@@ -16,3 +16,15 @@ build/
 .vscode/
 *.code-workspace
 *.code-search
+
+# File extensions to ignore
+*.dll
+*.exe
+*.pdb
+*.obj
+*.log
+*.tmp
+*.bak
+*.zip
+*.tar.gz
+*.7z
