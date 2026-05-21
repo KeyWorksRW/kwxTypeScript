@@ -1,0 +1,8 @@
+{
+  // Deno project configuration for kwxTypeScript-dev
+  "lock": false,
+  "tasks": {
+    "check": "deno check --no-lock src/kwxApp.ts examples/demo.ts",
+    "demo":  "deno run --allow-ffi --allow-read --allow-env examples/demo.ts"
+  }
+}

@@ -1,0 +1,7 @@
+{
+    "command":     "generate",
+    "headers_dir": "build/_deps/kwxffi-src/include",
+    "defs_file":   "build/_deps/kwxffi-src/src/kwx_defs.cpp",
+    "lang":        "typescript",
+    "out_path":    "./wx/"
+}
