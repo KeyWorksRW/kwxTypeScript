@@ -1,8 +1,12 @@
 {
   // Deno project configuration for kwxTypeScript-dev
   "lock": false,
+  "imports": {
+    "esbuild": "https://deno.land/x/esbuild@v0.24.0/mod.js"
+  },
   "tasks": {
     "check": "deno check --no-lock src/kwxApp.ts examples/demo.ts",
-    "demo":  "deno run --allow-ffi --allow-read --allow-env examples/demo.ts"
+    "demo":  "deno run --allow-ffi --allow-read --allow-env examples/demo.ts",
+    "bundle": "deno run --allow-read --allow-write --allow-net --allow-env --allow-run make_dist_bundle.ts"
   }
 }
