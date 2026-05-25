@@ -117,6 +117,8 @@ if(WIN32)
         target_sources(kwxFFI PRIVATE
             ${KWXFFI_MANIFEST_DIR}/kwxFFI_manifest.rc
         )
+        # Suppress the linker's default manifest (which conflicts with our RC file at ID=2)
+        set_target_properties(kwxFFI PROPERTIES LINK_FLAGS "/MANIFEST:NO")
         message(STATUS "Embedding Common Controls v6 manifest into kwxFFI shared library")
     else()
         message(WARNING "Manifest files not found at ${KWXFFI_MANIFEST_DIR} — "
