@@ -12,6 +12,9 @@ src/version.rc
 CMakeFiles/
 build/
 
+# typescript bundle (generated)
+*.mjs
+
 # VSCode files
 .vscode/
 *.code-workspace
