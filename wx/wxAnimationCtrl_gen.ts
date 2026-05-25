@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAnimationCtrl {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxAnimationCtrl | null {
@@ -27,39 +27,39 @@ export class wxAnimationCtrl {
   }
 
   GetAnimation(anim: Deno.PointerValue): void {
-    lib.symbols.wxAnimationCtrl_GetAnimation(this.#ptr, anim);
+    lib.symbols.wxAnimationCtrl_GetAnimation(this._ptr, anim);
   }
 
   GetInactiveBitmap(bmp: Deno.PointerValue): void {
-    lib.symbols.wxAnimationCtrl_GetInactiveBitmap(this.#ptr, bmp);
+    lib.symbols.wxAnimationCtrl_GetInactiveBitmap(this._ptr, bmp);
   }
 
   IsPlaying(): boolean {
-    return (lib.symbols.wxAnimationCtrl_IsPlaying(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAnimationCtrl_IsPlaying(this._ptr) as number) !== 0;
   }
 
   LoadFile(filename: Deno.PointerValue, type_: number): boolean {
-    return (lib.symbols.wxAnimationCtrl_LoadFile(this.#ptr, filename, type_) as number) !== 0;
+    return (lib.symbols.wxAnimationCtrl_LoadFile(this._ptr, filename, type_) as number) !== 0;
   }
 
   Load(stream: Deno.PointerValue, type_: number): boolean {
-    return (lib.symbols.wxAnimationCtrl_Load(this.#ptr, stream, type_) as number) !== 0;
+    return (lib.symbols.wxAnimationCtrl_Load(this._ptr, stream, type_) as number) !== 0;
   }
 
   Play(): boolean {
-    return (lib.symbols.wxAnimationCtrl_Play(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAnimationCtrl_Play(this._ptr) as number) !== 0;
   }
 
   SetAnimation(anim: Deno.PointerValue): void {
-    lib.symbols.wxAnimationCtrl_SetAnimation(this.#ptr, anim);
+    lib.symbols.wxAnimationCtrl_SetAnimation(this._ptr, anim);
   }
 
   SetInactiveBitmap(bmp: Deno.PointerValue): void {
-    lib.symbols.wxAnimationCtrl_SetInactiveBitmap(this.#ptr, bmp);
+    lib.symbols.wxAnimationCtrl_SetInactiveBitmap(this._ptr, bmp);
   }
 
   Stop(): void {
-    lib.symbols.wxAnimationCtrl_Stop(this.#ptr);
+    lib.symbols.wxAnimationCtrl_Stop(this._ptr);
   }
 
 }

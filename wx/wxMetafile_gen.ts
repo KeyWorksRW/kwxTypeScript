@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxMetafile {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(filePath: Deno.PointerValue): wxMetafile | null {
@@ -21,7 +21,7 @@ export class wxMetafile {
   }
 
   Delete(): void {
-    lib.symbols.wxMetafile_Delete(this.#ptr);
+    lib.symbols.wxMetafile_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,15 +29,15 @@ export class wxMetafile {
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxMetafile_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxMetafile_IsOk(this._ptr) as number) !== 0;
   }
 
   Play(dc: Deno.PointerValue): boolean {
-    return (lib.symbols.wxMetafile_Play(this.#ptr, dc) as number) !== 0;
+    return (lib.symbols.wxMetafile_Play(this._ptr, dc) as number) !== 0;
   }
 
   SetClipboard(width: number, height: number): boolean {
-    return (lib.symbols.wxMetafile_SetClipboard(this.#ptr, width, height) as number) !== 0;
+    return (lib.symbols.wxMetafile_SetClipboard(this._ptr, width, height) as number) !== 0;
   }
 
 }

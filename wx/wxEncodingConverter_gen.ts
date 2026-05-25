@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxEncodingConverter {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxEncodingConverter | null {
@@ -21,7 +21,7 @@ export class wxEncodingConverter {
   }
 
   Delete(): void {
-    lib.symbols.wxEncodingConverter_Delete(this.#ptr);
+    lib.symbols.wxEncodingConverter_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,19 +29,19 @@ export class wxEncodingConverter {
   }
 
   Convert(input: Deno.PointerValue, output: Deno.PointerValue): void {
-    lib.symbols.wxEncodingConverter_Convert(this.#ptr, input, output);
+    lib.symbols.wxEncodingConverter_Convert(this._ptr, input, output);
   }
 
   GetAllEquivalents(enc: number, list: Deno.PointerValue): number {
-    return lib.symbols.wxEncodingConverter_GetAllEquivalents(this.#ptr, enc, list);
+    return lib.symbols.wxEncodingConverter_GetAllEquivalents(this._ptr, enc, list);
   }
 
   GetPlatformEquivalents(enc: number, platform: number, list: Deno.PointerValue): number {
-    return lib.symbols.wxEncodingConverter_GetPlatformEquivalents(this.#ptr, enc, platform, list);
+    return lib.symbols.wxEncodingConverter_GetPlatformEquivalents(this._ptr, enc, platform, list);
   }
 
   Init(input_enc: number, output_enc: number, method: number): number {
-    return lib.symbols.wxEncodingConverter_Init(this.#ptr, input_enc, output_enc, method);
+    return lib.symbols.wxEncodingConverter_Init(this._ptr, input_enc, output_enc, method);
   }
 
 }

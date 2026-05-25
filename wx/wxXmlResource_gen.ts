@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxXmlResource {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(flags: number): wxXmlResource | null {
@@ -27,7 +27,7 @@ export class wxXmlResource {
   }
 
   Delete(): void {
-    lib.symbols.wxXmlResource_Delete(this.#ptr);
+    lib.symbols.wxXmlResource_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,23 +35,23 @@ export class wxXmlResource {
   }
 
   AddHandler(handler: Deno.PointerValue): void {
-    lib.symbols.wxXmlResource_AddHandler(this.#ptr, handler);
+    lib.symbols.wxXmlResource_AddHandler(this._ptr, handler);
   }
 
   AddSubclassFactory(factory: Deno.PointerValue): void {
-    lib.symbols.wxXmlResource_AddSubclassFactory(this.#ptr, factory);
+    lib.symbols.wxXmlResource_AddSubclassFactory(this._ptr, factory);
   }
 
   AttachUnknownControl(control: Deno.PointerValue, parent: Deno.PointerValue): number {
-    return lib.symbols.wxXmlResource_AttachUnknownControl(this.#ptr, control, parent);
+    return lib.symbols.wxXmlResource_AttachUnknownControl(this._ptr, control, parent);
   }
 
   ClearHandlers(): void {
-    lib.symbols.wxXmlResource_ClearHandlers(this.#ptr);
+    lib.symbols.wxXmlResource_ClearHandlers(this._ptr);
   }
 
   CompareVersion(major: number, minor: number, release: number, revision: number): number {
-    return lib.symbols.wxXmlResource_CompareVersion(this.#ptr, major, minor, release, revision);
+    return lib.symbols.wxXmlResource_CompareVersion(this._ptr, major, minor, release, revision);
   }
 
   Get(): Deno.PointerValue {
@@ -59,231 +59,231 @@ export class wxXmlResource {
   }
 
   GetDomain(): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetDomain(this.#ptr);
+    return lib.symbols.wxXmlResource_GetDomain(this._ptr);
   }
 
   GetFlags(): number {
-    return lib.symbols.wxXmlResource_GetFlags(this.#ptr);
+    return lib.symbols.wxXmlResource_GetFlags(this._ptr);
   }
 
   GetVersion(): number {
-    return lib.symbols.wxXmlResource_GetVersion(this.#ptr);
+    return lib.symbols.wxXmlResource_GetVersion(this._ptr);
   }
 
   GetXRCID(str_id: Deno.PointerValue, value_if_not_found: number): number {
-    return lib.symbols.wxXmlResource_GetXRCID(this.#ptr, str_id, value_if_not_found);
+    return lib.symbols.wxXmlResource_GetXRCID(this._ptr, str_id, value_if_not_found);
   }
 
   InitAllHandlers(): void {
-    lib.symbols.wxXmlResource_InitAllHandlers(this.#ptr);
+    lib.symbols.wxXmlResource_InitAllHandlers(this._ptr);
   }
 
   InsertHandler(handler: Deno.PointerValue): void {
-    lib.symbols.wxXmlResource_InsertHandler(this.#ptr, handler);
+    lib.symbols.wxXmlResource_InsertHandler(this._ptr, handler);
   }
 
   Load(filemask: Deno.PointerValue): boolean {
-    return (lib.symbols.wxXmlResource_Load(this.#ptr, filemask) as number) !== 0;
+    return (lib.symbols.wxXmlResource_Load(this._ptr, filemask) as number) !== 0;
   }
 
   LoadBitmap(name: Deno.PointerValue, ref: Deno.PointerValue): void {
-    lib.symbols.wxXmlResource_LoadBitmap(this.#ptr, name, ref);
+    lib.symbols.wxXmlResource_LoadBitmap(this._ptr, name, ref);
   }
 
   LoadDialog(parent: Deno.PointerValue, name: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_LoadDialog(this.#ptr, parent, name);
+    return lib.symbols.wxXmlResource_LoadDialog(this._ptr, parent, name);
   }
 
   LoadFrame(parent: Deno.PointerValue, name: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_LoadFrame(this.#ptr, parent, name);
+    return lib.symbols.wxXmlResource_LoadFrame(this._ptr, parent, name);
   }
 
   LoadIcon(name: Deno.PointerValue, ref: Deno.PointerValue): void {
-    lib.symbols.wxXmlResource_LoadIcon(this.#ptr, name, ref);
+    lib.symbols.wxXmlResource_LoadIcon(this._ptr, name, ref);
   }
 
   LoadMenu(name: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_LoadMenu(this.#ptr, name);
+    return lib.symbols.wxXmlResource_LoadMenu(this._ptr, name);
   }
 
   LoadMenuBar(parent: Deno.PointerValue, name: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_LoadMenuBar(this.#ptr, parent, name);
+    return lib.symbols.wxXmlResource_LoadMenuBar(this._ptr, parent, name);
   }
 
   LoadPanel(parent: Deno.PointerValue, name: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_LoadPanel(this.#ptr, parent, name);
+    return lib.symbols.wxXmlResource_LoadPanel(this._ptr, parent, name);
   }
 
   LoadToolBar(parent: Deno.PointerValue, name: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_LoadToolBar(this.#ptr, parent, name);
+    return lib.symbols.wxXmlResource_LoadToolBar(this._ptr, parent, name);
   }
 
   GetSizer(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetSizer(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetSizer(this._ptr, str_id);
   }
 
   GetBoxSizer(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetBoxSizer(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetBoxSizer(this._ptr, str_id);
   }
 
   GetStaticBoxSizer(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetStaticBoxSizer(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetStaticBoxSizer(this._ptr, str_id);
   }
 
   GetGridSizer(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetGridSizer(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetGridSizer(this._ptr, str_id);
   }
 
   GetFlexGridSizer(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetFlexGridSizer(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetFlexGridSizer(this._ptr, str_id);
   }
 
   GetBitmapButton(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetBitmapButton(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetBitmapButton(this._ptr, str_id);
   }
 
   GetButton(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetButton(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetButton(this._ptr, str_id);
   }
 
   GetCalendarCtrl(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetCalendarCtrl(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetCalendarCtrl(this._ptr, str_id);
   }
 
   GetCheckBox(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetCheckBox(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetCheckBox(this._ptr, str_id);
   }
 
   GetCheckListBox(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetCheckListBox(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetCheckListBox(this._ptr, str_id);
   }
 
   GetChoice(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetChoice(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetChoice(this._ptr, str_id);
   }
 
   GetComboBox(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetComboBox(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetComboBox(this._ptr, str_id);
   }
 
   GetGauge(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetGauge(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetGauge(this._ptr, str_id);
   }
 
   GetGrid(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetGrid(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetGrid(this._ptr, str_id);
   }
 
   GetHtmlWindow(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetHtmlWindow(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetHtmlWindow(this._ptr, str_id);
   }
 
   GetListBox(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetListBox(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetListBox(this._ptr, str_id);
   }
 
   GetListCtrl(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetListCtrl(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetListCtrl(this._ptr, str_id);
   }
 
   GetMDIChildFrame(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetMDIChildFrame(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetMDIChildFrame(this._ptr, str_id);
   }
 
   GetMDIParentFrame(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetMDIParentFrame(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetMDIParentFrame(this._ptr, str_id);
   }
 
   GetMenu(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetMenu(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetMenu(this._ptr, str_id);
   }
 
   GetMenuBar(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetMenuBar(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetMenuBar(this._ptr, str_id);
   }
 
   GetMenuItem(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetMenuItem(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetMenuItem(this._ptr, str_id);
   }
 
   GetNotebook(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetNotebook(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetNotebook(this._ptr, str_id);
   }
 
   GetPanel(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetPanel(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetPanel(this._ptr, str_id);
   }
 
   GetRadioButton(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetRadioButton(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetRadioButton(this._ptr, str_id);
   }
 
   GetRadioBox(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetRadioBox(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetRadioBox(this._ptr, str_id);
   }
 
   GetScrollBar(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetScrollBar(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetScrollBar(this._ptr, str_id);
   }
 
   GetScrolledWindow(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetScrolledWindow(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetScrolledWindow(this._ptr, str_id);
   }
 
   GetSlider(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetSlider(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetSlider(this._ptr, str_id);
   }
 
   GetSpinButton(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetSpinButton(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetSpinButton(this._ptr, str_id);
   }
 
   GetSpinCtrl(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetSpinCtrl(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetSpinCtrl(this._ptr, str_id);
   }
 
   GetSplitterWindow(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetSplitterWindow(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetSplitterWindow(this._ptr, str_id);
   }
 
   GetStaticBitmap(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetStaticBitmap(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetStaticBitmap(this._ptr, str_id);
   }
 
   GetStaticBox(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetStaticBox(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetStaticBox(this._ptr, str_id);
   }
 
   GetStaticLine(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetStaticLine(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetStaticLine(this._ptr, str_id);
   }
 
   GetStaticText(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetStaticText(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetStaticText(this._ptr, str_id);
   }
 
   GetTextCtrl(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetTextCtrl(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetTextCtrl(this._ptr, str_id);
   }
 
   GetTreeCtrl(str_id: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_GetTreeCtrl(this.#ptr, str_id);
+    return lib.symbols.wxXmlResource_GetTreeCtrl(this._ptr, str_id);
   }
 
   Unload(filemask: Deno.PointerValue): boolean {
-    return (lib.symbols.wxXmlResource_Unload(this.#ptr, filemask) as number) !== 0;
+    return (lib.symbols.wxXmlResource_Unload(this._ptr, filemask) as number) !== 0;
   }
 
   Set(): Deno.PointerValue {
-    return lib.symbols.wxXmlResource_Set(this.#ptr, this.#ptr);
+    return lib.symbols.wxXmlResource_Set(this._ptr, this._ptr);
   }
 
   SetDomain(domain: Deno.PointerValue): void {
-    lib.symbols.wxXmlResource_SetDomain(this.#ptr, domain);
+    lib.symbols.wxXmlResource_SetDomain(this._ptr, domain);
   }
 
   SetFlags(flags: number): void {
-    lib.symbols.wxXmlResource_SetFlags(this.#ptr, flags);
+    lib.symbols.wxXmlResource_SetFlags(this._ptr, flags);
   }
 
 }

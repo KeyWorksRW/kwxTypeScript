@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFilePickerCtrl {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, path: Deno.PointerValue, message: Deno.PointerValue, wildcard: Deno.PointerValue, style: number): wxFilePickerCtrl | null {
@@ -21,23 +21,23 @@ export class wxFilePickerCtrl {
   }
 
   GetPath(): Deno.PointerValue {
-    return lib.symbols.wxFilePickerCtrl_GetPath(this.#ptr);
+    return lib.symbols.wxFilePickerCtrl_GetPath(this._ptr);
   }
 
   SetPath(path: Deno.PointerValue): void {
-    lib.symbols.wxFilePickerCtrl_SetPath(this.#ptr, path);
+    lib.symbols.wxFilePickerCtrl_SetPath(this._ptr, path);
   }
 
   SetInitialDirectory(dir: Deno.PointerValue): void {
-    lib.symbols.wxFilePickerCtrl_SetInitialDirectory(this.#ptr, dir);
+    lib.symbols.wxFilePickerCtrl_SetInitialDirectory(this._ptr, dir);
   }
 
   SetFileName(filename: Deno.PointerValue): void {
-    lib.symbols.wxFilePickerCtrl_SetFileName(this.#ptr, filename);
+    lib.symbols.wxFilePickerCtrl_SetFileName(this._ptr, filename);
   }
 
   GetFileName(): Deno.PointerValue {
-    return lib.symbols.wxFilePickerCtrl_GetFileName(this.#ptr);
+    return lib.symbols.wxFilePickerCtrl_GetFileName(this._ptr);
   }
 
 }

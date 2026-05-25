@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxGridCellCoordsArray {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxGridCellCoordsArray | null {
@@ -21,7 +21,7 @@ export class wxGridCellCoordsArray {
   }
 
   Delete(): void {
-    lib.symbols.wxGridCellCoordsArray_Delete(this.#ptr);
+    lib.symbols.wxGridCellCoordsArray_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,11 +29,11 @@ export class wxGridCellCoordsArray {
   }
 
   GetCount(): number {
-    return lib.symbols.wxGridCellCoordsArray_GetCount(this.#ptr);
+    return lib.symbols.wxGridCellCoordsArray_GetCount(this._ptr);
   }
 
   Item(index: number, col: Deno.PointerValue, row: Deno.PointerValue): void {
-    lib.symbols.wxGridCellCoordsArray_Item(this.#ptr, index, col, row);
+    lib.symbols.wxGridCellCoordsArray_Item(this._ptr, index, col, row);
   }
 
 }

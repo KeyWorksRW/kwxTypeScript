@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxCaret {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(window: Deno.PointerValue, width: number, height: number): wxCaret | null {
@@ -25,31 +25,31 @@ export class wxCaret {
   }
 
   GetPosition(): Deno.PointerValue {
-    return lib.symbols.wxCaret_GetPosition(this.#ptr);
+    return lib.symbols.wxCaret_GetPosition(this._ptr);
   }
 
   GetSize(): Deno.PointerValue {
-    return lib.symbols.wxCaret_GetSize(this.#ptr);
+    return lib.symbols.wxCaret_GetSize(this._ptr);
   }
 
   GetWindow(): Deno.PointerValue {
-    return lib.symbols.wxCaret_GetWindow(this.#ptr);
+    return lib.symbols.wxCaret_GetWindow(this._ptr);
   }
 
   Hide(): void {
-    lib.symbols.wxCaret_Hide(this.#ptr);
+    lib.symbols.wxCaret_Hide(this._ptr);
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxCaret_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCaret_IsOk(this._ptr) as number) !== 0;
   }
 
   IsVisible(): boolean {
-    return (lib.symbols.wxCaret_IsVisible(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCaret_IsVisible(this._ptr) as number) !== 0;
   }
 
   Move(x: number, y: number): void {
-    lib.symbols.wxCaret_Move(this.#ptr, x, y);
+    lib.symbols.wxCaret_Move(this._ptr, x, y);
   }
 
   SetBlinkTime(milliseconds: number): void {
@@ -57,11 +57,11 @@ export class wxCaret {
   }
 
   SetSize(width: number, height: number): void {
-    lib.symbols.wxCaret_SetSize(this.#ptr, width, height);
+    lib.symbols.wxCaret_SetSize(this._ptr, width, height);
   }
 
   Show(): void {
-    lib.symbols.wxCaret_Show(this.#ptr);
+    lib.symbols.wxCaret_Show(this._ptr);
   }
 
 }

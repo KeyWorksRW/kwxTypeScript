@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAuiPaneInfo {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateDefault(): wxAuiPaneInfo | null {
@@ -27,311 +27,311 @@ export class wxAuiPaneInfo {
   }
 
   Bottom(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Bottom(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Bottom(this._ptr);
   }
 
   BottomDockable(enable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_BottomDockable(this.#ptr, enable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_BottomDockable(this._ptr, enable ? 1 : 0);
   }
 
   Caption(caption: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Caption(this.#ptr, caption);
+    return lib.symbols.wxAuiPaneInfo_Caption(this._ptr, caption);
   }
 
   CaptionVisible(visible: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_CaptionVisible(this.#ptr, visible ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_CaptionVisible(this._ptr, visible ? 1 : 0);
   }
 
   CloseButton(visible: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_CloseButton(this.#ptr, visible ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_CloseButton(this._ptr, visible ? 1 : 0);
   }
 
   DefaultPane(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_DefaultPane(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_DefaultPane(this._ptr);
   }
 
   DestroyOnClose(enable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_DestroyOnClose(this.#ptr, enable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_DestroyOnClose(this._ptr, enable ? 1 : 0);
   }
 
   Direction(direction: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Direction(this.#ptr, direction);
+    return lib.symbols.wxAuiPaneInfo_Direction(this._ptr, direction);
   }
 
   Dock(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Dock(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Dock(this._ptr);
   }
 
   DockFixed(enable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_DockFixed(this.#ptr, enable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_DockFixed(this._ptr, enable ? 1 : 0);
   }
 
   Dockable(enable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Dockable(this.#ptr, enable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_Dockable(this._ptr, enable ? 1 : 0);
   }
 
   Fixed(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Fixed(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Fixed(this._ptr);
   }
 
   Float(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Float(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Float(this._ptr);
   }
 
   Floatable(enable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Floatable(this.#ptr, enable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_Floatable(this._ptr, enable ? 1 : 0);
   }
 
   Gripper(visible: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Gripper(this.#ptr, visible ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_Gripper(this._ptr, visible ? 1 : 0);
   }
 
   GripperTop(attop: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_GripperTop(this.#ptr, attop ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_GripperTop(this._ptr, attop ? 1 : 0);
   }
 
   HasBorder(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_HasBorder(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_HasBorder(this._ptr) as number) !== 0;
   }
 
   HasCaption(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_HasCaption(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_HasCaption(this._ptr) as number) !== 0;
   }
 
   HasCloseButton(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_HasCloseButton(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_HasCloseButton(this._ptr) as number) !== 0;
   }
 
   HasFlag(flag: number): boolean {
-    return (lib.symbols.wxAuiPaneInfo_HasFlag(this.#ptr, flag) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_HasFlag(this._ptr, flag) as number) !== 0;
   }
 
   HasGripper(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_HasGripper(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_HasGripper(this._ptr) as number) !== 0;
   }
 
   HasGripperTop(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_HasGripperTop(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_HasGripperTop(this._ptr) as number) !== 0;
   }
 
   HasMaximizeButton(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_HasMaximizeButton(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_HasMaximizeButton(this._ptr) as number) !== 0;
   }
 
   HasMinimizeButton(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_HasMinimizeButton(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_HasMinimizeButton(this._ptr) as number) !== 0;
   }
 
   HasPinButton(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_HasPinButton(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_HasPinButton(this._ptr) as number) !== 0;
   }
 
   Hide(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Hide(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Hide(this._ptr);
   }
 
   Icon(bitmap: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Icon(this.#ptr, bitmap);
+    return lib.symbols.wxAuiPaneInfo_Icon(this._ptr, bitmap);
   }
 
   IsBottomDockable(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsBottomDockable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsBottomDockable(this._ptr) as number) !== 0;
   }
 
   IsDockable(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsDockable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsDockable(this._ptr) as number) !== 0;
   }
 
   IsDocked(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsDocked(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsDocked(this._ptr) as number) !== 0;
   }
 
   IsFixed(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsFixed(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsFixed(this._ptr) as number) !== 0;
   }
 
   IsFloatable(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsFloatable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsFloatable(this._ptr) as number) !== 0;
   }
 
   IsFloating(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsFloating(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsFloating(this._ptr) as number) !== 0;
   }
 
   IsLeftDockable(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsLeftDockable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsLeftDockable(this._ptr) as number) !== 0;
   }
 
   IsMovable(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsMovable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsMovable(this._ptr) as number) !== 0;
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsOk(this._ptr) as number) !== 0;
   }
 
   IsResizable(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsResizable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsResizable(this._ptr) as number) !== 0;
   }
 
   IsRightDockable(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsRightDockable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsRightDockable(this._ptr) as number) !== 0;
   }
 
   IsShown(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsShown(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsShown(this._ptr) as number) !== 0;
   }
 
   IsToolbar(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsToolbar(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsToolbar(this._ptr) as number) !== 0;
   }
 
   IsTopDockable(): boolean {
-    return (lib.symbols.wxAuiPaneInfo_IsTopDockable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiPaneInfo_IsTopDockable(this._ptr) as number) !== 0;
   }
 
   Layer(layer: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Layer(this.#ptr, layer);
+    return lib.symbols.wxAuiPaneInfo_Layer(this._ptr, layer);
   }
 
   Left(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Left(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Left(this._ptr);
   }
 
   LeftDockable(enable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_LeftDockable(this.#ptr, enable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_LeftDockable(this._ptr, enable ? 1 : 0);
   }
 
   MaximizeButton(visible: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_MaximizeButton(this.#ptr, visible ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_MaximizeButton(this._ptr, visible ? 1 : 0);
   }
 
   MinimizeButton(visible: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_MinimizeButton(this.#ptr, visible ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_MinimizeButton(this._ptr, visible ? 1 : 0);
   }
 
   Movable(enable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Movable(this.#ptr, enable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_Movable(this._ptr, enable ? 1 : 0);
   }
 
   Name(name: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Name(this.#ptr, name);
+    return lib.symbols.wxAuiPaneInfo_Name(this._ptr, name);
   }
 
   PaneBorder(visible: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_PaneBorder(this.#ptr, visible ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_PaneBorder(this._ptr, visible ? 1 : 0);
   }
 
   PinButton(visible: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_PinButton(this.#ptr, visible ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_PinButton(this._ptr, visible ? 1 : 0);
   }
 
   Position(pos: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Position(this.#ptr, pos);
+    return lib.symbols.wxAuiPaneInfo_Position(this._ptr, pos);
   }
 
   Resizable(resizable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Resizable(this.#ptr, resizable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_Resizable(this._ptr, resizable ? 1 : 0);
   }
 
   Right(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Right(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Right(this._ptr);
   }
 
   RightDockable(enable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_RightDockable(this.#ptr, enable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_RightDockable(this._ptr, enable ? 1 : 0);
   }
 
   Row(row: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Row(this.#ptr, row);
+    return lib.symbols.wxAuiPaneInfo_Row(this._ptr, row);
   }
 
   SafeSet(source: Deno.PointerValue): void {
-    lib.symbols.wxAuiPaneInfo_SafeSet(this.#ptr, source);
+    lib.symbols.wxAuiPaneInfo_SafeSet(this._ptr, source);
   }
 
   SetFlag(flag: number, option_state: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_SetFlag(this.#ptr, flag, option_state ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_SetFlag(this._ptr, flag, option_state ? 1 : 0);
   }
 
   Show(show: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Show(this.#ptr, show ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_Show(this._ptr, show ? 1 : 0);
   }
 
   ToolbarPane(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_ToolbarPane(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_ToolbarPane(this._ptr);
   }
 
   Top(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Top(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Top(this._ptr);
   }
 
   TopDockable(enable: boolean): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_TopDockable(this.#ptr, enable ? 1 : 0);
+    return lib.symbols.wxAuiPaneInfo_TopDockable(this._ptr, enable ? 1 : 0);
   }
 
   Window(window: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Window(this.#ptr, window);
+    return lib.symbols.wxAuiPaneInfo_Window(this._ptr, window);
   }
 
   Copy(source: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Copy(this.#ptr, source);
+    return lib.symbols.wxAuiPaneInfo_Copy(this._ptr, source);
   }
 
   BestSize(width: number, height: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_BestSize(this.#ptr, width, height);
+    return lib.symbols.wxAuiPaneInfo_BestSize(this._ptr, width, height);
   }
 
   BestSizeXY(x: number, y: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_BestSizeXY(this.#ptr, x, y);
+    return lib.symbols.wxAuiPaneInfo_BestSizeXY(this._ptr, x, y);
   }
 
   Centre(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Centre(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Centre(this._ptr);
   }
 
   Center(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_Center(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_Center(this._ptr);
   }
 
   CentrePane(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_CentrePane(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_CentrePane(this._ptr);
   }
 
   CenterPane(): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_CenterPane(this.#ptr);
+    return lib.symbols.wxAuiPaneInfo_CenterPane(this._ptr);
   }
 
   FloatingPosition(x: number, y: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_FloatingPosition(this.#ptr, x, y);
+    return lib.symbols.wxAuiPaneInfo_FloatingPosition(this._ptr, x, y);
   }
 
   FloatingPositionXY(x: number, y: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_FloatingPositionXY(this.#ptr, x, y);
+    return lib.symbols.wxAuiPaneInfo_FloatingPositionXY(this._ptr, x, y);
   }
 
   FloatingSize(width: number, height: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_FloatingSize(this.#ptr, width, height);
+    return lib.symbols.wxAuiPaneInfo_FloatingSize(this._ptr, width, height);
   }
 
   FloatingSizeXY(x: number, y: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_FloatingSizeXY(this.#ptr, x, y);
+    return lib.symbols.wxAuiPaneInfo_FloatingSizeXY(this._ptr, x, y);
   }
 
   MaxSize(width: number, height: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_MaxSize(this.#ptr, width, height);
+    return lib.symbols.wxAuiPaneInfo_MaxSize(this._ptr, width, height);
   }
 
   MaxSizeXY(x: number, y: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_MaxSizeXY(this.#ptr, x, y);
+    return lib.symbols.wxAuiPaneInfo_MaxSizeXY(this._ptr, x, y);
   }
 
   MinSize(width: number, height: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_MinSize(this.#ptr, width, height);
+    return lib.symbols.wxAuiPaneInfo_MinSize(this._ptr, width, height);
   }
 
   MinSizeXY(x: number, y: number): Deno.PointerValue {
-    return lib.symbols.wxAuiPaneInfo_MinSizeXY(this.#ptr, x, y);
+    return lib.symbols.wxAuiPaneInfo_MinSizeXY(this._ptr, x, y);
   }
 
 }

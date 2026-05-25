@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxMutex {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxMutex | null {
@@ -21,7 +21,7 @@ export class wxMutex {
   }
 
   Delete(): void {
-    lib.symbols.wxMutex_Delete(this.#ptr);
+    lib.symbols.wxMutex_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,15 +29,15 @@ export class wxMutex {
   }
 
   Lock(): number {
-    return lib.symbols.wxMutex_Lock(this.#ptr);
+    return lib.symbols.wxMutex_Lock(this._ptr);
   }
 
   TryLock(): number {
-    return lib.symbols.wxMutex_TryLock(this.#ptr);
+    return lib.symbols.wxMutex_TryLock(this._ptr);
   }
 
   Unlock(): number {
-    return lib.symbols.wxMutex_Unlock(this.#ptr);
+    return lib.symbols.wxMutex_Unlock(this._ptr);
   }
 
 }

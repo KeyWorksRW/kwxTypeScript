@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFontPickerCtrl {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, initial: Deno.PointerValue, x: number, y: number, width: number, height: number, style: number): wxFontPickerCtrl | null {
@@ -21,19 +21,19 @@ export class wxFontPickerCtrl {
   }
 
   GetSelectedFont(): Deno.PointerValue {
-    return lib.symbols.wxFontPickerCtrl_GetSelectedFont(this.#ptr);
+    return lib.symbols.wxFontPickerCtrl_GetSelectedFont(this._ptr);
   }
 
   SetSelectedFont(font: Deno.PointerValue): void {
-    lib.symbols.wxFontPickerCtrl_SetSelectedFont(this.#ptr, font);
+    lib.symbols.wxFontPickerCtrl_SetSelectedFont(this._ptr, font);
   }
 
   GetMaxPointSize(): number {
-    return lib.symbols.wxFontPickerCtrl_GetMaxPointSize(this.#ptr);
+    return lib.symbols.wxFontPickerCtrl_GetMaxPointSize(this._ptr);
   }
 
   SetMaxPointSize(maxSize: number): void {
-    lib.symbols.wxFontPickerCtrl_SetMaxPointSize(this.#ptr, maxSize);
+    lib.symbols.wxFontPickerCtrl_SetMaxPointSize(this._ptr, maxSize);
   }
 
 }

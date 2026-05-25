@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPageSetupDialogData {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxPageSetupDialogData | null {
@@ -27,7 +27,7 @@ export class wxPageSetupDialogData {
   }
 
   Delete(): void {
-    lib.symbols.wxPageSetupDialogData_Delete(this.#ptr);
+    lib.symbols.wxPageSetupDialogData_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,135 +35,135 @@ export class wxPageSetupDialogData {
   }
 
   Assign(data: Deno.PointerValue): void {
-    lib.symbols.wxPageSetupDialogData_Assign(this.#ptr, data);
+    lib.symbols.wxPageSetupDialogData_Assign(this._ptr, data);
   }
 
   AssignData(printData: Deno.PointerValue): void {
-    lib.symbols.wxPageSetupDialogData_AssignData(this.#ptr, printData);
+    lib.symbols.wxPageSetupDialogData_AssignData(this._ptr, printData);
   }
 
   CalculateIdFromPaperSize(): void {
-    lib.symbols.wxPageSetupDialogData_CalculateIdFromPaperSize(this.#ptr);
+    lib.symbols.wxPageSetupDialogData_CalculateIdFromPaperSize(this._ptr);
   }
 
   CalculatePaperSizeFromId(): void {
-    lib.symbols.wxPageSetupDialogData_CalculatePaperSizeFromId(this.#ptr);
+    lib.symbols.wxPageSetupDialogData_CalculatePaperSizeFromId(this._ptr);
   }
 
   EnableHelp(flag: boolean): void {
-    lib.symbols.wxPageSetupDialogData_EnableHelp(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPageSetupDialogData_EnableHelp(this._ptr, flag ? 1 : 0);
   }
 
   EnableMargins(flag: boolean): void {
-    lib.symbols.wxPageSetupDialogData_EnableMargins(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPageSetupDialogData_EnableMargins(this._ptr, flag ? 1 : 0);
   }
 
   EnableOrientation(flag: boolean): void {
-    lib.symbols.wxPageSetupDialogData_EnableOrientation(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPageSetupDialogData_EnableOrientation(this._ptr, flag ? 1 : 0);
   }
 
   EnablePaper(flag: boolean): void {
-    lib.symbols.wxPageSetupDialogData_EnablePaper(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPageSetupDialogData_EnablePaper(this._ptr, flag ? 1 : 0);
   }
 
   EnablePrinter(flag: boolean): void {
-    lib.symbols.wxPageSetupDialogData_EnablePrinter(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPageSetupDialogData_EnablePrinter(this._ptr, flag ? 1 : 0);
   }
 
   GetDefaultInfo(): boolean {
-    return (lib.symbols.wxPageSetupDialogData_GetDefaultInfo(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPageSetupDialogData_GetDefaultInfo(this._ptr) as number) !== 0;
   }
 
   GetDefaultMinMargins(): boolean {
-    return (lib.symbols.wxPageSetupDialogData_GetDefaultMinMargins(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPageSetupDialogData_GetDefaultMinMargins(this._ptr) as number) !== 0;
   }
 
   GetEnableHelp(): boolean {
-    return (lib.symbols.wxPageSetupDialogData_GetEnableHelp(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPageSetupDialogData_GetEnableHelp(this._ptr) as number) !== 0;
   }
 
   GetEnableMargins(): boolean {
-    return (lib.symbols.wxPageSetupDialogData_GetEnableMargins(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPageSetupDialogData_GetEnableMargins(this._ptr) as number) !== 0;
   }
 
   GetEnableOrientation(): boolean {
-    return (lib.symbols.wxPageSetupDialogData_GetEnableOrientation(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPageSetupDialogData_GetEnableOrientation(this._ptr) as number) !== 0;
   }
 
   GetEnablePaper(): boolean {
-    return (lib.symbols.wxPageSetupDialogData_GetEnablePaper(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPageSetupDialogData_GetEnablePaper(this._ptr) as number) !== 0;
   }
 
   GetEnablePrinter(): boolean {
-    return (lib.symbols.wxPageSetupDialogData_GetEnablePrinter(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPageSetupDialogData_GetEnablePrinter(this._ptr) as number) !== 0;
   }
 
   GetMarginBottomRight(): Deno.PointerValue {
-    return lib.symbols.wxPageSetupDialogData_GetMarginBottomRight(this.#ptr);
+    return lib.symbols.wxPageSetupDialogData_GetMarginBottomRight(this._ptr);
   }
 
   GetMarginTopLeft(): Deno.PointerValue {
-    return lib.symbols.wxPageSetupDialogData_GetMarginTopLeft(this.#ptr);
+    return lib.symbols.wxPageSetupDialogData_GetMarginTopLeft(this._ptr);
   }
 
   GetMinMarginBottomRight(): Deno.PointerValue {
-    return lib.symbols.wxPageSetupDialogData_GetMinMarginBottomRight(this.#ptr);
+    return lib.symbols.wxPageSetupDialogData_GetMinMarginBottomRight(this._ptr);
   }
 
   GetMinMarginTopLeft(): Deno.PointerValue {
-    return lib.symbols.wxPageSetupDialogData_GetMinMarginTopLeft(this.#ptr);
+    return lib.symbols.wxPageSetupDialogData_GetMinMarginTopLeft(this._ptr);
   }
 
   GetPaperId(): number {
-    return lib.symbols.wxPageSetupDialogData_GetPaperId(this.#ptr);
+    return lib.symbols.wxPageSetupDialogData_GetPaperId(this._ptr);
   }
 
   GetPaperSize(): Deno.PointerValue {
-    return lib.symbols.wxPageSetupDialogData_GetPaperSize(this.#ptr);
+    return lib.symbols.wxPageSetupDialogData_GetPaperSize(this._ptr);
   }
 
   GetPrintData(ref: Deno.PointerValue): void {
-    lib.symbols.wxPageSetupDialogData_GetPrintData(this.#ptr, ref);
+    lib.symbols.wxPageSetupDialogData_GetPrintData(this._ptr, ref);
   }
 
   SetDefaultInfo(flag: boolean): void {
-    lib.symbols.wxPageSetupDialogData_SetDefaultInfo(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPageSetupDialogData_SetDefaultInfo(this._ptr, flag ? 1 : 0);
   }
 
   SetDefaultMinMargins(flag: number): void {
-    lib.symbols.wxPageSetupDialogData_SetDefaultMinMargins(this.#ptr, flag);
+    lib.symbols.wxPageSetupDialogData_SetDefaultMinMargins(this._ptr, flag);
   }
 
   SetMarginBottomRight(x: number, y: number): void {
-    lib.symbols.wxPageSetupDialogData_SetMarginBottomRight(this.#ptr, x, y);
+    lib.symbols.wxPageSetupDialogData_SetMarginBottomRight(this._ptr, x, y);
   }
 
   SetMarginTopLeft(x: number, y: number): void {
-    lib.symbols.wxPageSetupDialogData_SetMarginTopLeft(this.#ptr, x, y);
+    lib.symbols.wxPageSetupDialogData_SetMarginTopLeft(this._ptr, x, y);
   }
 
   SetMinMarginBottomRight(x: number, y: number): void {
-    lib.symbols.wxPageSetupDialogData_SetMinMarginBottomRight(this.#ptr, x, y);
+    lib.symbols.wxPageSetupDialogData_SetMinMarginBottomRight(this._ptr, x, y);
   }
 
   SetMinMarginTopLeft(x: number, y: number): void {
-    lib.symbols.wxPageSetupDialogData_SetMinMarginTopLeft(this.#ptr, x, y);
+    lib.symbols.wxPageSetupDialogData_SetMinMarginTopLeft(this._ptr, x, y);
   }
 
   SetPaperId(id: Deno.PointerValue): void {
-    lib.symbols.wxPageSetupDialogData_SetPaperId(this.#ptr, id);
+    lib.symbols.wxPageSetupDialogData_SetPaperId(this._ptr, id);
   }
 
   SetPaperSize(width: number, height: number): void {
-    lib.symbols.wxPageSetupDialogData_SetPaperSize(this.#ptr, width, height);
+    lib.symbols.wxPageSetupDialogData_SetPaperSize(this._ptr, width, height);
   }
 
   SetPaperSizeId(id: number): void {
-    lib.symbols.wxPageSetupDialogData_SetPaperSizeId(this.#ptr, id);
+    lib.symbols.wxPageSetupDialogData_SetPaperSizeId(this._ptr, id);
   }
 
   SetPrintData(printData: Deno.PointerValue): void {
-    lib.symbols.wxPageSetupDialogData_SetPrintData(this.#ptr, printData);
+    lib.symbols.wxPageSetupDialogData_SetPrintData(this._ptr, printData);
   }
 
 }

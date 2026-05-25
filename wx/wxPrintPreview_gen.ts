@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPrintPreview {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateFromData(printout: Deno.PointerValue, printoutForPrinting: Deno.PointerValue, data: Deno.PointerValue): wxPrintPreview | null {
@@ -27,7 +27,7 @@ export class wxPrintPreview {
   }
 
   Delete(): void {
-    lib.symbols.wxPrintPreview_Delete(this.#ptr);
+    lib.symbols.wxPrintPreview_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,87 +35,87 @@ export class wxPrintPreview {
   }
 
   DetermineScaling(): void {
-    lib.symbols.wxPrintPreview_DetermineScaling(this.#ptr);
+    lib.symbols.wxPrintPreview_DetermineScaling(this._ptr);
   }
 
   DrawBlankPage(canvas: Deno.PointerValue, dc: Deno.PointerValue): boolean {
-    return (lib.symbols.wxPrintPreview_DrawBlankPage(this.#ptr, canvas, dc) as number) !== 0;
+    return (lib.symbols.wxPrintPreview_DrawBlankPage(this._ptr, canvas, dc) as number) !== 0;
   }
 
   GetCanvas(): Deno.PointerValue {
-    return lib.symbols.wxPrintPreview_GetCanvas(this.#ptr);
+    return lib.symbols.wxPrintPreview_GetCanvas(this._ptr);
   }
 
   GetCurrentPage(): number {
-    return lib.symbols.wxPrintPreview_GetCurrentPage(this.#ptr);
+    return lib.symbols.wxPrintPreview_GetCurrentPage(this._ptr);
   }
 
   GetFrame(): Deno.PointerValue {
-    return lib.symbols.wxPrintPreview_GetFrame(this.#ptr);
+    return lib.symbols.wxPrintPreview_GetFrame(this._ptr);
   }
 
   GetMaxPage(): number {
-    return lib.symbols.wxPrintPreview_GetMaxPage(this.#ptr);
+    return lib.symbols.wxPrintPreview_GetMaxPage(this._ptr);
   }
 
   GetMinPage(): number {
-    return lib.symbols.wxPrintPreview_GetMinPage(this.#ptr);
+    return lib.symbols.wxPrintPreview_GetMinPage(this._ptr);
   }
 
   GetPrintDialogData(ref: Deno.PointerValue): void {
-    lib.symbols.wxPrintPreview_GetPrintDialogData(this.#ptr, ref);
+    lib.symbols.wxPrintPreview_GetPrintDialogData(this._ptr, ref);
   }
 
   GetPrintout(): Deno.PointerValue {
-    return lib.symbols.wxPrintPreview_GetPrintout(this.#ptr);
+    return lib.symbols.wxPrintPreview_GetPrintout(this._ptr);
   }
 
   GetPrintoutForPrinting(): Deno.PointerValue {
-    return lib.symbols.wxPrintPreview_GetPrintoutForPrinting(this.#ptr);
+    return lib.symbols.wxPrintPreview_GetPrintoutForPrinting(this._ptr);
   }
 
   GetZoom(): number {
-    return lib.symbols.wxPrintPreview_GetZoom(this.#ptr);
+    return lib.symbols.wxPrintPreview_GetZoom(this._ptr);
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxPrintPreview_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintPreview_IsOk(this._ptr) as number) !== 0;
   }
 
   PaintPage(canvas: Deno.PointerValue, dc: Deno.PointerValue): boolean {
-    return (lib.symbols.wxPrintPreview_PaintPage(this.#ptr, canvas, dc) as number) !== 0;
+    return (lib.symbols.wxPrintPreview_PaintPage(this._ptr, canvas, dc) as number) !== 0;
   }
 
   Print(interactive: boolean): boolean {
-    return (lib.symbols.wxPrintPreview_Print(this.#ptr, interactive ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxPrintPreview_Print(this._ptr, interactive ? 1 : 0) as number) !== 0;
   }
 
   RenderPage(pageNum: number): boolean {
-    return (lib.symbols.wxPrintPreview_RenderPage(this.#ptr, pageNum) as number) !== 0;
+    return (lib.symbols.wxPrintPreview_RenderPage(this._ptr, pageNum) as number) !== 0;
   }
 
   SetCanvas(canvas: Deno.PointerValue): void {
-    lib.symbols.wxPrintPreview_SetCanvas(this.#ptr, canvas);
+    lib.symbols.wxPrintPreview_SetCanvas(this._ptr, canvas);
   }
 
   SetCurrentPage(pageNum: number): boolean {
-    return (lib.symbols.wxPrintPreview_SetCurrentPage(this.#ptr, pageNum) as number) !== 0;
+    return (lib.symbols.wxPrintPreview_SetCurrentPage(this._ptr, pageNum) as number) !== 0;
   }
 
   SetFrame(frame: Deno.PointerValue): void {
-    lib.symbols.wxPrintPreview_SetFrame(this.#ptr, frame);
+    lib.symbols.wxPrintPreview_SetFrame(this._ptr, frame);
   }
 
   SetOk(isOk: boolean): void {
-    lib.symbols.wxPrintPreview_SetOk(this.#ptr, isOk ? 1 : 0);
+    lib.symbols.wxPrintPreview_SetOk(this._ptr, isOk ? 1 : 0);
   }
 
   SetPrintout(printout: Deno.PointerValue): void {
-    lib.symbols.wxPrintPreview_SetPrintout(this.#ptr, printout);
+    lib.symbols.wxPrintPreview_SetPrintout(this._ptr, printout);
   }
 
   SetZoom(percent: number): void {
-    lib.symbols.wxPrintPreview_SetZoom(this.#ptr, percent);
+    lib.symbols.wxPrintPreview_SetZoom(this._ptr, percent);
   }
 
 }

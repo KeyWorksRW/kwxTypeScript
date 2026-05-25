@@ -3,27 +3,27 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxStreamBase {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   GetLastError(): number {
-    return lib.symbols.wxStreamBase_GetLastError(this.#ptr);
+    return lib.symbols.wxStreamBase_GetLastError(this._ptr);
   }
 
   GetSize(): number {
-    return lib.symbols.wxStreamBase_GetSize(this.#ptr);
+    return lib.symbols.wxStreamBase_GetSize(this._ptr);
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxStreamBase_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxStreamBase_IsOk(this._ptr) as number) !== 0;
   }
 
 }

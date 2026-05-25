@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class kwxGridTable {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(pObject: Deno.PointerValue, fnGetNumberRows: Deno.PointerValue, fnGetNumberCols: Deno.PointerValue, fnGetValue: Deno.PointerValue, fnSetValue: Deno.PointerValue, fnIsEmptyCell: Deno.PointerValue, fnClear: Deno.PointerValue, fnInsertRows: Deno.PointerValue, fnAppendRows: Deno.PointerValue, fnDeleteRows: Deno.PointerValue, fnInsertCols: Deno.PointerValue, fnAppendCols: Deno.PointerValue, fnDeleteCols: Deno.PointerValue, fnSetRowLabelValue: Deno.PointerValue, fnSetColLabelValue: Deno.PointerValue, fnGetRowLabelValue: Deno.PointerValue, fnGetColLabelValue: Deno.PointerValue): kwxGridTable | null {
@@ -21,7 +21,7 @@ export class kwxGridTable {
   }
 
   Delete(): void {
-    lib.symbols.kwxGridTable_Delete(this.#ptr);
+    lib.symbols.kwxGridTable_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,11 +29,11 @@ export class kwxGridTable {
   }
 
   GetView(): Deno.PointerValue {
-    return lib.symbols.kwxGridTable_GetView(this.#ptr);
+    return lib.symbols.kwxGridTable_GetView(this._ptr);
   }
 
   SendTableMessage(id: number, val1: number, val2: number): Deno.PointerValue {
-    return lib.symbols.kwxGridTable_SendTableMessage(this.#ptr, id, val1, val2);
+    return lib.symbols.kwxGridTable_SendTableMessage(this._ptr, id, val1, val2);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxMenuItem {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxMenuItem | null {
@@ -21,7 +21,7 @@ export class wxMenuItem {
   }
 
   Delete(): void {
-    lib.symbols.wxMenuItem_Delete(this.#ptr);
+    lib.symbols.wxMenuItem_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,23 +29,23 @@ export class wxMenuItem {
   }
 
   Check(check: boolean): void {
-    lib.symbols.wxMenuItem_Check(this.#ptr, check ? 1 : 0);
+    lib.symbols.wxMenuItem_Check(this._ptr, check ? 1 : 0);
   }
 
   Enable(enable: boolean): void {
-    lib.symbols.wxMenuItem_Enable(this.#ptr, enable ? 1 : 0);
+    lib.symbols.wxMenuItem_Enable(this._ptr, enable ? 1 : 0);
   }
 
   GetHelp(): Deno.PointerValue {
-    return lib.symbols.wxMenuItem_GetHelp(this.#ptr);
+    return lib.symbols.wxMenuItem_GetHelp(this._ptr);
   }
 
   GetId(): number {
-    return lib.symbols.wxMenuItem_GetId(this.#ptr);
+    return lib.symbols.wxMenuItem_GetId(this._ptr);
   }
 
   GetItemLabelText(): Deno.PointerValue {
-    return lib.symbols.wxMenuItem_GetItemLabelText(this.#ptr);
+    return lib.symbols.wxMenuItem_GetItemLabelText(this._ptr);
   }
 
   GetLabelText(text: Deno.PointerValue): Deno.PointerValue {
@@ -53,79 +53,79 @@ export class wxMenuItem {
   }
 
   GetMenu(): Deno.PointerValue {
-    return lib.symbols.wxMenuItem_GetMenu(this.#ptr);
+    return lib.symbols.wxMenuItem_GetMenu(this._ptr);
   }
 
   GetSubMenu(): Deno.PointerValue {
-    return lib.symbols.wxMenuItem_GetSubMenu(this.#ptr);
+    return lib.symbols.wxMenuItem_GetSubMenu(this._ptr);
   }
 
   GetItemLabel(): Deno.PointerValue {
-    return lib.symbols.wxMenuItem_GetItemLabel(this.#ptr);
+    return lib.symbols.wxMenuItem_GetItemLabel(this._ptr);
   }
 
   IsCheckable(): boolean {
-    return (lib.symbols.wxMenuItem_IsCheckable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxMenuItem_IsCheckable(this._ptr) as number) !== 0;
   }
 
   IsChecked(): boolean {
-    return (lib.symbols.wxMenuItem_IsChecked(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxMenuItem_IsChecked(this._ptr) as number) !== 0;
   }
 
   IsEnabled(): boolean {
-    return (lib.symbols.wxMenuItem_IsEnabled(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxMenuItem_IsEnabled(this._ptr) as number) !== 0;
   }
 
   IsSeparator(): boolean {
-    return (lib.symbols.wxMenuItem_IsSeparator(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxMenuItem_IsSeparator(this._ptr) as number) !== 0;
   }
 
   IsSubMenu(): boolean {
-    return (lib.symbols.wxMenuItem_IsSubMenu(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxMenuItem_IsSubMenu(this._ptr) as number) !== 0;
   }
 
   SetCheckable(checkable: boolean): void {
-    lib.symbols.wxMenuItem_SetCheckable(this.#ptr, checkable ? 1 : 0);
+    lib.symbols.wxMenuItem_SetCheckable(this._ptr, checkable ? 1 : 0);
   }
 
   SetHelp(str: Deno.PointerValue): void {
-    lib.symbols.wxMenuItem_SetHelp(this.#ptr, str);
+    lib.symbols.wxMenuItem_SetHelp(this._ptr, str);
   }
 
   SetId(id: number): void {
-    lib.symbols.wxMenuItem_SetId(this.#ptr, id);
+    lib.symbols.wxMenuItem_SetId(this._ptr, id);
   }
 
   SetSubMenu(menu: Deno.PointerValue): void {
-    lib.symbols.wxMenuItem_SetSubMenu(this.#ptr, menu);
+    lib.symbols.wxMenuItem_SetSubMenu(this._ptr, menu);
   }
 
   SetItemLabel(str: Deno.PointerValue): void {
-    lib.symbols.wxMenuItem_SetItemLabel(this.#ptr, str);
+    lib.symbols.wxMenuItem_SetItemLabel(this._ptr, str);
   }
 
   GetKind(): number {
-    return lib.symbols.wxMenuItem_GetKind(this.#ptr);
+    return lib.symbols.wxMenuItem_GetKind(this._ptr);
   }
 
   IsCheck(): boolean {
-    return (lib.symbols.wxMenuItem_IsCheck(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxMenuItem_IsCheck(this._ptr) as number) !== 0;
   }
 
   IsRadio(): boolean {
-    return (lib.symbols.wxMenuItem_IsRadio(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxMenuItem_IsRadio(this._ptr) as number) !== 0;
   }
 
   Toggle(): void {
-    lib.symbols.wxMenuItem_Toggle(this.#ptr);
+    lib.symbols.wxMenuItem_Toggle(this._ptr);
   }
 
   SetBitmap(bmp: Deno.PointerValue): void {
-    lib.symbols.wxMenuItem_SetBitmap(this.#ptr, bmp);
+    lib.symbols.wxMenuItem_SetBitmap(this._ptr, bmp);
   }
 
   GetBitmap(): Deno.PointerValue {
-    return lib.symbols.wxMenuItem_GetBitmap(this.#ptr);
+    return lib.symbols.wxMenuItem_GetBitmap(this._ptr);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAuiTabContainer {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxAuiTabContainer | null {
@@ -21,123 +21,123 @@ export class wxAuiTabContainer {
   }
 
   SetArtProvider(artId: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainer_SetArtProvider(this.#ptr, artId);
+    lib.symbols.wxAuiTabContainer_SetArtProvider(this._ptr, artId);
   }
 
   GetArtProvider(): Deno.PointerValue {
-    return lib.symbols.wxAuiTabContainer_GetArtProvider(this.#ptr);
+    return lib.symbols.wxAuiTabContainer_GetArtProvider(this._ptr);
   }
 
   SetFlags(flags: number): void {
-    lib.symbols.wxAuiTabContainer_SetFlags(this.#ptr, flags);
+    lib.symbols.wxAuiTabContainer_SetFlags(this._ptr, flags);
   }
 
   GetFlags(): number {
-    return lib.symbols.wxAuiTabContainer_GetFlags(this.#ptr);
+    return lib.symbols.wxAuiTabContainer_GetFlags(this._ptr);
   }
 
   AddPage(page: Deno.PointerValue, info: Deno.PointerValue): boolean {
-    return (lib.symbols.wxAuiTabContainer_AddPage(this.#ptr, page, info) as number) !== 0;
+    return (lib.symbols.wxAuiTabContainer_AddPage(this._ptr, page, info) as number) !== 0;
   }
 
   InsertPage(page: Deno.PointerValue, info: Deno.PointerValue, idx: bigint): boolean {
-    return (lib.symbols.wxAuiTabContainer_InsertPage(this.#ptr, page, info, idx) as number) !== 0;
+    return (lib.symbols.wxAuiTabContainer_InsertPage(this._ptr, page, info, idx) as number) !== 0;
   }
 
   MovePage(page: Deno.PointerValue, newIdx: bigint): boolean {
-    return (lib.symbols.wxAuiTabContainer_MovePage(this.#ptr, page, newIdx) as number) !== 0;
+    return (lib.symbols.wxAuiTabContainer_MovePage(this._ptr, page, newIdx) as number) !== 0;
   }
 
   RemovePage(page: Deno.PointerValue): boolean {
-    return (lib.symbols.wxAuiTabContainer_RemovePage(this.#ptr, page) as number) !== 0;
+    return (lib.symbols.wxAuiTabContainer_RemovePage(this._ptr, page) as number) !== 0;
   }
 
   SetActivePageByWindow(page: Deno.PointerValue): boolean {
-    return (lib.symbols.wxAuiTabContainer_SetActivePageByWindow(this.#ptr, page) as number) !== 0;
+    return (lib.symbols.wxAuiTabContainer_SetActivePageByWindow(this._ptr, page) as number) !== 0;
   }
 
   SetActivePage(page: bigint): boolean {
-    return (lib.symbols.wxAuiTabContainer_SetActivePage(this.#ptr, page) as number) !== 0;
+    return (lib.symbols.wxAuiTabContainer_SetActivePage(this._ptr, page) as number) !== 0;
   }
 
   SetNoneActive(): void {
-    lib.symbols.wxAuiTabContainer_SetNoneActive(this.#ptr);
+    lib.symbols.wxAuiTabContainer_SetNoneActive(this._ptr);
   }
 
   GetActivePage(): number {
-    return lib.symbols.wxAuiTabContainer_GetActivePage(this.#ptr);
+    return lib.symbols.wxAuiTabContainer_GetActivePage(this._ptr);
   }
 
   GetWindowFromIdx(idx: bigint): Deno.PointerValue {
-    return lib.symbols.wxAuiTabContainer_GetWindowFromIdx(this.#ptr, idx);
+    return lib.symbols.wxAuiTabContainer_GetWindowFromIdx(this._ptr, idx);
   }
 
   GetIdxFromWindow(page: Deno.PointerValue): number {
-    return lib.symbols.wxAuiTabContainer_GetIdxFromWindow(this.#ptr, page);
+    return lib.symbols.wxAuiTabContainer_GetIdxFromWindow(this._ptr, page);
   }
 
   GetPageCount(): bigint {
-    return lib.symbols.wxAuiTabContainer_GetPageCount(this.#ptr) as bigint;
+    return lib.symbols.wxAuiTabContainer_GetPageCount(this._ptr) as bigint;
   }
 
   GetPage(idx: bigint): Deno.PointerValue {
-    return lib.symbols.wxAuiTabContainer_GetPage(this.#ptr, idx);
+    return lib.symbols.wxAuiTabContainer_GetPage(this._ptr, idx);
   }
 
   GetPages(): Deno.PointerValue {
-    return lib.symbols.wxAuiTabContainer_GetPages(this.#ptr);
+    return lib.symbols.wxAuiTabContainer_GetPages(this._ptr);
   }
 
   SetNormalFont(normalFont: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainer_SetNormalFont(this.#ptr, normalFont);
+    lib.symbols.wxAuiTabContainer_SetNormalFont(this._ptr, normalFont);
   }
 
   SetSelectedFont(selectedFont: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainer_SetSelectedFont(this.#ptr, selectedFont);
+    lib.symbols.wxAuiTabContainer_SetSelectedFont(this._ptr, selectedFont);
   }
 
   SetMeasuringFont(measuringFont: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainer_SetMeasuringFont(this.#ptr, measuringFont);
+    lib.symbols.wxAuiTabContainer_SetMeasuringFont(this._ptr, measuringFont);
   }
 
   SetColour(colour: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainer_SetColour(this.#ptr, colour);
+    lib.symbols.wxAuiTabContainer_SetColour(this._ptr, colour);
   }
 
   SetActiveColour(colour: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainer_SetActiveColour(this.#ptr, colour);
+    lib.symbols.wxAuiTabContainer_SetActiveColour(this._ptr, colour);
   }
 
   DoShowHide(): void {
-    lib.symbols.wxAuiTabContainer_DoShowHide(this.#ptr);
+    lib.symbols.wxAuiTabContainer_DoShowHide(this._ptr);
   }
 
   SetRect(rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainer_SetRect(this.#ptr, rect);
+    lib.symbols.wxAuiTabContainer_SetRect(this._ptr, rect);
   }
 
   RemoveButton(id: number): void {
-    lib.symbols.wxAuiTabContainer_RemoveButton(this.#ptr, id);
+    lib.symbols.wxAuiTabContainer_RemoveButton(this._ptr, id);
   }
 
   AddButton(id: number, location: number, normalBitmap: Deno.PointerValue, disabledBitmap: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainer_AddButton(this.#ptr, id, location, normalBitmap, disabledBitmap);
+    lib.symbols.wxAuiTabContainer_AddButton(this._ptr, id, location, normalBitmap, disabledBitmap);
   }
 
   GetTabOffset(): bigint {
-    return lib.symbols.wxAuiTabContainer_GetTabOffset(this.#ptr) as bigint;
+    return lib.symbols.wxAuiTabContainer_GetTabOffset(this._ptr) as bigint;
   }
 
   SetTabOffset(offset: bigint): void {
-    lib.symbols.wxAuiTabContainer_SetTabOffset(this.#ptr, offset);
+    lib.symbols.wxAuiTabContainer_SetTabOffset(this._ptr, offset);
   }
 
   IsTabVisible(tabPage: number, tabOffset: number, dc: Deno.PointerValue, window: Deno.PointerValue): boolean {
-    return (lib.symbols.wxAuiTabContainer_IsTabVisible(this.#ptr, tabPage, tabOffset, dc, window) as number) !== 0;
+    return (lib.symbols.wxAuiTabContainer_IsTabVisible(this._ptr, tabPage, tabOffset, dc, window) as number) !== 0;
   }
 
   MakeTabVisible(tabPage: number, win: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainer_MakeTabVisible(this.#ptr, tabPage, win);
+    lib.symbols.wxAuiTabContainer_MakeTabVisible(this._ptr, tabPage, win);
   }
 
 }

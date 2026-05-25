@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxSimpleHtmlListBox {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxSimpleHtmlListBox | null {
@@ -21,67 +21,67 @@ export class wxSimpleHtmlListBox {
   }
 
   Clear(): void {
-    lib.symbols.wxSimpleHtmlListBox_Clear(this.#ptr);
+    lib.symbols.wxSimpleHtmlListBox_Clear(this._ptr);
   }
 
   Delete(index: number): void {
-    lib.symbols.wxSimpleHtmlListBox_Delete(this.#ptr, index);
+    lib.symbols.wxSimpleHtmlListBox_Delete(this._ptr, index);
   }
 
   GetCount(): number {
-    return lib.symbols.wxSimpleHtmlListBox_GetCount(this.#ptr);
+    return lib.symbols.wxSimpleHtmlListBox_GetCount(this._ptr);
   }
 
   GetString(index: number): Deno.PointerValue {
-    return lib.symbols.wxSimpleHtmlListBox_GetString(this.#ptr, index);
+    return lib.symbols.wxSimpleHtmlListBox_GetString(this._ptr, index);
   }
 
   SetString(index: number, str: Deno.PointerValue): void {
-    lib.symbols.wxSimpleHtmlListBox_SetString(this.#ptr, index, str);
+    lib.symbols.wxSimpleHtmlListBox_SetString(this._ptr, index, str);
   }
 
   GetSelection(): number {
-    return lib.symbols.wxSimpleHtmlListBox_GetSelection(this.#ptr);
+    return lib.symbols.wxSimpleHtmlListBox_GetSelection(this._ptr);
   }
 
   SetSelection(index: number): void {
-    lib.symbols.wxSimpleHtmlListBox_SetSelection(this.#ptr, index);
+    lib.symbols.wxSimpleHtmlListBox_SetSelection(this._ptr, index);
   }
 
   Append(item: Deno.PointerValue): number {
-    return lib.symbols.wxSimpleHtmlListBox_Append(this.#ptr, item);
+    return lib.symbols.wxSimpleHtmlListBox_Append(this._ptr, item);
   }
 
   AppendData(item: Deno.PointerValue, data: Deno.PointerValue): number {
-    return lib.symbols.wxSimpleHtmlListBox_AppendData(this.#ptr, item, data);
+    return lib.symbols.wxSimpleHtmlListBox_AppendData(this._ptr, item, data);
   }
 
   Insert(item: Deno.PointerValue, pos: number): number {
-    return lib.symbols.wxSimpleHtmlListBox_Insert(this.#ptr, item, pos);
+    return lib.symbols.wxSimpleHtmlListBox_Insert(this._ptr, item, pos);
   }
 
   InsertData(item: Deno.PointerValue, pos: number, data: Deno.PointerValue): number {
-    return lib.symbols.wxSimpleHtmlListBox_InsertData(this.#ptr, item, pos, data);
+    return lib.symbols.wxSimpleHtmlListBox_InsertData(this._ptr, item, pos, data);
   }
 
   FindString(str: Deno.PointerValue, caseSensitive: boolean): number {
-    return lib.symbols.wxSimpleHtmlListBox_FindString(this.#ptr, str, caseSensitive ? 1 : 0);
+    return lib.symbols.wxSimpleHtmlListBox_FindString(this._ptr, str, caseSensitive ? 1 : 0);
   }
 
   GetClientData(index: number): Deno.PointerValue {
-    return lib.symbols.wxSimpleHtmlListBox_GetClientData(this.#ptr, index);
+    return lib.symbols.wxSimpleHtmlListBox_GetClientData(this._ptr, index);
   }
 
   SetClientData(index: number, data: Deno.PointerValue): void {
-    lib.symbols.wxSimpleHtmlListBox_SetClientData(this.#ptr, index, data);
+    lib.symbols.wxSimpleHtmlListBox_SetClientData(this._ptr, index, data);
   }
 
   IsEmpty(): boolean {
-    return (lib.symbols.wxSimpleHtmlListBox_IsEmpty(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxSimpleHtmlListBox_IsEmpty(this._ptr) as number) !== 0;
   }
 
   GetItemCount(): number {
-    return lib.symbols.wxSimpleHtmlListBox_GetItemCount(this.#ptr);
+    return lib.symbols.wxSimpleHtmlListBox_GetItemCount(this._ptr);
   }
 
 }

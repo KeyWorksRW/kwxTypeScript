@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFileDataObject {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(count: number, list: Deno.PointerValue): wxFileDataObject | null {
@@ -21,7 +21,7 @@ export class wxFileDataObject {
   }
 
   Delete(): void {
-    lib.symbols.FileDataObject_Delete(this.#ptr);
+    lib.symbols.FileDataObject_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,11 +29,11 @@ export class wxFileDataObject {
   }
 
   AddFile(files: Deno.PointerValue): void {
-    lib.symbols.FileDataObject_AddFile(this.#ptr, files);
+    lib.symbols.FileDataObject_AddFile(this._ptr, files);
   }
 
   GetFilenames(list: Deno.PointerValue): number {
-    return lib.symbols.FileDataObject_GetFilenames(this.#ptr, list);
+    return lib.symbols.FileDataObject_GetFilenames(this._ptr, list);
   }
 
 }

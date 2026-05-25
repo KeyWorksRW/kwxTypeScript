@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDateTime {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxDateTime | null {
@@ -21,19 +21,19 @@ export class wxDateTime {
   }
 
   AddDate(diff: Deno.PointerValue, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_AddDate(this.#ptr, diff, ref);
+    lib.symbols.wxDateTime_AddDate(this._ptr, diff, ref);
   }
 
   AddDateValues(years: number, month: number, week: number, day: number): void {
-    lib.symbols.wxDateTime_AddDateValues(this.#ptr, years, month, week, day);
+    lib.symbols.wxDateTime_AddDateValues(this._ptr, years, month, week, day);
   }
 
   AddTime(diff: Deno.PointerValue, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_AddTime(this.#ptr, diff, ref);
+    lib.symbols.wxDateTime_AddTime(this._ptr, diff, ref);
   }
 
   AddTimeValues(hours: number, minVal: number, seconds: number, milliseconds: number): void {
-    lib.symbols.wxDateTime_AddTimeValues(this.#ptr, hours, minVal, seconds, milliseconds);
+    lib.symbols.wxDateTime_AddTimeValues(this._ptr, hours, minVal, seconds, milliseconds);
   }
 
   ConvertYearToBC(year: number): number {
@@ -41,23 +41,23 @@ export class wxDateTime {
   }
 
   Format(format: Deno.PointerValue, timeZone: number): Deno.PointerValue {
-    return lib.symbols.wxDateTime_Format(this.#ptr, format, timeZone);
+    return lib.symbols.wxDateTime_Format(this._ptr, format, timeZone);
   }
 
   FormatDate(): Deno.PointerValue {
-    return lib.symbols.wxDateTime_FormatDate(this.#ptr);
+    return lib.symbols.wxDateTime_FormatDate(this._ptr);
   }
 
   FormatISODate(): Deno.PointerValue {
-    return lib.symbols.wxDateTime_FormatISODate(this.#ptr);
+    return lib.symbols.wxDateTime_FormatISODate(this._ptr);
   }
 
   FormatISOTime(): Deno.PointerValue {
-    return lib.symbols.wxDateTime_FormatISOTime(this.#ptr);
+    return lib.symbols.wxDateTime_FormatISOTime(this._ptr);
   }
 
   FormatTime(): Deno.PointerValue {
-    return lib.symbols.wxDateTime_FormatTime(this.#ptr);
+    return lib.symbols.wxDateTime_FormatTime(this._ptr);
   }
 
   GetAmString(): Deno.PointerValue {
@@ -85,11 +85,11 @@ export class wxDateTime {
   }
 
   GetDay(timeZone: number): number {
-    return lib.symbols.wxDateTime_GetDay(this.#ptr, timeZone);
+    return lib.symbols.wxDateTime_GetDay(this._ptr, timeZone);
   }
 
   GetDayOfYear(timeZone: number): number {
-    return lib.symbols.wxDateTime_GetDayOfYear(this.#ptr, timeZone);
+    return lib.symbols.wxDateTime_GetDayOfYear(this._ptr, timeZone);
   }
 
   GetEndDST(year: number, country: number, dateTime: Deno.PointerValue): void {
@@ -97,27 +97,27 @@ export class wxDateTime {
   }
 
   GetHour(timeZone: number): number {
-    return lib.symbols.wxDateTime_GetHour(this.#ptr, timeZone);
+    return lib.symbols.wxDateTime_GetHour(this._ptr, timeZone);
   }
 
   GetLastMonthDay(month: number, year: number, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_GetLastMonthDay(this.#ptr, month, year, ref);
+    lib.symbols.wxDateTime_GetLastMonthDay(this._ptr, month, year, ref);
   }
 
   GetLastWeekDay(weekday: number, month: number, year: number, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_GetLastWeekDay(this.#ptr, weekday, month, year, ref);
+    lib.symbols.wxDateTime_GetLastWeekDay(this._ptr, weekday, month, year, ref);
   }
 
   GetMillisecond(timeZone: number): number {
-    return lib.symbols.wxDateTime_GetMillisecond(this.#ptr, timeZone);
+    return lib.symbols.wxDateTime_GetMillisecond(this._ptr, timeZone);
   }
 
   GetMinute(timeZone: number): number {
-    return lib.symbols.wxDateTime_GetMinute(this.#ptr, timeZone);
+    return lib.symbols.wxDateTime_GetMinute(this._ptr, timeZone);
   }
 
   GetMonth(timeZone: number): number {
-    return lib.symbols.wxDateTime_GetMonth(this.#ptr, timeZone);
+    return lib.symbols.wxDateTime_GetMonth(this._ptr, timeZone);
   }
 
   GetMonthName(month: number, flags: number): Deno.PointerValue {
@@ -125,7 +125,7 @@ export class wxDateTime {
   }
 
   GetNextWeekDay(weekday: number, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_GetNextWeekDay(this.#ptr, weekday, ref);
+    lib.symbols.wxDateTime_GetNextWeekDay(this._ptr, weekday, ref);
   }
 
   GetNumberOfDays(year: number, cal: number): number {
@@ -141,15 +141,15 @@ export class wxDateTime {
   }
 
   GetPrevWeekDay(weekday: number, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_GetPrevWeekDay(this.#ptr, weekday, ref);
+    lib.symbols.wxDateTime_GetPrevWeekDay(this._ptr, weekday, ref);
   }
 
   GetSecond(timeZone: number): number {
-    return lib.symbols.wxDateTime_GetSecond(this.#ptr, timeZone);
+    return lib.symbols.wxDateTime_GetSecond(this._ptr, timeZone);
   }
 
   GetTicks(): number {
-    return lib.symbols.wxDateTime_GetTicks(this.#ptr);
+    return lib.symbols.wxDateTime_GetTicks(this._ptr);
   }
 
   GetTimeNow(): number {
@@ -157,15 +157,15 @@ export class wxDateTime {
   }
 
   GetValue(hi_long: Deno.PointerValue, lo_long: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_GetValue(this.#ptr, hi_long, lo_long);
+    lib.symbols.wxDateTime_GetValue(this._ptr, hi_long, lo_long);
   }
 
   GetWeekDay(weekday: number, nthWeek: number, month: number, year: number, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_GetWeekDay(this.#ptr, weekday, nthWeek, month, year, ref);
+    lib.symbols.wxDateTime_GetWeekDay(this._ptr, weekday, nthWeek, month, year, ref);
   }
 
   GetWeekDayInSameWeek(weekday: number, flags: number, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_GetWeekDayInSameWeek(this.#ptr, weekday, flags, ref);
+    lib.symbols.wxDateTime_GetWeekDayInSameWeek(this._ptr, weekday, flags, ref);
   }
 
   GetWeekDayName(weekday: number, flags: number): Deno.PointerValue {
@@ -173,27 +173,27 @@ export class wxDateTime {
   }
 
   GetWeekDayTZ(timeZone: number): number {
-    return lib.symbols.wxDateTime_GetWeekDayTZ(this.#ptr, timeZone);
+    return lib.symbols.wxDateTime_GetWeekDayTZ(this._ptr, timeZone);
   }
 
   GetWeekOfMonth(flags: number, timeZone: number): number {
-    return lib.symbols.wxDateTime_GetWeekOfMonth(this.#ptr, flags, timeZone);
+    return lib.symbols.wxDateTime_GetWeekOfMonth(this._ptr, flags, timeZone);
   }
 
   GetWeekOfYear(flags: number, timeZone: number): number {
-    return lib.symbols.wxDateTime_GetWeekOfYear(this.#ptr, flags, timeZone);
+    return lib.symbols.wxDateTime_GetWeekOfYear(this._ptr, flags, timeZone);
   }
 
   GetYear(timeZone: number): number {
-    return lib.symbols.wxDateTime_GetYear(this.#ptr, timeZone);
+    return lib.symbols.wxDateTime_GetYear(this._ptr, timeZone);
   }
 
   IsBetween(t1: Deno.PointerValue, t2: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDateTime_IsBetween(this.#ptr, t1, t2) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsBetween(this._ptr, t1, t2) as number) !== 0;
   }
 
   IsDST(country: number): boolean {
-    return (lib.symbols.wxDateTime_IsDST(this.#ptr, country) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsDST(this._ptr, country) as number) !== 0;
   }
 
   IsDSTApplicable(year: number, country: number): boolean {
@@ -201,19 +201,19 @@ export class wxDateTime {
   }
 
   IsEarlierThan(datetime: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDateTime_IsEarlierThan(this.#ptr, datetime) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsEarlierThan(this._ptr, datetime) as number) !== 0;
   }
 
   IsEqualTo(datetime: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDateTime_IsEqualTo(this.#ptr, datetime) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsEqualTo(this._ptr, datetime) as number) !== 0;
   }
 
   IsEqualUpTo(dateTime: Deno.PointerValue, timeSpan: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDateTime_IsEqualUpTo(this.#ptr, dateTime, timeSpan) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsEqualUpTo(this._ptr, dateTime, timeSpan) as number) !== 0;
   }
 
   IsLaterThan(datetime: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDateTime_IsLaterThan(this.#ptr, datetime) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsLaterThan(this._ptr, datetime) as number) !== 0;
   }
 
   IsLeapYear(year: number, cal: number): boolean {
@@ -221,19 +221,19 @@ export class wxDateTime {
   }
 
   IsSameDate(dateTime: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDateTime_IsSameDate(this.#ptr, dateTime) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsSameDate(this._ptr, dateTime) as number) !== 0;
   }
 
   IsSameTime(dateTime: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDateTime_IsSameTime(this.#ptr, dateTime) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsSameTime(this._ptr, dateTime) as number) !== 0;
   }
 
   IsStrictlyBetween(t1: Deno.PointerValue, t2: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDateTime_IsStrictlyBetween(this.#ptr, t1, t2) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsStrictlyBetween(this._ptr, t1, t2) as number) !== 0;
   }
 
   IsValid(): boolean {
-    return (lib.symbols.wxDateTime_IsValid(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsValid(this._ptr) as number) !== 0;
   }
 
   IsWestEuropeanCountry(country: number): boolean {
@@ -241,47 +241,47 @@ export class wxDateTime {
   }
 
   IsWorkDay(country: number): boolean {
-    return (lib.symbols.wxDateTime_IsWorkDay(this.#ptr, country) as number) !== 0;
+    return (lib.symbols.wxDateTime_IsWorkDay(this._ptr, country) as number) !== 0;
   }
 
   MakeGMT(noDST: number): void {
-    lib.symbols.wxDateTime_MakeGMT(this.#ptr, noDST);
+    lib.symbols.wxDateTime_MakeGMT(this._ptr, noDST);
   }
 
   MakeTimezone(timeZone: number, noDST: number): void {
-    lib.symbols.wxDateTime_MakeTimezone(this.#ptr, timeZone, noDST);
+    lib.symbols.wxDateTime_MakeTimezone(this._ptr, timeZone, noDST);
   }
 
   Now(): void {
-    lib.symbols.wxDateTime_Now(this.#ptr);
+    lib.symbols.wxDateTime_Now(this._ptr);
   }
 
   ParseDate(date: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxDateTime_ParseDate(this.#ptr, date);
+    return lib.symbols.wxDateTime_ParseDate(this._ptr, date);
   }
 
   ParseDateTime(datetime: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxDateTime_ParseDateTime(this.#ptr, datetime);
+    return lib.symbols.wxDateTime_ParseDateTime(this._ptr, datetime);
   }
 
   ParseFormat(date: Deno.PointerValue, format: Deno.PointerValue, dateDef: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxDateTime_ParseFormat(this.#ptr, date, format, dateDef);
+    return lib.symbols.wxDateTime_ParseFormat(this._ptr, date, format, dateDef);
   }
 
   ParseRfc822Date(date: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxDateTime_ParseRfc822Date(this.#ptr, date);
+    return lib.symbols.wxDateTime_ParseRfc822Date(this._ptr, date);
   }
 
   ParseTime(time: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxDateTime_ParseTime(this.#ptr, time);
+    return lib.symbols.wxDateTime_ParseTime(this._ptr, time);
   }
 
   ResetTime(): void {
-    lib.symbols.wxDateTime_ResetTime(this.#ptr);
+    lib.symbols.wxDateTime_ResetTime(this._ptr);
   }
 
   Set(day: number, month: number, year: number, hour: number, minute: number, second: number, millisec: number): void {
-    lib.symbols.wxDateTime_Set(this.#ptr, day, month, year, hour, minute, second, millisec);
+    lib.symbols.wxDateTime_Set(this._ptr, day, month, year, hour, minute, second, millisec);
   }
 
   SetCountry(country: number): void {
@@ -289,87 +289,87 @@ export class wxDateTime {
   }
 
   SetDay(day: number): void {
-    lib.symbols.wxDateTime_SetDay(this.#ptr, day);
+    lib.symbols.wxDateTime_SetDay(this._ptr, day);
   }
 
   SetHour(hour: number): void {
-    lib.symbols.wxDateTime_SetHour(this.#ptr, hour);
+    lib.symbols.wxDateTime_SetHour(this._ptr, hour);
   }
 
   SetMillisecond(millisecond: number): void {
-    lib.symbols.wxDateTime_SetMillisecond(this.#ptr, millisecond);
+    lib.symbols.wxDateTime_SetMillisecond(this._ptr, millisecond);
   }
 
   SetMinute(minute: number): void {
-    lib.symbols.wxDateTime_SetMinute(this.#ptr, minute);
+    lib.symbols.wxDateTime_SetMinute(this._ptr, minute);
   }
 
   SetMonth(month: number): void {
-    lib.symbols.wxDateTime_SetMonth(this.#ptr, month);
+    lib.symbols.wxDateTime_SetMonth(this._ptr, month);
   }
 
   SetSecond(second: number): void {
-    lib.symbols.wxDateTime_SetSecond(this.#ptr, second);
+    lib.symbols.wxDateTime_SetSecond(this._ptr, second);
   }
 
   SetTime(hour: number, minute: number, second: number, millisec: number): void {
-    lib.symbols.wxDateTime_SetTime(this.#ptr, hour, minute, second, millisec);
+    lib.symbols.wxDateTime_SetTime(this._ptr, hour, minute, second, millisec);
   }
 
   SetToCurrent(): void {
-    lib.symbols.wxDateTime_SetToCurrent(this.#ptr);
+    lib.symbols.wxDateTime_SetToCurrent(this._ptr);
   }
 
   SetToLastMonthDay(month: number, year: number): void {
-    lib.symbols.wxDateTime_SetToLastMonthDay(this.#ptr, month, year);
+    lib.symbols.wxDateTime_SetToLastMonthDay(this._ptr, month, year);
   }
 
   SetToLastWeekDay(weekday: number, month: number, year: number): boolean {
-    return (lib.symbols.wxDateTime_SetToLastWeekDay(this.#ptr, weekday, month, year) as number) !== 0;
+    return (lib.symbols.wxDateTime_SetToLastWeekDay(this._ptr, weekday, month, year) as number) !== 0;
   }
 
   SetToNextWeekDay(weekday: number): void {
-    lib.symbols.wxDateTime_SetToNextWeekDay(this.#ptr, weekday);
+    lib.symbols.wxDateTime_SetToNextWeekDay(this._ptr, weekday);
   }
 
   SetToPrevWeekDay(weekday: number): void {
-    lib.symbols.wxDateTime_SetToPrevWeekDay(this.#ptr, weekday);
+    lib.symbols.wxDateTime_SetToPrevWeekDay(this._ptr, weekday);
   }
 
   SetToWeekDay(weekday: number, nthWeek: number, month: number, year: number): boolean {
-    return (lib.symbols.wxDateTime_SetToWeekDay(this.#ptr, weekday, nthWeek, month, year) as number) !== 0;
+    return (lib.symbols.wxDateTime_SetToWeekDay(this._ptr, weekday, nthWeek, month, year) as number) !== 0;
   }
 
   SetToWeekDayInSameWeek(weekday: number, flags: number): void {
-    lib.symbols.wxDateTime_SetToWeekDayInSameWeek(this.#ptr, weekday, flags);
+    lib.symbols.wxDateTime_SetToWeekDayInSameWeek(this._ptr, weekday, flags);
   }
 
   SetYear(year: number): void {
-    lib.symbols.wxDateTime_SetYear(this.#ptr, year);
+    lib.symbols.wxDateTime_SetYear(this._ptr, year);
   }
 
   SubtractDate(diff: Deno.PointerValue, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_SubtractDate(this.#ptr, diff, ref);
+    lib.symbols.wxDateTime_SubtractDate(this._ptr, diff, ref);
   }
 
   SubtractTime(diff: Deno.PointerValue, ref: Deno.PointerValue): void {
-    lib.symbols.wxDateTime_SubtractTime(this.#ptr, diff, ref);
+    lib.symbols.wxDateTime_SubtractTime(this._ptr, diff, ref);
   }
 
   ToGMT(noDST: number): void {
-    lib.symbols.wxDateTime_ToGMT(this.#ptr, noDST);
+    lib.symbols.wxDateTime_ToGMT(this._ptr, noDST);
   }
 
   ToTimezone(timeZone: number, noDST: number): void {
-    lib.symbols.wxDateTime_ToTimezone(this.#ptr, timeZone, noDST);
+    lib.symbols.wxDateTime_ToTimezone(this._ptr, timeZone, noDST);
   }
 
   Today(): void {
-    lib.symbols.wxDateTime_Today(this.#ptr);
+    lib.symbols.wxDateTime_Today(this._ptr);
   }
 
   UNow(): void {
-    lib.symbols.wxDateTime_UNow(this.#ptr);
+    lib.symbols.wxDateTime_UNow(this._ptr);
   }
 
   wxDateTime(hi_long: number, lo_long: number): Deno.PointerValue {

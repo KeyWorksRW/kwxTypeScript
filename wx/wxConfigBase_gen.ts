@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxConfigBase {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxConfigBase | null {
@@ -21,7 +21,7 @@ export class wxConfigBase {
   }
 
   Delete(): void {
-    lib.symbols.wxConfigBase_Delete(this.#ptr);
+    lib.symbols.wxConfigBase_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,155 +29,155 @@ export class wxConfigBase {
   }
 
   DeleteAll(): boolean {
-    return (lib.symbols.wxConfigBase_DeleteAll(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxConfigBase_DeleteAll(this._ptr) as number) !== 0;
   }
 
   DeleteEntry(key: Deno.PointerValue, bDeleteGroupIfEmpty: boolean): boolean {
-    return (lib.symbols.wxConfigBase_DeleteEntry(this.#ptr, key, bDeleteGroupIfEmpty ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxConfigBase_DeleteEntry(this._ptr, key, bDeleteGroupIfEmpty ? 1 : 0) as number) !== 0;
   }
 
   DeleteGroup(key: Deno.PointerValue): boolean {
-    return (lib.symbols.wxConfigBase_DeleteGroup(this.#ptr, key) as number) !== 0;
+    return (lib.symbols.wxConfigBase_DeleteGroup(this._ptr, key) as number) !== 0;
   }
 
   Exists(strName: Deno.PointerValue): boolean {
-    return (lib.symbols.wxConfigBase_Exists(this.#ptr, strName) as number) !== 0;
+    return (lib.symbols.wxConfigBase_Exists(this._ptr, strName) as number) !== 0;
   }
 
   ExpandEnvVars(str: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxConfigBase_ExpandEnvVars(this.#ptr, str);
+    return lib.symbols.wxConfigBase_ExpandEnvVars(this._ptr, str);
   }
 
   Flush(bCurrentOnly: boolean): boolean {
-    return (lib.symbols.wxConfigBase_Flush(this.#ptr, bCurrentOnly ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxConfigBase_Flush(this._ptr, bCurrentOnly ? 1 : 0) as number) !== 0;
   }
 
   GetAppName(): Deno.PointerValue {
-    return lib.symbols.wxConfigBase_GetAppName(this.#ptr);
+    return lib.symbols.wxConfigBase_GetAppName(this._ptr);
   }
 
   GetEntryType(name: Deno.PointerValue): number {
-    return lib.symbols.wxConfigBase_GetEntryType(this.#ptr, name);
+    return lib.symbols.wxConfigBase_GetEntryType(this._ptr, name);
   }
 
   GetFirstEntry(lIndex: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxConfigBase_GetFirstEntry(this.#ptr, lIndex);
+    return lib.symbols.wxConfigBase_GetFirstEntry(this._ptr, lIndex);
   }
 
   GetFirstGroup(lIndex: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxConfigBase_GetFirstGroup(this.#ptr, lIndex);
+    return lib.symbols.wxConfigBase_GetFirstGroup(this._ptr, lIndex);
   }
 
   GetNextEntry(lIndex: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxConfigBase_GetNextEntry(this.#ptr, lIndex);
+    return lib.symbols.wxConfigBase_GetNextEntry(this._ptr, lIndex);
   }
 
   GetNextGroup(lIndex: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxConfigBase_GetNextGroup(this.#ptr, lIndex);
+    return lib.symbols.wxConfigBase_GetNextGroup(this._ptr, lIndex);
   }
 
   GetNumberOfEntries(bRecursive: boolean): number {
-    return lib.symbols.wxConfigBase_GetNumberOfEntries(this.#ptr, bRecursive ? 1 : 0);
+    return lib.symbols.wxConfigBase_GetNumberOfEntries(this._ptr, bRecursive ? 1 : 0);
   }
 
   GetNumberOfGroups(bRecursive: boolean): number {
-    return lib.symbols.wxConfigBase_GetNumberOfGroups(this.#ptr, bRecursive ? 1 : 0);
+    return lib.symbols.wxConfigBase_GetNumberOfGroups(this._ptr, bRecursive ? 1 : 0);
   }
 
   GetPath(): Deno.PointerValue {
-    return lib.symbols.wxConfigBase_GetPath(this.#ptr);
+    return lib.symbols.wxConfigBase_GetPath(this._ptr);
   }
 
   GetStyle(): number {
-    return lib.symbols.wxConfigBase_GetStyle(this.#ptr);
+    return lib.symbols.wxConfigBase_GetStyle(this._ptr);
   }
 
   GetVendorName(): Deno.PointerValue {
-    return lib.symbols.wxConfigBase_GetVendorName(this.#ptr);
+    return lib.symbols.wxConfigBase_GetVendorName(this._ptr);
   }
 
   HasEntry(strName: Deno.PointerValue): boolean {
-    return (lib.symbols.wxConfigBase_HasEntry(this.#ptr, strName) as number) !== 0;
+    return (lib.symbols.wxConfigBase_HasEntry(this._ptr, strName) as number) !== 0;
   }
 
   HasGroup(strName: Deno.PointerValue): boolean {
-    return (lib.symbols.wxConfigBase_HasGroup(this.#ptr, strName) as number) !== 0;
+    return (lib.symbols.wxConfigBase_HasGroup(this._ptr, strName) as number) !== 0;
   }
 
   IsExpandingEnvVars(): boolean {
-    return (lib.symbols.wxConfigBase_IsExpandingEnvVars(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxConfigBase_IsExpandingEnvVars(this._ptr) as number) !== 0;
   }
 
   IsRecordingDefaults(): boolean {
-    return (lib.symbols.wxConfigBase_IsRecordingDefaults(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxConfigBase_IsRecordingDefaults(this._ptr) as number) !== 0;
   }
 
   ReadBool(key: Deno.PointerValue, defVal: boolean): boolean {
-    return (lib.symbols.wxConfigBase_ReadBool(this.#ptr, key, defVal ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxConfigBase_ReadBool(this._ptr, key, defVal ? 1 : 0) as number) !== 0;
   }
 
   ReadDouble(key: Deno.PointerValue, defVal: number): number {
-    return lib.symbols.wxConfigBase_ReadDouble(this.#ptr, key, defVal);
+    return lib.symbols.wxConfigBase_ReadDouble(this._ptr, key, defVal);
   }
 
   ReadInteger(key: Deno.PointerValue, defVal: number): number {
-    return lib.symbols.wxConfigBase_ReadInteger(this.#ptr, key, defVal);
+    return lib.symbols.wxConfigBase_ReadInteger(this._ptr, key, defVal);
   }
 
   ReadString(key: Deno.PointerValue, defVal: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxConfigBase_ReadString(this.#ptr, key, defVal);
+    return lib.symbols.wxConfigBase_ReadString(this._ptr, key, defVal);
   }
 
   RenameEntry(oldName: Deno.PointerValue, newName: Deno.PointerValue): boolean {
-    return (lib.symbols.wxConfigBase_RenameEntry(this.#ptr, oldName, newName) as number) !== 0;
+    return (lib.symbols.wxConfigBase_RenameEntry(this._ptr, oldName, newName) as number) !== 0;
   }
 
   RenameGroup(oldName: Deno.PointerValue, newName: Deno.PointerValue): boolean {
-    return (lib.symbols.wxConfigBase_RenameGroup(this.#ptr, oldName, newName) as number) !== 0;
+    return (lib.symbols.wxConfigBase_RenameGroup(this._ptr, oldName, newName) as number) !== 0;
   }
 
   SetAppName(appName: Deno.PointerValue): void {
-    lib.symbols.wxConfigBase_SetAppName(this.#ptr, appName);
+    lib.symbols.wxConfigBase_SetAppName(this._ptr, appName);
   }
 
   SetExpandEnvVars(bDoIt: boolean): void {
-    lib.symbols.wxConfigBase_SetExpandEnvVars(this.#ptr, bDoIt ? 1 : 0);
+    lib.symbols.wxConfigBase_SetExpandEnvVars(this._ptr, bDoIt ? 1 : 0);
   }
 
   SetPath(strPath: Deno.PointerValue): void {
-    lib.symbols.wxConfigBase_SetPath(this.#ptr, strPath);
+    lib.symbols.wxConfigBase_SetPath(this._ptr, strPath);
   }
 
   SetRecordDefaults(bDoIt: boolean): void {
-    lib.symbols.wxConfigBase_SetRecordDefaults(this.#ptr, bDoIt ? 1 : 0);
+    lib.symbols.wxConfigBase_SetRecordDefaults(this._ptr, bDoIt ? 1 : 0);
   }
 
   SetStyle(style: number): void {
-    lib.symbols.wxConfigBase_SetStyle(this.#ptr, style);
+    lib.symbols.wxConfigBase_SetStyle(this._ptr, style);
   }
 
   SetVendorName(vendorName: Deno.PointerValue): void {
-    lib.symbols.wxConfigBase_SetVendorName(this.#ptr, vendorName);
+    lib.symbols.wxConfigBase_SetVendorName(this._ptr, vendorName);
   }
 
   WriteBool(key: Deno.PointerValue, value: boolean): boolean {
-    return (lib.symbols.wxConfigBase_WriteBool(this.#ptr, key, value ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxConfigBase_WriteBool(this._ptr, key, value ? 1 : 0) as number) !== 0;
   }
 
   WriteDouble(key: Deno.PointerValue, value: number): boolean {
-    return (lib.symbols.wxConfigBase_WriteDouble(this.#ptr, key, value) as number) !== 0;
+    return (lib.symbols.wxConfigBase_WriteDouble(this._ptr, key, value) as number) !== 0;
   }
 
   WriteInteger(key: Deno.PointerValue, value: number): boolean {
-    return (lib.symbols.wxConfigBase_WriteInteger(this.#ptr, key, value) as number) !== 0;
+    return (lib.symbols.wxConfigBase_WriteInteger(this._ptr, key, value) as number) !== 0;
   }
 
   WriteLong(key: Deno.PointerValue, value: number): boolean {
-    return (lib.symbols.wxConfigBase_WriteLong(this.#ptr, key, value) as number) !== 0;
+    return (lib.symbols.wxConfigBase_WriteLong(this._ptr, key, value) as number) !== 0;
   }
 
   WriteString(key: Deno.PointerValue, value: Deno.PointerValue): boolean {
-    return (lib.symbols.wxConfigBase_WriteString(this.#ptr, key, value) as number) !== 0;
+    return (lib.symbols.wxConfigBase_WriteString(this._ptr, key, value) as number) !== 0;
   }
 
 }

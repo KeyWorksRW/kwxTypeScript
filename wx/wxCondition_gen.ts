@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxCondition {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(mutex: Deno.PointerValue): wxCondition | null {
@@ -21,7 +21,7 @@ export class wxCondition {
   }
 
   Delete(): void {
-    lib.symbols.wxCondition_Delete(this.#ptr);
+    lib.symbols.wxCondition_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,19 +29,19 @@ export class wxCondition {
   }
 
   Broadcast(): void {
-    lib.symbols.wxCondition_Broadcast(this.#ptr);
+    lib.symbols.wxCondition_Broadcast(this._ptr);
   }
 
   Signal(): void {
-    lib.symbols.wxCondition_Signal(this.#ptr);
+    lib.symbols.wxCondition_Signal(this._ptr);
   }
 
   Wait(): void {
-    lib.symbols.wxCondition_Wait(this.#ptr);
+    lib.symbols.wxCondition_Wait(this._ptr);
   }
 
   WaitFor(sec: number, nsec: number): number {
-    return lib.symbols.wxCondition_WaitFor(this.#ptr, sec, nsec);
+    return lib.symbols.wxCondition_WaitFor(this._ptr, sec, nsec);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPen {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateDefault(): wxPen | null {
@@ -39,7 +39,7 @@ export class wxPen {
   }
 
   Delete(): void {
-    lib.symbols.wxPen_Delete(this.#ptr);
+    lib.symbols.wxPen_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -47,75 +47,75 @@ export class wxPen {
   }
 
   Assign(pen: Deno.PointerValue): void {
-    lib.symbols.wxPen_Assign(this.#ptr, pen);
+    lib.symbols.wxPen_Assign(this._ptr, pen);
   }
 
   GetCap(): number {
-    return lib.symbols.wxPen_GetCap(this.#ptr);
+    return lib.symbols.wxPen_GetCap(this._ptr);
   }
 
   GetColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxPen_GetColour(this.#ptr, ref);
+    lib.symbols.wxPen_GetColour(this._ptr, ref);
   }
 
   GetDashes(ptr: Deno.PointerValue): number {
-    return lib.symbols.wxPen_GetDashes(this.#ptr, ptr);
+    return lib.symbols.wxPen_GetDashes(this._ptr, ptr);
   }
 
   GetJoin(): number {
-    return lib.symbols.wxPen_GetJoin(this.#ptr);
+    return lib.symbols.wxPen_GetJoin(this._ptr);
   }
 
   GetStipple(ref: Deno.PointerValue): void {
-    lib.symbols.wxPen_GetStipple(this.#ptr, ref);
+    lib.symbols.wxPen_GetStipple(this._ptr, ref);
   }
 
   GetStyle(): number {
-    return lib.symbols.wxPen_GetStyle(this.#ptr);
+    return lib.symbols.wxPen_GetStyle(this._ptr);
   }
 
   GetWidth(): number {
-    return lib.symbols.wxPen_GetWidth(this.#ptr);
+    return lib.symbols.wxPen_GetWidth(this._ptr);
   }
 
   IsEqual(pen: Deno.PointerValue): boolean {
-    return (lib.symbols.wxPen_IsEqual(this.#ptr, pen) as number) !== 0;
+    return (lib.symbols.wxPen_IsEqual(this._ptr, pen) as number) !== 0;
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxPen_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPen_IsOk(this._ptr) as number) !== 0;
   }
 
   SetCap(cap: number): void {
-    lib.symbols.wxPen_SetCap(this.#ptr, cap);
+    lib.symbols.wxPen_SetCap(this._ptr, cap);
   }
 
   SetColour(col: Deno.PointerValue): void {
-    lib.symbols.wxPen_SetColour(this.#ptr, col);
+    lib.symbols.wxPen_SetColour(this._ptr, col);
   }
 
   SetColourSingle(red: number, green: number, blue: number): void {
-    lib.symbols.wxPen_SetColourSingle(this.#ptr, red, green, blue);
+    lib.symbols.wxPen_SetColourSingle(this._ptr, red, green, blue);
   }
 
   SetDashes(nb_dashes: number, dash: Deno.PointerValue): void {
-    lib.symbols.wxPen_SetDashes(this.#ptr, nb_dashes, dash);
+    lib.symbols.wxPen_SetDashes(this._ptr, nb_dashes, dash);
   }
 
   SetJoin(join: number): void {
-    lib.symbols.wxPen_SetJoin(this.#ptr, join);
+    lib.symbols.wxPen_SetJoin(this._ptr, join);
   }
 
   SetStipple(stipple: Deno.PointerValue): void {
-    lib.symbols.wxPen_SetStipple(this.#ptr, stipple);
+    lib.symbols.wxPen_SetStipple(this._ptr, stipple);
   }
 
   SetStyle(style: number): void {
-    lib.symbols.wxPen_SetStyle(this.#ptr, style);
+    lib.symbols.wxPen_SetStyle(this._ptr, style);
   }
 
   SetWidth(width: number): void {
-    lib.symbols.wxPen_SetWidth(this.#ptr, width);
+    lib.symbols.wxPen_SetWidth(this._ptr, width);
   }
 
 }

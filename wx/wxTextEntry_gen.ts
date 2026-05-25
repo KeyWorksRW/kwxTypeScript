@@ -3,183 +3,183 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxTextEntry {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   SetValue(value: Deno.PointerValue): void {
-    lib.symbols.wxTextEntry_SetValue(this.#ptr, value);
+    lib.symbols.wxTextEntry_SetValue(this._ptr, value);
   }
 
   ChangeValue(value: Deno.PointerValue): void {
-    lib.symbols.wxTextEntry_ChangeValue(this.#ptr, value);
+    lib.symbols.wxTextEntry_ChangeValue(this._ptr, value);
   }
 
   GetValue(): Deno.PointerValue {
-    return lib.symbols.wxTextEntry_GetValue(this.#ptr);
+    return lib.symbols.wxTextEntry_GetValue(this._ptr);
   }
 
   GetRange(from_: number, to: number): Deno.PointerValue {
-    return lib.symbols.wxTextEntry_GetRange(this.#ptr, from_, to);
+    return lib.symbols.wxTextEntry_GetRange(this._ptr, from_, to);
   }
 
   IsEmpty(): boolean {
-    return (lib.symbols.wxTextEntry_IsEmpty(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_IsEmpty(this._ptr) as number) !== 0;
   }
 
   WriteText(text: Deno.PointerValue): void {
-    lib.symbols.wxTextEntry_WriteText(this.#ptr, text);
+    lib.symbols.wxTextEntry_WriteText(this._ptr, text);
   }
 
   AppendText(text: Deno.PointerValue): void {
-    lib.symbols.wxTextEntry_AppendText(this.#ptr, text);
+    lib.symbols.wxTextEntry_AppendText(this._ptr, text);
   }
 
   Replace(from_: number, to: number, value: Deno.PointerValue): void {
-    lib.symbols.wxTextEntry_Replace(this.#ptr, from_, to, value);
+    lib.symbols.wxTextEntry_Replace(this._ptr, from_, to, value);
   }
 
   Remove(from_: number, to: number): void {
-    lib.symbols.wxTextEntry_Remove(this.#ptr, from_, to);
+    lib.symbols.wxTextEntry_Remove(this._ptr, from_, to);
   }
 
   Clear(): void {
-    lib.symbols.wxTextEntry_Clear(this.#ptr);
+    lib.symbols.wxTextEntry_Clear(this._ptr);
   }
 
   RemoveSelection(): void {
-    lib.symbols.wxTextEntry_RemoveSelection(this.#ptr);
+    lib.symbols.wxTextEntry_RemoveSelection(this._ptr);
   }
 
   Copy(): void {
-    lib.symbols.wxTextEntry_Copy(this.#ptr);
+    lib.symbols.wxTextEntry_Copy(this._ptr);
   }
 
   Cut(): void {
-    lib.symbols.wxTextEntry_Cut(this.#ptr);
+    lib.symbols.wxTextEntry_Cut(this._ptr);
   }
 
   Paste(): void {
-    lib.symbols.wxTextEntry_Paste(this.#ptr);
+    lib.symbols.wxTextEntry_Paste(this._ptr);
   }
 
   CanCopy(): boolean {
-    return (lib.symbols.wxTextEntry_CanCopy(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_CanCopy(this._ptr) as number) !== 0;
   }
 
   CanCut(): boolean {
-    return (lib.symbols.wxTextEntry_CanCut(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_CanCut(this._ptr) as number) !== 0;
   }
 
   CanPaste(): boolean {
-    return (lib.symbols.wxTextEntry_CanPaste(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_CanPaste(this._ptr) as number) !== 0;
   }
 
   Undo(): void {
-    lib.symbols.wxTextEntry_Undo(this.#ptr);
+    lib.symbols.wxTextEntry_Undo(this._ptr);
   }
 
   Redo(): void {
-    lib.symbols.wxTextEntry_Redo(this.#ptr);
+    lib.symbols.wxTextEntry_Redo(this._ptr);
   }
 
   CanUndo(): boolean {
-    return (lib.symbols.wxTextEntry_CanUndo(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_CanUndo(this._ptr) as number) !== 0;
   }
 
   CanRedo(): boolean {
-    return (lib.symbols.wxTextEntry_CanRedo(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_CanRedo(this._ptr) as number) !== 0;
   }
 
   SetInsertionPoint(pos: number): void {
-    lib.symbols.wxTextEntry_SetInsertionPoint(this.#ptr, pos);
+    lib.symbols.wxTextEntry_SetInsertionPoint(this._ptr, pos);
   }
 
   SetInsertionPointEnd(): void {
-    lib.symbols.wxTextEntry_SetInsertionPointEnd(this.#ptr);
+    lib.symbols.wxTextEntry_SetInsertionPointEnd(this._ptr);
   }
 
   GetInsertionPoint(): number {
-    return lib.symbols.wxTextEntry_GetInsertionPoint(this.#ptr);
+    return lib.symbols.wxTextEntry_GetInsertionPoint(this._ptr);
   }
 
   GetLastPosition(): number {
-    return lib.symbols.wxTextEntry_GetLastPosition(this.#ptr);
+    return lib.symbols.wxTextEntry_GetLastPosition(this._ptr);
   }
 
   SetSelection(from_: number, to: number): void {
-    lib.symbols.wxTextEntry_SetSelection(this.#ptr, from_, to);
+    lib.symbols.wxTextEntry_SetSelection(this._ptr, from_, to);
   }
 
   SelectAll(): void {
-    lib.symbols.wxTextEntry_SelectAll(this.#ptr);
+    lib.symbols.wxTextEntry_SelectAll(this._ptr);
   }
 
   SelectNone(): void {
-    lib.symbols.wxTextEntry_SelectNone(this.#ptr);
+    lib.symbols.wxTextEntry_SelectNone(this._ptr);
   }
 
   GetSelection(from_: Deno.PointerValue, to: Deno.PointerValue): void {
-    lib.symbols.wxTextEntry_GetSelection(this.#ptr, from_, to);
+    lib.symbols.wxTextEntry_GetSelection(this._ptr, from_, to);
   }
 
   HasSelection(): boolean {
-    return (lib.symbols.wxTextEntry_HasSelection(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_HasSelection(this._ptr) as number) !== 0;
   }
 
   GetStringSelection(): Deno.PointerValue {
-    return lib.symbols.wxTextEntry_GetStringSelection(this.#ptr);
+    return lib.symbols.wxTextEntry_GetStringSelection(this._ptr);
   }
 
   IsEditable(): boolean {
-    return (lib.symbols.wxTextEntry_IsEditable(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_IsEditable(this._ptr) as number) !== 0;
   }
 
   SetEditable(editable: boolean): void {
-    lib.symbols.wxTextEntry_SetEditable(this.#ptr, editable ? 1 : 0);
+    lib.symbols.wxTextEntry_SetEditable(this._ptr, editable ? 1 : 0);
   }
 
   SetMaxLength(len: number): void {
-    lib.symbols.wxTextEntry_SetMaxLength(this.#ptr, len);
+    lib.symbols.wxTextEntry_SetMaxLength(this._ptr, len);
   }
 
   ForceUpper(): void {
-    lib.symbols.wxTextEntry_ForceUpper(this.#ptr);
+    lib.symbols.wxTextEntry_ForceUpper(this._ptr);
   }
 
   SetHint(hint: Deno.PointerValue): boolean {
-    return (lib.symbols.wxTextEntry_SetHint(this.#ptr, hint) as number) !== 0;
+    return (lib.symbols.wxTextEntry_SetHint(this._ptr, hint) as number) !== 0;
   }
 
   GetHint(): Deno.PointerValue {
-    return lib.symbols.wxTextEntry_GetHint(this.#ptr);
+    return lib.symbols.wxTextEntry_GetHint(this._ptr);
   }
 
   SetMargins(left: number, top: number): boolean {
-    return (lib.symbols.wxTextEntry_SetMargins(this.#ptr, left, top) as number) !== 0;
+    return (lib.symbols.wxTextEntry_SetMargins(this._ptr, left, top) as number) !== 0;
   }
 
   GetMargins(left: Deno.PointerValue, top: Deno.PointerValue): void {
-    lib.symbols.wxTextEntry_GetMargins(this.#ptr, left, top);
+    lib.symbols.wxTextEntry_GetMargins(this._ptr, left, top);
   }
 
   AutoComplete(count: number, items: Deno.PointerValue): boolean {
-    return (lib.symbols.wxTextEntry_AutoComplete(this.#ptr, count, items) as number) !== 0;
+    return (lib.symbols.wxTextEntry_AutoComplete(this._ptr, count, items) as number) !== 0;
   }
 
   AutoCompleteFileNames(): boolean {
-    return (lib.symbols.wxTextEntry_AutoCompleteFileNames(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_AutoCompleteFileNames(this._ptr) as number) !== 0;
   }
 
   AutoCompleteDirectories(): boolean {
-    return (lib.symbols.wxTextEntry_AutoCompleteDirectories(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTextEntry_AutoCompleteDirectories(this._ptr) as number) !== 0;
   }
 
 }

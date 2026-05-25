@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxTimer {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number): wxTimer | null {
@@ -21,7 +21,7 @@ export class wxTimer {
   }
 
   Delete(): void {
-    lib.symbols.wxTimer_Delete(this.#ptr);
+    lib.symbols.wxTimer_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,23 +29,23 @@ export class wxTimer {
   }
 
   GetInterval(): number {
-    return lib.symbols.wxTimer_GetInterval(this.#ptr);
+    return lib.symbols.wxTimer_GetInterval(this._ptr);
   }
 
   IsOneShot(): boolean {
-    return (lib.symbols.wxTimer_IsOneShot(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTimer_IsOneShot(this._ptr) as number) !== 0;
   }
 
   IsRuning(): boolean {
-    return (lib.symbols.wxTimer_IsRuning(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTimer_IsRuning(this._ptr) as number) !== 0;
   }
 
   Start(interval: number, oneShot: boolean): boolean {
-    return (lib.symbols.wxTimer_Start(this.#ptr, interval, oneShot ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxTimer_Start(this._ptr, interval, oneShot ? 1 : 0) as number) !== 0;
   }
 
   Stop(): void {
-    lib.symbols.wxTimer_Stop(this.#ptr);
+    lib.symbols.wxTimer_Stop(this._ptr);
   }
 
 }

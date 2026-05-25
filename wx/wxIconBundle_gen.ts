@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxIconBundle {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateDefault(): wxIconBundle | null {
@@ -33,7 +33,7 @@ export class wxIconBundle {
   }
 
   Delete(): void {
-    lib.symbols.wxIconBundle_Delete(this.#ptr);
+    lib.symbols.wxIconBundle_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -41,19 +41,19 @@ export class wxIconBundle {
   }
 
   AddIcon(icon: Deno.PointerValue): void {
-    lib.symbols.wxIconBundle_AddIcon(this.#ptr, icon);
+    lib.symbols.wxIconBundle_AddIcon(this._ptr, icon);
   }
 
   AddIconFromFile(file: Deno.PointerValue, type_: number): void {
-    lib.symbols.wxIconBundle_AddIconFromFile(this.#ptr, file, type_);
+    lib.symbols.wxIconBundle_AddIconFromFile(this._ptr, file, type_);
   }
 
   Assign(ref: Deno.PointerValue): void {
-    lib.symbols.wxIconBundle_Assign(this.#ptr, ref);
+    lib.symbols.wxIconBundle_Assign(this._ptr, ref);
   }
 
   GetIcon(width: number, height: number, flags: number, ref: Deno.PointerValue): void {
-    lib.symbols.wxIconBundle_GetIcon(this.#ptr, width, height, flags, ref);
+    lib.symbols.wxIconBundle_GetIcon(this._ptr, width, height, flags, ref);
   }
 
 }

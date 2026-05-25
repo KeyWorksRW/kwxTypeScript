@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxRibbonPage {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, label: Deno.PointerValue, icon: Deno.PointerValue, style: number): wxRibbonPage | null {
@@ -21,35 +21,35 @@ export class wxRibbonPage {
   }
 
   DismissExpandedPanel(): void {
-    lib.symbols.wxRibbonPage_DismissExpandedPanel(this.#ptr);
+    lib.symbols.wxRibbonPage_DismissExpandedPanel(this._ptr);
   }
 
   ScrollLines(lines: number): boolean {
-    return (lib.symbols.wxRibbonPage_ScrollLines(this.#ptr, lines) as number) !== 0;
+    return (lib.symbols.wxRibbonPage_ScrollLines(this._ptr, lines) as number) !== 0;
   }
 
   ScrollPixels(pixels: number): boolean {
-    return (lib.symbols.wxRibbonPage_ScrollPixels(this.#ptr, pixels) as number) !== 0;
+    return (lib.symbols.wxRibbonPage_ScrollPixels(this._ptr, pixels) as number) !== 0;
   }
 
   GetLabel(): Deno.PointerValue {
-    return lib.symbols.wxRibbonPage_GetLabel(this.#ptr);
+    return lib.symbols.wxRibbonPage_GetLabel(this._ptr);
   }
 
   Realize(): void {
-    lib.symbols.wxRibbonPage_Realize(this.#ptr);
+    lib.symbols.wxRibbonPage_Realize(this._ptr);
   }
 
   GetMinSize(): Deno.PointerValue {
-    return lib.symbols.wxRibbonPage_GetMinSize(this.#ptr);
+    return lib.symbols.wxRibbonPage_GetMinSize(this._ptr);
   }
 
   SetArtProvider(art: Deno.PointerValue): void {
-    lib.symbols.wxRibbonPage_SetArtProvider(this.#ptr, art);
+    lib.symbols.wxRibbonPage_SetArtProvider(this._ptr, art);
   }
 
   GetArtProvider(): Deno.PointerValue {
-    return lib.symbols.wxRibbonPage_GetArtProvider(this.#ptr);
+    return lib.symbols.wxRibbonPage_GetArtProvider(this._ptr);
   }
 
 }

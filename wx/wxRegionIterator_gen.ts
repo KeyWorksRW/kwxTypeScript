@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxRegionIterator {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxRegionIterator | null {
@@ -27,7 +27,7 @@ export class wxRegionIterator {
   }
 
   Delete(): void {
-    lib.symbols.wxRegionIterator_Delete(this.#ptr);
+    lib.symbols.wxRegionIterator_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,35 +35,35 @@ export class wxRegionIterator {
   }
 
   GetHeight(): number {
-    return lib.symbols.wxRegionIterator_GetHeight(this.#ptr);
+    return lib.symbols.wxRegionIterator_GetHeight(this._ptr);
   }
 
   GetWidth(): number {
-    return lib.symbols.wxRegionIterator_GetWidth(this.#ptr);
+    return lib.symbols.wxRegionIterator_GetWidth(this._ptr);
   }
 
   GetX(): number {
-    return lib.symbols.wxRegionIterator_GetX(this.#ptr);
+    return lib.symbols.wxRegionIterator_GetX(this._ptr);
   }
 
   GetY(): number {
-    return lib.symbols.wxRegionIterator_GetY(this.#ptr);
+    return lib.symbols.wxRegionIterator_GetY(this._ptr);
   }
 
   HaveRects(): boolean {
-    return (lib.symbols.wxRegionIterator_HaveRects(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRegionIterator_HaveRects(this._ptr) as number) !== 0;
   }
 
   Next(): void {
-    lib.symbols.wxRegionIterator_Next(this.#ptr);
+    lib.symbols.wxRegionIterator_Next(this._ptr);
   }
 
   Reset(): void {
-    lib.symbols.wxRegionIterator_Reset(this.#ptr);
+    lib.symbols.wxRegionIterator_Reset(this._ptr);
   }
 
   ResetToRegion(region: Deno.PointerValue): void {
-    lib.symbols.wxRegionIterator_ResetToRegion(this.#ptr, region);
+    lib.symbols.wxRegionIterator_ResetToRegion(this._ptr, region);
   }
 
 }

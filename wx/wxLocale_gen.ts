@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxLocale {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(name: number, flags: number): wxLocale | null {
@@ -21,7 +21,7 @@ export class wxLocale {
   }
 
   Delete(): void {
-    lib.symbols.wxLocale_Delete(this.#ptr);
+    lib.symbols.wxLocale_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,31 +29,31 @@ export class wxLocale {
   }
 
   AddCatalog(szDomain: Deno.PointerValue, msgIdLanguage: number): number {
-    return lib.symbols.wxLocale_AddCatalog(this.#ptr, szDomain, msgIdLanguage);
+    return lib.symbols.wxLocale_AddCatalog(this._ptr, szDomain, msgIdLanguage);
   }
 
   AddCatalogLookupPathPrefix(prefix: Deno.PointerValue): void {
-    lib.symbols.wxLocale_AddCatalogLookupPathPrefix(this.#ptr, prefix);
+    lib.symbols.wxLocale_AddCatalogLookupPathPrefix(this._ptr, prefix);
   }
 
   GetLocale(): Deno.PointerValue {
-    return lib.symbols.wxLocale_GetLocale(this.#ptr);
+    return lib.symbols.wxLocale_GetLocale(this._ptr);
   }
 
   GetName(): Deno.PointerValue {
-    return lib.symbols.wxLocale_GetName(this.#ptr);
+    return lib.symbols.wxLocale_GetName(this._ptr);
   }
 
   GetString(szOrigString: Deno.PointerValue, szDomain: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxLocale_GetString(this.#ptr, szOrigString, szDomain);
+    return lib.symbols.wxLocale_GetString(this._ptr, szOrigString, szDomain);
   }
 
   IsLoaded(szDomain: Deno.PointerValue): boolean {
-    return (lib.symbols.wxLocale_IsLoaded(this.#ptr, szDomain) as number) !== 0;
+    return (lib.symbols.wxLocale_IsLoaded(this._ptr, szDomain) as number) !== 0;
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxLocale_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxLocale_IsOk(this._ptr) as number) !== 0;
   }
 
 }

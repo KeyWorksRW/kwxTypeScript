@@ -3,23 +3,23 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDropTarget {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   GetData(): void {
-    lib.symbols.wxDropTarget_GetData(this.#ptr);
+    lib.symbols.wxDropTarget_GetData(this._ptr);
   }
 
   SetDataObject(dataObject: Deno.PointerValue): void {
-    lib.symbols.wxDropTarget_SetDataObject(this.#ptr, dataObject);
+    lib.symbols.wxDropTarget_SetDataObject(this._ptr, dataObject);
   }
 
 }

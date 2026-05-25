@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxActivityIndicator {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxActivityIndicator | null {
@@ -21,15 +21,15 @@ export class wxActivityIndicator {
   }
 
   IsRunning(): boolean {
-    return (lib.symbols.wxActivityIndicator_IsRunning(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxActivityIndicator_IsRunning(this._ptr) as number) !== 0;
   }
 
   Start(): void {
-    lib.symbols.wxActivityIndicator_Start(this.#ptr);
+    lib.symbols.wxActivityIndicator_Start(this._ptr);
   }
 
   Stop(): void {
-    lib.symbols.wxActivityIndicator_Stop(this.#ptr);
+    lib.symbols.wxActivityIndicator_Stop(this._ptr);
   }
 
 }

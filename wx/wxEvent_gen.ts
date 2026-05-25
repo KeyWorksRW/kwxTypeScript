@@ -3,39 +3,39 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxEvent {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   GetEventObject(): Deno.PointerValue {
-    return lib.symbols.wxEvent_GetEventObject(this.#ptr);
+    return lib.symbols.wxEvent_GetEventObject(this._ptr);
   }
 
   GetEventType(): number {
-    return lib.symbols.wxEvent_GetEventType(this.#ptr);
+    return lib.symbols.wxEvent_GetEventType(this._ptr);
   }
 
   GetId(): number {
-    return lib.symbols.wxEvent_GetId(this.#ptr);
+    return lib.symbols.wxEvent_GetId(this._ptr);
   }
 
   GetSkipped(): boolean {
-    return (lib.symbols.wxEvent_GetSkipped(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxEvent_GetSkipped(this._ptr) as number) !== 0;
   }
 
   GetTimestamp(): number {
-    return lib.symbols.wxEvent_GetTimestamp(this.#ptr);
+    return lib.symbols.wxEvent_GetTimestamp(this._ptr);
   }
 
   IsCommandEvent(): boolean {
-    return (lib.symbols.wxEvent_IsCommandEvent(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxEvent_IsCommandEvent(this._ptr) as number) !== 0;
   }
 
   NewEventType(): number {
@@ -43,23 +43,23 @@ export class wxEvent {
   }
 
   SetEventObject(obj: Deno.PointerValue): void {
-    lib.symbols.wxEvent_SetEventObject(this.#ptr, obj);
+    lib.symbols.wxEvent_SetEventObject(this._ptr, obj);
   }
 
   SetEventType(typ: number): void {
-    lib.symbols.wxEvent_SetEventType(this.#ptr, typ);
+    lib.symbols.wxEvent_SetEventType(this._ptr, typ);
   }
 
   SetId(Id: number): void {
-    lib.symbols.wxEvent_SetId(this.#ptr, Id);
+    lib.symbols.wxEvent_SetId(this._ptr, Id);
   }
 
   SetTimestamp(timestamp: number): void {
-    lib.symbols.wxEvent_SetTimestamp(this.#ptr, timestamp);
+    lib.symbols.wxEvent_SetTimestamp(this._ptr, timestamp);
   }
 
   Skip(skip: boolean): void {
-    lib.symbols.wxEvent_Skip(this.#ptr, skip ? 1 : 0);
+    lib.symbols.wxEvent_Skip(this._ptr, skip ? 1 : 0);
   }
 
 }

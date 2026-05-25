@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxColour {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateByName(name: Deno.PointerValue): wxColour | null {
@@ -39,7 +39,7 @@ export class wxColour {
   }
 
   Delete(): void {
-    lib.symbols.wxColour_Delete(this.#ptr);
+    lib.symbols.wxColour_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -47,39 +47,39 @@ export class wxColour {
   }
 
   Alpha(): number {
-    return lib.symbols.wxColour_Alpha(this.#ptr);
+    return lib.symbols.wxColour_Alpha(this._ptr);
   }
 
   Assign(other: Deno.PointerValue): void {
-    lib.symbols.wxColour_Assign(this.#ptr, other);
+    lib.symbols.wxColour_Assign(this._ptr, other);
   }
 
   Blue(): number {
-    return lib.symbols.wxColour_Blue(this.#ptr);
+    return lib.symbols.wxColour_Blue(this._ptr);
   }
 
   Copy(other: Deno.PointerValue): void {
-    lib.symbols.wxColour_Copy(this.#ptr, other);
+    lib.symbols.wxColour_Copy(this._ptr, other);
   }
 
   Green(): number {
-    return lib.symbols.wxColour_Green(this.#ptr);
+    return lib.symbols.wxColour_Green(this._ptr);
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxColour_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxColour_IsOk(this._ptr) as number) !== 0;
   }
 
   Red(): number {
-    return lib.symbols.wxColour_Red(this.#ptr);
+    return lib.symbols.wxColour_Red(this._ptr);
   }
 
   Set(red: number, green: number, blue: number, alpha: number): void {
-    lib.symbols.wxColour_Set(this.#ptr, red, green, blue, alpha);
+    lib.symbols.wxColour_Set(this._ptr, red, green, blue, alpha);
   }
 
   SetByName(name: Deno.PointerValue): void {
-    lib.symbols.wxColour_SetByName(this.#ptr, name);
+    lib.symbols.wxColour_SetByName(this._ptr, name);
   }
 
   ValidName(name: Deno.PointerValue): boolean {

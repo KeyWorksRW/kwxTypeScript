@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDatePickerCtrl {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxDatePickerCtrl | null {
@@ -21,19 +21,19 @@ export class wxDatePickerCtrl {
   }
 
   SetValue(dateTime: Deno.PointerValue): void {
-    lib.symbols.wxDatePickerCtrl_SetValue(this.#ptr, dateTime);
+    lib.symbols.wxDatePickerCtrl_SetValue(this._ptr, dateTime);
   }
 
   GetValue(dateTime: Deno.PointerValue): void {
-    lib.symbols.wxDatePickerCtrl_GetValue(this.#ptr, dateTime);
+    lib.symbols.wxDatePickerCtrl_GetValue(this._ptr, dateTime);
   }
 
   SetRange(dt1: Deno.PointerValue, dt2: Deno.PointerValue): void {
-    lib.symbols.wxDatePickerCtrl_SetRange(this.#ptr, dt1, dt2);
+    lib.symbols.wxDatePickerCtrl_SetRange(this._ptr, dt1, dt2);
   }
 
   GetRange(dt1: Deno.PointerValue, dt2: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDatePickerCtrl_GetRange(this.#ptr, dt1, dt2) as number) !== 0;
+    return (lib.symbols.wxDatePickerCtrl_GetRange(this._ptr, dt1, dt2) as number) !== 0;
   }
 
 }

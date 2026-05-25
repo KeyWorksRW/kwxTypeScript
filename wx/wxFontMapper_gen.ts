@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFontMapper {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxFontMapper | null {
@@ -21,11 +21,11 @@ export class wxFontMapper {
   }
 
   GetAltForEncoding(encoding: number, alt_encoding: Deno.PointerValue, buffer: Deno.PointerValue): boolean {
-    return (lib.symbols.wxFontMapper_GetAltForEncoding(this.#ptr, encoding, alt_encoding, buffer) as number) !== 0;
+    return (lib.symbols.wxFontMapper_GetAltForEncoding(this._ptr, encoding, alt_encoding, buffer) as number) !== 0;
   }
 
   IsEncodingAvailable(encoding: number, buffer: Deno.PointerValue): boolean {
-    return (lib.symbols.wxFontMapper_IsEncodingAvailable(this.#ptr, encoding, buffer) as number) !== 0;
+    return (lib.symbols.wxFontMapper_IsEncodingAvailable(this._ptr, encoding, buffer) as number) !== 0;
   }
 
 }

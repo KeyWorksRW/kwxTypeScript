@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPrintData {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxPrintData | null {
@@ -21,7 +21,7 @@ export class wxPrintData {
   }
 
   Delete(): void {
-    lib.symbols.wxPrintData_Delete(this.#ptr);
+    lib.symbols.wxPrintData_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,167 +29,167 @@ export class wxPrintData {
   }
 
   Assign(data: Deno.PointerValue): void {
-    lib.symbols.wxPrintData_Assign(this.#ptr, data);
+    lib.symbols.wxPrintData_Assign(this._ptr, data);
   }
 
   GetCollate(): boolean {
-    return (lib.symbols.wxPrintData_GetCollate(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintData_GetCollate(this._ptr) as number) !== 0;
   }
 
   GetColour(): boolean {
-    return (lib.symbols.wxPrintData_GetColour(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintData_GetColour(this._ptr) as number) !== 0;
   }
 
   GetDuplex(): number {
-    return lib.symbols.wxPrintData_GetDuplex(this.#ptr);
+    return lib.symbols.wxPrintData_GetDuplex(this._ptr);
   }
 
   GetFilename(): Deno.PointerValue {
-    return lib.symbols.wxPrintData_GetFilename(this.#ptr);
+    return lib.symbols.wxPrintData_GetFilename(this._ptr);
   }
 
   GetFontMetricPath(): Deno.PointerValue {
-    return lib.symbols.wxPrintData_GetFontMetricPath(this.#ptr);
+    return lib.symbols.wxPrintData_GetFontMetricPath(this._ptr);
   }
 
   GetNoCopies(): number {
-    return lib.symbols.wxPrintData_GetNoCopies(this.#ptr);
+    return lib.symbols.wxPrintData_GetNoCopies(this._ptr);
   }
 
   GetOrientation(): number {
-    return lib.symbols.wxPrintData_GetOrientation(this.#ptr);
+    return lib.symbols.wxPrintData_GetOrientation(this._ptr);
   }
 
   GetPaperId(): number {
-    return lib.symbols.wxPrintData_GetPaperId(this.#ptr);
+    return lib.symbols.wxPrintData_GetPaperId(this._ptr);
   }
 
   GetPaperSize(): Deno.PointerValue {
-    return lib.symbols.wxPrintData_GetPaperSize(this.#ptr);
+    return lib.symbols.wxPrintData_GetPaperSize(this._ptr);
   }
 
   GetPreviewCommand(): Deno.PointerValue {
-    return lib.symbols.wxPrintData_GetPreviewCommand(this.#ptr);
+    return lib.symbols.wxPrintData_GetPreviewCommand(this._ptr);
   }
 
   GetPrintMode(): number {
-    return lib.symbols.wxPrintData_GetPrintMode(this.#ptr);
+    return lib.symbols.wxPrintData_GetPrintMode(this._ptr);
   }
 
   GetPrinterCommand(): Deno.PointerValue {
-    return lib.symbols.wxPrintData_GetPrinterCommand(this.#ptr);
+    return lib.symbols.wxPrintData_GetPrinterCommand(this._ptr);
   }
 
   GetPrinterName(): Deno.PointerValue {
-    return lib.symbols.wxPrintData_GetPrinterName(this.#ptr);
+    return lib.symbols.wxPrintData_GetPrinterName(this._ptr);
   }
 
   GetPrinterOptions(): Deno.PointerValue {
-    return lib.symbols.wxPrintData_GetPrinterOptions(this.#ptr);
+    return lib.symbols.wxPrintData_GetPrinterOptions(this._ptr);
   }
 
   GetPrinterScaleX(): number {
-    return lib.symbols.wxPrintData_GetPrinterScaleX(this.#ptr);
+    return lib.symbols.wxPrintData_GetPrinterScaleX(this._ptr);
   }
 
   GetPrinterScaleY(): number {
-    return lib.symbols.wxPrintData_GetPrinterScaleY(this.#ptr);
+    return lib.symbols.wxPrintData_GetPrinterScaleY(this._ptr);
   }
 
   GetPrinterTranslateX(): number {
-    return lib.symbols.wxPrintData_GetPrinterTranslateX(this.#ptr);
+    return lib.symbols.wxPrintData_GetPrinterTranslateX(this._ptr);
   }
 
   GetPrinterTranslateY(): number {
-    return lib.symbols.wxPrintData_GetPrinterTranslateY(this.#ptr);
+    return lib.symbols.wxPrintData_GetPrinterTranslateY(this._ptr);
   }
 
   GetQuality(): number {
-    return lib.symbols.wxPrintData_GetQuality(this.#ptr);
+    return lib.symbols.wxPrintData_GetQuality(this._ptr);
   }
 
   SetCollate(flag: boolean): void {
-    lib.symbols.wxPrintData_SetCollate(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPrintData_SetCollate(this._ptr, flag ? 1 : 0);
   }
 
   SetColour(colour: boolean): void {
-    lib.symbols.wxPrintData_SetColour(this.#ptr, colour ? 1 : 0);
+    lib.symbols.wxPrintData_SetColour(this._ptr, colour ? 1 : 0);
   }
 
   SetDuplex(duplex: number): void {
-    lib.symbols.wxPrintData_SetDuplex(this.#ptr, duplex);
+    lib.symbols.wxPrintData_SetDuplex(this._ptr, duplex);
   }
 
   SetFilename(filename: Deno.PointerValue): void {
-    lib.symbols.wxPrintData_SetFilename(this.#ptr, filename);
+    lib.symbols.wxPrintData_SetFilename(this._ptr, filename);
   }
 
   SetFontMetricPath(path: Deno.PointerValue): void {
-    lib.symbols.wxPrintData_SetFontMetricPath(this.#ptr, path);
+    lib.symbols.wxPrintData_SetFontMetricPath(this._ptr, path);
   }
 
   SetNoCopies(value: number): void {
-    lib.symbols.wxPrintData_SetNoCopies(this.#ptr, value);
+    lib.symbols.wxPrintData_SetNoCopies(this._ptr, value);
   }
 
   SetOrientation(orient: number): void {
-    lib.symbols.wxPrintData_SetOrientation(this.#ptr, orient);
+    lib.symbols.wxPrintData_SetOrientation(this._ptr, orient);
   }
 
   SetPaperId(sizeId: number): void {
-    lib.symbols.wxPrintData_SetPaperId(this.#ptr, sizeId);
+    lib.symbols.wxPrintData_SetPaperId(this._ptr, sizeId);
   }
 
   SetPaperSize(width: number, height: number): void {
-    lib.symbols.wxPrintData_SetPaperSize(this.#ptr, width, height);
+    lib.symbols.wxPrintData_SetPaperSize(this._ptr, width, height);
   }
 
   SetPreviewCommand(command: Deno.PointerValue): void {
-    lib.symbols.wxPrintData_SetPreviewCommand(this.#ptr, command);
+    lib.symbols.wxPrintData_SetPreviewCommand(this._ptr, command);
   }
 
   SetPrintMode(printMode: number): void {
-    lib.symbols.wxPrintData_SetPrintMode(this.#ptr, printMode);
+    lib.symbols.wxPrintData_SetPrintMode(this._ptr, printMode);
   }
 
   SetPrinterCommand(command: Deno.PointerValue): void {
-    lib.symbols.wxPrintData_SetPrinterCommand(this.#ptr, command);
+    lib.symbols.wxPrintData_SetPrinterCommand(this._ptr, command);
   }
 
   SetPrinterName(name: Deno.PointerValue): void {
-    lib.symbols.wxPrintData_SetPrinterName(this.#ptr, name);
+    lib.symbols.wxPrintData_SetPrinterName(this._ptr, name);
   }
 
   SetPrinterOptions(options: Deno.PointerValue): void {
-    lib.symbols.wxPrintData_SetPrinterOptions(this.#ptr, options);
+    lib.symbols.wxPrintData_SetPrinterOptions(this._ptr, options);
   }
 
   SetPrinterScaleX(x: number): void {
-    lib.symbols.wxPrintData_SetPrinterScaleX(this.#ptr, x);
+    lib.symbols.wxPrintData_SetPrinterScaleX(this._ptr, x);
   }
 
   SetPrinterScaleY(y: number): void {
-    lib.symbols.wxPrintData_SetPrinterScaleY(this.#ptr, y);
+    lib.symbols.wxPrintData_SetPrinterScaleY(this._ptr, y);
   }
 
   SetPrinterScaling(x: number, y: number): void {
-    lib.symbols.wxPrintData_SetPrinterScaling(this.#ptr, x, y);
+    lib.symbols.wxPrintData_SetPrinterScaling(this._ptr, x, y);
   }
 
   SetPrinterTranslateX(x: number): void {
-    lib.symbols.wxPrintData_SetPrinterTranslateX(this.#ptr, x);
+    lib.symbols.wxPrintData_SetPrinterTranslateX(this._ptr, x);
   }
 
   SetPrinterTranslateY(y: number): void {
-    lib.symbols.wxPrintData_SetPrinterTranslateY(this.#ptr, y);
+    lib.symbols.wxPrintData_SetPrinterTranslateY(this._ptr, y);
   }
 
   SetPrinterTranslation(x: number, y: number): void {
-    lib.symbols.wxPrintData_SetPrinterTranslation(this.#ptr, x, y);
+    lib.symbols.wxPrintData_SetPrinterTranslation(this._ptr, x, y);
   }
 
   SetQuality(quality: number): void {
-    lib.symbols.wxPrintData_SetQuality(this.#ptr, quality);
+    lib.symbols.wxPrintData_SetQuality(this._ptr, quality);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAcceleratorEntry {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(flags: number, keyCode: number, cmd: number): wxAcceleratorEntry | null {
@@ -21,7 +21,7 @@ export class wxAcceleratorEntry {
   }
 
   Delete(): void {
-    lib.symbols.wxAcceleratorEntry_Delete(this.#ptr);
+    lib.symbols.wxAcceleratorEntry_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,19 +29,19 @@ export class wxAcceleratorEntry {
   }
 
   GetCommand(): number {
-    return lib.symbols.wxAcceleratorEntry_GetCommand(this.#ptr);
+    return lib.symbols.wxAcceleratorEntry_GetCommand(this._ptr);
   }
 
   GetFlags(): number {
-    return lib.symbols.wxAcceleratorEntry_GetFlags(this.#ptr);
+    return lib.symbols.wxAcceleratorEntry_GetFlags(this._ptr);
   }
 
   GetKeyCode(): number {
-    return lib.symbols.wxAcceleratorEntry_GetKeyCode(this.#ptr);
+    return lib.symbols.wxAcceleratorEntry_GetKeyCode(this._ptr);
   }
 
   Set(flags: number, keyCode: number, cmd: number, item: Deno.PointerValue): void {
-    lib.symbols.wxAcceleratorEntry_Set(this.#ptr, flags, keyCode, cmd, item);
+    lib.symbols.wxAcceleratorEntry_Set(this._ptr, flags, keyCode, cmd, item);
   }
 
 }

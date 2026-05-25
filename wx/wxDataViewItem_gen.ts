@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDataViewItem {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(id: Deno.PointerValue): wxDataViewItem | null {
@@ -21,15 +21,15 @@ export class wxDataViewItem {
   }
 
   Delete(): void {
-    lib.symbols.wxDataViewItem_Delete(this.#ptr);
+    lib.symbols.wxDataViewItem_Delete(this._ptr);
   }
 
   GetID(): Deno.PointerValue {
-    return lib.symbols.wxDataViewItem_GetID(this.#ptr);
+    return lib.symbols.wxDataViewItem_GetID(this._ptr);
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxDataViewItem_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxDataViewItem_IsOk(this._ptr) as number) !== 0;
   }
 
 }

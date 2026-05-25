@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFontEnumerator {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(pObject: Deno.PointerValue, pFunction: Deno.PointerValue): wxFontEnumerator | null {
@@ -21,7 +21,7 @@ export class wxFontEnumerator {
   }
 
   Delete(): void {
-    lib.symbols.wxFontEnumerator_Delete(this.#ptr);
+    lib.symbols.wxFontEnumerator_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,11 +29,11 @@ export class wxFontEnumerator {
   }
 
   EnumerateEncodings(facename: Deno.PointerValue): boolean {
-    return (lib.symbols.wxFontEnumerator_EnumerateEncodings(this.#ptr, facename) as number) !== 0;
+    return (lib.symbols.wxFontEnumerator_EnumerateEncodings(this._ptr, facename) as number) !== 0;
   }
 
   EnumerateFacenames(encoding: number, fixedWidthOnly: number): boolean {
-    return (lib.symbols.wxFontEnumerator_EnumerateFacenames(this.#ptr, encoding, fixedWidthOnly) as number) !== 0;
+    return (lib.symbols.wxFontEnumerator_EnumerateFacenames(this._ptr, encoding, fixedWidthOnly) as number) !== 0;
   }
 
 }

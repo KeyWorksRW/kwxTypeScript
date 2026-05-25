@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAnimation {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxAnimation | null {
@@ -27,7 +27,7 @@ export class wxAnimation {
   }
 
   Delete(): void {
-    lib.symbols.wxAnimation_Delete(this.#ptr);
+    lib.symbols.wxAnimation_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,31 +35,31 @@ export class wxAnimation {
   }
 
   GetDelay(frame: number): number {
-    return lib.symbols.wxAnimation_GetDelay(this.#ptr, frame);
+    return lib.symbols.wxAnimation_GetDelay(this._ptr, frame);
   }
 
   GetFrameCount(): number {
-    return lib.symbols.wxAnimation_GetFrameCount(this.#ptr);
+    return lib.symbols.wxAnimation_GetFrameCount(this._ptr);
   }
 
   GetFrame(frame: number, image: Deno.PointerValue): void {
-    lib.symbols.wxAnimation_GetFrame(this.#ptr, frame, image);
+    lib.symbols.wxAnimation_GetFrame(this._ptr, frame, image);
   }
 
   GetSize(width: Deno.PointerValue, height: Deno.PointerValue): void {
-    lib.symbols.wxAnimation_GetSize(this.#ptr, width, height);
+    lib.symbols.wxAnimation_GetSize(this._ptr, width, height);
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxAnimation_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAnimation_IsOk(this._ptr) as number) !== 0;
   }
 
   LoadFile(filename: Deno.PointerValue, type_: number): boolean {
-    return (lib.symbols.wxAnimation_LoadFile(this.#ptr, filename, type_) as number) !== 0;
+    return (lib.symbols.wxAnimation_LoadFile(this._ptr, filename, type_) as number) !== 0;
   }
 
   Load(stream: Deno.PointerValue, type_: number): boolean {
-    return (lib.symbols.wxAnimation_Load(this.#ptr, stream, type_) as number) !== 0;
+    return (lib.symbols.wxAnimation_Load(this._ptr, stream, type_) as number) !== 0;
   }
 
 }

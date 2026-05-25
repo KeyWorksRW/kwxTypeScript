@@ -3,19 +3,19 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxCommandProcessor {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   Delete(): void {
-    lib.symbols.wxCommandProcessor_Delete(this.#ptr);
+    lib.symbols.wxCommandProcessor_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -23,51 +23,51 @@ export class wxCommandProcessor {
   }
 
   CanRedo(): boolean {
-    return (lib.symbols.wxCommandProcessor_CanRedo(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCommandProcessor_CanRedo(this._ptr) as number) !== 0;
   }
 
   CanUndo(): boolean {
-    return (lib.symbols.wxCommandProcessor_CanUndo(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCommandProcessor_CanUndo(this._ptr) as number) !== 0;
   }
 
   ClearCommands(): void {
-    lib.symbols.wxCommandProcessor_ClearCommands(this.#ptr);
+    lib.symbols.wxCommandProcessor_ClearCommands(this._ptr);
   }
 
   GetCommands(ref: Deno.PointerValue): number {
-    return lib.symbols.wxCommandProcessor_GetCommands(this.#ptr, ref);
+    return lib.symbols.wxCommandProcessor_GetCommands(this._ptr, ref);
   }
 
   GetEditMenu(): Deno.PointerValue {
-    return lib.symbols.wxCommandProcessor_GetEditMenu(this.#ptr);
+    return lib.symbols.wxCommandProcessor_GetEditMenu(this._ptr);
   }
 
   GetMaxCommands(): number {
-    return lib.symbols.wxCommandProcessor_GetMaxCommands(this.#ptr);
+    return lib.symbols.wxCommandProcessor_GetMaxCommands(this._ptr);
   }
 
   Initialize(): void {
-    lib.symbols.wxCommandProcessor_Initialize(this.#ptr);
+    lib.symbols.wxCommandProcessor_Initialize(this._ptr);
   }
 
   Redo(): number {
-    return lib.symbols.wxCommandProcessor_Redo(this.#ptr);
+    return lib.symbols.wxCommandProcessor_Redo(this._ptr);
   }
 
   SetEditMenu(menu: Deno.PointerValue): void {
-    lib.symbols.wxCommandProcessor_SetEditMenu(this.#ptr, menu);
+    lib.symbols.wxCommandProcessor_SetEditMenu(this._ptr, menu);
   }
 
   SetMenuStrings(): void {
-    lib.symbols.wxCommandProcessor_SetMenuStrings(this.#ptr);
+    lib.symbols.wxCommandProcessor_SetMenuStrings(this._ptr);
   }
 
   Submit(command: Deno.PointerValue, storeIt: number): number {
-    return lib.symbols.wxCommandProcessor_Submit(this.#ptr, command, storeIt);
+    return lib.symbols.wxCommandProcessor_Submit(this._ptr, command, storeIt);
   }
 
   Undo(): number {
-    return lib.symbols.wxCommandProcessor_Undo(this.#ptr);
+    return lib.symbols.wxCommandProcessor_Undo(this._ptr);
   }
 
   wxCommandProcessor(maxCommands: number): Deno.PointerValue {

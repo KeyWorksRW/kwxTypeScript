@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxStopWatch {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxStopWatch | null {
@@ -21,7 +21,7 @@ export class wxStopWatch {
   }
 
   Delete(): void {
-    lib.symbols.wxStopWatch_Delete(this.#ptr);
+    lib.symbols.wxStopWatch_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,19 +29,19 @@ export class wxStopWatch {
   }
 
   Start(msec: number): void {
-    lib.symbols.wxStopWatch_Start(this.#ptr, msec);
+    lib.symbols.wxStopWatch_Start(this._ptr, msec);
   }
 
   Pause(): void {
-    lib.symbols.wxStopWatch_Pause(this.#ptr);
+    lib.symbols.wxStopWatch_Pause(this._ptr);
   }
 
   Resume(): void {
-    lib.symbols.wxStopWatch_Resume(this.#ptr);
+    lib.symbols.wxStopWatch_Resume(this._ptr);
   }
 
   Time(): number {
-    return lib.symbols.wxStopWatch_Time(this.#ptr);
+    return lib.symbols.wxStopWatch_Time(this._ptr);
   }
 
 }

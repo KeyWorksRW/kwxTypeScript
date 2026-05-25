@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxBitmapDataObject {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(bitmap: Deno.PointerValue): wxBitmapDataObject | null {
@@ -27,7 +27,7 @@ export class wxBitmapDataObject {
   }
 
   Delete(): void {
-    lib.symbols.BitmapDataObject_Delete(this.#ptr);
+    lib.symbols.BitmapDataObject_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,11 +35,11 @@ export class wxBitmapDataObject {
   }
 
   GetBitmap(bitmap: Deno.PointerValue): void {
-    lib.symbols.BitmapDataObject_GetBitmap(this.#ptr, bitmap);
+    lib.symbols.BitmapDataObject_GetBitmap(this._ptr, bitmap);
   }
 
   SetBitmap(bitmap: Deno.PointerValue): void {
-    lib.symbols.BitmapDataObject_SetBitmap(this.#ptr, bitmap);
+    lib.symbols.BitmapDataObject_SetBitmap(this._ptr, bitmap);
   }
 
 }

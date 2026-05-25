@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxImage {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateDefault(): wxImage | null {
@@ -61,183 +61,183 @@ export class wxImage {
   }
 
   ConvertToBitmap(bitmap: Deno.PointerValue): void {
-    lib.symbols.wxImage_ConvertToBitmap(this.#ptr, bitmap);
+    lib.symbols.wxImage_ConvertToBitmap(this._ptr, bitmap);
   }
 
   ConvertToByteString(type_: number, data: Deno.PointerValue): number {
-    return lib.symbols.wxImage_ConvertToByteString(this.#ptr, type_, data);
+    return lib.symbols.wxImage_ConvertToByteString(this._ptr, type_, data);
   }
 
   ConvertToLazyByteString(type_: number, data: Deno.PointerValue): number {
-    return lib.symbols.wxImage_ConvertToLazyByteString(this.#ptr, type_, data);
+    return lib.symbols.wxImage_ConvertToLazyByteString(this._ptr, type_, data);
   }
 
   CountColours(stopafter: number): number {
-    return lib.symbols.wxImage_CountColours(this.#ptr, stopafter);
+    return lib.symbols.wxImage_CountColours(this._ptr, stopafter);
   }
 
   Copy(image: Deno.PointerValue): void {
-    lib.symbols.wxImage_Copy(this.#ptr, image);
+    lib.symbols.wxImage_Copy(this._ptr, image);
   }
 
   Destroy(): void {
-    lib.symbols.wxImage_Destroy(this.#ptr);
+    lib.symbols.wxImage_Destroy(this._ptr);
   }
 
   GetBlue(x: number, y: number): number {
-    return lib.symbols.wxImage_GetBlue(this.#ptr, x, y);
+    return lib.symbols.wxImage_GetBlue(this._ptr, x, y);
   }
 
   GetData(): Deno.PointerValue {
-    return lib.symbols.wxImage_GetData(this.#ptr);
+    return lib.symbols.wxImage_GetData(this._ptr);
   }
 
   GetGreen(x: number, y: number): number {
-    return lib.symbols.wxImage_GetGreen(this.#ptr, x, y);
+    return lib.symbols.wxImage_GetGreen(this._ptr, x, y);
   }
 
   GetHeight(): number {
-    return lib.symbols.wxImage_GetHeight(this.#ptr);
+    return lib.symbols.wxImage_GetHeight(this._ptr);
   }
 
   GetMaskBlue(): number {
-    return lib.symbols.wxImage_GetMaskBlue(this.#ptr);
+    return lib.symbols.wxImage_GetMaskBlue(this._ptr);
   }
 
   GetMaskGreen(): number {
-    return lib.symbols.wxImage_GetMaskGreen(this.#ptr);
+    return lib.symbols.wxImage_GetMaskGreen(this._ptr);
   }
 
   GetMaskRed(): number {
-    return lib.symbols.wxImage_GetMaskRed(this.#ptr);
+    return lib.symbols.wxImage_GetMaskRed(this._ptr);
   }
 
   GetRed(x: number, y: number): number {
-    return lib.symbols.wxImage_GetRed(this.#ptr, x, y);
+    return lib.symbols.wxImage_GetRed(this._ptr, x, y);
   }
 
   GetSubImage(x: number, y: number, width: number, height: number, image: Deno.PointerValue): void {
-    lib.symbols.wxImage_GetSubImage(this.#ptr, x, y, width, height, image);
+    lib.symbols.wxImage_GetSubImage(this._ptr, x, y, width, height, image);
   }
 
   GetType(): number {
-    return lib.symbols.wxImage_GetType(this.#ptr);
+    return lib.symbols.wxImage_GetType(this._ptr);
   }
 
   SetType(type_: number): void {
-    lib.symbols.wxImage_SetType(this.#ptr, type_);
+    lib.symbols.wxImage_SetType(this._ptr, type_);
   }
 
   GetWidth(): number {
-    return lib.symbols.wxImage_GetWidth(this.#ptr);
+    return lib.symbols.wxImage_GetWidth(this._ptr);
   }
 
   HasMask(): boolean {
-    return (lib.symbols.wxImage_HasMask(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxImage_HasMask(this._ptr) as number) !== 0;
   }
 
   GetOption(name: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxImage_GetOption(this.#ptr, name);
+    return lib.symbols.wxImage_GetOption(this._ptr, name);
   }
 
   GetOptionInt(name: Deno.PointerValue): boolean {
-    return (lib.symbols.wxImage_GetOptionInt(this.#ptr, name) as number) !== 0;
+    return (lib.symbols.wxImage_GetOptionInt(this._ptr, name) as number) !== 0;
   }
 
   HasOption(name: Deno.PointerValue): boolean {
-    return (lib.symbols.wxImage_HasOption(this.#ptr, name) as number) !== 0;
+    return (lib.symbols.wxImage_HasOption(this._ptr, name) as number) !== 0;
   }
 
   Initialize(width: number, height: number, clear: boolean): void {
-    lib.symbols.wxImage_Initialize(this.#ptr, width, height, clear ? 1 : 0);
+    lib.symbols.wxImage_Initialize(this._ptr, width, height, clear ? 1 : 0);
   }
 
   InitializeFromData(width: number, height: number, data: Deno.PointerValue): void {
-    lib.symbols.wxImage_InitializeFromData(this.#ptr, width, height, data);
+    lib.symbols.wxImage_InitializeFromData(this._ptr, width, height, data);
   }
 
   LoadFile(name: Deno.PointerValue, type_: number, index: number): boolean {
-    return (lib.symbols.wxImage_LoadFile(this.#ptr, name, type_, index) as number) !== 0;
+    return (lib.symbols.wxImage_LoadFile(this._ptr, name, type_, index) as number) !== 0;
   }
 
   LoadStream(name: Deno.PointerValue, type_: number, index: number): boolean {
-    return (lib.symbols.wxImage_LoadStream(this.#ptr, name, type_, index) as number) !== 0;
+    return (lib.symbols.wxImage_LoadStream(this._ptr, name, type_, index) as number) !== 0;
   }
 
   Mirror(horizontally: boolean, image: Deno.PointerValue): void {
-    lib.symbols.wxImage_Mirror(this.#ptr, horizontally ? 1 : 0, image);
+    lib.symbols.wxImage_Mirror(this._ptr, horizontally ? 1 : 0, image);
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxImage_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxImage_IsOk(this._ptr) as number) !== 0;
   }
 
   Paste(image: Deno.PointerValue, x: number, y: number, alphaBlend: number): void {
-    lib.symbols.wxImage_Paste(this.#ptr, image, x, y, alphaBlend);
+    lib.symbols.wxImage_Paste(this._ptr, image, x, y, alphaBlend);
   }
 
   Replace(r1: number, g1: number, b1: number, r2: number, g2: number, b2: number): void {
-    lib.symbols.wxImage_Replace(this.#ptr, r1, g1, b1, r2, g2, b2);
+    lib.symbols.wxImage_Replace(this._ptr, r1, g1, b1, r2, g2, b2);
   }
 
   Rescale(width: number, height: number): void {
-    lib.symbols.wxImage_Rescale(this.#ptr, width, height);
+    lib.symbols.wxImage_Rescale(this._ptr, width, height);
   }
 
   RescaleEx(width: number, height: number, quality: number): void {
-    lib.symbols.wxImage_RescaleEx(this.#ptr, width, height, quality);
+    lib.symbols.wxImage_RescaleEx(this._ptr, width, height, quality);
   }
 
   Rotate(angle: number, c_x: number, c_y: number, interpolating: boolean, offset_after_rotation: Deno.PointerValue, image: Deno.PointerValue): void {
-    lib.symbols.wxImage_Rotate(this.#ptr, angle, c_x, c_y, interpolating ? 1 : 0, offset_after_rotation, image);
+    lib.symbols.wxImage_Rotate(this._ptr, angle, c_x, c_y, interpolating ? 1 : 0, offset_after_rotation, image);
   }
 
   Rotate90(clockwise: boolean, image: Deno.PointerValue): void {
-    lib.symbols.wxImage_Rotate90(this.#ptr, clockwise ? 1 : 0, image);
+    lib.symbols.wxImage_Rotate90(this._ptr, clockwise ? 1 : 0, image);
   }
 
   SaveFile(name: Deno.PointerValue, type_: number): boolean {
-    return (lib.symbols.wxImage_SaveFile(this.#ptr, name, type_) as number) !== 0;
+    return (lib.symbols.wxImage_SaveFile(this._ptr, name, type_) as number) !== 0;
   }
 
   SaveStream(stream: Deno.PointerValue, type_: number): boolean {
-    return (lib.symbols.wxImage_SaveStream(this.#ptr, stream, type_) as number) !== 0;
+    return (lib.symbols.wxImage_SaveStream(this._ptr, stream, type_) as number) !== 0;
   }
 
   ScaleEx(width: number, height: number, quality: number, image: Deno.PointerValue): void {
-    lib.symbols.wxImage_ScaleEx(this.#ptr, width, height, quality, image);
+    lib.symbols.wxImage_ScaleEx(this._ptr, width, height, quality, image);
   }
 
   Scale(width: number, height: number, image: Deno.PointerValue): void {
-    lib.symbols.wxImage_Scale(this.#ptr, width, height, image);
+    lib.symbols.wxImage_Scale(this._ptr, width, height, image);
   }
 
   SetData(data: Deno.PointerValue, static_data: boolean): void {
-    lib.symbols.wxImage_SetData(this.#ptr, data, static_data ? 1 : 0);
+    lib.symbols.wxImage_SetData(this._ptr, data, static_data ? 1 : 0);
   }
 
   SetDataAndSize(data: Deno.PointerValue, new_width: number, new_height: number, static_data: boolean): void {
-    lib.symbols.wxImage_SetDataAndSize(this.#ptr, data, new_width, new_height, static_data ? 1 : 0);
+    lib.symbols.wxImage_SetDataAndSize(this._ptr, data, new_width, new_height, static_data ? 1 : 0);
   }
 
   SetMask(mask: number): void {
-    lib.symbols.wxImage_SetMask(this.#ptr, mask);
+    lib.symbols.wxImage_SetMask(this._ptr, mask);
   }
 
   SetMaskColour(r: number, g: number, b: number): void {
-    lib.symbols.wxImage_SetMaskColour(this.#ptr, r, g, b);
+    lib.symbols.wxImage_SetMaskColour(this._ptr, r, g, b);
   }
 
   SetOption(name: Deno.PointerValue, value: Deno.PointerValue): void {
-    lib.symbols.wxImage_SetOption(this.#ptr, name, value);
+    lib.symbols.wxImage_SetOption(this._ptr, name, value);
   }
 
   SetOptionInt(name: Deno.PointerValue, value: number): void {
-    lib.symbols.wxImage_SetOptionInt(this.#ptr, name, value);
+    lib.symbols.wxImage_SetOptionInt(this._ptr, name, value);
   }
 
   SetRGB(x: number, y: number, r: number, g: number, b: number): void {
-    lib.symbols.wxImage_SetRGB(this.#ptr, x, y, r, g, b);
+    lib.symbols.wxImage_SetRGB(this._ptr, x, y, r, g, b);
   }
 
 }

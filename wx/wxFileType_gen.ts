@@ -3,19 +3,19 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFileType {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   Delete(): void {
-    lib.symbols.wxFileType_Delete(this.#ptr);
+    lib.symbols.wxFileType_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -23,35 +23,35 @@ export class wxFileType {
   }
 
   ExpandCommand(command: Deno.PointerValue, params: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxFileType_ExpandCommand(this.#ptr, command, params);
+    return lib.symbols.wxFileType_ExpandCommand(this._ptr, command, params);
   }
 
   GetDescription(): Deno.PointerValue {
-    return lib.symbols.wxFileType_GetDescription(this.#ptr);
+    return lib.symbols.wxFileType_GetDescription(this._ptr);
   }
 
   GetExtensions(list: Deno.PointerValue): number {
-    return lib.symbols.wxFileType_GetExtensions(this.#ptr, list);
+    return lib.symbols.wxFileType_GetExtensions(this._ptr, list);
   }
 
   GetIcon(icon: Deno.PointerValue): number {
-    return lib.symbols.wxFileType_GetIcon(this.#ptr, icon);
+    return lib.symbols.wxFileType_GetIcon(this._ptr, icon);
   }
 
   GetMimeType(): Deno.PointerValue {
-    return lib.symbols.wxFileType_GetMimeType(this.#ptr);
+    return lib.symbols.wxFileType_GetMimeType(this._ptr);
   }
 
   GetMimeTypes(list: Deno.PointerValue): number {
-    return lib.symbols.wxFileType_GetMimeTypes(this.#ptr, list);
+    return lib.symbols.wxFileType_GetMimeTypes(this._ptr, list);
   }
 
   GetOpenCommand(buffer: Deno.PointerValue, params: Deno.PointerValue): number {
-    return lib.symbols.wxFileType_GetOpenCommand(this.#ptr, buffer, params);
+    return lib.symbols.wxFileType_GetOpenCommand(this._ptr, buffer, params);
   }
 
   GetPrintCommand(buffer: Deno.PointerValue, params: Deno.PointerValue): number {
-    return lib.symbols.wxFileType_GetPrintCommand(this.#ptr, buffer, params);
+    return lib.symbols.wxFileType_GetPrintCommand(this._ptr, buffer, params);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxCriticalSection {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxCriticalSection | null {
@@ -21,7 +21,7 @@ export class wxCriticalSection {
   }
 
   Delete(): void {
-    lib.symbols.wxCriticalSection_Delete(this.#ptr);
+    lib.symbols.wxCriticalSection_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,11 +29,11 @@ export class wxCriticalSection {
   }
 
   Enter(): void {
-    lib.symbols.wxCriticalSection_Enter(this.#ptr);
+    lib.symbols.wxCriticalSection_Enter(this._ptr);
   }
 
   Leave(): void {
-    lib.symbols.wxCriticalSection_Leave(this.#ptr);
+    lib.symbols.wxCriticalSection_Leave(this._ptr);
   }
 
 }

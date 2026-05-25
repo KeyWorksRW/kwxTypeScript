@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDataViewCtrl {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxDataViewCtrl | null {
@@ -21,227 +21,227 @@ export class wxDataViewCtrl {
   }
 
   AssociateModel(model: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDataViewCtrl_AssociateModel(this.#ptr, model) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_AssociateModel(this._ptr, model) as number) !== 0;
   }
 
   GetModel(): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_GetModel(this.#ptr);
+    return lib.symbols.wxDataViewCtrl_GetModel(this._ptr);
   }
 
   AppendTextColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_AppendTextColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_AppendTextColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   AppendToggleColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_AppendToggleColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_AppendToggleColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   AppendProgressColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_AppendProgressColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_AppendProgressColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   AppendBitmapColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_AppendBitmapColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_AppendBitmapColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   AppendColumn(col: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDataViewCtrl_AppendColumn(this.#ptr, col) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_AppendColumn(this._ptr, col) as number) !== 0;
   }
 
   PrependColumn(col: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDataViewCtrl_PrependColumn(this.#ptr, col) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_PrependColumn(this._ptr, col) as number) !== 0;
   }
 
   InsertColumn(pos: number, col: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDataViewCtrl_InsertColumn(this.#ptr, pos, col) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_InsertColumn(this._ptr, pos, col) as number) !== 0;
   }
 
   GetColumnCount(): number {
-    return lib.symbols.wxDataViewCtrl_GetColumnCount(this.#ptr);
+    return lib.symbols.wxDataViewCtrl_GetColumnCount(this._ptr);
   }
 
   GetColumn(pos: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_GetColumn(this.#ptr, pos);
+    return lib.symbols.wxDataViewCtrl_GetColumn(this._ptr, pos);
   }
 
   GetColumnPosition(column: Deno.PointerValue): number {
-    return lib.symbols.wxDataViewCtrl_GetColumnPosition(this.#ptr, column);
+    return lib.symbols.wxDataViewCtrl_GetColumnPosition(this._ptr, column);
   }
 
   DeleteColumn(column: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDataViewCtrl_DeleteColumn(this.#ptr, column) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_DeleteColumn(this._ptr, column) as number) !== 0;
   }
 
   ClearColumns(): boolean {
-    return (lib.symbols.wxDataViewCtrl_ClearColumns(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_ClearColumns(this._ptr) as number) !== 0;
   }
 
   SetExpanderColumn(col: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_SetExpanderColumn(this.#ptr, col);
+    lib.symbols.wxDataViewCtrl_SetExpanderColumn(this._ptr, col);
   }
 
   GetExpanderColumn(): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_GetExpanderColumn(this.#ptr);
+    return lib.symbols.wxDataViewCtrl_GetExpanderColumn(this._ptr);
   }
 
   GetSortingColumn(): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_GetSortingColumn(this.#ptr);
+    return lib.symbols.wxDataViewCtrl_GetSortingColumn(this._ptr);
   }
 
   SetIndent(indent: number): void {
-    lib.symbols.wxDataViewCtrl_SetIndent(this.#ptr, indent);
+    lib.symbols.wxDataViewCtrl_SetIndent(this._ptr, indent);
   }
 
   GetIndent(): number {
-    return lib.symbols.wxDataViewCtrl_GetIndent(this.#ptr);
+    return lib.symbols.wxDataViewCtrl_GetIndent(this._ptr);
   }
 
   GetCurrentItem(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_GetCurrentItem(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_GetCurrentItem(this._ptr, item);
   }
 
   SetCurrentItem(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_SetCurrentItem(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_SetCurrentItem(this._ptr, item);
   }
 
   GetCurrentColumn(): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_GetCurrentColumn(this.#ptr);
+    return lib.symbols.wxDataViewCtrl_GetCurrentColumn(this._ptr);
   }
 
   GetSelectedItemsCount(): number {
-    return lib.symbols.wxDataViewCtrl_GetSelectedItemsCount(this.#ptr);
+    return lib.symbols.wxDataViewCtrl_GetSelectedItemsCount(this._ptr);
   }
 
   HasSelection(): boolean {
-    return (lib.symbols.wxDataViewCtrl_HasSelection(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_HasSelection(this._ptr) as number) !== 0;
   }
 
   GetSelection(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_GetSelection(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_GetSelection(this._ptr, item);
   }
 
   GetSelections(sel: Deno.PointerValue): number {
-    return lib.symbols.wxDataViewCtrl_GetSelections(this.#ptr, sel);
+    return lib.symbols.wxDataViewCtrl_GetSelections(this._ptr, sel);
   }
 
   SetSelections(sel: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_SetSelections(this.#ptr, sel);
+    lib.symbols.wxDataViewCtrl_SetSelections(this._ptr, sel);
   }
 
   Select(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_Select(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_Select(this._ptr, item);
   }
 
   Unselect(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_Unselect(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_Unselect(this._ptr, item);
   }
 
   IsSelected(item: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDataViewCtrl_IsSelected(this.#ptr, item) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_IsSelected(this._ptr, item) as number) !== 0;
   }
 
   SelectAll(): void {
-    lib.symbols.wxDataViewCtrl_SelectAll(this.#ptr);
+    lib.symbols.wxDataViewCtrl_SelectAll(this._ptr);
   }
 
   UnselectAll(): void {
-    lib.symbols.wxDataViewCtrl_UnselectAll(this.#ptr);
+    lib.symbols.wxDataViewCtrl_UnselectAll(this._ptr);
   }
 
   Expand(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_Expand(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_Expand(this._ptr, item);
   }
 
   Collapse(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_Collapse(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_Collapse(this._ptr, item);
   }
 
   IsExpanded(item: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDataViewCtrl_IsExpanded(this.#ptr, item) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_IsExpanded(this._ptr, item) as number) !== 0;
   }
 
   EnsureVisible(item: Deno.PointerValue, column: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_EnsureVisible(this.#ptr, item, column);
+    lib.symbols.wxDataViewCtrl_EnsureVisible(this._ptr, item, column);
   }
 
   HitTest(x: number, y: number, item: Deno.PointerValue, col: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_HitTest(this.#ptr, x, y, item, col);
+    lib.symbols.wxDataViewCtrl_HitTest(this._ptr, x, y, item, col);
   }
 
   GetItemRect(item: Deno.PointerValue, column: Deno.PointerValue, x: Deno.PointerValue, y: Deno.PointerValue, width: Deno.PointerValue, height: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_GetItemRect(this.#ptr, item, column, x, y, width, height);
+    lib.symbols.wxDataViewCtrl_GetItemRect(this._ptr, item, column, x, y, width, height);
   }
 
   EditItem(item: Deno.PointerValue, column: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_EditItem(this.#ptr, item, column);
+    lib.symbols.wxDataViewCtrl_EditItem(this._ptr, item, column);
   }
 
   GetCountPerPage(): number {
-    return lib.symbols.wxDataViewCtrl_GetCountPerPage(this.#ptr);
+    return lib.symbols.wxDataViewCtrl_GetCountPerPage(this._ptr);
   }
 
   GetTopItem(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_GetTopItem(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_GetTopItem(this._ptr, item);
   }
 
   ExpandChildren(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_ExpandChildren(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_ExpandChildren(this._ptr, item);
   }
 
   ExpandAncestors(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewCtrl_ExpandAncestors(this.#ptr, item);
+    lib.symbols.wxDataViewCtrl_ExpandAncestors(this._ptr, item);
   }
 
   AllowMultiColumnSort(allow: boolean): boolean {
-    return (lib.symbols.wxDataViewCtrl_AllowMultiColumnSort(this.#ptr, allow ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_AllowMultiColumnSort(this._ptr, allow ? 1 : 0) as number) !== 0;
   }
 
   IsMultiColumnSortAllowed(): boolean {
-    return (lib.symbols.wxDataViewCtrl_IsMultiColumnSortAllowed(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_IsMultiColumnSortAllowed(this._ptr) as number) !== 0;
   }
 
   ToggleSortByColumn(column: number): void {
-    lib.symbols.wxDataViewCtrl_ToggleSortByColumn(this.#ptr, column);
+    lib.symbols.wxDataViewCtrl_ToggleSortByColumn(this._ptr, column);
   }
 
   SetRowHeight(rowHeight: number): boolean {
-    return (lib.symbols.wxDataViewCtrl_SetRowHeight(this.#ptr, rowHeight) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_SetRowHeight(this._ptr, rowHeight) as number) !== 0;
   }
 
   SetAlternateRowColour(colour: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDataViewCtrl_SetAlternateRowColour(this.#ptr, colour) as number) !== 0;
+    return (lib.symbols.wxDataViewCtrl_SetAlternateRowColour(this._ptr, colour) as number) !== 0;
   }
 
   AppendIconTextColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_AppendIconTextColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_AppendIconTextColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   AppendDateColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_AppendDateColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_AppendDateColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   PrependTextColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_PrependTextColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_PrependTextColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   PrependIconTextColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_PrependIconTextColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_PrependIconTextColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   PrependToggleColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_PrependToggleColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_PrependToggleColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   PrependProgressColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_PrependProgressColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_PrependProgressColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   PrependDateColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_PrependDateColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_PrependDateColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
   PrependBitmapColumn(label: Deno.PointerValue, model_column: number, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewCtrl_PrependBitmapColumn(this.#ptr, label, model_column, mode, width, align, flags);
+    return lib.symbols.wxDataViewCtrl_PrependBitmapColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 
 }

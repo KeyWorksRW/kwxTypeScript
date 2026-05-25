@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxSingleInstanceChecker {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(pObject: Deno.PointerValue, name: Deno.PointerValue, path: Deno.PointerValue): boolean {
@@ -25,7 +25,7 @@ export class wxSingleInstanceChecker {
   }
 
   Delete(): void {
-    lib.symbols.wxSingleInstanceChecker_Delete(this.#ptr);
+    lib.symbols.wxSingleInstanceChecker_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -33,7 +33,7 @@ export class wxSingleInstanceChecker {
   }
 
   IsAnotherRunning(): boolean {
-    return (lib.symbols.wxSingleInstanceChecker_IsAnotherRunning(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxSingleInstanceChecker_IsAnotherRunning(this._ptr) as number) !== 0;
   }
 
 }

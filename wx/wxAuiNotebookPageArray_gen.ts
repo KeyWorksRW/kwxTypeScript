@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAuiNotebookPageArray {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxAuiNotebookPageArray | null {
@@ -21,7 +21,7 @@ export class wxAuiNotebookPageArray {
   }
 
   Delete(): void {
-    lib.symbols.wxAuiNotebookPageArray_Delete(this.#ptr);
+    lib.symbols.wxAuiNotebookPageArray_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,11 +29,11 @@ export class wxAuiNotebookPageArray {
   }
 
   GetCount(): number {
-    return lib.symbols.wxAuiNotebookPageArray_GetCount(this.#ptr);
+    return lib.symbols.wxAuiNotebookPageArray_GetCount(this._ptr);
   }
 
   Item(index: number): Deno.PointerValue {
-    return lib.symbols.wxAuiNotebookPageArray_Item(this.#ptr, index);
+    return lib.symbols.wxAuiNotebookPageArray_Item(this._ptr, index);
   }
 
 }

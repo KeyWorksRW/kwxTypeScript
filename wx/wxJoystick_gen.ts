@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxJoystick {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(joystick: number): wxJoystick | null {
@@ -21,7 +21,7 @@ export class wxJoystick {
   }
 
   Delete(): void {
-    lib.symbols.wxJoystick_Delete(this.#ptr);
+    lib.symbols.wxJoystick_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,171 +29,171 @@ export class wxJoystick {
   }
 
   GetButtonState(): number {
-    return lib.symbols.wxJoystick_GetButtonState(this.#ptr);
+    return lib.symbols.wxJoystick_GetButtonState(this._ptr);
   }
 
   GetManufacturerId(): number {
-    return lib.symbols.wxJoystick_GetManufacturerId(this.#ptr);
+    return lib.symbols.wxJoystick_GetManufacturerId(this._ptr);
   }
 
   GetMaxAxes(): number {
-    return lib.symbols.wxJoystick_GetMaxAxes(this.#ptr);
+    return lib.symbols.wxJoystick_GetMaxAxes(this._ptr);
   }
 
   GetMaxButtons(): number {
-    return lib.symbols.wxJoystick_GetMaxButtons(this.#ptr);
+    return lib.symbols.wxJoystick_GetMaxButtons(this._ptr);
   }
 
   GetMovementThreshold(): number {
-    return lib.symbols.wxJoystick_GetMovementThreshold(this.#ptr);
+    return lib.symbols.wxJoystick_GetMovementThreshold(this._ptr);
   }
 
   GetNumberAxes(): number {
-    return lib.symbols.wxJoystick_GetNumberAxes(this.#ptr);
+    return lib.symbols.wxJoystick_GetNumberAxes(this._ptr);
   }
 
   GetNumberButtons(): number {
-    return lib.symbols.wxJoystick_GetNumberButtons(this.#ptr);
+    return lib.symbols.wxJoystick_GetNumberButtons(this._ptr);
   }
 
   GetNumberJoysticks(): number {
-    return lib.symbols.wxJoystick_GetNumberJoysticks(this.#ptr);
+    return lib.symbols.wxJoystick_GetNumberJoysticks(this._ptr);
   }
 
   GetPOVCTSPosition(): number {
-    return lib.symbols.wxJoystick_GetPOVCTSPosition(this.#ptr);
+    return lib.symbols.wxJoystick_GetPOVCTSPosition(this._ptr);
   }
 
   GetPOVPosition(): number {
-    return lib.symbols.wxJoystick_GetPOVPosition(this.#ptr);
+    return lib.symbols.wxJoystick_GetPOVPosition(this._ptr);
   }
 
   GetPollingMax(): number {
-    return lib.symbols.wxJoystick_GetPollingMax(this.#ptr);
+    return lib.symbols.wxJoystick_GetPollingMax(this._ptr);
   }
 
   GetPollingMin(): number {
-    return lib.symbols.wxJoystick_GetPollingMin(this.#ptr);
+    return lib.symbols.wxJoystick_GetPollingMin(this._ptr);
   }
 
   GetPosition(): Deno.PointerValue {
-    return lib.symbols.wxJoystick_GetPosition(this.#ptr);
+    return lib.symbols.wxJoystick_GetPosition(this._ptr);
   }
 
   GetProductId(): number {
-    return lib.symbols.wxJoystick_GetProductId(this.#ptr);
+    return lib.symbols.wxJoystick_GetProductId(this._ptr);
   }
 
   GetProductName(): Deno.PointerValue {
-    return lib.symbols.wxJoystick_GetProductName(this.#ptr);
+    return lib.symbols.wxJoystick_GetProductName(this._ptr);
   }
 
   GetRudderMax(): number {
-    return lib.symbols.wxJoystick_GetRudderMax(this.#ptr);
+    return lib.symbols.wxJoystick_GetRudderMax(this._ptr);
   }
 
   GetRudderMin(): number {
-    return lib.symbols.wxJoystick_GetRudderMin(this.#ptr);
+    return lib.symbols.wxJoystick_GetRudderMin(this._ptr);
   }
 
   GetRudderPosition(): number {
-    return lib.symbols.wxJoystick_GetRudderPosition(this.#ptr);
+    return lib.symbols.wxJoystick_GetRudderPosition(this._ptr);
   }
 
   GetUMax(): number {
-    return lib.symbols.wxJoystick_GetUMax(this.#ptr);
+    return lib.symbols.wxJoystick_GetUMax(this._ptr);
   }
 
   GetUMin(): number {
-    return lib.symbols.wxJoystick_GetUMin(this.#ptr);
+    return lib.symbols.wxJoystick_GetUMin(this._ptr);
   }
 
   GetUPosition(): number {
-    return lib.symbols.wxJoystick_GetUPosition(this.#ptr);
+    return lib.symbols.wxJoystick_GetUPosition(this._ptr);
   }
 
   GetVMax(): number {
-    return lib.symbols.wxJoystick_GetVMax(this.#ptr);
+    return lib.symbols.wxJoystick_GetVMax(this._ptr);
   }
 
   GetVMin(): number {
-    return lib.symbols.wxJoystick_GetVMin(this.#ptr);
+    return lib.symbols.wxJoystick_GetVMin(this._ptr);
   }
 
   GetVPosition(): number {
-    return lib.symbols.wxJoystick_GetVPosition(this.#ptr);
+    return lib.symbols.wxJoystick_GetVPosition(this._ptr);
   }
 
   GetXMax(): number {
-    return lib.symbols.wxJoystick_GetXMax(this.#ptr);
+    return lib.symbols.wxJoystick_GetXMax(this._ptr);
   }
 
   GetXMin(): number {
-    return lib.symbols.wxJoystick_GetXMin(this.#ptr);
+    return lib.symbols.wxJoystick_GetXMin(this._ptr);
   }
 
   GetYMax(): number {
-    return lib.symbols.wxJoystick_GetYMax(this.#ptr);
+    return lib.symbols.wxJoystick_GetYMax(this._ptr);
   }
 
   GetYMin(): number {
-    return lib.symbols.wxJoystick_GetYMin(this.#ptr);
+    return lib.symbols.wxJoystick_GetYMin(this._ptr);
   }
 
   GetZMax(): number {
-    return lib.symbols.wxJoystick_GetZMax(this.#ptr);
+    return lib.symbols.wxJoystick_GetZMax(this._ptr);
   }
 
   GetZMin(): number {
-    return lib.symbols.wxJoystick_GetZMin(this.#ptr);
+    return lib.symbols.wxJoystick_GetZMin(this._ptr);
   }
 
   GetZPosition(): number {
-    return lib.symbols.wxJoystick_GetZPosition(this.#ptr);
+    return lib.symbols.wxJoystick_GetZPosition(this._ptr);
   }
 
   HasPOV(): boolean {
-    return (lib.symbols.wxJoystick_HasPOV(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxJoystick_HasPOV(this._ptr) as number) !== 0;
   }
 
   HasPOV4Dir(): boolean {
-    return (lib.symbols.wxJoystick_HasPOV4Dir(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxJoystick_HasPOV4Dir(this._ptr) as number) !== 0;
   }
 
   HasPOVCTS(): boolean {
-    return (lib.symbols.wxJoystick_HasPOVCTS(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxJoystick_HasPOVCTS(this._ptr) as number) !== 0;
   }
 
   HasRudder(): boolean {
-    return (lib.symbols.wxJoystick_HasRudder(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxJoystick_HasRudder(this._ptr) as number) !== 0;
   }
 
   HasU(): boolean {
-    return (lib.symbols.wxJoystick_HasU(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxJoystick_HasU(this._ptr) as number) !== 0;
   }
 
   HasV(): boolean {
-    return (lib.symbols.wxJoystick_HasV(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxJoystick_HasV(this._ptr) as number) !== 0;
   }
 
   HasZ(): boolean {
-    return (lib.symbols.wxJoystick_HasZ(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxJoystick_HasZ(this._ptr) as number) !== 0;
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxJoystick_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxJoystick_IsOk(this._ptr) as number) !== 0;
   }
 
   ReleaseCapture(): number {
-    return lib.symbols.wxJoystick_ReleaseCapture(this.#ptr);
+    return lib.symbols.wxJoystick_ReleaseCapture(this._ptr);
   }
 
   SetCapture(win: Deno.PointerValue, pollingFreq: number): number {
-    return lib.symbols.wxJoystick_SetCapture(this.#ptr, win, pollingFreq);
+    return lib.symbols.wxJoystick_SetCapture(this._ptr, win, pollingFreq);
   }
 
   SetMovementThreshold(threshold: number): void {
-    lib.symbols.wxJoystick_SetMovementThreshold(this.#ptr, threshold);
+    lib.symbols.wxJoystick_SetMovementThreshold(this._ptr, threshold);
   }
 
 }

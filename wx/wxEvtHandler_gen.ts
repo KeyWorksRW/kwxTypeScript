@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxEvtHandler {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxEvtHandler | null {
@@ -21,7 +21,7 @@ export class wxEvtHandler {
   }
 
   Delete(): void {
-    lib.symbols.wxEvtHandler_Delete(this.#ptr);
+    lib.symbols.wxEvtHandler_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,47 +29,47 @@ export class wxEvtHandler {
   }
 
   AddPendingEvent(event: Deno.PointerValue): void {
-    lib.symbols.wxEvtHandler_AddPendingEvent(this.#ptr, event);
+    lib.symbols.wxEvtHandler_AddPendingEvent(this._ptr, event);
   }
 
   Connect(first: number, last: number, type_: number, data: Deno.PointerValue): number {
-    return lib.symbols.wxEvtHandler_Connect(this.#ptr, first, last, type_, data);
+    return lib.symbols.wxEvtHandler_Connect(this._ptr, first, last, type_, data);
   }
 
   Disconnect(first: number, last: number, type_: number, id: number): number {
-    return lib.symbols.wxEvtHandler_Disconnect(this.#ptr, first, last, type_, id);
+    return lib.symbols.wxEvtHandler_Disconnect(this._ptr, first, last, type_, id);
   }
 
   GetEvtHandlerEnabled(): boolean {
-    return (lib.symbols.wxEvtHandler_GetEvtHandlerEnabled(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxEvtHandler_GetEvtHandlerEnabled(this._ptr) as number) !== 0;
   }
 
   GetNextHandler(): Deno.PointerValue {
-    return lib.symbols.wxEvtHandler_GetNextHandler(this.#ptr);
+    return lib.symbols.wxEvtHandler_GetNextHandler(this._ptr);
   }
 
   GetPreviousHandler(): Deno.PointerValue {
-    return lib.symbols.wxEvtHandler_GetPreviousHandler(this.#ptr);
+    return lib.symbols.wxEvtHandler_GetPreviousHandler(this._ptr);
   }
 
   ProcessEvent(event: Deno.PointerValue): boolean {
-    return (lib.symbols.wxEvtHandler_ProcessEvent(this.#ptr, event) as number) !== 0;
+    return (lib.symbols.wxEvtHandler_ProcessEvent(this._ptr, event) as number) !== 0;
   }
 
   ProcessPendingEvents(): void {
-    lib.symbols.wxEvtHandler_ProcessPendingEvents(this.#ptr);
+    lib.symbols.wxEvtHandler_ProcessPendingEvents(this._ptr);
   }
 
   SetEvtHandlerEnabled(enabled: boolean): void {
-    lib.symbols.wxEvtHandler_SetEvtHandlerEnabled(this.#ptr, enabled ? 1 : 0);
+    lib.symbols.wxEvtHandler_SetEvtHandlerEnabled(this._ptr, enabled ? 1 : 0);
   }
 
   SetNextHandler(handler: Deno.PointerValue): void {
-    lib.symbols.wxEvtHandler_SetNextHandler(this.#ptr, handler);
+    lib.symbols.wxEvtHandler_SetNextHandler(this._ptr, handler);
   }
 
   SetPreviousHandler(handler: Deno.PointerValue): void {
-    lib.symbols.wxEvtHandler_SetPreviousHandler(this.#ptr, handler);
+    lib.symbols.wxEvtHandler_SetPreviousHandler(this._ptr, handler);
   }
 
 }

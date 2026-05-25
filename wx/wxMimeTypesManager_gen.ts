@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxMimeTypesManager {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxMimeTypesManager | null {
@@ -21,23 +21,23 @@ export class wxMimeTypesManager {
   }
 
   AddFallbacks(types: Deno.PointerValue): void {
-    lib.symbols.wxMimeTypesManager_AddFallbacks(this.#ptr, types);
+    lib.symbols.wxMimeTypesManager_AddFallbacks(this._ptr, types);
   }
 
   EnumAllFileTypes(list: Deno.PointerValue): number {
-    return lib.symbols.wxMimeTypesManager_EnumAllFileTypes(this.#ptr, list);
+    return lib.symbols.wxMimeTypesManager_EnumAllFileTypes(this._ptr, list);
   }
 
   GetFileTypeFromExtension(extension: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxMimeTypesManager_GetFileTypeFromExtension(this.#ptr, extension);
+    return lib.symbols.wxMimeTypesManager_GetFileTypeFromExtension(this._ptr, extension);
   }
 
   GetFileTypeFromMimeType(name: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxMimeTypesManager_GetFileTypeFromMimeType(this.#ptr, name);
+    return lib.symbols.wxMimeTypesManager_GetFileTypeFromMimeType(this._ptr, name);
   }
 
   IsOfType(type_: Deno.PointerValue, wildcard: Deno.PointerValue): boolean {
-    return (lib.symbols.wxMimeTypesManager_IsOfType(this.#ptr, type_, wildcard) as number) !== 0;
+    return (lib.symbols.wxMimeTypesManager_IsOfType(this._ptr, type_, wildcard) as number) !== 0;
   }
 
 }
