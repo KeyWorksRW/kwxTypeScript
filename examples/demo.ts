@@ -41,59 +41,6 @@ import {
     shutdown,
 } from "../dist/kwx.mjs";
 
-// ---------------------------------------------------------------------------
-// Generated TS classes don't encode C++ inheritance.  These shims bridge
-// the gap for common inherited methods.
-// ---------------------------------------------------------------------------
-function asWindow(ptr: Deno.PointerValue)
-{
-    return {
-        Show()
-        {
-            lib.symbols.wxWindow_Show(ptr);
-        },
-        Center(dir: number)
-        {
-            lib.symbols.wxWindow_Center(ptr, dir);
-        },
-        Close(force: boolean)
-        {
-            return (lib.symbols.wxWindow_Close(ptr, force ? 1 : 0) as number) !== 0;
-        },
-        SetSizer(sizer: Deno.PointerValue)
-        {
-            lib.symbols.wxWindow_SetSizer(ptr, sizer, 0);
-        },
-    };
-}
-
-// wxBoxSizer IS-A wxSizer in C++, so sizer methods are on the wxSizer symbol set
-function asSizer(ptr: Deno.PointerValue)
-{
-    return {
-        AddWindow(
-            wnd: Deno.PointerValue,
-            option: number,
-            flag: number,
-            border: number,
-            userData: Deno.PointerValue,
-        )
-        {
-            lib.symbols.wxSizer_AddWindow(ptr, wnd, option, flag, border, userData);
-        },
-        AddSizer(
-            sz: Deno.PointerValue,
-            option: number,
-            flag: number,
-            border: number,
-            userData: Deno.PointerValue,
-        )
-        {
-            lib.symbols.wxSizer_AddSizer(ptr, sz, option, flag, border, userData);
-        },
-    };
-}
-
 // --- Helper: create a wxString from a JS string ---
 function createWxString(s: string): typeof wxString
 {
@@ -155,8 +102,6 @@ const frame = wxFrame.Create(
     wx.DEFAULT_FRAME_STYLE, // style
 )!;
 titleStr.Delete();
-
-const win = asWindow(frame.ptr);
 
 // 3. Build menu bar
 const fileMenu = wxMenu.Create(createWxString("&File").ptr, 0)!;
@@ -237,9 +182,8 @@ const textCtrl = wxTextCtrl.Create(panel.ptr, wx.ID_ANY, createWxString("").ptr,
 lib.symbols.wxTextEntry_SetHint(textCtrl.ptr, hintStr.ptr);
 hintStr.Delete();
 
-const hSz = asSizer(hSizer.ptr);
-hSz.AddWindow(label.ptr, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5, null);
-hSz.AddWindow(textCtrl.ptr, 1, wx.ALL | wx.EXPAND, 5, null);
+hSizer.AddWindow(label.ptr, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5, null);
+hSizer.AddWindow(textCtrl.ptr, 1, wx.ALL | wx.EXPAND, 5, null);
 
 // --- "Click Me" button (use known ID for event binding) ---
 const btnStr = createWxString("Click Me");
@@ -247,12 +191,11 @@ const button = wxButton.Create(panel.ptr, BTN_CLICK_ME, btnStr.ptr, -1, -1, -1, 
 btnStr.Delete();
 
 // Assemble sizers
-const topSz = asSizer(topSizer.ptr);
-topSz.AddSizer(hSizer.ptr, 0, wx.EXPAND | wx.ALL, 5, null);
-topSz.AddWindow(button.ptr, 0, wx.ALL, 10, null);
+topSizer.AddSizer(hSizer.ptr, 0, wx.EXPAND | wx.ALL, 5, null);
+topSizer.AddWindow(button.ptr, 0, wx.ALL, 10, null);
 
 // Attach sizer to panel (inherited from wxWindow)
-asWindow(panel.ptr).SetSizer(topSizer.ptr);
+panel.SetSizer(topSizer.ptr);
 
 // 6. Event handlers
 // IMPORTANT: Keep references to UnsafeCallback instances alive — if GC'd,
@@ -313,7 +256,7 @@ const exitCb = new Deno.UnsafeCallback({
     result: "void",
 }, () =>
 {
-    win.Close(true);
+    frame.Close(true);
 });
 const exitClosure = wxClosure.Create(exitCb.pointer, null)!;
 lib.symbols.wxEvtHandler_Connect(frame.ptr, wx.ID_EXIT, wx.ID_EXIT, wx.EVT_MENU, exitClosure.ptr);
@@ -354,8 +297,8 @@ const closeClosure = wxClosure.Create(closeCb.pointer, null)!;
 lib.symbols.wxEvtHandler_Connect(frame.ptr, wx.ID_ANY, wx.ID_ANY, wx.EVT_CLOSE_WINDOW, closeClosure.ptr);
 
 // 7. Center and show
-win.Center(wx.BOTH);
-win.Show();
+frame.Center(wx.BOTH);
+frame.Show();
 setTopWindow(frame.ptr);
 
 // 8. Run the event loop
