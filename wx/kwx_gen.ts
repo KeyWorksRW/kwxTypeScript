@@ -6,6 +6,7 @@
 export { lib } from "./kwx_ffi_gen.ts";
 export * from "./kwx_constants_gen.ts";
 export * from "./kwx_free_functions_gen.ts";
+export * from "./kwx_helpers_gen.ts";
 
 export { kwxArtProv } from "./kwxArtProv_gen.ts";
 export { kwxClient } from "./kwxClient_gen.ts";
