@@ -36,8 +36,8 @@ export class wxTimer {
     return (lib.symbols.wxTimer_IsOneShot(this._ptr) as number) !== 0;
   }
 
-  IsRuning(): boolean {
-    return (lib.symbols.wxTimer_IsRuning(this._ptr) as number) !== 0;
+  IsRunning(): boolean {
+    return (lib.symbols.wxTimer_IsRunning(this._ptr) as number) !== 0;
   }
 
   Start(interval: number, oneShot: boolean): boolean {
