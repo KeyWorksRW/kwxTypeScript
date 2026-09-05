@@ -117,7 +117,15 @@ if(WIN32)
         target_sources(kwxFFI PRIVATE
             ${KWXFFI_MANIFEST_DIR}/kwxFFI_manifest.rc
         )
-        message(STATUS "Embedding Common Controls v6 manifest into kwxFFI shared library")
+
+        # Only MSVC/clang-cl accepts /MANIFEST:NO. GNU/Clang frontends on MSYS2
+        # (e.g. clang++.exe) use a different linker and reject this flag.
+        if(MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
+            target_link_options(kwxFFI PRIVATE "/MANIFEST:NO")
+            message(STATUS "Embedding Common Controls v6 manifest into kwxFFI shared library")
+        else()
+            message(STATUS "Skipping /MANIFEST:NO for non-MSVC Windows linker")
+        endif()
     else()
         message(WARNING "Manifest files not found at ${KWXFFI_MANIFEST_DIR} — "
             "visual styles (ComCtl32 v6) will not be enabled")

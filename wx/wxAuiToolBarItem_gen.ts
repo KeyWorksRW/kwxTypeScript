@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAuiToolBarItem {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateDefault(): wxAuiToolBarItem | null {
@@ -27,163 +27,163 @@ export class wxAuiToolBarItem {
   }
 
   Copy(source: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarItem_Copy(this.#ptr, source);
+    return lib.symbols.wxAuiToolBarItem_Copy(this._ptr, source);
   }
 
   Assign(source: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_Assign(this.#ptr, source);
+    lib.symbols.wxAuiToolBarItem_Assign(this._ptr, source);
   }
 
   SetWindow(window: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_SetWindow(this.#ptr, window);
+    lib.symbols.wxAuiToolBarItem_SetWindow(this._ptr, window);
   }
 
   GetWindow(): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarItem_GetWindow(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetWindow(this._ptr);
   }
 
   SetId(new_id: number): void {
-    lib.symbols.wxAuiToolBarItem_SetId(this.#ptr, new_id);
+    lib.symbols.wxAuiToolBarItem_SetId(this._ptr, new_id);
   }
 
   GetId(): number {
-    return lib.symbols.wxAuiToolBarItem_GetId(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetId(this._ptr);
   }
 
   SetKind(new_kind: number): void {
-    lib.symbols.wxAuiToolBarItem_SetKind(this.#ptr, new_kind);
+    lib.symbols.wxAuiToolBarItem_SetKind(this._ptr, new_kind);
   }
 
   GetKind(): number {
-    return lib.symbols.wxAuiToolBarItem_GetKind(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetKind(this._ptr);
   }
 
   SetState(new_state: number): void {
-    lib.symbols.wxAuiToolBarItem_SetState(this.#ptr, new_state);
+    lib.symbols.wxAuiToolBarItem_SetState(this._ptr, new_state);
   }
 
   GetState(): number {
-    return lib.symbols.wxAuiToolBarItem_GetState(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetState(this._ptr);
   }
 
   SetSizerItem(sizerItem: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_SetSizerItem(this.#ptr, sizerItem);
+    lib.symbols.wxAuiToolBarItem_SetSizerItem(this._ptr, sizerItem);
   }
 
   GetSizerItem(): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarItem_GetSizerItem(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetSizerItem(this._ptr);
   }
 
   SetLabel(label: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_SetLabel(this.#ptr, label);
+    lib.symbols.wxAuiToolBarItem_SetLabel(this._ptr, label);
   }
 
   GetLabel(): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarItem_GetLabel(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetLabel(this._ptr);
   }
 
   SetBitmap(bitmap: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_SetBitmap(this.#ptr, bitmap);
+    lib.symbols.wxAuiToolBarItem_SetBitmap(this._ptr, bitmap);
   }
 
   GetBitmap(ref: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_GetBitmap(this.#ptr, ref);
+    lib.symbols.wxAuiToolBarItem_GetBitmap(this._ptr, ref);
   }
 
   SetDisabledBitmap(bitmap: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_SetDisabledBitmap(this.#ptr, bitmap);
+    lib.symbols.wxAuiToolBarItem_SetDisabledBitmap(this._ptr, bitmap);
   }
 
   GetDisabledBitmap(ref: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_GetDisabledBitmap(this.#ptr, ref);
+    lib.symbols.wxAuiToolBarItem_GetDisabledBitmap(this._ptr, ref);
   }
 
   SetHoverBitmap(bitmap: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_SetHoverBitmap(this.#ptr, bitmap);
+    lib.symbols.wxAuiToolBarItem_SetHoverBitmap(this._ptr, bitmap);
   }
 
   GetHoverBitmap(ref: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_GetHoverBitmap(this.#ptr, ref);
+    lib.symbols.wxAuiToolBarItem_GetHoverBitmap(this._ptr, ref);
   }
 
   SetShortHelp(helpString: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_SetShortHelp(this.#ptr, helpString);
+    lib.symbols.wxAuiToolBarItem_SetShortHelp(this._ptr, helpString);
   }
 
   GetShortHelp(): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarItem_GetShortHelp(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetShortHelp(this._ptr);
   }
 
   SetLongHelp(helpString: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarItem_SetLongHelp(this.#ptr, helpString);
+    lib.symbols.wxAuiToolBarItem_SetLongHelp(this._ptr, helpString);
   }
 
   GetLongHelp(): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarItem_GetLongHelp(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetLongHelp(this._ptr);
   }
 
   SetMinSize(width: number, height: number): void {
-    lib.symbols.wxAuiToolBarItem_SetMinSize(this.#ptr, width, height);
+    lib.symbols.wxAuiToolBarItem_SetMinSize(this._ptr, width, height);
   }
 
   GetMinSize(): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarItem_GetMinSize(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetMinSize(this._ptr);
   }
 
   SetSpacerPixels(spacerPixels: number): void {
-    lib.symbols.wxAuiToolBarItem_SetSpacerPixels(this.#ptr, spacerPixels);
+    lib.symbols.wxAuiToolBarItem_SetSpacerPixels(this._ptr, spacerPixels);
   }
 
   GetSpacerPixels(): number {
-    return lib.symbols.wxAuiToolBarItem_GetSpacerPixels(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetSpacerPixels(this._ptr);
   }
 
   SetProportion(proportion: number): void {
-    lib.symbols.wxAuiToolBarItem_SetProportion(this.#ptr, proportion);
+    lib.symbols.wxAuiToolBarItem_SetProportion(this._ptr, proportion);
   }
 
   GetProportion(): number {
-    return lib.symbols.wxAuiToolBarItem_GetProportion(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetProportion(this._ptr);
   }
 
   SetActive(enable: boolean): void {
-    lib.symbols.wxAuiToolBarItem_SetActive(this.#ptr, enable ? 1 : 0);
+    lib.symbols.wxAuiToolBarItem_SetActive(this._ptr, enable ? 1 : 0);
   }
 
   IsActive(): boolean {
-    return (lib.symbols.wxAuiToolBarItem_IsActive(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiToolBarItem_IsActive(this._ptr) as number) !== 0;
   }
 
   SetHasDropDown(enable: boolean): void {
-    lib.symbols.wxAuiToolBarItem_SetHasDropDown(this.#ptr, enable ? 1 : 0);
+    lib.symbols.wxAuiToolBarItem_SetHasDropDown(this._ptr, enable ? 1 : 0);
   }
 
   HasDropDown(): boolean {
-    return (lib.symbols.wxAuiToolBarItem_HasDropDown(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiToolBarItem_HasDropDown(this._ptr) as number) !== 0;
   }
 
   SetSticky(enable: boolean): void {
-    lib.symbols.wxAuiToolBarItem_SetSticky(this.#ptr, enable ? 1 : 0);
+    lib.symbols.wxAuiToolBarItem_SetSticky(this._ptr, enable ? 1 : 0);
   }
 
   IsSticky(): boolean {
-    return (lib.symbols.wxAuiToolBarItem_IsSticky(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiToolBarItem_IsSticky(this._ptr) as number) !== 0;
   }
 
   SetUserData(userData: number): void {
-    lib.symbols.wxAuiToolBarItem_SetUserData(this.#ptr, userData);
+    lib.symbols.wxAuiToolBarItem_SetUserData(this._ptr, userData);
   }
 
   GetUserData(): number {
-    return lib.symbols.wxAuiToolBarItem_GetUserData(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetUserData(this._ptr);
   }
 
   SetAlignment(alignment: number): void {
-    lib.symbols.wxAuiToolBarItem_SetAlignment(this.#ptr, alignment);
+    lib.symbols.wxAuiToolBarItem_SetAlignment(this._ptr, alignment);
   }
 
   GetAlignment(): number {
-    return lib.symbols.wxAuiToolBarItem_GetAlignment(this.#ptr);
+    return lib.symbols.wxAuiToolBarItem_GetAlignment(this._ptr);
   }
 
 }

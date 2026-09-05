@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxInfoBar {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number): wxInfoBar | null {
@@ -21,51 +21,51 @@ export class wxInfoBar {
   }
 
   AddButton(btnid: number, label: Deno.PointerValue): void {
-    lib.symbols.wxInfoBar_AddButton(this.#ptr, btnid, label);
+    lib.symbols.wxInfoBar_AddButton(this._ptr, btnid, label);
   }
 
   Dismiss(): void {
-    lib.symbols.wxInfoBar_Dismiss(this.#ptr);
+    lib.symbols.wxInfoBar_Dismiss(this._ptr);
   }
 
   GetButtonCount(): bigint {
-    return lib.symbols.wxInfoBar_GetButtonCount(this.#ptr) as bigint;
+    return lib.symbols.wxInfoBar_GetButtonCount(this._ptr) as bigint;
   }
 
   GetButtonId(idx: number): number {
-    return lib.symbols.wxInfoBar_GetButtonId(this.#ptr, idx);
+    return lib.symbols.wxInfoBar_GetButtonId(this._ptr, idx);
   }
 
   GetEffectDuration(): number {
-    return lib.symbols.wxInfoBar_GetEffectDuration(this.#ptr);
+    return lib.symbols.wxInfoBar_GetEffectDuration(this._ptr);
   }
 
   GetShowEffect(): number {
-    return lib.symbols.wxInfoBar_GetShowEffect(this.#ptr);
+    return lib.symbols.wxInfoBar_GetShowEffect(this._ptr);
   }
 
   GetHideEffect(): number {
-    return lib.symbols.wxInfoBar_GetHideEffect(this.#ptr);
+    return lib.symbols.wxInfoBar_GetHideEffect(this._ptr);
   }
 
   HasFlag(flag: number): boolean {
-    return (lib.symbols.wxInfoBar_HasFlag(this.#ptr, flag) as number) !== 0;
+    return (lib.symbols.wxInfoBar_HasFlag(this._ptr, flag) as number) !== 0;
   }
 
   RemoveButton(btnid: number): void {
-    lib.symbols.wxInfoBar_RemoveButton(this.#ptr, btnid);
+    lib.symbols.wxInfoBar_RemoveButton(this._ptr, btnid);
   }
 
   SetEffectDuration(duration: number): void {
-    lib.symbols.wxInfoBar_SetEffectDuration(this.#ptr, duration);
+    lib.symbols.wxInfoBar_SetEffectDuration(this._ptr, duration);
   }
 
   SetShowHideEffects(showEffect: number, hideEffect: number): void {
-    lib.symbols.wxInfoBar_SetShowHideEffects(this.#ptr, showEffect, hideEffect);
+    lib.symbols.wxInfoBar_SetShowHideEffects(this._ptr, showEffect, hideEffect);
   }
 
   ShowMessage(msg: Deno.PointerValue, flags: number): void {
-    lib.symbols.wxInfoBar_ShowMessage(this.#ptr, msg, flags);
+    lib.symbols.wxInfoBar_ShowMessage(this._ptr, msg, flags);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxRibbonGallery {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxRibbonGallery | null {
@@ -21,91 +21,91 @@ export class wxRibbonGallery {
   }
 
   Append(bitmap: Deno.PointerValue, id: number): Deno.PointerValue {
-    return lib.symbols.wxRibbonGallery_Append(this.#ptr, bitmap, id);
+    return lib.symbols.wxRibbonGallery_Append(this._ptr, bitmap, id);
   }
 
   Append_WithClientData(bitmap: Deno.PointerValue, id: number, clientData: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonGallery_Append_WithClientData(this.#ptr, bitmap, id, clientData);
+    return lib.symbols.wxRibbonGallery_Append_WithClientData(this._ptr, bitmap, id, clientData);
   }
 
   Clear(): void {
-    lib.symbols.wxRibbonGallery_Clear(this.#ptr);
+    lib.symbols.wxRibbonGallery_Clear(this._ptr);
   }
 
   IsEmpty(): boolean {
-    return (lib.symbols.wxRibbonGallery_IsEmpty(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonGallery_IsEmpty(this._ptr) as number) !== 0;
   }
 
   GetCount(): number {
-    return lib.symbols.wxRibbonGallery_GetCount(this.#ptr);
+    return lib.symbols.wxRibbonGallery_GetCount(this._ptr);
   }
 
   GetItem(index: number): Deno.PointerValue {
-    return lib.symbols.wxRibbonGallery_GetItem(this.#ptr, index);
+    return lib.symbols.wxRibbonGallery_GetItem(this._ptr, index);
   }
 
   SetSelection(item: Deno.PointerValue): void {
-    lib.symbols.wxRibbonGallery_SetSelection(this.#ptr, item);
+    lib.symbols.wxRibbonGallery_SetSelection(this._ptr, item);
   }
 
   GetSelection(): Deno.PointerValue {
-    return lib.symbols.wxRibbonGallery_GetSelection(this.#ptr);
+    return lib.symbols.wxRibbonGallery_GetSelection(this._ptr);
   }
 
   GetHoveredItem(): Deno.PointerValue {
-    return lib.symbols.wxRibbonGallery_GetHoveredItem(this.#ptr);
+    return lib.symbols.wxRibbonGallery_GetHoveredItem(this._ptr);
   }
 
   GetActiveItem(): Deno.PointerValue {
-    return lib.symbols.wxRibbonGallery_GetActiveItem(this.#ptr);
+    return lib.symbols.wxRibbonGallery_GetActiveItem(this._ptr);
   }
 
   SetItemClientData(item: Deno.PointerValue, data: Deno.PointerValue): void {
-    lib.symbols.wxRibbonGallery_SetItemClientData(this.#ptr, item, data);
+    lib.symbols.wxRibbonGallery_SetItemClientData(this._ptr, item, data);
   }
 
   GetItemClientData(item: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonGallery_GetItemClientData(this.#ptr, item);
+    return lib.symbols.wxRibbonGallery_GetItemClientData(this._ptr, item);
   }
 
   ScrollLines(lines: number): boolean {
-    return (lib.symbols.wxRibbonGallery_ScrollLines(this.#ptr, lines) as number) !== 0;
+    return (lib.symbols.wxRibbonGallery_ScrollLines(this._ptr, lines) as number) !== 0;
   }
 
   ScrollPixels(pixels: number): boolean {
-    return (lib.symbols.wxRibbonGallery_ScrollPixels(this.#ptr, pixels) as number) !== 0;
+    return (lib.symbols.wxRibbonGallery_ScrollPixels(this._ptr, pixels) as number) !== 0;
   }
 
   EnsureVisible(item: Deno.PointerValue): void {
-    lib.symbols.wxRibbonGallery_EnsureVisible(this.#ptr, item);
+    lib.symbols.wxRibbonGallery_EnsureVisible(this._ptr, item);
   }
 
   GetUpButtonState(): number {
-    return lib.symbols.wxRibbonGallery_GetUpButtonState(this.#ptr);
+    return lib.symbols.wxRibbonGallery_GetUpButtonState(this._ptr);
   }
 
   GetDownButtonState(): number {
-    return lib.symbols.wxRibbonGallery_GetDownButtonState(this.#ptr);
+    return lib.symbols.wxRibbonGallery_GetDownButtonState(this._ptr);
   }
 
   GetExtensionButtonState(): number {
-    return lib.symbols.wxRibbonGallery_GetExtensionButtonState(this.#ptr);
+    return lib.symbols.wxRibbonGallery_GetExtensionButtonState(this._ptr);
   }
 
   IsHovered(): boolean {
-    return (lib.symbols.wxRibbonGallery_IsHovered(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonGallery_IsHovered(this._ptr) as number) !== 0;
   }
 
   IsSizingContinuous(): boolean {
-    return (lib.symbols.wxRibbonGallery_IsSizingContinuous(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonGallery_IsSizingContinuous(this._ptr) as number) !== 0;
   }
 
   SetArtProvider(art: Deno.PointerValue): void {
-    lib.symbols.wxRibbonGallery_SetArtProvider(this.#ptr, art);
+    lib.symbols.wxRibbonGallery_SetArtProvider(this._ptr, art);
   }
 
   GetArtProvider(): Deno.PointerValue {
-    return lib.symbols.wxRibbonGallery_GetArtProvider(this.#ptr);
+    return lib.symbols.wxRibbonGallery_GetArtProvider(this._ptr);
   }
 
 }

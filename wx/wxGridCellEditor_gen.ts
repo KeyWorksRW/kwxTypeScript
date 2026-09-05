@@ -3,79 +3,79 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxGridCellEditor {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   BeginEdit(row: number, col: number, grid: Deno.PointerValue): void {
-    lib.symbols.wxGridCellEditor_BeginEdit(this.#ptr, row, col, grid);
+    lib.symbols.wxGridCellEditor_BeginEdit(this._ptr, row, col, grid);
   }
 
   Create(parent: Deno.PointerValue, id: number, evtHandler: Deno.PointerValue): void {
-    lib.symbols.wxGridCellEditor_Create(this.#ptr, parent, id, evtHandler);
+    lib.symbols.wxGridCellEditor_Create(this._ptr, parent, id, evtHandler);
   }
 
   Destroy(): void {
-    lib.symbols.wxGridCellEditor_Destroy(this.#ptr);
+    lib.symbols.wxGridCellEditor_Destroy(this._ptr);
   }
 
   EndEdit(row: number, col: number, grid: Deno.PointerValue, oldStr: Deno.PointerValue, newStr: Deno.PointerValue): number {
-    return lib.symbols.wxGridCellEditor_EndEdit(this.#ptr, row, col, grid, oldStr, newStr);
+    return lib.symbols.wxGridCellEditor_EndEdit(this._ptr, row, col, grid, oldStr, newStr);
   }
 
   GetControl(): Deno.PointerValue {
-    return lib.symbols.wxGridCellEditor_GetControl(this.#ptr);
+    return lib.symbols.wxGridCellEditor_GetControl(this._ptr);
   }
 
   HandleReturn(event: Deno.PointerValue): void {
-    lib.symbols.wxGridCellEditor_HandleReturn(this.#ptr, event);
+    lib.symbols.wxGridCellEditor_HandleReturn(this._ptr, event);
   }
 
   IsAcceptedKey(event: Deno.PointerValue): boolean {
-    return (lib.symbols.wxGridCellEditor_IsAcceptedKey(this.#ptr, event) as number) !== 0;
+    return (lib.symbols.wxGridCellEditor_IsAcceptedKey(this._ptr, event) as number) !== 0;
   }
 
   IsCreated(): boolean {
-    return (lib.symbols.wxGridCellEditor_IsCreated(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxGridCellEditor_IsCreated(this._ptr) as number) !== 0;
   }
 
   PaintBackground(dc: Deno.PointerValue, x: number, y: number, width: number, height: number, attr: Deno.PointerValue): void {
-    lib.symbols.wxGridCellEditor_PaintBackground(this.#ptr, dc, x, y, width, height, attr);
+    lib.symbols.wxGridCellEditor_PaintBackground(this._ptr, dc, x, y, width, height, attr);
   }
 
   Reset(): void {
-    lib.symbols.wxGridCellEditor_Reset(this.#ptr);
+    lib.symbols.wxGridCellEditor_Reset(this._ptr);
   }
 
   SetControl(control: Deno.PointerValue): void {
-    lib.symbols.wxGridCellEditor_SetControl(this.#ptr, control);
+    lib.symbols.wxGridCellEditor_SetControl(this._ptr, control);
   }
 
   SetParameters(params: Deno.PointerValue): void {
-    lib.symbols.wxGridCellEditor_SetParameters(this.#ptr, params);
+    lib.symbols.wxGridCellEditor_SetParameters(this._ptr, params);
   }
 
   SetSize(x: number, y: number, width: number, height: number): void {
-    lib.symbols.wxGridCellEditor_SetSize(this.#ptr, x, y, width, height);
+    lib.symbols.wxGridCellEditor_SetSize(this._ptr, x, y, width, height);
   }
 
   Show(show: boolean, attr: Deno.PointerValue): void {
-    lib.symbols.wxGridCellEditor_Show(this.#ptr, show ? 1 : 0, attr);
+    lib.symbols.wxGridCellEditor_Show(this._ptr, show ? 1 : 0, attr);
   }
 
   StartingClick(): void {
-    lib.symbols.wxGridCellEditor_StartingClick(this.#ptr);
+    lib.symbols.wxGridCellEditor_StartingClick(this._ptr);
   }
 
   StartingKey(event: Deno.PointerValue): void {
-    lib.symbols.wxGridCellEditor_StartingKey(this.#ptr, event);
+    lib.symbols.wxGridCellEditor_StartingKey(this._ptr, event);
   }
 
 }

@@ -3,99 +3,99 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxItemContainer {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   GetCount(): number {
-    return lib.symbols.wxItemContainer_GetCount(this.#ptr);
+    return lib.symbols.wxItemContainer_GetCount(this._ptr);
   }
 
   IsEmpty(): boolean {
-    return (lib.symbols.wxItemContainer_IsEmpty(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxItemContainer_IsEmpty(this._ptr) as number) !== 0;
   }
 
   GetString(n: number): Deno.PointerValue {
-    return lib.symbols.wxItemContainer_GetString(this.#ptr, n);
+    return lib.symbols.wxItemContainer_GetString(this._ptr, n);
   }
 
   SetString(n: number, s: Deno.PointerValue): void {
-    lib.symbols.wxItemContainer_SetString(this.#ptr, n, s);
+    lib.symbols.wxItemContainer_SetString(this._ptr, n, s);
   }
 
   FindString(s: Deno.PointerValue, caseSensitive: boolean): number {
-    return lib.symbols.wxItemContainer_FindString(this.#ptr, s, caseSensitive ? 1 : 0);
+    return lib.symbols.wxItemContainer_FindString(this._ptr, s, caseSensitive ? 1 : 0);
   }
 
   SetSelection(n: number): void {
-    lib.symbols.wxItemContainer_SetSelection(this.#ptr, n);
+    lib.symbols.wxItemContainer_SetSelection(this._ptr, n);
   }
 
   GetSelection(): number {
-    return lib.symbols.wxItemContainer_GetSelection(this.#ptr);
+    return lib.symbols.wxItemContainer_GetSelection(this._ptr);
   }
 
   SetStringSelection(s: Deno.PointerValue): boolean {
-    return (lib.symbols.wxItemContainer_SetStringSelection(this.#ptr, s) as number) !== 0;
+    return (lib.symbols.wxItemContainer_SetStringSelection(this._ptr, s) as number) !== 0;
   }
 
   GetStringSelection(): Deno.PointerValue {
-    return lib.symbols.wxItemContainer_GetStringSelection(this.#ptr);
+    return lib.symbols.wxItemContainer_GetStringSelection(this._ptr);
   }
 
   Select(n: number): void {
-    lib.symbols.wxItemContainer_Select(this.#ptr, n);
+    lib.symbols.wxItemContainer_Select(this._ptr, n);
   }
 
   Append(item: Deno.PointerValue): number {
-    return lib.symbols.wxItemContainer_Append(this.#ptr, item);
+    return lib.symbols.wxItemContainer_Append(this._ptr, item);
   }
 
   AppendItems(count: number, items: Deno.PointerValue): number {
-    return lib.symbols.wxItemContainer_AppendItems(this.#ptr, count, items);
+    return lib.symbols.wxItemContainer_AppendItems(this._ptr, count, items);
   }
 
   Insert(item: Deno.PointerValue, pos: number): number {
-    return lib.symbols.wxItemContainer_Insert(this.#ptr, item, pos);
+    return lib.symbols.wxItemContainer_Insert(this._ptr, item, pos);
   }
 
   InsertItems(count: number, items: Deno.PointerValue, pos: number): number {
-    return lib.symbols.wxItemContainer_InsertItems(this.#ptr, count, items, pos);
+    return lib.symbols.wxItemContainer_InsertItems(this._ptr, count, items, pos);
   }
 
   Set(count: number, items: Deno.PointerValue): void {
-    lib.symbols.wxItemContainer_Set(this.#ptr, count, items);
+    lib.symbols.wxItemContainer_Set(this._ptr, count, items);
   }
 
   Clear(): void {
-    lib.symbols.wxItemContainer_Clear(this.#ptr);
+    lib.symbols.wxItemContainer_Clear(this._ptr);
   }
 
   Delete(pos: number): void {
-    lib.symbols.wxItemContainer_Delete(this.#ptr, pos);
+    lib.symbols.wxItemContainer_Delete(this._ptr, pos);
   }
 
   IsSorted(): boolean {
-    return (lib.symbols.wxItemContainer_IsSorted(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxItemContainer_IsSorted(this._ptr) as number) !== 0;
   }
 
   SetClientData(n: number, clientData: Deno.PointerValue): void {
-    lib.symbols.wxItemContainer_SetClientData(this.#ptr, n, clientData);
+    lib.symbols.wxItemContainer_SetClientData(this._ptr, n, clientData);
   }
 
   GetClientData(n: number): Deno.PointerValue {
-    return lib.symbols.wxItemContainer_GetClientData(this.#ptr, n);
+    return lib.symbols.wxItemContainer_GetClientData(this._ptr, n);
   }
 
   HasClientData(): boolean {
-    return (lib.symbols.wxItemContainer_HasClientData(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxItemContainer_HasClientData(this._ptr) as number) !== 0;
   }
 
 }

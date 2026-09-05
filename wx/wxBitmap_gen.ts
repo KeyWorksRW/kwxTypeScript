@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxBitmap {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(data: Deno.PointerValue, type_: number, width: number, height: number, depth: number): wxBitmap | null {
@@ -39,7 +39,7 @@ export class wxBitmap {
   }
 
   Delete(): void {
-    lib.symbols.wxBitmap_Delete(this.#ptr);
+    lib.symbols.wxBitmap_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -55,11 +55,11 @@ export class wxBitmap {
   }
 
   CreateFromXPM(): Deno.PointerValue {
-    return lib.symbols.wxBitmap_CreateFromXPM(this.#ptr);
+    return lib.symbols.wxBitmap_CreateFromXPM(this._ptr);
   }
 
   FindHandlerByExtension(type_: number): Deno.PointerValue {
-    return lib.symbols.wxBitmap_FindHandlerByExtension(this.#ptr, type_);
+    return lib.symbols.wxBitmap_FindHandlerByExtension(this._ptr, type_);
   }
 
   FindHandlerByName(name: Deno.PointerValue): Deno.PointerValue {
@@ -71,23 +71,23 @@ export class wxBitmap {
   }
 
   GetDepth(): number {
-    return lib.symbols.wxBitmap_GetDepth(this.#ptr);
+    return lib.symbols.wxBitmap_GetDepth(this._ptr);
   }
 
   GetHeight(): number {
-    return lib.symbols.wxBitmap_GetHeight(this.#ptr);
+    return lib.symbols.wxBitmap_GetHeight(this._ptr);
   }
 
   GetMask(): Deno.PointerValue {
-    return lib.symbols.wxBitmap_GetMask(this.#ptr);
+    return lib.symbols.wxBitmap_GetMask(this._ptr);
   }
 
   GetSubBitmap(x: number, y: number, width: number, height: number, ref: Deno.PointerValue): void {
-    lib.symbols.wxBitmap_GetSubBitmap(this.#ptr, x, y, width, height, ref);
+    lib.symbols.wxBitmap_GetSubBitmap(this._ptr, x, y, width, height, ref);
   }
 
   GetWidth(): number {
-    return lib.symbols.wxBitmap_GetWidth(this.#ptr);
+    return lib.symbols.wxBitmap_GetWidth(this._ptr);
   }
 
   InitStandardHandlers(): void {
@@ -99,11 +99,11 @@ export class wxBitmap {
   }
 
   LoadFile(name: Deno.PointerValue, type_: number): number {
-    return lib.symbols.wxBitmap_LoadFile(this.#ptr, name, type_);
+    return lib.symbols.wxBitmap_LoadFile(this._ptr, name, type_);
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxBitmap_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxBitmap_IsOk(this._ptr) as number) !== 0;
   }
 
   RemoveHandler(name: Deno.PointerValue): boolean {
@@ -111,11 +111,11 @@ export class wxBitmap {
   }
 
   SaveFile(name: Deno.PointerValue, type_: number, cmap: Deno.PointerValue): number {
-    return lib.symbols.wxBitmap_SaveFile(this.#ptr, name, type_, cmap);
+    return lib.symbols.wxBitmap_SaveFile(this._ptr, name, type_, cmap);
   }
 
   SetMask(mask: Deno.PointerValue): void {
-    lib.symbols.wxBitmap_SetMask(this.#ptr, mask);
+    lib.symbols.wxBitmap_SetMask(this._ptr, mask);
   }
 
 }

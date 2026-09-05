@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPrinter {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(data: Deno.PointerValue): wxPrinter | null {
@@ -21,7 +21,7 @@ export class wxPrinter {
   }
 
   Delete(): void {
-    lib.symbols.wxPrinter_Delete(this.#ptr);
+    lib.symbols.wxPrinter_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,35 +29,35 @@ export class wxPrinter {
   }
 
   CreateAbortWindow(parent: Deno.PointerValue, printout: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxPrinter_CreateAbortWindow(this.#ptr, parent, printout);
+    return lib.symbols.wxPrinter_CreateAbortWindow(this._ptr, parent, printout);
   }
 
   GetAbort(): boolean {
-    return (lib.symbols.wxPrinter_GetAbort(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrinter_GetAbort(this._ptr) as number) !== 0;
   }
 
   GetLastError(): number {
-    return lib.symbols.wxPrinter_GetLastError(this.#ptr);
+    return lib.symbols.wxPrinter_GetLastError(this._ptr);
   }
 
   GetPrintDialogData(ref: Deno.PointerValue): void {
-    lib.symbols.wxPrinter_GetPrintDialogData(this.#ptr, ref);
+    lib.symbols.wxPrinter_GetPrintDialogData(this._ptr, ref);
   }
 
   Print(parent: Deno.PointerValue, printout: Deno.PointerValue, prompt: boolean): boolean {
-    return (lib.symbols.wxPrinter_Print(this.#ptr, parent, printout, prompt ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxPrinter_Print(this._ptr, parent, printout, prompt ? 1 : 0) as number) !== 0;
   }
 
   PrintDialog(parent: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxPrinter_PrintDialog(this.#ptr, parent);
+    return lib.symbols.wxPrinter_PrintDialog(this._ptr, parent);
   }
 
   ReportError(parent: Deno.PointerValue, printout: Deno.PointerValue, message: Deno.PointerValue): void {
-    lib.symbols.wxPrinter_ReportError(this.#ptr, parent, printout, message);
+    lib.symbols.wxPrinter_ReportError(this._ptr, parent, printout, message);
   }
 
   Setup(parent: Deno.PointerValue): boolean {
-    return (lib.symbols.wxPrinter_Setup(this.#ptr, parent) as number) !== 0;
+    return (lib.symbols.wxPrinter_Setup(this._ptr, parent) as number) !== 0;
   }
 
 }

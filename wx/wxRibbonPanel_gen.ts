@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxRibbonPanel {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, label: Deno.PointerValue, icon: Deno.PointerValue, x: number, y: number, width: number, height: number, style: number): wxRibbonPanel | null {
@@ -21,51 +21,51 @@ export class wxRibbonPanel {
   }
 
   GetLabel(): Deno.PointerValue {
-    return lib.symbols.wxRibbonPanel_GetLabel(this.#ptr);
+    return lib.symbols.wxRibbonPanel_GetLabel(this._ptr);
   }
 
   IsMinimised(): boolean {
-    return (lib.symbols.wxRibbonPanel_IsMinimised(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonPanel_IsMinimised(this._ptr) as number) !== 0;
   }
 
   IsMinimised_AtSize(width: number, height: number): boolean {
-    return (lib.symbols.wxRibbonPanel_IsMinimised_AtSize(this.#ptr, width, height) as number) !== 0;
+    return (lib.symbols.wxRibbonPanel_IsMinimised_AtSize(this._ptr, width, height) as number) !== 0;
   }
 
   IsHovered(): boolean {
-    return (lib.symbols.wxRibbonPanel_IsHovered(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonPanel_IsHovered(this._ptr) as number) !== 0;
   }
 
   IsExtButtonHovered(): boolean {
-    return (lib.symbols.wxRibbonPanel_IsExtButtonHovered(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonPanel_IsExtButtonHovered(this._ptr) as number) !== 0;
   }
 
   CanAutoMinimise(): boolean {
-    return (lib.symbols.wxRibbonPanel_CanAutoMinimise(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonPanel_CanAutoMinimise(this._ptr) as number) !== 0;
   }
 
   ShowExpanded(): boolean {
-    return (lib.symbols.wxRibbonPanel_ShowExpanded(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonPanel_ShowExpanded(this._ptr) as number) !== 0;
   }
 
   HideExpanded(): boolean {
-    return (lib.symbols.wxRibbonPanel_HideExpanded(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonPanel_HideExpanded(this._ptr) as number) !== 0;
   }
 
   Realize(): void {
-    lib.symbols.wxRibbonPanel_Realize(this.#ptr);
+    lib.symbols.wxRibbonPanel_Realize(this._ptr);
   }
 
   GetMinSize(): Deno.PointerValue {
-    return lib.symbols.wxRibbonPanel_GetMinSize(this.#ptr);
+    return lib.symbols.wxRibbonPanel_GetMinSize(this._ptr);
   }
 
   SetArtProvider(art: Deno.PointerValue): void {
-    lib.symbols.wxRibbonPanel_SetArtProvider(this.#ptr, art);
+    lib.symbols.wxRibbonPanel_SetArtProvider(this._ptr, art);
   }
 
   GetArtProvider(): Deno.PointerValue {
-    return lib.symbols.wxRibbonPanel_GetArtProvider(this.#ptr);
+    return lib.symbols.wxRibbonPanel_GetArtProvider(this._ptr);
   }
 
 }

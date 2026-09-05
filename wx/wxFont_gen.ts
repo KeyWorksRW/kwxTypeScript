@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFont {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(pointSize: number, family: number, style: number, weight: number, underlined: boolean, face: Deno.PointerValue, enc: number): wxFont | null {
@@ -33,7 +33,7 @@ export class wxFont {
   }
 
   Delete(): void {
-    lib.symbols.wxFont_Delete(this.#ptr);
+    lib.symbols.wxFont_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -41,83 +41,83 @@ export class wxFont {
   }
 
   GetDefaultEncoding(): number {
-    return lib.symbols.wxFont_GetDefaultEncoding(this.#ptr);
+    return lib.symbols.wxFont_GetDefaultEncoding(this._ptr);
   }
 
   GetEncoding(): number {
-    return lib.symbols.wxFont_GetEncoding(this.#ptr);
+    return lib.symbols.wxFont_GetEncoding(this._ptr);
   }
 
   GetFaceName(): Deno.PointerValue {
-    return lib.symbols.wxFont_GetFaceName(this.#ptr);
+    return lib.symbols.wxFont_GetFaceName(this._ptr);
   }
 
   GetFamily(): number {
-    return lib.symbols.wxFont_GetFamily(this.#ptr);
+    return lib.symbols.wxFont_GetFamily(this._ptr);
   }
 
   GetFamilyString(): Deno.PointerValue {
-    return lib.symbols.wxFont_GetFamilyString(this.#ptr);
+    return lib.symbols.wxFont_GetFamilyString(this._ptr);
   }
 
   GetPointSize(): number {
-    return lib.symbols.wxFont_GetPointSize(this.#ptr);
+    return lib.symbols.wxFont_GetPointSize(this._ptr);
   }
 
   GetStyle(): number {
-    return lib.symbols.wxFont_GetStyle(this.#ptr);
+    return lib.symbols.wxFont_GetStyle(this._ptr);
   }
 
   GetStyleString(): Deno.PointerValue {
-    return lib.symbols.wxFont_GetStyleString(this.#ptr);
+    return lib.symbols.wxFont_GetStyleString(this._ptr);
   }
 
   GetUnderlined(): number {
-    return lib.symbols.wxFont_GetUnderlined(this.#ptr);
+    return lib.symbols.wxFont_GetUnderlined(this._ptr);
   }
 
   GetWeight(): number {
-    return lib.symbols.wxFont_GetWeight(this.#ptr);
+    return lib.symbols.wxFont_GetWeight(this._ptr);
   }
 
   GetWeightString(): Deno.PointerValue {
-    return lib.symbols.wxFont_GetWeightString(this.#ptr);
+    return lib.symbols.wxFont_GetWeightString(this._ptr);
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxFont_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxFont_IsOk(this._ptr) as number) !== 0;
   }
 
   SetDefaultEncoding(encoding: number): void {
-    lib.symbols.wxFont_SetDefaultEncoding(this.#ptr, encoding);
+    lib.symbols.wxFont_SetDefaultEncoding(this._ptr, encoding);
   }
 
   SetEncoding(encoding: number): void {
-    lib.symbols.wxFont_SetEncoding(this.#ptr, encoding);
+    lib.symbols.wxFont_SetEncoding(this._ptr, encoding);
   }
 
   SetFaceName(faceName: Deno.PointerValue): void {
-    lib.symbols.wxFont_SetFaceName(this.#ptr, faceName);
+    lib.symbols.wxFont_SetFaceName(this._ptr, faceName);
   }
 
   SetFamily(family: number): void {
-    lib.symbols.wxFont_SetFamily(this.#ptr, family);
+    lib.symbols.wxFont_SetFamily(this._ptr, family);
   }
 
   SetPointSize(pointSize: number): void {
-    lib.symbols.wxFont_SetPointSize(this.#ptr, pointSize);
+    lib.symbols.wxFont_SetPointSize(this._ptr, pointSize);
   }
 
   SetStyle(style: number): void {
-    lib.symbols.wxFont_SetStyle(this.#ptr, style);
+    lib.symbols.wxFont_SetStyle(this._ptr, style);
   }
 
   SetUnderlined(underlined: number): void {
-    lib.symbols.wxFont_SetUnderlined(this.#ptr, underlined);
+    lib.symbols.wxFont_SetUnderlined(this._ptr, underlined);
   }
 
   SetWeight(weight: number): void {
-    lib.symbols.wxFont_SetWeight(this.#ptr, weight);
+    lib.symbols.wxFont_SetWeight(this._ptr, weight);
   }
 
 }

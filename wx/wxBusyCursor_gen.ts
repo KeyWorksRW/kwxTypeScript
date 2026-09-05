@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxBusyCursor {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxBusyCursor | null {
@@ -21,7 +21,7 @@ export class wxBusyCursor {
   }
 
   Delete(): void {
-    lib.symbols.wxBusyCursor_Delete(this.#ptr);
+    lib.symbols.wxBusyCursor_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,7 +29,7 @@ export class wxBusyCursor {
   }
 
   CreateWithCursor(): Deno.PointerValue {
-    return lib.symbols.wxBusyCursor_CreateWithCursor(this.#ptr);
+    return lib.symbols.wxBusyCursor_CreateWithCursor(this._ptr);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxTreeItemId {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxTreeItemId | null {
@@ -21,7 +21,7 @@ export class wxTreeItemId {
   }
 
   Delete(): void {
-    lib.symbols.wxTreeItemId_Delete(this.#ptr);
+    lib.symbols.wxTreeItemId_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,7 +29,7 @@ export class wxTreeItemId {
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxTreeItemId_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxTreeItemId_IsOk(this._ptr) as number) !== 0;
   }
 
 }

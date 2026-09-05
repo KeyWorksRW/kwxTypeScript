@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxRibbonButtonBar {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxRibbonButtonBar | null {
@@ -21,127 +21,127 @@ export class wxRibbonButtonBar {
   }
 
   AddButton(button_id: number, label: Deno.PointerValue, bitmap: Deno.PointerValue, help_string: Deno.PointerValue, kind: number, bitmap_small: Deno.PointerValue, bitmap_disabled: Deno.PointerValue, bitmap_small_disabled: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_AddButton(this.#ptr, button_id, label, bitmap, help_string, kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
+    return lib.symbols.wxRibbonButtonBar_AddButton(this._ptr, button_id, label, bitmap, help_string, kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
   }
 
   AddDropdownButton(button_id: number, label: Deno.PointerValue, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_AddDropdownButton(this.#ptr, button_id, label, bitmap, help_string);
+    return lib.symbols.wxRibbonButtonBar_AddDropdownButton(this._ptr, button_id, label, bitmap, help_string);
   }
 
   AddHybridButton(button_id: number, label: Deno.PointerValue, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_AddHybridButton(this.#ptr, button_id, label, bitmap, help_string);
+    return lib.symbols.wxRibbonButtonBar_AddHybridButton(this._ptr, button_id, label, bitmap, help_string);
   }
 
   AddToggleButton(button_id: number, label: Deno.PointerValue, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_AddToggleButton(this.#ptr, button_id, label, bitmap, help_string);
+    return lib.symbols.wxRibbonButtonBar_AddToggleButton(this._ptr, button_id, label, bitmap, help_string);
   }
 
   InsertButton(pos: bigint, button_id: number, label: Deno.PointerValue, bitmap: Deno.PointerValue, help_string: Deno.PointerValue, kind: number, bitmap_small: Deno.PointerValue, bitmap_disabled: Deno.PointerValue, bitmap_small_disabled: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_InsertButton(this.#ptr, pos, button_id, label, bitmap, help_string, kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
+    return lib.symbols.wxRibbonButtonBar_InsertButton(this._ptr, pos, button_id, label, bitmap, help_string, kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
   }
 
   InsertDropdownButton(pos: bigint, button_id: number, label: Deno.PointerValue, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_InsertDropdownButton(this.#ptr, pos, button_id, label, bitmap, help_string);
+    return lib.symbols.wxRibbonButtonBar_InsertDropdownButton(this._ptr, pos, button_id, label, bitmap, help_string);
   }
 
   InsertHybridButton(pos: bigint, button_id: number, label: Deno.PointerValue, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_InsertHybridButton(this.#ptr, pos, button_id, label, bitmap, help_string);
+    return lib.symbols.wxRibbonButtonBar_InsertHybridButton(this._ptr, pos, button_id, label, bitmap, help_string);
   }
 
   InsertToggleButton(pos: bigint, button_id: number, label: Deno.PointerValue, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_InsertToggleButton(this.#ptr, pos, button_id, label, bitmap, help_string);
+    return lib.symbols.wxRibbonButtonBar_InsertToggleButton(this._ptr, pos, button_id, label, bitmap, help_string);
   }
 
   ClearButtons(): void {
-    lib.symbols.wxRibbonButtonBar_ClearButtons(this.#ptr);
+    lib.symbols.wxRibbonButtonBar_ClearButtons(this._ptr);
   }
 
   DeleteButton(button_id: number): boolean {
-    return (lib.symbols.wxRibbonButtonBar_DeleteButton(this.#ptr, button_id) as number) !== 0;
+    return (lib.symbols.wxRibbonButtonBar_DeleteButton(this._ptr, button_id) as number) !== 0;
   }
 
   EnableButton(button_id: number, enable: boolean): void {
-    lib.symbols.wxRibbonButtonBar_EnableButton(this.#ptr, button_id, enable ? 1 : 0);
+    lib.symbols.wxRibbonButtonBar_EnableButton(this._ptr, button_id, enable ? 1 : 0);
   }
 
   SetButtonIcon(button_id: number, bitmap: Deno.PointerValue, bitmap_small: Deno.PointerValue, bitmap_disabled: Deno.PointerValue, bitmap_small_disabled: Deno.PointerValue): void {
-    lib.symbols.wxRibbonButtonBar_SetButtonIcon(this.#ptr, button_id, bitmap, bitmap_small, bitmap_disabled, bitmap_small_disabled);
+    lib.symbols.wxRibbonButtonBar_SetButtonIcon(this._ptr, button_id, bitmap, bitmap_small, bitmap_disabled, bitmap_small_disabled);
   }
 
   SetButtonText(button_id: number, label: Deno.PointerValue): void {
-    lib.symbols.wxRibbonButtonBar_SetButtonText(this.#ptr, button_id, label);
+    lib.symbols.wxRibbonButtonBar_SetButtonText(this._ptr, button_id, label);
   }
 
   SetButtonTextMinWidth_Int(button_id: number, min_width_medium: number, min_width_large: number): void {
-    lib.symbols.wxRibbonButtonBar_SetButtonTextMinWidth_Int(this.#ptr, button_id, min_width_medium, min_width_large);
+    lib.symbols.wxRibbonButtonBar_SetButtonTextMinWidth_Int(this._ptr, button_id, min_width_medium, min_width_large);
   }
 
   SetButtonTextMinWidth_String(button_id: number, label: Deno.PointerValue): void {
-    lib.symbols.wxRibbonButtonBar_SetButtonTextMinWidth_String(this.#ptr, button_id, label);
+    lib.symbols.wxRibbonButtonBar_SetButtonTextMinWidth_String(this._ptr, button_id, label);
   }
 
   SetButtonMinSizeClass(button_id: number, min_class: number): void {
-    lib.symbols.wxRibbonButtonBar_SetButtonMinSizeClass(this.#ptr, button_id, min_class);
+    lib.symbols.wxRibbonButtonBar_SetButtonMinSizeClass(this._ptr, button_id, min_class);
   }
 
   SetButtonMaxSizeClass(button_id: number, max_class: number): void {
-    lib.symbols.wxRibbonButtonBar_SetButtonMaxSizeClass(this.#ptr, button_id, max_class);
+    lib.symbols.wxRibbonButtonBar_SetButtonMaxSizeClass(this._ptr, button_id, max_class);
   }
 
   GetButtonCount(): bigint {
-    return lib.symbols.wxRibbonButtonBar_GetButtonCount(this.#ptr) as bigint;
+    return lib.symbols.wxRibbonButtonBar_GetButtonCount(this._ptr) as bigint;
   }
 
   GetItem(index: bigint): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_GetItem(this.#ptr, index);
+    return lib.symbols.wxRibbonButtonBar_GetItem(this._ptr, index);
   }
 
   GetItemById(button_id: number): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_GetItemById(this.#ptr, button_id);
+    return lib.symbols.wxRibbonButtonBar_GetItemById(this._ptr, button_id);
   }
 
   GetItemId(button: Deno.PointerValue): number {
-    return lib.symbols.wxRibbonButtonBar_GetItemId(this.#ptr, button);
+    return lib.symbols.wxRibbonButtonBar_GetItemId(this._ptr, button);
   }
 
   GetItemRect(button_id: number, x: Deno.PointerValue, y: Deno.PointerValue, width: Deno.PointerValue, height: Deno.PointerValue): void {
-    lib.symbols.wxRibbonButtonBar_GetItemRect(this.#ptr, button_id, x, y, width, height);
+    lib.symbols.wxRibbonButtonBar_GetItemRect(this._ptr, button_id, x, y, width, height);
   }
 
   GetActiveItem(): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_GetActiveItem(this.#ptr);
+    return lib.symbols.wxRibbonButtonBar_GetActiveItem(this._ptr);
   }
 
   GetHoveredItem(): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_GetHoveredItem(this.#ptr);
+    return lib.symbols.wxRibbonButtonBar_GetHoveredItem(this._ptr);
   }
 
   SetItemClientData(item: Deno.PointerValue, data: Deno.PointerValue): void {
-    lib.symbols.wxRibbonButtonBar_SetItemClientData(this.#ptr, item, data);
+    lib.symbols.wxRibbonButtonBar_SetItemClientData(this._ptr, item, data);
   }
 
   GetItemClientData(item: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_GetItemClientData(this.#ptr, item);
+    return lib.symbols.wxRibbonButtonBar_GetItemClientData(this._ptr, item);
   }
 
   SetShowToolTipsForDisabled(show: boolean): void {
-    lib.symbols.wxRibbonButtonBar_SetShowToolTipsForDisabled(this.#ptr, show ? 1 : 0);
+    lib.symbols.wxRibbonButtonBar_SetShowToolTipsForDisabled(this._ptr, show ? 1 : 0);
   }
 
   GetShowToolTipsForDisabled(): boolean {
-    return (lib.symbols.wxRibbonButtonBar_GetShowToolTipsForDisabled(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRibbonButtonBar_GetShowToolTipsForDisabled(this._ptr) as number) !== 0;
   }
 
   Realize(): void {
-    lib.symbols.wxRibbonButtonBar_Realize(this.#ptr);
+    lib.symbols.wxRibbonButtonBar_Realize(this._ptr);
   }
 
   SetArtProvider(art: Deno.PointerValue): void {
-    lib.symbols.wxRibbonButtonBar_SetArtProvider(this.#ptr, art);
+    lib.symbols.wxRibbonButtonBar_SetArtProvider(this._ptr, art);
   }
 
   GetArtProvider(): Deno.PointerValue {
-    return lib.symbols.wxRibbonButtonBar_GetArtProvider(this.#ptr);
+    return lib.symbols.wxRibbonButtonBar_GetArtProvider(this._ptr);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxRibbonToolBar {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxRibbonToolBar | null {
@@ -21,143 +21,143 @@ export class wxRibbonToolBar {
   }
 
   AddTool(tool_id: number, bitmap: Deno.PointerValue, help_string: Deno.PointerValue, kind: number, bitmap_disabled: Deno.PointerValue, client_data: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_AddTool(this.#ptr, tool_id, bitmap, help_string, kind, bitmap_disabled, client_data);
+    return lib.symbols.wxRibbonToolBar_AddTool(this._ptr, tool_id, bitmap, help_string, kind, bitmap_disabled, client_data);
   }
 
   AddDropdownTool(tool_id: number, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_AddDropdownTool(this.#ptr, tool_id, bitmap, help_string);
+    return lib.symbols.wxRibbonToolBar_AddDropdownTool(this._ptr, tool_id, bitmap, help_string);
   }
 
   AddHybridTool(tool_id: number, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_AddHybridTool(this.#ptr, tool_id, bitmap, help_string);
+    return lib.symbols.wxRibbonToolBar_AddHybridTool(this._ptr, tool_id, bitmap, help_string);
   }
 
   AddToggleTool(tool_id: number, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_AddToggleTool(this.#ptr, tool_id, bitmap, help_string);
+    return lib.symbols.wxRibbonToolBar_AddToggleTool(this._ptr, tool_id, bitmap, help_string);
   }
 
   AddSeparator(): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_AddSeparator(this.#ptr);
+    return lib.symbols.wxRibbonToolBar_AddSeparator(this._ptr);
   }
 
   InsertTool(pos: bigint, tool_id: number, bitmap: Deno.PointerValue, help_string: Deno.PointerValue, kind: number, bitmap_disabled: Deno.PointerValue, client_data: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_InsertTool(this.#ptr, pos, tool_id, bitmap, help_string, kind, bitmap_disabled, client_data);
+    return lib.symbols.wxRibbonToolBar_InsertTool(this._ptr, pos, tool_id, bitmap, help_string, kind, bitmap_disabled, client_data);
   }
 
   InsertDropdownTool(pos: bigint, tool_id: number, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_InsertDropdownTool(this.#ptr, pos, tool_id, bitmap, help_string);
+    return lib.symbols.wxRibbonToolBar_InsertDropdownTool(this._ptr, pos, tool_id, bitmap, help_string);
   }
 
   InsertHybridTool(pos: bigint, tool_id: number, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_InsertHybridTool(this.#ptr, pos, tool_id, bitmap, help_string);
+    return lib.symbols.wxRibbonToolBar_InsertHybridTool(this._ptr, pos, tool_id, bitmap, help_string);
   }
 
   InsertToggleTool(pos: bigint, tool_id: number, bitmap: Deno.PointerValue, help_string: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_InsertToggleTool(this.#ptr, pos, tool_id, bitmap, help_string);
+    return lib.symbols.wxRibbonToolBar_InsertToggleTool(this._ptr, pos, tool_id, bitmap, help_string);
   }
 
   InsertSeparator(pos: bigint): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_InsertSeparator(this.#ptr, pos);
+    return lib.symbols.wxRibbonToolBar_InsertSeparator(this._ptr, pos);
   }
 
   ClearTools(): void {
-    lib.symbols.wxRibbonToolBar_ClearTools(this.#ptr);
+    lib.symbols.wxRibbonToolBar_ClearTools(this._ptr);
   }
 
   DeleteTool(tool_id: number): boolean {
-    return (lib.symbols.wxRibbonToolBar_DeleteTool(this.#ptr, tool_id) as number) !== 0;
+    return (lib.symbols.wxRibbonToolBar_DeleteTool(this._ptr, tool_id) as number) !== 0;
   }
 
   DeleteToolByPos(pos: bigint): boolean {
-    return (lib.symbols.wxRibbonToolBar_DeleteToolByPos(this.#ptr, pos) as number) !== 0;
+    return (lib.symbols.wxRibbonToolBar_DeleteToolByPos(this._ptr, pos) as number) !== 0;
   }
 
   FindById(tool_id: number): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_FindById(this.#ptr, tool_id);
+    return lib.symbols.wxRibbonToolBar_FindById(this._ptr, tool_id);
   }
 
   GetToolByPos(pos: bigint): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_GetToolByPos(this.#ptr, pos);
+    return lib.symbols.wxRibbonToolBar_GetToolByPos(this._ptr, pos);
   }
 
   GetToolByPos_Coords(x: number, y: number): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_GetToolByPos_Coords(this.#ptr, x, y);
+    return lib.symbols.wxRibbonToolBar_GetToolByPos_Coords(this._ptr, x, y);
   }
 
   GetToolCount(): bigint {
-    return lib.symbols.wxRibbonToolBar_GetToolCount(this.#ptr) as bigint;
+    return lib.symbols.wxRibbonToolBar_GetToolCount(this._ptr) as bigint;
   }
 
   GetToolId(tool: Deno.PointerValue): number {
-    return lib.symbols.wxRibbonToolBar_GetToolId(this.#ptr, tool);
+    return lib.symbols.wxRibbonToolBar_GetToolId(this._ptr, tool);
   }
 
   GetActiveTool(): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_GetActiveTool(this.#ptr);
+    return lib.symbols.wxRibbonToolBar_GetActiveTool(this._ptr);
   }
 
   GetToolPos(tool_id: number): number {
-    return lib.symbols.wxRibbonToolBar_GetToolPos(this.#ptr, tool_id);
+    return lib.symbols.wxRibbonToolBar_GetToolPos(this._ptr, tool_id);
   }
 
   GetToolRect(tool_id: number, x: Deno.PointerValue, y: Deno.PointerValue, width: Deno.PointerValue, height: Deno.PointerValue): void {
-    lib.symbols.wxRibbonToolBar_GetToolRect(this.#ptr, tool_id, x, y, width, height);
+    lib.symbols.wxRibbonToolBar_GetToolRect(this._ptr, tool_id, x, y, width, height);
   }
 
   EnableTool(tool_id: number, enable: boolean): void {
-    lib.symbols.wxRibbonToolBar_EnableTool(this.#ptr, tool_id, enable ? 1 : 0);
+    lib.symbols.wxRibbonToolBar_EnableTool(this._ptr, tool_id, enable ? 1 : 0);
   }
 
   GetToolEnabled(tool_id: number): boolean {
-    return (lib.symbols.wxRibbonToolBar_GetToolEnabled(this.#ptr, tool_id) as number) !== 0;
+    return (lib.symbols.wxRibbonToolBar_GetToolEnabled(this._ptr, tool_id) as number) !== 0;
   }
 
   GetToolHelpString(tool_id: number): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_GetToolHelpString(this.#ptr, tool_id);
+    return lib.symbols.wxRibbonToolBar_GetToolHelpString(this._ptr, tool_id);
   }
 
   SetToolHelpString(tool_id: number, help_string: Deno.PointerValue): void {
-    lib.symbols.wxRibbonToolBar_SetToolHelpString(this.#ptr, tool_id, help_string);
+    lib.symbols.wxRibbonToolBar_SetToolHelpString(this._ptr, tool_id, help_string);
   }
 
   GetToolKind(tool_id: number): number {
-    return lib.symbols.wxRibbonToolBar_GetToolKind(this.#ptr, tool_id);
+    return lib.symbols.wxRibbonToolBar_GetToolKind(this._ptr, tool_id);
   }
 
   GetToolState(tool_id: number): boolean {
-    return (lib.symbols.wxRibbonToolBar_GetToolState(this.#ptr, tool_id) as number) !== 0;
+    return (lib.symbols.wxRibbonToolBar_GetToolState(this._ptr, tool_id) as number) !== 0;
   }
 
   SetToolNormalBitmap(tool_id: number, bitmap: Deno.PointerValue): void {
-    lib.symbols.wxRibbonToolBar_SetToolNormalBitmap(this.#ptr, tool_id, bitmap);
+    lib.symbols.wxRibbonToolBar_SetToolNormalBitmap(this._ptr, tool_id, bitmap);
   }
 
   SetToolDisabledBitmap(tool_id: number, bitmap: Deno.PointerValue): void {
-    lib.symbols.wxRibbonToolBar_SetToolDisabledBitmap(this.#ptr, tool_id, bitmap);
+    lib.symbols.wxRibbonToolBar_SetToolDisabledBitmap(this._ptr, tool_id, bitmap);
   }
 
   SetToolClientData(tool_id: number, clientData: Deno.PointerValue): void {
-    lib.symbols.wxRibbonToolBar_SetToolClientData(this.#ptr, tool_id, clientData);
+    lib.symbols.wxRibbonToolBar_SetToolClientData(this._ptr, tool_id, clientData);
   }
 
   GetToolClientData(tool_id: number): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_GetToolClientData(this.#ptr, tool_id);
+    return lib.symbols.wxRibbonToolBar_GetToolClientData(this._ptr, tool_id);
   }
 
   SetRows(nMin: number, nMax: number): void {
-    lib.symbols.wxRibbonToolBar_SetRows(this.#ptr, nMin, nMax);
+    lib.symbols.wxRibbonToolBar_SetRows(this._ptr, nMin, nMax);
   }
 
   Realize(): void {
-    lib.symbols.wxRibbonToolBar_Realize(this.#ptr);
+    lib.symbols.wxRibbonToolBar_Realize(this._ptr);
   }
 
   SetArtProvider(art: Deno.PointerValue): void {
-    lib.symbols.wxRibbonToolBar_SetArtProvider(this.#ptr, art);
+    lib.symbols.wxRibbonToolBar_SetArtProvider(this._ptr, art);
   }
 
   GetArtProvider(): Deno.PointerValue {
-    return lib.symbols.wxRibbonToolBar_GetArtProvider(this.#ptr);
+    return lib.symbols.wxRibbonToolBar_GetArtProvider(this._ptr);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxContextHelp {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(win: Deno.PointerValue, beginHelp: boolean): wxContextHelp | null {
@@ -21,7 +21,7 @@ export class wxContextHelp {
   }
 
   Delete(): void {
-    lib.symbols.wxContextHelp_Delete(this.#ptr);
+    lib.symbols.wxContextHelp_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,11 +29,11 @@ export class wxContextHelp {
   }
 
   BeginContextHelp(win: Deno.PointerValue): boolean {
-    return (lib.symbols.wxContextHelp_BeginContextHelp(this.#ptr, win) as number) !== 0;
+    return (lib.symbols.wxContextHelp_BeginContextHelp(this._ptr, win) as number) !== 0;
   }
 
   EndContextHelp(): boolean {
-    return (lib.symbols.wxContextHelp_EndContextHelp(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxContextHelp_EndContextHelp(this._ptr) as number) !== 0;
   }
 
 }

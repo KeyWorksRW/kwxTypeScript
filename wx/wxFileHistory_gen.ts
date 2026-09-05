@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFileHistory {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(maxFiles: number): wxFileHistory | null {
@@ -21,7 +21,7 @@ export class wxFileHistory {
   }
 
   Delete(): void {
-    lib.symbols.wxFileHistory_Delete(this.#ptr);
+    lib.symbols.wxFileHistory_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,47 +29,47 @@ export class wxFileHistory {
   }
 
   AddFileToHistory(file: Deno.PointerValue): void {
-    lib.symbols.wxFileHistory_AddFileToHistory(this.#ptr, file);
+    lib.symbols.wxFileHistory_AddFileToHistory(this._ptr, file);
   }
 
   AddFilesToMenu(menu: Deno.PointerValue): void {
-    lib.symbols.wxFileHistory_AddFilesToMenu(this.#ptr, menu);
+    lib.symbols.wxFileHistory_AddFilesToMenu(this._ptr, menu);
   }
 
   GetCount(): number {
-    return lib.symbols.wxFileHistory_GetCount(this.#ptr);
+    return lib.symbols.wxFileHistory_GetCount(this._ptr);
   }
 
   GetHistoryFile(index: number): Deno.PointerValue {
-    return lib.symbols.wxFileHistory_GetHistoryFile(this.#ptr, index);
+    return lib.symbols.wxFileHistory_GetHistoryFile(this._ptr, index);
   }
 
   GetMaxFiles(): number {
-    return lib.symbols.wxFileHistory_GetMaxFiles(this.#ptr);
+    return lib.symbols.wxFileHistory_GetMaxFiles(this._ptr);
   }
 
   GetMenus(ref: Deno.PointerValue): number {
-    return lib.symbols.wxFileHistory_GetMenus(this.#ptr, ref);
+    return lib.symbols.wxFileHistory_GetMenus(this._ptr, ref);
   }
 
   Load(config: Deno.PointerValue): void {
-    lib.symbols.wxFileHistory_Load(this.#ptr, config);
+    lib.symbols.wxFileHistory_Load(this._ptr, config);
   }
 
   RemoveFileFromHistory(index: number): void {
-    lib.symbols.wxFileHistory_RemoveFileFromHistory(this.#ptr, index);
+    lib.symbols.wxFileHistory_RemoveFileFromHistory(this._ptr, index);
   }
 
   RemoveMenu(menu: Deno.PointerValue): void {
-    lib.symbols.wxFileHistory_RemoveMenu(this.#ptr, menu);
+    lib.symbols.wxFileHistory_RemoveMenu(this._ptr, menu);
   }
 
   Save(config: Deno.PointerValue): void {
-    lib.symbols.wxFileHistory_Save(this.#ptr, config);
+    lib.symbols.wxFileHistory_Save(this._ptr, config);
   }
 
   UseMenu(menu: Deno.PointerValue): void {
-    lib.symbols.wxFileHistory_UseMenu(this.#ptr, menu);
+    lib.symbols.wxFileHistory_UseMenu(this._ptr, menu);
   }
 
 }

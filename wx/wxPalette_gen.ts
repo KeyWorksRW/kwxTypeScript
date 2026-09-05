@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPalette {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateDefault(): wxPalette | null {
@@ -27,7 +27,7 @@ export class wxPalette {
   }
 
   Delete(): void {
-    lib.symbols.wxPalette_Delete(this.#ptr);
+    lib.symbols.wxPalette_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,23 +35,23 @@ export class wxPalette {
   }
 
   Assign(palette: Deno.PointerValue): void {
-    lib.symbols.wxPalette_Assign(this.#ptr, palette);
+    lib.symbols.wxPalette_Assign(this._ptr, palette);
   }
 
   GetPixel(red: number, green: number, blue: number): number {
-    return lib.symbols.wxPalette_GetPixel(this.#ptr, red, green, blue);
+    return lib.symbols.wxPalette_GetPixel(this._ptr, red, green, blue);
   }
 
   GetRGB(pixel: number, red: Deno.PointerValue, green: Deno.PointerValue, blue: Deno.PointerValue): boolean {
-    return (lib.symbols.wxPalette_GetRGB(this.#ptr, pixel, red, green, blue) as number) !== 0;
+    return (lib.symbols.wxPalette_GetRGB(this._ptr, pixel, red, green, blue) as number) !== 0;
   }
 
   IsEqual(palette: Deno.PointerValue): boolean {
-    return (lib.symbols.wxPalette_IsEqual(this.#ptr, palette) as number) !== 0;
+    return (lib.symbols.wxPalette_IsEqual(this._ptr, palette) as number) !== 0;
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxPalette_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPalette_IsOk(this._ptr) as number) !== 0;
   }
 
 }

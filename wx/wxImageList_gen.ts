@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxImageList {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(width: number, height: number, mask: boolean, initialCount: number): wxImageList | null {
@@ -21,7 +21,7 @@ export class wxImageList {
   }
 
   Delete(): void {
-    lib.symbols.wxImageList_Delete(this.#ptr);
+    lib.symbols.wxImageList_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,43 +29,43 @@ export class wxImageList {
   }
 
   AddBitmap(bitmap: Deno.PointerValue, mask: Deno.PointerValue): number {
-    return lib.symbols.wxImageList_AddBitmap(this.#ptr, bitmap, mask);
+    return lib.symbols.wxImageList_AddBitmap(this._ptr, bitmap, mask);
   }
 
   AddIcon(icon: Deno.PointerValue): number {
-    return lib.symbols.wxImageList_AddIcon(this.#ptr, icon);
+    return lib.symbols.wxImageList_AddIcon(this._ptr, icon);
   }
 
   AddMasked(bitmap: Deno.PointerValue, maskColour: Deno.PointerValue): number {
-    return lib.symbols.wxImageList_AddMasked(this.#ptr, bitmap, maskColour);
+    return lib.symbols.wxImageList_AddMasked(this._ptr, bitmap, maskColour);
   }
 
   Draw(index: number, dc: Deno.PointerValue, x: number, y: number, flags: number, solidBackground: boolean): boolean {
-    return (lib.symbols.wxImageList_Draw(this.#ptr, index, dc, x, y, flags, solidBackground ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxImageList_Draw(this._ptr, index, dc, x, y, flags, solidBackground ? 1 : 0) as number) !== 0;
   }
 
   GetImageCount(): number {
-    return lib.symbols.wxImageList_GetImageCount(this.#ptr);
+    return lib.symbols.wxImageList_GetImageCount(this._ptr);
   }
 
   GetSize(index: number, width: Deno.PointerValue, height: Deno.PointerValue): void {
-    lib.symbols.wxImageList_GetSize(this.#ptr, index, width, height);
+    lib.symbols.wxImageList_GetSize(this._ptr, index, width, height);
   }
 
   Remove(index: number): boolean {
-    return (lib.symbols.wxImageList_Remove(this.#ptr, index) as number) !== 0;
+    return (lib.symbols.wxImageList_Remove(this._ptr, index) as number) !== 0;
   }
 
   RemoveAll(): boolean {
-    return (lib.symbols.wxImageList_RemoveAll(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxImageList_RemoveAll(this._ptr) as number) !== 0;
   }
 
   Replace(index: number, bitmap: Deno.PointerValue, mask: Deno.PointerValue): boolean {
-    return (lib.symbols.wxImageList_Replace(this.#ptr, index, bitmap, mask) as number) !== 0;
+    return (lib.symbols.wxImageList_Replace(this._ptr, index, bitmap, mask) as number) !== 0;
   }
 
   ReplaceIcon(index: number, icon: Deno.PointerValue): boolean {
-    return (lib.symbols.wxImageList_ReplaceIcon(this.#ptr, index, icon) as number) !== 0;
+    return (lib.symbols.wxImageList_ReplaceIcon(this._ptr, index, icon) as number) !== 0;
   }
 
 }

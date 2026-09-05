@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class kwxDragDataObject {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(pObject: Deno.PointerValue, format: Deno.PointerValue, fnGetDataSize: Deno.PointerValue, fnGetDataHere: Deno.PointerValue, fnSetData: Deno.PointerValue): kwxDragDataObject | null {
@@ -21,7 +21,7 @@ export class kwxDragDataObject {
   }
 
   Delete(): void {
-    lib.symbols.kwxDragDataObject_Delete(this.#ptr);
+    lib.symbols.kwxDragDataObject_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class kwxClient {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(kwxObject: Deno.PointerValue, connectFunc: Deno.PointerValue): kwxClient | null {
@@ -21,7 +21,7 @@ export class kwxClient {
   }
 
   Delete(): void {
-    lib.symbols.kwxClient_Delete(this.#ptr);
+    lib.symbols.kwxClient_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,7 +29,7 @@ export class kwxClient {
   }
 
   MakeConnection(host: Deno.PointerValue, server: Deno.PointerValue, topic: Deno.PointerValue): void {
-    lib.symbols.kwxClient_MakeConnection(this.#ptr, host, server, topic);
+    lib.symbols.kwxClient_MakeConnection(this._ptr, host, server, topic);
   }
 
 }

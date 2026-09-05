@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDropSource {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(data: Deno.PointerValue, win: Deno.PointerValue, copy: Deno.PointerValue, move: Deno.PointerValue, none: Deno.PointerValue): wxDropSource | null {
@@ -21,7 +21,7 @@ export class wxDropSource {
   }
 
   Delete(): void {
-    lib.symbols.DropSource_Delete(this.#ptr);
+    lib.symbols.DropSource_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,7 +29,7 @@ export class wxDropSource {
   }
 
   DoDragDrop(move: number): number {
-    return lib.symbols.DropSource_DoDragDrop(this.#ptr, move);
+    return lib.symbols.DropSource_DoDragDrop(this._ptr, move);
   }
 
 }

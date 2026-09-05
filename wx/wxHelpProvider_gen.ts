@@ -3,19 +3,19 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxHelpProvider {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   Delete(): void {
-    lib.symbols.wxHelpProvider_Delete(this.#ptr);
+    lib.symbols.wxHelpProvider_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -23,11 +23,11 @@ export class wxHelpProvider {
   }
 
   AddHelp(window: Deno.PointerValue, text: Deno.PointerValue): void {
-    lib.symbols.wxHelpProvider_AddHelp(this.#ptr, window, text);
+    lib.symbols.wxHelpProvider_AddHelp(this._ptr, window, text);
   }
 
   AddHelpById(id: number, text: Deno.PointerValue): void {
-    lib.symbols.wxHelpProvider_AddHelpById(this.#ptr, id, text);
+    lib.symbols.wxHelpProvider_AddHelpById(this._ptr, id, text);
   }
 
   Get(): Deno.PointerValue {
@@ -35,19 +35,19 @@ export class wxHelpProvider {
   }
 
   GetHelp(window: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxHelpProvider_GetHelp(this.#ptr, window);
+    return lib.symbols.wxHelpProvider_GetHelp(this._ptr, window);
   }
 
   RemoveHelp(window: Deno.PointerValue): void {
-    lib.symbols.wxHelpProvider_RemoveHelp(this.#ptr, window);
+    lib.symbols.wxHelpProvider_RemoveHelp(this._ptr, window);
   }
 
   Set(): Deno.PointerValue {
-    return lib.symbols.wxHelpProvider_Set(this.#ptr);
+    return lib.symbols.wxHelpProvider_Set(this._ptr);
   }
 
   ShowHelp(window: Deno.PointerValue): boolean {
-    return (lib.symbols.wxHelpProvider_ShowHelp(this.#ptr, window) as number) !== 0;
+    return (lib.symbols.wxHelpProvider_ShowHelp(this._ptr, window) as number) !== 0;
   }
 
 }

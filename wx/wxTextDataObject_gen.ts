@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxTextDataObject {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(text: Deno.PointerValue): wxTextDataObject | null {
@@ -21,7 +21,7 @@ export class wxTextDataObject {
   }
 
   Delete(): void {
-    lib.symbols.TextDataObject_Delete(this.#ptr);
+    lib.symbols.TextDataObject_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,11 +29,11 @@ export class wxTextDataObject {
   }
 
   GetText(): Deno.PointerValue {
-    return lib.symbols.TextDataObject_GetText(this.#ptr);
+    return lib.symbols.TextDataObject_GetText(this._ptr);
   }
 
   SetText(text: Deno.PointerValue): void {
-    lib.symbols.TextDataObject_SetText(this.#ptr, text);
+    lib.symbols.TextDataObject_SetText(this._ptr, text);
   }
 
 }

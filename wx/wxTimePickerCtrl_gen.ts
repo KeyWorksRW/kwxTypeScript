@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxTimePickerCtrl {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxTimePickerCtrl | null {
@@ -21,19 +21,19 @@ export class wxTimePickerCtrl {
   }
 
   SetValue(dateTime: Deno.PointerValue): void {
-    lib.symbols.wxTimePickerCtrl_SetValue(this.#ptr, dateTime);
+    lib.symbols.wxTimePickerCtrl_SetValue(this._ptr, dateTime);
   }
 
   GetValue(dateTime: Deno.PointerValue): void {
-    lib.symbols.wxTimePickerCtrl_GetValue(this.#ptr, dateTime);
+    lib.symbols.wxTimePickerCtrl_GetValue(this._ptr, dateTime);
   }
 
   SetTime(hour: number, min: number, sec: number): void {
-    lib.symbols.wxTimePickerCtrl_SetTime(this.#ptr, hour, min, sec);
+    lib.symbols.wxTimePickerCtrl_SetTime(this._ptr, hour, min, sec);
   }
 
   GetTime(hour: Deno.PointerValue, min: Deno.PointerValue, sec: Deno.PointerValue): boolean {
-    return (lib.symbols.wxTimePickerCtrl_GetTime(this.#ptr, hour, min, sec) as number) !== 0;
+    return (lib.symbols.wxTimePickerCtrl_GetTime(this._ptr, hour, min, sec) as number) !== 0;
   }
 
 }

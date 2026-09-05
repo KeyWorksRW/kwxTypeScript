@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFontData {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxFontData | null {
@@ -21,7 +21,7 @@ export class wxFontData {
   }
 
   Delete(): void {
-    lib.symbols.wxFontData_Delete(this.#ptr);
+    lib.symbols.wxFontData_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,63 +29,63 @@ export class wxFontData {
   }
 
   EnableEffects(flag: boolean): void {
-    lib.symbols.wxFontData_EnableEffects(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxFontData_EnableEffects(this._ptr, flag ? 1 : 0);
   }
 
   GetAllowSymbols(): boolean {
-    return (lib.symbols.wxFontData_GetAllowSymbols(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxFontData_GetAllowSymbols(this._ptr) as number) !== 0;
   }
 
   GetChosenFont(ref: Deno.PointerValue): void {
-    lib.symbols.wxFontData_GetChosenFont(this.#ptr, ref);
+    lib.symbols.wxFontData_GetChosenFont(this._ptr, ref);
   }
 
   GetColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxFontData_GetColour(this.#ptr, ref);
+    lib.symbols.wxFontData_GetColour(this._ptr, ref);
   }
 
   GetEnableEffects(): boolean {
-    return (lib.symbols.wxFontData_GetEnableEffects(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxFontData_GetEnableEffects(this._ptr) as number) !== 0;
   }
 
   GetEncoding(): number {
-    return lib.symbols.wxFontData_GetEncoding(this.#ptr);
+    return lib.symbols.wxFontData_GetEncoding(this._ptr);
   }
 
   GetInitialFont(ref: Deno.PointerValue): void {
-    lib.symbols.wxFontData_GetInitialFont(this.#ptr, ref);
+    lib.symbols.wxFontData_GetInitialFont(this._ptr, ref);
   }
 
   GetShowHelp(): number {
-    return lib.symbols.wxFontData_GetShowHelp(this.#ptr);
+    return lib.symbols.wxFontData_GetShowHelp(this._ptr);
   }
 
   SetAllowSymbols(flag: boolean): void {
-    lib.symbols.wxFontData_SetAllowSymbols(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxFontData_SetAllowSymbols(this._ptr, flag ? 1 : 0);
   }
 
   SetChosenFont(font: Deno.PointerValue): void {
-    lib.symbols.wxFontData_SetChosenFont(this.#ptr, font);
+    lib.symbols.wxFontData_SetChosenFont(this._ptr, font);
   }
 
   SetColour(colour: Deno.PointerValue): void {
-    lib.symbols.wxFontData_SetColour(this.#ptr, colour);
+    lib.symbols.wxFontData_SetColour(this._ptr, colour);
   }
 
   SetEncoding(encoding: number): void {
-    lib.symbols.wxFontData_SetEncoding(this.#ptr, encoding);
+    lib.symbols.wxFontData_SetEncoding(this._ptr, encoding);
   }
 
   SetInitialFont(font: Deno.PointerValue): void {
-    lib.symbols.wxFontData_SetInitialFont(this.#ptr, font);
+    lib.symbols.wxFontData_SetInitialFont(this._ptr, font);
   }
 
   SetRange(minRange: number, maxRange: number): void {
-    lib.symbols.wxFontData_SetRange(this.#ptr, minRange, maxRange);
+    lib.symbols.wxFontData_SetRange(this._ptr, minRange, maxRange);
   }
 
   SetShowHelp(flag: boolean): void {
-    lib.symbols.wxFontData_SetShowHelp(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxFontData_SetShowHelp(this._ptr, flag ? 1 : 0);
   }
 
 }

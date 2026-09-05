@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxBusyInfo {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(text: Deno.PointerValue, parent: Deno.PointerValue): wxBusyInfo | null {
@@ -21,7 +21,7 @@ export class wxBusyInfo {
   }
 
   Delete(): void {
-    lib.symbols.wxBusyInfo_Delete(this.#ptr);
+    lib.symbols.wxBusyInfo_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {

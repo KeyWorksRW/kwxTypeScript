@@ -14316,7 +14316,7 @@ export const lib = Deno.dlopen(_libName, {
     parameters: ["pointer"],
     result: "i32",
   },
-  wxTimer_IsRuning: {
+  wxTimer_IsRunning: {
     parameters: ["pointer"],
     result: "i32",
   },

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxRegion {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateDefault(): wxRegion | null {
@@ -27,7 +27,7 @@ export class wxRegion {
   }
 
   Delete(): void {
-    lib.symbols.wxRegion_Delete(this.#ptr);
+    lib.symbols.wxRegion_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,59 +35,59 @@ export class wxRegion {
   }
 
   Assign(region: Deno.PointerValue): void {
-    lib.symbols.wxRegion_Assign(this.#ptr, region);
+    lib.symbols.wxRegion_Assign(this._ptr, region);
   }
 
   Clear(): void {
-    lib.symbols.wxRegion_Clear(this.#ptr);
+    lib.symbols.wxRegion_Clear(this._ptr);
   }
 
   ContainsPoint(x: number, y: number): boolean {
-    return (lib.symbols.wxRegion_ContainsPoint(this.#ptr, x, y) as number) !== 0;
+    return (lib.symbols.wxRegion_ContainsPoint(this._ptr, x, y) as number) !== 0;
   }
 
   ContainsRect(x: number, y: number, width: number, height: number): boolean {
-    return (lib.symbols.wxRegion_ContainsRect(this.#ptr, x, y, width, height) as number) !== 0;
+    return (lib.symbols.wxRegion_ContainsRect(this._ptr, x, y, width, height) as number) !== 0;
   }
 
   IsEmpty(): boolean {
-    return (lib.symbols.wxRegion_IsEmpty(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxRegion_IsEmpty(this._ptr) as number) !== 0;
   }
 
   GetBox(x: Deno.PointerValue, y: Deno.PointerValue, width: Deno.PointerValue, height: Deno.PointerValue): void {
-    lib.symbols.wxRegion_GetBox(this.#ptr, x, y, width, height);
+    lib.symbols.wxRegion_GetBox(this._ptr, x, y, width, height);
   }
 
   IntersectRect(x: number, y: number, width: number, height: number): boolean {
-    return (lib.symbols.wxRegion_IntersectRect(this.#ptr, x, y, width, height) as number) !== 0;
+    return (lib.symbols.wxRegion_IntersectRect(this._ptr, x, y, width, height) as number) !== 0;
   }
 
   IntersectRegion(region: Deno.PointerValue): boolean {
-    return (lib.symbols.wxRegion_IntersectRegion(this.#ptr, region) as number) !== 0;
+    return (lib.symbols.wxRegion_IntersectRegion(this._ptr, region) as number) !== 0;
   }
 
   SubtractRect(x: number, y: number, width: number, height: number): boolean {
-    return (lib.symbols.wxRegion_SubtractRect(this.#ptr, x, y, width, height) as number) !== 0;
+    return (lib.symbols.wxRegion_SubtractRect(this._ptr, x, y, width, height) as number) !== 0;
   }
 
   SubtractRegion(region: Deno.PointerValue): boolean {
-    return (lib.symbols.wxRegion_SubtractRegion(this.#ptr, region) as number) !== 0;
+    return (lib.symbols.wxRegion_SubtractRegion(this._ptr, region) as number) !== 0;
   }
 
   UnionRect(x: number, y: number, width: number, height: number): boolean {
-    return (lib.symbols.wxRegion_UnionRect(this.#ptr, x, y, width, height) as number) !== 0;
+    return (lib.symbols.wxRegion_UnionRect(this._ptr, x, y, width, height) as number) !== 0;
   }
 
   UnionRegion(region: Deno.PointerValue): boolean {
-    return (lib.symbols.wxRegion_UnionRegion(this.#ptr, region) as number) !== 0;
+    return (lib.symbols.wxRegion_UnionRegion(this._ptr, region) as number) !== 0;
   }
 
   XorRect(x: number, y: number, width: number, height: number): boolean {
-    return (lib.symbols.wxRegion_XorRect(this.#ptr, x, y, width, height) as number) !== 0;
+    return (lib.symbols.wxRegion_XorRect(this._ptr, x, y, width, height) as number) !== 0;
   }
 
   XorRegion(region: Deno.PointerValue): boolean {
-    return (lib.symbols.wxRegion_XorRegion(this.#ptr, region) as number) !== 0;
+    return (lib.symbols.wxRegion_XorRegion(this._ptr, region) as number) !== 0;
   }
 
 }

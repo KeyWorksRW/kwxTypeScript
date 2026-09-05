@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxLayoutAlgorithm {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxLayoutAlgorithm | null {
@@ -21,7 +21,7 @@ export class wxLayoutAlgorithm {
   }
 
   Delete(): void {
-    lib.symbols.wxLayoutAlgorithm_Delete(this.#ptr);
+    lib.symbols.wxLayoutAlgorithm_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,15 +29,15 @@ export class wxLayoutAlgorithm {
   }
 
   LayoutFrame(frame: Deno.PointerValue, mainWindow: Deno.PointerValue): boolean {
-    return (lib.symbols.wxLayoutAlgorithm_LayoutFrame(this.#ptr, frame, mainWindow) as number) !== 0;
+    return (lib.symbols.wxLayoutAlgorithm_LayoutFrame(this._ptr, frame, mainWindow) as number) !== 0;
   }
 
   LayoutMDIFrame(frame: Deno.PointerValue, x: number, y: number, width: number, height: number, use: number): boolean {
-    return (lib.symbols.wxLayoutAlgorithm_LayoutMDIFrame(this.#ptr, frame, x, y, width, height, use) as number) !== 0;
+    return (lib.symbols.wxLayoutAlgorithm_LayoutMDIFrame(this._ptr, frame, x, y, width, height, use) as number) !== 0;
   }
 
   LayoutWindow(frame: Deno.PointerValue, mainWindow: Deno.PointerValue): boolean {
-    return (lib.symbols.wxLayoutAlgorithm_LayoutWindow(this.#ptr, frame, mainWindow) as number) !== 0;
+    return (lib.symbols.wxLayoutAlgorithm_LayoutWindow(this._ptr, frame, mainWindow) as number) !== 0;
   }
 
 }

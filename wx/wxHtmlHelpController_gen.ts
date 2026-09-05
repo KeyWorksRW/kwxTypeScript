@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxHtmlHelpController {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(style: number, parentWindow: Deno.PointerValue): wxHtmlHelpController | null {
@@ -21,7 +21,7 @@ export class wxHtmlHelpController {
   }
 
   Delete(): void {
-    lib.symbols.wxHtmlHelpController_Delete(this.#ptr);
+    lib.symbols.wxHtmlHelpController_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,87 +29,87 @@ export class wxHtmlHelpController {
   }
 
   AddBook(book: Deno.PointerValue, show_wait_msg: number): boolean {
-    return (lib.symbols.wxHtmlHelpController_AddBook(this.#ptr, book, show_wait_msg) as number) !== 0;
+    return (lib.symbols.wxHtmlHelpController_AddBook(this._ptr, book, show_wait_msg) as number) !== 0;
   }
 
   Display(x: Deno.PointerValue): number {
-    return lib.symbols.wxHtmlHelpController_Display(this.#ptr, x);
+    return lib.symbols.wxHtmlHelpController_Display(this._ptr, x);
   }
 
   DisplayBlock(blockNo: number): boolean {
-    return (lib.symbols.wxHtmlHelpController_DisplayBlock(this.#ptr, blockNo) as number) !== 0;
+    return (lib.symbols.wxHtmlHelpController_DisplayBlock(this._ptr, blockNo) as number) !== 0;
   }
 
   DisplayContents(): number {
-    return lib.symbols.wxHtmlHelpController_DisplayContents(this.#ptr);
+    return lib.symbols.wxHtmlHelpController_DisplayContents(this._ptr);
   }
 
   DisplayIndex(): number {
-    return lib.symbols.wxHtmlHelpController_DisplayIndex(this.#ptr);
+    return lib.symbols.wxHtmlHelpController_DisplayIndex(this._ptr);
   }
 
   DisplayNumber(id: number): number {
-    return lib.symbols.wxHtmlHelpController_DisplayNumber(this.#ptr, id);
+    return lib.symbols.wxHtmlHelpController_DisplayNumber(this._ptr, id);
   }
 
   DisplaySection(section: Deno.PointerValue): boolean {
-    return (lib.symbols.wxHtmlHelpController_DisplaySection(this.#ptr, section) as number) !== 0;
+    return (lib.symbols.wxHtmlHelpController_DisplaySection(this._ptr, section) as number) !== 0;
   }
 
   DisplaySectionNumber(sectionNo: number): boolean {
-    return (lib.symbols.wxHtmlHelpController_DisplaySectionNumber(this.#ptr, sectionNo) as number) !== 0;
+    return (lib.symbols.wxHtmlHelpController_DisplaySectionNumber(this._ptr, sectionNo) as number) !== 0;
   }
 
   GetFrame(): Deno.PointerValue {
-    return lib.symbols.wxHtmlHelpController_GetFrame(this.#ptr);
+    return lib.symbols.wxHtmlHelpController_GetFrame(this._ptr);
   }
 
   GetFrameParameters(title: Deno.PointerValue, width: Deno.PointerValue, height: Deno.PointerValue, pos_x: Deno.PointerValue, pos_y: Deno.PointerValue, newFrameEachTime: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxHtmlHelpController_GetFrameParameters(this.#ptr, title, width, height, pos_x, pos_y, newFrameEachTime);
+    return lib.symbols.wxHtmlHelpController_GetFrameParameters(this._ptr, title, width, height, pos_x, pos_y, newFrameEachTime);
   }
 
   Initialize(file: Deno.PointerValue): boolean {
-    return (lib.symbols.wxHtmlHelpController_Initialize(this.#ptr, file) as number) !== 0;
+    return (lib.symbols.wxHtmlHelpController_Initialize(this._ptr, file) as number) !== 0;
   }
 
   KeywordSearch(keyword: Deno.PointerValue): boolean {
-    return (lib.symbols.wxHtmlHelpController_KeywordSearch(this.#ptr, keyword) as number) !== 0;
+    return (lib.symbols.wxHtmlHelpController_KeywordSearch(this._ptr, keyword) as number) !== 0;
   }
 
   LoadFile(file: Deno.PointerValue): boolean {
-    return (lib.symbols.wxHtmlHelpController_LoadFile(this.#ptr, file) as number) !== 0;
+    return (lib.symbols.wxHtmlHelpController_LoadFile(this._ptr, file) as number) !== 0;
   }
 
   Quit(): boolean {
-    return (lib.symbols.wxHtmlHelpController_Quit(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxHtmlHelpController_Quit(this._ptr) as number) !== 0;
   }
 
   ReadCustomization(cfg: Deno.PointerValue, path: Deno.PointerValue): void {
-    lib.symbols.wxHtmlHelpController_ReadCustomization(this.#ptr, cfg, path);
+    lib.symbols.wxHtmlHelpController_ReadCustomization(this._ptr, cfg, path);
   }
 
   SetFrameParameters(title: Deno.PointerValue, width: number, height: number, pos_x: number, pos_y: number, newFrameEachTime: boolean): void {
-    lib.symbols.wxHtmlHelpController_SetFrameParameters(this.#ptr, title, width, height, pos_x, pos_y, newFrameEachTime ? 1 : 0);
+    lib.symbols.wxHtmlHelpController_SetFrameParameters(this._ptr, title, width, height, pos_x, pos_y, newFrameEachTime ? 1 : 0);
   }
 
   SetTempDir(path: Deno.PointerValue): void {
-    lib.symbols.wxHtmlHelpController_SetTempDir(this.#ptr, path);
+    lib.symbols.wxHtmlHelpController_SetTempDir(this._ptr, path);
   }
 
   SetTitleFormat(format: Deno.PointerValue): void {
-    lib.symbols.wxHtmlHelpController_SetTitleFormat(this.#ptr, format);
+    lib.symbols.wxHtmlHelpController_SetTitleFormat(this._ptr, format);
   }
 
   SetViewer(viewer: Deno.PointerValue, flags: number): void {
-    lib.symbols.wxHtmlHelpController_SetViewer(this.#ptr, viewer, flags);
+    lib.symbols.wxHtmlHelpController_SetViewer(this._ptr, viewer, flags);
   }
 
   UseConfig(config: Deno.PointerValue, rootpath: Deno.PointerValue): void {
-    lib.symbols.wxHtmlHelpController_UseConfig(this.#ptr, config, rootpath);
+    lib.symbols.wxHtmlHelpController_UseConfig(this._ptr, config, rootpath);
   }
 
   WriteCustomization(cfg: Deno.PointerValue, path: Deno.PointerValue): void {
-    lib.symbols.wxHtmlHelpController_WriteCustomization(this.#ptr, cfg, path);
+    lib.symbols.wxHtmlHelpController_WriteCustomization(this._ptr, cfg, path);
   }
 
 }

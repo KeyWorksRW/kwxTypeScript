@@ -3,35 +3,35 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPGProperty {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   GetLabel(): Deno.PointerValue {
-    return lib.symbols.wxPGProperty_GetLabel(this.#ptr);
+    return lib.symbols.wxPGProperty_GetLabel(this._ptr);
   }
 
   GetName(): Deno.PointerValue {
-    return lib.symbols.wxPGProperty_GetName(this.#ptr);
+    return lib.symbols.wxPGProperty_GetName(this._ptr);
   }
 
   GetValueAsString(): Deno.PointerValue {
-    return lib.symbols.wxPGProperty_GetValueAsString(this.#ptr);
+    return lib.symbols.wxPGProperty_GetValueAsString(this._ptr);
   }
 
   GetValueType(): Deno.PointerValue {
-    return lib.symbols.wxPGProperty_GetValueType(this.#ptr);
+    return lib.symbols.wxPGProperty_GetValueType(this._ptr);
   }
 
   SetHelpString(helpString: Deno.PointerValue): void {
-    lib.symbols.wxPGProperty_SetHelpString(this.#ptr, helpString);
+    lib.symbols.wxPGProperty_SetHelpString(this._ptr, helpString);
   }
 
 }

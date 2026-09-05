@@ -3,99 +3,99 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAuiToolBarArt {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   Clone(): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarArt_Clone(this.#ptr);
+    return lib.symbols.wxAuiToolBarArt_Clone(this._ptr);
   }
 
   SetFlags(flags: number): void {
-    lib.symbols.wxAuiToolBarArt_SetFlags(this.#ptr, flags);
+    lib.symbols.wxAuiToolBarArt_SetFlags(this._ptr, flags);
   }
 
   GetFlags(): number {
-    return lib.symbols.wxAuiToolBarArt_GetFlags(this.#ptr);
+    return lib.symbols.wxAuiToolBarArt_GetFlags(this._ptr);
   }
 
   SetFont(font: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarArt_SetFont(this.#ptr, font);
+    lib.symbols.wxAuiToolBarArt_SetFont(this._ptr, font);
   }
 
   GetFont(): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarArt_GetFont(this.#ptr);
+    return lib.symbols.wxAuiToolBarArt_GetFont(this._ptr);
   }
 
   SetTextOrientation(orientation: number): void {
-    lib.symbols.wxAuiToolBarArt_SetTextOrientation(this.#ptr, orientation);
+    lib.symbols.wxAuiToolBarArt_SetTextOrientation(this._ptr, orientation);
   }
 
   GetTextOrientation(): number {
-    return lib.symbols.wxAuiToolBarArt_GetTextOrientation(this.#ptr);
+    return lib.symbols.wxAuiToolBarArt_GetTextOrientation(this._ptr);
   }
 
   DrawBackground(dc: Deno.PointerValue, window: Deno.PointerValue, rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarArt_DrawBackground(this.#ptr, dc, window, rect);
+    lib.symbols.wxAuiToolBarArt_DrawBackground(this._ptr, dc, window, rect);
   }
 
   DrawPlainBackground(dc: Deno.PointerValue, window: Deno.PointerValue, rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarArt_DrawPlainBackground(this.#ptr, dc, window, rect);
+    lib.symbols.wxAuiToolBarArt_DrawPlainBackground(this._ptr, dc, window, rect);
   }
 
   DrawLabel(dc: Deno.PointerValue, window: Deno.PointerValue, item: Deno.PointerValue, rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarArt_DrawLabel(this.#ptr, dc, window, item, rect);
+    lib.symbols.wxAuiToolBarArt_DrawLabel(this._ptr, dc, window, item, rect);
   }
 
   DrawButton(dc: Deno.PointerValue, window: Deno.PointerValue, item: Deno.PointerValue, rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarArt_DrawButton(this.#ptr, dc, window, item, rect);
+    lib.symbols.wxAuiToolBarArt_DrawButton(this._ptr, dc, window, item, rect);
   }
 
   DrawDropDownButton(dc: Deno.PointerValue, window: Deno.PointerValue, item: Deno.PointerValue, rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarArt_DrawDropDownButton(this.#ptr, dc, window, item, rect);
+    lib.symbols.wxAuiToolBarArt_DrawDropDownButton(this._ptr, dc, window, item, rect);
   }
 
   DrawControlLabel(dc: Deno.PointerValue, window: Deno.PointerValue, item: Deno.PointerValue, rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarArt_DrawControlLabel(this.#ptr, dc, window, item, rect);
+    lib.symbols.wxAuiToolBarArt_DrawControlLabel(this._ptr, dc, window, item, rect);
   }
 
   DrawSeparator(dc: Deno.PointerValue, window: Deno.PointerValue, rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarArt_DrawSeparator(this.#ptr, dc, window, rect);
+    lib.symbols.wxAuiToolBarArt_DrawSeparator(this._ptr, dc, window, rect);
   }
 
   DrawGripper(dc: Deno.PointerValue, window: Deno.PointerValue, rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiToolBarArt_DrawGripper(this.#ptr, dc, window, rect);
+    lib.symbols.wxAuiToolBarArt_DrawGripper(this._ptr, dc, window, rect);
   }
 
   DrawOverflowButton(dc: Deno.PointerValue, window: Deno.PointerValue, rect: Deno.PointerValue, state: number): void {
-    lib.symbols.wxAuiToolBarArt_DrawOverflowButton(this.#ptr, dc, window, rect, state);
+    lib.symbols.wxAuiToolBarArt_DrawOverflowButton(this._ptr, dc, window, rect, state);
   }
 
   GetLabelSize(dc: Deno.PointerValue, window: Deno.PointerValue, item: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarArt_GetLabelSize(this.#ptr, dc, window, item);
+    return lib.symbols.wxAuiToolBarArt_GetLabelSize(this._ptr, dc, window, item);
   }
 
   GetToolSize(dc: Deno.PointerValue, window: Deno.PointerValue, item: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarArt_GetToolSize(this.#ptr, dc, window, item);
+    return lib.symbols.wxAuiToolBarArt_GetToolSize(this._ptr, dc, window, item);
   }
 
   GetElementSize(element_id: number): number {
-    return lib.symbols.wxAuiToolBarArt_GetElementSize(this.#ptr, element_id);
+    return lib.symbols.wxAuiToolBarArt_GetElementSize(this._ptr, element_id);
   }
 
   SetElementSize(element_id: number, size: number): void {
-    lib.symbols.wxAuiToolBarArt_SetElementSize(this.#ptr, element_id, size);
+    lib.symbols.wxAuiToolBarArt_SetElementSize(this._ptr, element_id, size);
   }
 
   ShowDropDown(window: Deno.PointerValue, items: Deno.PointerValue): number {
-    return lib.symbols.wxAuiToolBarArt_ShowDropDown(this.#ptr, window, items);
+    return lib.symbols.wxAuiToolBarArt_ShowDropDown(this._ptr, window, items);
   }
 
 }

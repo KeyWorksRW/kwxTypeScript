@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxListItem {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxListItem | null {
@@ -21,7 +21,7 @@ export class wxListItem {
   }
 
   Delete(): void {
-    lib.symbols.wxListItem_Delete(this.#ptr);
+    lib.symbols.wxListItem_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,123 +29,123 @@ export class wxListItem {
   }
 
   Clear(): void {
-    lib.symbols.wxListItem_Clear(this.#ptr);
+    lib.symbols.wxListItem_Clear(this._ptr);
   }
 
   ClearAttributes(): void {
-    lib.symbols.wxListItem_ClearAttributes(this.#ptr);
+    lib.symbols.wxListItem_ClearAttributes(this._ptr);
   }
 
   GetAlign(): number {
-    return lib.symbols.wxListItem_GetAlign(this.#ptr);
+    return lib.symbols.wxListItem_GetAlign(this._ptr);
   }
 
   GetAttributes(): Deno.PointerValue {
-    return lib.symbols.wxListItem_GetAttributes(this.#ptr);
+    return lib.symbols.wxListItem_GetAttributes(this._ptr);
   }
 
   GetBackgroundColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxListItem_GetBackgroundColour(this.#ptr, ref);
+    lib.symbols.wxListItem_GetBackgroundColour(this._ptr, ref);
   }
 
   GetColumn(): number {
-    return lib.symbols.wxListItem_GetColumn(this.#ptr);
+    return lib.symbols.wxListItem_GetColumn(this._ptr);
   }
 
   GetData(): number {
-    return lib.symbols.wxListItem_GetData(this.#ptr);
+    return lib.symbols.wxListItem_GetData(this._ptr);
   }
 
   GetFont(ref: Deno.PointerValue): void {
-    lib.symbols.wxListItem_GetFont(this.#ptr, ref);
+    lib.symbols.wxListItem_GetFont(this._ptr, ref);
   }
 
   GetId(): number {
-    return lib.symbols.wxListItem_GetId(this.#ptr);
+    return lib.symbols.wxListItem_GetId(this._ptr);
   }
 
   GetImage(): number {
-    return lib.symbols.wxListItem_GetImage(this.#ptr);
+    return lib.symbols.wxListItem_GetImage(this._ptr);
   }
 
   GetMask(): number {
-    return lib.symbols.wxListItem_GetMask(this.#ptr);
+    return lib.symbols.wxListItem_GetMask(this._ptr);
   }
 
   GetState(): number {
-    return lib.symbols.wxListItem_GetState(this.#ptr);
+    return lib.symbols.wxListItem_GetState(this._ptr);
   }
 
   GetText(): Deno.PointerValue {
-    return lib.symbols.wxListItem_GetText(this.#ptr);
+    return lib.symbols.wxListItem_GetText(this._ptr);
   }
 
   GetTextColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxListItem_GetTextColour(this.#ptr, ref);
+    lib.symbols.wxListItem_GetTextColour(this._ptr, ref);
   }
 
   GetWidth(): number {
-    return lib.symbols.wxListItem_GetWidth(this.#ptr);
+    return lib.symbols.wxListItem_GetWidth(this._ptr);
   }
 
   HasAttributes(): boolean {
-    return (lib.symbols.wxListItem_HasAttributes(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxListItem_HasAttributes(this._ptr) as number) !== 0;
   }
 
   SetAlign(align: number): void {
-    lib.symbols.wxListItem_SetAlign(this.#ptr, align);
+    lib.symbols.wxListItem_SetAlign(this._ptr, align);
   }
 
   SetBackgroundColour(colBack: Deno.PointerValue): void {
-    lib.symbols.wxListItem_SetBackgroundColour(this.#ptr, colBack);
+    lib.symbols.wxListItem_SetBackgroundColour(this._ptr, colBack);
   }
 
   SetColumn(col: number): void {
-    lib.symbols.wxListItem_SetColumn(this.#ptr, col);
+    lib.symbols.wxListItem_SetColumn(this._ptr, col);
   }
 
   SetData(data: number): void {
-    lib.symbols.wxListItem_SetData(this.#ptr, data);
+    lib.symbols.wxListItem_SetData(this._ptr, data);
   }
 
   SetDataPointer(data: Deno.PointerValue): void {
-    lib.symbols.wxListItem_SetDataPointer(this.#ptr, data);
+    lib.symbols.wxListItem_SetDataPointer(this._ptr, data);
   }
 
   SetFont(font: Deno.PointerValue): void {
-    lib.symbols.wxListItem_SetFont(this.#ptr, font);
+    lib.symbols.wxListItem_SetFont(this._ptr, font);
   }
 
   SetId(id: number): void {
-    lib.symbols.wxListItem_SetId(this.#ptr, id);
+    lib.symbols.wxListItem_SetId(this._ptr, id);
   }
 
   SetImage(image: number): void {
-    lib.symbols.wxListItem_SetImage(this.#ptr, image);
+    lib.symbols.wxListItem_SetImage(this._ptr, image);
   }
 
   SetMask(mask: number): void {
-    lib.symbols.wxListItem_SetMask(this.#ptr, mask);
+    lib.symbols.wxListItem_SetMask(this._ptr, mask);
   }
 
   SetState(state: number): void {
-    lib.symbols.wxListItem_SetState(this.#ptr, state);
+    lib.symbols.wxListItem_SetState(this._ptr, state);
   }
 
   SetStateMask(stateMask: number): void {
-    lib.symbols.wxListItem_SetStateMask(this.#ptr, stateMask);
+    lib.symbols.wxListItem_SetStateMask(this._ptr, stateMask);
   }
 
   SetText(text: Deno.PointerValue): void {
-    lib.symbols.wxListItem_SetText(this.#ptr, text);
+    lib.symbols.wxListItem_SetText(this._ptr, text);
   }
 
   SetTextColour(colText: Deno.PointerValue): void {
-    lib.symbols.wxListItem_SetTextColour(this.#ptr, colText);
+    lib.symbols.wxListItem_SetTextColour(this._ptr, colText);
   }
 
   SetWidth(width: number): void {
-    lib.symbols.wxListItem_SetWidth(this.#ptr, width);
+    lib.symbols.wxListItem_SetWidth(this._ptr, width);
   }
 
 }

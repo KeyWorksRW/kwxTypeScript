@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxSize {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(width: number, height: number): wxSize | null {
@@ -21,7 +21,7 @@ export class wxSize {
   }
 
   Delete(): void {
-    lib.symbols.wxSize_Delete(this.#ptr);
+    lib.symbols.wxSize_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,19 +29,19 @@ export class wxSize {
   }
 
   GetHeight(): number {
-    return lib.symbols.wxSize_GetHeight(this.#ptr);
+    return lib.symbols.wxSize_GetHeight(this._ptr);
   }
 
   GetWidth(): number {
-    return lib.symbols.wxSize_GetWidth(this.#ptr);
+    return lib.symbols.wxSize_GetWidth(this._ptr);
   }
 
   SetHeight(height: number): void {
-    lib.symbols.wxSize_SetHeight(this.#ptr, height);
+    lib.symbols.wxSize_SetHeight(this._ptr, height);
   }
 
   SetWidth(width: number): void {
-    lib.symbols.wxSize_SetWidth(this.#ptr, width);
+    lib.symbols.wxSize_SetWidth(this._ptr, width);
   }
 
 }

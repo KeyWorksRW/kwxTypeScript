@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxLogChain {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(logger: Deno.PointerValue): wxLogChain | null {
@@ -21,7 +21,7 @@ export class wxLogChain {
   }
 
   Delete(): void {
-    lib.symbols.wxLogChain_Delete(this.#ptr);
+    lib.symbols.wxLogChain_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,19 +29,19 @@ export class wxLogChain {
   }
 
   GetOldLog(): Deno.PointerValue {
-    return lib.symbols.wxLogChain_GetOldLog(this.#ptr);
+    return lib.symbols.wxLogChain_GetOldLog(this._ptr);
   }
 
   IsPassingMessages(): boolean {
-    return (lib.symbols.wxLogChain_IsPassingMessages(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxLogChain_IsPassingMessages(this._ptr) as number) !== 0;
   }
 
   PassMessages(bDoPass: boolean): void {
-    lib.symbols.wxLogChain_PassMessages(this.#ptr, bDoPass ? 1 : 0);
+    lib.symbols.wxLogChain_PassMessages(this._ptr, bDoPass ? 1 : 0);
   }
 
   SetLog(logger: Deno.PointerValue): void {
-    lib.symbols.wxLogChain_SetLog(this.#ptr, logger);
+    lib.symbols.wxLogChain_SetLog(this._ptr, logger);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class kwxConnection {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(pObject: Deno.PointerValue, buffer: Deno.PointerValue, size: number): kwxConnection | null {
@@ -21,7 +21,7 @@ export class kwxConnection {
   }
 
   Delete(): void {
-    lib.symbols.kwxConnection_Delete(this.#ptr);
+    lib.symbols.kwxConnection_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,67 +29,67 @@ export class kwxConnection {
   }
 
   Advise(item: Deno.PointerValue, data: Deno.PointerValue, size: number, format: number): number {
-    return lib.symbols.kwxConnection_Advise(this.#ptr, item, data, size, format);
+    return lib.symbols.kwxConnection_Advise(this._ptr, item, data, size, format);
   }
 
   Compress(enable: number): void {
-    lib.symbols.kwxConnection_Compress(this.#ptr, enable);
+    lib.symbols.kwxConnection_Compress(this._ptr, enable);
   }
 
   CreateDefault(): Deno.PointerValue {
-    return lib.symbols.kwxConnection_CreateDefault(this.#ptr);
+    return lib.symbols.kwxConnection_CreateDefault(this._ptr);
   }
 
   Disconnect(): boolean {
-    return (lib.symbols.kwxConnection_Disconnect(this.#ptr) as number) !== 0;
+    return (lib.symbols.kwxConnection_Disconnect(this._ptr) as number) !== 0;
   }
 
   Execute(data: Deno.PointerValue, size: number, format: number): boolean {
-    return (lib.symbols.kwxConnection_Execute(this.#ptr, data, size, format) as number) !== 0;
+    return (lib.symbols.kwxConnection_Execute(this._ptr, data, size, format) as number) !== 0;
   }
 
   Poke(item: Deno.PointerValue, data: Deno.PointerValue, size: number, format: number): boolean {
-    return (lib.symbols.kwxConnection_Poke(this.#ptr, item, data, size, format) as number) !== 0;
+    return (lib.symbols.kwxConnection_Poke(this._ptr, item, data, size, format) as number) !== 0;
   }
 
   Request(item: Deno.PointerValue, size: Deno.PointerValue, format: number): Deno.PointerValue {
-    return lib.symbols.kwxConnection_Request(this.#ptr, item, size, format);
+    return lib.symbols.kwxConnection_Request(this._ptr, item, size, format);
   }
 
   SetOnAdvise(pFunction: Deno.PointerValue): void {
-    lib.symbols.kwxConnection_SetOnAdvise(this.#ptr, pFunction);
+    lib.symbols.kwxConnection_SetOnAdvise(this._ptr, pFunction);
   }
 
   SetOnDisconnect(pFunction: Deno.PointerValue): void {
-    lib.symbols.kwxConnection_SetOnDisconnect(this.#ptr, pFunction);
+    lib.symbols.kwxConnection_SetOnDisconnect(this._ptr, pFunction);
   }
 
   SetOnExecute(pFunction: Deno.PointerValue): void {
-    lib.symbols.kwxConnection_SetOnExecute(this.#ptr, pFunction);
+    lib.symbols.kwxConnection_SetOnExecute(this._ptr, pFunction);
   }
 
   SetOnPoke(pFunction: Deno.PointerValue): void {
-    lib.symbols.kwxConnection_SetOnPoke(this.#ptr, pFunction);
+    lib.symbols.kwxConnection_SetOnPoke(this._ptr, pFunction);
   }
 
   SetOnRequest(pFunction: Deno.PointerValue): void {
-    lib.symbols.kwxConnection_SetOnRequest(this.#ptr, pFunction);
+    lib.symbols.kwxConnection_SetOnRequest(this._ptr, pFunction);
   }
 
   SetOnStartAdvise(pFunction: Deno.PointerValue): void {
-    lib.symbols.kwxConnection_SetOnStartAdvise(this.#ptr, pFunction);
+    lib.symbols.kwxConnection_SetOnStartAdvise(this._ptr, pFunction);
   }
 
   SetOnStopAdvise(pFunction: Deno.PointerValue): void {
-    lib.symbols.kwxConnection_SetOnStopAdvise(this.#ptr, pFunction);
+    lib.symbols.kwxConnection_SetOnStopAdvise(this._ptr, pFunction);
   }
 
   StartAdvise(item: Deno.PointerValue): boolean {
-    return (lib.symbols.kwxConnection_StartAdvise(this.#ptr, item) as number) !== 0;
+    return (lib.symbols.kwxConnection_StartAdvise(this._ptr, item) as number) !== 0;
   }
 
   StopAdvise(item: Deno.PointerValue): boolean {
-    return (lib.symbols.kwxConnection_StopAdvise(this.#ptr, item) as number) !== 0;
+    return (lib.symbols.kwxConnection_StopAdvise(this._ptr, item) as number) !== 0;
   }
 
 }

@@ -3,71 +3,71 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAuiTabArt {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   Clone(): Deno.PointerValue {
-    return lib.symbols.wxAuiTabArt_Clone(this.#ptr);
+    return lib.symbols.wxAuiTabArt_Clone(this._ptr);
   }
 
   DrawBackground(dc: Deno.PointerValue, window: Deno.PointerValue, rect: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabArt_DrawBackground(this.#ptr, dc, window, rect);
+    lib.symbols.wxAuiTabArt_DrawBackground(this._ptr, dc, window, rect);
   }
 
   DrawButton(dc: Deno.PointerValue, window: Deno.PointerValue, inRect: Deno.PointerValue, bitmap_id: number, button_state: number, orientation: number, outRect: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabArt_DrawButton(this.#ptr, dc, window, inRect, bitmap_id, button_state, orientation, outRect);
+    lib.symbols.wxAuiTabArt_DrawButton(this._ptr, dc, window, inRect, bitmap_id, button_state, orientation, outRect);
   }
 
   DrawTab(dc: Deno.PointerValue, window: Deno.PointerValue, page: Deno.PointerValue, rect: Deno.PointerValue, close_button_state: number, outTabRect: Deno.PointerValue, outButtonRect: Deno.PointerValue, x_extent: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabArt_DrawTab(this.#ptr, dc, window, page, rect, close_button_state, outTabRect, outButtonRect, x_extent);
+    lib.symbols.wxAuiTabArt_DrawTab(this._ptr, dc, window, page, rect, close_button_state, outTabRect, outButtonRect, x_extent);
   }
 
   GetBestTabCtrlSize(window: Deno.PointerValue, pages: Deno.PointerValue, width: number, height: number): number {
-    return lib.symbols.wxAuiTabArt_GetBestTabCtrlSize(this.#ptr, window, pages, width, height);
+    return lib.symbols.wxAuiTabArt_GetBestTabCtrlSize(this._ptr, window, pages, width, height);
   }
 
   GetIndentSize(): number {
-    return lib.symbols.wxAuiTabArt_GetIndentSize(this.#ptr);
+    return lib.symbols.wxAuiTabArt_GetIndentSize(this._ptr);
   }
 
   GetTabSize(dc: Deno.PointerValue, window: Deno.PointerValue, caption: Deno.PointerValue, bitmap: Deno.PointerValue, active: boolean, close_button_state: number, x_extent: Deno.PointerValue): Deno.PointerValue {
-    return lib.symbols.wxAuiTabArt_GetTabSize(this.#ptr, dc, window, caption, bitmap, active ? 1 : 0, close_button_state, x_extent);
+    return lib.symbols.wxAuiTabArt_GetTabSize(this._ptr, dc, window, caption, bitmap, active ? 1 : 0, close_button_state, x_extent);
   }
 
   SetFlags(flags: number): void {
-    lib.symbols.wxAuiTabArt_SetFlags(this.#ptr, flags);
+    lib.symbols.wxAuiTabArt_SetFlags(this._ptr, flags);
   }
 
   SetMeasuringFont(font: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabArt_SetMeasuringFont(this.#ptr, font);
+    lib.symbols.wxAuiTabArt_SetMeasuringFont(this._ptr, font);
   }
 
   SetNormalFont(font: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabArt_SetNormalFont(this.#ptr, font);
+    lib.symbols.wxAuiTabArt_SetNormalFont(this._ptr, font);
   }
 
   SetSelectedFont(font: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabArt_SetSelectedFont(this.#ptr, font);
+    lib.symbols.wxAuiTabArt_SetSelectedFont(this._ptr, font);
   }
 
   SetColour(colour: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabArt_SetColour(this.#ptr, colour);
+    lib.symbols.wxAuiTabArt_SetColour(this._ptr, colour);
   }
 
   SetActiveColour(colour: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabArt_SetActiveColour(this.#ptr, colour);
+    lib.symbols.wxAuiTabArt_SetActiveColour(this._ptr, colour);
   }
 
   SetSizingInfo(width: number, height: number, tab_count: bigint): void {
-    lib.symbols.wxAuiTabArt_SetSizingInfo(this.#ptr, width, height, tab_count);
+    lib.symbols.wxAuiTabArt_SetSizingInfo(this._ptr, width, height, tab_count);
   }
 
 }

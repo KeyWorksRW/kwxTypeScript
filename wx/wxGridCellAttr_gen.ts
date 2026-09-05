@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxGridCellAttr {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   Ctor(): Deno.PointerValue {
@@ -19,95 +19,95 @@ export class wxGridCellAttr {
   }
 
   DecRef(): void {
-    lib.symbols.wxGridCellAttr_DecRef(this.#ptr);
+    lib.symbols.wxGridCellAttr_DecRef(this._ptr);
   }
 
   GetAlignment(hAlign: Deno.PointerValue, vAlign: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_GetAlignment(this.#ptr, hAlign, vAlign);
+    lib.symbols.wxGridCellAttr_GetAlignment(this._ptr, hAlign, vAlign);
   }
 
   GetBackgroundColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_GetBackgroundColour(this.#ptr, ref);
+    lib.symbols.wxGridCellAttr_GetBackgroundColour(this._ptr, ref);
   }
 
   GetEditor(grid: Deno.PointerValue, row: number, col: number): Deno.PointerValue {
-    return lib.symbols.wxGridCellAttr_GetEditor(this.#ptr, grid, row, col);
+    return lib.symbols.wxGridCellAttr_GetEditor(this._ptr, grid, row, col);
   }
 
   GetFont(ref: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_GetFont(this.#ptr, ref);
+    lib.symbols.wxGridCellAttr_GetFont(this._ptr, ref);
   }
 
   GetRenderer(grid: Deno.PointerValue, row: number, col: number): Deno.PointerValue {
-    return lib.symbols.wxGridCellAttr_GetRenderer(this.#ptr, grid, row, col);
+    return lib.symbols.wxGridCellAttr_GetRenderer(this._ptr, grid, row, col);
   }
 
   GetTextColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_GetTextColour(this.#ptr, ref);
+    lib.symbols.wxGridCellAttr_GetTextColour(this._ptr, ref);
   }
 
   HasAlignment(): boolean {
-    return (lib.symbols.wxGridCellAttr_HasAlignment(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxGridCellAttr_HasAlignment(this._ptr) as number) !== 0;
   }
 
   HasBackgroundColour(): boolean {
-    return (lib.symbols.wxGridCellAttr_HasBackgroundColour(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxGridCellAttr_HasBackgroundColour(this._ptr) as number) !== 0;
   }
 
   HasEditor(): boolean {
-    return (lib.symbols.wxGridCellAttr_HasEditor(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxGridCellAttr_HasEditor(this._ptr) as number) !== 0;
   }
 
   HasFont(): boolean {
-    return (lib.symbols.wxGridCellAttr_HasFont(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxGridCellAttr_HasFont(this._ptr) as number) !== 0;
   }
 
   HasRenderer(): boolean {
-    return (lib.symbols.wxGridCellAttr_HasRenderer(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxGridCellAttr_HasRenderer(this._ptr) as number) !== 0;
   }
 
   HasTextColour(): boolean {
-    return (lib.symbols.wxGridCellAttr_HasTextColour(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxGridCellAttr_HasTextColour(this._ptr) as number) !== 0;
   }
 
   IncRef(): void {
-    lib.symbols.wxGridCellAttr_IncRef(this.#ptr);
+    lib.symbols.wxGridCellAttr_IncRef(this._ptr);
   }
 
   IsReadOnly(): boolean {
-    return (lib.symbols.wxGridCellAttr_IsReadOnly(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxGridCellAttr_IsReadOnly(this._ptr) as number) !== 0;
   }
 
   SetAlignment(hAlign: number, vAlign: number): void {
-    lib.symbols.wxGridCellAttr_SetAlignment(this.#ptr, hAlign, vAlign);
+    lib.symbols.wxGridCellAttr_SetAlignment(this._ptr, hAlign, vAlign);
   }
 
   SetBackgroundColour(colBack: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_SetBackgroundColour(this.#ptr, colBack);
+    lib.symbols.wxGridCellAttr_SetBackgroundColour(this._ptr, colBack);
   }
 
   SetDefAttr(defAttr: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_SetDefAttr(this.#ptr, defAttr);
+    lib.symbols.wxGridCellAttr_SetDefAttr(this._ptr, defAttr);
   }
 
   SetEditor(editor: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_SetEditor(this.#ptr, editor);
+    lib.symbols.wxGridCellAttr_SetEditor(this._ptr, editor);
   }
 
   SetFont(font: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_SetFont(this.#ptr, font);
+    lib.symbols.wxGridCellAttr_SetFont(this._ptr, font);
   }
 
   SetReadOnly(isReadOnly: boolean): void {
-    lib.symbols.wxGridCellAttr_SetReadOnly(this.#ptr, isReadOnly ? 1 : 0);
+    lib.symbols.wxGridCellAttr_SetReadOnly(this._ptr, isReadOnly ? 1 : 0);
   }
 
   SetRenderer(renderer: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_SetRenderer(this.#ptr, renderer);
+    lib.symbols.wxGridCellAttr_SetRenderer(this._ptr, renderer);
   }
 
   SetTextColour(colText: Deno.PointerValue): void {
-    lib.symbols.wxGridCellAttr_SetTextColour(this.#ptr, colText);
+    lib.symbols.wxGridCellAttr_SetTextColour(this._ptr, colText);
   }
 
 }

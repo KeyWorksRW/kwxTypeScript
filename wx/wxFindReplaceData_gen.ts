@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxFindReplaceData {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(flags: number): wxFindReplaceData | null {
@@ -27,7 +27,7 @@ export class wxFindReplaceData {
   }
 
   Delete(): void {
-    lib.symbols.wxFindReplaceData_Delete(this.#ptr);
+    lib.symbols.wxFindReplaceData_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,27 +35,27 @@ export class wxFindReplaceData {
   }
 
   GetFindString(): Deno.PointerValue {
-    return lib.symbols.wxFindReplaceData_GetFindString(this.#ptr);
+    return lib.symbols.wxFindReplaceData_GetFindString(this._ptr);
   }
 
   GetFlags(): number {
-    return lib.symbols.wxFindReplaceData_GetFlags(this.#ptr);
+    return lib.symbols.wxFindReplaceData_GetFlags(this._ptr);
   }
 
   GetReplaceString(): Deno.PointerValue {
-    return lib.symbols.wxFindReplaceData_GetReplaceString(this.#ptr);
+    return lib.symbols.wxFindReplaceData_GetReplaceString(this._ptr);
   }
 
   SetFindString(str: Deno.PointerValue): void {
-    lib.symbols.wxFindReplaceData_SetFindString(this.#ptr, str);
+    lib.symbols.wxFindReplaceData_SetFindString(this._ptr, str);
   }
 
   SetFlags(flags: number): void {
-    lib.symbols.wxFindReplaceData_SetFlags(this.#ptr, flags);
+    lib.symbols.wxFindReplaceData_SetFlags(this._ptr, flags);
   }
 
   SetReplaceString(str: Deno.PointerValue): void {
-    lib.symbols.wxFindReplaceData_SetReplaceString(this.#ptr, str);
+    lib.symbols.wxFindReplaceData_SetReplaceString(this._ptr, str);
   }
 
 }

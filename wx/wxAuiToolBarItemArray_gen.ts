@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAuiToolBarItemArray {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxAuiToolBarItemArray | null {
@@ -21,7 +21,7 @@ export class wxAuiToolBarItemArray {
   }
 
   Delete(): void {
-    lib.symbols.wxAuiToolBarItemArray_Delete(this.#ptr);
+    lib.symbols.wxAuiToolBarItemArray_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,11 +29,11 @@ export class wxAuiToolBarItemArray {
   }
 
   GetCount(): number {
-    return lib.symbols.wxAuiToolBarItemArray_GetCount(this.#ptr);
+    return lib.symbols.wxAuiToolBarItemArray_GetCount(this._ptr);
   }
 
   Item(index: number): Deno.PointerValue {
-    return lib.symbols.wxAuiToolBarItemArray_Item(this.#ptr, index);
+    return lib.symbols.wxAuiToolBarItemArray_Item(this._ptr, index);
   }
 
 }

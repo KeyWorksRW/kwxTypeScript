@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPrintDialogData {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateDefault(): wxPrintDialogData | null {
@@ -27,7 +27,7 @@ export class wxPrintDialogData {
   }
 
   Delete(): void {
-    lib.symbols.wxPrintDialogData_Delete(this.#ptr);
+    lib.symbols.wxPrintDialogData_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,123 +35,123 @@ export class wxPrintDialogData {
   }
 
   Assign(data: Deno.PointerValue): void {
-    lib.symbols.wxPrintDialogData_Assign(this.#ptr, data);
+    lib.symbols.wxPrintDialogData_Assign(this._ptr, data);
   }
 
   AssignData(data: Deno.PointerValue): void {
-    lib.symbols.wxPrintDialogData_AssignData(this.#ptr, data);
+    lib.symbols.wxPrintDialogData_AssignData(this._ptr, data);
   }
 
   EnableHelp(flag: boolean): void {
-    lib.symbols.wxPrintDialogData_EnableHelp(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPrintDialogData_EnableHelp(this._ptr, flag ? 1 : 0);
   }
 
   EnablePageNumbers(flag: boolean): void {
-    lib.symbols.wxPrintDialogData_EnablePageNumbers(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPrintDialogData_EnablePageNumbers(this._ptr, flag ? 1 : 0);
   }
 
   EnablePrintToFile(flag: boolean): void {
-    lib.symbols.wxPrintDialogData_EnablePrintToFile(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPrintDialogData_EnablePrintToFile(this._ptr, flag ? 1 : 0);
   }
 
   EnableSelection(flag: boolean): void {
-    lib.symbols.wxPrintDialogData_EnableSelection(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPrintDialogData_EnableSelection(this._ptr, flag ? 1 : 0);
   }
 
   GetAllPages(): number {
-    return lib.symbols.wxPrintDialogData_GetAllPages(this.#ptr);
+    return lib.symbols.wxPrintDialogData_GetAllPages(this._ptr);
   }
 
   GetCollate(): boolean {
-    return (lib.symbols.wxPrintDialogData_GetCollate(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintDialogData_GetCollate(this._ptr) as number) !== 0;
   }
 
   GetEnableHelp(): boolean {
-    return (lib.symbols.wxPrintDialogData_GetEnableHelp(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintDialogData_GetEnableHelp(this._ptr) as number) !== 0;
   }
 
   GetEnablePageNumbers(): boolean {
-    return (lib.symbols.wxPrintDialogData_GetEnablePageNumbers(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintDialogData_GetEnablePageNumbers(this._ptr) as number) !== 0;
   }
 
   GetEnablePrintToFile(): boolean {
-    return (lib.symbols.wxPrintDialogData_GetEnablePrintToFile(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintDialogData_GetEnablePrintToFile(this._ptr) as number) !== 0;
   }
 
   GetEnableSelection(): boolean {
-    return (lib.symbols.wxPrintDialogData_GetEnableSelection(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintDialogData_GetEnableSelection(this._ptr) as number) !== 0;
   }
 
   GetFromPage(): number {
-    return lib.symbols.wxPrintDialogData_GetFromPage(this.#ptr);
+    return lib.symbols.wxPrintDialogData_GetFromPage(this._ptr);
   }
 
   GetMaxPage(): number {
-    return lib.symbols.wxPrintDialogData_GetMaxPage(this.#ptr);
+    return lib.symbols.wxPrintDialogData_GetMaxPage(this._ptr);
   }
 
   GetMinPage(): number {
-    return lib.symbols.wxPrintDialogData_GetMinPage(this.#ptr);
+    return lib.symbols.wxPrintDialogData_GetMinPage(this._ptr);
   }
 
   GetNoCopies(): number {
-    return lib.symbols.wxPrintDialogData_GetNoCopies(this.#ptr);
+    return lib.symbols.wxPrintDialogData_GetNoCopies(this._ptr);
   }
 
   GetPrintData(ref: Deno.PointerValue): void {
-    lib.symbols.wxPrintDialogData_GetPrintData(this.#ptr, ref);
+    lib.symbols.wxPrintDialogData_GetPrintData(this._ptr, ref);
   }
 
   GetPrintToFile(): boolean {
-    return (lib.symbols.wxPrintDialogData_GetPrintToFile(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintDialogData_GetPrintToFile(this._ptr) as number) !== 0;
   }
 
   GetSelection(): boolean {
-    return (lib.symbols.wxPrintDialogData_GetSelection(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxPrintDialogData_GetSelection(this._ptr) as number) !== 0;
   }
 
   GetToPage(): number {
-    return lib.symbols.wxPrintDialogData_GetToPage(this.#ptr);
+    return lib.symbols.wxPrintDialogData_GetToPage(this._ptr);
   }
 
   SetAllPages(flag: boolean): void {
-    lib.symbols.wxPrintDialogData_SetAllPages(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPrintDialogData_SetAllPages(this._ptr, flag ? 1 : 0);
   }
 
   SetCollate(flag: boolean): void {
-    lib.symbols.wxPrintDialogData_SetCollate(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPrintDialogData_SetCollate(this._ptr, flag ? 1 : 0);
   }
 
   SetFromPage(value: number): void {
-    lib.symbols.wxPrintDialogData_SetFromPage(this.#ptr, value);
+    lib.symbols.wxPrintDialogData_SetFromPage(this._ptr, value);
   }
 
   SetMaxPage(value: number): void {
-    lib.symbols.wxPrintDialogData_SetMaxPage(this.#ptr, value);
+    lib.symbols.wxPrintDialogData_SetMaxPage(this._ptr, value);
   }
 
   SetMinPage(value: number): void {
-    lib.symbols.wxPrintDialogData_SetMinPage(this.#ptr, value);
+    lib.symbols.wxPrintDialogData_SetMinPage(this._ptr, value);
   }
 
   SetNoCopies(value: number): void {
-    lib.symbols.wxPrintDialogData_SetNoCopies(this.#ptr, value);
+    lib.symbols.wxPrintDialogData_SetNoCopies(this._ptr, value);
   }
 
   SetPrintData(printData: Deno.PointerValue): void {
-    lib.symbols.wxPrintDialogData_SetPrintData(this.#ptr, printData);
+    lib.symbols.wxPrintDialogData_SetPrintData(this._ptr, printData);
   }
 
   SetPrintToFile(flag: boolean): void {
-    lib.symbols.wxPrintDialogData_SetPrintToFile(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPrintDialogData_SetPrintToFile(this._ptr, flag ? 1 : 0);
   }
 
   SetSelection(flag: boolean): void {
-    lib.symbols.wxPrintDialogData_SetSelection(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxPrintDialogData_SetSelection(this._ptr, flag ? 1 : 0);
   }
 
   SetToPage(value: number): void {
-    lib.symbols.wxPrintDialogData_SetToPage(this.#ptr, value);
+    lib.symbols.wxPrintDialogData_SetToPage(this._ptr, value);
   }
 
 }

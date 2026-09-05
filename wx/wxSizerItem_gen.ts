@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxSizerItem {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(width: number, height: number, option: number, flag: number, border: number, userData: Deno.PointerValue): wxSizerItem | null {
@@ -29,7 +29,7 @@ export class wxSizerItem {
   }
 
   Delete(): void {
-    lib.symbols.wxSizerItem_Delete(this.#ptr);
+    lib.symbols.wxSizerItem_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -37,123 +37,123 @@ export class wxSizerItem {
   }
 
   CalcMin(): Deno.PointerValue {
-    return lib.symbols.wxSizerItem_CalcMin(this.#ptr);
+    return lib.symbols.wxSizerItem_CalcMin(this._ptr);
   }
 
   GetBorder(): number {
-    return lib.symbols.wxSizerItem_GetBorder(this.#ptr);
+    return lib.symbols.wxSizerItem_GetBorder(this._ptr);
   }
 
   GetFlag(): number {
-    return lib.symbols.wxSizerItem_GetFlag(this.#ptr);
+    return lib.symbols.wxSizerItem_GetFlag(this._ptr);
   }
 
   GetMinSize(): Deno.PointerValue {
-    return lib.symbols.wxSizerItem_GetMinSize(this.#ptr);
+    return lib.symbols.wxSizerItem_GetMinSize(this._ptr);
   }
 
   GetPosition(): Deno.PointerValue {
-    return lib.symbols.wxSizerItem_GetPosition(this.#ptr);
+    return lib.symbols.wxSizerItem_GetPosition(this._ptr);
   }
 
   GetRatio(): number {
-    return lib.symbols.wxSizerItem_GetRatio(this.#ptr);
+    return lib.symbols.wxSizerItem_GetRatio(this._ptr);
   }
 
   GetSize(): Deno.PointerValue {
-    return lib.symbols.wxSizerItem_GetSize(this.#ptr);
+    return lib.symbols.wxSizerItem_GetSize(this._ptr);
   }
 
   GetSizer(): Deno.PointerValue {
-    return lib.symbols.wxSizerItem_GetSizer(this.#ptr);
+    return lib.symbols.wxSizerItem_GetSizer(this._ptr);
   }
 
   GetUserData(): Deno.PointerValue {
-    return lib.symbols.wxSizerItem_GetUserData(this.#ptr);
+    return lib.symbols.wxSizerItem_GetUserData(this._ptr);
   }
 
   GetWindow(): Deno.PointerValue {
-    return lib.symbols.wxSizerItem_GetWindow(this.#ptr);
+    return lib.symbols.wxSizerItem_GetWindow(this._ptr);
   }
 
   IsSizer(): boolean {
-    return (lib.symbols.wxSizerItem_IsSizer(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxSizerItem_IsSizer(this._ptr) as number) !== 0;
   }
 
   IsSpacer(): boolean {
-    return (lib.symbols.wxSizerItem_IsSpacer(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxSizerItem_IsSpacer(this._ptr) as number) !== 0;
   }
 
   IsWindow(): boolean {
-    return (lib.symbols.wxSizerItem_IsWindow(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxSizerItem_IsWindow(this._ptr) as number) !== 0;
   }
 
   SetBorder(border: number): void {
-    lib.symbols.wxSizerItem_SetBorder(this.#ptr, border);
+    lib.symbols.wxSizerItem_SetBorder(this._ptr, border);
   }
 
   SetDimension(x: number, y: number, width: number, height: number): void {
-    lib.symbols.wxSizerItem_SetDimension(this.#ptr, x, y, width, height);
+    lib.symbols.wxSizerItem_SetDimension(this._ptr, x, y, width, height);
   }
 
   SetFlag(flag: number): void {
-    lib.symbols.wxSizerItem_SetFlag(this.#ptr, flag);
+    lib.symbols.wxSizerItem_SetFlag(this._ptr, flag);
   }
 
   SetFloatRatio(ratio: number): void {
-    lib.symbols.wxSizerItem_SetFloatRatio(this.#ptr, ratio);
+    lib.symbols.wxSizerItem_SetFloatRatio(this._ptr, ratio);
   }
 
   SetInitSize(x: number, y: number): void {
-    lib.symbols.wxSizerItem_SetInitSize(this.#ptr, x, y);
+    lib.symbols.wxSizerItem_SetInitSize(this._ptr, x, y);
   }
 
   SetRatio(width: number, height: number): void {
-    lib.symbols.wxSizerItem_SetRatio(this.#ptr, width, height);
+    lib.symbols.wxSizerItem_SetRatio(this._ptr, width, height);
   }
 
   AssignSizer(sizer: Deno.PointerValue): void {
-    lib.symbols.wxSizerItem_AssignSizer(this.#ptr, sizer);
+    lib.symbols.wxSizerItem_AssignSizer(this._ptr, sizer);
   }
 
   AssignWindow(window: Deno.PointerValue): void {
-    lib.symbols.wxSizerItem_AssignWindow(this.#ptr, window);
+    lib.symbols.wxSizerItem_AssignWindow(this._ptr, window);
   }
 
   DeleteWindows(): void {
-    lib.symbols.wxSizerItem_DeleteWindows(this.#ptr);
+    lib.symbols.wxSizerItem_DeleteWindows(this._ptr);
   }
 
   DetachSizer(): void {
-    lib.symbols.wxSizerItem_DetachSizer(this.#ptr);
+    lib.symbols.wxSizerItem_DetachSizer(this._ptr);
   }
 
   GetProportion(): number {
-    return lib.symbols.wxSizerItem_GetProportion(this.#ptr);
+    return lib.symbols.wxSizerItem_GetProportion(this._ptr);
   }
 
   GetRect(): Deno.PointerValue {
-    return lib.symbols.wxSizerItem_GetRect(this.#ptr);
+    return lib.symbols.wxSizerItem_GetRect(this._ptr);
   }
 
   GetSpacer(): Deno.PointerValue {
-    return lib.symbols.wxSizerItem_GetSpacer(this.#ptr);
+    return lib.symbols.wxSizerItem_GetSpacer(this._ptr);
   }
 
   IsShown(): number {
-    return lib.symbols.wxSizerItem_IsShown(this.#ptr);
+    return lib.symbols.wxSizerItem_IsShown(this._ptr);
   }
 
   SetProportion(proportion: number): void {
-    lib.symbols.wxSizerItem_SetProportion(this.#ptr, proportion);
+    lib.symbols.wxSizerItem_SetProportion(this._ptr, proportion);
   }
 
   AssignSpacer(width: number, height: number): void {
-    lib.symbols.wxSizerItem_AssignSpacer(this.#ptr, width, height);
+    lib.symbols.wxSizerItem_AssignSpacer(this._ptr, width, height);
   }
 
   Show(show: number): void {
-    lib.symbols.wxSizerItem_Show(this.#ptr, show);
+    lib.symbols.wxSizerItem_Show(this._ptr, show);
   }
 
 }

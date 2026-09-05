@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxCalendarDateAttr {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(textColour: Deno.PointerValue, backColour: Deno.PointerValue, borderColour: Deno.PointerValue, font: Deno.PointerValue, border: number): wxCalendarDateAttr | null {
@@ -27,7 +27,7 @@ export class wxCalendarDateAttr {
   }
 
   Delete(): void {
-    lib.symbols.wxCalendarDateAttr_Delete(this.#ptr);
+    lib.symbols.wxCalendarDateAttr_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,71 +35,71 @@ export class wxCalendarDateAttr {
   }
 
   GetBackgroundColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxCalendarDateAttr_GetBackgroundColour(this.#ptr, ref);
+    lib.symbols.wxCalendarDateAttr_GetBackgroundColour(this._ptr, ref);
   }
 
   GetBorder(): number {
-    return lib.symbols.wxCalendarDateAttr_GetBorder(this.#ptr);
+    return lib.symbols.wxCalendarDateAttr_GetBorder(this._ptr);
   }
 
   GetBorderColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxCalendarDateAttr_GetBorderColour(this.#ptr, ref);
+    lib.symbols.wxCalendarDateAttr_GetBorderColour(this._ptr, ref);
   }
 
   GetFont(ref: Deno.PointerValue): void {
-    lib.symbols.wxCalendarDateAttr_GetFont(this.#ptr, ref);
+    lib.symbols.wxCalendarDateAttr_GetFont(this._ptr, ref);
   }
 
   GetTextColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxCalendarDateAttr_GetTextColour(this.#ptr, ref);
+    lib.symbols.wxCalendarDateAttr_GetTextColour(this._ptr, ref);
   }
 
   HasBackgroundColour(): boolean {
-    return (lib.symbols.wxCalendarDateAttr_HasBackgroundColour(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCalendarDateAttr_HasBackgroundColour(this._ptr) as number) !== 0;
   }
 
   HasBorder(): boolean {
-    return (lib.symbols.wxCalendarDateAttr_HasBorder(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCalendarDateAttr_HasBorder(this._ptr) as number) !== 0;
   }
 
   HasBorderColour(): boolean {
-    return (lib.symbols.wxCalendarDateAttr_HasBorderColour(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCalendarDateAttr_HasBorderColour(this._ptr) as number) !== 0;
   }
 
   HasFont(): boolean {
-    return (lib.symbols.wxCalendarDateAttr_HasFont(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCalendarDateAttr_HasFont(this._ptr) as number) !== 0;
   }
 
   HasTextColour(): boolean {
-    return (lib.symbols.wxCalendarDateAttr_HasTextColour(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCalendarDateAttr_HasTextColour(this._ptr) as number) !== 0;
   }
 
   IsHoliday(): boolean {
-    return (lib.symbols.wxCalendarDateAttr_IsHoliday(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxCalendarDateAttr_IsHoliday(this._ptr) as number) !== 0;
   }
 
   SetBackgroundColour(col: Deno.PointerValue): void {
-    lib.symbols.wxCalendarDateAttr_SetBackgroundColour(this.#ptr, col);
+    lib.symbols.wxCalendarDateAttr_SetBackgroundColour(this._ptr, col);
   }
 
   SetBorder(border: number): void {
-    lib.symbols.wxCalendarDateAttr_SetBorder(this.#ptr, border);
+    lib.symbols.wxCalendarDateAttr_SetBorder(this._ptr, border);
   }
 
   SetBorderColour(col: Deno.PointerValue): void {
-    lib.symbols.wxCalendarDateAttr_SetBorderColour(this.#ptr, col);
+    lib.symbols.wxCalendarDateAttr_SetBorderColour(this._ptr, col);
   }
 
   SetFont(font: Deno.PointerValue): void {
-    lib.symbols.wxCalendarDateAttr_SetFont(this.#ptr, font);
+    lib.symbols.wxCalendarDateAttr_SetFont(this._ptr, font);
   }
 
   SetHoliday(holiday: number): void {
-    lib.symbols.wxCalendarDateAttr_SetHoliday(this.#ptr, holiday);
+    lib.symbols.wxCalendarDateAttr_SetHoliday(this._ptr, holiday);
   }
 
   SetTextColour(col: Deno.PointerValue): void {
-    lib.symbols.wxCalendarDateAttr_SetTextColour(this.#ptr, col);
+    lib.symbols.wxCalendarDateAttr_SetTextColour(this._ptr, col);
   }
 
 }

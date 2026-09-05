@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxClipboard {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxClipboard | null {
@@ -21,43 +21,43 @@ export class wxClipboard {
   }
 
   AddData(data: Deno.PointerValue): boolean {
-    return (lib.symbols.wxClipboard_AddData(this.#ptr, data) as number) !== 0;
+    return (lib.symbols.wxClipboard_AddData(this._ptr, data) as number) !== 0;
   }
 
   Clear(): void {
-    lib.symbols.wxClipboard_Clear(this.#ptr);
+    lib.symbols.wxClipboard_Clear(this._ptr);
   }
 
   Close(): void {
-    lib.symbols.wxClipboard_Close(this.#ptr);
+    lib.symbols.wxClipboard_Close(this._ptr);
   }
 
   Flush(): boolean {
-    return (lib.symbols.wxClipboard_Flush(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxClipboard_Flush(this._ptr) as number) !== 0;
   }
 
   GetData(data: Deno.PointerValue): boolean {
-    return (lib.symbols.wxClipboard_GetData(this.#ptr, data) as number) !== 0;
+    return (lib.symbols.wxClipboard_GetData(this._ptr, data) as number) !== 0;
   }
 
   IsOpened(): boolean {
-    return (lib.symbols.wxClipboard_IsOpened(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxClipboard_IsOpened(this._ptr) as number) !== 0;
   }
 
   IsSupported(format: Deno.PointerValue): boolean {
-    return (lib.symbols.wxClipboard_IsSupported(this.#ptr, format) as number) !== 0;
+    return (lib.symbols.wxClipboard_IsSupported(this._ptr, format) as number) !== 0;
   }
 
   Open(): boolean {
-    return (lib.symbols.wxClipboard_Open(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxClipboard_Open(this._ptr) as number) !== 0;
   }
 
   SetData(data: Deno.PointerValue): boolean {
-    return (lib.symbols.wxClipboard_SetData(this.#ptr, data) as number) !== 0;
+    return (lib.symbols.wxClipboard_SetData(this._ptr, data) as number) !== 0;
   }
 
   UsePrimarySelection(primary: boolean): void {
-    lib.symbols.wxClipboard_UsePrimarySelection(this.#ptr, primary ? 1 : 0);
+    lib.symbols.wxClipboard_UsePrimarySelection(this._ptr, primary ? 1 : 0);
   }
 
 }

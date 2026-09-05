@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxBrush {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateDefault(): wxBrush | null {
@@ -39,7 +39,7 @@ export class wxBrush {
   }
 
   Delete(): void {
-    lib.symbols.wxBrush_Delete(this.#ptr);
+    lib.symbols.wxBrush_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -47,43 +47,43 @@ export class wxBrush {
   }
 
   Assign(brush: Deno.PointerValue): void {
-    lib.symbols.wxBrush_Assign(this.#ptr, brush);
+    lib.symbols.wxBrush_Assign(this._ptr, brush);
   }
 
   GetColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxBrush_GetColour(this.#ptr, ref);
+    lib.symbols.wxBrush_GetColour(this._ptr, ref);
   }
 
   GetStipple(ref: Deno.PointerValue): void {
-    lib.symbols.wxBrush_GetStipple(this.#ptr, ref);
+    lib.symbols.wxBrush_GetStipple(this._ptr, ref);
   }
 
   GetStyle(): number {
-    return lib.symbols.wxBrush_GetStyle(this.#ptr);
+    return lib.symbols.wxBrush_GetStyle(this._ptr);
   }
 
   IsEqual(brush: Deno.PointerValue): boolean {
-    return (lib.symbols.wxBrush_IsEqual(this.#ptr, brush) as number) !== 0;
+    return (lib.symbols.wxBrush_IsEqual(this._ptr, brush) as number) !== 0;
   }
 
   IsOk(): boolean {
-    return (lib.symbols.wxBrush_IsOk(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxBrush_IsOk(this._ptr) as number) !== 0;
   }
 
   SetColour(col: Deno.PointerValue): void {
-    lib.symbols.wxBrush_SetColour(this.#ptr, col);
+    lib.symbols.wxBrush_SetColour(this._ptr, col);
   }
 
   SetColourSingle(red: number, green: number, blue: number): void {
-    lib.symbols.wxBrush_SetColourSingle(this.#ptr, red, green, blue);
+    lib.symbols.wxBrush_SetColourSingle(this._ptr, red, green, blue);
   }
 
   SetStipple(stipple: Deno.PointerValue): void {
-    lib.symbols.wxBrush_SetStipple(this.#ptr, stipple);
+    lib.symbols.wxBrush_SetStipple(this._ptr, stipple);
   }
 
   SetStyle(style: number): void {
-    lib.symbols.wxBrush_SetStyle(this.#ptr, style);
+    lib.symbols.wxBrush_SetStyle(this._ptr, style);
   }
 
 }

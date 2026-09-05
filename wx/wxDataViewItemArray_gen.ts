@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDataViewItemArray {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxDataViewItemArray | null {
@@ -21,23 +21,23 @@ export class wxDataViewItemArray {
   }
 
   Delete(): void {
-    lib.symbols.wxDataViewItemArray_Delete(this.#ptr);
+    lib.symbols.wxDataViewItemArray_Delete(this._ptr);
   }
 
   GetCount(): bigint {
-    return lib.symbols.wxDataViewItemArray_GetCount(this.#ptr) as bigint;
+    return lib.symbols.wxDataViewItemArray_GetCount(this._ptr) as bigint;
   }
 
   Item(index: bigint, item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewItemArray_Item(this.#ptr, index, item);
+    lib.symbols.wxDataViewItemArray_Item(this._ptr, index, item);
   }
 
   Add(item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewItemArray_Add(this.#ptr, item);
+    lib.symbols.wxDataViewItemArray_Add(this._ptr, item);
   }
 
   Clear(): void {
-    lib.symbols.wxDataViewItemArray_Clear(this.#ptr);
+    lib.symbols.wxDataViewItemArray_Clear(this._ptr);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDataFormat {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static CreateFromId(name: Deno.PointerValue): wxDataFormat | null {
@@ -27,7 +27,7 @@ export class wxDataFormat {
   }
 
   Delete(): void {
-    lib.symbols.wxDataFormat_Delete(this.#ptr);
+    lib.symbols.wxDataFormat_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -35,23 +35,23 @@ export class wxDataFormat {
   }
 
   GetId(): Deno.PointerValue {
-    return lib.symbols.wxDataFormat_GetId(this.#ptr);
+    return lib.symbols.wxDataFormat_GetId(this._ptr);
   }
 
   GetType(): number {
-    return lib.symbols.wxDataFormat_GetType(this.#ptr);
+    return lib.symbols.wxDataFormat_GetType(this._ptr);
   }
 
   IsEqual(other: Deno.PointerValue): boolean {
-    return (lib.symbols.wxDataFormat_IsEqual(this.#ptr, other) as number) !== 0;
+    return (lib.symbols.wxDataFormat_IsEqual(this._ptr, other) as number) !== 0;
   }
 
   SetId(id: Deno.PointerValue): void {
-    lib.symbols.wxDataFormat_SetId(this.#ptr, id);
+    lib.symbols.wxDataFormat_SetId(this._ptr, id);
   }
 
   SetType(typ: number): void {
-    lib.symbols.wxDataFormat_SetType(this.#ptr, typ);
+    lib.symbols.wxDataFormat_SetType(this._ptr, typ);
   }
 
 }

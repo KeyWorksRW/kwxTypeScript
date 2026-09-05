@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDataObjectComposite {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxDataObjectComposite | null {
@@ -21,7 +21,7 @@ export class wxDataObjectComposite {
   }
 
   Delete(): void {
-    lib.symbols.wxDataObjectComposite_Delete(this.#ptr);
+    lib.symbols.wxDataObjectComposite_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,7 +29,7 @@ export class wxDataObjectComposite {
   }
 
   Add(data: Deno.PointerValue, preferred: number): void {
-    lib.symbols.wxDataObjectComposite_Add(this.#ptr, data, preferred);
+    lib.symbols.wxDataObjectComposite_Add(this._ptr, data, preferred);
   }
 
 }

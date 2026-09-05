@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPoint {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(xx: number, yy: number): wxPoint | null {
@@ -21,7 +21,7 @@ export class wxPoint {
   }
 
   Delete(): void {
-    lib.symbols.wxPoint_Delete(this.#ptr);
+    lib.symbols.wxPoint_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,19 +29,19 @@ export class wxPoint {
   }
 
   GetX(): number {
-    return lib.symbols.wxPoint_GetX(this.#ptr);
+    return lib.symbols.wxPoint_GetX(this._ptr);
   }
 
   GetY(): number {
-    return lib.symbols.wxPoint_GetY(this.#ptr);
+    return lib.symbols.wxPoint_GetY(this._ptr);
   }
 
   SetX(width: number): void {
-    lib.symbols.wxPoint_SetX(this.#ptr, width);
+    lib.symbols.wxPoint_SetX(this._ptr, width);
   }
 
   SetY(height: number): void {
-    lib.symbols.wxPoint_SetY(this.#ptr, height);
+    lib.symbols.wxPoint_SetY(this._ptr, height);
   }
 
 }

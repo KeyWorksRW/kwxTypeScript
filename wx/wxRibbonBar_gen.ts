@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxRibbonBar {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxRibbonBar | null {
@@ -21,47 +21,47 @@ export class wxRibbonBar {
   }
 
   DismissExpandedPanel(): void {
-    lib.symbols.wxRibbonBar_DismissExpandedPanel(this.#ptr);
+    lib.symbols.wxRibbonBar_DismissExpandedPanel(this._ptr);
   }
 
   GetPage(index: number): Deno.PointerValue {
-    return lib.symbols.wxRibbonBar_GetPage(this.#ptr, index);
+    return lib.symbols.wxRibbonBar_GetPage(this._ptr, index);
   }
 
   GetPageCount(): bigint {
-    return lib.symbols.wxRibbonBar_GetPageCount(this.#ptr) as bigint;
+    return lib.symbols.wxRibbonBar_GetPageCount(this._ptr) as bigint;
   }
 
   DeletePage(index: bigint): boolean {
-    return (lib.symbols.wxRibbonBar_DeletePage(this.#ptr, index) as number) !== 0;
+    return (lib.symbols.wxRibbonBar_DeletePage(this._ptr, index) as number) !== 0;
   }
 
   ClearPages(): void {
-    lib.symbols.wxRibbonBar_ClearPages(this.#ptr);
+    lib.symbols.wxRibbonBar_ClearPages(this._ptr);
   }
 
   GetActivePage(): number {
-    return lib.symbols.wxRibbonBar_GetActivePage(this.#ptr);
+    return lib.symbols.wxRibbonBar_GetActivePage(this._ptr);
   }
 
   SetActivePage_ByIndex(page: bigint): void {
-    lib.symbols.wxRibbonBar_SetActivePage_ByIndex(this.#ptr, page);
+    lib.symbols.wxRibbonBar_SetActivePage_ByIndex(this._ptr, page);
   }
 
   SetActivePage_ByPtr(page: Deno.PointerValue): void {
-    lib.symbols.wxRibbonBar_SetActivePage_ByPtr(this.#ptr, page);
+    lib.symbols.wxRibbonBar_SetActivePage_ByPtr(this._ptr, page);
   }
 
   Realize(): void {
-    lib.symbols.wxRibbonBar_Realize(this.#ptr);
+    lib.symbols.wxRibbonBar_Realize(this._ptr);
   }
 
   SetArtProvider(art: Deno.PointerValue): void {
-    lib.symbols.wxRibbonBar_SetArtProvider(this.#ptr, art);
+    lib.symbols.wxRibbonBar_SetArtProvider(this._ptr, art);
   }
 
   GetArtProvider(): Deno.PointerValue {
-    return lib.symbols.wxRibbonBar_GetArtProvider(this.#ptr);
+    return lib.symbols.wxRibbonBar_GetArtProvider(this._ptr);
   }
 
 }

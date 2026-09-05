@@ -3,39 +3,39 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAuiNotebookPage {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   Window(): Deno.PointerValue {
-    return lib.symbols.wxAuiNotebookPage_Window(this.#ptr);
+    return lib.symbols.wxAuiNotebookPage_Window(this._ptr);
   }
 
   Caption(): Deno.PointerValue {
-    return lib.symbols.wxAuiNotebookPage_Caption(this.#ptr);
+    return lib.symbols.wxAuiNotebookPage_Caption(this._ptr);
   }
 
   Tooltip(): Deno.PointerValue {
-    return lib.symbols.wxAuiNotebookPage_Tooltip(this.#ptr);
+    return lib.symbols.wxAuiNotebookPage_Tooltip(this._ptr);
   }
 
   Bitmap(): Deno.PointerValue {
-    return lib.symbols.wxAuiNotebookPage_Bitmap(this.#ptr);
+    return lib.symbols.wxAuiNotebookPage_Bitmap(this._ptr);
   }
 
   Rect(): Deno.PointerValue {
-    return lib.symbols.wxAuiNotebookPage_Rect(this.#ptr);
+    return lib.symbols.wxAuiNotebookPage_Rect(this._ptr);
   }
 
   Active(): boolean {
-    return (lib.symbols.wxAuiNotebookPage_Active(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxAuiNotebookPage_Active(this._ptr) as number) !== 0;
   }
 
 }

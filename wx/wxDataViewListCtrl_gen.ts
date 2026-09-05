@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDataViewListCtrl {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, style: number): wxDataViewListCtrl | null {
@@ -21,103 +21,103 @@ export class wxDataViewListCtrl {
   }
 
   GetStore(): Deno.PointerValue {
-    return lib.symbols.wxDataViewListCtrl_GetStore(this.#ptr);
+    return lib.symbols.wxDataViewListCtrl_GetStore(this._ptr);
   }
 
   AppendTextColumn(label: Deno.PointerValue, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewListCtrl_AppendTextColumn(this.#ptr, label, mode, width, align, flags);
+    return lib.symbols.wxDataViewListCtrl_AppendTextColumn(this._ptr, label, mode, width, align, flags);
   }
 
   AppendToggleColumn(label: Deno.PointerValue, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewListCtrl_AppendToggleColumn(this.#ptr, label, mode, width, align, flags);
+    return lib.symbols.wxDataViewListCtrl_AppendToggleColumn(this._ptr, label, mode, width, align, flags);
   }
 
   AppendProgressColumn(label: Deno.PointerValue, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewListCtrl_AppendProgressColumn(this.#ptr, label, mode, width, align, flags);
+    return lib.symbols.wxDataViewListCtrl_AppendProgressColumn(this._ptr, label, mode, width, align, flags);
   }
 
   AppendIconTextColumn(label: Deno.PointerValue, mode: number, width: number, align: number, flags: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewListCtrl_AppendIconTextColumn(this.#ptr, label, mode, width, align, flags);
+    return lib.symbols.wxDataViewListCtrl_AppendIconTextColumn(this._ptr, label, mode, width, align, flags);
   }
 
   ItemToRow(item: Deno.PointerValue): number {
-    return lib.symbols.wxDataViewListCtrl_ItemToRow(this.#ptr, item);
+    return lib.symbols.wxDataViewListCtrl_ItemToRow(this._ptr, item);
   }
 
   RowToItem(row: number, item: Deno.PointerValue): void {
-    lib.symbols.wxDataViewListCtrl_RowToItem(this.#ptr, row, item);
+    lib.symbols.wxDataViewListCtrl_RowToItem(this._ptr, row, item);
   }
 
   GetSelectedRow(): number {
-    return lib.symbols.wxDataViewListCtrl_GetSelectedRow(this.#ptr);
+    return lib.symbols.wxDataViewListCtrl_GetSelectedRow(this._ptr);
   }
 
   SelectRow(row: number): void {
-    lib.symbols.wxDataViewListCtrl_SelectRow(this.#ptr, row);
+    lib.symbols.wxDataViewListCtrl_SelectRow(this._ptr, row);
   }
 
   UnselectRow(row: number): void {
-    lib.symbols.wxDataViewListCtrl_UnselectRow(this.#ptr, row);
+    lib.symbols.wxDataViewListCtrl_UnselectRow(this._ptr, row);
   }
 
   AppendItem(values: Deno.PointerValue, data: bigint): void {
-    lib.symbols.wxDataViewListCtrl_AppendItem(this.#ptr, values, data);
+    lib.symbols.wxDataViewListCtrl_AppendItem(this._ptr, values, data);
   }
 
   PrependItem(values: Deno.PointerValue, data: bigint): void {
-    lib.symbols.wxDataViewListCtrl_PrependItem(this.#ptr, values, data);
+    lib.symbols.wxDataViewListCtrl_PrependItem(this._ptr, values, data);
   }
 
   InsertItem(row: number, values: Deno.PointerValue, data: bigint): void {
-    lib.symbols.wxDataViewListCtrl_InsertItem(this.#ptr, row, values, data);
+    lib.symbols.wxDataViewListCtrl_InsertItem(this._ptr, row, values, data);
   }
 
   DeleteItem(row: number): void {
-    lib.symbols.wxDataViewListCtrl_DeleteItem(this.#ptr, row);
+    lib.symbols.wxDataViewListCtrl_DeleteItem(this._ptr, row);
   }
 
   DeleteAllItems(): void {
-    lib.symbols.wxDataViewListCtrl_DeleteAllItems(this.#ptr);
+    lib.symbols.wxDataViewListCtrl_DeleteAllItems(this._ptr);
   }
 
   SetValue(value: Deno.PointerValue, row: number, col: number): void {
-    lib.symbols.wxDataViewListCtrl_SetValue(this.#ptr, value, row, col);
+    lib.symbols.wxDataViewListCtrl_SetValue(this._ptr, value, row, col);
   }
 
   GetValue(value: Deno.PointerValue, row: number, col: number): void {
-    lib.symbols.wxDataViewListCtrl_GetValue(this.#ptr, value, row, col);
+    lib.symbols.wxDataViewListCtrl_GetValue(this._ptr, value, row, col);
   }
 
   SetTextValue(value: Deno.PointerValue, row: number, col: number): void {
-    lib.symbols.wxDataViewListCtrl_SetTextValue(this.#ptr, value, row, col);
+    lib.symbols.wxDataViewListCtrl_SetTextValue(this._ptr, value, row, col);
   }
 
   GetTextValue(row: number, col: number): Deno.PointerValue {
-    return lib.symbols.wxDataViewListCtrl_GetTextValue(this.#ptr, row, col);
+    return lib.symbols.wxDataViewListCtrl_GetTextValue(this._ptr, row, col);
   }
 
   SetToggleValue(value: boolean, row: number, col: number): void {
-    lib.symbols.wxDataViewListCtrl_SetToggleValue(this.#ptr, value ? 1 : 0, row, col);
+    lib.symbols.wxDataViewListCtrl_SetToggleValue(this._ptr, value ? 1 : 0, row, col);
   }
 
   GetToggleValue(row: number, col: number): boolean {
-    return (lib.symbols.wxDataViewListCtrl_GetToggleValue(this.#ptr, row, col) as number) !== 0;
+    return (lib.symbols.wxDataViewListCtrl_GetToggleValue(this._ptr, row, col) as number) !== 0;
   }
 
   SetItemData(item: Deno.PointerValue, data: bigint): void {
-    lib.symbols.wxDataViewListCtrl_SetItemData(this.#ptr, item, data);
+    lib.symbols.wxDataViewListCtrl_SetItemData(this._ptr, item, data);
   }
 
   GetItemData(item: Deno.PointerValue): bigint {
-    return lib.symbols.wxDataViewListCtrl_GetItemData(this.#ptr, item) as bigint;
+    return lib.symbols.wxDataViewListCtrl_GetItemData(this._ptr, item) as bigint;
   }
 
   GetItemCount(): number {
-    return lib.symbols.wxDataViewListCtrl_GetItemCount(this.#ptr);
+    return lib.symbols.wxDataViewListCtrl_GetItemCount(this._ptr);
   }
 
   IsRowSelected(row: number): boolean {
-    return (lib.symbols.wxDataViewListCtrl_IsRowSelected(this.#ptr, row) as number) !== 0;
+    return (lib.symbols.wxDataViewListCtrl_IsRowSelected(this._ptr, row) as number) !== 0;
   }
 
 }

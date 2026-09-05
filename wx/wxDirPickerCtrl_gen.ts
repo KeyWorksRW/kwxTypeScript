@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxDirPickerCtrl {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, id: number, x: number, y: number, width: number, height: number, path: Deno.PointerValue, message: Deno.PointerValue, style: number): wxDirPickerCtrl | null {
@@ -21,23 +21,23 @@ export class wxDirPickerCtrl {
   }
 
   GetPath(): Deno.PointerValue {
-    return lib.symbols.wxDirPickerCtrl_GetPath(this.#ptr);
+    return lib.symbols.wxDirPickerCtrl_GetPath(this._ptr);
   }
 
   SetPath(path: Deno.PointerValue): void {
-    lib.symbols.wxDirPickerCtrl_SetPath(this.#ptr, path);
+    lib.symbols.wxDirPickerCtrl_SetPath(this._ptr, path);
   }
 
   SetInitialDirectory(dir: Deno.PointerValue): void {
-    lib.symbols.wxDirPickerCtrl_SetInitialDirectory(this.#ptr, dir);
+    lib.symbols.wxDirPickerCtrl_SetInitialDirectory(this._ptr, dir);
   }
 
   SetDirName(dirname: Deno.PointerValue): void {
-    lib.symbols.wxDirPickerCtrl_SetDirName(this.#ptr, dirname);
+    lib.symbols.wxDirPickerCtrl_SetDirName(this._ptr, dirname);
   }
 
   GetDirName(): Deno.PointerValue {
-    return lib.symbols.wxDirPickerCtrl_GetDirName(this.#ptr);
+    return lib.symbols.wxDirPickerCtrl_GetDirName(this._ptr);
   }
 
 }

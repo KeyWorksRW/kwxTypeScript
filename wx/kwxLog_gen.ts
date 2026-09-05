@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class kwxLog {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(pObject: Deno.PointerValue, pFunction: Deno.PointerValue): kwxLog | null {
@@ -21,7 +21,7 @@ export class kwxLog {
   }
 
   Delete(): void {
-    lib.symbols.kwxLog_Delete(this.#ptr);
+    lib.symbols.kwxLog_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,23 +29,23 @@ export class kwxLog {
   }
 
   AddTraceMask(str: Deno.PointerValue): void {
-    lib.symbols.kwxLog_AddTraceMask(this.#ptr, str);
+    lib.symbols.kwxLog_AddTraceMask(this._ptr, str);
   }
 
   DontCreateOnDemand(): void {
-    lib.symbols.kwxLog_DontCreateOnDemand(this.#ptr);
+    lib.symbols.kwxLog_DontCreateOnDemand(this._ptr);
   }
 
   EnableLogging(doIt: boolean): number {
-    return lib.symbols.kwxLog_EnableLogging(this.#ptr, doIt ? 1 : 0);
+    return lib.symbols.kwxLog_EnableLogging(this._ptr, doIt ? 1 : 0);
   }
 
   Flush(): void {
-    lib.symbols.kwxLog_Flush(this.#ptr);
+    lib.symbols.kwxLog_Flush(this._ptr);
   }
 
   FlushActive(): void {
-    lib.symbols.kwxLog_FlushActive(this.#ptr);
+    lib.symbols.kwxLog_FlushActive(this._ptr);
   }
 
   GetActiveTarget(): Deno.PointerValue {
@@ -53,51 +53,51 @@ export class kwxLog {
   }
 
   GetTimestamp(): Deno.PointerValue {
-    return lib.symbols.kwxLog_GetTimestamp(this.#ptr);
+    return lib.symbols.kwxLog_GetTimestamp(this._ptr);
   }
 
   GetVerbose(): number {
-    return lib.symbols.kwxLog_GetVerbose(this.#ptr);
+    return lib.symbols.kwxLog_GetVerbose(this._ptr);
   }
 
   HasPendingMessages(): boolean {
-    return (lib.symbols.kwxLog_HasPendingMessages(this.#ptr) as number) !== 0;
+    return (lib.symbols.kwxLog_HasPendingMessages(this._ptr) as number) !== 0;
   }
 
   IsAllowedTraceMask(mask: Deno.PointerValue): boolean {
-    return (lib.symbols.kwxLog_IsAllowedTraceMask(this.#ptr, mask) as number) !== 0;
+    return (lib.symbols.kwxLog_IsAllowedTraceMask(this._ptr, mask) as number) !== 0;
   }
 
   IsEnabled(): boolean {
-    return (lib.symbols.kwxLog_IsEnabled(this.#ptr) as number) !== 0;
+    return (lib.symbols.kwxLog_IsEnabled(this._ptr) as number) !== 0;
   }
 
   OnLog(level: number, szString: Deno.PointerValue, timestamp: number): void {
-    lib.symbols.kwxLog_OnLog(this.#ptr, level, szString, timestamp);
+    lib.symbols.kwxLog_OnLog(this._ptr, level, szString, timestamp);
   }
 
   RemoveTraceMask(str: Deno.PointerValue): void {
-    lib.symbols.kwxLog_RemoveTraceMask(this.#ptr, str);
+    lib.symbols.kwxLog_RemoveTraceMask(this._ptr, str);
   }
 
   Resume(): void {
-    lib.symbols.kwxLog_Resume(this.#ptr);
+    lib.symbols.kwxLog_Resume(this._ptr);
   }
 
   SetActiveTarget(): Deno.PointerValue {
-    return lib.symbols.kwxLog_SetActiveTarget(this.#ptr);
+    return lib.symbols.kwxLog_SetActiveTarget(this._ptr);
   }
 
   SetTimestamp(timestamp: Deno.PointerValue): void {
-    lib.symbols.kwxLog_SetTimestamp(this.#ptr, timestamp);
+    lib.symbols.kwxLog_SetTimestamp(this._ptr, timestamp);
   }
 
   SetVerbose(bVerbose: number): void {
-    lib.symbols.kwxLog_SetVerbose(this.#ptr, bVerbose);
+    lib.symbols.kwxLog_SetVerbose(this._ptr, bVerbose);
   }
 
   Suspend(): void {
-    lib.symbols.kwxLog_Suspend(this.#ptr);
+    lib.symbols.kwxLog_Suspend(this._ptr);
   }
 
 }

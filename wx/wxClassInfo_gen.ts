@@ -3,27 +3,27 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxClassInfo {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   CreateClassByName(): Deno.PointerValue {
-    return lib.symbols.wxClassInfo_CreateClassByName(this.#ptr);
+    return lib.symbols.wxClassInfo_CreateClassByName(this._ptr);
   }
 
   GetClassName(): Deno.PointerValue {
-    return lib.symbols.wxClassInfo_GetClassName(this.#ptr);
+    return lib.symbols.wxClassInfo_GetClassName(this._ptr);
   }
 
   IsKindOf(name: Deno.PointerValue): boolean {
-    return (lib.symbols.wxClassInfo_IsKindOf(this.#ptr, name) as number) !== 0;
+    return (lib.symbols.wxClassInfo_IsKindOf(this._ptr, name) as number) !== 0;
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxColourData {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(): wxColourData | null {
@@ -21,7 +21,7 @@ export class wxColourData {
   }
 
   Delete(): void {
-    lib.symbols.wxColourData_Delete(this.#ptr);
+    lib.symbols.wxColourData_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
@@ -29,27 +29,27 @@ export class wxColourData {
   }
 
   GetChooseFull(): boolean {
-    return (lib.symbols.wxColourData_GetChooseFull(this.#ptr) as number) !== 0;
+    return (lib.symbols.wxColourData_GetChooseFull(this._ptr) as number) !== 0;
   }
 
   GetColour(ref: Deno.PointerValue): void {
-    lib.symbols.wxColourData_GetColour(this.#ptr, ref);
+    lib.symbols.wxColourData_GetColour(this._ptr, ref);
   }
 
   GetCustomColour(index: number, ref: Deno.PointerValue): void {
-    lib.symbols.wxColourData_GetCustomColour(this.#ptr, index, ref);
+    lib.symbols.wxColourData_GetCustomColour(this._ptr, index, ref);
   }
 
   SetChooseFull(flag: boolean): void {
-    lib.symbols.wxColourData_SetChooseFull(this.#ptr, flag ? 1 : 0);
+    lib.symbols.wxColourData_SetChooseFull(this._ptr, flag ? 1 : 0);
   }
 
   SetColour(colour: Deno.PointerValue): void {
-    lib.symbols.wxColourData_SetColour(this.#ptr, colour);
+    lib.symbols.wxColourData_SetColour(this._ptr, colour);
   }
 
   SetCustomColour(index: number, colour: Deno.PointerValue): void {
-    lib.symbols.wxColourData_SetCustomColour(this.#ptr, index, colour);
+    lib.symbols.wxColourData_SetCustomColour(this._ptr, index, colour);
   }
 
 }

@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxPageSetupDialog {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(parent: Deno.PointerValue, data: Deno.PointerValue): wxPageSetupDialog | null {
@@ -21,11 +21,11 @@ export class wxPageSetupDialog {
   }
 
   GetPageSetupData(ref: Deno.PointerValue): void {
-    lib.symbols.wxPageSetupDialog_GetPageSetupData(this.#ptr, ref);
+    lib.symbols.wxPageSetupDialog_GetPageSetupData(this._ptr, ref);
   }
 
   ShowModal(): number {
-    return lib.symbols.wxPageSetupDialog_ShowModal(this.#ptr);
+    return lib.symbols.wxPageSetupDialog_ShowModal(this._ptr);
   }
 
 }

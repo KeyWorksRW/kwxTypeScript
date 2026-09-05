@@ -3,15 +3,15 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAcceleratorTable {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   static Create(count: number, entries: Deno.PointerValue): wxAcceleratorTable | null {
@@ -21,7 +21,7 @@ export class wxAcceleratorTable {
   }
 
   Delete(): void {
-    lib.symbols.wxAcceleratorTable_Delete(this.#ptr);
+    lib.symbols.wxAcceleratorTable_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {

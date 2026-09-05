@@ -3,215 +3,215 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxSizer {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   Add(width: number, height: number, option: number, flag: number, border: number, userData: Deno.PointerValue): void {
-    lib.symbols.wxSizer_Add(this.#ptr, width, height, option, flag, border, userData);
+    lib.symbols.wxSizer_Add(this._ptr, width, height, option, flag, border, userData);
   }
 
   AddSizer(sizer: Deno.PointerValue, option: number, flag: number, border: number, userData: Deno.PointerValue): void {
-    lib.symbols.wxSizer_AddSizer(this.#ptr, sizer, option, flag, border, userData);
+    lib.symbols.wxSizer_AddSizer(this._ptr, sizer, option, flag, border, userData);
   }
 
   AddWindow(window: Deno.PointerValue, option: number, flag: number, border: number, userData: Deno.PointerValue): void {
-    lib.symbols.wxSizer_AddWindow(this.#ptr, window, option, flag, border, userData);
+    lib.symbols.wxSizer_AddWindow(this._ptr, window, option, flag, border, userData);
   }
 
   CalcMin(): Deno.PointerValue {
-    return lib.symbols.wxSizer_CalcMin(this.#ptr);
+    return lib.symbols.wxSizer_CalcMin(this._ptr);
   }
 
   Fit(window: Deno.PointerValue): void {
-    lib.symbols.wxSizer_Fit(this.#ptr, window);
+    lib.symbols.wxSizer_Fit(this._ptr, window);
   }
 
   GetChildren(result: Deno.PointerValue, count: number): number {
-    return lib.symbols.wxSizer_GetChildren(this.#ptr, result, count);
+    return lib.symbols.wxSizer_GetChildren(this._ptr, result, count);
   }
 
   GetMinSize(): Deno.PointerValue {
-    return lib.symbols.wxSizer_GetMinSize(this.#ptr);
+    return lib.symbols.wxSizer_GetMinSize(this._ptr);
   }
 
   GetPosition(): Deno.PointerValue {
-    return lib.symbols.wxSizer_GetPosition(this.#ptr);
+    return lib.symbols.wxSizer_GetPosition(this._ptr);
   }
 
   GetSize(): Deno.PointerValue {
-    return lib.symbols.wxSizer_GetSize(this.#ptr);
+    return lib.symbols.wxSizer_GetSize(this._ptr);
   }
 
   Insert(before: number, width: number, height: number, option: number, flag: number, border: number, userData: Deno.PointerValue): void {
-    lib.symbols.wxSizer_Insert(this.#ptr, before, width, height, option, flag, border, userData);
+    lib.symbols.wxSizer_Insert(this._ptr, before, width, height, option, flag, border, userData);
   }
 
   InsertSizer(before: number, sizer: Deno.PointerValue, option: number, flag: number, border: number, userData: Deno.PointerValue): void {
-    lib.symbols.wxSizer_InsertSizer(this.#ptr, before, sizer, option, flag, border, userData);
+    lib.symbols.wxSizer_InsertSizer(this._ptr, before, sizer, option, flag, border, userData);
   }
 
   InsertWindow(before: number, window: Deno.PointerValue, option: number, flag: number, border: number, userData: Deno.PointerValue): void {
-    lib.symbols.wxSizer_InsertWindow(this.#ptr, before, window, option, flag, border, userData);
+    lib.symbols.wxSizer_InsertWindow(this._ptr, before, window, option, flag, border, userData);
   }
 
   Layout(): void {
-    lib.symbols.wxSizer_Layout(this.#ptr);
+    lib.symbols.wxSizer_Layout(this._ptr);
   }
 
   Prepend(width: number, height: number, option: number, flag: number, border: number, userData: Deno.PointerValue): void {
-    lib.symbols.wxSizer_Prepend(this.#ptr, width, height, option, flag, border, userData);
+    lib.symbols.wxSizer_Prepend(this._ptr, width, height, option, flag, border, userData);
   }
 
   PrependSizer(sizer: Deno.PointerValue, option: number, flag: number, border: number, userData: Deno.PointerValue): void {
-    lib.symbols.wxSizer_PrependSizer(this.#ptr, sizer, option, flag, border, userData);
+    lib.symbols.wxSizer_PrependSizer(this._ptr, sizer, option, flag, border, userData);
   }
 
   PrependWindow(window: Deno.PointerValue, option: number, flag: number, border: number, userData: Deno.PointerValue): void {
-    lib.symbols.wxSizer_PrependWindow(this.#ptr, window, option, flag, border, userData);
+    lib.symbols.wxSizer_PrependWindow(this._ptr, window, option, flag, border, userData);
   }
 
   RecalcSizes(): void {
-    lib.symbols.wxSizer_RecalcSizes(this.#ptr);
+    lib.symbols.wxSizer_RecalcSizes(this._ptr);
   }
 
   SetDimension(x: number, y: number, width: number, height: number): void {
-    lib.symbols.wxSizer_SetDimension(this.#ptr, x, y, width, height);
+    lib.symbols.wxSizer_SetDimension(this._ptr, x, y, width, height);
   }
 
   SetItemMinSize(pos: number, width: number, height: number): void {
-    lib.symbols.wxSizer_SetItemMinSize(this.#ptr, pos, width, height);
+    lib.symbols.wxSizer_SetItemMinSize(this._ptr, pos, width, height);
   }
 
   SetItemMinSizeSizer(sizer: Deno.PointerValue, width: number, height: number): void {
-    lib.symbols.wxSizer_SetItemMinSizeSizer(this.#ptr, sizer, width, height);
+    lib.symbols.wxSizer_SetItemMinSizeSizer(this._ptr, sizer, width, height);
   }
 
   SetItemMinSizeWindow(window: Deno.PointerValue, width: number, height: number): void {
-    lib.symbols.wxSizer_SetItemMinSizeWindow(this.#ptr, window, width, height);
+    lib.symbols.wxSizer_SetItemMinSizeWindow(this._ptr, window, width, height);
   }
 
   SetMinSize(width: number, height: number): void {
-    lib.symbols.wxSizer_SetMinSize(this.#ptr, width, height);
+    lib.symbols.wxSizer_SetMinSize(this._ptr, width, height);
   }
 
   SetSizeHints(window: Deno.PointerValue): void {
-    lib.symbols.wxSizer_SetSizeHints(this.#ptr, window);
+    lib.symbols.wxSizer_SetSizeHints(this._ptr, window);
   }
 
   AddSpacer(size: number): void {
-    lib.symbols.wxSizer_AddSpacer(this.#ptr, size);
+    lib.symbols.wxSizer_AddSpacer(this._ptr, size);
   }
 
   AddStretchSpacer(size: number): void {
-    lib.symbols.wxSizer_AddStretchSpacer(this.#ptr, size);
+    lib.symbols.wxSizer_AddStretchSpacer(this._ptr, size);
   }
 
   Clear(delete_windows: boolean): void {
-    lib.symbols.wxSizer_Clear(this.#ptr, delete_windows ? 1 : 0);
+    lib.symbols.wxSizer_Clear(this._ptr, delete_windows ? 1 : 0);
   }
 
   DetachWindow(window: Deno.PointerValue): boolean {
-    return (lib.symbols.wxSizer_DetachWindow(this.#ptr, window) as number) !== 0;
+    return (lib.symbols.wxSizer_DetachWindow(this._ptr, window) as number) !== 0;
   }
 
   DetachSizer(sizer: Deno.PointerValue): boolean {
-    return (lib.symbols.wxSizer_DetachSizer(this.#ptr, sizer) as number) !== 0;
+    return (lib.symbols.wxSizer_DetachSizer(this._ptr, sizer) as number) !== 0;
   }
 
   Detach(index: number): boolean {
-    return (lib.symbols.wxSizer_Detach(this.#ptr, index) as number) !== 0;
+    return (lib.symbols.wxSizer_Detach(this._ptr, index) as number) !== 0;
   }
 
   FitInside(window: Deno.PointerValue): void {
-    lib.symbols.wxSizer_FitInside(this.#ptr, window);
+    lib.symbols.wxSizer_FitInside(this._ptr, window);
   }
 
   GetContainingWindow(): Deno.PointerValue {
-    return lib.symbols.wxSizer_GetContainingWindow(this.#ptr);
+    return lib.symbols.wxSizer_GetContainingWindow(this._ptr);
   }
 
   GetItemWindow(window: Deno.PointerValue, recursive: boolean): Deno.PointerValue {
-    return lib.symbols.wxSizer_GetItemWindow(this.#ptr, window, recursive ? 1 : 0);
+    return lib.symbols.wxSizer_GetItemWindow(this._ptr, window, recursive ? 1 : 0);
   }
 
   GetItemSizer(window: Deno.PointerValue, recursive: boolean): Deno.PointerValue {
-    return lib.symbols.wxSizer_GetItemSizer(this.#ptr, window, recursive ? 1 : 0);
+    return lib.symbols.wxSizer_GetItemSizer(this._ptr, window, recursive ? 1 : 0);
   }
 
   GetItem(index: number): Deno.PointerValue {
-    return lib.symbols.wxSizer_GetItem(this.#ptr, index);
+    return lib.symbols.wxSizer_GetItem(this._ptr, index);
   }
 
   HideWindow(window: Deno.PointerValue): boolean {
-    return (lib.symbols.wxSizer_HideWindow(this.#ptr, window) as number) !== 0;
+    return (lib.symbols.wxSizer_HideWindow(this._ptr, window) as number) !== 0;
   }
 
   HideSizer(sizer: Deno.PointerValue): boolean {
-    return (lib.symbols.wxSizer_HideSizer(this.#ptr, sizer) as number) !== 0;
+    return (lib.symbols.wxSizer_HideSizer(this._ptr, sizer) as number) !== 0;
   }
 
   Hide(index: number): boolean {
-    return (lib.symbols.wxSizer_Hide(this.#ptr, index) as number) !== 0;
+    return (lib.symbols.wxSizer_Hide(this._ptr, index) as number) !== 0;
   }
 
   InsertSpacer(index: number, size: number): Deno.PointerValue {
-    return lib.symbols.wxSizer_InsertSpacer(this.#ptr, index, size);
+    return lib.symbols.wxSizer_InsertSpacer(this._ptr, index, size);
   }
 
   InsertStretchSpacer(index: number, prop: number): Deno.PointerValue {
-    return lib.symbols.wxSizer_InsertStretchSpacer(this.#ptr, index, prop);
+    return lib.symbols.wxSizer_InsertStretchSpacer(this._ptr, index, prop);
   }
 
   IsShownWindow(window: Deno.PointerValue): boolean {
-    return (lib.symbols.wxSizer_IsShownWindow(this.#ptr, window) as number) !== 0;
+    return (lib.symbols.wxSizer_IsShownWindow(this._ptr, window) as number) !== 0;
   }
 
   IsShownSizer(sizer: Deno.PointerValue): boolean {
-    return (lib.symbols.wxSizer_IsShownSizer(this.#ptr, sizer) as number) !== 0;
+    return (lib.symbols.wxSizer_IsShownSizer(this._ptr, sizer) as number) !== 0;
   }
 
   IsShown(index: number): boolean {
-    return (lib.symbols.wxSizer_IsShown(this.#ptr, index) as number) !== 0;
+    return (lib.symbols.wxSizer_IsShown(this._ptr, index) as number) !== 0;
   }
 
   PrependSpacer(size: number): Deno.PointerValue {
-    return lib.symbols.wxSizer_PrependSpacer(this.#ptr, size);
+    return lib.symbols.wxSizer_PrependSpacer(this._ptr, size);
   }
 
   PrependStretchSpacer(prop: number): Deno.PointerValue {
-    return lib.symbols.wxSizer_PrependStretchSpacer(this.#ptr, prop);
+    return lib.symbols.wxSizer_PrependStretchSpacer(this._ptr, prop);
   }
 
   ReplaceWindow(oldwin: Deno.PointerValue, newwin: Deno.PointerValue, recursive: boolean): boolean {
-    return (lib.symbols.wxSizer_ReplaceWindow(this.#ptr, oldwin, newwin, recursive ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxSizer_ReplaceWindow(this._ptr, oldwin, newwin, recursive ? 1 : 0) as number) !== 0;
   }
 
   ReplaceSizer(oldsz: Deno.PointerValue, newsz: Deno.PointerValue, recursive: boolean): boolean {
-    return (lib.symbols.wxSizer_ReplaceSizer(this.#ptr, oldsz, newsz, recursive ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxSizer_ReplaceSizer(this._ptr, oldsz, newsz, recursive ? 1 : 0) as number) !== 0;
   }
 
   Replace(oldindex: number, newitem: Deno.PointerValue): boolean {
-    return (lib.symbols.wxSizer_Replace(this.#ptr, oldindex, newitem) as number) !== 0;
+    return (lib.symbols.wxSizer_Replace(this._ptr, oldindex, newitem) as number) !== 0;
   }
 
   ShowWindow(window: Deno.PointerValue, show: boolean, recursive: boolean): boolean {
-    return (lib.symbols.wxSizer_ShowWindow(this.#ptr, window, show ? 1 : 0, recursive ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxSizer_ShowWindow(this._ptr, window, show ? 1 : 0, recursive ? 1 : 0) as number) !== 0;
   }
 
   ShowSizer(sizer: Deno.PointerValue, show: boolean, recursive: boolean): boolean {
-    return (lib.symbols.wxSizer_ShowSizer(this.#ptr, sizer, show ? 1 : 0, recursive ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxSizer_ShowSizer(this._ptr, sizer, show ? 1 : 0, recursive ? 1 : 0) as number) !== 0;
   }
 
   Show(sizer: Deno.PointerValue, index: number, show: boolean): boolean {
-    return (lib.symbols.wxSizer_Show(this.#ptr, sizer, index, show ? 1 : 0) as number) !== 0;
+    return (lib.symbols.wxSizer_Show(this._ptr, sizer, index, show ? 1 : 0) as number) !== 0;
   }
 
 }

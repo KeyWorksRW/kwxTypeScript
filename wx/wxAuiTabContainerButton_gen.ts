@@ -3,39 +3,39 @@
 import { lib } from "./kwx_ffi_gen.ts";
 
 export class wxAuiTabContainerButton {
-  readonly #ptr: Deno.PointerValue;
+  protected readonly _ptr: Deno.PointerValue;
 
   constructor(ptr: Deno.PointerValue) {
-    this.#ptr = ptr;
+    this._ptr = ptr;
   }
 
   /** Returns the underlying native pointer. */
   get ptr(): Deno.PointerValue {
-    return this.#ptr;
+    return this._ptr;
   }
 
   Id(): number {
-    return lib.symbols.wxAuiTabContainerButton_Id(this.#ptr);
+    return lib.symbols.wxAuiTabContainerButton_Id(this._ptr);
   }
 
   CurState(): number {
-    return lib.symbols.wxAuiTabContainerButton_CurState(this.#ptr);
+    return lib.symbols.wxAuiTabContainerButton_CurState(this._ptr);
   }
 
   Location(): number {
-    return lib.symbols.wxAuiTabContainerButton_Location(this.#ptr);
+    return lib.symbols.wxAuiTabContainerButton_Location(this._ptr);
   }
 
   Bitmap(bitmap: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainerButton_Bitmap(this.#ptr, bitmap);
+    lib.symbols.wxAuiTabContainerButton_Bitmap(this._ptr, bitmap);
   }
 
   DisBitmap(bitmap: Deno.PointerValue): void {
-    lib.symbols.wxAuiTabContainerButton_DisBitmap(this.#ptr, bitmap);
+    lib.symbols.wxAuiTabContainerButton_DisBitmap(this._ptr, bitmap);
   }
 
   Rect(): Deno.PointerValue {
-    return lib.symbols.wxAuiTabContainerButton_Rect(this.#ptr);
+    return lib.symbols.wxAuiTabContainerButton_Rect(this._ptr);
   }
 
 }
