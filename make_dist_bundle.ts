@@ -1,3 +1,9 @@
+// Following references are added so that a Deno linter will recognize Deno
+// and esbuild types. The files don't need to exist -- they are only there
+// if you are using a normal TypeScript linter and allow you to add the
+// missing types.
+/// <reference path="./_deno_types.d.ts" />
+/// <reference path="./_esbuild_types.d.ts" />
 // Create a single distribution bundle from both entry points
 import * as esbuild from "esbuild";
 
@@ -15,11 +21,11 @@ await Deno.writeTextFile(barrelPath, barrelContent);
 await Deno.mkdir("dist", { recursive: true });
 
 await esbuild.build({
-  entryPoints: [barrelPath],
-  outfile: "dist/kwx.mjs",
-  bundle: true,
-  format: "esm",
-  platform: "neutral",
+    entryPoints: [barrelPath],
+    outfile: "dist/kwx.mjs",
+    bundle: true,
+    format: "esm",
+    platform: "neutral",
 });
 
 // Clean up the temporary barrel entry
