@@ -3,30 +3,35 @@
 import { lib } from "./kwx_ffi_gen.ts";
 import { wxDC } from "./wxDC_gen.ts";
 
-export class wxBufferedDC extends wxDC {
-  /** Returns the underlying native pointer. */
-  get ptr(): Deno.PointerValue {
-    return this._ptr;
-  }
+export class wxBufferedDC extends wxDC
+{
+    /** Returns the underlying native pointer. */
+    get ptr(): Deno.PointerValue
+    {
+        return this._ptr;
+    }
 
-  static CreateByDCAndSize(dc: Deno.PointerValue, width: number, hight: number, style: number): wxBufferedDC | null {
-    const rawPtr = lib.symbols.wxBufferedDC_CreateByDCAndSize(dc, width, hight, style);
-    if (rawPtr === null) return null;
-    return new wxBufferedDC(rawPtr);
-  }
+    static CreateByDCAndSize(dc: Deno.PointerValue, width: number, height: number, style: number): wxBufferedDC | null
+    {
+        const rawPtr = lib.symbols.wxBufferedDC_CreateByDCAndSize(dc, width, height, style);
+        if (rawPtr === null) return null;
+        return new wxBufferedDC(rawPtr);
+    }
 
-  static CreateByDCAndBitmap(dc: Deno.PointerValue, bitmap: Deno.PointerValue, style: number): wxBufferedDC | null {
-    const rawPtr = lib.symbols.wxBufferedDC_CreateByDCAndBitmap(dc, bitmap, style);
-    if (rawPtr === null) return null;
-    return new wxBufferedDC(rawPtr);
-  }
+    static CreateByDCAndBitmap(dc: Deno.PointerValue, bitmap: Deno.PointerValue, style: number): wxBufferedDC | null
+    {
+        const rawPtr = lib.symbols.wxBufferedDC_CreateByDCAndBitmap(dc, bitmap, style);
+        if (rawPtr === null) return null;
+        return new wxBufferedDC(rawPtr);
+    }
 
-  Delete(): void {
-    lib.symbols.wxBufferedDC_Delete(this._ptr);
-  }
+    Delete(): void
+    {
+        lib.symbols.wxBufferedDC_Delete(this._ptr);
+    }
 
-  [Symbol.dispose](): void {
-    this.Delete();
-  }
-
+    [Symbol.dispose](): void
+    {
+        this.Delete();
+    }
 }
