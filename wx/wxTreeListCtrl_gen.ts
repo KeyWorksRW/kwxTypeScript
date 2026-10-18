@@ -167,8 +167,8 @@ export class wxTreeListCtrl extends wxWindow {
     lib.symbols.wxTreeListCtrl_SetSortColumn(this._ptr, col, ascendingOrder ? 1 : 0);
   }
 
-  GetSortColumn(col: Deno.PointerValue, ascendingOrder: boolean): boolean {
-    return (lib.symbols.wxTreeListCtrl_GetSortColumn(this._ptr, col, ascendingOrder ? 1 : 0) as number) !== 0;
+  GetSortColumn(col: Deno.PointerValue, ascendingOrder: Deno.PointerValue): boolean {
+    return (lib.symbols.wxTreeListCtrl_GetSortColumn(this._ptr, col, ascendingOrder) as number) !== 0;
   }
 
   GetView(): Deno.PointerValue {

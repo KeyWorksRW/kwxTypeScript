@@ -55,6 +55,8 @@ export { wxAuiToolBarItemArray } from "./wxAuiToolBarItemArray_gen.ts";
 export { wxAutoBufferedPaintDC } from "./wxAutoBufferedPaintDC_gen.ts";
 export { wxBannerWindow } from "./wxBannerWindow_gen.ts";
 export { wxBitmap } from "./wxBitmap_gen.ts";
+export { wxBitmapBundle } from "./wxBitmapBundle_gen.ts";
+export { wxBitmapBundleBuilder } from "./wxBitmapBundleBuilder_gen.ts";
 export { wxBitmapButton } from "./wxBitmapButton_gen.ts";
 export { wxBitmapComboBox } from "./wxBitmapComboBox_gen.ts";
 export { wxBitmapDataObject } from "./wxBitmapDataObject_gen.ts";

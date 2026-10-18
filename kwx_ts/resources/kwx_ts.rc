@@ -1,0 +1,4 @@
+// Embedded manifest for Common Controls v6 (visual styles).
+// Resource ID 1 = executable manifest, RT_MANIFEST = 24.
+// The kwxFFI DLL uses ID 2; an executable must use 1.
+1 24 "kwx_ts.manifest"

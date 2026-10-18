@@ -2480,6 +2480,14 @@ export const lib = Deno.dlopen(_libName, {
     parameters: ["pointer", "i32"],
     result: "pointer",
   },
+  wxBitmap_CreateFromData: {
+    parameters: ["pointer", "usize", "i32"],
+    result: "pointer",
+  },
+  wxBitmap_CreateFromBase64: {
+    parameters: ["pointer", "usize", "i32"],
+    result: "pointer",
+  },
   wxBitmap_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -2663,6 +2671,38 @@ export const lib = Deno.dlopen(_libName, {
   BitmapDataObject_SetBitmap: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxBitmapBundle_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxBitmapBundle_CreateFromData: {
+    parameters: ["pointer", "usize", "i32"],
+    result: "pointer",
+  },
+  wxBitmapBundle_CreateFromBase64: {
+    parameters: ["pointer", "usize", "i32"],
+    result: "pointer",
+  },
+  wxBitmapBundle_CreateFromSVGBase64: {
+    parameters: ["pointer", "usize", "i32", "i32"],
+    result: "pointer",
+  },
+  wxBitmapBundleBuilder_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxBitmapBundleBuilder_AddData: {
+    parameters: ["pointer", "pointer", "usize", "i32"],
+    result: "void",
+  },
+  wxBitmapBundleBuilder_AddBase64: {
+    parameters: ["pointer", "pointer", "usize", "i32"],
+    result: "void",
+  },
+  wxBitmapBundleBuilder_Build: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxBoxSizer_CalcMin: {
     parameters: ["pointer"],
@@ -7076,12 +7116,28 @@ export const lib = Deno.dlopen(_libName, {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxIconBundle_CreateFromData: {
+    parameters: ["pointer", "usize", "i32"],
+    result: "pointer",
+  },
+  wxIconBundle_CreateFromBase64: {
+    parameters: ["pointer", "usize", "i32"],
+    result: "pointer",
+  },
   wxIconBundle_Delete: {
     parameters: ["pointer"],
     result: "void",
   },
   wxIconBundle_GetIcon: {
     parameters: ["pointer", "i32", "i32", "i32", "pointer"],
+    result: "void",
+  },
+  wxIconBundle_AddIconFromData: {
+    parameters: ["pointer", "pointer", "usize", "i32"],
+    result: "void",
+  },
+  wxIconBundle_AddIconFromBase64: {
+    parameters: ["pointer", "pointer", "usize", "i32"],
     result: "void",
   },
   wxIdleEvent_MoreRequested: {
@@ -7125,11 +7181,11 @@ export const lib = Deno.dlopen(_libName, {
     result: "pointer",
   },
   wxImage_CreateFromByteString: {
-    parameters: ["i32", "i32", "i32", "pointer"],
+    parameters: ["i32", "i32", "pointer", "i32"],
     result: "pointer",
   },
   wxImage_CreateFromLazyByteString: {
-    parameters: ["i32", "i32", "i32", "pointer"],
+    parameters: ["i32", "i32", "pointer", "i32"],
     result: "pointer",
   },
   wxImage_CreateFromData: {
@@ -7138,6 +7194,14 @@ export const lib = Deno.dlopen(_libName, {
   },
   wxImage_CreateFromFile: {
     parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxImage_CreateFromDataEncoded: {
+    parameters: ["pointer", "usize", "i32"],
+    result: "pointer",
+  },
+  wxImage_CreateFromBase64: {
+    parameters: ["pointer", "usize", "i32"],
     result: "pointer",
   },
   wxImage_CreateSized: {
@@ -15185,7 +15249,7 @@ export const lib = Deno.dlopen(_libName, {
     result: "void",
   },
   wxTreeListCtrl_GetSortColumn: {
-    parameters: ["pointer", "pointer", "i32"],
+    parameters: ["pointer", "pointer", "pointer"],
     result: "i32",
   },
   wxTreeListCtrl_GetView: {

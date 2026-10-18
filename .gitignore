@@ -8,10 +8,7 @@ bin/
 src/version.h
 src/version.rc
 
-# Non-tracked directory for testing files -- most of these files will be untracked
-# as it is designed to be changed dynamically at any time for a quick test. Use
-# the tests directory for any permanent test files.
-testing/
+tests/quick
 
 # cmake
 build/

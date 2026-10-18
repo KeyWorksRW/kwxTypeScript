@@ -38,6 +38,18 @@ export class wxBitmap {
     return new wxBitmap(rawPtr);
   }
 
+  static CreateFromData(data: Deno.PointerValue, size: bigint, bitmap_type: number): wxBitmap | null {
+    const rawPtr = lib.symbols.wxBitmap_CreateFromData(data, size, bitmap_type);
+    if (rawPtr === null) return null;
+    return new wxBitmap(rawPtr);
+  }
+
+  static CreateFromBase64(base64: Deno.PointerValue, len: bigint, bitmap_type: number): wxBitmap | null {
+    const rawPtr = lib.symbols.wxBitmap_CreateFromBase64(base64, len, bitmap_type);
+    if (rawPtr === null) return null;
+    return new wxBitmap(rawPtr);
+  }
+
   Delete(): void {
     lib.symbols.wxBitmap_Delete(this._ptr);
   }

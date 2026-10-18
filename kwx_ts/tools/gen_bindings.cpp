@@ -1,0 +1,424 @@
+/*
+ * kwx_ts — build-time binding generator.
+ *
+ * Parses the Deno FFI declaration corpus (`wx/kwx_ffi_gen.ts` and
+ * `src/kwxApp.ts`) and emits `bindings_gen.h` / `bindings_gen.cpp` into the
+ * build directory. Each parsed symbol becomes one QuickJS C function mounted on
+ * the `__kwx_native` object by kwx_register_generated_bindings().
+ *
+ * This tool runs at build time only; it never ships with the executable and
+ * needs no Node, Deno, or Python.
+ *
+ * Usage: kwx_binding_gen <kwx_ffi_gen.ts> <kwxApp.ts> <output_dir>
+ */
+
+#include <cstddef>
+#include <cstdint>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <regex>
+#include <set>
+#include <sstream>
+#include <string>
+#include <system_error>
+#include <vector>
+
+namespace {
+
+// A single parsed declaration: its name, its Deno parameter types in order, and
+// its Deno result type.
+struct Symbol {
+  std::string name;
+  std::vector<std::string> parameters;
+  std::string result;
+};
+
+// Collapse every run of whitespace (including newlines) to a single space so
+// multi-line and single-line entries share one shape.
+std::string NormalizeWhitespace(const std::string &text) {
+  std::string normalized;
+  normalized.reserve(text.size());
+  bool in_whitespace = false;
+  for (const char character : text) {
+    const bool is_whitespace = (character == ' ' || character == '\t' ||
+                                character == '\r' || character == '\n');
+    if (is_whitespace) {
+      if (!in_whitespace) {
+        normalized.push_back(' ');
+        in_whitespace = true;
+      }
+    } else {
+      normalized.push_back(character);
+      in_whitespace = false;
+    }
+  }
+  return normalized;
+}
+
+bool ReadFile(const std::string &path, std::string &out_text) {
+  std::ifstream input(path, std::ios::binary);
+  if (!input.is_open()) {
+    return false;
+  }
+  out_text.assign(std::istreambuf_iterator<char>(input),
+                  std::istreambuf_iterator<char>());
+  return true;
+}
+
+std::set<std::string> ParamTypes() {
+  return {"pointer", "function", "i32", "u32", "u8", "usize", "f32", "f64"};
+}
+
+bool IsKnownParamType(const std::string &type) {
+  static const std::set<std::string> types = ParamTypes();
+  return types.contains(type);
+}
+
+bool IsKnownResultType(const std::string &type) {
+  return type == "void" || IsKnownParamType(type);
+}
+
+std::vector<std::string> ExtractParameters(const std::string &raw_parameters) {
+  std::vector<std::string> parameters;
+  static const std::regex quoted(R"rx("([^"]*)")rx");
+  std::sregex_iterator iterator(raw_parameters.begin(), raw_parameters.end(),
+                                quoted);
+  const std::sregex_iterator end_iterator;
+  for (; iterator != end_iterator; ++iterator) {
+    parameters.push_back((*iterator)[1].str());
+  }
+  return parameters;
+}
+
+// Parse every `<identifier>: { parameters: [ ... ], result: "<type>" }` entry.
+bool ParseSymbols(const std::string &path, std::vector<Symbol> &out_symbols) {
+  std::string text;
+  if (!ReadFile(path, text)) {
+    std::cerr << "gen_bindings: cannot read " << path << "\n";
+    return false;
+  }
+
+  const std::string normalized = NormalizeWhitespace(text);
+  // clang-format off
+  static const std::regex entry(
+      R"rx(([A-Za-z_][A-Za-z0-9_]*)\s*:\s*\{\s*parameters\s*:\s*\[([^\]]*)\]\s*,?\s*result\s*:\s*"([^"]*)"\s*,?\s*\})rx");
+  // clang-format on
+
+  std::sregex_iterator iterator(normalized.begin(), normalized.end(), entry);
+  const std::sregex_iterator end_iterator;
+  for (; iterator != end_iterator; ++iterator) {
+    Symbol symbol;
+    symbol.name = (*iterator)[1].str();
+    symbol.parameters = ExtractParameters((*iterator)[2].str());
+    symbol.result = (*iterator)[3].str();
+
+    for (const std::string &parameter : symbol.parameters) {
+      if (!IsKnownParamType(parameter)) {
+        std::cerr << "gen_bindings: unknown parameter type \"" << parameter
+                  << "\" for " << symbol.name << " in " << path << "\n";
+        return false;
+      }
+    }
+    if (!IsKnownResultType(symbol.result)) {
+      std::cerr << "gen_bindings: unknown result type \"" << symbol.result
+                << "\" for " << symbol.name << " in " << path << "\n";
+      return false;
+    }
+    out_symbols.push_back(symbol);
+  }
+
+  if (out_symbols.empty()) {
+    std::cerr << "gen_bindings: no symbols parsed from " << path << "\n";
+    return false;
+  }
+  return true;
+}
+
+const char *ParameterCType(const std::string &type) {
+  if (type == "pointer" || type == "function") {
+    return "void *";
+  }
+  if (type == "i32") {
+    return "std::int32_t ";
+  }
+  if (type == "u32") {
+    return "std::uint32_t ";
+  }
+  if (type == "u8") {
+    return "std::uint8_t ";
+  }
+  if (type == "usize") {
+    return "std::size_t ";
+  }
+  if (type == "f32") {
+    return "float ";
+  }
+  return "double ";
+}
+
+const char *ArgumentConverter(const std::string &type) {
+  if (type == "pointer") {
+    return "arg_ptr";
+  }
+  if (type == "function") {
+    return "arg_fnptr";
+  }
+  if (type == "i32") {
+    return "arg_i32";
+  }
+  if (type == "u32") {
+    return "arg_u32";
+  }
+  if (type == "u8") {
+    return "arg_u8";
+  }
+  if (type == "usize") {
+    return "arg_usize";
+  }
+  if (type == "f32") {
+    return "arg_f32";
+  }
+  return "arg_f64";
+}
+
+bool IsPointerParameter(const std::string &type) {
+  return type == "pointer" || type == "function";
+}
+
+bool NeedsScope(const Symbol &symbol) {
+  for (const std::string &parameter : symbol.parameters) {
+    if (IsPointerParameter(parameter)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+std::string CallExpression(const Symbol &symbol) {
+  std::ostringstream call;
+  call << symbol.name << "(";
+  for (std::size_t index = 0; index < symbol.parameters.size(); ++index) {
+    if (index != 0) {
+      call << ", ";
+    }
+    if (IsPointerParameter(symbol.parameters[index])) {
+      // KwxArgPointer bridges the corpus' generic "pointer" to the exact
+      // pointer type the kwxFFI prototype declares (object or function).
+      call << "KwxArgPointer(p" << index << ")";
+    } else {
+      call << "p" << index;
+    }
+  }
+  call << ")";
+  return call.str();
+}
+
+const char *ResultConverter(const std::string &type) {
+  if (type == "pointer") {
+    return "ret_ptr";
+  }
+  if (type == "i32") {
+    return "ret_i32";
+  }
+  if (type == "u32") {
+    return "ret_u32";
+  }
+  if (type == "u8") {
+    return "ret_u8";
+  }
+  if (type == "usize") {
+    return "ret_usize";
+  }
+  if (type == "f32") {
+    return "ret_f32";
+  }
+  return "ret_f64";
+}
+
+void EmitThunk(std::ostream &out, const Symbol &symbol) {
+  const bool uses_scope = NeedsScope(symbol);
+  const bool has_parameters = !symbol.parameters.empty();
+  const bool returns_value = symbol.result != "void";
+
+  out << "static JSValue js_" << symbol.name << "(";
+  if (uses_scope || has_parameters || returns_value) {
+    out << "JSContext *ctx";
+  } else {
+    out << "[[maybe_unused]] JSContext *ctx";
+  }
+  out << ", [[maybe_unused]] JSValueConst this_val, ";
+  if (has_parameters) {
+    out << "int argc, JSValueConst *argv";
+  } else {
+    out << "[[maybe_unused]] int argc, [[maybe_unused]] JSValueConst *argv";
+  }
+  out << ")\n{\n";
+
+  if (uses_scope) {
+    out << "    KwxArgScope scope(ctx);\n";
+  }
+
+  for (std::size_t index = 0; index < symbol.parameters.size(); ++index) {
+    out << "    " << ParameterCType(symbol.parameters[index]) << "p" << index
+        << (IsPointerParameter(symbol.parameters[index]) ? " = nullptr;\n"
+                                                         : " = 0;\n");
+  }
+
+  if (has_parameters) {
+    out << "    if (argc < " << symbol.parameters.size() << ")\n    {\n"
+        << "        return JS_ThrowTypeError(ctx, \"" << symbol.name
+        << " expects " << symbol.parameters.size()
+        << " argument(s)\");\n    }\n";
+
+    out << "    if (";
+    for (std::size_t index = 0; index < symbol.parameters.size(); ++index) {
+      if (index != 0) {
+        out << " || ";
+      }
+      out << "!" << ArgumentConverter(symbol.parameters[index]) << "(ctx, argv["
+          << index << "], &p" << index;
+      if (IsPointerParameter(symbol.parameters[index])) {
+        out << ", scope";
+      }
+      out << ")";
+    }
+    out << ")\n    {\n        return JS_EXCEPTION;\n    }\n";
+  }
+
+  if (returns_value) {
+    out << "    return " << ResultConverter(symbol.result) << "(ctx, "
+        << CallExpression(symbol) << ");\n";
+  } else {
+    out << "    " << CallExpression(symbol) << ";\n    return JS_UNDEFINED;\n";
+  }
+
+  out << "}\n\n";
+}
+
+bool WriteFile(const std::filesystem::path &path, const std::string &content) {
+  std::ofstream output(path, std::ios::binary);
+  if (!output.is_open()) {
+    std::cerr << "gen_bindings: cannot write " << path.string() << "\n";
+    return false;
+  }
+  output << content;
+  return output.good();
+}
+
+void EmitExternExpressionPrototypes(std::ostream &out,
+                                    const std::vector<Symbol> &symbols) {
+  // Every `exp*` entry is a zero-parameter constant. The kwxFFI headers
+  // declare only a subset of them (events, keys, a few class constants and
+  // expSetDefaultAssertHandler); the pointer-returning colour/brush/font/art
+  // constants are declared nowhere. Emit a prototype for each, matching the
+  // corpus result type, so the thunks compile and link.
+  std::vector<const Symbol *> expression_symbols;
+  for (const Symbol &symbol : symbols) {
+    if (symbol.name.starts_with("exp")) {
+      expression_symbols.push_back(&symbol);
+    }
+  }
+
+  if (expression_symbols.empty()) {
+    return;
+  }
+
+  out << "// Zero-parameter kwxFFI constants (declared here so every thunk "
+         "resolves).\n"
+      << "extern \"C\"\n{\n";
+  for (const Symbol *symbol : expression_symbols) {
+    out << "    "
+        << (symbol->result == "pointer"
+                ? "void *"
+                : (symbol->result == "void" ? "void " : "int "))
+        << symbol->name << "();\n";
+  }
+  out << "}\n\n";
+}
+
+} // namespace
+
+int main(int argc, char **argv) {
+  if (argc != 4) {
+    std::cerr
+        << "usage: kwx_binding_gen <kwx_ffi_gen.ts> <kwxApp.ts> <output_dir>\n";
+    return 2;
+  }
+
+  const std::string ffi_path = argv[1];
+  const std::string app_path = argv[2];
+  const std::filesystem::path output_dir = argv[3];
+
+  std::vector<Symbol> symbols;
+  if (!ParseSymbols(ffi_path, symbols) || !ParseSymbols(app_path, symbols)) {
+    return 1;
+  }
+
+  std::set<std::string> seen;
+  for (const Symbol &symbol : symbols) {
+    if (!seen.insert(symbol.name).second) {
+      std::cerr << "gen_bindings: duplicate identifier " << symbol.name << "\n";
+      return 1;
+    }
+  }
+
+  std::error_code error_code;
+  std::filesystem::create_directories(output_dir, error_code);
+  if (error_code) {
+    std::cerr << "gen_bindings: cannot create " << output_dir.string() << ": "
+              << error_code.message() << "\n";
+    return 1;
+  }
+
+  std::ostringstream header;
+  header << "// Generated by kwx_ts/tools/gen_bindings.cpp — do not edit.\n"
+         << "#ifndef KWX_TS_BINDINGS_GEN_H\n"
+         << "#define KWX_TS_BINDINGS_GEN_H\n\n"
+         << "#include \"quickjs.h\"\n\n"
+         << "void kwx_register_generated_bindings(JSContext *ctx, JSValue "
+            "native_obj);\n\n"
+         << "#endif // KWX_TS_BINDINGS_GEN_H\n";
+
+  std::ostringstream source;
+  source << "// Generated by kwx_ts/tools/gen_bindings.cpp — do not edit.\n"
+         << "#include \"bindings_gen.h\"\n\n"
+         << "#include \"kwx_js_marshal.h\"\n"
+         << "#include \"kwx_host_app.h\"\n\n"
+         << "#include <cstddef>\n"
+         << "#include <cstdint>\n\n"
+         << "// kwxFFI declares plain (unwrapped) C prototypes, so the headers "
+            "must\n"
+         << "// be included with C linkage.\n"
+         << "extern \"C\"\n{\n"
+         << "#include \"kwx_glue.h\"\n"
+         << "}\n\n";
+
+  EmitExternExpressionPrototypes(source, symbols);
+
+  source << "namespace\n{\n\n";
+  for (const Symbol &symbol : symbols) {
+    EmitThunk(source, symbol);
+  }
+
+  source << "} // namespace\n\n"
+         << "void kwx_register_generated_bindings(JSContext *ctx, JSValue "
+            "native_obj)\n{\n";
+  for (const Symbol &symbol : symbols) {
+    source << "    JS_SetPropertyStr(ctx, native_obj, \"" << symbol.name
+           << "\",\n"
+           << "                    JS_NewCFunction(ctx, js_" << symbol.name
+           << ", \"" << symbol.name << "\", " << symbol.parameters.size()
+           << "));\n";
+  }
+  source << "}\n";
+
+  if (!WriteFile(output_dir / "bindings_gen.h", header.str()) ||
+      !WriteFile(output_dir / "bindings_gen.cpp", source.str())) {
+    return 1;
+  }
+
+  std::cout << "gen_bindings: " << symbols.size() << " symbols\n";
+  return 0;
+}

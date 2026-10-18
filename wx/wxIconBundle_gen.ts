@@ -32,6 +32,18 @@ export class wxIconBundle {
     return new wxIconBundle(rawPtr);
   }
 
+  static CreateFromData(data: Deno.PointerValue, size: bigint, bitmap_type: number): wxIconBundle | null {
+    const rawPtr = lib.symbols.wxIconBundle_CreateFromData(data, size, bitmap_type);
+    if (rawPtr === null) return null;
+    return new wxIconBundle(rawPtr);
+  }
+
+  static CreateFromBase64(base64: Deno.PointerValue, len: bigint, bitmap_type: number): wxIconBundle | null {
+    const rawPtr = lib.symbols.wxIconBundle_CreateFromBase64(base64, len, bitmap_type);
+    if (rawPtr === null) return null;
+    return new wxIconBundle(rawPtr);
+  }
+
   Delete(): void {
     lib.symbols.wxIconBundle_Delete(this._ptr);
   }
@@ -54,6 +66,14 @@ export class wxIconBundle {
 
   GetIcon(width: number, height: number, flags: number, ref: Deno.PointerValue): void {
     lib.symbols.wxIconBundle_GetIcon(this._ptr, width, height, flags, ref);
+  }
+
+  AddIconFromData(data: Deno.PointerValue, size: bigint, bitmap_type: number): void {
+    lib.symbols.wxIconBundle_AddIconFromData(this._ptr, data, size, bitmap_type);
+  }
+
+  AddIconFromBase64(base64: Deno.PointerValue, len: bigint, bitmap_type: number): void {
+    lib.symbols.wxIconBundle_AddIconFromBase64(this._ptr, base64, len, bitmap_type);
   }
 
 }

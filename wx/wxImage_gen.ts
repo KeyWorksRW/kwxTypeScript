@@ -26,13 +26,13 @@ export class wxImage {
     return new wxImage(rawPtr);
   }
 
-  static CreateFromByteString(width: number, height: number, data: number, length: Deno.PointerValue): wxImage | null {
+  static CreateFromByteString(width: number, height: number, data: Deno.PointerValue, length: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_CreateFromByteString(width, height, data, length);
     if (rawPtr === null) return null;
     return new wxImage(rawPtr);
   }
 
-  static CreateFromLazyByteString(width: number, height: number, data: number, length: Deno.PointerValue): wxImage | null {
+  static CreateFromLazyByteString(width: number, height: number, data: Deno.PointerValue, length: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_CreateFromLazyByteString(width, height, data, length);
     if (rawPtr === null) return null;
     return new wxImage(rawPtr);
@@ -46,6 +46,18 @@ export class wxImage {
 
   static CreateFromFile(name: Deno.PointerValue): wxImage | null {
     const rawPtr = lib.symbols.wxImage_CreateFromFile(name);
+    if (rawPtr === null) return null;
+    return new wxImage(rawPtr);
+  }
+
+  static CreateFromDataEncoded(data: Deno.PointerValue, size: bigint, bitmap_type: number): wxImage | null {
+    const rawPtr = lib.symbols.wxImage_CreateFromDataEncoded(data, size, bitmap_type);
+    if (rawPtr === null) return null;
+    return new wxImage(rawPtr);
+  }
+
+  static CreateFromBase64(base64: Deno.PointerValue, len: bigint, bitmap_type: number): wxImage | null {
+    const rawPtr = lib.symbols.wxImage_CreateFromBase64(base64, len, bitmap_type);
     if (rawPtr === null) return null;
     return new wxImage(rawPtr);
   }

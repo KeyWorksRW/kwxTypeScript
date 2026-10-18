@@ -24,6 +24,21 @@
             "description": "Default build using Ninja Multi-Config generator",
             "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/build"
+        },
+        {
+            "name": "macos-universal",
+            "displayName": "macOS Universal (x86_64 + arm64)",
+            "description": "Build a macOS Universal binary with Ninja Multi-Config",
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/build-macos",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "x86_64;arm64"
+            }
         }
     ]
 }
