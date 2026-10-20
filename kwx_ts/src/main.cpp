@@ -15,6 +15,7 @@
 #include <vector>
 
 int main(int argc, char **argv) {
+  kwx_trace_process_start();
   kwx_trace_mark("main-begin");
 
   if (argc < 2) {

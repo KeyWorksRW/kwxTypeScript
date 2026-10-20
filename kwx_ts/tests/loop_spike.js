@@ -1,13 +1,13 @@
 // Phase 2 event-loop/re-entrancy spike.
 //
 // Proves three things in one run:
-//   1. JS can drive the wxWidgets application lifecycle (__kwx_native).
+//   1. JS can drive the wxWidgets application lifecycle (kwxHost).
 //   2. A wx event (one-shot timer) can call back into QuickJS.
 //   3. JS can call back into wx from that callback and end the loop.
 //
 // Exit code 0 means the callback fired and the loop exited cleanly.
 
-const native = __kwx_native;
+const native = kwxHost;
 
 if (typeof native.kwxApp_Initialize !== "function") {
     throw new Error("kwx_ts: spike bindings are not installed");

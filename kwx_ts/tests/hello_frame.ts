@@ -12,28 +12,29 @@
 
 import {
     BOTH,
+    createWxClosure,
+    createWxFrame,
     createWxString,
     DEFAULT_FRAME_STYLE,
     EVT_CLOSE_WINDOW,
-    exit,
+    exitMainLoop,
     ID_ANY,
     initialize,
     lib,
     run,
     setTopWindow,
-    shutdown,
-    wxClosure,
-    wxFrame
+    shutdown
 } from "kwx";
+import { Callback } from "kwx/platform";
 
-const native = (globalThis as { __kwx_native: Record<string, unknown> }).__kwx_native;
+const native = (globalThis as unknown as { kwxHost: Record<string, unknown> }).kwxHost;
 
 if (!initialize()) {
     throw new Error("kwx_ts: initialize() failed");
 }
 
 const titleStr = createWxString("kwx_ts hello frame");
-const frame = wxFrame.Create(
+const frame = createWxFrame(
     null,
     ID_ANY,
     titleStr.ptr,
@@ -46,17 +47,17 @@ const frame = wxFrame.Create(
 titleStr.Delete();
 
 if (!frame) {
-    throw new Error("kwx_ts: wxFrame.Create returned null");
+    throw new Error("kwx_ts: createWxFrame returned null");
 }
 
 // Window close — end the main loop (never Close() inside a close handler).
-const closeCallback = new Deno.UnsafeCallback(
+const closeCallback = new Callback(
     { parameters: ["pointer", "pointer", "pointer"], result: "void" },
     () => {
-        exit();
+        exitMainLoop();
     }
 );
-const closeClosure = wxClosure.Create(closeCallback.pointer, null)!;
+const closeClosure = createWxClosure(closeCallback.pointer, null)!;
 lib.symbols.wxEvtHandler_Connect(
     frame.ptr,
     ID_ANY,

@@ -1,18 +1,20 @@
-// Phase 4 Deno shim smoke test (plain JS — no transpilation yet).
+// kwx_ts — platform surface smoke test (plain JS).
 //
-// Proves that the Deno compatibility shim can drive the whole wxWidgets
-// lifecycle through the statically linked kwxFFI surface:
-//   1. Deno.dlopen resolves every requested symbol from __kwx_native.
+// Proves that the kwx/platform module can drive the whole wxWidgets lifecycle
+// through the statically linked kwxFFI surface:
+//   1. dlopen() resolves every requested symbol.
 //   2. The CommonJS-style loader loads this file as a module (__kwx_run_main).
-//   3. Deno.UnsafePointer.of + TextEncoder produce a usable C string buffer.
-//   4. Deno.UnsafeCallback supplies a native closure pointer for an event.
+//   3. pointerOf() + TextEncoder produce a usable C string buffer.
+//   4. Callback supplies a native closure pointer for an event.
 //   5. A frame appears and the process exits with code 0.
 //
-// Deno.exit sets the exit code and unwinds through the host sentinel, so the
+// exit() sets the exit code and unwinds through the host sentinel, so the
 // scheduled timer ending the loop exercises that path too.
 
-const native = __kwx_native;
-const lib = Deno.dlopen("kwxFFI", {
+const { Callback, dlopen, exit, pointerOf } = require("kwx/platform");
+
+const native = kwxHost;
+const lib = dlopen("kwxFFI", {
     kwxApp_Initialize: { parameters: ["i32", "pointer"], result: "i32" },
     kwxApp_MainLoop: { parameters: [], result: "i32" },
     kwxApp_ExitMainLoop: { parameters: [], result: "void" },
@@ -47,9 +49,9 @@ if (!$.kwxApp_Initialize(0, null)) {
     throw new Error("kwx_ts: kwxApp_Initialize failed");
 }
 
-// UTF-8 C string through the Deno surface (Deno.UnsafePointer.of).
-const titleBuffer = new TextEncoder().encode("kwx_ts shim smoke\0");
-const title = $.wxString_CreateUTF8(Deno.UnsafePointer.of(titleBuffer));
+// UTF-8 C string through the platform surface (pointerOf).
+const titleBuffer = new TextEncoder().encode("kwx_ts platform smoke\0");
+const title = $.wxString_CreateUTF8(pointerOf(titleBuffer));
 const frame = $.wxFrame_Create(
     null,
     $.expwxID_ANY(),
@@ -58,7 +60,7 @@ const frame = $.wxFrame_Create(
     -1,
     420,
     320,
-    $.expwxDEFAULT_FRAME_STYLE()
+    $.expwxDEFAULT_FRAME_STYLE(),
 );
 $.wxString_Delete(title);
 
@@ -66,12 +68,12 @@ if (!frame) {
     throw new Error("kwx_ts: wxFrame_Create returned null");
 }
 
-// Close-event handler: end the loop through the Deno surface.
-const closeCallback = new Deno.UnsafeCallback(
+// Close-event handler: end the loop through the platform surface.
+const closeCallback = new Callback(
     { parameters: ["pointer", "pointer", "pointer"], result: "void" },
     () => {
         $.kwxApp_ExitMainLoop();
-    }
+    },
 );
 const closeClosure = $.wxClosure_Create(closeCallback.pointer, null);
 $.wxEvtHandler_Connect(
@@ -79,16 +81,16 @@ $.wxEvtHandler_Connect(
     $.expwxID_ANY(),
     $.expwxID_ANY(),
     $.exp_wxEVT_CLOSE_WINDOW(),
-    closeClosure
+    closeClosure,
 );
 
 $.wxWindow_Center(frame, $.expwxBOTH());
 $.wxWindow_Show(frame);
 $.kwxApp_SetTopWindow(frame);
 
-// End the loop without user interaction, exercising Deno.exit's sentinel path.
+// End the loop without user interaction, exercising exit()'s sentinel path.
 native.__kwx_test_after(400, () => {
-    Deno.exit(0);
+    exit(0);
 });
 
 const result = $.kwxApp_MainLoop();
@@ -101,4 +103,4 @@ if (result !== 0) {
     throw new Error("kwx_ts: main loop returned " + result);
 }
 
-console.log("kwx_ts shim smoke ok");
+console.log("kwx_ts platform smoke ok");

@@ -1,10 +1,10 @@
 /*
  * kwx_ts — QuickJS runtime host.
  *
- * Owns the JSRuntime/JSContext lifecycle, the `__kwx_native` global object, and
- * the `console` prelude. Phase 1 exposes only the runtime plumbing plus the
- * native print bridge; later phases register additional native bindings on the
- * same `__kwx_native` object.
+ * Owns the JSRuntime/JSContext lifecycle, the `kwxHost` global object, and the
+ * `console` prelude. The runtime plumbing and native print bridge are owned
+ * here; the generated bindings and hand-written helpers are registered on the
+ * same `kwxHost` object.
  */
 
 #ifndef KWX_TS_QUICKJS_HOST_H
@@ -33,7 +33,7 @@ void kwx_host_drain_jobs();
 
 // Read, evaluate, and drain `path` as a global-scope script.
 // Returns false on any failure; `exit_code` receives the process exit code.
-// The embedded Deno shim is installed and `__kwx_run_main(path)` is invoked
+// The embedded host runtime is installed and `__kwx_run_main(path)` is invoked
 // instead of evaluating the entry directly, so modules load through the loader.
 bool kwx_runtime_eval_file(const std::string &path, int &exit_code);
 
@@ -43,7 +43,7 @@ void kwx_runtime_set_args(const std::vector<std::string> &args);
 // The full argv recorded by kwx_runtime_set_args().
 const std::vector<std::string> &kwx_runtime_arguments();
 
-// Record the process exit code requested by JS (Deno.exit /
+// Record the process exit code requested by JS (kwx/platform exit() /
 // __kwx_set_exit_code).
 void kwx_runtime_set_exit_code(int code);
 
@@ -54,18 +54,28 @@ int kwx_runtime_exit_code();
 // otherwise). Used by the entry point to bracket process startup.
 void kwx_trace_mark(const char *label);
 
-// If the pending exception is the Deno.exit() sentinel, consume it, record its
-// exit code, and return true. Otherwise leave the exception pending and return
-// false; the caller must then report it.
+// Emit the `pre-main` trace mark, measuring process creation to entry into
+// main(). A no-op unless KWX_TS_TRACE is enabled; on non-Windows platforms it
+// is always a no-op. Called as the first statement of main().
+void kwx_trace_process_start();
+
+// Evaluate the embedded Sucrase bytecode on demand, exactly once. Returns false
+// before the runtime is initialized or when the bytecode fails to evaluate; the
+// eager `sucrase-bundle-evaluated` trace mark is emitted here on first success.
+bool kwx_runtime_ensure_sucrase();
+
+// If the pending exception is the platform exit() sentinel, consume it, record
+// its exit code, and return true. Otherwise leave the exception pending and
+// return false; the caller must then report it.
 bool kwx_host_consume_exit_exception(JSContext *ctx);
 
 // Release every native callback slot while the context is still alive.
 // Called from kwx_runtime_shutdown() before the context is freed.
 void kwx_host_release_callbacks(JSContext *ctx);
 
-// Extension hook: register additional native functions on the `__kwx_native`
-// global object. Called once from kwx_runtime_init(), after `__kwx_print` has
-// been installed but before the object is published to the global scope.
+// Extension hook: register additional native functions on the `kwxHost` global
+// object. Called once from kwx_runtime_init(), after `__kwx_print` has been
+// installed but before the object is published to the global scope.
 // Implemented by runtime_bindings.cpp: it registers the generated kwxFFI thunks
 // plus the hand-written helpers.
 void kwx_host_register_bindings(JSContext *ctx, JSValue native_object);

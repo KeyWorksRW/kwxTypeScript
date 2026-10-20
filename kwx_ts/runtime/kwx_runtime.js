@@ -1620,8 +1620,319 @@ __export(mod_exports, {
   YES_DEFAULT: () => YES_DEFAULT,
   YES_NO: () => YES_NO,
   bell: () => bell,
+  createKwxArtProv: () => createKwxArtProv,
+  createKwxClient: () => createKwxClient,
+  createKwxCommand: () => createKwxCommand,
+  createKwxConnection: () => createKwxConnection,
+  createKwxDragDataObject: () => createKwxDragDataObject,
+  createKwxDropTarget: () => createKwxDropTarget,
+  createKwxFileDropTarget: () => createKwxFileDropTarget,
+  createKwxGridTable: () => createKwxGridTable,
+  createKwxLog: () => createKwxLog,
+  createKwxPreviewControlBar: () => createKwxPreviewControlBar,
+  createKwxPreviewFrame: () => createKwxPreviewFrame,
+  createKwxServer: () => createKwxServer,
+  createKwxTextDropTarget: () => createKwxTextDropTarget,
+  createKwxTextValidator: () => createKwxTextValidator,
+  createWxAcceleratorEntry: () => createWxAcceleratorEntry,
+  createWxAcceleratorTable: () => createWxAcceleratorTable,
+  createWxActivityIndicator: () => createWxActivityIndicator,
+  createWxAnimation: () => createWxAnimation,
+  createWxAnimationCtrl: () => createWxAnimationCtrl,
+  createWxAnimationCtrlWithAnimation: () => createWxAnimationCtrlWithAnimation,
+  createWxAnimationFromFile: () => createWxAnimationFromFile,
+  createWxAuiDefaultTabArt: () => createWxAuiDefaultTabArt,
+  createWxAuiDefaultToolBarArt: () => createWxAuiDefaultToolBarArt,
+  createWxAuiMDIChildFrame: () => createWxAuiMDIChildFrame,
+  createWxAuiMDIParentFrame: () => createWxAuiMDIParentFrame,
+  createWxAuiManager: () => createWxAuiManager,
+  createWxAuiManagerEvent: () => createWxAuiManagerEvent,
+  createWxAuiNotebook: () => createWxAuiNotebook,
+  createWxAuiNotebookDefault: () => createWxAuiNotebookDefault,
+  createWxAuiNotebookEvent: () => createWxAuiNotebookEvent,
+  createWxAuiNotebookPageArray: () => createWxAuiNotebookPageArray,
+  createWxAuiPaneInfo: () => createWxAuiPaneInfo,
+  createWxAuiPaneInfoArray: () => createWxAuiPaneInfoArray,
+  createWxAuiPaneInfoDefault: () => createWxAuiPaneInfoDefault,
+  createWxAuiSimpleTabArt: () => createWxAuiSimpleTabArt,
+  createWxAuiTabContainer: () => createWxAuiTabContainer,
+  createWxAuiToolBar: () => createWxAuiToolBar,
+  createWxAuiToolBarDefault: () => createWxAuiToolBarDefault,
+  createWxAuiToolBarItem: () => createWxAuiToolBarItem,
+  createWxAuiToolBarItemArray: () => createWxAuiToolBarItemArray,
+  createWxAuiToolBarItemDefault: () => createWxAuiToolBarItemDefault,
+  createWxAutoBufferedPaintDC: () => createWxAutoBufferedPaintDC,
+  createWxBannerWindow: () => createWxBannerWindow,
+  createWxBitmap: () => createWxBitmap,
+  createWxBitmapBundleBuilder: () => createWxBitmapBundleBuilder,
+  createWxBitmapBundleFromBase64: () => createWxBitmapBundleFromBase64,
+  createWxBitmapBundleFromData: () => createWxBitmapBundleFromData,
+  createWxBitmapBundleFromSVGBase64: () => createWxBitmapBundleFromSVGBase64,
+  createWxBitmapButton: () => createWxBitmapButton,
+  createWxBitmapComboBox: () => createWxBitmapComboBox,
+  createWxBitmapDataObject: () => createWxBitmapDataObject,
+  createWxBitmapDataObjectEmpty: () => createWxBitmapDataObjectEmpty,
+  createWxBitmapDefault: () => createWxBitmapDefault,
+  createWxBitmapEmpty: () => createWxBitmapEmpty,
+  createWxBitmapFromBase64: () => createWxBitmapFromBase64,
+  createWxBitmapFromData: () => createWxBitmapFromData,
+  createWxBitmapLoad: () => createWxBitmapLoad,
+  createWxBitmapToggleButton: () => createWxBitmapToggleButton,
+  createWxBookCtrlEvent: () => createWxBookCtrlEvent,
+  createWxBoolProperty: () => createWxBoolProperty,
+  createWxBoxSizer: () => createWxBoxSizer,
+  createWxBrushDefault: () => createWxBrushDefault,
+  createWxBrushFromBitmap: () => createWxBrushFromBitmap,
+  createWxBrushFromColour: () => createWxBrushFromColour,
+  createWxBrushFromStock: () => createWxBrushFromStock,
+  createWxBufferedDCByDCAndBitmap: () => createWxBufferedDCByDCAndBitmap,
+  createWxBufferedDCByDCAndSize: () => createWxBufferedDCByDCAndSize,
+  createWxBufferedPaintDC: () => createWxBufferedPaintDC,
+  createWxBufferedPaintDCWithBitmap: () => createWxBufferedPaintDCWithBitmap,
+  createWxBusyCursor: () => createWxBusyCursor,
+  createWxBusyInfo: () => createWxBusyInfo,
+  createWxButton: () => createWxButton,
+  createWxCalculateLayoutEvent: () => createWxCalculateLayoutEvent,
+  createWxCalendarCtrl: () => createWxCalendarCtrl,
+  createWxCalendarDateAttr: () => createWxCalendarDateAttr,
+  createWxCalendarDateAttrDefault: () => createWxCalendarDateAttrDefault,
+  createWxCaret: () => createWxCaret,
+  createWxCheckBox: () => createWxCheckBox,
+  createWxCheckListBox: () => createWxCheckListBox,
+  createWxChoice: () => createWxChoice,
+  createWxChoicebook: () => createWxChoicebook,
+  createWxClientDC: () => createWxClientDC,
+  createWxClipboard: () => createWxClipboard,
+  createWxClosure: () => createWxClosure,
+  createWxCollapsiblePane: () => createWxCollapsiblePane,
+  createWxColourByName: () => createWxColourByName,
+  createWxColourData: () => createWxColourData,
+  createWxColourDialog: () => createWxColourDialog,
+  createWxColourEmpty: () => createWxColourEmpty,
+  createWxColourFromStock: () => createWxColourFromStock,
+  createWxColourRGB: () => createWxColourRGB,
+  createWxComboBox: () => createWxComboBox,
+  createWxCommandEvent: () => createWxCommandEvent,
+  createWxCommandLinkButton: () => createWxCommandLinkButton,
+  createWxCondition: () => createWxCondition,
+  createWxConfigBase: () => createWxConfigBase,
+  createWxContextHelp: () => createWxContextHelp,
+  createWxContextHelpButton: () => createWxContextHelpButton,
+  createWxCriticalSection: () => createWxCriticalSection,
+  createWxCursorFromImage: () => createWxCursorFromImage,
+  createWxCursorFromStock: () => createWxCursorFromStock,
+  createWxCursorLoad: () => createWxCursorLoad,
+  createWxDataFormatFromId: () => createWxDataFormatFromId,
+  createWxDataFormatFromType: () => createWxDataFormatFromType,
+  createWxDataObjectComposite: () => createWxDataObjectComposite,
+  createWxDataViewCtrl: () => createWxDataViewCtrl,
+  createWxDataViewItem: () => createWxDataViewItem,
+  createWxDataViewItemArray: () => createWxDataViewItemArray,
+  createWxDataViewListCtrl: () => createWxDataViewListCtrl,
+  createWxDatePickerCtrl: () => createWxDatePickerCtrl,
+  createWxDateProperty: () => createWxDateProperty,
+  createWxDateTime: () => createWxDateTime,
+  createWxDialog: () => createWxDialog,
+  createWxDirDialog: () => createWxDirDialog,
+  createWxDirPickerCtrl: () => createWxDirPickerCtrl,
+  createWxDocChildFrame: () => createWxDocChildFrame,
+  createWxDocMDIChildFrame: () => createWxDocMDIChildFrame,
+  createWxDocMDIParentFrame: () => createWxDocMDIParentFrame,
+  createWxDocParentFrame: () => createWxDocParentFrame,
+  createWxDrawControl: () => createWxDrawControl,
+  createWxDrawWindow: () => createWxDrawWindow,
+  createWxDropSource: () => createWxDropSource,
+  createWxEncodingConverter: () => createWxEncodingConverter,
+  createWxEvtHandler: () => createWxEvtHandler,
+  createWxFileCtrl: () => createWxFileCtrl,
+  createWxFileDataObject: () => createWxFileDataObject,
+  createWxFileDialog: () => createWxFileDialog,
+  createWxFileHistory: () => createWxFileHistory,
+  createWxFilePickerCtrl: () => createWxFilePickerCtrl,
+  createWxFileProperty: () => createWxFileProperty,
+  createWxFindReplaceData: () => createWxFindReplaceData,
+  createWxFindReplaceDataDefault: () => createWxFindReplaceDataDefault,
+  createWxFindReplaceDialog: () => createWxFindReplaceDialog,
+  createWxFlexGridSizer: () => createWxFlexGridSizer,
+  createWxFloatProperty: () => createWxFloatProperty,
+  createWxFont: () => createWxFont,
+  createWxFontData: () => createWxFontData,
+  createWxFontDefault: () => createWxFontDefault,
+  createWxFontDialog: () => createWxFontDialog,
+  createWxFontEnumerator: () => createWxFontEnumerator,
+  createWxFontFromStock: () => createWxFontFromStock,
+  createWxFontMapper: () => createWxFontMapper,
+  createWxFontPickerCtrl: () => createWxFontPickerCtrl,
+  createWxFrame: () => createWxFrame,
+  createWxGauge: () => createWxGauge,
+  createWxGrid: () => createWxGrid,
+  createWxGridBagSizer: () => createWxGridBagSizer,
+  createWxGridCellAttr: () => createWxGridCellAttr,
+  createWxGridCellAutoWrapStringRenderer: () => createWxGridCellAutoWrapStringRenderer,
+  createWxGridCellBoolEditor: () => createWxGridCellBoolEditor,
+  createWxGridCellChoiceEditor: () => createWxGridCellChoiceEditor,
+  createWxGridCellCoordsArray: () => createWxGridCellCoordsArray,
+  createWxGridCellFloatEditor: () => createWxGridCellFloatEditor,
+  createWxGridCellNumberEditor: () => createWxGridCellNumberEditor,
+  createWxGridCellNumberRenderer: () => createWxGridCellNumberRenderer,
+  createWxGridCellTextEditor: () => createWxGridCellTextEditor,
+  createWxGridSizer: () => createWxGridSizer,
+  createWxHelpControllerHelpProvider: () => createWxHelpControllerHelpProvider,
+  createWxHtmlHelpController: () => createWxHtmlHelpController,
+  createWxIconBundleDefault: () => createWxIconBundleDefault,
+  createWxIconBundleFromBase64: () => createWxIconBundleFromBase64,
+  createWxIconBundleFromData: () => createWxIconBundleFromData,
+  createWxIconBundleFromFile: () => createWxIconBundleFromFile,
+  createWxIconBundleFromIcon: () => createWxIconBundleFromIcon,
+  createWxIconDefault: () => createWxIconDefault,
+  createWxIconLoad: () => createWxIconLoad,
+  createWxImageDefault: () => createWxImageDefault,
+  createWxImageFromBase64: () => createWxImageFromBase64,
+  createWxImageFromBitmap: () => createWxImageFromBitmap,
+  createWxImageFromByteString: () => createWxImageFromByteString,
+  createWxImageFromData: () => createWxImageFromData,
+  createWxImageFromDataEncoded: () => createWxImageFromDataEncoded,
+  createWxImageFromFile: () => createWxImageFromFile,
+  createWxImageFromLazyByteString: () => createWxImageFromLazyByteString,
+  createWxImageList: () => createWxImageList,
+  createWxImageSized: () => createWxImageSized,
+  createWxInfoBar: () => createWxInfoBar,
+  createWxIntProperty: () => createWxIntProperty,
+  createWxJoystick: () => createWxJoystick,
+  createWxLayoutAlgorithm: () => createWxLayoutAlgorithm,
+  createWxListBox: () => createWxListBox,
+  createWxListCtrl: () => createWxListCtrl,
+  createWxListItem: () => createWxListItem,
+  createWxListView: () => createWxListView,
+  createWxListbook: () => createWxListbook,
+  createWxLocale: () => createWxLocale,
+  createWxLogChain: () => createWxLogChain,
+  createWxMDIChildFrame: () => createWxMDIChildFrame,
+  createWxMDIParentFrame: () => createWxMDIParentFrame,
+  createWxMask: () => createWxMask,
+  createWxMaskColoured: () => createWxMaskColoured,
+  createWxMemoryDC: () => createWxMemoryDC,
+  createWxMemoryDCCompatible: () => createWxMemoryDCCompatible,
+  createWxMemoryDCWithBitmap: () => createWxMemoryDCWithBitmap,
+  createWxMenu: () => createWxMenu,
+  createWxMenuBar: () => createWxMenuBar,
+  createWxMenuItem: () => createWxMenuItem,
+  createWxMessageDialog: () => createWxMessageDialog,
+  createWxMetafile: () => createWxMetafile,
+  createWxMetafileDC: () => createWxMetafileDC,
+  createWxMimeTypesManager: () => createWxMimeTypesManager,
+  createWxMiniFrame: () => createWxMiniFrame,
+  createWxMirrorDC: () => createWxMirrorDC,
+  createWxMutex: () => createWxMutex,
+  createWxNotebook: () => createWxNotebook,
+  createWxPageSetupDialog: () => createWxPageSetupDialog,
+  createWxPageSetupDialogData: () => createWxPageSetupDialogData,
+  createWxPageSetupDialogDataFromData: () => createWxPageSetupDialogDataFromData,
+  createWxPaintDC: () => createWxPaintDC,
+  createWxPaletteDefault: () => createWxPaletteDefault,
+  createWxPaletteRGB: () => createWxPaletteRGB,
+  createWxPanel: () => createWxPanel,
+  createWxPenDefault: () => createWxPenDefault,
+  createWxPenFromBitmap: () => createWxPenFromBitmap,
+  createWxPenFromColour: () => createWxPenFromColour,
+  createWxPenFromStock: () => createWxPenFromStock,
+  createWxPoint: () => createWxPoint,
+  createWxPostScriptDC: () => createWxPostScriptDC,
+  createWxPostScriptPrintNativeData: () => createWxPostScriptPrintNativeData,
+  createWxPreviewCanvas: () => createWxPreviewCanvas,
+  createWxPrintData: () => createWxPrintData,
+  createWxPrintDialog: () => createWxPrintDialog,
+  createWxPrintDialogDataDefault: () => createWxPrintDialogDataDefault,
+  createWxPrintDialogDataFromData: () => createWxPrintDialogDataFromData,
+  createWxPrintPreviewFromData: () => createWxPrintPreviewFromData,
+  createWxPrintPreviewFromDialogData: () => createWxPrintPreviewFromDialogData,
+  createWxPrinter: () => createWxPrinter,
+  createWxPrinterDC: () => createWxPrinterDC,
+  createWxProcessDefault: () => createWxProcessDefault,
+  createWxProcessRedirect: () => createWxProcessRedirect,
+  createWxPropertyCategory: () => createWxPropertyCategory,
+  createWxPropertyGrid: () => createWxPropertyGrid,
+  createWxPropertyGridManager: () => createWxPropertyGridManager,
+  createWxPropertySheetDialog: () => createWxPropertySheetDialog,
+  createWxQueryLayoutInfoEvent: () => createWxQueryLayoutInfoEvent,
+  createWxRadioBox: () => createWxRadioBox,
+  createWxRadioButton: () => createWxRadioButton,
+  createWxRearrangeCtrl: () => createWxRearrangeCtrl,
+  createWxRegionDefault: () => createWxRegionDefault,
+  createWxRegionFromRect: () => createWxRegionFromRect,
+  createWxRegionIterator: () => createWxRegionIterator,
+  createWxRegionIteratorFromRegion: () => createWxRegionIteratorFromRegion,
+  createWxRibbonBar: () => createWxRibbonBar,
+  createWxRibbonButtonBar: () => createWxRibbonButtonBar,
+  createWxRibbonGallery: () => createWxRibbonGallery,
+  createWxRibbonPage: () => createWxRibbonPage,
+  createWxRibbonPanel: () => createWxRibbonPanel,
+  createWxRibbonToolBar: () => createWxRibbonToolBar,
+  createWxRichTextCtrl: () => createWxRichTextCtrl,
+  createWxSVGFileDC: () => createWxSVGFileDC,
+  createWxSVGFileDCWithSize: () => createWxSVGFileDCWithSize,
+  createWxSVGFileDCWithSizeAndResolution: () => createWxSVGFileDCWithSizeAndResolution,
+  createWxSashEvent: () => createWxSashEvent,
+  createWxSashLayoutWindow: () => createWxSashLayoutWindow,
+  createWxSashWindow: () => createWxSashWindow,
+  createWxScreenDC: () => createWxScreenDC,
+  createWxScrollBar: () => createWxScrollBar,
+  createWxScrolledWindow: () => createWxScrolledWindow,
+  createWxSearchCtrl: () => createWxSearchCtrl,
+  createWxSimpleHelpProvider: () => createWxSimpleHelpProvider,
+  createWxSimpleHtmlListBox: () => createWxSimpleHtmlListBox,
+  createWxSimplebook: () => createWxSimplebook,
+  createWxSingleInstanceChecker: () => createWxSingleInstanceChecker,
+  createWxSingleInstanceCheckerDefault: () => createWxSingleInstanceCheckerDefault,
+  createWxSize: () => createWxSize,
+  createWxSizerItem: () => createWxSizerItem,
+  createWxSizerItemInSizer: () => createWxSizerItemInSizer,
+  createWxSizerItemInWindow: () => createWxSizerItemInWindow,
+  createWxSlider: () => createWxSlider,
+  createWxSpinButton: () => createWxSpinButton,
+  createWxSpinCtrl: () => createWxSpinCtrl,
+  createWxSpinCtrlDouble: () => createWxSpinCtrlDouble,
+  createWxSplashScreen: () => createWxSplashScreen,
+  createWxSplitterWindow: () => createWxSplitterWindow,
+  createWxStaticBitmap: () => createWxStaticBitmap,
+  createWxStaticBox: () => createWxStaticBox,
+  createWxStaticBoxSizer: () => createWxStaticBoxSizer,
+  createWxStaticLine: () => createWxStaticLine,
+  createWxStaticText: () => createWxStaticText,
+  createWxStatusBar: () => createWxStatusBar,
+  createWxStdDialogButtonSizer: () => createWxStdDialogButtonSizer,
+  createWxStopWatch: () => createWxStopWatch,
   createWxString: () => createWxString,
-  exit: () => exit,
+  createWxStringFromBuffer: () => createWxStringFromBuffer,
+  createWxStringLen: () => createWxStringLen,
+  createWxStringProperty: () => createWxStringProperty,
+  createWxStringUTF8: () => createWxStringUTF8,
+  createWxTaskBarIcon: () => createWxTaskBarIcon,
+  createWxTextCtrl: () => createWxTextCtrl,
+  createWxTextDataObject: () => createWxTextDataObject,
+  createWxTextEntryDialog: () => createWxTextEntryDialog,
+  createWxTextValidator: () => createWxTextValidator,
+  createWxTimePickerCtrl: () => createWxTimePickerCtrl,
+  createWxTimer: () => createWxTimer,
+  createWxTipWindow: () => createWxTipWindow,
+  createWxToggleButton: () => createWxToggleButton,
+  createWxToolBar: () => createWxToolBar,
+  createWxToolbook: () => createWxToolbook,
+  createWxTreeCtrl: () => createWxTreeCtrl,
+  createWxTreeItemId: () => createWxTreeItemId,
+  createWxTreeListCtrl: () => createWxTreeListCtrl,
+  createWxTreeListItem: () => createWxTreeListItem,
+  createWxTreebook: () => createWxTreebook,
+  createWxValidator: () => createWxValidator,
+  createWxVariantVector: () => createWxVariantVector,
+  createWxWindow: () => createWxWindow,
+  createWxWindowDC: () => createWxWindowDC,
+  createWxWizard: () => createWxWizard,
+  createWxWizardPageSimple: () => createWxWizardPageSimple,
+  createWxWrapSizer: () => createWxWrapSizer,
+  createWxXmlResource: () => createWxXmlResource,
+  createWxXmlResourceFromFile: () => createWxXmlResourceFromFile,
+  exitMainLoop: () => exitMainLoop,
   expBK_HITTEST_NOWHERE: () => expBK_HITTEST_NOWHERE,
   expBK_HITTEST_ONICON: () => expBK_HITTEST_ONICON,
   expBK_HITTEST_ONITEM: () => expBK_HITTEST_ONITEM,
@@ -2034,12 +2345,8 @@ __export(mod_exports, {
 module.exports = __toCommonJS(mod_exports);
 
 // ../../wx/kwx_ffi_gen.ts
-var _libName = {
-  windows: "kwxFFI.dll",
-  linux: "libkwxFFI.so",
-  darwin: "libkwxFFI.dylib"
-}[Deno.build.os] ?? "kwxFFI";
-var lib = Deno.dlopen(_libName, {
+var import_platform = require("kwx/platform");
+var lib = (0, import_platform.dlopen)("kwxFFI", {
   kwxArtProv_Create: {
     parameters: ["pointer", "pointer"],
     result: "pointer"
@@ -3362,7 +3669,7 @@ var lib = Deno.dlopen(_libName, {
   },
   wxAuiNotebook_SetSelection: {
     parameters: ["pointer", "usize"],
-    result: "usize"
+    result: "i32"
   },
   wxAuiNotebook_SetTabCtrlHeight: {
     parameters: ["pointer", "i32"],
@@ -7669,11 +7976,11 @@ var lib = Deno.dlopen(_libName, {
     result: "pointer"
   },
   wxFrame_CreateStatusBar: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32"],
     result: "pointer"
   },
   wxFrame_CreateToolBar: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i32", "i32"],
     result: "pointer"
   },
   wxFrame_GetClientAreaOrigin_left: {
@@ -10186,7 +10493,7 @@ var lib = Deno.dlopen(_libName, {
   },
   wxListCtrl_SetBackgroundColour: {
     parameters: ["pointer", "pointer"],
-    result: "void"
+    result: "i32"
   },
   wxListCtrl_SetColumn: {
     parameters: ["pointer", "i32", "pointer"],
@@ -11469,7 +11776,7 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxChoicebook_DeletePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxChoicebook_GetChoiceCtrl: {
@@ -11481,19 +11788,19 @@ var lib = Deno.dlopen(_libName, {
     result: "pointer"
   },
   wxChoicebook_GetPage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxChoicebook_GetPageCount: {
     parameters: ["pointer"],
-    result: "i32"
+    result: "usize"
   },
   wxChoicebook_GetPageImage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxChoicebook_GetPageText: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxChoicebook_GetSelection: {
@@ -11505,11 +11812,11 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxChoicebook_InsertPage: {
-    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
     result: "i32"
   },
   wxChoicebook_RemovePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxChoicebook_SetImageList: {
@@ -11517,15 +11824,15 @@ var lib = Deno.dlopen(_libName, {
     result: "void"
   },
   wxChoicebook_SetPageImage: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "i32"],
     result: "i32"
   },
   wxChoicebook_SetPageText: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "usize", "pointer"],
     result: "i32"
   },
   wxChoicebook_SetSelection: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxListbook_AddPage: {
@@ -11545,7 +11852,7 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxListbook_DeletePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxListbook_GetImageList: {
@@ -11557,19 +11864,19 @@ var lib = Deno.dlopen(_libName, {
     result: "pointer"
   },
   wxListbook_GetPage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxListbook_GetPageCount: {
     parameters: ["pointer"],
-    result: "i32"
+    result: "usize"
   },
   wxListbook_GetPageImage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxListbook_GetPageText: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxListbook_GetSelection: {
@@ -11581,11 +11888,11 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxListbook_InsertPage: {
-    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
     result: "i32"
   },
   wxListbook_RemovePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxListbook_SetImageList: {
@@ -11593,15 +11900,15 @@ var lib = Deno.dlopen(_libName, {
     result: "void"
   },
   wxListbook_SetPageImage: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "i32"],
     result: "i32"
   },
   wxListbook_SetPageText: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "usize", "pointer"],
     result: "i32"
   },
   wxListbook_SetSelection: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxSimplebook_AddPage: {
@@ -11609,7 +11916,7 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxSimplebook_ChangeSelection: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxSimplebook_Create: {
@@ -11621,7 +11928,7 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxSimplebook_DeletePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxSimplebook_GetImageList: {
@@ -11629,19 +11936,19 @@ var lib = Deno.dlopen(_libName, {
     result: "pointer"
   },
   wxSimplebook_GetPage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxSimplebook_GetPageCount: {
     parameters: ["pointer"],
-    result: "i32"
+    result: "usize"
   },
   wxSimplebook_GetPageImage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxSimplebook_GetPageText: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxSimplebook_GetSelection: {
@@ -11649,11 +11956,11 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxSimplebook_InsertPage: {
-    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
     result: "i32"
   },
   wxSimplebook_RemovePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxSimplebook_SetImageList: {
@@ -11661,15 +11968,15 @@ var lib = Deno.dlopen(_libName, {
     result: "void"
   },
   wxSimplebook_SetPageImage: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "i32"],
     result: "i32"
   },
   wxSimplebook_SetPageText: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "usize", "pointer"],
     result: "i32"
   },
   wxSimplebook_SetSelection: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxSimplebook_ShowNewPage: {
@@ -11701,7 +12008,7 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxToolbook_DeletePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxToolbook_GetImageList: {
@@ -11709,19 +12016,19 @@ var lib = Deno.dlopen(_libName, {
     result: "pointer"
   },
   wxToolbook_GetPage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxToolbook_GetPageCount: {
     parameters: ["pointer"],
-    result: "i32"
+    result: "usize"
   },
   wxToolbook_GetPageImage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxToolbook_GetPageText: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxToolbook_GetSelection: {
@@ -11737,11 +12044,11 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxToolbook_InsertPage: {
-    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
     result: "i32"
   },
   wxToolbook_RemovePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxToolbook_SetImageList: {
@@ -11749,15 +12056,15 @@ var lib = Deno.dlopen(_libName, {
     result: "void"
   },
   wxToolbook_SetPageImage: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "i32"],
     result: "i32"
   },
   wxToolbook_SetPageText: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "usize", "pointer"],
     result: "i32"
   },
   wxToolbook_SetSelection: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxTreebook_AddPage: {
@@ -11781,7 +12088,7 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxTreebook_DeletePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxTreebook_ExpandNode: {
@@ -11793,23 +12100,23 @@ var lib = Deno.dlopen(_libName, {
     result: "pointer"
   },
   wxTreebook_GetPage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxTreebook_GetPageCount: {
     parameters: ["pointer"],
-    result: "i32"
+    result: "usize"
   },
   wxTreebook_GetPageImage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxTreebook_GetPageParent: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxTreebook_GetPageText: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "pointer"
   },
   wxTreebook_GetSelection: {
@@ -11825,7 +12132,7 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxTreebook_InsertPage: {
-    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
     result: "i32"
   },
   wxTreebook_InsertSubPage: {
@@ -11841,7 +12148,7 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxTreebook_RemovePage: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxTreebook_SetImageList: {
@@ -11849,15 +12156,15 @@ var lib = Deno.dlopen(_libName, {
     result: "void"
   },
   wxTreebook_SetPageImage: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "usize", "i32"],
     result: "i32"
   },
   wxTreebook_SetPageText: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "usize", "pointer"],
     result: "i32"
   },
   wxTreebook_SetSelection: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "usize"],
     result: "i32"
   },
   wxDataViewCtrl_Create: {
@@ -17617,7 +17924,7 @@ var lib = Deno.dlopen(_libName, {
     result: "i32"
   },
   wxWindow_Enable: {
-    parameters: ["pointer"],
+    parameters: ["pointer", "i32"],
     result: "i32"
   },
   wxWindow_FindFocus: {
@@ -20432,437 +20739,445 @@ var lib = Deno.dlopen(_libName, {
   expwxRIBBON_GALLERY_BUTTON_NORMAL: { parameters: [], result: "i32" },
   expwxRIBBON_GALLERY_BUTTON_HOVERED: { parameters: [], result: "i32" },
   expwxRIBBON_GALLERY_BUTTON_ACTIVE: { parameters: [], result: "i32" },
-  expwxRIBBON_GALLERY_BUTTON_DISABLED: { parameters: [], result: "i32" }
+  expwxRIBBON_GALLERY_BUTTON_DISABLED: { parameters: [], result: "i32" },
+  kwxConstants_IntCount: { parameters: [], result: "i32" },
+  kwxConstants_IntTable: { parameters: [], result: "pointer" }
 });
 
 // ../../wx/kwx_constants_gen.ts
-var EVT_ACTIVATE = lib.symbols.exp_wxEVT_ACTIVATE();
-var EVT_ACTIVATE_APP = lib.symbols.exp_wxEVT_ACTIVATE_APP();
-var EVT_AUINOTEBOOK_ALLOW_DND = lib.symbols.exp_wxEVT_AUINOTEBOOK_ALLOW_DND();
-var EVT_AUINOTEBOOK_BEGIN_DRAG = lib.symbols.exp_wxEVT_AUINOTEBOOK_BEGIN_DRAG();
-var EVT_AUINOTEBOOK_BG_DCLICK = lib.symbols.exp_wxEVT_AUINOTEBOOK_BG_DCLICK();
-var EVT_AUINOTEBOOK_BUTTON = lib.symbols.exp_wxEVT_AUINOTEBOOK_BUTTON();
-var EVT_AUINOTEBOOK_DRAG_DONE = lib.symbols.exp_wxEVT_AUINOTEBOOK_DRAG_DONE();
-var EVT_AUINOTEBOOK_DRAG_MOTION = lib.symbols.exp_wxEVT_AUINOTEBOOK_DRAG_MOTION();
-var EVT_AUINOTEBOOK_END_DRAG = lib.symbols.exp_wxEVT_AUINOTEBOOK_END_DRAG();
-var EVT_AUINOTEBOOK_PAGE_CHANGED = lib.symbols.exp_wxEVT_AUINOTEBOOK_PAGE_CHANGED();
-var EVT_AUINOTEBOOK_PAGE_CHANGING = lib.symbols.exp_wxEVT_AUINOTEBOOK_PAGE_CHANGING();
-var EVT_AUINOTEBOOK_PAGE_CLOSE = lib.symbols.exp_wxEVT_AUINOTEBOOK_PAGE_CLOSE();
-var EVT_AUINOTEBOOK_PAGE_CLOSED = lib.symbols.exp_wxEVT_AUINOTEBOOK_PAGE_CLOSED();
-var EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN = lib.symbols.exp_wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN();
-var EVT_AUINOTEBOOK_TAB_MIDDLE_UP = lib.symbols.exp_wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP();
-var EVT_AUINOTEBOOK_TAB_RIGHT_DOWN = lib.symbols.exp_wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN();
-var EVT_AUINOTEBOOK_TAB_RIGHT_UP = lib.symbols.exp_wxEVT_AUINOTEBOOK_TAB_RIGHT_UP();
-var EVT_AUITOOLBAR_BEGIN_DRAG = lib.symbols.exp_wxEVT_AUITOOLBAR_BEGIN_DRAG();
-var EVT_AUITOOLBAR_MIDDLE_CLICK = lib.symbols.exp_wxEVT_AUITOOLBAR_MIDDLE_CLICK();
-var EVT_AUITOOLBAR_OVERFLOW_CLICK = lib.symbols.exp_wxEVT_AUITOOLBAR_OVERFLOW_CLICK();
-var EVT_AUITOOLBAR_RIGHT_CLICK = lib.symbols.exp_wxEVT_AUITOOLBAR_RIGHT_CLICK();
-var EVT_AUITOOLBAR_TOOL_DROPDOWN = lib.symbols.exp_wxEVT_AUITOOLBAR_TOOL_DROPDOWN();
-var EVT_AUI_FIND_MANAGER = lib.symbols.exp_wxEVT_AUI_FIND_MANAGER();
-var EVT_AUI_PANE_BUTTON = lib.symbols.exp_wxEVT_AUI_PANE_BUTTON();
-var EVT_AUI_PANE_CLOSE = lib.symbols.exp_wxEVT_AUI_PANE_CLOSE();
-var EVT_AUI_PANE_MAXIMIZE = lib.symbols.exp_wxEVT_AUI_PANE_MAXIMIZE();
-var EVT_AUI_PANE_RESTORE = lib.symbols.exp_wxEVT_AUI_PANE_RESTORE();
-var EVT_AUI_RENDER = lib.symbols.exp_wxEVT_AUI_RENDER();
-var EVT_AUX1_DCLICK = lib.symbols.exp_wxEVT_AUX1_DCLICK();
-var EVT_AUX1_DOWN = lib.symbols.exp_wxEVT_AUX1_DOWN();
-var EVT_AUX1_UP = lib.symbols.exp_wxEVT_AUX1_UP();
-var EVT_AUX2_DCLICK = lib.symbols.exp_wxEVT_AUX2_DCLICK();
-var EVT_AUX2_DOWN = lib.symbols.exp_wxEVT_AUX2_DOWN();
-var EVT_AUX2_UP = lib.symbols.exp_wxEVT_AUX2_UP();
-var EVT_BUTTON = lib.symbols.exp_wxEVT_BUTTON();
-var EVT_CALCULATE_LAYOUT = lib.symbols.exp_wxEVT_CALCULATE_LAYOUT();
-var EVT_CALENDAR_DAY_CHANGED = lib.symbols.exp_wxEVT_CALENDAR_DAY_CHANGED();
-var EVT_CALENDAR_DOUBLECLICKED = lib.symbols.exp_wxEVT_CALENDAR_DOUBLECLICKED();
-var EVT_CALENDAR_MONTH_CHANGED = lib.symbols.exp_wxEVT_CALENDAR_MONTH_CHANGED();
-var EVT_CALENDAR_PAGE_CHANGED = lib.symbols.exp_wxEVT_CALENDAR_PAGE_CHANGED();
-var EVT_CALENDAR_SEL_CHANGED = lib.symbols.exp_wxEVT_CALENDAR_SEL_CHANGED();
-var EVT_CALENDAR_WEEKDAY_CLICKED = lib.symbols.exp_wxEVT_CALENDAR_WEEKDAY_CLICKED();
-var EVT_CALENDAR_WEEK_CLICKED = lib.symbols.exp_wxEVT_CALENDAR_WEEK_CLICKED();
-var EVT_CALENDAR_YEAR_CHANGED = lib.symbols.exp_wxEVT_CALENDAR_YEAR_CHANGED();
-var EVT_CHAR = lib.symbols.exp_wxEVT_CHAR();
-var EVT_CHAR_HOOK = lib.symbols.exp_wxEVT_CHAR_HOOK();
-var EVT_CHECKBOX = lib.symbols.exp_wxEVT_CHECKBOX();
-var EVT_CHECKLISTBOX = lib.symbols.exp_wxEVT_CHECKLISTBOX();
-var EVT_CHILD_FOCUS = lib.symbols.exp_wxEVT_CHILD_FOCUS();
-var EVT_CHOICE = lib.symbols.exp_wxEVT_CHOICE();
-var EVT_CHOICEBOOK_PAGE_CHANGED = lib.symbols.exp_wxEVT_CHOICEBOOK_PAGE_CHANGED();
-var EVT_CHOICEBOOK_PAGE_CHANGING = lib.symbols.exp_wxEVT_CHOICEBOOK_PAGE_CHANGING();
-var EVT_CLIPBOARD_CHANGED = lib.symbols.exp_wxEVT_CLIPBOARD_CHANGED();
-var EVT_CLOSE_WINDOW = lib.symbols.exp_wxEVT_CLOSE_WINDOW();
-var EVT_COLLAPSIBLEPANE_CHANGED = lib.symbols.exp_wxEVT_COLLAPSIBLEPANE_CHANGED();
-var EVT_COLOURPICKER_CHANGED = lib.symbols.exp_wxEVT_COLOURPICKER_CHANGED();
-var EVT_COMBOBOX = lib.symbols.exp_wxEVT_COMBOBOX();
-var EVT_COMBOBOX_CLOSEUP = lib.symbols.exp_wxEVT_COMBOBOX_CLOSEUP();
-var EVT_COMBOBOX_DROPDOWN = lib.symbols.exp_wxEVT_COMBOBOX_DROPDOWN();
-var EVT_CONTEXT_MENU = lib.symbols.exp_wxEVT_CONTEXT_MENU();
-var EVT_CREATE = lib.symbols.exp_wxEVT_CREATE();
-var EVT_DATAVIEW_ITEM_ACTIVATED = lib.symbols.exp_wxEVT_DATAVIEW_ITEM_ACTIVATED();
-var EVT_DATAVIEW_ITEM_COLLAPSED = lib.symbols.exp_wxEVT_DATAVIEW_ITEM_COLLAPSED();
-var EVT_DATAVIEW_ITEM_COLLAPSING = lib.symbols.exp_wxEVT_DATAVIEW_ITEM_COLLAPSING();
-var EVT_DATAVIEW_ITEM_EDITING_DONE = lib.symbols.exp_wxEVT_DATAVIEW_ITEM_EDITING_DONE();
-var EVT_DATAVIEW_ITEM_EDITING_STARTED = lib.symbols.exp_wxEVT_DATAVIEW_ITEM_EDITING_STARTED();
-var EVT_DATAVIEW_ITEM_EXPANDED = lib.symbols.exp_wxEVT_DATAVIEW_ITEM_EXPANDED();
-var EVT_DATAVIEW_ITEM_EXPANDING = lib.symbols.exp_wxEVT_DATAVIEW_ITEM_EXPANDING();
-var EVT_DATAVIEW_ITEM_VALUE_CHANGED = lib.symbols.exp_wxEVT_DATAVIEW_ITEM_VALUE_CHANGED();
-var EVT_DATAVIEW_SELECTION_CHANGED = lib.symbols.exp_wxEVT_DATAVIEW_SELECTION_CHANGED();
-var EVT_DATE_CHANGED = lib.symbols.exp_wxEVT_DATE_CHANGED();
-var EVT_DELETE = lib.symbols.exp_wxEVT_DELETE();
-var EVT_DESTROY = lib.symbols.exp_wxEVT_DESTROY();
-var EVT_DETAILED_HELP = lib.symbols.exp_wxEVT_DETAILED_HELP();
-var EVT_DIRPICKER_CHANGED = lib.symbols.exp_wxEVT_DIRPICKER_CHANGED();
-var EVT_DISPLAY_CHANGED = lib.symbols.exp_wxEVT_DISPLAY_CHANGED();
-var EVT_DROP_FILES = lib.symbols.exp_wxEVT_DROP_FILES();
-var EVT_END_PROCESS = lib.symbols.exp_wxEVT_END_PROCESS();
-var EVT_END_SESSION = lib.symbols.exp_wxEVT_END_SESSION();
-var EVT_ENTER_WINDOW = lib.symbols.exp_wxEVT_ENTER_WINDOW();
-var EVT_ERASE_BACKGROUND = lib.symbols.exp_wxEVT_ERASE_BACKGROUND();
-var EVT_FILECTRL_FILEACTIVATED = lib.symbols.exp_wxEVT_FILECTRL_FILEACTIVATED();
-var EVT_FILECTRL_FILTERCHANGED = lib.symbols.exp_wxEVT_FILECTRL_FILTERCHANGED();
-var EVT_FILECTRL_FOLDERCHANGED = lib.symbols.exp_wxEVT_FILECTRL_FOLDERCHANGED();
-var EVT_FILECTRL_SELECTIONCHANGED = lib.symbols.exp_wxEVT_FILECTRL_SELECTIONCHANGED();
-var EVT_FILEPICKER_CHANGED = lib.symbols.exp_wxEVT_FILEPICKER_CHANGED();
-var EVT_FIRST = lib.symbols.exp_wxEVT_FIRST();
-var EVT_FONTPICKER_CHANGED = lib.symbols.exp_wxEVT_FONTPICKER_CHANGED();
-var EVT_FSWATCHER = lib.symbols.exp_wxEVT_FSWATCHER();
-var EVT_GRID_CELL_BEGIN_DRAG = lib.symbols.exp_wxEVT_GRID_CELL_BEGIN_DRAG();
-var EVT_GRID_CELL_CHANGE = lib.symbols.exp_wxEVT_GRID_CELL_CHANGE();
-var EVT_GRID_CELL_CHANGED = lib.symbols.exp_wxEVT_GRID_CELL_CHANGED();
-var EVT_GRID_CELL_CHANGING = lib.symbols.exp_wxEVT_GRID_CELL_CHANGING();
-var EVT_GRID_CELL_LEFT_CLICK = lib.symbols.exp_wxEVT_GRID_CELL_LEFT_CLICK();
-var EVT_GRID_CELL_LEFT_DCLICK = lib.symbols.exp_wxEVT_GRID_CELL_LEFT_DCLICK();
-var EVT_GRID_CELL_RIGHT_CLICK = lib.symbols.exp_wxEVT_GRID_CELL_RIGHT_CLICK();
-var EVT_GRID_CELL_RIGHT_DCLICK = lib.symbols.exp_wxEVT_GRID_CELL_RIGHT_DCLICK();
-var EVT_GRID_COL_MOVE = lib.symbols.exp_wxEVT_GRID_COL_MOVE();
-var EVT_GRID_COL_SIZE = lib.symbols.exp_wxEVT_GRID_COL_SIZE();
-var EVT_GRID_COL_SORT = lib.symbols.exp_wxEVT_GRID_COL_SORT();
-var EVT_GRID_EDITOR_CREATED = lib.symbols.exp_wxEVT_GRID_EDITOR_CREATED();
-var EVT_GRID_EDITOR_HIDDEN = lib.symbols.exp_wxEVT_GRID_EDITOR_HIDDEN();
-var EVT_GRID_EDITOR_SHOWN = lib.symbols.exp_wxEVT_GRID_EDITOR_SHOWN();
-var EVT_GRID_LABEL_LEFT_CLICK = lib.symbols.exp_wxEVT_GRID_LABEL_LEFT_CLICK();
-var EVT_GRID_LABEL_LEFT_DCLICK = lib.symbols.exp_wxEVT_GRID_LABEL_LEFT_DCLICK();
-var EVT_GRID_LABEL_RIGHT_CLICK = lib.symbols.exp_wxEVT_GRID_LABEL_RIGHT_CLICK();
-var EVT_GRID_LABEL_RIGHT_DCLICK = lib.symbols.exp_wxEVT_GRID_LABEL_RIGHT_DCLICK();
-var EVT_GRID_RANGE_SELECT = lib.symbols.exp_wxEVT_GRID_RANGE_SELECT();
-var EVT_GRID_ROW_SIZE = lib.symbols.exp_wxEVT_GRID_ROW_SIZE();
-var EVT_GRID_SELECT_CELL = lib.symbols.exp_wxEVT_GRID_SELECT_CELL();
-var EVT_HELP = lib.symbols.exp_wxEVT_HELP();
-var EVT_HIBERNATE = lib.symbols.exp_wxEVT_HIBERNATE();
-var EVT_HOTKEY = lib.symbols.exp_wxEVT_HOTKEY();
-var EVT_HTML_CELL_CLICKED = lib.symbols.exp_wxEVT_HTML_CELL_CLICKED();
-var EVT_HTML_CELL_MOUSE_HOVER = lib.symbols.exp_wxEVT_HTML_CELL_MOUSE_HOVER();
-var EVT_HTML_LINK_CLICKED = lib.symbols.exp_wxEVT_HTML_LINK_CLICKED();
-var EVT_HTML_SET_TITLE = lib.symbols.exp_wxEVT_HTML_SET_TITLE();
-var EVT_HYPERLINK = lib.symbols.exp_wxEVT_HYPERLINK();
-var EVT_ICONIZE = lib.symbols.exp_wxEVT_ICONIZE();
-var EVT_IDLE = lib.symbols.exp_wxEVT_IDLE();
-var EVT_INIT_DIALOG = lib.symbols.exp_wxEVT_INIT_DIALOG();
-var EVT_INPUT_SINK = lib.symbols.exp_wxEVT_INPUT_SINK();
-var EVT_JOY_BUTTON_DOWN = lib.symbols.exp_wxEVT_JOY_BUTTON_DOWN();
-var EVT_JOY_BUTTON_UP = lib.symbols.exp_wxEVT_JOY_BUTTON_UP();
-var EVT_JOY_MOVE = lib.symbols.exp_wxEVT_JOY_MOVE();
-var EVT_JOY_ZMOVE = lib.symbols.exp_wxEVT_JOY_ZMOVE();
-var EVT_KEY_DOWN = lib.symbols.exp_wxEVT_KEY_DOWN();
-var EVT_KEY_UP = lib.symbols.exp_wxEVT_KEY_UP();
-var EVT_KILL_FOCUS = lib.symbols.exp_wxEVT_KILL_FOCUS();
-var EVT_LEAVE_WINDOW = lib.symbols.exp_wxEVT_LEAVE_WINDOW();
-var EVT_LEFT_DCLICK = lib.symbols.exp_wxEVT_LEFT_DCLICK();
-var EVT_LEFT_DOWN = lib.symbols.exp_wxEVT_LEFT_DOWN();
-var EVT_LEFT_UP = lib.symbols.exp_wxEVT_LEFT_UP();
-var EVT_LISTBOOK_PAGE_CHANGED = lib.symbols.exp_wxEVT_LISTBOOK_PAGE_CHANGED();
-var EVT_LISTBOOK_PAGE_CHANGING = lib.symbols.exp_wxEVT_LISTBOOK_PAGE_CHANGING();
-var EVT_LISTBOX = lib.symbols.exp_wxEVT_LISTBOX();
-var EVT_LISTBOX_DCLICK = lib.symbols.exp_wxEVT_LISTBOX_DCLICK();
-var EVT_LIST_BEGIN_DRAG = lib.symbols.exp_wxEVT_LIST_BEGIN_DRAG();
-var EVT_LIST_BEGIN_LABEL_EDIT = lib.symbols.exp_wxEVT_LIST_BEGIN_LABEL_EDIT();
-var EVT_LIST_BEGIN_RDRAG = lib.symbols.exp_wxEVT_LIST_BEGIN_RDRAG();
-var EVT_LIST_COL_CLICK = lib.symbols.exp_wxEVT_LIST_COL_CLICK();
-var EVT_LIST_DELETE_ALL_ITEMS = lib.symbols.exp_wxEVT_LIST_DELETE_ALL_ITEMS();
-var EVT_LIST_DELETE_ITEM = lib.symbols.exp_wxEVT_LIST_DELETE_ITEM();
-var EVT_LIST_END_LABEL_EDIT = lib.symbols.exp_wxEVT_LIST_END_LABEL_EDIT();
-var EVT_LIST_INSERT_ITEM = lib.symbols.exp_wxEVT_LIST_INSERT_ITEM();
-var EVT_LIST_ITEM_ACTIVATED = lib.symbols.exp_wxEVT_LIST_ITEM_ACTIVATED();
-var EVT_LIST_ITEM_DESELECTED = lib.symbols.exp_wxEVT_LIST_ITEM_DESELECTED();
-var EVT_LIST_ITEM_FOCUSED = lib.symbols.exp_wxEVT_LIST_ITEM_FOCUSED();
-var EVT_LIST_ITEM_MIDDLE_CLICK = lib.symbols.exp_wxEVT_LIST_ITEM_MIDDLE_CLICK();
-var EVT_LIST_ITEM_RIGHT_CLICK = lib.symbols.exp_wxEVT_LIST_ITEM_RIGHT_CLICK();
-var EVT_LIST_ITEM_SELECTED = lib.symbols.exp_wxEVT_LIST_ITEM_SELECTED();
-var EVT_LIST_KEY_DOWN = lib.symbols.exp_wxEVT_LIST_KEY_DOWN();
-var EVT_MAXIMIZE = lib.symbols.exp_wxEVT_MAXIMIZE();
-var EVT_MENU = lib.symbols.exp_wxEVT_MENU();
-var EVT_MENU_CLOSE = lib.symbols.exp_wxEVT_MENU_CLOSE();
-var EVT_MENU_HIGHLIGHT = lib.symbols.exp_wxEVT_MENU_HIGHLIGHT();
-var EVT_MENU_OPEN = lib.symbols.exp_wxEVT_MENU_OPEN();
-var EVT_MIDDLE_DCLICK = lib.symbols.exp_wxEVT_MIDDLE_DCLICK();
-var EVT_MIDDLE_DOWN = lib.symbols.exp_wxEVT_MIDDLE_DOWN();
-var EVT_MIDDLE_UP = lib.symbols.exp_wxEVT_MIDDLE_UP();
-var EVT_MOTION = lib.symbols.exp_wxEVT_MOTION();
-var EVT_MOUSEWHEEL = lib.symbols.exp_wxEVT_MOUSEWHEEL();
-var EVT_MOUSE_CAPTURE_CHANGED = lib.symbols.exp_wxEVT_MOUSE_CAPTURE_CHANGED();
-var EVT_MOUSE_CAPTURE_LOST = lib.symbols.exp_wxEVT_MOUSE_CAPTURE_LOST();
-var EVT_MOVE = lib.symbols.exp_wxEVT_MOVE();
-var EVT_MOVE_END = lib.symbols.exp_wxEVT_MOVE_END();
-var EVT_MOVE_START = lib.symbols.exp_wxEVT_MOVE_START();
-var EVT_MOVING = lib.symbols.exp_wxEVT_MOVING();
-var EVT_NAVIGATION_KEY = lib.symbols.exp_wxEVT_NAVIGATION_KEY();
-var EVT_NC_PAINT = lib.symbols.exp_wxEVT_NC_PAINT();
-var EVT_NOTEBOOK_PAGE_CHANGED = lib.symbols.exp_wxEVT_NOTEBOOK_PAGE_CHANGED();
-var EVT_NOTEBOOK_PAGE_CHANGING = lib.symbols.exp_wxEVT_NOTEBOOK_PAGE_CHANGING();
-var EVT_NULL = lib.symbols.exp_wxEVT_NULL();
-var EVT_PAINT = lib.symbols.exp_wxEVT_PAINT();
-var EVT_PALETTE_CHANGED = lib.symbols.exp_wxEVT_PALETTE_CHANGED();
-var EVT_PG_CHANGED = lib.symbols.exp_wxEVT_PG_CHANGED();
-var EVT_PG_CHANGING = lib.symbols.exp_wxEVT_PG_CHANGING();
-var EVT_PG_DOUBLE_CLICK = lib.symbols.exp_wxEVT_PG_DOUBLE_CLICK();
-var EVT_PG_HIGHLIGHTED = lib.symbols.exp_wxEVT_PG_HIGHLIGHTED();
-var EVT_PG_ITEM_COLLAPSED = lib.symbols.exp_wxEVT_PG_ITEM_COLLAPSED();
-var EVT_PG_ITEM_EXPANDED = lib.symbols.exp_wxEVT_PG_ITEM_EXPANDED();
-var EVT_PG_PAGE_CHANGED = lib.symbols.exp_wxEVT_PG_PAGE_CHANGED();
-var EVT_PG_RIGHT_CLICK = lib.symbols.exp_wxEVT_PG_RIGHT_CLICK();
-var EVT_PG_SELECTED = lib.symbols.exp_wxEVT_PG_SELECTED();
-var EVT_POWER_RESUME = lib.symbols.exp_wxEVT_POWER_RESUME();
-var EVT_POWER_SUSPENDED = lib.symbols.exp_wxEVT_POWER_SUSPENDED();
-var EVT_POWER_SUSPENDING = lib.symbols.exp_wxEVT_POWER_SUSPENDING();
-var EVT_POWER_SUSPEND_CANCEL = lib.symbols.exp_wxEVT_POWER_SUSPEND_CANCEL();
-var EVT_QUERY_END_SESSION = lib.symbols.exp_wxEVT_QUERY_END_SESSION();
-var EVT_QUERY_LAYOUT_INFO = lib.symbols.exp_wxEVT_QUERY_LAYOUT_INFO();
-var EVT_QUERY_NEW_PALETTE = lib.symbols.exp_wxEVT_QUERY_NEW_PALETTE();
-var EVT_RADIOBOX = lib.symbols.exp_wxEVT_RADIOBOX();
-var EVT_RADIOBUTTON = lib.symbols.exp_wxEVT_RADIOBUTTON();
-var EVT_RIGHT_DCLICK = lib.symbols.exp_wxEVT_RIGHT_DCLICK();
-var EVT_RIGHT_DOWN = lib.symbols.exp_wxEVT_RIGHT_DOWN();
-var EVT_RIGHT_UP = lib.symbols.exp_wxEVT_RIGHT_UP();
-var EVT_SASH_DRAGGED = lib.symbols.exp_wxEVT_SASH_DRAGGED();
-var EVT_SCROLLBAR = lib.symbols.exp_wxEVT_SCROLLBAR();
-var EVT_SCROLLWIN_BOTTOM = lib.symbols.exp_wxEVT_SCROLLWIN_BOTTOM();
-var EVT_SCROLLWIN_LINEDOWN = lib.symbols.exp_wxEVT_SCROLLWIN_LINEDOWN();
-var EVT_SCROLLWIN_LINEUP = lib.symbols.exp_wxEVT_SCROLLWIN_LINEUP();
-var EVT_SCROLLWIN_PAGEDOWN = lib.symbols.exp_wxEVT_SCROLLWIN_PAGEDOWN();
-var EVT_SCROLLWIN_PAGEUP = lib.symbols.exp_wxEVT_SCROLLWIN_PAGEUP();
-var EVT_SCROLLWIN_THUMBRELEASE = lib.symbols.exp_wxEVT_SCROLLWIN_THUMBRELEASE();
-var EVT_SCROLLWIN_THUMBTRACK = lib.symbols.exp_wxEVT_SCROLLWIN_THUMBTRACK();
-var EVT_SCROLLWIN_TOP = lib.symbols.exp_wxEVT_SCROLLWIN_TOP();
-var EVT_SCROLL_BOTTOM = lib.symbols.exp_wxEVT_SCROLL_BOTTOM();
-var EVT_SCROLL_CHANGED = lib.symbols.exp_wxEVT_SCROLL_CHANGED();
-var EVT_SCROLL_LINEDOWN = lib.symbols.exp_wxEVT_SCROLL_LINEDOWN();
-var EVT_SCROLL_LINEUP = lib.symbols.exp_wxEVT_SCROLL_LINEUP();
-var EVT_SCROLL_PAGEDOWN = lib.symbols.exp_wxEVT_SCROLL_PAGEDOWN();
-var EVT_SCROLL_PAGEUP = lib.symbols.exp_wxEVT_SCROLL_PAGEUP();
-var EVT_SCROLL_THUMBRELEASE = lib.symbols.exp_wxEVT_SCROLL_THUMBRELEASE();
-var EVT_SCROLL_THUMBTRACK = lib.symbols.exp_wxEVT_SCROLL_THUMBTRACK();
-var EVT_SCROLL_TOP = lib.symbols.exp_wxEVT_SCROLL_TOP();
-var EVT_SEARCHCTRL_CANCEL_BTN = lib.symbols.exp_wxEVT_SEARCHCTRL_CANCEL_BTN();
-var EVT_SEARCHCTRL_SEARCH_BTN = lib.symbols.exp_wxEVT_SEARCHCTRL_SEARCH_BTN();
-var EVT_SET_CURSOR = lib.symbols.exp_wxEVT_SET_CURSOR();
-var EVT_SET_FOCUS = lib.symbols.exp_wxEVT_SET_FOCUS();
-var EVT_SHOW = lib.symbols.exp_wxEVT_SHOW();
-var EVT_SIZE = lib.symbols.exp_wxEVT_SIZE();
-var EVT_SIZING = lib.symbols.exp_wxEVT_SIZING();
-var EVT_SLIDER = lib.symbols.exp_wxEVT_SLIDER();
-var EVT_SOCKET = lib.symbols.exp_wxEVT_SOCKET();
-var EVT_SORT = lib.symbols.exp_wxEVT_SORT();
-var EVT_SPIN = lib.symbols.exp_wxEVT_SPIN();
-var EVT_SPINCTRL = lib.symbols.exp_wxEVT_SPINCTRL();
-var EVT_SPINCTRLDOUBLE = lib.symbols.exp_wxEVT_SPINCTRLDOUBLE();
-var EVT_SPIN_DOWN = lib.symbols.exp_wxEVT_SPIN_DOWN();
-var EVT_SPIN_UP = lib.symbols.exp_wxEVT_SPIN_UP();
-var EVT_SPLITTER_DOUBLECLICKED = lib.symbols.exp_wxEVT_SPLITTER_DOUBLECLICKED();
-var EVT_SPLITTER_SASH_POS_CHANGED = lib.symbols.exp_wxEVT_SPLITTER_SASH_POS_CHANGED();
-var EVT_SPLITTER_SASH_POS_CHANGING = lib.symbols.exp_wxEVT_SPLITTER_SASH_POS_CHANGING();
-var EVT_SPLITTER_UNSPLIT = lib.symbols.exp_wxEVT_SPLITTER_UNSPLIT();
-var EVT_SYS_COLOUR_CHANGED = lib.symbols.exp_wxEVT_SYS_COLOUR_CHANGED();
-var EVT_TASKBAR_BALLOON_CLICK = lib.symbols.exp_wxEVT_TASKBAR_BALLOON_CLICK();
-var EVT_TASKBAR_BALLOON_TIMEOUT = lib.symbols.exp_wxEVT_TASKBAR_BALLOON_TIMEOUT();
-var EVT_TASKBAR_LEFT_DCLICK = lib.symbols.exp_wxEVT_TASKBAR_LEFT_DCLICK();
-var EVT_TASKBAR_LEFT_DOWN = lib.symbols.exp_wxEVT_TASKBAR_LEFT_DOWN();
-var EVT_TASKBAR_LEFT_UP = lib.symbols.exp_wxEVT_TASKBAR_LEFT_UP();
-var EVT_TASKBAR_MOVE = lib.symbols.exp_wxEVT_TASKBAR_MOVE();
-var EVT_TASKBAR_RIGHT_DCLICK = lib.symbols.exp_wxEVT_TASKBAR_RIGHT_DCLICK();
-var EVT_TASKBAR_RIGHT_DOWN = lib.symbols.exp_wxEVT_TASKBAR_RIGHT_DOWN();
-var EVT_TASKBAR_RIGHT_UP = lib.symbols.exp_wxEVT_TASKBAR_RIGHT_UP();
-var EVT_TEXT = lib.symbols.exp_wxEVT_TEXT();
-var EVT_TEXT_COPY = lib.symbols.exp_wxEVT_TEXT_COPY();
-var EVT_TEXT_CUT = lib.symbols.exp_wxEVT_TEXT_CUT();
-var EVT_TEXT_ENTER = lib.symbols.exp_wxEVT_TEXT_ENTER();
-var EVT_TEXT_MAXLEN = lib.symbols.exp_wxEVT_TEXT_MAXLEN();
-var EVT_TEXT_PASTE = lib.symbols.exp_wxEVT_TEXT_PASTE();
-var EVT_TEXT_URL = lib.symbols.exp_wxEVT_TEXT_URL();
-var EVT_THREAD = lib.symbols.exp_wxEVT_THREAD();
-var EVT_TIMER = lib.symbols.exp_wxEVT_TIMER();
-var EVT_TOGGLEBUTTON = lib.symbols.exp_wxEVT_TOGGLEBUTTON();
-var EVT_TOOL = lib.symbols.exp_wxEVT_TOOL();
-var EVT_TOOLBOOK_PAGE_CHANGED = lib.symbols.exp_wxEVT_TOOLBOOK_PAGE_CHANGED();
-var EVT_TOOLBOOK_PAGE_CHANGING = lib.symbols.exp_wxEVT_TOOLBOOK_PAGE_CHANGING();
-var EVT_TOOL_DROPDOWN = lib.symbols.exp_wxEVT_TOOL_DROPDOWN();
-var EVT_TOOL_ENTER = lib.symbols.exp_wxEVT_TOOL_ENTER();
-var EVT_TOOL_RCLICKED = lib.symbols.exp_wxEVT_TOOL_RCLICKED();
-var EVT_TREEBOOK_NODE_COLLAPSED = lib.symbols.exp_wxEVT_TREEBOOK_NODE_COLLAPSED();
-var EVT_TREEBOOK_NODE_EXPANDED = lib.symbols.exp_wxEVT_TREEBOOK_NODE_EXPANDED();
-var EVT_TREEBOOK_PAGE_CHANGED = lib.symbols.exp_wxEVT_TREEBOOK_PAGE_CHANGED();
-var EVT_TREEBOOK_PAGE_CHANGING = lib.symbols.exp_wxEVT_TREEBOOK_PAGE_CHANGING();
-var EVT_TREELIST_COLUMN_SORTED = lib.symbols.exp_wxEVT_TREELIST_COLUMN_SORTED();
-var EVT_TREELIST_ITEM_ACTIVATED = lib.symbols.exp_wxEVT_TREELIST_ITEM_ACTIVATED();
-var EVT_TREELIST_ITEM_CHECKED = lib.symbols.exp_wxEVT_TREELIST_ITEM_CHECKED();
-var EVT_TREELIST_ITEM_CONTEXT_MENU = lib.symbols.exp_wxEVT_TREELIST_ITEM_CONTEXT_MENU();
-var EVT_TREELIST_ITEM_EXPANDED = lib.symbols.exp_wxEVT_TREELIST_ITEM_EXPANDED();
-var EVT_TREELIST_ITEM_EXPANDING = lib.symbols.exp_wxEVT_TREELIST_ITEM_EXPANDING();
-var EVT_TREELIST_SELECTION_CHANGED = lib.symbols.exp_wxEVT_TREELIST_SELECTION_CHANGED();
-var EVT_TREE_BEGIN_DRAG = lib.symbols.exp_wxEVT_TREE_BEGIN_DRAG();
-var EVT_TREE_BEGIN_LABEL_EDIT = lib.symbols.exp_wxEVT_TREE_BEGIN_LABEL_EDIT();
-var EVT_TREE_BEGIN_RDRAG = lib.symbols.exp_wxEVT_TREE_BEGIN_RDRAG();
-var EVT_TREE_DELETE_ITEM = lib.symbols.exp_wxEVT_TREE_DELETE_ITEM();
-var EVT_TREE_END_DRAG = lib.symbols.exp_wxEVT_TREE_END_DRAG();
-var EVT_TREE_END_LABEL_EDIT = lib.symbols.exp_wxEVT_TREE_END_LABEL_EDIT();
-var EVT_TREE_GET_INFO = lib.symbols.exp_wxEVT_TREE_GET_INFO();
-var EVT_TREE_ITEM_ACTIVATED = lib.symbols.exp_wxEVT_TREE_ITEM_ACTIVATED();
-var EVT_TREE_ITEM_COLLAPSED = lib.symbols.exp_wxEVT_TREE_ITEM_COLLAPSED();
-var EVT_TREE_ITEM_COLLAPSING = lib.symbols.exp_wxEVT_TREE_ITEM_COLLAPSING();
-var EVT_TREE_ITEM_EXPANDED = lib.symbols.exp_wxEVT_TREE_ITEM_EXPANDED();
-var EVT_TREE_ITEM_EXPANDING = lib.symbols.exp_wxEVT_TREE_ITEM_EXPANDING();
-var EVT_TREE_ITEM_MIDDLE_CLICK = lib.symbols.exp_wxEVT_TREE_ITEM_MIDDLE_CLICK();
-var EVT_TREE_ITEM_RIGHT_CLICK = lib.symbols.exp_wxEVT_TREE_ITEM_RIGHT_CLICK();
-var EVT_TREE_KEY_DOWN = lib.symbols.exp_wxEVT_TREE_KEY_DOWN();
-var EVT_TREE_SEL_CHANGED = lib.symbols.exp_wxEVT_TREE_SEL_CHANGED();
-var EVT_TREE_SEL_CHANGING = lib.symbols.exp_wxEVT_TREE_SEL_CHANGING();
-var EVT_TREE_SET_INFO = lib.symbols.exp_wxEVT_TREE_SET_INFO();
-var EVT_UPDATE_UI = lib.symbols.exp_wxEVT_UPDATE_UI();
-var EVT_USER_FIRST = lib.symbols.exp_wxEVT_USER_FIRST();
-var EVT_VLBOX = lib.symbols.exp_wxEVT_VLBOX();
-var EVT_WEBVIEW_ERROR = lib.symbols.exp_wxEVT_WEBVIEW_ERROR();
-var EVT_WEBVIEW_FULLSCREEN_CHANGED = lib.symbols.exp_wxEVT_WEBVIEW_FULLSCREEN_CHANGED();
-var EVT_WEBVIEW_LOADED = lib.symbols.exp_wxEVT_WEBVIEW_LOADED();
-var EVT_WEBVIEW_NAVIGATED = lib.symbols.exp_wxEVT_WEBVIEW_NAVIGATED();
-var EVT_WEBVIEW_NAVIGATING = lib.symbols.exp_wxEVT_WEBVIEW_NAVIGATING();
-var EVT_WEBVIEW_NEWWINDOW = lib.symbols.exp_wxEVT_WEBVIEW_NEWWINDOW();
-var EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED = lib.symbols.exp_wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED();
-var EVT_WEBVIEW_SCRIPT_RESULT = lib.symbols.exp_wxEVT_WEBVIEW_SCRIPT_RESULT();
-var EVT_WEBVIEW_TITLE_CHANGED = lib.symbols.exp_wxEVT_WEBVIEW_TITLE_CHANGED();
-var EVT_WINDOW_MODAL_DIALOG_CLOSED = lib.symbols.exp_wxEVT_WINDOW_MODAL_DIALOG_CLOSED();
-var EVT_WIZARD_CANCEL = lib.symbols.exp_wxEVT_WIZARD_CANCEL();
-var EVT_WIZARD_FINISHED = lib.symbols.exp_wxEVT_WIZARD_FINISHED();
-var EVT_WIZARD_HELP = lib.symbols.exp_wxEVT_WIZARD_HELP();
-var EVT_WIZARD_PAGE_CHANGED = lib.symbols.exp_wxEVT_WIZARD_PAGE_CHANGED();
-var EVT_WIZARD_PAGE_CHANGING = lib.symbols.exp_wxEVT_WIZARD_PAGE_CHANGING();
-var EVT_WIZARD_PAGE_SHOWN = lib.symbols.exp_wxEVT_WIZARD_PAGE_SHOWN();
-var K_ADD = lib.symbols.expK_ADD();
-var K_ALT = lib.symbols.expK_ALT();
-var K_BACK = lib.symbols.expK_BACK();
-var K_CANCEL = lib.symbols.expK_CANCEL();
-var K_CAPITAL = lib.symbols.expK_CAPITAL();
-var K_CLEAR = lib.symbols.expK_CLEAR();
-var K_CONTROL = lib.symbols.expK_CONTROL();
-var K_DECIMAL = lib.symbols.expK_DECIMAL();
-var K_DELETE = lib.symbols.expK_DELETE();
-var K_DIVIDE = lib.symbols.expK_DIVIDE();
-var K_DOWN = lib.symbols.expK_DOWN();
-var K_END = lib.symbols.expK_END();
-var K_ESCAPE = lib.symbols.expK_ESCAPE();
-var K_EXECUTE = lib.symbols.expK_EXECUTE();
-var K_F1 = lib.symbols.expK_F1();
-var K_F10 = lib.symbols.expK_F10();
-var K_F11 = lib.symbols.expK_F11();
-var K_F12 = lib.symbols.expK_F12();
-var K_F13 = lib.symbols.expK_F13();
-var K_F14 = lib.symbols.expK_F14();
-var K_F15 = lib.symbols.expK_F15();
-var K_F16 = lib.symbols.expK_F16();
-var K_F17 = lib.symbols.expK_F17();
-var K_F18 = lib.symbols.expK_F18();
-var K_F19 = lib.symbols.expK_F19();
-var K_F2 = lib.symbols.expK_F2();
-var K_F20 = lib.symbols.expK_F20();
-var K_F21 = lib.symbols.expK_F21();
-var K_F22 = lib.symbols.expK_F22();
-var K_F23 = lib.symbols.expK_F23();
-var K_F24 = lib.symbols.expK_F24();
-var K_F3 = lib.symbols.expK_F3();
-var K_F4 = lib.symbols.expK_F4();
-var K_F5 = lib.symbols.expK_F5();
-var K_F6 = lib.symbols.expK_F6();
-var K_F7 = lib.symbols.expK_F7();
-var K_F8 = lib.symbols.expK_F8();
-var K_F9 = lib.symbols.expK_F9();
-var K_HELP = lib.symbols.expK_HELP();
-var K_HOME = lib.symbols.expK_HOME();
-var K_INSERT = lib.symbols.expK_INSERT();
-var K_LBUTTON = lib.symbols.expK_LBUTTON();
-var K_LEFT = lib.symbols.expK_LEFT();
-var K_MBUTTON = lib.symbols.expK_MBUTTON();
-var K_MENU = lib.symbols.expK_MENU();
-var K_MULTIPLY = lib.symbols.expK_MULTIPLY();
-var K_NUMLOCK = lib.symbols.expK_NUMLOCK();
-var K_NUMPAD0 = lib.symbols.expK_NUMPAD0();
-var K_NUMPAD1 = lib.symbols.expK_NUMPAD1();
-var K_NUMPAD2 = lib.symbols.expK_NUMPAD2();
-var K_NUMPAD3 = lib.symbols.expK_NUMPAD3();
-var K_NUMPAD4 = lib.symbols.expK_NUMPAD4();
-var K_NUMPAD5 = lib.symbols.expK_NUMPAD5();
-var K_NUMPAD6 = lib.symbols.expK_NUMPAD6();
-var K_NUMPAD7 = lib.symbols.expK_NUMPAD7();
-var K_NUMPAD8 = lib.symbols.expK_NUMPAD8();
-var K_NUMPAD9 = lib.symbols.expK_NUMPAD9();
-var K_NUMPAD_ADD = lib.symbols.expK_NUMPAD_ADD();
-var K_NUMPAD_BEGIN = lib.symbols.expK_NUMPAD_BEGIN();
-var K_NUMPAD_DECIMAL = lib.symbols.expK_NUMPAD_DECIMAL();
-var K_NUMPAD_DELETE = lib.symbols.expK_NUMPAD_DELETE();
-var K_NUMPAD_DIVIDE = lib.symbols.expK_NUMPAD_DIVIDE();
-var K_NUMPAD_DOWN = lib.symbols.expK_NUMPAD_DOWN();
-var K_NUMPAD_END = lib.symbols.expK_NUMPAD_END();
-var K_NUMPAD_ENTER = lib.symbols.expK_NUMPAD_ENTER();
-var K_NUMPAD_EQUAL = lib.symbols.expK_NUMPAD_EQUAL();
-var K_NUMPAD_F1 = lib.symbols.expK_NUMPAD_F1();
-var K_NUMPAD_F2 = lib.symbols.expK_NUMPAD_F2();
-var K_NUMPAD_F3 = lib.symbols.expK_NUMPAD_F3();
-var K_NUMPAD_F4 = lib.symbols.expK_NUMPAD_F4();
-var K_NUMPAD_HOME = lib.symbols.expK_NUMPAD_HOME();
-var K_NUMPAD_INSERT = lib.symbols.expK_NUMPAD_INSERT();
-var K_NUMPAD_LEFT = lib.symbols.expK_NUMPAD_LEFT();
-var K_NUMPAD_MULTIPLY = lib.symbols.expK_NUMPAD_MULTIPLY();
-var K_NUMPAD_PAGEDOWN = lib.symbols.expK_NUMPAD_PAGEDOWN();
-var K_NUMPAD_PAGEUP = lib.symbols.expK_NUMPAD_PAGEUP();
-var K_NUMPAD_RIGHT = lib.symbols.expK_NUMPAD_RIGHT();
-var K_NUMPAD_SEPARATOR = lib.symbols.expK_NUMPAD_SEPARATOR();
-var K_NUMPAD_SPACE = lib.symbols.expK_NUMPAD_SPACE();
-var K_NUMPAD_SUBTRACT = lib.symbols.expK_NUMPAD_SUBTRACT();
-var K_NUMPAD_TAB = lib.symbols.expK_NUMPAD_TAB();
-var K_NUMPAD_UP = lib.symbols.expK_NUMPAD_UP();
-var K_PAGEDOWN = lib.symbols.expK_PAGEDOWN();
-var K_PAGEUP = lib.symbols.expK_PAGEUP();
-var K_PAUSE = lib.symbols.expK_PAUSE();
-var K_PRINT = lib.symbols.expK_PRINT();
-var K_RBUTTON = lib.symbols.expK_RBUTTON();
-var K_RETURN = lib.symbols.expK_RETURN();
-var K_RIGHT = lib.symbols.expK_RIGHT();
-var K_SCROLL = lib.symbols.expK_SCROLL();
-var K_SELECT = lib.symbols.expK_SELECT();
-var K_SEPARATOR = lib.symbols.expK_SEPARATOR();
-var K_SHIFT = lib.symbols.expK_SHIFT();
-var K_SNAPSHOT = lib.symbols.expK_SNAPSHOT();
-var K_SPACE = lib.symbols.expK_SPACE();
-var K_START = lib.symbols.expK_START();
-var K_SUBTRACT = lib.symbols.expK_SUBTRACT();
-var K_TAB = lib.symbols.expK_TAB();
-var K_UP = lib.symbols.expK_UP();
-var ACCEL_ALT = lib.symbols.expwxACCEL_ALT();
-var ACCEL_CTRL = lib.symbols.expwxACCEL_CTRL();
-var ACCEL_NORMAL = lib.symbols.expwxACCEL_NORMAL();
-var ACCEL_SHIFT = lib.symbols.expwxACCEL_SHIFT();
-var ALIGN_BOTTOM = lib.symbols.expwxALIGN_BOTTOM();
-var ALIGN_CENTER = lib.symbols.expwxALIGN_CENTER();
-var ALIGN_CENTER_HORIZONTAL = lib.symbols.expwxALIGN_CENTER_HORIZONTAL();
-var ALIGN_CENTER_VERTICAL = lib.symbols.expwxALIGN_CENTER_VERTICAL();
-var ALIGN_CENTRE = lib.symbols.expwxALIGN_CENTRE();
-var ALIGN_CENTRE_HORIZONTAL = lib.symbols.expwxALIGN_CENTRE_HORIZONTAL();
-var ALIGN_CENTRE_VERTICAL = lib.symbols.expwxALIGN_CENTRE_VERTICAL();
-var ALIGN_LEFT = lib.symbols.expwxALIGN_LEFT();
-var ALIGN_NOT = lib.symbols.expwxALIGN_NOT();
-var ALIGN_RIGHT = lib.symbols.expwxALIGN_RIGHT();
-var ALIGN_TOP = lib.symbols.expwxALIGN_TOP();
-var ALL = lib.symbols.expwxALL();
-var ALWAYS_SHOW_SB = lib.symbols.expwxALWAYS_SHOW_SB();
-var AND = lib.symbols.expwxAND();
-var AND_INVERT = lib.symbols.expwxAND_INVERT();
-var AND_REVERSE = lib.symbols.expwxAND_REVERSE();
+var import_platform2 = require("kwx/platform");
+var _intCount = lib.symbols.kwxConstants_IntCount();
+var _intTable = lib.symbols.kwxConstants_IntTable();
+var _ints = new Int32Array(
+  (0, import_platform2.arrayBufferView)(_intTable, _intCount * 4)
+);
+var EVT_ACTIVATE = _ints[0];
+var EVT_ACTIVATE_APP = _ints[1];
+var EVT_AUINOTEBOOK_ALLOW_DND = _ints[2];
+var EVT_AUINOTEBOOK_BEGIN_DRAG = _ints[3];
+var EVT_AUINOTEBOOK_BG_DCLICK = _ints[4];
+var EVT_AUINOTEBOOK_BUTTON = _ints[5];
+var EVT_AUINOTEBOOK_DRAG_DONE = _ints[6];
+var EVT_AUINOTEBOOK_DRAG_MOTION = _ints[7];
+var EVT_AUINOTEBOOK_END_DRAG = _ints[8];
+var EVT_AUINOTEBOOK_PAGE_CHANGED = _ints[9];
+var EVT_AUINOTEBOOK_PAGE_CHANGING = _ints[10];
+var EVT_AUINOTEBOOK_PAGE_CLOSE = _ints[11];
+var EVT_AUINOTEBOOK_PAGE_CLOSED = _ints[12];
+var EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN = _ints[13];
+var EVT_AUINOTEBOOK_TAB_MIDDLE_UP = _ints[14];
+var EVT_AUINOTEBOOK_TAB_RIGHT_DOWN = _ints[15];
+var EVT_AUINOTEBOOK_TAB_RIGHT_UP = _ints[16];
+var EVT_AUITOOLBAR_BEGIN_DRAG = _ints[17];
+var EVT_AUITOOLBAR_MIDDLE_CLICK = _ints[18];
+var EVT_AUITOOLBAR_OVERFLOW_CLICK = _ints[19];
+var EVT_AUITOOLBAR_RIGHT_CLICK = _ints[20];
+var EVT_AUITOOLBAR_TOOL_DROPDOWN = _ints[21];
+var EVT_AUI_FIND_MANAGER = _ints[22];
+var EVT_AUI_PANE_BUTTON = _ints[23];
+var EVT_AUI_PANE_CLOSE = _ints[24];
+var EVT_AUI_PANE_MAXIMIZE = _ints[25];
+var EVT_AUI_PANE_RESTORE = _ints[26];
+var EVT_AUI_RENDER = _ints[27];
+var EVT_AUX1_DCLICK = _ints[28];
+var EVT_AUX1_DOWN = _ints[29];
+var EVT_AUX1_UP = _ints[30];
+var EVT_AUX2_DCLICK = _ints[31];
+var EVT_AUX2_DOWN = _ints[32];
+var EVT_AUX2_UP = _ints[33];
+var EVT_BUTTON = _ints[34];
+var EVT_CALCULATE_LAYOUT = _ints[35];
+var EVT_CALENDAR_DAY_CHANGED = _ints[36];
+var EVT_CALENDAR_DOUBLECLICKED = _ints[37];
+var EVT_CALENDAR_MONTH_CHANGED = _ints[38];
+var EVT_CALENDAR_PAGE_CHANGED = _ints[39];
+var EVT_CALENDAR_SEL_CHANGED = _ints[40];
+var EVT_CALENDAR_WEEKDAY_CLICKED = _ints[41];
+var EVT_CALENDAR_WEEK_CLICKED = _ints[42];
+var EVT_CALENDAR_YEAR_CHANGED = _ints[43];
+var EVT_CHAR = _ints[44];
+var EVT_CHAR_HOOK = _ints[45];
+var EVT_CHECKBOX = _ints[46];
+var EVT_CHECKLISTBOX = _ints[47];
+var EVT_CHILD_FOCUS = _ints[48];
+var EVT_CHOICE = _ints[49];
+var EVT_CHOICEBOOK_PAGE_CHANGED = _ints[50];
+var EVT_CHOICEBOOK_PAGE_CHANGING = _ints[51];
+var EVT_CLIPBOARD_CHANGED = _ints[52];
+var EVT_CLOSE_WINDOW = _ints[53];
+var EVT_COLLAPSIBLEPANE_CHANGED = _ints[54];
+var EVT_COLOURPICKER_CHANGED = _ints[55];
+var EVT_COMBOBOX = _ints[56];
+var EVT_COMBOBOX_CLOSEUP = _ints[57];
+var EVT_COMBOBOX_DROPDOWN = _ints[58];
+var EVT_CONTEXT_MENU = _ints[59];
+var EVT_CREATE = _ints[60];
+var EVT_DATAVIEW_ITEM_ACTIVATED = _ints[61];
+var EVT_DATAVIEW_ITEM_COLLAPSED = _ints[62];
+var EVT_DATAVIEW_ITEM_COLLAPSING = _ints[63];
+var EVT_DATAVIEW_ITEM_EDITING_DONE = _ints[64];
+var EVT_DATAVIEW_ITEM_EDITING_STARTED = _ints[65];
+var EVT_DATAVIEW_ITEM_EXPANDED = _ints[66];
+var EVT_DATAVIEW_ITEM_EXPANDING = _ints[67];
+var EVT_DATAVIEW_ITEM_VALUE_CHANGED = _ints[68];
+var EVT_DATAVIEW_SELECTION_CHANGED = _ints[69];
+var EVT_DATE_CHANGED = _ints[70];
+var EVT_DELETE = _ints[71];
+var EVT_DESTROY = _ints[72];
+var EVT_DETAILED_HELP = _ints[73];
+var EVT_DIRPICKER_CHANGED = _ints[74];
+var EVT_DISPLAY_CHANGED = _ints[75];
+var EVT_DROP_FILES = _ints[76];
+var EVT_END_PROCESS = _ints[77];
+var EVT_END_SESSION = _ints[78];
+var EVT_ENTER_WINDOW = _ints[79];
+var EVT_ERASE_BACKGROUND = _ints[80];
+var EVT_FILECTRL_FILEACTIVATED = _ints[81];
+var EVT_FILECTRL_FILTERCHANGED = _ints[82];
+var EVT_FILECTRL_FOLDERCHANGED = _ints[83];
+var EVT_FILECTRL_SELECTIONCHANGED = _ints[84];
+var EVT_FILEPICKER_CHANGED = _ints[85];
+var EVT_FIRST = _ints[86];
+var EVT_FONTPICKER_CHANGED = _ints[87];
+var EVT_FSWATCHER = _ints[88];
+var EVT_GRID_CELL_BEGIN_DRAG = _ints[89];
+var EVT_GRID_CELL_CHANGE = _ints[90];
+var EVT_GRID_CELL_CHANGED = _ints[91];
+var EVT_GRID_CELL_CHANGING = _ints[92];
+var EVT_GRID_CELL_LEFT_CLICK = _ints[93];
+var EVT_GRID_CELL_LEFT_DCLICK = _ints[94];
+var EVT_GRID_CELL_RIGHT_CLICK = _ints[95];
+var EVT_GRID_CELL_RIGHT_DCLICK = _ints[96];
+var EVT_GRID_COL_MOVE = _ints[97];
+var EVT_GRID_COL_SIZE = _ints[98];
+var EVT_GRID_COL_SORT = _ints[99];
+var EVT_GRID_EDITOR_CREATED = _ints[100];
+var EVT_GRID_EDITOR_HIDDEN = _ints[101];
+var EVT_GRID_EDITOR_SHOWN = _ints[102];
+var EVT_GRID_LABEL_LEFT_CLICK = _ints[103];
+var EVT_GRID_LABEL_LEFT_DCLICK = _ints[104];
+var EVT_GRID_LABEL_RIGHT_CLICK = _ints[105];
+var EVT_GRID_LABEL_RIGHT_DCLICK = _ints[106];
+var EVT_GRID_RANGE_SELECT = _ints[107];
+var EVT_GRID_ROW_SIZE = _ints[108];
+var EVT_GRID_SELECT_CELL = _ints[109];
+var EVT_HELP = _ints[110];
+var EVT_HIBERNATE = _ints[111];
+var EVT_HOTKEY = _ints[112];
+var EVT_HTML_CELL_CLICKED = _ints[113];
+var EVT_HTML_CELL_MOUSE_HOVER = _ints[114];
+var EVT_HTML_LINK_CLICKED = _ints[115];
+var EVT_HTML_SET_TITLE = _ints[116];
+var EVT_HYPERLINK = _ints[117];
+var EVT_ICONIZE = _ints[118];
+var EVT_IDLE = _ints[119];
+var EVT_INIT_DIALOG = _ints[120];
+var EVT_INPUT_SINK = _ints[121];
+var EVT_JOY_BUTTON_DOWN = _ints[122];
+var EVT_JOY_BUTTON_UP = _ints[123];
+var EVT_JOY_MOVE = _ints[124];
+var EVT_JOY_ZMOVE = _ints[125];
+var EVT_KEY_DOWN = _ints[126];
+var EVT_KEY_UP = _ints[127];
+var EVT_KILL_FOCUS = _ints[128];
+var EVT_LEAVE_WINDOW = _ints[129];
+var EVT_LEFT_DCLICK = _ints[130];
+var EVT_LEFT_DOWN = _ints[131];
+var EVT_LEFT_UP = _ints[132];
+var EVT_LISTBOOK_PAGE_CHANGED = _ints[133];
+var EVT_LISTBOOK_PAGE_CHANGING = _ints[134];
+var EVT_LISTBOX = _ints[135];
+var EVT_LISTBOX_DCLICK = _ints[136];
+var EVT_LIST_BEGIN_DRAG = _ints[137];
+var EVT_LIST_BEGIN_LABEL_EDIT = _ints[138];
+var EVT_LIST_BEGIN_RDRAG = _ints[139];
+var EVT_LIST_COL_CLICK = _ints[140];
+var EVT_LIST_DELETE_ALL_ITEMS = _ints[141];
+var EVT_LIST_DELETE_ITEM = _ints[142];
+var EVT_LIST_END_LABEL_EDIT = _ints[143];
+var EVT_LIST_INSERT_ITEM = _ints[144];
+var EVT_LIST_ITEM_ACTIVATED = _ints[145];
+var EVT_LIST_ITEM_DESELECTED = _ints[146];
+var EVT_LIST_ITEM_FOCUSED = _ints[147];
+var EVT_LIST_ITEM_MIDDLE_CLICK = _ints[148];
+var EVT_LIST_ITEM_RIGHT_CLICK = _ints[149];
+var EVT_LIST_ITEM_SELECTED = _ints[150];
+var EVT_LIST_KEY_DOWN = _ints[151];
+var EVT_MAXIMIZE = _ints[152];
+var EVT_MENU = _ints[153];
+var EVT_MENU_CLOSE = _ints[154];
+var EVT_MENU_HIGHLIGHT = _ints[155];
+var EVT_MENU_OPEN = _ints[156];
+var EVT_MIDDLE_DCLICK = _ints[157];
+var EVT_MIDDLE_DOWN = _ints[158];
+var EVT_MIDDLE_UP = _ints[159];
+var EVT_MOTION = _ints[160];
+var EVT_MOUSEWHEEL = _ints[161];
+var EVT_MOUSE_CAPTURE_CHANGED = _ints[162];
+var EVT_MOUSE_CAPTURE_LOST = _ints[163];
+var EVT_MOVE = _ints[164];
+var EVT_MOVE_END = _ints[165];
+var EVT_MOVE_START = _ints[166];
+var EVT_MOVING = _ints[167];
+var EVT_NAVIGATION_KEY = _ints[168];
+var EVT_NC_PAINT = _ints[169];
+var EVT_NOTEBOOK_PAGE_CHANGED = _ints[170];
+var EVT_NOTEBOOK_PAGE_CHANGING = _ints[171];
+var EVT_NULL = _ints[172];
+var EVT_PAINT = _ints[173];
+var EVT_PALETTE_CHANGED = _ints[174];
+var EVT_PG_CHANGED = _ints[175];
+var EVT_PG_CHANGING = _ints[176];
+var EVT_PG_DOUBLE_CLICK = _ints[177];
+var EVT_PG_HIGHLIGHTED = _ints[178];
+var EVT_PG_ITEM_COLLAPSED = _ints[179];
+var EVT_PG_ITEM_EXPANDED = _ints[180];
+var EVT_PG_PAGE_CHANGED = _ints[181];
+var EVT_PG_RIGHT_CLICK = _ints[182];
+var EVT_PG_SELECTED = _ints[183];
+var EVT_POWER_RESUME = _ints[184];
+var EVT_POWER_SUSPENDED = _ints[185];
+var EVT_POWER_SUSPENDING = _ints[186];
+var EVT_POWER_SUSPEND_CANCEL = _ints[187];
+var EVT_QUERY_END_SESSION = _ints[188];
+var EVT_QUERY_LAYOUT_INFO = _ints[189];
+var EVT_QUERY_NEW_PALETTE = _ints[190];
+var EVT_RADIOBOX = _ints[191];
+var EVT_RADIOBUTTON = _ints[192];
+var EVT_RIGHT_DCLICK = _ints[193];
+var EVT_RIGHT_DOWN = _ints[194];
+var EVT_RIGHT_UP = _ints[195];
+var EVT_SASH_DRAGGED = _ints[196];
+var EVT_SCROLLBAR = _ints[197];
+var EVT_SCROLLWIN_BOTTOM = _ints[198];
+var EVT_SCROLLWIN_LINEDOWN = _ints[199];
+var EVT_SCROLLWIN_LINEUP = _ints[200];
+var EVT_SCROLLWIN_PAGEDOWN = _ints[201];
+var EVT_SCROLLWIN_PAGEUP = _ints[202];
+var EVT_SCROLLWIN_THUMBRELEASE = _ints[203];
+var EVT_SCROLLWIN_THUMBTRACK = _ints[204];
+var EVT_SCROLLWIN_TOP = _ints[205];
+var EVT_SCROLL_BOTTOM = _ints[206];
+var EVT_SCROLL_CHANGED = _ints[207];
+var EVT_SCROLL_LINEDOWN = _ints[208];
+var EVT_SCROLL_LINEUP = _ints[209];
+var EVT_SCROLL_PAGEDOWN = _ints[210];
+var EVT_SCROLL_PAGEUP = _ints[211];
+var EVT_SCROLL_THUMBRELEASE = _ints[212];
+var EVT_SCROLL_THUMBTRACK = _ints[213];
+var EVT_SCROLL_TOP = _ints[214];
+var EVT_SEARCHCTRL_CANCEL_BTN = _ints[215];
+var EVT_SEARCHCTRL_SEARCH_BTN = _ints[216];
+var EVT_SET_CURSOR = _ints[217];
+var EVT_SET_FOCUS = _ints[218];
+var EVT_SHOW = _ints[219];
+var EVT_SIZE = _ints[220];
+var EVT_SIZING = _ints[221];
+var EVT_SLIDER = _ints[222];
+var EVT_SOCKET = _ints[223];
+var EVT_SORT = _ints[224];
+var EVT_SPIN = _ints[225];
+var EVT_SPINCTRL = _ints[226];
+var EVT_SPINCTRLDOUBLE = _ints[227];
+var EVT_SPIN_DOWN = _ints[228];
+var EVT_SPIN_UP = _ints[229];
+var EVT_SPLITTER_DOUBLECLICKED = _ints[230];
+var EVT_SPLITTER_SASH_POS_CHANGED = _ints[231];
+var EVT_SPLITTER_SASH_POS_CHANGING = _ints[232];
+var EVT_SPLITTER_UNSPLIT = _ints[233];
+var EVT_SYS_COLOUR_CHANGED = _ints[234];
+var EVT_TASKBAR_BALLOON_CLICK = _ints[235];
+var EVT_TASKBAR_BALLOON_TIMEOUT = _ints[236];
+var EVT_TASKBAR_LEFT_DCLICK = _ints[237];
+var EVT_TASKBAR_LEFT_DOWN = _ints[238];
+var EVT_TASKBAR_LEFT_UP = _ints[239];
+var EVT_TASKBAR_MOVE = _ints[240];
+var EVT_TASKBAR_RIGHT_DCLICK = _ints[241];
+var EVT_TASKBAR_RIGHT_DOWN = _ints[242];
+var EVT_TASKBAR_RIGHT_UP = _ints[243];
+var EVT_TEXT = _ints[244];
+var EVT_TEXT_COPY = _ints[245];
+var EVT_TEXT_CUT = _ints[246];
+var EVT_TEXT_ENTER = _ints[247];
+var EVT_TEXT_MAXLEN = _ints[248];
+var EVT_TEXT_PASTE = _ints[249];
+var EVT_TEXT_URL = _ints[250];
+var EVT_THREAD = _ints[251];
+var EVT_TIMER = _ints[252];
+var EVT_TOGGLEBUTTON = _ints[253];
+var EVT_TOOL = _ints[254];
+var EVT_TOOLBOOK_PAGE_CHANGED = _ints[255];
+var EVT_TOOLBOOK_PAGE_CHANGING = _ints[256];
+var EVT_TOOL_DROPDOWN = _ints[257];
+var EVT_TOOL_ENTER = _ints[258];
+var EVT_TOOL_RCLICKED = _ints[259];
+var EVT_TREEBOOK_NODE_COLLAPSED = _ints[260];
+var EVT_TREEBOOK_NODE_EXPANDED = _ints[261];
+var EVT_TREEBOOK_PAGE_CHANGED = _ints[262];
+var EVT_TREEBOOK_PAGE_CHANGING = _ints[263];
+var EVT_TREELIST_COLUMN_SORTED = _ints[264];
+var EVT_TREELIST_ITEM_ACTIVATED = _ints[265];
+var EVT_TREELIST_ITEM_CHECKED = _ints[266];
+var EVT_TREELIST_ITEM_CONTEXT_MENU = _ints[267];
+var EVT_TREELIST_ITEM_EXPANDED = _ints[268];
+var EVT_TREELIST_ITEM_EXPANDING = _ints[269];
+var EVT_TREELIST_SELECTION_CHANGED = _ints[270];
+var EVT_TREE_BEGIN_DRAG = _ints[271];
+var EVT_TREE_BEGIN_LABEL_EDIT = _ints[272];
+var EVT_TREE_BEGIN_RDRAG = _ints[273];
+var EVT_TREE_DELETE_ITEM = _ints[274];
+var EVT_TREE_END_DRAG = _ints[275];
+var EVT_TREE_END_LABEL_EDIT = _ints[276];
+var EVT_TREE_GET_INFO = _ints[277];
+var EVT_TREE_ITEM_ACTIVATED = _ints[278];
+var EVT_TREE_ITEM_COLLAPSED = _ints[279];
+var EVT_TREE_ITEM_COLLAPSING = _ints[280];
+var EVT_TREE_ITEM_EXPANDED = _ints[281];
+var EVT_TREE_ITEM_EXPANDING = _ints[282];
+var EVT_TREE_ITEM_MIDDLE_CLICK = _ints[283];
+var EVT_TREE_ITEM_RIGHT_CLICK = _ints[284];
+var EVT_TREE_KEY_DOWN = _ints[285];
+var EVT_TREE_SEL_CHANGED = _ints[286];
+var EVT_TREE_SEL_CHANGING = _ints[287];
+var EVT_TREE_SET_INFO = _ints[288];
+var EVT_UPDATE_UI = _ints[289];
+var EVT_USER_FIRST = _ints[290];
+var EVT_VLBOX = _ints[291];
+var EVT_WEBVIEW_ERROR = _ints[292];
+var EVT_WEBVIEW_FULLSCREEN_CHANGED = _ints[293];
+var EVT_WEBVIEW_LOADED = _ints[294];
+var EVT_WEBVIEW_NAVIGATED = _ints[295];
+var EVT_WEBVIEW_NAVIGATING = _ints[296];
+var EVT_WEBVIEW_NEWWINDOW = _ints[297];
+var EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED = _ints[298];
+var EVT_WEBVIEW_SCRIPT_RESULT = _ints[299];
+var EVT_WEBVIEW_TITLE_CHANGED = _ints[300];
+var EVT_WINDOW_MODAL_DIALOG_CLOSED = _ints[301];
+var EVT_WIZARD_CANCEL = _ints[302];
+var EVT_WIZARD_FINISHED = _ints[303];
+var EVT_WIZARD_HELP = _ints[304];
+var EVT_WIZARD_PAGE_CHANGED = _ints[305];
+var EVT_WIZARD_PAGE_CHANGING = _ints[306];
+var EVT_WIZARD_PAGE_SHOWN = _ints[307];
+var K_ADD = _ints[308];
+var K_ALT = _ints[309];
+var K_BACK = _ints[310];
+var K_CANCEL = _ints[311];
+var K_CAPITAL = _ints[312];
+var K_CLEAR = _ints[313];
+var K_CONTROL = _ints[314];
+var K_DECIMAL = _ints[315];
+var K_DELETE = _ints[316];
+var K_DIVIDE = _ints[317];
+var K_DOWN = _ints[318];
+var K_END = _ints[319];
+var K_ESCAPE = _ints[320];
+var K_EXECUTE = _ints[321];
+var K_F1 = _ints[322];
+var K_F10 = _ints[323];
+var K_F11 = _ints[324];
+var K_F12 = _ints[325];
+var K_F13 = _ints[326];
+var K_F14 = _ints[327];
+var K_F15 = _ints[328];
+var K_F16 = _ints[329];
+var K_F17 = _ints[330];
+var K_F18 = _ints[331];
+var K_F19 = _ints[332];
+var K_F2 = _ints[333];
+var K_F20 = _ints[334];
+var K_F21 = _ints[335];
+var K_F22 = _ints[336];
+var K_F23 = _ints[337];
+var K_F24 = _ints[338];
+var K_F3 = _ints[339];
+var K_F4 = _ints[340];
+var K_F5 = _ints[341];
+var K_F6 = _ints[342];
+var K_F7 = _ints[343];
+var K_F8 = _ints[344];
+var K_F9 = _ints[345];
+var K_HELP = _ints[346];
+var K_HOME = _ints[347];
+var K_INSERT = _ints[348];
+var K_LBUTTON = _ints[349];
+var K_LEFT = _ints[350];
+var K_MBUTTON = _ints[351];
+var K_MENU = _ints[352];
+var K_MULTIPLY = _ints[353];
+var K_NUMLOCK = _ints[354];
+var K_NUMPAD0 = _ints[355];
+var K_NUMPAD1 = _ints[356];
+var K_NUMPAD2 = _ints[357];
+var K_NUMPAD3 = _ints[358];
+var K_NUMPAD4 = _ints[359];
+var K_NUMPAD5 = _ints[360];
+var K_NUMPAD6 = _ints[361];
+var K_NUMPAD7 = _ints[362];
+var K_NUMPAD8 = _ints[363];
+var K_NUMPAD9 = _ints[364];
+var K_NUMPAD_ADD = _ints[365];
+var K_NUMPAD_BEGIN = _ints[366];
+var K_NUMPAD_DECIMAL = _ints[367];
+var K_NUMPAD_DELETE = _ints[368];
+var K_NUMPAD_DIVIDE = _ints[369];
+var K_NUMPAD_DOWN = _ints[370];
+var K_NUMPAD_END = _ints[371];
+var K_NUMPAD_ENTER = _ints[372];
+var K_NUMPAD_EQUAL = _ints[373];
+var K_NUMPAD_F1 = _ints[374];
+var K_NUMPAD_F2 = _ints[375];
+var K_NUMPAD_F3 = _ints[376];
+var K_NUMPAD_F4 = _ints[377];
+var K_NUMPAD_HOME = _ints[378];
+var K_NUMPAD_INSERT = _ints[379];
+var K_NUMPAD_LEFT = _ints[380];
+var K_NUMPAD_MULTIPLY = _ints[381];
+var K_NUMPAD_PAGEDOWN = _ints[382];
+var K_NUMPAD_PAGEUP = _ints[383];
+var K_NUMPAD_RIGHT = _ints[384];
+var K_NUMPAD_SEPARATOR = _ints[385];
+var K_NUMPAD_SPACE = _ints[386];
+var K_NUMPAD_SUBTRACT = _ints[387];
+var K_NUMPAD_TAB = _ints[388];
+var K_NUMPAD_UP = _ints[389];
+var K_PAGEDOWN = _ints[390];
+var K_PAGEUP = _ints[391];
+var K_PAUSE = _ints[392];
+var K_PRINT = _ints[393];
+var K_RBUTTON = _ints[394];
+var K_RETURN = _ints[395];
+var K_RIGHT = _ints[396];
+var K_SCROLL = _ints[397];
+var K_SELECT = _ints[398];
+var K_SEPARATOR = _ints[399];
+var K_SHIFT = _ints[400];
+var K_SNAPSHOT = _ints[401];
+var K_SPACE = _ints[402];
+var K_START = _ints[403];
+var K_SUBTRACT = _ints[404];
+var K_TAB = _ints[405];
+var K_UP = _ints[406];
+var ACCEL_ALT = _ints[407];
+var ACCEL_CTRL = _ints[408];
+var ACCEL_NORMAL = _ints[409];
+var ACCEL_SHIFT = _ints[410];
+var ALIGN_BOTTOM = _ints[411];
+var ALIGN_CENTER = _ints[412];
+var ALIGN_CENTER_HORIZONTAL = _ints[413];
+var ALIGN_CENTER_VERTICAL = _ints[414];
+var ALIGN_CENTRE = _ints[415];
+var ALIGN_CENTRE_HORIZONTAL = _ints[416];
+var ALIGN_CENTRE_VERTICAL = _ints[417];
+var ALIGN_LEFT = _ints[418];
+var ALIGN_NOT = _ints[419];
+var ALIGN_RIGHT = _ints[420];
+var ALIGN_TOP = _ints[421];
+var ALL = _ints[422];
+var ALWAYS_SHOW_SB = _ints[423];
+var AND = _ints[424];
+var AND_INVERT = _ints[425];
+var AND_REVERSE = _ints[426];
 var ART_ADD_BOOKMARK = lib.symbols.expwxART_ADD_BOOKMARK();
 var ART_BUTTON = lib.symbols.expwxART_BUTTON();
 var ART_CDROM = lib.symbols.expwxART_CDROM();
@@ -20919,1104 +21234,1104 @@ var ART_TIP = lib.symbols.expwxART_TIP();
 var ART_TOOLBAR = lib.symbols.expwxART_TOOLBAR();
 var ART_UNDO = lib.symbols.expwxART_UNDO();
 var ART_WARNING = lib.symbols.expwxART_WARNING();
-var BACKINGSTORE = lib.symbols.expwxBACKINGSTORE();
-var BACKWARD = lib.symbols.expwxBACKWARD();
-var BIG_ENDIAN = lib.symbols.expwxBIG_ENDIAN();
-var BITMAP_TYPE_ANY = lib.symbols.expwxBITMAP_TYPE_ANY();
-var BITMAP_TYPE_BMP = lib.symbols.expwxBITMAP_TYPE_BMP();
-var BITMAP_TYPE_BMP_RESOURCE = lib.symbols.expwxBITMAP_TYPE_BMP_RESOURCE();
-var BITMAP_TYPE_CUR = lib.symbols.expwxBITMAP_TYPE_CUR();
-var BITMAP_TYPE_CUR_RESOURCE = lib.symbols.expwxBITMAP_TYPE_CUR_RESOURCE();
-var BITMAP_TYPE_GIF = lib.symbols.expwxBITMAP_TYPE_GIF();
-var BITMAP_TYPE_GIF_RESOURCE = lib.symbols.expwxBITMAP_TYPE_GIF_RESOURCE();
-var BITMAP_TYPE_ICO = lib.symbols.expwxBITMAP_TYPE_ICO();
-var BITMAP_TYPE_ICON = lib.symbols.expwxBITMAP_TYPE_ICON();
-var BITMAP_TYPE_ICON_RESOURCE = lib.symbols.expwxBITMAP_TYPE_ICON_RESOURCE();
-var BITMAP_TYPE_ICO_RESOURCE = lib.symbols.expwxBITMAP_TYPE_ICO_RESOURCE();
-var BITMAP_TYPE_INVALID = lib.symbols.expwxBITMAP_TYPE_INVALID();
-var BITMAP_TYPE_JPEG = lib.symbols.expwxBITMAP_TYPE_JPEG();
-var BITMAP_TYPE_JPEG_RESOURCE = lib.symbols.expwxBITMAP_TYPE_JPEG_RESOURCE();
-var BITMAP_TYPE_MACCURSOR = lib.symbols.expwxBITMAP_TYPE_MACCURSOR();
-var BITMAP_TYPE_MACCURSOR_RESOURCE = lib.symbols.expwxBITMAP_TYPE_MACCURSOR_RESOURCE();
-var BITMAP_TYPE_PCX = lib.symbols.expwxBITMAP_TYPE_PCX();
-var BITMAP_TYPE_PCX_RESOURCE = lib.symbols.expwxBITMAP_TYPE_PCX_RESOURCE();
-var BITMAP_TYPE_PICT = lib.symbols.expwxBITMAP_TYPE_PICT();
-var BITMAP_TYPE_PICT_RESOURCE = lib.symbols.expwxBITMAP_TYPE_PICT_RESOURCE();
-var BITMAP_TYPE_PNG = lib.symbols.expwxBITMAP_TYPE_PNG();
-var BITMAP_TYPE_PNG_RESOURCE = lib.symbols.expwxBITMAP_TYPE_PNG_RESOURCE();
-var BITMAP_TYPE_PNM = lib.symbols.expwxBITMAP_TYPE_PNM();
-var BITMAP_TYPE_PNM_RESOURCE = lib.symbols.expwxBITMAP_TYPE_PNM_RESOURCE();
-var BITMAP_TYPE_RESOURCE = lib.symbols.expwxBITMAP_TYPE_RESOURCE();
-var BITMAP_TYPE_TIF = lib.symbols.expwxBITMAP_TYPE_TIF();
-var BITMAP_TYPE_TIF_RESOURCE = lib.symbols.expwxBITMAP_TYPE_TIF_RESOURCE();
-var BITMAP_TYPE_XBM = lib.symbols.expwxBITMAP_TYPE_XBM();
-var BITMAP_TYPE_XBM_DATA = lib.symbols.expwxBITMAP_TYPE_XBM_DATA();
-var BITMAP_TYPE_XPM = lib.symbols.expwxBITMAP_TYPE_XPM();
-var BITMAP_TYPE_XPM_DATA = lib.symbols.expwxBITMAP_TYPE_XPM_DATA();
+var BACKINGSTORE = _ints[427];
+var BACKWARD = _ints[428];
+var BIG_ENDIAN = _ints[429];
+var BITMAP_TYPE_ANY = _ints[430];
+var BITMAP_TYPE_BMP = _ints[431];
+var BITMAP_TYPE_BMP_RESOURCE = _ints[432];
+var BITMAP_TYPE_CUR = _ints[433];
+var BITMAP_TYPE_CUR_RESOURCE = _ints[434];
+var BITMAP_TYPE_GIF = _ints[435];
+var BITMAP_TYPE_GIF_RESOURCE = _ints[436];
+var BITMAP_TYPE_ICO = _ints[437];
+var BITMAP_TYPE_ICON = _ints[438];
+var BITMAP_TYPE_ICON_RESOURCE = _ints[439];
+var BITMAP_TYPE_ICO_RESOURCE = _ints[440];
+var BITMAP_TYPE_INVALID = _ints[441];
+var BITMAP_TYPE_JPEG = _ints[442];
+var BITMAP_TYPE_JPEG_RESOURCE = _ints[443];
+var BITMAP_TYPE_MACCURSOR = _ints[444];
+var BITMAP_TYPE_MACCURSOR_RESOURCE = _ints[445];
+var BITMAP_TYPE_PCX = _ints[446];
+var BITMAP_TYPE_PCX_RESOURCE = _ints[447];
+var BITMAP_TYPE_PICT = _ints[448];
+var BITMAP_TYPE_PICT_RESOURCE = _ints[449];
+var BITMAP_TYPE_PNG = _ints[450];
+var BITMAP_TYPE_PNG_RESOURCE = _ints[451];
+var BITMAP_TYPE_PNM = _ints[452];
+var BITMAP_TYPE_PNM_RESOURCE = _ints[453];
+var BITMAP_TYPE_RESOURCE = _ints[454];
+var BITMAP_TYPE_TIF = _ints[455];
+var BITMAP_TYPE_TIF_RESOURCE = _ints[456];
+var BITMAP_TYPE_XBM = _ints[457];
+var BITMAP_TYPE_XBM_DATA = _ints[458];
+var BITMAP_TYPE_XPM = _ints[459];
+var BITMAP_TYPE_XPM_DATA = _ints[460];
 var BLACK = lib.symbols.expwxBLACK();
 var BLACK_BRUSH = lib.symbols.expwxBLACK_BRUSH();
 var BLACK_DASHED_PEN = lib.symbols.expwxBLACK_DASHED_PEN();
 var BLACK_PEN = lib.symbols.expwxBLACK_PEN();
 var BLUE = lib.symbols.expwxBLUE();
 var BLUE_BRUSH = lib.symbols.expwxBLUE_BRUSH();
-var BORDER_DEFAULT = lib.symbols.expwxBORDER_DEFAULT();
-var BORDER_NONE = lib.symbols.expwxBORDER_NONE();
-var BORDER_RAISED = lib.symbols.expwxBORDER_RAISED();
-var BORDER_SIMPLE = lib.symbols.expwxBORDER_SIMPLE();
-var BORDER_STATIC = lib.symbols.expwxBORDER_STATIC();
-var BORDER_SUNKEN = lib.symbols.expwxBORDER_SUNKEN();
-var BORDER_THEME = lib.symbols.expwxBORDER_THEME();
-var BOTH = lib.symbols.expwxBOTH();
-var BOTTOM = lib.symbols.expwxBOTTOM();
-var BRUSHSTYLE_BDIAGONAL_HATCH = lib.symbols.expwxBRUSHSTYLE_BDIAGONAL_HATCH();
-var BRUSHSTYLE_CROSSDIAG_HATCH = lib.symbols.expwxBRUSHSTYLE_CROSSDIAG_HATCH();
-var BRUSHSTYLE_CROSS_HATCH = lib.symbols.expwxBRUSHSTYLE_CROSS_HATCH();
-var BRUSHSTYLE_FDIAGONAL_HATCH = lib.symbols.expwxBRUSHSTYLE_FDIAGONAL_HATCH();
-var BRUSHSTYLE_HORIZONTAL_HATCH = lib.symbols.expwxBRUSHSTYLE_HORIZONTAL_HATCH();
-var BRUSHSTYLE_INVALID = lib.symbols.expwxBRUSHSTYLE_INVALID();
-var BRUSHSTYLE_SOLID = lib.symbols.expwxBRUSHSTYLE_SOLID();
-var BRUSHSTYLE_STIPPLE = lib.symbols.expwxBRUSHSTYLE_STIPPLE();
-var BRUSHSTYLE_STIPPLE_MASK = lib.symbols.expwxBRUSHSTYLE_STIPPLE_MASK();
-var BRUSHSTYLE_STIPPLE_MASK_OPAQUE = lib.symbols.expwxBRUSHSTYLE_STIPPLE_MASK_OPAQUE();
-var BRUSHSTYLE_TRANSPARENT = lib.symbols.expwxBRUSHSTYLE_TRANSPARENT();
-var BRUSHSTYLE_VERTICAL_HATCH = lib.symbols.expwxBRUSHSTYLE_VERTICAL_HATCH();
-var BU_AUTODRAW = lib.symbols.expwxBU_AUTODRAW();
-var BU_BOTTOM = lib.symbols.expwxBU_BOTTOM();
-var BU_EXACTFIT = lib.symbols.expwxBU_EXACTFIT();
-var BU_LEFT = lib.symbols.expwxBU_LEFT();
-var BU_NOAUTODRAW = lib.symbols.expwxBU_NOAUTODRAW();
-var BU_RIGHT = lib.symbols.expwxBU_RIGHT();
-var BU_TOP = lib.symbols.expwxBU_TOP();
-var CAL_BORDER_NONE = lib.symbols.expwxCAL_BORDER_NONE();
-var CAL_BORDER_ROUND = lib.symbols.expwxCAL_BORDER_ROUND();
-var CAL_BORDER_SQUARE = lib.symbols.expwxCAL_BORDER_SQUARE();
-var CAL_HITTEST_DAY = lib.symbols.expwxCAL_HITTEST_DAY();
-var CAL_HITTEST_HEADER = lib.symbols.expwxCAL_HITTEST_HEADER();
-var CAL_HITTEST_NOWHERE = lib.symbols.expwxCAL_HITTEST_NOWHERE();
-var CAL_MONDAY_FIRST = lib.symbols.expwxCAL_MONDAY_FIRST();
-var CAL_NO_MONTH_CHANGE = lib.symbols.expwxCAL_NO_MONTH_CHANGE();
-var CAL_NO_YEAR_CHANGE = lib.symbols.expwxCAL_NO_YEAR_CHANGE();
-var CAL_SHOW_HOLIDAYS = lib.symbols.expwxCAL_SHOW_HOLIDAYS();
-var CAL_SUNDAY_FIRST = lib.symbols.expwxCAL_SUNDAY_FIRST();
-var CANCEL = lib.symbols.expwxCANCEL();
-var CAPTION = lib.symbols.expwxCAPTION();
-var CAP_BUTT = lib.symbols.expwxCAP_BUTT();
-var CAP_PROJECTING = lib.symbols.expwxCAP_PROJECTING();
-var CAP_ROUND = lib.symbols.expwxCAP_ROUND();
-var CB_DROPDOWN = lib.symbols.expwxCB_DROPDOWN();
-var CB_READONLY = lib.symbols.expwxCB_READONLY();
-var CB_SIMPLE = lib.symbols.expwxCB_SIMPLE();
-var CB_SORT = lib.symbols.expwxCB_SORT();
-var CENTER = lib.symbols.expwxCENTER();
-var CENTER_FRAME = lib.symbols.expwxCENTER_FRAME();
-var CENTRE = lib.symbols.expwxCENTRE();
-var CENTRE_ON_SCREEN = lib.symbols.expwxCENTRE_ON_SCREEN();
-var CHK_2STATE = lib.symbols.expwxCHK_2STATE();
-var CHK_3STATE = lib.symbols.expwxCHK_3STATE();
-var CHK_ALLOW_3RD_STATE_FOR_USER = lib.symbols.expwxCHK_ALLOW_3RD_STATE_FOR_USER();
-var CHK_CHECKED = lib.symbols.expwxCHK_CHECKED();
-var CHK_UNCHECKED = lib.symbols.expwxCHK_UNCHECKED();
-var CHK_UNDETERMINED = lib.symbols.expwxCHK_UNDETERMINED();
-var CLEAR = lib.symbols.expwxCLEAR();
-var CLIP_CHILDREN = lib.symbols.expwxCLIP_CHILDREN();
-var CLIP_SIBLINGS = lib.symbols.expwxCLIP_SIBLINGS();
-var CLOSE_BOX = lib.symbols.expwxCLOSE_BOX();
-var COLOURED = lib.symbols.expwxCOLOURED();
-var CONFIG_USE_GLOBAL_FILE = lib.symbols.expwxCONFIG_USE_GLOBAL_FILE();
-var CONFIG_USE_LOCAL_FILE = lib.symbols.expwxCONFIG_USE_LOCAL_FILE();
-var CONFIG_USE_NO_ESCAPE_CHARACTERS = lib.symbols.expwxCONFIG_USE_NO_ESCAPE_CHARACTERS();
-var CONFIG_USE_RELATIVE_PATH = lib.symbols.expwxCONFIG_USE_RELATIVE_PATH();
-var COPY = lib.symbols.expwxCOPY();
-var CURSOR_ARROW = lib.symbols.expwxCURSOR_ARROW();
-var CURSOR_BLANK = lib.symbols.expwxCURSOR_BLANK();
-var CURSOR_BULLSEYE = lib.symbols.expwxCURSOR_BULLSEYE();
-var CURSOR_CHAR = lib.symbols.expwxCURSOR_CHAR();
-var CURSOR_CROSS = lib.symbols.expwxCURSOR_CROSS();
-var CURSOR_HAND = lib.symbols.expwxCURSOR_HAND();
-var CURSOR_IBEAM = lib.symbols.expwxCURSOR_IBEAM();
-var CURSOR_LEFT_BUTTON = lib.symbols.expwxCURSOR_LEFT_BUTTON();
-var CURSOR_MAGNIFIER = lib.symbols.expwxCURSOR_MAGNIFIER();
-var CURSOR_MIDDLE_BUTTON = lib.symbols.expwxCURSOR_MIDDLE_BUTTON();
-var CURSOR_NONE = lib.symbols.expwxCURSOR_NONE();
-var CURSOR_NO_ENTRY = lib.symbols.expwxCURSOR_NO_ENTRY();
-var CURSOR_PAINT_BRUSH = lib.symbols.expwxCURSOR_PAINT_BRUSH();
-var CURSOR_PENCIL = lib.symbols.expwxCURSOR_PENCIL();
-var CURSOR_POINT_LEFT = lib.symbols.expwxCURSOR_POINT_LEFT();
-var CURSOR_POINT_RIGHT = lib.symbols.expwxCURSOR_POINT_RIGHT();
-var CURSOR_QUESTION_ARROW = lib.symbols.expwxCURSOR_QUESTION_ARROW();
-var CURSOR_RIGHT_ARROW = lib.symbols.expwxCURSOR_RIGHT_ARROW();
-var CURSOR_RIGHT_BUTTON = lib.symbols.expwxCURSOR_RIGHT_BUTTON();
-var CURSOR_SIZENESW = lib.symbols.expwxCURSOR_SIZENESW();
-var CURSOR_SIZENS = lib.symbols.expwxCURSOR_SIZENS();
-var CURSOR_SIZENWSE = lib.symbols.expwxCURSOR_SIZENWSE();
-var CURSOR_SIZEWE = lib.symbols.expwxCURSOR_SIZEWE();
-var CURSOR_SIZING = lib.symbols.expwxCURSOR_SIZING();
-var CURSOR_SPRAYCAN = lib.symbols.expwxCURSOR_SPRAYCAN();
-var CURSOR_WAIT = lib.symbols.expwxCURSOR_WAIT();
-var CURSOR_WATCH = lib.symbols.expwxCURSOR_WATCH();
+var BORDER_DEFAULT = _ints[461];
+var BORDER_NONE = _ints[462];
+var BORDER_RAISED = _ints[463];
+var BORDER_SIMPLE = _ints[464];
+var BORDER_STATIC = _ints[465];
+var BORDER_SUNKEN = _ints[466];
+var BORDER_THEME = _ints[467];
+var BOTH = _ints[468];
+var BOTTOM = _ints[469];
+var BRUSHSTYLE_BDIAGONAL_HATCH = _ints[470];
+var BRUSHSTYLE_CROSSDIAG_HATCH = _ints[471];
+var BRUSHSTYLE_CROSS_HATCH = _ints[472];
+var BRUSHSTYLE_FDIAGONAL_HATCH = _ints[473];
+var BRUSHSTYLE_HORIZONTAL_HATCH = _ints[474];
+var BRUSHSTYLE_INVALID = _ints[475];
+var BRUSHSTYLE_SOLID = _ints[476];
+var BRUSHSTYLE_STIPPLE = _ints[477];
+var BRUSHSTYLE_STIPPLE_MASK = _ints[478];
+var BRUSHSTYLE_STIPPLE_MASK_OPAQUE = _ints[479];
+var BRUSHSTYLE_TRANSPARENT = _ints[480];
+var BRUSHSTYLE_VERTICAL_HATCH = _ints[481];
+var BU_AUTODRAW = _ints[482];
+var BU_BOTTOM = _ints[483];
+var BU_EXACTFIT = _ints[484];
+var BU_LEFT = _ints[485];
+var BU_NOAUTODRAW = _ints[486];
+var BU_RIGHT = _ints[487];
+var BU_TOP = _ints[488];
+var CAL_BORDER_NONE = _ints[489];
+var CAL_BORDER_ROUND = _ints[490];
+var CAL_BORDER_SQUARE = _ints[491];
+var CAL_HITTEST_DAY = _ints[492];
+var CAL_HITTEST_HEADER = _ints[493];
+var CAL_HITTEST_NOWHERE = _ints[494];
+var CAL_MONDAY_FIRST = _ints[495];
+var CAL_NO_MONTH_CHANGE = _ints[496];
+var CAL_NO_YEAR_CHANGE = _ints[497];
+var CAL_SHOW_HOLIDAYS = _ints[498];
+var CAL_SUNDAY_FIRST = _ints[499];
+var CANCEL = _ints[500];
+var CAPTION = _ints[501];
+var CAP_BUTT = _ints[502];
+var CAP_PROJECTING = _ints[503];
+var CAP_ROUND = _ints[504];
+var CB_DROPDOWN = _ints[505];
+var CB_READONLY = _ints[506];
+var CB_SIMPLE = _ints[507];
+var CB_SORT = _ints[508];
+var CENTER = _ints[509];
+var CENTER_FRAME = _ints[510];
+var CENTRE = _ints[511];
+var CENTRE_ON_SCREEN = _ints[512];
+var CHK_2STATE = _ints[513];
+var CHK_3STATE = _ints[514];
+var CHK_ALLOW_3RD_STATE_FOR_USER = _ints[515];
+var CHK_CHECKED = _ints[516];
+var CHK_UNCHECKED = _ints[517];
+var CHK_UNDETERMINED = _ints[518];
+var CLEAR = _ints[519];
+var CLIP_CHILDREN = _ints[520];
+var CLIP_SIBLINGS = _ints[521];
+var CLOSE_BOX = _ints[522];
+var COLOURED = _ints[523];
+var CONFIG_USE_GLOBAL_FILE = _ints[524];
+var CONFIG_USE_LOCAL_FILE = _ints[525];
+var CONFIG_USE_NO_ESCAPE_CHARACTERS = _ints[526];
+var CONFIG_USE_RELATIVE_PATH = _ints[527];
+var COPY = _ints[528];
+var CURSOR_ARROW = _ints[529];
+var CURSOR_BLANK = _ints[530];
+var CURSOR_BULLSEYE = _ints[531];
+var CURSOR_CHAR = _ints[532];
+var CURSOR_CROSS = _ints[533];
+var CURSOR_HAND = _ints[534];
+var CURSOR_IBEAM = _ints[535];
+var CURSOR_LEFT_BUTTON = _ints[536];
+var CURSOR_MAGNIFIER = _ints[537];
+var CURSOR_MIDDLE_BUTTON = _ints[538];
+var CURSOR_NONE = _ints[539];
+var CURSOR_NO_ENTRY = _ints[540];
+var CURSOR_PAINT_BRUSH = _ints[541];
+var CURSOR_PENCIL = _ints[542];
+var CURSOR_POINT_LEFT = _ints[543];
+var CURSOR_POINT_RIGHT = _ints[544];
+var CURSOR_QUESTION_ARROW = _ints[545];
+var CURSOR_RIGHT_ARROW = _ints[546];
+var CURSOR_RIGHT_BUTTON = _ints[547];
+var CURSOR_SIZENESW = _ints[548];
+var CURSOR_SIZENS = _ints[549];
+var CURSOR_SIZENWSE = _ints[550];
+var CURSOR_SIZEWE = _ints[551];
+var CURSOR_SIZING = _ints[552];
+var CURSOR_SPRAYCAN = _ints[553];
+var CURSOR_WAIT = _ints[554];
+var CURSOR_WATCH = _ints[555];
 var CYAN = lib.symbols.expwxCYAN();
 var CYAN_BRUSH = lib.symbols.expwxCYAN_BRUSH();
 var CYAN_PEN = lib.symbols.expwxCYAN_PEN();
-var DD_CHANGE_DIR = lib.symbols.expwxDD_CHANGE_DIR();
-var DD_DEFAULT_STYLE = lib.symbols.expwxDD_DEFAULT_STYLE();
-var DD_DIR_MUST_EXIST = lib.symbols.expwxDD_DIR_MUST_EXIST();
-var DD_MULTIPLE = lib.symbols.expwxDD_MULTIPLE();
-var DD_SHOW_HIDDEN = lib.symbols.expwxDD_SHOW_HIDDEN();
-var DEFAULT_FRAME_STYLE = lib.symbols.expwxDEFAULT_FRAME_STYLE();
-var DF_BITMAP = lib.symbols.expwxDF_BITMAP();
-var DF_DIB = lib.symbols.expwxDF_DIB();
-var DF_DIF = lib.symbols.expwxDF_DIF();
-var DF_ENHMETAFILE = lib.symbols.expwxDF_ENHMETAFILE();
-var DF_FILENAME = lib.symbols.expwxDF_FILENAME();
-var DF_INVALID = lib.symbols.expwxDF_INVALID();
-var DF_LOCALE = lib.symbols.expwxDF_LOCALE();
-var DF_MAX = lib.symbols.expwxDF_MAX();
-var DF_METAFILE = lib.symbols.expwxDF_METAFILE();
-var DF_OEMTEXT = lib.symbols.expwxDF_OEMTEXT();
-var DF_PALETTE = lib.symbols.expwxDF_PALETTE();
-var DF_PENDATA = lib.symbols.expwxDF_PENDATA();
-var DF_PRIVATE = lib.symbols.expwxDF_PRIVATE();
-var DF_RIFF = lib.symbols.expwxDF_RIFF();
-var DF_SYLK = lib.symbols.expwxDF_SYLK();
-var DF_TEXT = lib.symbols.expwxDF_TEXT();
-var DF_TIFF = lib.symbols.expwxDF_TIFF();
-var DF_UNICODETEXT = lib.symbols.expwxDF_UNICODETEXT();
-var DF_WAVE = lib.symbols.expwxDF_WAVE();
-var DIALOG_EX_CONTEXTHELP = lib.symbols.expwxDIALOG_EX_CONTEXTHELP();
-var DOWN = lib.symbols.expwxDOWN();
-var DUPLEX_HORIZONTAL = lib.symbols.expwxDUPLEX_HORIZONTAL();
-var DUPLEX_SIMPLEX = lib.symbols.expwxDUPLEX_SIMPLEX();
-var DUPLEX_VERTICAL = lib.symbols.expwxDUPLEX_VERTICAL();
-var DefaultCoord = lib.symbols.expwxDefaultCoord();
-var EAST = lib.symbols.expwxEAST();
-var EQUIV = lib.symbols.expwxEQUIV();
-var EXEC_ASYNC = lib.symbols.expwxEXEC_ASYNC();
-var EXEC_MAKE_GROUP_LEADER = lib.symbols.expwxEXEC_MAKE_GROUP_LEADER();
-var EXEC_NOHIDE = lib.symbols.expwxEXEC_NOHIDE();
-var EXEC_SYNC = lib.symbols.expwxEXEC_SYNC();
-var EXPAND = lib.symbols.expwxEXPAND();
-var FD_CHANGE_DIR = lib.symbols.expwxFD_CHANGE_DIR();
-var FD_DEFAULT_STYLE = lib.symbols.expwxFD_DEFAULT_STYLE();
-var FD_FILE_MUST_EXIST = lib.symbols.expwxFD_FILE_MUST_EXIST();
-var FD_MULTIPLE = lib.symbols.expwxFD_MULTIPLE();
-var FD_NO_FOLLOW = lib.symbols.expwxFD_NO_FOLLOW();
-var FD_OPEN = lib.symbols.expwxFD_OPEN();
-var FD_OVERWRITE_PROMPT = lib.symbols.expwxFD_OVERWRITE_PROMPT();
-var FD_PREVIEW = lib.symbols.expwxFD_PREVIEW();
-var FD_SAVE = lib.symbols.expwxFD_SAVE();
-var FD_SHOW_HIDDEN = lib.symbols.expwxFD_SHOW_HIDDEN();
-var FILTER_ALPHA = lib.symbols.expwxFILTER_ALPHA();
-var FILTER_ALPHANUMERIC = lib.symbols.expwxFILTER_ALPHANUMERIC();
-var FILTER_ASCII = lib.symbols.expwxFILTER_ASCII();
-var FILTER_EXCLUDE_LIST = lib.symbols.expwxFILTER_EXCLUDE_LIST();
-var FILTER_INCLUDE_LIST = lib.symbols.expwxFILTER_INCLUDE_LIST();
-var FILTER_NONE = lib.symbols.expwxFILTER_NONE();
-var FILTER_NUMERIC = lib.symbols.expwxFILTER_NUMERIC();
-var FIXED_LENGTH = lib.symbols.expwxFIXED_LENGTH();
-var FLOOD_BORDER = lib.symbols.expwxFLOOD_BORDER();
-var FLOOD_SURFACE = lib.symbols.expwxFLOOD_SURFACE();
-var FONTENCODING_ALTERNATIVE = lib.symbols.expwxFONTENCODING_ALTERNATIVE();
-var FONTENCODING_BULGARIAN = lib.symbols.expwxFONTENCODING_BULGARIAN();
-var FONTENCODING_CP1250 = lib.symbols.expwxFONTENCODING_CP1250();
-var FONTENCODING_CP1251 = lib.symbols.expwxFONTENCODING_CP1251();
-var FONTENCODING_CP1252 = lib.symbols.expwxFONTENCODING_CP1252();
-var FONTENCODING_CP1253 = lib.symbols.expwxFONTENCODING_CP1253();
-var FONTENCODING_CP1254 = lib.symbols.expwxFONTENCODING_CP1254();
-var FONTENCODING_CP1255 = lib.symbols.expwxFONTENCODING_CP1255();
-var FONTENCODING_CP1256 = lib.symbols.expwxFONTENCODING_CP1256();
-var FONTENCODING_CP1257 = lib.symbols.expwxFONTENCODING_CP1257();
-var FONTENCODING_CP12_MAX = lib.symbols.expwxFONTENCODING_CP12_MAX();
-var FONTENCODING_CP437 = lib.symbols.expwxFONTENCODING_CP437();
-var FONTENCODING_CP850 = lib.symbols.expwxFONTENCODING_CP850();
-var FONTENCODING_CP852 = lib.symbols.expwxFONTENCODING_CP852();
-var FONTENCODING_CP855 = lib.symbols.expwxFONTENCODING_CP855();
-var FONTENCODING_CP866 = lib.symbols.expwxFONTENCODING_CP866();
-var FONTENCODING_CP874 = lib.symbols.expwxFONTENCODING_CP874();
-var FONTENCODING_DEFAULT = lib.symbols.expwxFONTENCODING_DEFAULT();
-var FONTENCODING_ISO8859_1 = lib.symbols.expwxFONTENCODING_ISO8859_1();
-var FONTENCODING_ISO8859_10 = lib.symbols.expwxFONTENCODING_ISO8859_10();
-var FONTENCODING_ISO8859_11 = lib.symbols.expwxFONTENCODING_ISO8859_11();
-var FONTENCODING_ISO8859_12 = lib.symbols.expwxFONTENCODING_ISO8859_12();
-var FONTENCODING_ISO8859_13 = lib.symbols.expwxFONTENCODING_ISO8859_13();
-var FONTENCODING_ISO8859_14 = lib.symbols.expwxFONTENCODING_ISO8859_14();
-var FONTENCODING_ISO8859_15 = lib.symbols.expwxFONTENCODING_ISO8859_15();
-var FONTENCODING_ISO8859_2 = lib.symbols.expwxFONTENCODING_ISO8859_2();
-var FONTENCODING_ISO8859_3 = lib.symbols.expwxFONTENCODING_ISO8859_3();
-var FONTENCODING_ISO8859_4 = lib.symbols.expwxFONTENCODING_ISO8859_4();
-var FONTENCODING_ISO8859_5 = lib.symbols.expwxFONTENCODING_ISO8859_5();
-var FONTENCODING_ISO8859_6 = lib.symbols.expwxFONTENCODING_ISO8859_6();
-var FONTENCODING_ISO8859_7 = lib.symbols.expwxFONTENCODING_ISO8859_7();
-var FONTENCODING_ISO8859_8 = lib.symbols.expwxFONTENCODING_ISO8859_8();
-var FONTENCODING_ISO8859_9 = lib.symbols.expwxFONTENCODING_ISO8859_9();
-var FONTENCODING_ISO8859_MAX = lib.symbols.expwxFONTENCODING_ISO8859_MAX();
-var FONTENCODING_KOI8 = lib.symbols.expwxFONTENCODING_KOI8();
-var FONTENCODING_MAX = lib.symbols.expwxFONTENCODING_MAX();
-var FONTENCODING_SYSTEM = lib.symbols.expwxFONTENCODING_SYSTEM();
-var FONTENCODING_UNICODE = lib.symbols.expwxFONTENCODING_UNICODE();
-var FONTFAMILY_DECORATIVE = lib.symbols.expwxFONTFAMILY_DECORATIVE();
-var FONTFAMILY_DEFAULT = lib.symbols.expwxFONTFAMILY_DEFAULT();
-var FONTFAMILY_MODERN = lib.symbols.expwxFONTFAMILY_MODERN();
-var FONTFAMILY_ROMAN = lib.symbols.expwxFONTFAMILY_ROMAN();
-var FONTFAMILY_SCRIPT = lib.symbols.expwxFONTFAMILY_SCRIPT();
-var FONTFAMILY_SWISS = lib.symbols.expwxFONTFAMILY_SWISS();
-var FONTFAMILY_TELETYPE = lib.symbols.expwxFONTFAMILY_TELETYPE();
-var FONTSTYLE_ITALIC = lib.symbols.expwxFONTSTYLE_ITALIC();
-var FONTSTYLE_NORMAL = lib.symbols.expwxFONTSTYLE_NORMAL();
-var FONTSTYLE_SLANT = lib.symbols.expwxFONTSTYLE_SLANT();
-var FONTWEIGHT_BOLD = lib.symbols.expwxFONTWEIGHT_BOLD();
-var FONTWEIGHT_EXTRABOLD = lib.symbols.expwxFONTWEIGHT_EXTRABOLD();
-var FONTWEIGHT_EXTRAHEAVY = lib.symbols.expwxFONTWEIGHT_EXTRAHEAVY();
-var FONTWEIGHT_EXTRALIGHT = lib.symbols.expwxFONTWEIGHT_EXTRALIGHT();
-var FONTWEIGHT_HEAVY = lib.symbols.expwxFONTWEIGHT_HEAVY();
-var FONTWEIGHT_INVALID = lib.symbols.expwxFONTWEIGHT_INVALID();
-var FONTWEIGHT_LIGHT = lib.symbols.expwxFONTWEIGHT_LIGHT();
-var FONTWEIGHT_MAX = lib.symbols.expwxFONTWEIGHT_MAX();
-var FONTWEIGHT_MEDIUM = lib.symbols.expwxFONTWEIGHT_MEDIUM();
-var FONTWEIGHT_NORMAL = lib.symbols.expwxFONTWEIGHT_NORMAL();
-var FONTWEIGHT_SEMIBOLD = lib.symbols.expwxFONTWEIGHT_SEMIBOLD();
-var FONTWEIGHT_THIN = lib.symbols.expwxFONTWEIGHT_THIN();
-var FORWARD = lib.symbols.expwxFORWARD();
-var FRAME_EX_CONTEXTHELP = lib.symbols.expwxFRAME_EX_CONTEXTHELP();
-var FRAME_FLOAT_ON_PARENT = lib.symbols.expwxFRAME_FLOAT_ON_PARENT();
-var FRAME_NO_TASKBAR = lib.symbols.expwxFRAME_NO_TASKBAR();
-var FRAME_NO_WINDOW_MENU = lib.symbols.expwxFRAME_NO_WINDOW_MENU();
-var FRAME_SHAPED = lib.symbols.expwxFRAME_SHAPED();
-var FRAME_TOOL_WINDOW = lib.symbols.expwxFRAME_TOOL_WINDOW();
-var FULLSCREEN_ALL = lib.symbols.expwxFULLSCREEN_ALL();
-var FULLSCREEN_NOBORDER = lib.symbols.expwxFULLSCREEN_NOBORDER();
-var FULLSCREEN_NOCAPTION = lib.symbols.expwxFULLSCREEN_NOCAPTION();
-var FULLSCREEN_NOMENUBAR = lib.symbols.expwxFULLSCREEN_NOMENUBAR();
-var FULLSCREEN_NOSTATUSBAR = lib.symbols.expwxFULLSCREEN_NOSTATUSBAR();
-var FULLSCREEN_NOTOOLBAR = lib.symbols.expwxFULLSCREEN_NOTOOLBAR();
-var FULL_REPAINT_ON_RESIZE = lib.symbols.expwxFULL_REPAINT_ON_RESIZE();
-var GA_SMOOTH = lib.symbols.expwxGA_SMOOTH();
+var DD_CHANGE_DIR = _ints[556];
+var DD_DEFAULT_STYLE = _ints[557];
+var DD_DIR_MUST_EXIST = _ints[558];
+var DD_MULTIPLE = _ints[559];
+var DD_SHOW_HIDDEN = _ints[560];
+var DEFAULT_FRAME_STYLE = _ints[561];
+var DF_BITMAP = _ints[562];
+var DF_DIB = _ints[563];
+var DF_DIF = _ints[564];
+var DF_ENHMETAFILE = _ints[565];
+var DF_FILENAME = _ints[566];
+var DF_INVALID = _ints[567];
+var DF_LOCALE = _ints[568];
+var DF_MAX = _ints[569];
+var DF_METAFILE = _ints[570];
+var DF_OEMTEXT = _ints[571];
+var DF_PALETTE = _ints[572];
+var DF_PENDATA = _ints[573];
+var DF_PRIVATE = _ints[574];
+var DF_RIFF = _ints[575];
+var DF_SYLK = _ints[576];
+var DF_TEXT = _ints[577];
+var DF_TIFF = _ints[578];
+var DF_UNICODETEXT = _ints[579];
+var DF_WAVE = _ints[580];
+var DIALOG_EX_CONTEXTHELP = _ints[581];
+var DOWN = _ints[582];
+var DUPLEX_HORIZONTAL = _ints[583];
+var DUPLEX_SIMPLEX = _ints[584];
+var DUPLEX_VERTICAL = _ints[585];
+var DefaultCoord = _ints[586];
+var EAST = _ints[587];
+var EQUIV = _ints[588];
+var EXEC_ASYNC = _ints[589];
+var EXEC_MAKE_GROUP_LEADER = _ints[590];
+var EXEC_NOHIDE = _ints[591];
+var EXEC_SYNC = _ints[592];
+var EXPAND = _ints[593];
+var FD_CHANGE_DIR = _ints[594];
+var FD_DEFAULT_STYLE = _ints[595];
+var FD_FILE_MUST_EXIST = _ints[596];
+var FD_MULTIPLE = _ints[597];
+var FD_NO_FOLLOW = _ints[598];
+var FD_OPEN = _ints[599];
+var FD_OVERWRITE_PROMPT = _ints[600];
+var FD_PREVIEW = _ints[601];
+var FD_SAVE = _ints[602];
+var FD_SHOW_HIDDEN = _ints[603];
+var FILTER_ALPHA = _ints[604];
+var FILTER_ALPHANUMERIC = _ints[605];
+var FILTER_ASCII = _ints[606];
+var FILTER_EXCLUDE_LIST = _ints[607];
+var FILTER_INCLUDE_LIST = _ints[608];
+var FILTER_NONE = _ints[609];
+var FILTER_NUMERIC = _ints[610];
+var FIXED_LENGTH = _ints[611];
+var FLOOD_BORDER = _ints[612];
+var FLOOD_SURFACE = _ints[613];
+var FONTENCODING_ALTERNATIVE = _ints[614];
+var FONTENCODING_BULGARIAN = _ints[615];
+var FONTENCODING_CP1250 = _ints[616];
+var FONTENCODING_CP1251 = _ints[617];
+var FONTENCODING_CP1252 = _ints[618];
+var FONTENCODING_CP1253 = _ints[619];
+var FONTENCODING_CP1254 = _ints[620];
+var FONTENCODING_CP1255 = _ints[621];
+var FONTENCODING_CP1256 = _ints[622];
+var FONTENCODING_CP1257 = _ints[623];
+var FONTENCODING_CP12_MAX = _ints[624];
+var FONTENCODING_CP437 = _ints[625];
+var FONTENCODING_CP850 = _ints[626];
+var FONTENCODING_CP852 = _ints[627];
+var FONTENCODING_CP855 = _ints[628];
+var FONTENCODING_CP866 = _ints[629];
+var FONTENCODING_CP874 = _ints[630];
+var FONTENCODING_DEFAULT = _ints[631];
+var FONTENCODING_ISO8859_1 = _ints[632];
+var FONTENCODING_ISO8859_10 = _ints[633];
+var FONTENCODING_ISO8859_11 = _ints[634];
+var FONTENCODING_ISO8859_12 = _ints[635];
+var FONTENCODING_ISO8859_13 = _ints[636];
+var FONTENCODING_ISO8859_14 = _ints[637];
+var FONTENCODING_ISO8859_15 = _ints[638];
+var FONTENCODING_ISO8859_2 = _ints[639];
+var FONTENCODING_ISO8859_3 = _ints[640];
+var FONTENCODING_ISO8859_4 = _ints[641];
+var FONTENCODING_ISO8859_5 = _ints[642];
+var FONTENCODING_ISO8859_6 = _ints[643];
+var FONTENCODING_ISO8859_7 = _ints[644];
+var FONTENCODING_ISO8859_8 = _ints[645];
+var FONTENCODING_ISO8859_9 = _ints[646];
+var FONTENCODING_ISO8859_MAX = _ints[647];
+var FONTENCODING_KOI8 = _ints[648];
+var FONTENCODING_MAX = _ints[649];
+var FONTENCODING_SYSTEM = _ints[650];
+var FONTENCODING_UNICODE = _ints[651];
+var FONTFAMILY_DECORATIVE = _ints[652];
+var FONTFAMILY_DEFAULT = _ints[653];
+var FONTFAMILY_MODERN = _ints[654];
+var FONTFAMILY_ROMAN = _ints[655];
+var FONTFAMILY_SCRIPT = _ints[656];
+var FONTFAMILY_SWISS = _ints[657];
+var FONTFAMILY_TELETYPE = _ints[658];
+var FONTSTYLE_ITALIC = _ints[659];
+var FONTSTYLE_NORMAL = _ints[660];
+var FONTSTYLE_SLANT = _ints[661];
+var FONTWEIGHT_BOLD = _ints[662];
+var FONTWEIGHT_EXTRABOLD = _ints[663];
+var FONTWEIGHT_EXTRAHEAVY = _ints[664];
+var FONTWEIGHT_EXTRALIGHT = _ints[665];
+var FONTWEIGHT_HEAVY = _ints[666];
+var FONTWEIGHT_INVALID = _ints[667];
+var FONTWEIGHT_LIGHT = _ints[668];
+var FONTWEIGHT_MAX = _ints[669];
+var FONTWEIGHT_MEDIUM = _ints[670];
+var FONTWEIGHT_NORMAL = _ints[671];
+var FONTWEIGHT_SEMIBOLD = _ints[672];
+var FONTWEIGHT_THIN = _ints[673];
+var FORWARD = _ints[674];
+var FRAME_EX_CONTEXTHELP = _ints[675];
+var FRAME_FLOAT_ON_PARENT = _ints[676];
+var FRAME_NO_TASKBAR = _ints[677];
+var FRAME_NO_WINDOW_MENU = _ints[678];
+var FRAME_SHAPED = _ints[679];
+var FRAME_TOOL_WINDOW = _ints[680];
+var FULLSCREEN_ALL = _ints[681];
+var FULLSCREEN_NOBORDER = _ints[682];
+var FULLSCREEN_NOCAPTION = _ints[683];
+var FULLSCREEN_NOMENUBAR = _ints[684];
+var FULLSCREEN_NOSTATUSBAR = _ints[685];
+var FULLSCREEN_NOTOOLBAR = _ints[686];
+var FULL_REPAINT_ON_RESIZE = _ints[687];
+var GA_SMOOTH = _ints[688];
 var GREEN = lib.symbols.expwxGREEN();
 var GREEN_BRUSH = lib.symbols.expwxGREEN_BRUSH();
 var GREEN_PEN = lib.symbols.expwxGREEN_PEN();
 var GREY_BRUSH = lib.symbols.expwxGREY_BRUSH();
 var GREY_PEN = lib.symbols.expwxGREY_PEN();
-var GRIDTABLE_NOTIFY_COLS_APPENDED = lib.symbols.expwxGRIDTABLE_NOTIFY_COLS_APPENDED();
-var GRIDTABLE_NOTIFY_COLS_DELETED = lib.symbols.expwxGRIDTABLE_NOTIFY_COLS_DELETED();
-var GRIDTABLE_NOTIFY_COLS_INSERTED = lib.symbols.expwxGRIDTABLE_NOTIFY_COLS_INSERTED();
-var GRIDTABLE_NOTIFY_ROWS_APPENDED = lib.symbols.expwxGRIDTABLE_NOTIFY_ROWS_APPENDED();
-var GRIDTABLE_NOTIFY_ROWS_DELETED = lib.symbols.expwxGRIDTABLE_NOTIFY_ROWS_DELETED();
-var GRIDTABLE_NOTIFY_ROWS_INSERTED = lib.symbols.expwxGRIDTABLE_NOTIFY_ROWS_INSERTED();
-var GROW = lib.symbols.expwxGROW();
-var HATCHSTYLE_BDIAGONAL = lib.symbols.expwxHATCHSTYLE_BDIAGONAL();
-var HATCHSTYLE_CROSS = lib.symbols.expwxHATCHSTYLE_CROSS();
-var HATCHSTYLE_CROSSDIAG = lib.symbols.expwxHATCHSTYLE_CROSSDIAG();
-var HATCHSTYLE_FDIAGONAL = lib.symbols.expwxHATCHSTYLE_FDIAGONAL();
-var HATCHSTYLE_HORIZONTAL = lib.symbols.expwxHATCHSTYLE_HORIZONTAL();
-var HATCHSTYLE_VERTICAL = lib.symbols.expwxHATCHSTYLE_VERTICAL();
-var HELP = lib.symbols.expwxHELP();
-var HF_BOOKMARKS = lib.symbols.expwxHF_BOOKMARKS();
-var HF_CONTENTS = lib.symbols.expwxHF_CONTENTS();
-var HF_DEFAULTSTYLE = lib.symbols.expwxHF_DEFAULTSTYLE();
-var HF_FLATTOOLBAR = lib.symbols.expwxHF_FLATTOOLBAR();
-var HF_INDEX = lib.symbols.expwxHF_INDEX();
-var HF_OPENFILES = lib.symbols.expwxHF_OPENFILES();
-var HF_PRINT = lib.symbols.expwxHF_PRINT();
-var HF_SEARCH = lib.symbols.expwxHF_SEARCH();
-var HF_TOOLBAR = lib.symbols.expwxHF_TOOLBAR();
-var HORIZONTAL = lib.symbols.expwxHORIZONTAL();
-var HSCROLL = lib.symbols.expwxHSCROLL();
-var HW_SCROLLBAR_AUTO = lib.symbols.expwxHW_SCROLLBAR_AUTO();
-var HW_SCROLLBAR_NEVER = lib.symbols.expwxHW_SCROLLBAR_NEVER();
-var ICONIZE = lib.symbols.expwxICONIZE();
-var ICON_ERROR = lib.symbols.expwxICON_ERROR();
-var ICON_INFORMATION = lib.symbols.expwxICON_INFORMATION();
-var ICON_QUESTION = lib.symbols.expwxICON_QUESTION();
-var ICON_WARNING = lib.symbols.expwxICON_WARNING();
-var ID_ABOUT = lib.symbols.expwxID_ABOUT();
-var ID_ANY = lib.symbols.expwxID_ANY();
-var ID_APPLY = lib.symbols.expwxID_APPLY();
-var ID_BACKWARD = lib.symbols.expwxID_BACKWARD();
-var ID_CANCEL = lib.symbols.expwxID_CANCEL();
-var ID_CLEAR = lib.symbols.expwxID_CLEAR();
-var ID_CLOSE = lib.symbols.expwxID_CLOSE();
-var ID_COPY = lib.symbols.expwxID_COPY();
-var ID_CUT = lib.symbols.expwxID_CUT();
-var ID_DEFAULT = lib.symbols.expwxID_DEFAULT();
-var ID_DUPLICATE = lib.symbols.expwxID_DUPLICATE();
-var ID_EXIT = lib.symbols.expwxID_EXIT();
-var ID_FILE1 = lib.symbols.expwxID_FILE1();
-var ID_FILE2 = lib.symbols.expwxID_FILE2();
-var ID_FILE3 = lib.symbols.expwxID_FILE3();
-var ID_FILE4 = lib.symbols.expwxID_FILE4();
-var ID_FILE5 = lib.symbols.expwxID_FILE5();
-var ID_FILE6 = lib.symbols.expwxID_FILE6();
-var ID_FILE7 = lib.symbols.expwxID_FILE7();
-var ID_FILE8 = lib.symbols.expwxID_FILE8();
-var ID_FILE9 = lib.symbols.expwxID_FILE9();
-var ID_FILEDLGG = lib.symbols.expwxID_FILEDLGG();
-var ID_FIND = lib.symbols.expwxID_FIND();
-var ID_FORWARD = lib.symbols.expwxID_FORWARD();
-var ID_HELP = lib.symbols.expwxID_HELP();
-var ID_HELP_COMMANDS = lib.symbols.expwxID_HELP_COMMANDS();
-var ID_HELP_CONTENTS = lib.symbols.expwxID_HELP_CONTENTS();
-var ID_HELP_CONTEXT = lib.symbols.expwxID_HELP_CONTEXT();
-var ID_HELP_PROCEDURES = lib.symbols.expwxID_HELP_PROCEDURES();
-var ID_HIGHEST = lib.symbols.expwxID_HIGHEST();
-var ID_LOWEST = lib.symbols.expwxID_LOWEST();
-var ID_MORE = lib.symbols.expwxID_MORE();
-var ID_NEW = lib.symbols.expwxID_NEW();
-var ID_NO = lib.symbols.expwxID_NO();
-var ID_OK = lib.symbols.expwxID_OK();
-var ID_OPEN = lib.symbols.expwxID_OPEN();
-var ID_PASTE = lib.symbols.expwxID_PASTE();
-var ID_PREVIEW = lib.symbols.expwxID_PREVIEW();
-var ID_PREVIEW_CLOSE = lib.symbols.expwxID_PREVIEW_CLOSE();
-var ID_PREVIEW_FIRST = lib.symbols.expwxID_PREVIEW_FIRST();
-var ID_PREVIEW_GOTO = lib.symbols.expwxID_PREVIEW_GOTO();
-var ID_PREVIEW_LAST = lib.symbols.expwxID_PREVIEW_LAST();
-var ID_PREVIEW_NEXT = lib.symbols.expwxID_PREVIEW_NEXT();
-var ID_PREVIEW_PREVIOUS = lib.symbols.expwxID_PREVIEW_PREVIOUS();
-var ID_PREVIEW_PRINT = lib.symbols.expwxID_PREVIEW_PRINT();
-var ID_PREVIEW_ZOOM = lib.symbols.expwxID_PREVIEW_ZOOM();
-var ID_PRINT = lib.symbols.expwxID_PRINT();
-var ID_PRINT_SETUP = lib.symbols.expwxID_PRINT_SETUP();
-var ID_REDO = lib.symbols.expwxID_REDO();
-var ID_RESET = lib.symbols.expwxID_RESET();
-var ID_REVERT = lib.symbols.expwxID_REVERT();
-var ID_SAVE = lib.symbols.expwxID_SAVE();
-var ID_SAVEAS = lib.symbols.expwxID_SAVEAS();
-var ID_SELECTALL = lib.symbols.expwxID_SELECTALL();
-var ID_SETUP = lib.symbols.expwxID_SETUP();
-var ID_STATIC = lib.symbols.expwxID_STATIC();
-var ID_UNDO = lib.symbols.expwxID_UNDO();
-var ID_YES = lib.symbols.expwxID_YES();
-var IMAGE_LIST_NORMAL = lib.symbols.expwxIMAGE_LIST_NORMAL();
-var IMAGE_LIST_SMALL = lib.symbols.expwxIMAGE_LIST_SMALL();
-var IMAGE_LIST_STATE = lib.symbols.expwxIMAGE_LIST_STATE();
-var INVERT = lib.symbols.expwxINVERT();
+var GRIDTABLE_NOTIFY_COLS_APPENDED = _ints[689];
+var GRIDTABLE_NOTIFY_COLS_DELETED = _ints[690];
+var GRIDTABLE_NOTIFY_COLS_INSERTED = _ints[691];
+var GRIDTABLE_NOTIFY_ROWS_APPENDED = _ints[692];
+var GRIDTABLE_NOTIFY_ROWS_DELETED = _ints[693];
+var GRIDTABLE_NOTIFY_ROWS_INSERTED = _ints[694];
+var GROW = _ints[695];
+var HATCHSTYLE_BDIAGONAL = _ints[696];
+var HATCHSTYLE_CROSS = _ints[697];
+var HATCHSTYLE_CROSSDIAG = _ints[698];
+var HATCHSTYLE_FDIAGONAL = _ints[699];
+var HATCHSTYLE_HORIZONTAL = _ints[700];
+var HATCHSTYLE_VERTICAL = _ints[701];
+var HELP = _ints[702];
+var HF_BOOKMARKS = _ints[703];
+var HF_CONTENTS = _ints[704];
+var HF_DEFAULTSTYLE = _ints[705];
+var HF_FLATTOOLBAR = _ints[706];
+var HF_INDEX = _ints[707];
+var HF_OPENFILES = _ints[708];
+var HF_PRINT = _ints[709];
+var HF_SEARCH = _ints[710];
+var HF_TOOLBAR = _ints[711];
+var HORIZONTAL = _ints[712];
+var HSCROLL = _ints[713];
+var HW_SCROLLBAR_AUTO = _ints[714];
+var HW_SCROLLBAR_NEVER = _ints[715];
+var ICONIZE = _ints[716];
+var ICON_ERROR = _ints[717];
+var ICON_INFORMATION = _ints[718];
+var ICON_QUESTION = _ints[719];
+var ICON_WARNING = _ints[720];
+var ID_ABOUT = _ints[721];
+var ID_ANY = _ints[722];
+var ID_APPLY = _ints[723];
+var ID_BACKWARD = _ints[724];
+var ID_CANCEL = _ints[725];
+var ID_CLEAR = _ints[726];
+var ID_CLOSE = _ints[727];
+var ID_COPY = _ints[728];
+var ID_CUT = _ints[729];
+var ID_DEFAULT = _ints[730];
+var ID_DUPLICATE = _ints[731];
+var ID_EXIT = _ints[732];
+var ID_FILE1 = _ints[733];
+var ID_FILE2 = _ints[734];
+var ID_FILE3 = _ints[735];
+var ID_FILE4 = _ints[736];
+var ID_FILE5 = _ints[737];
+var ID_FILE6 = _ints[738];
+var ID_FILE7 = _ints[739];
+var ID_FILE8 = _ints[740];
+var ID_FILE9 = _ints[741];
+var ID_FILEDLGG = _ints[742];
+var ID_FIND = _ints[743];
+var ID_FORWARD = _ints[744];
+var ID_HELP = _ints[745];
+var ID_HELP_COMMANDS = _ints[746];
+var ID_HELP_CONTENTS = _ints[747];
+var ID_HELP_CONTEXT = _ints[748];
+var ID_HELP_PROCEDURES = _ints[749];
+var ID_HIGHEST = _ints[750];
+var ID_LOWEST = _ints[751];
+var ID_MORE = _ints[752];
+var ID_NEW = _ints[753];
+var ID_NO = _ints[754];
+var ID_OK = _ints[755];
+var ID_OPEN = _ints[756];
+var ID_PASTE = _ints[757];
+var ID_PREVIEW = _ints[758];
+var ID_PREVIEW_CLOSE = _ints[759];
+var ID_PREVIEW_FIRST = _ints[760];
+var ID_PREVIEW_GOTO = _ints[761];
+var ID_PREVIEW_LAST = _ints[762];
+var ID_PREVIEW_NEXT = _ints[763];
+var ID_PREVIEW_PREVIOUS = _ints[764];
+var ID_PREVIEW_PRINT = _ints[765];
+var ID_PREVIEW_ZOOM = _ints[766];
+var ID_PRINT = _ints[767];
+var ID_PRINT_SETUP = _ints[768];
+var ID_REDO = _ints[769];
+var ID_RESET = _ints[770];
+var ID_REVERT = _ints[771];
+var ID_SAVE = _ints[772];
+var ID_SAVEAS = _ints[773];
+var ID_SELECTALL = _ints[774];
+var ID_SETUP = _ints[775];
+var ID_STATIC = _ints[776];
+var ID_UNDO = _ints[777];
+var ID_YES = _ints[778];
+var IMAGE_LIST_NORMAL = _ints[779];
+var IMAGE_LIST_SMALL = _ints[780];
+var IMAGE_LIST_STATE = _ints[781];
+var INVERT = _ints[782];
 var ITALIC_FONT = lib.symbols.expwxITALIC_FONT();
-var ITEM_CHECK = lib.symbols.expwxITEM_CHECK();
-var ITEM_MAX = lib.symbols.expwxITEM_MAX();
-var ITEM_NORMAL = lib.symbols.expwxITEM_NORMAL();
-var ITEM_RADIO = lib.symbols.expwxITEM_RADIO();
-var ITEM_SEPARATOR = lib.symbols.expwxITEM_SEPARATOR();
-var JOIN_BEVEL = lib.symbols.expwxJOIN_BEVEL();
-var JOIN_MITER = lib.symbols.expwxJOIN_MITER();
-var JOIN_ROUND = lib.symbols.expwxJOIN_ROUND();
-var JOYSTICK1 = lib.symbols.expwxJOYSTICK1();
-var JOYSTICK2 = lib.symbols.expwxJOYSTICK2();
-var JOY_BUTTON1 = lib.symbols.expwxJOY_BUTTON1();
-var JOY_BUTTON2 = lib.symbols.expwxJOY_BUTTON2();
-var JOY_BUTTON3 = lib.symbols.expwxJOY_BUTTON3();
-var JOY_BUTTON4 = lib.symbols.expwxJOY_BUTTON4();
-var KILL_ACCESS_DENIED = lib.symbols.expwxKILL_ACCESS_DENIED();
-var KILL_BAD_SIGNAL = lib.symbols.expwxKILL_BAD_SIGNAL();
-var KILL_ERROR = lib.symbols.expwxKILL_ERROR();
-var KILL_NO_PROCESS = lib.symbols.expwxKILL_NO_PROCESS();
-var KILL_OK = lib.symbols.expwxKILL_OK();
-var LANDSCAPE = lib.symbols.expwxLANDSCAPE();
-var LANGUAGE_ABKHAZIAN = lib.symbols.expwxLANGUAGE_ABKHAZIAN();
-var LANGUAGE_AFAR = lib.symbols.expwxLANGUAGE_AFAR();
-var LANGUAGE_AFRIKAANS = lib.symbols.expwxLANGUAGE_AFRIKAANS();
-var LANGUAGE_ALBANIAN = lib.symbols.expwxLANGUAGE_ALBANIAN();
-var LANGUAGE_AMHARIC = lib.symbols.expwxLANGUAGE_AMHARIC();
-var LANGUAGE_ARABIC = lib.symbols.expwxLANGUAGE_ARABIC();
-var LANGUAGE_ARABIC_ALGERIA = lib.symbols.expwxLANGUAGE_ARABIC_ALGERIA();
-var LANGUAGE_ARABIC_BAHRAIN = lib.symbols.expwxLANGUAGE_ARABIC_BAHRAIN();
-var LANGUAGE_ARABIC_EGYPT = lib.symbols.expwxLANGUAGE_ARABIC_EGYPT();
-var LANGUAGE_ARABIC_IRAQ = lib.symbols.expwxLANGUAGE_ARABIC_IRAQ();
-var LANGUAGE_ARABIC_JORDAN = lib.symbols.expwxLANGUAGE_ARABIC_JORDAN();
-var LANGUAGE_ARABIC_KUWAIT = lib.symbols.expwxLANGUAGE_ARABIC_KUWAIT();
-var LANGUAGE_ARABIC_LEBANON = lib.symbols.expwxLANGUAGE_ARABIC_LEBANON();
-var LANGUAGE_ARABIC_LIBYA = lib.symbols.expwxLANGUAGE_ARABIC_LIBYA();
-var LANGUAGE_ARABIC_MOROCCO = lib.symbols.expwxLANGUAGE_ARABIC_MOROCCO();
-var LANGUAGE_ARABIC_OMAN = lib.symbols.expwxLANGUAGE_ARABIC_OMAN();
-var LANGUAGE_ARABIC_QATAR = lib.symbols.expwxLANGUAGE_ARABIC_QATAR();
-var LANGUAGE_ARABIC_SAUDI_ARABIA = lib.symbols.expwxLANGUAGE_ARABIC_SAUDI_ARABIA();
-var LANGUAGE_ARABIC_SUDAN = lib.symbols.expwxLANGUAGE_ARABIC_SUDAN();
-var LANGUAGE_ARABIC_SYRIA = lib.symbols.expwxLANGUAGE_ARABIC_SYRIA();
-var LANGUAGE_ARABIC_TUNISIA = lib.symbols.expwxLANGUAGE_ARABIC_TUNISIA();
-var LANGUAGE_ARABIC_UAE = lib.symbols.expwxLANGUAGE_ARABIC_UAE();
-var LANGUAGE_ARABIC_YEMEN = lib.symbols.expwxLANGUAGE_ARABIC_YEMEN();
-var LANGUAGE_ARMENIAN = lib.symbols.expwxLANGUAGE_ARMENIAN();
-var LANGUAGE_ASSAMESE = lib.symbols.expwxLANGUAGE_ASSAMESE();
-var LANGUAGE_AYMARA = lib.symbols.expwxLANGUAGE_AYMARA();
-var LANGUAGE_AZERI = lib.symbols.expwxLANGUAGE_AZERI();
-var LANGUAGE_AZERI_CYRILLIC = lib.symbols.expwxLANGUAGE_AZERI_CYRILLIC();
-var LANGUAGE_AZERI_LATIN = lib.symbols.expwxLANGUAGE_AZERI_LATIN();
-var LANGUAGE_BASHKIR = lib.symbols.expwxLANGUAGE_BASHKIR();
-var LANGUAGE_BASQUE = lib.symbols.expwxLANGUAGE_BASQUE();
-var LANGUAGE_BELARUSIAN = lib.symbols.expwxLANGUAGE_BELARUSIAN();
-var LANGUAGE_BENGALI = lib.symbols.expwxLANGUAGE_BENGALI();
-var LANGUAGE_BHUTANI = lib.symbols.expwxLANGUAGE_BHUTANI();
-var LANGUAGE_BIHARI = lib.symbols.expwxLANGUAGE_BIHARI();
-var LANGUAGE_BISLAMA = lib.symbols.expwxLANGUAGE_BISLAMA();
-var LANGUAGE_BRETON = lib.symbols.expwxLANGUAGE_BRETON();
-var LANGUAGE_BULGARIAN = lib.symbols.expwxLANGUAGE_BULGARIAN();
-var LANGUAGE_BURMESE = lib.symbols.expwxLANGUAGE_BURMESE();
-var LANGUAGE_CAMBODIAN = lib.symbols.expwxLANGUAGE_CAMBODIAN();
-var LANGUAGE_CATALAN = lib.symbols.expwxLANGUAGE_CATALAN();
-var LANGUAGE_CHINESE = lib.symbols.expwxLANGUAGE_CHINESE();
-var LANGUAGE_CHINESE_HONGKONG = lib.symbols.expwxLANGUAGE_CHINESE_HONGKONG();
-var LANGUAGE_CHINESE_MACAU = lib.symbols.expwxLANGUAGE_CHINESE_MACAU();
-var LANGUAGE_CHINESE_SIMPLIFIED = lib.symbols.expwxLANGUAGE_CHINESE_SIMPLIFIED();
-var LANGUAGE_CHINESE_SINGAPORE = lib.symbols.expwxLANGUAGE_CHINESE_SINGAPORE();
-var LANGUAGE_CHINESE_TAIWAN = lib.symbols.expwxLANGUAGE_CHINESE_TAIWAN();
-var LANGUAGE_CHINESE_TRADITIONAL = lib.symbols.expwxLANGUAGE_CHINESE_TRADITIONAL();
-var LANGUAGE_CORSICAN = lib.symbols.expwxLANGUAGE_CORSICAN();
-var LANGUAGE_CROATIAN = lib.symbols.expwxLANGUAGE_CROATIAN();
-var LANGUAGE_CZECH = lib.symbols.expwxLANGUAGE_CZECH();
-var LANGUAGE_DANISH = lib.symbols.expwxLANGUAGE_DANISH();
-var LANGUAGE_DEFAULT = lib.symbols.expwxLANGUAGE_DEFAULT();
-var LANGUAGE_DUTCH = lib.symbols.expwxLANGUAGE_DUTCH();
-var LANGUAGE_DUTCH_BELGIAN = lib.symbols.expwxLANGUAGE_DUTCH_BELGIAN();
-var LANGUAGE_ENGLISH = lib.symbols.expwxLANGUAGE_ENGLISH();
-var LANGUAGE_ENGLISH_AUSTRALIA = lib.symbols.expwxLANGUAGE_ENGLISH_AUSTRALIA();
-var LANGUAGE_ENGLISH_BELIZE = lib.symbols.expwxLANGUAGE_ENGLISH_BELIZE();
-var LANGUAGE_ENGLISH_BOTSWANA = lib.symbols.expwxLANGUAGE_ENGLISH_BOTSWANA();
-var LANGUAGE_ENGLISH_CANADA = lib.symbols.expwxLANGUAGE_ENGLISH_CANADA();
-var LANGUAGE_ENGLISH_CARIBBEAN = lib.symbols.expwxLANGUAGE_ENGLISH_CARIBBEAN();
-var LANGUAGE_ENGLISH_DENMARK = lib.symbols.expwxLANGUAGE_ENGLISH_DENMARK();
-var LANGUAGE_ENGLISH_EIRE = lib.symbols.expwxLANGUAGE_ENGLISH_EIRE();
-var LANGUAGE_ENGLISH_JAMAICA = lib.symbols.expwxLANGUAGE_ENGLISH_JAMAICA();
-var LANGUAGE_ENGLISH_NEW_ZEALAND = lib.symbols.expwxLANGUAGE_ENGLISH_NEW_ZEALAND();
-var LANGUAGE_ENGLISH_PHILIPPINES = lib.symbols.expwxLANGUAGE_ENGLISH_PHILIPPINES();
-var LANGUAGE_ENGLISH_SOUTH_AFRICA = lib.symbols.expwxLANGUAGE_ENGLISH_SOUTH_AFRICA();
-var LANGUAGE_ENGLISH_TRINIDAD = lib.symbols.expwxLANGUAGE_ENGLISH_TRINIDAD();
-var LANGUAGE_ENGLISH_UK = lib.symbols.expwxLANGUAGE_ENGLISH_UK();
-var LANGUAGE_ENGLISH_US = lib.symbols.expwxLANGUAGE_ENGLISH_US();
-var LANGUAGE_ENGLISH_ZIMBABWE = lib.symbols.expwxLANGUAGE_ENGLISH_ZIMBABWE();
-var LANGUAGE_ESPERANTO = lib.symbols.expwxLANGUAGE_ESPERANTO();
-var LANGUAGE_ESTONIAN = lib.symbols.expwxLANGUAGE_ESTONIAN();
-var LANGUAGE_FAEROESE = lib.symbols.expwxLANGUAGE_FAEROESE();
-var LANGUAGE_FARSI = lib.symbols.expwxLANGUAGE_FARSI();
-var LANGUAGE_FIJI = lib.symbols.expwxLANGUAGE_FIJI();
-var LANGUAGE_FINNISH = lib.symbols.expwxLANGUAGE_FINNISH();
-var LANGUAGE_FRENCH = lib.symbols.expwxLANGUAGE_FRENCH();
-var LANGUAGE_FRENCH_BELGIAN = lib.symbols.expwxLANGUAGE_FRENCH_BELGIAN();
-var LANGUAGE_FRENCH_CANADIAN = lib.symbols.expwxLANGUAGE_FRENCH_CANADIAN();
-var LANGUAGE_FRENCH_LUXEMBOURG = lib.symbols.expwxLANGUAGE_FRENCH_LUXEMBOURG();
-var LANGUAGE_FRENCH_MONACO = lib.symbols.expwxLANGUAGE_FRENCH_MONACO();
-var LANGUAGE_FRENCH_SWISS = lib.symbols.expwxLANGUAGE_FRENCH_SWISS();
-var LANGUAGE_FRISIAN = lib.symbols.expwxLANGUAGE_FRISIAN();
-var LANGUAGE_GALICIAN = lib.symbols.expwxLANGUAGE_GALICIAN();
-var LANGUAGE_GEORGIAN = lib.symbols.expwxLANGUAGE_GEORGIAN();
-var LANGUAGE_GERMAN = lib.symbols.expwxLANGUAGE_GERMAN();
-var LANGUAGE_GERMAN_AUSTRIAN = lib.symbols.expwxLANGUAGE_GERMAN_AUSTRIAN();
-var LANGUAGE_GERMAN_BELGIUM = lib.symbols.expwxLANGUAGE_GERMAN_BELGIUM();
-var LANGUAGE_GERMAN_LIECHTENSTEIN = lib.symbols.expwxLANGUAGE_GERMAN_LIECHTENSTEIN();
-var LANGUAGE_GERMAN_LUXEMBOURG = lib.symbols.expwxLANGUAGE_GERMAN_LUXEMBOURG();
-var LANGUAGE_GERMAN_SWISS = lib.symbols.expwxLANGUAGE_GERMAN_SWISS();
-var LANGUAGE_GREEK = lib.symbols.expwxLANGUAGE_GREEK();
-var LANGUAGE_GREENLANDIC = lib.symbols.expwxLANGUAGE_GREENLANDIC();
-var LANGUAGE_GUARANI = lib.symbols.expwxLANGUAGE_GUARANI();
-var LANGUAGE_GUJARATI = lib.symbols.expwxLANGUAGE_GUJARATI();
-var LANGUAGE_HAUSA = lib.symbols.expwxLANGUAGE_HAUSA();
-var LANGUAGE_HEBREW = lib.symbols.expwxLANGUAGE_HEBREW();
-var LANGUAGE_HINDI = lib.symbols.expwxLANGUAGE_HINDI();
-var LANGUAGE_HUNGARIAN = lib.symbols.expwxLANGUAGE_HUNGARIAN();
-var LANGUAGE_ICELANDIC = lib.symbols.expwxLANGUAGE_ICELANDIC();
-var LANGUAGE_INDONESIAN = lib.symbols.expwxLANGUAGE_INDONESIAN();
-var LANGUAGE_INTERLINGUA = lib.symbols.expwxLANGUAGE_INTERLINGUA();
-var LANGUAGE_INTERLINGUE = lib.symbols.expwxLANGUAGE_INTERLINGUE();
-var LANGUAGE_INUKTITUT = lib.symbols.expwxLANGUAGE_INUKTITUT();
-var LANGUAGE_INUPIAK = lib.symbols.expwxLANGUAGE_INUPIAK();
-var LANGUAGE_IRISH = lib.symbols.expwxLANGUAGE_IRISH();
-var LANGUAGE_ITALIAN = lib.symbols.expwxLANGUAGE_ITALIAN();
-var LANGUAGE_ITALIAN_SWISS = lib.symbols.expwxLANGUAGE_ITALIAN_SWISS();
-var LANGUAGE_JAPANESE = lib.symbols.expwxLANGUAGE_JAPANESE();
-var LANGUAGE_JAVANESE = lib.symbols.expwxLANGUAGE_JAVANESE();
-var LANGUAGE_KANNADA = lib.symbols.expwxLANGUAGE_KANNADA();
-var LANGUAGE_KASHMIRI = lib.symbols.expwxLANGUAGE_KASHMIRI();
-var LANGUAGE_KASHMIRI_INDIA = lib.symbols.expwxLANGUAGE_KASHMIRI_INDIA();
-var LANGUAGE_KAZAKH = lib.symbols.expwxLANGUAGE_KAZAKH();
-var LANGUAGE_KERNEWEK = lib.symbols.expwxLANGUAGE_KERNEWEK();
-var LANGUAGE_KINYARWANDA = lib.symbols.expwxLANGUAGE_KINYARWANDA();
-var LANGUAGE_KIRGHIZ = lib.symbols.expwxLANGUAGE_KIRGHIZ();
-var LANGUAGE_KIRUNDI = lib.symbols.expwxLANGUAGE_KIRUNDI();
-var LANGUAGE_KONKANI = lib.symbols.expwxLANGUAGE_KONKANI();
-var LANGUAGE_KOREAN = lib.symbols.expwxLANGUAGE_KOREAN();
-var LANGUAGE_KURDISH = lib.symbols.expwxLANGUAGE_KURDISH();
-var LANGUAGE_LAOTHIAN = lib.symbols.expwxLANGUAGE_LAOTHIAN();
-var LANGUAGE_LATIN = lib.symbols.expwxLANGUAGE_LATIN();
-var LANGUAGE_LATVIAN = lib.symbols.expwxLANGUAGE_LATVIAN();
-var LANGUAGE_LINGALA = lib.symbols.expwxLANGUAGE_LINGALA();
-var LANGUAGE_LITHUANIAN = lib.symbols.expwxLANGUAGE_LITHUANIAN();
-var LANGUAGE_MACEDONIAN = lib.symbols.expwxLANGUAGE_MACEDONIAN();
-var LANGUAGE_MALAGASY = lib.symbols.expwxLANGUAGE_MALAGASY();
-var LANGUAGE_MALAY = lib.symbols.expwxLANGUAGE_MALAY();
-var LANGUAGE_MALAYALAM = lib.symbols.expwxLANGUAGE_MALAYALAM();
-var LANGUAGE_MALAY_BRUNEI_DARUSSALAM = lib.symbols.expwxLANGUAGE_MALAY_BRUNEI_DARUSSALAM();
-var LANGUAGE_MALAY_MALAYSIA = lib.symbols.expwxLANGUAGE_MALAY_MALAYSIA();
-var LANGUAGE_MALTESE = lib.symbols.expwxLANGUAGE_MALTESE();
-var LANGUAGE_MANIPURI = lib.symbols.expwxLANGUAGE_MANIPURI();
-var LANGUAGE_MAORI = lib.symbols.expwxLANGUAGE_MAORI();
-var LANGUAGE_MARATHI = lib.symbols.expwxLANGUAGE_MARATHI();
-var LANGUAGE_MOLDAVIAN = lib.symbols.expwxLANGUAGE_MOLDAVIAN();
-var LANGUAGE_MONGOLIAN = lib.symbols.expwxLANGUAGE_MONGOLIAN();
-var LANGUAGE_NAURU = lib.symbols.expwxLANGUAGE_NAURU();
-var LANGUAGE_NEPALI = lib.symbols.expwxLANGUAGE_NEPALI();
-var LANGUAGE_NEPALI_INDIA = lib.symbols.expwxLANGUAGE_NEPALI_INDIA();
-var LANGUAGE_NORWEGIAN_BOKMAL = lib.symbols.expwxLANGUAGE_NORWEGIAN_BOKMAL();
-var LANGUAGE_NORWEGIAN_NYNORSK = lib.symbols.expwxLANGUAGE_NORWEGIAN_NYNORSK();
-var LANGUAGE_OCCITAN = lib.symbols.expwxLANGUAGE_OCCITAN();
-var LANGUAGE_ORIYA = lib.symbols.expwxLANGUAGE_ORIYA();
-var LANGUAGE_OROMO = lib.symbols.expwxLANGUAGE_OROMO();
-var LANGUAGE_PASHTO = lib.symbols.expwxLANGUAGE_PASHTO();
-var LANGUAGE_POLISH = lib.symbols.expwxLANGUAGE_POLISH();
-var LANGUAGE_PORTUGUESE = lib.symbols.expwxLANGUAGE_PORTUGUESE();
-var LANGUAGE_PORTUGUESE_BRAZILIAN = lib.symbols.expwxLANGUAGE_PORTUGUESE_BRAZILIAN();
-var LANGUAGE_PUNJABI = lib.symbols.expwxLANGUAGE_PUNJABI();
-var LANGUAGE_QUECHUA = lib.symbols.expwxLANGUAGE_QUECHUA();
-var LANGUAGE_RHAETO_ROMANCE = lib.symbols.expwxLANGUAGE_RHAETO_ROMANCE();
-var LANGUAGE_ROMANIAN = lib.symbols.expwxLANGUAGE_ROMANIAN();
-var LANGUAGE_RUSSIAN = lib.symbols.expwxLANGUAGE_RUSSIAN();
-var LANGUAGE_RUSSIAN_UKRAINE = lib.symbols.expwxLANGUAGE_RUSSIAN_UKRAINE();
-var LANGUAGE_SAMOAN = lib.symbols.expwxLANGUAGE_SAMOAN();
-var LANGUAGE_SANGHO = lib.symbols.expwxLANGUAGE_SANGHO();
-var LANGUAGE_SANSKRIT = lib.symbols.expwxLANGUAGE_SANSKRIT();
-var LANGUAGE_SCOTS_GAELIC = lib.symbols.expwxLANGUAGE_SCOTS_GAELIC();
-var LANGUAGE_SERBIAN = lib.symbols.expwxLANGUAGE_SERBIAN();
-var LANGUAGE_SERBIAN_CYRILLIC = lib.symbols.expwxLANGUAGE_SERBIAN_CYRILLIC();
-var LANGUAGE_SERBIAN_LATIN = lib.symbols.expwxLANGUAGE_SERBIAN_LATIN();
-var LANGUAGE_SERBO_CROATIAN = lib.symbols.expwxLANGUAGE_SERBO_CROATIAN();
-var LANGUAGE_SESOTHO = lib.symbols.expwxLANGUAGE_SESOTHO();
-var LANGUAGE_SETSWANA = lib.symbols.expwxLANGUAGE_SETSWANA();
-var LANGUAGE_SHONA = lib.symbols.expwxLANGUAGE_SHONA();
-var LANGUAGE_SINDHI = lib.symbols.expwxLANGUAGE_SINDHI();
-var LANGUAGE_SINHALESE = lib.symbols.expwxLANGUAGE_SINHALESE();
-var LANGUAGE_SISWATI = lib.symbols.expwxLANGUAGE_SISWATI();
-var LANGUAGE_SLOVAK = lib.symbols.expwxLANGUAGE_SLOVAK();
-var LANGUAGE_SLOVENIAN = lib.symbols.expwxLANGUAGE_SLOVENIAN();
-var LANGUAGE_SOMALI = lib.symbols.expwxLANGUAGE_SOMALI();
-var LANGUAGE_SPANISH = lib.symbols.expwxLANGUAGE_SPANISH();
-var LANGUAGE_SPANISH_ARGENTINA = lib.symbols.expwxLANGUAGE_SPANISH_ARGENTINA();
-var LANGUAGE_SPANISH_BOLIVIA = lib.symbols.expwxLANGUAGE_SPANISH_BOLIVIA();
-var LANGUAGE_SPANISH_CHILE = lib.symbols.expwxLANGUAGE_SPANISH_CHILE();
-var LANGUAGE_SPANISH_COLOMBIA = lib.symbols.expwxLANGUAGE_SPANISH_COLOMBIA();
-var LANGUAGE_SPANISH_COSTA_RICA = lib.symbols.expwxLANGUAGE_SPANISH_COSTA_RICA();
-var LANGUAGE_SPANISH_DOMINICAN_REPUBLIC = lib.symbols.expwxLANGUAGE_SPANISH_DOMINICAN_REPUBLIC();
-var LANGUAGE_SPANISH_ECUADOR = lib.symbols.expwxLANGUAGE_SPANISH_ECUADOR();
-var LANGUAGE_SPANISH_EL_SALVADOR = lib.symbols.expwxLANGUAGE_SPANISH_EL_SALVADOR();
-var LANGUAGE_SPANISH_GUATEMALA = lib.symbols.expwxLANGUAGE_SPANISH_GUATEMALA();
-var LANGUAGE_SPANISH_HONDURAS = lib.symbols.expwxLANGUAGE_SPANISH_HONDURAS();
-var LANGUAGE_SPANISH_MEXICAN = lib.symbols.expwxLANGUAGE_SPANISH_MEXICAN();
-var LANGUAGE_SPANISH_MODERN = lib.symbols.expwxLANGUAGE_SPANISH_MODERN();
-var LANGUAGE_SPANISH_NICARAGUA = lib.symbols.expwxLANGUAGE_SPANISH_NICARAGUA();
-var LANGUAGE_SPANISH_PANAMA = lib.symbols.expwxLANGUAGE_SPANISH_PANAMA();
-var LANGUAGE_SPANISH_PARAGUAY = lib.symbols.expwxLANGUAGE_SPANISH_PARAGUAY();
-var LANGUAGE_SPANISH_PERU = lib.symbols.expwxLANGUAGE_SPANISH_PERU();
-var LANGUAGE_SPANISH_PUERTO_RICO = lib.symbols.expwxLANGUAGE_SPANISH_PUERTO_RICO();
-var LANGUAGE_SPANISH_URUGUAY = lib.symbols.expwxLANGUAGE_SPANISH_URUGUAY();
-var LANGUAGE_SPANISH_US = lib.symbols.expwxLANGUAGE_SPANISH_US();
-var LANGUAGE_SPANISH_VENEZUELA = lib.symbols.expwxLANGUAGE_SPANISH_VENEZUELA();
-var LANGUAGE_SUNDANESE = lib.symbols.expwxLANGUAGE_SUNDANESE();
-var LANGUAGE_SWAHILI = lib.symbols.expwxLANGUAGE_SWAHILI();
-var LANGUAGE_SWEDISH = lib.symbols.expwxLANGUAGE_SWEDISH();
-var LANGUAGE_SWEDISH_FINLAND = lib.symbols.expwxLANGUAGE_SWEDISH_FINLAND();
-var LANGUAGE_TAGALOG = lib.symbols.expwxLANGUAGE_TAGALOG();
-var LANGUAGE_TAJIK = lib.symbols.expwxLANGUAGE_TAJIK();
-var LANGUAGE_TAMIL = lib.symbols.expwxLANGUAGE_TAMIL();
-var LANGUAGE_TATAR = lib.symbols.expwxLANGUAGE_TATAR();
-var LANGUAGE_TELUGU = lib.symbols.expwxLANGUAGE_TELUGU();
-var LANGUAGE_THAI = lib.symbols.expwxLANGUAGE_THAI();
-var LANGUAGE_TIBETAN = lib.symbols.expwxLANGUAGE_TIBETAN();
-var LANGUAGE_TIGRINYA = lib.symbols.expwxLANGUAGE_TIGRINYA();
-var LANGUAGE_TONGA = lib.symbols.expwxLANGUAGE_TONGA();
-var LANGUAGE_TSONGA = lib.symbols.expwxLANGUAGE_TSONGA();
-var LANGUAGE_TURKISH = lib.symbols.expwxLANGUAGE_TURKISH();
-var LANGUAGE_TURKMEN = lib.symbols.expwxLANGUAGE_TURKMEN();
-var LANGUAGE_TWI = lib.symbols.expwxLANGUAGE_TWI();
-var LANGUAGE_UIGHUR = lib.symbols.expwxLANGUAGE_UIGHUR();
-var LANGUAGE_UKRAINIAN = lib.symbols.expwxLANGUAGE_UKRAINIAN();
-var LANGUAGE_UNKNOWN = lib.symbols.expwxLANGUAGE_UNKNOWN();
-var LANGUAGE_URDU = lib.symbols.expwxLANGUAGE_URDU();
-var LANGUAGE_URDU_INDIA = lib.symbols.expwxLANGUAGE_URDU_INDIA();
-var LANGUAGE_URDU_PAKISTAN = lib.symbols.expwxLANGUAGE_URDU_PAKISTAN();
-var LANGUAGE_UZBEK = lib.symbols.expwxLANGUAGE_UZBEK();
-var LANGUAGE_UZBEK_CYRILLIC = lib.symbols.expwxLANGUAGE_UZBEK_CYRILLIC();
-var LANGUAGE_UZBEK_LATIN = lib.symbols.expwxLANGUAGE_UZBEK_LATIN();
-var LANGUAGE_VIETNAMESE = lib.symbols.expwxLANGUAGE_VIETNAMESE();
-var LANGUAGE_VOLAPUK = lib.symbols.expwxLANGUAGE_VOLAPUK();
-var LANGUAGE_WELSH = lib.symbols.expwxLANGUAGE_WELSH();
-var LANGUAGE_WOLOF = lib.symbols.expwxLANGUAGE_WOLOF();
-var LANGUAGE_XHOSA = lib.symbols.expwxLANGUAGE_XHOSA();
-var LANGUAGE_YIDDISH = lib.symbols.expwxLANGUAGE_YIDDISH();
-var LANGUAGE_YORUBA = lib.symbols.expwxLANGUAGE_YORUBA();
-var LANGUAGE_ZHUANG = lib.symbols.expwxLANGUAGE_ZHUANG();
-var LANGUAGE_ZULU = lib.symbols.expwxLANGUAGE_ZULU();
-var LAYOUT_BOTTOM = lib.symbols.expwxLAYOUT_BOTTOM();
-var LAYOUT_DEFAULT_MARGIN = lib.symbols.expwxLAYOUT_DEFAULT_MARGIN();
-var LAYOUT_HORIZONTAL = lib.symbols.expwxLAYOUT_HORIZONTAL();
-var LAYOUT_LEFT = lib.symbols.expwxLAYOUT_LEFT();
-var LAYOUT_NONE = lib.symbols.expwxLAYOUT_NONE();
-var LAYOUT_RIGHT = lib.symbols.expwxLAYOUT_RIGHT();
-var LAYOUT_TOP = lib.symbols.expwxLAYOUT_TOP();
-var LAYOUT_VERTICAL = lib.symbols.expwxLAYOUT_VERTICAL();
-var LB_ALWAYS_SB = lib.symbols.expwxLB_ALWAYS_SB();
-var LB_EXTENDED = lib.symbols.expwxLB_EXTENDED();
-var LB_MULTIPLE = lib.symbols.expwxLB_MULTIPLE();
-var LB_NEEDED_SB = lib.symbols.expwxLB_NEEDED_SB();
-var LB_OWNERDRAW = lib.symbols.expwxLB_OWNERDRAW();
-var LB_SINGLE = lib.symbols.expwxLB_SINGLE();
-var LB_SORT = lib.symbols.expwxLB_SORT();
-var LC_ALIGN_LEFT = lib.symbols.expwxLC_ALIGN_LEFT();
-var LC_ALIGN_TOP = lib.symbols.expwxLC_ALIGN_TOP();
-var LC_AUTOARRANGE = lib.symbols.expwxLC_AUTOARRANGE();
-var LC_EDIT_LABELS = lib.symbols.expwxLC_EDIT_LABELS();
-var LC_HRULES = lib.symbols.expwxLC_HRULES();
-var LC_ICON = lib.symbols.expwxLC_ICON();
-var LC_LIST = lib.symbols.expwxLC_LIST();
-var LC_NO_HEADER = lib.symbols.expwxLC_NO_HEADER();
-var LC_NO_SORT_HEADER = lib.symbols.expwxLC_NO_SORT_HEADER();
-var LC_REPORT = lib.symbols.expwxLC_REPORT();
-var LC_SINGLE_SEL = lib.symbols.expwxLC_SINGLE_SEL();
-var LC_SMALL_ICON = lib.symbols.expwxLC_SMALL_ICON();
-var LC_SORT_ASCENDING = lib.symbols.expwxLC_SORT_ASCENDING();
-var LC_SORT_DESCENDING = lib.symbols.expwxLC_SORT_DESCENDING();
-var LC_USER_TEXT = lib.symbols.expwxLC_USER_TEXT();
-var LC_VRULES = lib.symbols.expwxLC_VRULES();
-var LEFT = lib.symbols.expwxLEFT();
+var ITEM_CHECK = _ints[783];
+var ITEM_MAX = _ints[784];
+var ITEM_NORMAL = _ints[785];
+var ITEM_RADIO = _ints[786];
+var ITEM_SEPARATOR = _ints[787];
+var JOIN_BEVEL = _ints[788];
+var JOIN_MITER = _ints[789];
+var JOIN_ROUND = _ints[790];
+var JOYSTICK1 = _ints[791];
+var JOYSTICK2 = _ints[792];
+var JOY_BUTTON1 = _ints[793];
+var JOY_BUTTON2 = _ints[794];
+var JOY_BUTTON3 = _ints[795];
+var JOY_BUTTON4 = _ints[796];
+var KILL_ACCESS_DENIED = _ints[797];
+var KILL_BAD_SIGNAL = _ints[798];
+var KILL_ERROR = _ints[799];
+var KILL_NO_PROCESS = _ints[800];
+var KILL_OK = _ints[801];
+var LANDSCAPE = _ints[802];
+var LANGUAGE_ABKHAZIAN = _ints[803];
+var LANGUAGE_AFAR = _ints[804];
+var LANGUAGE_AFRIKAANS = _ints[805];
+var LANGUAGE_ALBANIAN = _ints[806];
+var LANGUAGE_AMHARIC = _ints[807];
+var LANGUAGE_ARABIC = _ints[808];
+var LANGUAGE_ARABIC_ALGERIA = _ints[809];
+var LANGUAGE_ARABIC_BAHRAIN = _ints[810];
+var LANGUAGE_ARABIC_EGYPT = _ints[811];
+var LANGUAGE_ARABIC_IRAQ = _ints[812];
+var LANGUAGE_ARABIC_JORDAN = _ints[813];
+var LANGUAGE_ARABIC_KUWAIT = _ints[814];
+var LANGUAGE_ARABIC_LEBANON = _ints[815];
+var LANGUAGE_ARABIC_LIBYA = _ints[816];
+var LANGUAGE_ARABIC_MOROCCO = _ints[817];
+var LANGUAGE_ARABIC_OMAN = _ints[818];
+var LANGUAGE_ARABIC_QATAR = _ints[819];
+var LANGUAGE_ARABIC_SAUDI_ARABIA = _ints[820];
+var LANGUAGE_ARABIC_SUDAN = _ints[821];
+var LANGUAGE_ARABIC_SYRIA = _ints[822];
+var LANGUAGE_ARABIC_TUNISIA = _ints[823];
+var LANGUAGE_ARABIC_UAE = _ints[824];
+var LANGUAGE_ARABIC_YEMEN = _ints[825];
+var LANGUAGE_ARMENIAN = _ints[826];
+var LANGUAGE_ASSAMESE = _ints[827];
+var LANGUAGE_AYMARA = _ints[828];
+var LANGUAGE_AZERI = _ints[829];
+var LANGUAGE_AZERI_CYRILLIC = _ints[830];
+var LANGUAGE_AZERI_LATIN = _ints[831];
+var LANGUAGE_BASHKIR = _ints[832];
+var LANGUAGE_BASQUE = _ints[833];
+var LANGUAGE_BELARUSIAN = _ints[834];
+var LANGUAGE_BENGALI = _ints[835];
+var LANGUAGE_BHUTANI = _ints[836];
+var LANGUAGE_BIHARI = _ints[837];
+var LANGUAGE_BISLAMA = _ints[838];
+var LANGUAGE_BRETON = _ints[839];
+var LANGUAGE_BULGARIAN = _ints[840];
+var LANGUAGE_BURMESE = _ints[841];
+var LANGUAGE_CAMBODIAN = _ints[842];
+var LANGUAGE_CATALAN = _ints[843];
+var LANGUAGE_CHINESE = _ints[844];
+var LANGUAGE_CHINESE_HONGKONG = _ints[845];
+var LANGUAGE_CHINESE_MACAU = _ints[846];
+var LANGUAGE_CHINESE_SIMPLIFIED = _ints[847];
+var LANGUAGE_CHINESE_SINGAPORE = _ints[848];
+var LANGUAGE_CHINESE_TAIWAN = _ints[849];
+var LANGUAGE_CHINESE_TRADITIONAL = _ints[850];
+var LANGUAGE_CORSICAN = _ints[851];
+var LANGUAGE_CROATIAN = _ints[852];
+var LANGUAGE_CZECH = _ints[853];
+var LANGUAGE_DANISH = _ints[854];
+var LANGUAGE_DEFAULT = _ints[855];
+var LANGUAGE_DUTCH = _ints[856];
+var LANGUAGE_DUTCH_BELGIAN = _ints[857];
+var LANGUAGE_ENGLISH = _ints[858];
+var LANGUAGE_ENGLISH_AUSTRALIA = _ints[859];
+var LANGUAGE_ENGLISH_BELIZE = _ints[860];
+var LANGUAGE_ENGLISH_BOTSWANA = _ints[861];
+var LANGUAGE_ENGLISH_CANADA = _ints[862];
+var LANGUAGE_ENGLISH_CARIBBEAN = _ints[863];
+var LANGUAGE_ENGLISH_DENMARK = _ints[864];
+var LANGUAGE_ENGLISH_EIRE = _ints[865];
+var LANGUAGE_ENGLISH_JAMAICA = _ints[866];
+var LANGUAGE_ENGLISH_NEW_ZEALAND = _ints[867];
+var LANGUAGE_ENGLISH_PHILIPPINES = _ints[868];
+var LANGUAGE_ENGLISH_SOUTH_AFRICA = _ints[869];
+var LANGUAGE_ENGLISH_TRINIDAD = _ints[870];
+var LANGUAGE_ENGLISH_UK = _ints[871];
+var LANGUAGE_ENGLISH_US = _ints[872];
+var LANGUAGE_ENGLISH_ZIMBABWE = _ints[873];
+var LANGUAGE_ESPERANTO = _ints[874];
+var LANGUAGE_ESTONIAN = _ints[875];
+var LANGUAGE_FAEROESE = _ints[876];
+var LANGUAGE_FARSI = _ints[877];
+var LANGUAGE_FIJI = _ints[878];
+var LANGUAGE_FINNISH = _ints[879];
+var LANGUAGE_FRENCH = _ints[880];
+var LANGUAGE_FRENCH_BELGIAN = _ints[881];
+var LANGUAGE_FRENCH_CANADIAN = _ints[882];
+var LANGUAGE_FRENCH_LUXEMBOURG = _ints[883];
+var LANGUAGE_FRENCH_MONACO = _ints[884];
+var LANGUAGE_FRENCH_SWISS = _ints[885];
+var LANGUAGE_FRISIAN = _ints[886];
+var LANGUAGE_GALICIAN = _ints[887];
+var LANGUAGE_GEORGIAN = _ints[888];
+var LANGUAGE_GERMAN = _ints[889];
+var LANGUAGE_GERMAN_AUSTRIAN = _ints[890];
+var LANGUAGE_GERMAN_BELGIUM = _ints[891];
+var LANGUAGE_GERMAN_LIECHTENSTEIN = _ints[892];
+var LANGUAGE_GERMAN_LUXEMBOURG = _ints[893];
+var LANGUAGE_GERMAN_SWISS = _ints[894];
+var LANGUAGE_GREEK = _ints[895];
+var LANGUAGE_GREENLANDIC = _ints[896];
+var LANGUAGE_GUARANI = _ints[897];
+var LANGUAGE_GUJARATI = _ints[898];
+var LANGUAGE_HAUSA = _ints[899];
+var LANGUAGE_HEBREW = _ints[900];
+var LANGUAGE_HINDI = _ints[901];
+var LANGUAGE_HUNGARIAN = _ints[902];
+var LANGUAGE_ICELANDIC = _ints[903];
+var LANGUAGE_INDONESIAN = _ints[904];
+var LANGUAGE_INTERLINGUA = _ints[905];
+var LANGUAGE_INTERLINGUE = _ints[906];
+var LANGUAGE_INUKTITUT = _ints[907];
+var LANGUAGE_INUPIAK = _ints[908];
+var LANGUAGE_IRISH = _ints[909];
+var LANGUAGE_ITALIAN = _ints[910];
+var LANGUAGE_ITALIAN_SWISS = _ints[911];
+var LANGUAGE_JAPANESE = _ints[912];
+var LANGUAGE_JAVANESE = _ints[913];
+var LANGUAGE_KANNADA = _ints[914];
+var LANGUAGE_KASHMIRI = _ints[915];
+var LANGUAGE_KASHMIRI_INDIA = _ints[916];
+var LANGUAGE_KAZAKH = _ints[917];
+var LANGUAGE_KERNEWEK = _ints[918];
+var LANGUAGE_KINYARWANDA = _ints[919];
+var LANGUAGE_KIRGHIZ = _ints[920];
+var LANGUAGE_KIRUNDI = _ints[921];
+var LANGUAGE_KONKANI = _ints[922];
+var LANGUAGE_KOREAN = _ints[923];
+var LANGUAGE_KURDISH = _ints[924];
+var LANGUAGE_LAOTHIAN = _ints[925];
+var LANGUAGE_LATIN = _ints[926];
+var LANGUAGE_LATVIAN = _ints[927];
+var LANGUAGE_LINGALA = _ints[928];
+var LANGUAGE_LITHUANIAN = _ints[929];
+var LANGUAGE_MACEDONIAN = _ints[930];
+var LANGUAGE_MALAGASY = _ints[931];
+var LANGUAGE_MALAY = _ints[932];
+var LANGUAGE_MALAYALAM = _ints[933];
+var LANGUAGE_MALAY_BRUNEI_DARUSSALAM = _ints[934];
+var LANGUAGE_MALAY_MALAYSIA = _ints[935];
+var LANGUAGE_MALTESE = _ints[936];
+var LANGUAGE_MANIPURI = _ints[937];
+var LANGUAGE_MAORI = _ints[938];
+var LANGUAGE_MARATHI = _ints[939];
+var LANGUAGE_MOLDAVIAN = _ints[940];
+var LANGUAGE_MONGOLIAN = _ints[941];
+var LANGUAGE_NAURU = _ints[942];
+var LANGUAGE_NEPALI = _ints[943];
+var LANGUAGE_NEPALI_INDIA = _ints[944];
+var LANGUAGE_NORWEGIAN_BOKMAL = _ints[945];
+var LANGUAGE_NORWEGIAN_NYNORSK = _ints[946];
+var LANGUAGE_OCCITAN = _ints[947];
+var LANGUAGE_ORIYA = _ints[948];
+var LANGUAGE_OROMO = _ints[949];
+var LANGUAGE_PASHTO = _ints[950];
+var LANGUAGE_POLISH = _ints[951];
+var LANGUAGE_PORTUGUESE = _ints[952];
+var LANGUAGE_PORTUGUESE_BRAZILIAN = _ints[953];
+var LANGUAGE_PUNJABI = _ints[954];
+var LANGUAGE_QUECHUA = _ints[955];
+var LANGUAGE_RHAETO_ROMANCE = _ints[956];
+var LANGUAGE_ROMANIAN = _ints[957];
+var LANGUAGE_RUSSIAN = _ints[958];
+var LANGUAGE_RUSSIAN_UKRAINE = _ints[959];
+var LANGUAGE_SAMOAN = _ints[960];
+var LANGUAGE_SANGHO = _ints[961];
+var LANGUAGE_SANSKRIT = _ints[962];
+var LANGUAGE_SCOTS_GAELIC = _ints[963];
+var LANGUAGE_SERBIAN = _ints[964];
+var LANGUAGE_SERBIAN_CYRILLIC = _ints[965];
+var LANGUAGE_SERBIAN_LATIN = _ints[966];
+var LANGUAGE_SERBO_CROATIAN = _ints[967];
+var LANGUAGE_SESOTHO = _ints[968];
+var LANGUAGE_SETSWANA = _ints[969];
+var LANGUAGE_SHONA = _ints[970];
+var LANGUAGE_SINDHI = _ints[971];
+var LANGUAGE_SINHALESE = _ints[972];
+var LANGUAGE_SISWATI = _ints[973];
+var LANGUAGE_SLOVAK = _ints[974];
+var LANGUAGE_SLOVENIAN = _ints[975];
+var LANGUAGE_SOMALI = _ints[976];
+var LANGUAGE_SPANISH = _ints[977];
+var LANGUAGE_SPANISH_ARGENTINA = _ints[978];
+var LANGUAGE_SPANISH_BOLIVIA = _ints[979];
+var LANGUAGE_SPANISH_CHILE = _ints[980];
+var LANGUAGE_SPANISH_COLOMBIA = _ints[981];
+var LANGUAGE_SPANISH_COSTA_RICA = _ints[982];
+var LANGUAGE_SPANISH_DOMINICAN_REPUBLIC = _ints[983];
+var LANGUAGE_SPANISH_ECUADOR = _ints[984];
+var LANGUAGE_SPANISH_EL_SALVADOR = _ints[985];
+var LANGUAGE_SPANISH_GUATEMALA = _ints[986];
+var LANGUAGE_SPANISH_HONDURAS = _ints[987];
+var LANGUAGE_SPANISH_MEXICAN = _ints[988];
+var LANGUAGE_SPANISH_MODERN = _ints[989];
+var LANGUAGE_SPANISH_NICARAGUA = _ints[990];
+var LANGUAGE_SPANISH_PANAMA = _ints[991];
+var LANGUAGE_SPANISH_PARAGUAY = _ints[992];
+var LANGUAGE_SPANISH_PERU = _ints[993];
+var LANGUAGE_SPANISH_PUERTO_RICO = _ints[994];
+var LANGUAGE_SPANISH_URUGUAY = _ints[995];
+var LANGUAGE_SPANISH_US = _ints[996];
+var LANGUAGE_SPANISH_VENEZUELA = _ints[997];
+var LANGUAGE_SUNDANESE = _ints[998];
+var LANGUAGE_SWAHILI = _ints[999];
+var LANGUAGE_SWEDISH = _ints[1e3];
+var LANGUAGE_SWEDISH_FINLAND = _ints[1001];
+var LANGUAGE_TAGALOG = _ints[1002];
+var LANGUAGE_TAJIK = _ints[1003];
+var LANGUAGE_TAMIL = _ints[1004];
+var LANGUAGE_TATAR = _ints[1005];
+var LANGUAGE_TELUGU = _ints[1006];
+var LANGUAGE_THAI = _ints[1007];
+var LANGUAGE_TIBETAN = _ints[1008];
+var LANGUAGE_TIGRINYA = _ints[1009];
+var LANGUAGE_TONGA = _ints[1010];
+var LANGUAGE_TSONGA = _ints[1011];
+var LANGUAGE_TURKISH = _ints[1012];
+var LANGUAGE_TURKMEN = _ints[1013];
+var LANGUAGE_TWI = _ints[1014];
+var LANGUAGE_UIGHUR = _ints[1015];
+var LANGUAGE_UKRAINIAN = _ints[1016];
+var LANGUAGE_UNKNOWN = _ints[1017];
+var LANGUAGE_URDU = _ints[1018];
+var LANGUAGE_URDU_INDIA = _ints[1019];
+var LANGUAGE_URDU_PAKISTAN = _ints[1020];
+var LANGUAGE_UZBEK = _ints[1021];
+var LANGUAGE_UZBEK_CYRILLIC = _ints[1022];
+var LANGUAGE_UZBEK_LATIN = _ints[1023];
+var LANGUAGE_VIETNAMESE = _ints[1024];
+var LANGUAGE_VOLAPUK = _ints[1025];
+var LANGUAGE_WELSH = _ints[1026];
+var LANGUAGE_WOLOF = _ints[1027];
+var LANGUAGE_XHOSA = _ints[1028];
+var LANGUAGE_YIDDISH = _ints[1029];
+var LANGUAGE_YORUBA = _ints[1030];
+var LANGUAGE_ZHUANG = _ints[1031];
+var LANGUAGE_ZULU = _ints[1032];
+var LAYOUT_BOTTOM = _ints[1033];
+var LAYOUT_DEFAULT_MARGIN = _ints[1034];
+var LAYOUT_HORIZONTAL = _ints[1035];
+var LAYOUT_LEFT = _ints[1036];
+var LAYOUT_NONE = _ints[1037];
+var LAYOUT_RIGHT = _ints[1038];
+var LAYOUT_TOP = _ints[1039];
+var LAYOUT_VERTICAL = _ints[1040];
+var LB_ALWAYS_SB = _ints[1041];
+var LB_EXTENDED = _ints[1042];
+var LB_MULTIPLE = _ints[1043];
+var LB_NEEDED_SB = _ints[1044];
+var LB_OWNERDRAW = _ints[1045];
+var LB_SINGLE = _ints[1046];
+var LB_SORT = _ints[1047];
+var LC_ALIGN_LEFT = _ints[1048];
+var LC_ALIGN_TOP = _ints[1049];
+var LC_AUTOARRANGE = _ints[1050];
+var LC_EDIT_LABELS = _ints[1051];
+var LC_HRULES = _ints[1052];
+var LC_ICON = _ints[1053];
+var LC_LIST = _ints[1054];
+var LC_NO_HEADER = _ints[1055];
+var LC_NO_SORT_HEADER = _ints[1056];
+var LC_REPORT = _ints[1057];
+var LC_SINGLE_SEL = _ints[1058];
+var LC_SMALL_ICON = _ints[1059];
+var LC_SORT_ASCENDING = _ints[1060];
+var LC_SORT_DESCENDING = _ints[1061];
+var LC_USER_TEXT = _ints[1062];
+var LC_VRULES = _ints[1063];
+var LEFT = _ints[1064];
 var LIGHT_GREY = lib.symbols.expwxLIGHT_GREY();
 var LIGHT_GREY_BRUSH = lib.symbols.expwxLIGHT_GREY_BRUSH();
 var LIGHT_GREY_PEN = lib.symbols.expwxLIGHT_GREY_PEN();
-var LIST_FORMAT_CENTER = lib.symbols.expwxLIST_FORMAT_CENTER();
-var LIST_FORMAT_CENTRE = lib.symbols.expwxLIST_FORMAT_CENTRE();
-var LIST_FORMAT_LEFT = lib.symbols.expwxLIST_FORMAT_LEFT();
-var LIST_FORMAT_RIGHT = lib.symbols.expwxLIST_FORMAT_RIGHT();
-var LIST_MASK_DATA = lib.symbols.expwxLIST_MASK_DATA();
-var LIST_MASK_FORMAT = lib.symbols.expwxLIST_MASK_FORMAT();
-var LIST_MASK_IMAGE = lib.symbols.expwxLIST_MASK_IMAGE();
-var LIST_MASK_STATE = lib.symbols.expwxLIST_MASK_STATE();
-var LIST_MASK_TEXT = lib.symbols.expwxLIST_MASK_TEXT();
-var LIST_MASK_WIDTH = lib.symbols.expwxLIST_MASK_WIDTH();
-var LIST_NEXT_ABOVE = lib.symbols.expwxLIST_NEXT_ABOVE();
-var LIST_NEXT_ALL = lib.symbols.expwxLIST_NEXT_ALL();
-var LIST_NEXT_BELOW = lib.symbols.expwxLIST_NEXT_BELOW();
-var LIST_NEXT_LEFT = lib.symbols.expwxLIST_NEXT_LEFT();
-var LIST_NEXT_RIGHT = lib.symbols.expwxLIST_NEXT_RIGHT();
-var LIST_STATE_CUT = lib.symbols.expwxLIST_STATE_CUT();
-var LIST_STATE_DONTCARE = lib.symbols.expwxLIST_STATE_DONTCARE();
-var LIST_STATE_DROPHILITED = lib.symbols.expwxLIST_STATE_DROPHILITED();
-var LIST_STATE_FOCUSED = lib.symbols.expwxLIST_STATE_FOCUSED();
-var LIST_STATE_SELECTED = lib.symbols.expwxLIST_STATE_SELECTED();
-var LITTLE_ENDIAN = lib.symbols.expwxLITTLE_ENDIAN();
-var LOCALE_DECIMAL_POINT = lib.symbols.expwxLOCALE_DECIMAL_POINT();
-var LOCALE_LOAD_DEFAULT = lib.symbols.expwxLOCALE_LOAD_DEFAULT();
-var LOCALE_THOUSANDS_SEP = lib.symbols.expwxLOCALE_THOUSANDS_SEP();
-var MAXIMIZE = lib.symbols.expwxMAXIMIZE();
-var MAXIMIZE_BOX = lib.symbols.expwxMAXIMIZE_BOX();
-var MB_DOCKABLE = lib.symbols.expwxMB_DOCKABLE();
+var LIST_FORMAT_CENTER = _ints[1065];
+var LIST_FORMAT_CENTRE = _ints[1066];
+var LIST_FORMAT_LEFT = _ints[1067];
+var LIST_FORMAT_RIGHT = _ints[1068];
+var LIST_MASK_DATA = _ints[1069];
+var LIST_MASK_FORMAT = _ints[1070];
+var LIST_MASK_IMAGE = _ints[1071];
+var LIST_MASK_STATE = _ints[1072];
+var LIST_MASK_TEXT = _ints[1073];
+var LIST_MASK_WIDTH = _ints[1074];
+var LIST_NEXT_ABOVE = _ints[1075];
+var LIST_NEXT_ALL = _ints[1076];
+var LIST_NEXT_BELOW = _ints[1077];
+var LIST_NEXT_LEFT = _ints[1078];
+var LIST_NEXT_RIGHT = _ints[1079];
+var LIST_STATE_CUT = _ints[1080];
+var LIST_STATE_DONTCARE = _ints[1081];
+var LIST_STATE_DROPHILITED = _ints[1082];
+var LIST_STATE_FOCUSED = _ints[1083];
+var LIST_STATE_SELECTED = _ints[1084];
+var LITTLE_ENDIAN = _ints[1085];
+var LOCALE_DECIMAL_POINT = _ints[1086];
+var LOCALE_LOAD_DEFAULT = _ints[1087];
+var LOCALE_THOUSANDS_SEP = _ints[1088];
+var MAXIMIZE = _ints[1089];
+var MAXIMIZE_BOX = _ints[1090];
+var MB_DOCKABLE = _ints[1091];
 var MEDIUM_GREY_BRUSH = lib.symbols.expwxMEDIUM_GREY_BRUSH();
 var MEDIUM_GREY_PEN = lib.symbols.expwxMEDIUM_GREY_PEN();
-var MENU_TEAROFF = lib.symbols.expwxMENU_TEAROFF();
-var MINIMIZE_BOX = lib.symbols.expwxMINIMIZE_BOX();
-var MM_LOMETRIC = lib.symbols.expwxMM_LOMETRIC();
-var MM_METRIC = lib.symbols.expwxMM_METRIC();
-var MM_POINTS = lib.symbols.expwxMM_POINTS();
-var MM_TEXT = lib.symbols.expwxMM_TEXT();
-var MM_TWIPS = lib.symbols.expwxMM_TWIPS();
-var MOD_ALL = lib.symbols.expwxMOD_ALL();
-var MOD_ALT = lib.symbols.expwxMOD_ALT();
-var MOD_ALTGR = lib.symbols.expwxMOD_ALTGR();
-var MOD_CMD = lib.symbols.expwxMOD_CMD();
-var MOD_CONTROL = lib.symbols.expwxMOD_CONTROL();
-var MOD_META = lib.symbols.expwxMOD_META();
-var MOD_SHIFT = lib.symbols.expwxMOD_SHIFT();
-var MOD_WIN = lib.symbols.expwxMOD_WIN();
-var MORE = lib.symbols.expwxMORE();
-var NAND = lib.symbols.expwxNAND();
-var NB_BOTTOM = lib.symbols.expwxNB_BOTTOM();
-var NB_FIXEDWIDTH = lib.symbols.expwxNB_FIXEDWIDTH();
-var NB_LEFT = lib.symbols.expwxNB_LEFT();
-var NB_MULTILINE = lib.symbols.expwxNB_MULTILINE();
-var NB_RIGHT = lib.symbols.expwxNB_RIGHT();
-var NB_TOP = lib.symbols.expwxNB_TOP();
-var NO = lib.symbols.expwxNO();
-var NOR = lib.symbols.expwxNOR();
+var MENU_TEAROFF = _ints[1092];
+var MINIMIZE_BOX = _ints[1093];
+var MM_LOMETRIC = _ints[1094];
+var MM_METRIC = _ints[1095];
+var MM_POINTS = _ints[1096];
+var MM_TEXT = _ints[1097];
+var MM_TWIPS = _ints[1098];
+var MOD_ALL = _ints[1099];
+var MOD_ALT = _ints[1100];
+var MOD_ALTGR = _ints[1101];
+var MOD_CMD = _ints[1102];
+var MOD_CONTROL = _ints[1103];
+var MOD_META = _ints[1104];
+var MOD_SHIFT = _ints[1105];
+var MOD_WIN = _ints[1106];
+var MORE = _ints[1107];
+var NAND = _ints[1108];
+var NB_BOTTOM = _ints[1109];
+var NB_FIXEDWIDTH = _ints[1110];
+var NB_LEFT = _ints[1111];
+var NB_MULTILINE = _ints[1112];
+var NB_RIGHT = _ints[1113];
+var NB_TOP = _ints[1114];
+var NO = _ints[1115];
+var NOR = _ints[1116];
 var NORMAL_FONT = lib.symbols.expwxNORMAL_FONT();
-var NORTH = lib.symbols.expwxNORTH();
-var NOT_FOUND = lib.symbols.expwxNOT_FOUND();
-var NO_DEFAULT = lib.symbols.expwxNO_DEFAULT();
-var NO_FULL_REPAINT_ON_RESIZE = lib.symbols.expwxNO_FULL_REPAINT_ON_RESIZE();
-var NO_OP = lib.symbols.expwxNO_OP();
-var ODDEVEN_RULE = lib.symbols.expwxODDEVEN_RULE();
-var OK = lib.symbols.expwxOK();
-var OR = lib.symbols.expwxOR();
-var OR_INVERT = lib.symbols.expwxOR_INVERT();
-var OR_REVERSE = lib.symbols.expwxOR_REVERSE();
-var PAPER_10X11 = lib.symbols.expwxPAPER_10X11();
-var PAPER_10X14 = lib.symbols.expwxPAPER_10X14();
-var PAPER_11X17 = lib.symbols.expwxPAPER_11X17();
-var PAPER_15X11 = lib.symbols.expwxPAPER_15X11();
-var PAPER_9X11 = lib.symbols.expwxPAPER_9X11();
-var PAPER_A2 = lib.symbols.expwxPAPER_A2();
-var PAPER_A3 = lib.symbols.expwxPAPER_A3();
-var PAPER_A3_EXTRA = lib.symbols.expwxPAPER_A3_EXTRA();
-var PAPER_A3_EXTRA_TRANSVERSE = lib.symbols.expwxPAPER_A3_EXTRA_TRANSVERSE();
-var PAPER_A3_TRANSVERSE = lib.symbols.expwxPAPER_A3_TRANSVERSE();
-var PAPER_A4 = lib.symbols.expwxPAPER_A4();
-var PAPER_A4SMALL = lib.symbols.expwxPAPER_A4SMALL();
-var PAPER_A4_EXTRA = lib.symbols.expwxPAPER_A4_EXTRA();
-var PAPER_A4_PLUS = lib.symbols.expwxPAPER_A4_PLUS();
-var PAPER_A4_TRANSVERSE = lib.symbols.expwxPAPER_A4_TRANSVERSE();
-var PAPER_A5 = lib.symbols.expwxPAPER_A5();
-var PAPER_A5_EXTRA = lib.symbols.expwxPAPER_A5_EXTRA();
-var PAPER_A5_TRANSVERSE = lib.symbols.expwxPAPER_A5_TRANSVERSE();
-var PAPER_A_PLUS = lib.symbols.expwxPAPER_A_PLUS();
-var PAPER_B4 = lib.symbols.expwxPAPER_B4();
-var PAPER_B5 = lib.symbols.expwxPAPER_B5();
-var PAPER_B5_EXTRA = lib.symbols.expwxPAPER_B5_EXTRA();
-var PAPER_B5_TRANSVERSE = lib.symbols.expwxPAPER_B5_TRANSVERSE();
-var PAPER_B_PLUS = lib.symbols.expwxPAPER_B_PLUS();
-var PAPER_CSHEET = lib.symbols.expwxPAPER_CSHEET();
-var PAPER_DSHEET = lib.symbols.expwxPAPER_DSHEET();
-var PAPER_ENV_10 = lib.symbols.expwxPAPER_ENV_10();
-var PAPER_ENV_11 = lib.symbols.expwxPAPER_ENV_11();
-var PAPER_ENV_12 = lib.symbols.expwxPAPER_ENV_12();
-var PAPER_ENV_14 = lib.symbols.expwxPAPER_ENV_14();
-var PAPER_ENV_9 = lib.symbols.expwxPAPER_ENV_9();
-var PAPER_ENV_B4 = lib.symbols.expwxPAPER_ENV_B4();
-var PAPER_ENV_B5 = lib.symbols.expwxPAPER_ENV_B5();
-var PAPER_ENV_B6 = lib.symbols.expwxPAPER_ENV_B6();
-var PAPER_ENV_C3 = lib.symbols.expwxPAPER_ENV_C3();
-var PAPER_ENV_C4 = lib.symbols.expwxPAPER_ENV_C4();
-var PAPER_ENV_C5 = lib.symbols.expwxPAPER_ENV_C5();
-var PAPER_ENV_C6 = lib.symbols.expwxPAPER_ENV_C6();
-var PAPER_ENV_C65 = lib.symbols.expwxPAPER_ENV_C65();
-var PAPER_ENV_DL = lib.symbols.expwxPAPER_ENV_DL();
-var PAPER_ENV_INVITE = lib.symbols.expwxPAPER_ENV_INVITE();
-var PAPER_ENV_ITALY = lib.symbols.expwxPAPER_ENV_ITALY();
-var PAPER_ENV_MONARCH = lib.symbols.expwxPAPER_ENV_MONARCH();
-var PAPER_ENV_PERSONAL = lib.symbols.expwxPAPER_ENV_PERSONAL();
-var PAPER_ESHEET = lib.symbols.expwxPAPER_ESHEET();
-var PAPER_EXECUTIVE = lib.symbols.expwxPAPER_EXECUTIVE();
-var PAPER_FANFOLD_LGL_GERMAN = lib.symbols.expwxPAPER_FANFOLD_LGL_GERMAN();
-var PAPER_FANFOLD_STD_GERMAN = lib.symbols.expwxPAPER_FANFOLD_STD_GERMAN();
-var PAPER_FANFOLD_US = lib.symbols.expwxPAPER_FANFOLD_US();
-var PAPER_FOLIO = lib.symbols.expwxPAPER_FOLIO();
-var PAPER_ISO_B4 = lib.symbols.expwxPAPER_ISO_B4();
-var PAPER_JAPANESE_POSTCARD = lib.symbols.expwxPAPER_JAPANESE_POSTCARD();
-var PAPER_LEDGER = lib.symbols.expwxPAPER_LEDGER();
-var PAPER_LEGAL = lib.symbols.expwxPAPER_LEGAL();
-var PAPER_LEGAL_EXTRA = lib.symbols.expwxPAPER_LEGAL_EXTRA();
-var PAPER_LETTER = lib.symbols.expwxPAPER_LETTER();
-var PAPER_LETTERSMALL = lib.symbols.expwxPAPER_LETTERSMALL();
-var PAPER_LETTER_EXTRA = lib.symbols.expwxPAPER_LETTER_EXTRA();
-var PAPER_LETTER_EXTRA_TRANSVERSE = lib.symbols.expwxPAPER_LETTER_EXTRA_TRANSVERSE();
-var PAPER_LETTER_PLUS = lib.symbols.expwxPAPER_LETTER_PLUS();
-var PAPER_LETTER_TRANSVERSE = lib.symbols.expwxPAPER_LETTER_TRANSVERSE();
-var PAPER_NONE = lib.symbols.expwxPAPER_NONE();
-var PAPER_NOTE = lib.symbols.expwxPAPER_NOTE();
-var PAPER_QUARTO = lib.symbols.expwxPAPER_QUARTO();
-var PAPER_STATEMENT = lib.symbols.expwxPAPER_STATEMENT();
-var PAPER_TABLOID = lib.symbols.expwxPAPER_TABLOID();
-var PAPER_TABLOID_EXTRA = lib.symbols.expwxPAPER_TABLOID_EXTRA();
-var PDP_ENDIAN = lib.symbols.expwxPDP_ENDIAN();
-var PENSTYLE_DOT = lib.symbols.expwxPENSTYLE_DOT();
-var PENSTYLE_DOT_DASH = lib.symbols.expwxPENSTYLE_DOT_DASH();
-var PENSTYLE_FIRST_HATCH = lib.symbols.expwxPENSTYLE_FIRST_HATCH();
-var PENSTYLE_INVALID = lib.symbols.expwxPENSTYLE_INVALID();
-var PENSTYLE_LAST_HATCH = lib.symbols.expwxPENSTYLE_LAST_HATCH();
-var PENSTYLE_LONG_DASH = lib.symbols.expwxPENSTYLE_LONG_DASH();
-var PENSTYLE_SHORT_DASH = lib.symbols.expwxPENSTYLE_SHORT_DASH();
-var PENSTYLE_SOLID = lib.symbols.expwxPENSTYLE_SOLID();
-var PENSTYLE_STIPPLE = lib.symbols.expwxPENSTYLE_STIPPLE();
-var PENSTYLE_STIPPLE_MASK = lib.symbols.expwxPENSTYLE_STIPPLE_MASK();
-var PENSTYLE_STIPPLE_MASK_OPAQUE = lib.symbols.expwxPENSTYLE_STIPPLE_MASK_OPAQUE();
-var PENSTYLE_TRANSPARENT = lib.symbols.expwxPENSTYLE_TRANSPARENT();
-var PENSTYLE_USER_DASH = lib.symbols.expwxPENSTYLE_USER_DASH();
-var PLATFORM_CURRENT = lib.symbols.expwxPLATFORM_CURRENT();
-var PLATFORM_MAC = lib.symbols.expwxPLATFORM_MAC();
-var PLATFORM_UNIX = lib.symbols.expwxPLATFORM_UNIX();
-var PLATFORM_WINDOWS = lib.symbols.expwxPLATFORM_WINDOWS();
-var POPUP_WINDOW = lib.symbols.expwxPOPUP_WINDOW();
-var PORTRAIT = lib.symbols.expwxPORTRAIT();
-var PREVIEW_DEFAULT = lib.symbols.expwxPREVIEW_DEFAULT();
-var PREVIEW_FIRST = lib.symbols.expwxPREVIEW_FIRST();
-var PREVIEW_GOTO = lib.symbols.expwxPREVIEW_GOTO();
-var PREVIEW_LAST = lib.symbols.expwxPREVIEW_LAST();
-var PREVIEW_NEXT = lib.symbols.expwxPREVIEW_NEXT();
-var PREVIEW_PREVIOUS = lib.symbols.expwxPREVIEW_PREVIOUS();
-var PREVIEW_PRINT = lib.symbols.expwxPREVIEW_PRINT();
-var PREVIEW_ZOOM = lib.symbols.expwxPREVIEW_ZOOM();
-var PRINTER_CANCELLED = lib.symbols.expwxPRINTER_CANCELLED();
-var PRINTER_ERROR = lib.symbols.expwxPRINTER_ERROR();
-var PRINTER_NO_ERROR = lib.symbols.expwxPRINTER_NO_ERROR();
-var PRINT_MODE_FILE = lib.symbols.expwxPRINT_MODE_FILE();
-var PRINT_MODE_NONE = lib.symbols.expwxPRINT_MODE_NONE();
-var PRINT_MODE_PREVIEW = lib.symbols.expwxPRINT_MODE_PREVIEW();
-var PRINT_MODE_PRINTER = lib.symbols.expwxPRINT_MODE_PRINTER();
-var RA_SPECIFY_COLS = lib.symbols.expwxRA_SPECIFY_COLS();
-var RA_SPECIFY_ROWS = lib.symbols.expwxRA_SPECIFY_ROWS();
-var RB_GROUP = lib.symbols.expwxRB_GROUP();
+var NORTH = _ints[1117];
+var NOT_FOUND = _ints[1118];
+var NO_DEFAULT = _ints[1119];
+var NO_FULL_REPAINT_ON_RESIZE = _ints[1120];
+var NO_OP = _ints[1121];
+var ODDEVEN_RULE = _ints[1122];
+var OK = _ints[1123];
+var OR = _ints[1124];
+var OR_INVERT = _ints[1125];
+var OR_REVERSE = _ints[1126];
+var PAPER_10X11 = _ints[1127];
+var PAPER_10X14 = _ints[1128];
+var PAPER_11X17 = _ints[1129];
+var PAPER_15X11 = _ints[1130];
+var PAPER_9X11 = _ints[1131];
+var PAPER_A2 = _ints[1132];
+var PAPER_A3 = _ints[1133];
+var PAPER_A3_EXTRA = _ints[1134];
+var PAPER_A3_EXTRA_TRANSVERSE = _ints[1135];
+var PAPER_A3_TRANSVERSE = _ints[1136];
+var PAPER_A4 = _ints[1137];
+var PAPER_A4SMALL = _ints[1138];
+var PAPER_A4_EXTRA = _ints[1139];
+var PAPER_A4_PLUS = _ints[1140];
+var PAPER_A4_TRANSVERSE = _ints[1141];
+var PAPER_A5 = _ints[1142];
+var PAPER_A5_EXTRA = _ints[1143];
+var PAPER_A5_TRANSVERSE = _ints[1144];
+var PAPER_A_PLUS = _ints[1145];
+var PAPER_B4 = _ints[1146];
+var PAPER_B5 = _ints[1147];
+var PAPER_B5_EXTRA = _ints[1148];
+var PAPER_B5_TRANSVERSE = _ints[1149];
+var PAPER_B_PLUS = _ints[1150];
+var PAPER_CSHEET = _ints[1151];
+var PAPER_DSHEET = _ints[1152];
+var PAPER_ENV_10 = _ints[1153];
+var PAPER_ENV_11 = _ints[1154];
+var PAPER_ENV_12 = _ints[1155];
+var PAPER_ENV_14 = _ints[1156];
+var PAPER_ENV_9 = _ints[1157];
+var PAPER_ENV_B4 = _ints[1158];
+var PAPER_ENV_B5 = _ints[1159];
+var PAPER_ENV_B6 = _ints[1160];
+var PAPER_ENV_C3 = _ints[1161];
+var PAPER_ENV_C4 = _ints[1162];
+var PAPER_ENV_C5 = _ints[1163];
+var PAPER_ENV_C6 = _ints[1164];
+var PAPER_ENV_C65 = _ints[1165];
+var PAPER_ENV_DL = _ints[1166];
+var PAPER_ENV_INVITE = _ints[1167];
+var PAPER_ENV_ITALY = _ints[1168];
+var PAPER_ENV_MONARCH = _ints[1169];
+var PAPER_ENV_PERSONAL = _ints[1170];
+var PAPER_ESHEET = _ints[1171];
+var PAPER_EXECUTIVE = _ints[1172];
+var PAPER_FANFOLD_LGL_GERMAN = _ints[1173];
+var PAPER_FANFOLD_STD_GERMAN = _ints[1174];
+var PAPER_FANFOLD_US = _ints[1175];
+var PAPER_FOLIO = _ints[1176];
+var PAPER_ISO_B4 = _ints[1177];
+var PAPER_JAPANESE_POSTCARD = _ints[1178];
+var PAPER_LEDGER = _ints[1179];
+var PAPER_LEGAL = _ints[1180];
+var PAPER_LEGAL_EXTRA = _ints[1181];
+var PAPER_LETTER = _ints[1182];
+var PAPER_LETTERSMALL = _ints[1183];
+var PAPER_LETTER_EXTRA = _ints[1184];
+var PAPER_LETTER_EXTRA_TRANSVERSE = _ints[1185];
+var PAPER_LETTER_PLUS = _ints[1186];
+var PAPER_LETTER_TRANSVERSE = _ints[1187];
+var PAPER_NONE = _ints[1188];
+var PAPER_NOTE = _ints[1189];
+var PAPER_QUARTO = _ints[1190];
+var PAPER_STATEMENT = _ints[1191];
+var PAPER_TABLOID = _ints[1192];
+var PAPER_TABLOID_EXTRA = _ints[1193];
+var PDP_ENDIAN = _ints[1194];
+var PENSTYLE_DOT = _ints[1195];
+var PENSTYLE_DOT_DASH = _ints[1196];
+var PENSTYLE_FIRST_HATCH = _ints[1197];
+var PENSTYLE_INVALID = _ints[1198];
+var PENSTYLE_LAST_HATCH = _ints[1199];
+var PENSTYLE_LONG_DASH = _ints[1200];
+var PENSTYLE_SHORT_DASH = _ints[1201];
+var PENSTYLE_SOLID = _ints[1202];
+var PENSTYLE_STIPPLE = _ints[1203];
+var PENSTYLE_STIPPLE_MASK = _ints[1204];
+var PENSTYLE_STIPPLE_MASK_OPAQUE = _ints[1205];
+var PENSTYLE_TRANSPARENT = _ints[1206];
+var PENSTYLE_USER_DASH = _ints[1207];
+var PLATFORM_CURRENT = _ints[1208];
+var PLATFORM_MAC = _ints[1209];
+var PLATFORM_UNIX = _ints[1210];
+var PLATFORM_WINDOWS = _ints[1211];
+var POPUP_WINDOW = _ints[1212];
+var PORTRAIT = _ints[1213];
+var PREVIEW_DEFAULT = _ints[1214];
+var PREVIEW_FIRST = _ints[1215];
+var PREVIEW_GOTO = _ints[1216];
+var PREVIEW_LAST = _ints[1217];
+var PREVIEW_NEXT = _ints[1218];
+var PREVIEW_PREVIOUS = _ints[1219];
+var PREVIEW_PRINT = _ints[1220];
+var PREVIEW_ZOOM = _ints[1221];
+var PRINTER_CANCELLED = _ints[1222];
+var PRINTER_ERROR = _ints[1223];
+var PRINTER_NO_ERROR = _ints[1224];
+var PRINT_MODE_FILE = _ints[1225];
+var PRINT_MODE_NONE = _ints[1226];
+var PRINT_MODE_PREVIEW = _ints[1227];
+var PRINT_MODE_PRINTER = _ints[1228];
+var RA_SPECIFY_COLS = _ints[1229];
+var RA_SPECIFY_ROWS = _ints[1230];
+var RB_GROUP = _ints[1231];
 var RED = lib.symbols.expwxRED();
 var RED_BRUSH = lib.symbols.expwxRED_BRUSH();
 var RED_PEN = lib.symbols.expwxRED_PEN();
-var RESET = lib.symbols.expwxRESET();
-var RESIZE_BORDER = lib.symbols.expwxRESIZE_BORDER();
-var RETAINED = lib.symbols.expwxRETAINED();
-var RIBBON_BAR_ALWAYS_SHOW_TABS = lib.symbols.expRIBBON_BAR_ALWAYS_SHOW_TABS();
-var RIBBON_BAR_DEFAULT_STYLE = lib.symbols.expRIBBON_BAR_DEFAULT_STYLE();
-var RIBBON_BAR_FLOW_HORIZONTAL = lib.symbols.expRIBBON_BAR_FLOW_HORIZONTAL();
-var RIBBON_BAR_FLOW_VERTICAL = lib.symbols.expRIBBON_BAR_FLOW_VERTICAL();
-var RIBBON_BAR_FOLDBAR_STYLE = lib.symbols.expRIBBON_BAR_FOLDBAR_STYLE();
-var RIBBON_BAR_SHOW_HELP_BUTTON = lib.symbols.expRIBBON_BAR_SHOW_HELP_BUTTON();
-var RIBBON_BAR_SHOW_PAGE_ICONS = lib.symbols.expRIBBON_BAR_SHOW_PAGE_ICONS();
-var RIBBON_BAR_SHOW_PAGE_LABELS = lib.symbols.expRIBBON_BAR_SHOW_PAGE_LABELS();
-var RIBBON_BAR_SHOW_PANEL_EXT_BUTTONS = lib.symbols.expRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS();
-var RIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS = lib.symbols.expRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS();
-var RIBBON_BAR_SHOW_TOGGLE_BUTTON = lib.symbols.expRIBBON_BAR_SHOW_TOGGLE_BUTTON();
-var RIBBON_BUTTONBAR_BUTTON_LARGE = lib.symbols.expwxRIBBON_BUTTONBAR_BUTTON_LARGE();
-var RIBBON_BUTTONBAR_BUTTON_MEDIUM = lib.symbols.expwxRIBBON_BUTTONBAR_BUTTON_MEDIUM();
-var RIBBON_BUTTONBAR_BUTTON_SMALL = lib.symbols.expwxRIBBON_BUTTONBAR_BUTTON_SMALL();
-var RIBBON_BUTTON_DROPDOWN = lib.symbols.expwxRIBBON_BUTTON_DROPDOWN();
-var RIBBON_BUTTON_HYBRID = lib.symbols.expwxRIBBON_BUTTON_HYBRID();
-var RIBBON_BUTTON_NORMAL = lib.symbols.expwxRIBBON_BUTTON_NORMAL();
-var RIBBON_BUTTON_TOGGLE = lib.symbols.expwxRIBBON_BUTTON_TOGGLE();
-var RIBBON_GALLERY_BUTTON_ACTIVE = lib.symbols.expwxRIBBON_GALLERY_BUTTON_ACTIVE();
-var RIBBON_GALLERY_BUTTON_DISABLED = lib.symbols.expwxRIBBON_GALLERY_BUTTON_DISABLED();
-var RIBBON_GALLERY_BUTTON_HOVERED = lib.symbols.expwxRIBBON_GALLERY_BUTTON_HOVERED();
-var RIBBON_GALLERY_BUTTON_NORMAL = lib.symbols.expwxRIBBON_GALLERY_BUTTON_NORMAL();
-var RIBBON_PANEL_DEFAULT_STYLE = lib.symbols.expRIBBON_PANEL_DEFAULT_STYLE();
-var RIBBON_PANEL_EXT_BUTTON = lib.symbols.expRIBBON_PANEL_EXT_BUTTON();
-var RIBBON_PANEL_FLEXIBLE = lib.symbols.expRIBBON_PANEL_FLEXIBLE();
-var RIBBON_PANEL_MINIMISE_BUTTON = lib.symbols.expRIBBON_PANEL_MINIMISE_BUTTON();
-var RIBBON_PANEL_NO_AUTO_MINIMISE = lib.symbols.expRIBBON_PANEL_NO_AUTO_MINIMISE();
-var RIBBON_PANEL_STRETCH = lib.symbols.expRIBBON_PANEL_STRETCH();
-var RIGHT = lib.symbols.expwxRIGHT();
-var SASH_BOTTOM = lib.symbols.expwxSASH_BOTTOM();
-var SASH_DRAG_DRAGGING = lib.symbols.expwxSASH_DRAG_DRAGGING();
-var SASH_DRAG_LEFT_DOWN = lib.symbols.expwxSASH_DRAG_LEFT_DOWN();
-var SASH_DRAG_NONE = lib.symbols.expwxSASH_DRAG_NONE();
-var SASH_LEFT = lib.symbols.expwxSASH_LEFT();
-var SASH_NONE = lib.symbols.expwxSASH_NONE();
-var SASH_RIGHT = lib.symbols.expwxSASH_RIGHT();
-var SASH_STATUS_OK = lib.symbols.expwxSASH_STATUS_OK();
-var SASH_STATUS_OUT_OF_RANGE = lib.symbols.expwxSASH_STATUS_OUT_OF_RANGE();
-var SASH_TOP = lib.symbols.expwxSASH_TOP();
-var SET = lib.symbols.expwxSET();
-var SETUP = lib.symbols.expwxSETUP();
-var SHAPED = lib.symbols.expwxSHAPED();
-var SHRINK = lib.symbols.expwxSHRINK();
-var SIGABRT = lib.symbols.expwxSIGABRT();
-var SIGALRM = lib.symbols.expwxSIGALRM();
-var SIGBUS = lib.symbols.expwxSIGBUS();
-var SIGEMT = lib.symbols.expwxSIGEMT();
-var SIGFPE = lib.symbols.expwxSIGFPE();
-var SIGHUP = lib.symbols.expwxSIGHUP();
-var SIGILL = lib.symbols.expwxSIGILL();
-var SIGINT = lib.symbols.expwxSIGINT();
-var SIGKILL = lib.symbols.expwxSIGKILL();
-var SIGNONE = lib.symbols.expwxSIGNONE();
-var SIGPIPE = lib.symbols.expwxSIGPIPE();
-var SIGQUIT = lib.symbols.expwxSIGQUIT();
-var SIGSEGV = lib.symbols.expwxSIGSEGV();
-var SIGSYS = lib.symbols.expwxSIGSYS();
-var SIGTERM = lib.symbols.expwxSIGTERM();
-var SIGTRAP = lib.symbols.expwxSIGTRAP();
-var SIZE_ALLOW_MINUS_ONE = lib.symbols.expwxSIZE_ALLOW_MINUS_ONE();
-var SIZE_AUTO = lib.symbols.expwxSIZE_AUTO();
-var SIZE_AUTO_HEIGHT = lib.symbols.expwxSIZE_AUTO_HEIGHT();
-var SIZE_AUTO_WIDTH = lib.symbols.expwxSIZE_AUTO_WIDTH();
-var SIZE_NO_ADJUSTMENTS = lib.symbols.expwxSIZE_NO_ADJUSTMENTS();
-var SIZE_USE_EXISTING = lib.symbols.expwxSIZE_USE_EXISTING();
-var SL_AUTOTICKS = lib.symbols.expwxSL_AUTOTICKS();
-var SL_BOTH = lib.symbols.expwxSL_BOTH();
-var SL_BOTTOM = lib.symbols.expwxSL_BOTTOM();
-var SL_LABELS = lib.symbols.expwxSL_LABELS();
-var SL_LEFT = lib.symbols.expwxSL_LEFT();
-var SL_RIGHT = lib.symbols.expwxSL_RIGHT();
-var SL_SELRANGE = lib.symbols.expwxSL_SELRANGE();
-var SL_TOP = lib.symbols.expwxSL_TOP();
+var RESET = _ints[1232];
+var RESIZE_BORDER = _ints[1233];
+var RETAINED = _ints[1234];
+var RIBBON_BAR_ALWAYS_SHOW_TABS = _ints[1235];
+var RIBBON_BAR_DEFAULT_STYLE = _ints[1236];
+var RIBBON_BAR_FLOW_HORIZONTAL = _ints[1237];
+var RIBBON_BAR_FLOW_VERTICAL = _ints[1238];
+var RIBBON_BAR_FOLDBAR_STYLE = _ints[1239];
+var RIBBON_BAR_SHOW_HELP_BUTTON = _ints[1240];
+var RIBBON_BAR_SHOW_PAGE_ICONS = _ints[1241];
+var RIBBON_BAR_SHOW_PAGE_LABELS = _ints[1242];
+var RIBBON_BAR_SHOW_PANEL_EXT_BUTTONS = _ints[1243];
+var RIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS = _ints[1244];
+var RIBBON_BAR_SHOW_TOGGLE_BUTTON = _ints[1245];
+var RIBBON_BUTTONBAR_BUTTON_LARGE = _ints[1246];
+var RIBBON_BUTTONBAR_BUTTON_MEDIUM = _ints[1247];
+var RIBBON_BUTTONBAR_BUTTON_SMALL = _ints[1248];
+var RIBBON_BUTTON_DROPDOWN = _ints[1249];
+var RIBBON_BUTTON_HYBRID = _ints[1250];
+var RIBBON_BUTTON_NORMAL = _ints[1251];
+var RIBBON_BUTTON_TOGGLE = _ints[1252];
+var RIBBON_GALLERY_BUTTON_ACTIVE = _ints[1253];
+var RIBBON_GALLERY_BUTTON_DISABLED = _ints[1254];
+var RIBBON_GALLERY_BUTTON_HOVERED = _ints[1255];
+var RIBBON_GALLERY_BUTTON_NORMAL = _ints[1256];
+var RIBBON_PANEL_DEFAULT_STYLE = _ints[1257];
+var RIBBON_PANEL_EXT_BUTTON = _ints[1258];
+var RIBBON_PANEL_FLEXIBLE = _ints[1259];
+var RIBBON_PANEL_MINIMISE_BUTTON = _ints[1260];
+var RIBBON_PANEL_NO_AUTO_MINIMISE = _ints[1261];
+var RIBBON_PANEL_STRETCH = _ints[1262];
+var RIGHT = _ints[1263];
+var SASH_BOTTOM = _ints[1264];
+var SASH_DRAG_DRAGGING = _ints[1265];
+var SASH_DRAG_LEFT_DOWN = _ints[1266];
+var SASH_DRAG_NONE = _ints[1267];
+var SASH_LEFT = _ints[1268];
+var SASH_NONE = _ints[1269];
+var SASH_RIGHT = _ints[1270];
+var SASH_STATUS_OK = _ints[1271];
+var SASH_STATUS_OUT_OF_RANGE = _ints[1272];
+var SASH_TOP = _ints[1273];
+var SET = _ints[1274];
+var SETUP = _ints[1275];
+var SHAPED = _ints[1276];
+var SHRINK = _ints[1277];
+var SIGABRT = _ints[1278];
+var SIGALRM = _ints[1279];
+var SIGBUS = _ints[1280];
+var SIGEMT = _ints[1281];
+var SIGFPE = _ints[1282];
+var SIGHUP = _ints[1283];
+var SIGILL = _ints[1284];
+var SIGINT = _ints[1285];
+var SIGKILL = _ints[1286];
+var SIGNONE = _ints[1287];
+var SIGPIPE = _ints[1288];
+var SIGQUIT = _ints[1289];
+var SIGSEGV = _ints[1290];
+var SIGSYS = _ints[1291];
+var SIGTERM = _ints[1292];
+var SIGTRAP = _ints[1293];
+var SIZE_ALLOW_MINUS_ONE = _ints[1294];
+var SIZE_AUTO = _ints[1295];
+var SIZE_AUTO_HEIGHT = _ints[1296];
+var SIZE_AUTO_WIDTH = _ints[1297];
+var SIZE_NO_ADJUSTMENTS = _ints[1298];
+var SIZE_USE_EXISTING = _ints[1299];
+var SL_AUTOTICKS = _ints[1300];
+var SL_BOTH = _ints[1301];
+var SL_BOTTOM = _ints[1302];
+var SL_LABELS = _ints[1303];
+var SL_LEFT = _ints[1304];
+var SL_RIGHT = _ints[1305];
+var SL_SELRANGE = _ints[1306];
+var SL_TOP = _ints[1307];
 var SMALL_FONT = lib.symbols.expwxSMALL_FONT();
-var SOUND_ASYNC = lib.symbols.expwxSOUND_ASYNC();
-var SOUND_LOOP = lib.symbols.expwxSOUND_LOOP();
-var SOUND_SYNC = lib.symbols.expwxSOUND_SYNC();
-var SOUTH = lib.symbols.expwxSOUTH();
-var SPLIT_HORIZONTAL = lib.symbols.expwxSPLIT_HORIZONTAL();
-var SPLIT_VERTICAL = lib.symbols.expwxSPLIT_VERTICAL();
-var SP_3D = lib.symbols.expwxSP_3D();
-var SP_3DBORDER = lib.symbols.expwxSP_3DBORDER();
-var SP_3DSASH = lib.symbols.expwxSP_3DSASH();
-var SP_ARROW_KEYS = lib.symbols.expwxSP_ARROW_KEYS();
-var SP_BORDER = lib.symbols.expwxSP_BORDER();
-var SP_LIVE_UPDATE = lib.symbols.expwxSP_LIVE_UPDATE();
-var SP_NOBORDER = lib.symbols.expwxSP_NOBORDER();
-var SP_NOSASH = lib.symbols.expwxSP_NOSASH();
-var SP_PERMIT_UNSPLIT = lib.symbols.expwxSP_PERMIT_UNSPLIT();
-var SP_WRAP = lib.symbols.expwxSP_WRAP();
-var SRC_INVERT = lib.symbols.expwxSRC_INVERT();
-var STAY_ON_TOP = lib.symbols.expwxSTAY_ON_TOP();
-var STREAM_EOF = lib.symbols.expwxSTREAM_EOF();
-var STREAM_NO_ERROR = lib.symbols.expwxSTREAM_NO_ERROR();
-var STREAM_READ_ERROR = lib.symbols.expwxSTREAM_READ_ERROR();
-var STREAM_WRITE_ERROR = lib.symbols.expwxSTREAM_WRITE_ERROR();
-var STRETCH_NOT = lib.symbols.expwxSTRETCH_NOT();
-var ST_NO_AUTORESIZE = lib.symbols.expwxST_NO_AUTORESIZE();
-var ST_SIZEGRIP = lib.symbols.expwxST_SIZEGRIP();
+var SOUND_ASYNC = _ints[1308];
+var SOUND_LOOP = _ints[1309];
+var SOUND_SYNC = _ints[1310];
+var SOUTH = _ints[1311];
+var SPLIT_HORIZONTAL = _ints[1312];
+var SPLIT_VERTICAL = _ints[1313];
+var SP_3D = _ints[1314];
+var SP_3DBORDER = _ints[1315];
+var SP_3DSASH = _ints[1316];
+var SP_ARROW_KEYS = _ints[1317];
+var SP_BORDER = _ints[1318];
+var SP_LIVE_UPDATE = _ints[1319];
+var SP_NOBORDER = _ints[1320];
+var SP_NOSASH = _ints[1321];
+var SP_PERMIT_UNSPLIT = _ints[1322];
+var SP_WRAP = _ints[1323];
+var SRC_INVERT = _ints[1324];
+var STAY_ON_TOP = _ints[1325];
+var STREAM_EOF = _ints[1326];
+var STREAM_NO_ERROR = _ints[1327];
+var STREAM_READ_ERROR = _ints[1328];
+var STREAM_WRITE_ERROR = _ints[1329];
+var STRETCH_NOT = _ints[1330];
+var ST_NO_AUTORESIZE = _ints[1331];
+var ST_SIZEGRIP = _ints[1332];
 var SWISS_FONT = lib.symbols.expwxSWISS_FONT();
-var SW_3D = lib.symbols.expwxSW_3D();
-var SW_3DBORDER = lib.symbols.expwxSW_3DBORDER();
-var SW_3DSASH = lib.symbols.expwxSW_3DSASH();
-var SW_BORDER = lib.symbols.expwxSW_BORDER();
-var SW_NOBORDER = lib.symbols.expwxSW_NOBORDER();
-var SYSTEM_MENU = lib.symbols.expwxSYSTEM_MENU();
-var SYS_ANSI_FIXED_FONT = lib.symbols.expwxSYS_ANSI_FIXED_FONT();
-var SYS_ANSI_VAR_FONT = lib.symbols.expwxSYS_ANSI_VAR_FONT();
-var SYS_BORDER_X = lib.symbols.expwxSYS_BORDER_X();
-var SYS_BORDER_Y = lib.symbols.expwxSYS_BORDER_Y();
-var SYS_CAPTION_Y = lib.symbols.expwxSYS_CAPTION_Y();
-var SYS_COLOUR_3DDKSHADOW = lib.symbols.expwxSYS_COLOUR_3DDKSHADOW();
-var SYS_COLOUR_3DFACE = lib.symbols.expwxSYS_COLOUR_3DFACE();
-var SYS_COLOUR_3DHIGHLIGHT = lib.symbols.expwxSYS_COLOUR_3DHIGHLIGHT();
-var SYS_COLOUR_3DHILIGHT = lib.symbols.expwxSYS_COLOUR_3DHILIGHT();
-var SYS_COLOUR_3DLIGHT = lib.symbols.expwxSYS_COLOUR_3DLIGHT();
-var SYS_COLOUR_3DSHADOW = lib.symbols.expwxSYS_COLOUR_3DSHADOW();
-var SYS_COLOUR_ACTIVEBORDER = lib.symbols.expwxSYS_COLOUR_ACTIVEBORDER();
-var SYS_COLOUR_ACTIVECAPTION = lib.symbols.expwxSYS_COLOUR_ACTIVECAPTION();
-var SYS_COLOUR_APPWORKSPACE = lib.symbols.expwxSYS_COLOUR_APPWORKSPACE();
-var SYS_COLOUR_BACKGROUND = lib.symbols.expwxSYS_COLOUR_BACKGROUND();
-var SYS_COLOUR_BTNFACE = lib.symbols.expwxSYS_COLOUR_BTNFACE();
-var SYS_COLOUR_BTNHIGHLIGHT = lib.symbols.expwxSYS_COLOUR_BTNHIGHLIGHT();
-var SYS_COLOUR_BTNHILIGHT = lib.symbols.expwxSYS_COLOUR_BTNHILIGHT();
-var SYS_COLOUR_BTNSHADOW = lib.symbols.expwxSYS_COLOUR_BTNSHADOW();
-var SYS_COLOUR_BTNTEXT = lib.symbols.expwxSYS_COLOUR_BTNTEXT();
-var SYS_COLOUR_CAPTIONTEXT = lib.symbols.expwxSYS_COLOUR_CAPTIONTEXT();
-var SYS_COLOUR_DESKTOP = lib.symbols.expwxSYS_COLOUR_DESKTOP();
-var SYS_COLOUR_GRAYTEXT = lib.symbols.expwxSYS_COLOUR_GRAYTEXT();
-var SYS_COLOUR_HIGHLIGHT = lib.symbols.expwxSYS_COLOUR_HIGHLIGHT();
-var SYS_COLOUR_HIGHLIGHTTEXT = lib.symbols.expwxSYS_COLOUR_HIGHLIGHTTEXT();
-var SYS_COLOUR_INACTIVEBORDER = lib.symbols.expwxSYS_COLOUR_INACTIVEBORDER();
-var SYS_COLOUR_INACTIVECAPTION = lib.symbols.expwxSYS_COLOUR_INACTIVECAPTION();
-var SYS_COLOUR_INACTIVECAPTIONTEXT = lib.symbols.expwxSYS_COLOUR_INACTIVECAPTIONTEXT();
-var SYS_COLOUR_INFOBK = lib.symbols.expwxSYS_COLOUR_INFOBK();
-var SYS_COLOUR_INFOTEXT = lib.symbols.expwxSYS_COLOUR_INFOTEXT();
-var SYS_COLOUR_LISTBOX = lib.symbols.expwxSYS_COLOUR_LISTBOX();
-var SYS_COLOUR_MENU = lib.symbols.expwxSYS_COLOUR_MENU();
-var SYS_COLOUR_MENUTEXT = lib.symbols.expwxSYS_COLOUR_MENUTEXT();
-var SYS_COLOUR_SCROLLBAR = lib.symbols.expwxSYS_COLOUR_SCROLLBAR();
-var SYS_COLOUR_WINDOW = lib.symbols.expwxSYS_COLOUR_WINDOW();
-var SYS_COLOUR_WINDOWFRAME = lib.symbols.expwxSYS_COLOUR_WINDOWFRAME();
-var SYS_COLOUR_WINDOWTEXT = lib.symbols.expwxSYS_COLOUR_WINDOWTEXT();
-var SYS_CURSOR_X = lib.symbols.expwxSYS_CURSOR_X();
-var SYS_CURSOR_Y = lib.symbols.expwxSYS_CURSOR_Y();
-var SYS_DCLICK_X = lib.symbols.expwxSYS_DCLICK_X();
-var SYS_DCLICK_Y = lib.symbols.expwxSYS_DCLICK_Y();
-var SYS_DEFAULT_GUI_FONT = lib.symbols.expwxSYS_DEFAULT_GUI_FONT();
-var SYS_DEFAULT_PALETTE = lib.symbols.expwxSYS_DEFAULT_PALETTE();
-var SYS_DEVICE_DEFAULT_FONT = lib.symbols.expwxSYS_DEVICE_DEFAULT_FONT();
-var SYS_DRAG_X = lib.symbols.expwxSYS_DRAG_X();
-var SYS_DRAG_Y = lib.symbols.expwxSYS_DRAG_Y();
-var SYS_EDGE_X = lib.symbols.expwxSYS_EDGE_X();
-var SYS_EDGE_Y = lib.symbols.expwxSYS_EDGE_Y();
-var SYS_FRAMESIZE_X = lib.symbols.expwxSYS_FRAMESIZE_X();
-var SYS_FRAMESIZE_Y = lib.symbols.expwxSYS_FRAMESIZE_Y();
-var SYS_HSCROLL_ARROW_X = lib.symbols.expwxSYS_HSCROLL_ARROW_X();
-var SYS_HSCROLL_ARROW_Y = lib.symbols.expwxSYS_HSCROLL_ARROW_Y();
-var SYS_HSCROLL_Y = lib.symbols.expwxSYS_HSCROLL_Y();
-var SYS_HTHUMB_X = lib.symbols.expwxSYS_HTHUMB_X();
-var SYS_ICONSPACING_X = lib.symbols.expwxSYS_ICONSPACING_X();
-var SYS_ICONSPACING_Y = lib.symbols.expwxSYS_ICONSPACING_Y();
-var SYS_ICON_X = lib.symbols.expwxSYS_ICON_X();
-var SYS_ICON_Y = lib.symbols.expwxSYS_ICON_Y();
-var SYS_MENU_Y = lib.symbols.expwxSYS_MENU_Y();
-var SYS_MOUSE_BUTTONS = lib.symbols.expwxSYS_MOUSE_BUTTONS();
-var SYS_NETWORK_PRESENT = lib.symbols.expwxSYS_NETWORK_PRESENT();
-var SYS_OEM_FIXED_FONT = lib.symbols.expwxSYS_OEM_FIXED_FONT();
-var SYS_PENWINDOWS_PRESENT = lib.symbols.expwxSYS_PENWINDOWS_PRESENT();
-var SYS_SCREEN_DESKTOP = lib.symbols.expwxSYS_SCREEN_DESKTOP();
-var SYS_SCREEN_NONE = lib.symbols.expwxSYS_SCREEN_NONE();
-var SYS_SCREEN_PDA = lib.symbols.expwxSYS_SCREEN_PDA();
-var SYS_SCREEN_SMALL = lib.symbols.expwxSYS_SCREEN_SMALL();
-var SYS_SCREEN_TINY = lib.symbols.expwxSYS_SCREEN_TINY();
-var SYS_SCREEN_X = lib.symbols.expwxSYS_SCREEN_X();
-var SYS_SCREEN_Y = lib.symbols.expwxSYS_SCREEN_Y();
-var SYS_SHOW_SOUNDS = lib.symbols.expwxSYS_SHOW_SOUNDS();
-var SYS_SMALLICON_X = lib.symbols.expwxSYS_SMALLICON_X();
-var SYS_SMALLICON_Y = lib.symbols.expwxSYS_SMALLICON_Y();
-var SYS_SWAP_BUTTONS = lib.symbols.expwxSYS_SWAP_BUTTONS();
-var SYS_SYSTEM_FIXED_FONT = lib.symbols.expwxSYS_SYSTEM_FIXED_FONT();
-var SYS_SYSTEM_FONT = lib.symbols.expwxSYS_SYSTEM_FONT();
-var SYS_VSCROLL_ARROW_X = lib.symbols.expwxSYS_VSCROLL_ARROW_X();
-var SYS_VSCROLL_ARROW_Y = lib.symbols.expwxSYS_VSCROLL_ARROW_Y();
-var SYS_VSCROLL_X = lib.symbols.expwxSYS_VSCROLL_X();
-var SYS_VTHUMB_Y = lib.symbols.expwxSYS_VTHUMB_Y();
-var SYS_WINDOWMIN_X = lib.symbols.expwxSYS_WINDOWMIN_X();
-var SYS_WINDOWMIN_Y = lib.symbols.expwxSYS_WINDOWMIN_Y();
-var TAB_TRAVERSAL = lib.symbols.expwxTAB_TRAVERSAL();
-var TB_DOCKABLE = lib.symbols.expwxTB_DOCKABLE();
-var TB_FLAT = lib.symbols.expwxTB_FLAT();
-var TB_HORIZONTAL = lib.symbols.expwxTB_HORIZONTAL();
-var TB_NOALIGN = lib.symbols.expwxTB_NOALIGN();
-var TB_NODIVIDER = lib.symbols.expwxTB_NODIVIDER();
-var TB_NOICONS = lib.symbols.expwxTB_NOICONS();
-var TB_TEXT = lib.symbols.expwxTB_TEXT();
-var TB_VERTICAL = lib.symbols.expwxTB_VERTICAL();
-var TC_FIXEDWIDTH = lib.symbols.expwxTC_FIXEDWIDTH();
-var TC_MULTILINE = lib.symbols.expwxTC_MULTILINE();
-var TC_OWNERDRAW = lib.symbols.expwxTC_OWNERDRAW();
-var TC_RIGHTJUSTIFY = lib.symbols.expwxTC_RIGHTJUSTIFY();
-var TE_AUTO_URL = lib.symbols.expwxTE_AUTO_URL();
-var TE_CENTRE = lib.symbols.expwxTE_CENTRE();
-var TE_LEFT = lib.symbols.expwxTE_LEFT();
-var TE_MULTILINE = lib.symbols.expwxTE_MULTILINE();
-var TE_NOHIDESEL = lib.symbols.expwxTE_NOHIDESEL();
-var TE_NO_VSCROLL = lib.symbols.expwxTE_NO_VSCROLL();
-var TE_PASSWORD = lib.symbols.expwxTE_PASSWORD();
-var TE_PROCESS_ENTER = lib.symbols.expwxTE_PROCESS_ENTER();
-var TE_PROCESS_TAB = lib.symbols.expwxTE_PROCESS_TAB();
-var TE_READONLY = lib.symbols.expwxTE_READONLY();
-var TE_RICH = lib.symbols.expwxTE_RICH();
-var TE_RICH2 = lib.symbols.expwxTE_RICH2();
-var TE_RIGHT = lib.symbols.expwxTE_RIGHT();
-var TE_WORDWRAP = lib.symbols.expwxTE_WORDWRAP();
-var TOOL_BOTTOM = lib.symbols.expwxTOOL_BOTTOM();
-var TOOL_LEFT = lib.symbols.expwxTOOL_LEFT();
-var TOOL_RIGHT = lib.symbols.expwxTOOL_RIGHT();
-var TOOL_TOP = lib.symbols.expwxTOOL_TOP();
-var TOP = lib.symbols.expwxTOP();
+var SW_3D = _ints[1333];
+var SW_3DBORDER = _ints[1334];
+var SW_3DSASH = _ints[1335];
+var SW_BORDER = _ints[1336];
+var SW_NOBORDER = _ints[1337];
+var SYSTEM_MENU = _ints[1338];
+var SYS_ANSI_FIXED_FONT = _ints[1339];
+var SYS_ANSI_VAR_FONT = _ints[1340];
+var SYS_BORDER_X = _ints[1341];
+var SYS_BORDER_Y = _ints[1342];
+var SYS_CAPTION_Y = _ints[1343];
+var SYS_COLOUR_3DDKSHADOW = _ints[1344];
+var SYS_COLOUR_3DFACE = _ints[1345];
+var SYS_COLOUR_3DHIGHLIGHT = _ints[1346];
+var SYS_COLOUR_3DHILIGHT = _ints[1347];
+var SYS_COLOUR_3DLIGHT = _ints[1348];
+var SYS_COLOUR_3DSHADOW = _ints[1349];
+var SYS_COLOUR_ACTIVEBORDER = _ints[1350];
+var SYS_COLOUR_ACTIVECAPTION = _ints[1351];
+var SYS_COLOUR_APPWORKSPACE = _ints[1352];
+var SYS_COLOUR_BACKGROUND = _ints[1353];
+var SYS_COLOUR_BTNFACE = _ints[1354];
+var SYS_COLOUR_BTNHIGHLIGHT = _ints[1355];
+var SYS_COLOUR_BTNHILIGHT = _ints[1356];
+var SYS_COLOUR_BTNSHADOW = _ints[1357];
+var SYS_COLOUR_BTNTEXT = _ints[1358];
+var SYS_COLOUR_CAPTIONTEXT = _ints[1359];
+var SYS_COLOUR_DESKTOP = _ints[1360];
+var SYS_COLOUR_GRAYTEXT = _ints[1361];
+var SYS_COLOUR_HIGHLIGHT = _ints[1362];
+var SYS_COLOUR_HIGHLIGHTTEXT = _ints[1363];
+var SYS_COLOUR_INACTIVEBORDER = _ints[1364];
+var SYS_COLOUR_INACTIVECAPTION = _ints[1365];
+var SYS_COLOUR_INACTIVECAPTIONTEXT = _ints[1366];
+var SYS_COLOUR_INFOBK = _ints[1367];
+var SYS_COLOUR_INFOTEXT = _ints[1368];
+var SYS_COLOUR_LISTBOX = _ints[1369];
+var SYS_COLOUR_MENU = _ints[1370];
+var SYS_COLOUR_MENUTEXT = _ints[1371];
+var SYS_COLOUR_SCROLLBAR = _ints[1372];
+var SYS_COLOUR_WINDOW = _ints[1373];
+var SYS_COLOUR_WINDOWFRAME = _ints[1374];
+var SYS_COLOUR_WINDOWTEXT = _ints[1375];
+var SYS_CURSOR_X = _ints[1376];
+var SYS_CURSOR_Y = _ints[1377];
+var SYS_DCLICK_X = _ints[1378];
+var SYS_DCLICK_Y = _ints[1379];
+var SYS_DEFAULT_GUI_FONT = _ints[1380];
+var SYS_DEFAULT_PALETTE = _ints[1381];
+var SYS_DEVICE_DEFAULT_FONT = _ints[1382];
+var SYS_DRAG_X = _ints[1383];
+var SYS_DRAG_Y = _ints[1384];
+var SYS_EDGE_X = _ints[1385];
+var SYS_EDGE_Y = _ints[1386];
+var SYS_FRAMESIZE_X = _ints[1387];
+var SYS_FRAMESIZE_Y = _ints[1388];
+var SYS_HSCROLL_ARROW_X = _ints[1389];
+var SYS_HSCROLL_ARROW_Y = _ints[1390];
+var SYS_HSCROLL_Y = _ints[1391];
+var SYS_HTHUMB_X = _ints[1392];
+var SYS_ICONSPACING_X = _ints[1393];
+var SYS_ICONSPACING_Y = _ints[1394];
+var SYS_ICON_X = _ints[1395];
+var SYS_ICON_Y = _ints[1396];
+var SYS_MENU_Y = _ints[1397];
+var SYS_MOUSE_BUTTONS = _ints[1398];
+var SYS_NETWORK_PRESENT = _ints[1399];
+var SYS_OEM_FIXED_FONT = _ints[1400];
+var SYS_PENWINDOWS_PRESENT = _ints[1401];
+var SYS_SCREEN_DESKTOP = _ints[1402];
+var SYS_SCREEN_NONE = _ints[1403];
+var SYS_SCREEN_PDA = _ints[1404];
+var SYS_SCREEN_SMALL = _ints[1405];
+var SYS_SCREEN_TINY = _ints[1406];
+var SYS_SCREEN_X = _ints[1407];
+var SYS_SCREEN_Y = _ints[1408];
+var SYS_SHOW_SOUNDS = _ints[1409];
+var SYS_SMALLICON_X = _ints[1410];
+var SYS_SMALLICON_Y = _ints[1411];
+var SYS_SWAP_BUTTONS = _ints[1412];
+var SYS_SYSTEM_FIXED_FONT = _ints[1413];
+var SYS_SYSTEM_FONT = _ints[1414];
+var SYS_VSCROLL_ARROW_X = _ints[1415];
+var SYS_VSCROLL_ARROW_Y = _ints[1416];
+var SYS_VSCROLL_X = _ints[1417];
+var SYS_VTHUMB_Y = _ints[1418];
+var SYS_WINDOWMIN_X = _ints[1419];
+var SYS_WINDOWMIN_Y = _ints[1420];
+var TAB_TRAVERSAL = _ints[1421];
+var TB_DOCKABLE = _ints[1422];
+var TB_FLAT = _ints[1423];
+var TB_HORIZONTAL = _ints[1424];
+var TB_NOALIGN = _ints[1425];
+var TB_NODIVIDER = _ints[1426];
+var TB_NOICONS = _ints[1427];
+var TB_TEXT = _ints[1428];
+var TB_VERTICAL = _ints[1429];
+var TC_FIXEDWIDTH = _ints[1430];
+var TC_MULTILINE = _ints[1431];
+var TC_OWNERDRAW = _ints[1432];
+var TC_RIGHTJUSTIFY = _ints[1433];
+var TE_AUTO_URL = _ints[1434];
+var TE_CENTRE = _ints[1435];
+var TE_LEFT = _ints[1436];
+var TE_MULTILINE = _ints[1437];
+var TE_NOHIDESEL = _ints[1438];
+var TE_NO_VSCROLL = _ints[1439];
+var TE_PASSWORD = _ints[1440];
+var TE_PROCESS_ENTER = _ints[1441];
+var TE_PROCESS_TAB = _ints[1442];
+var TE_READONLY = _ints[1443];
+var TE_RICH = _ints[1444];
+var TE_RICH2 = _ints[1445];
+var TE_RIGHT = _ints[1446];
+var TE_WORDWRAP = _ints[1447];
+var TOOL_BOTTOM = _ints[1448];
+var TOOL_LEFT = _ints[1449];
+var TOOL_RIGHT = _ints[1450];
+var TOOL_TOP = _ints[1451];
+var TOP = _ints[1452];
 var TRANSPARENT_BRUSH = lib.symbols.expwxTRANSPARENT_BRUSH();
 var TRANSPARENT_PEN = lib.symbols.expwxTRANSPARENT_PEN();
-var TREE_HITTEST_ABOVE = lib.symbols.expwxTREE_HITTEST_ABOVE();
-var TREE_HITTEST_BELOW = lib.symbols.expwxTREE_HITTEST_BELOW();
-var TREE_HITTEST_NOWHERE = lib.symbols.expwxTREE_HITTEST_NOWHERE();
-var TREE_HITTEST_ONITEM = lib.symbols.expwxTREE_HITTEST_ONITEM();
-var TREE_HITTEST_ONITEMBUTTON = lib.symbols.expwxTREE_HITTEST_ONITEMBUTTON();
-var TREE_HITTEST_ONITEMICON = lib.symbols.expwxTREE_HITTEST_ONITEMICON();
-var TREE_HITTEST_ONITEMINDENT = lib.symbols.expwxTREE_HITTEST_ONITEMINDENT();
-var TREE_HITTEST_ONITEMLABEL = lib.symbols.expwxTREE_HITTEST_ONITEMLABEL();
-var TREE_HITTEST_ONITEMLOWERPART = lib.symbols.expwxTREE_HITTEST_ONITEMLOWERPART();
-var TREE_HITTEST_ONITEMRIGHT = lib.symbols.expwxTREE_HITTEST_ONITEMRIGHT();
-var TREE_HITTEST_ONITEMSTATEICON = lib.symbols.expwxTREE_HITTEST_ONITEMSTATEICON();
-var TREE_HITTEST_ONITEMUPPERPART = lib.symbols.expwxTREE_HITTEST_ONITEMUPPERPART();
-var TREE_HITTEST_TOLEFT = lib.symbols.expwxTREE_HITTEST_TOLEFT();
-var TREE_HITTEST_TORIGHT = lib.symbols.expwxTREE_HITTEST_TORIGHT();
-var TR_EDIT_LABELS = lib.symbols.expwxTR_EDIT_LABELS();
-var TR_FULL_ROW_HIGHLIGHT = lib.symbols.expwxTR_FULL_ROW_HIGHLIGHT();
-var TR_HAS_BUTTONS = lib.symbols.expwxTR_HAS_BUTTONS();
-var TR_HAS_VARIABLE_ROW_HEIGHT = lib.symbols.expwxTR_HAS_VARIABLE_ROW_HEIGHT();
-var TR_HIDE_ROOT = lib.symbols.expwxTR_HIDE_ROOT();
-var TR_LINES_AT_ROOT = lib.symbols.expwxTR_LINES_AT_ROOT();
-var TR_MULTIPLE = lib.symbols.expwxTR_MULTIPLE();
-var TR_NO_BUTTONS = lib.symbols.expwxTR_NO_BUTTONS();
-var TR_NO_LINES = lib.symbols.expwxTR_NO_LINES();
-var TR_ROW_LINES = lib.symbols.expwxTR_ROW_LINES();
-var TR_SINGLE = lib.symbols.expwxTR_SINGLE();
-var TR_TWIST_BUTTONS = lib.symbols.expwxTR_TWIST_BUTTONS();
-var TreeItemIcon_Expanded = lib.symbols.expwxTreeItemIcon_Expanded();
-var TreeItemIcon_Normal = lib.symbols.expwxTreeItemIcon_Normal();
-var TreeItemIcon_Selected = lib.symbols.expwxTreeItemIcon_Selected();
-var TreeItemIcon_SelectedExpanded = lib.symbols.expwxTreeItemIcon_SelectedExpanded();
-var UP = lib.symbols.expwxUP();
-var VERTICAL = lib.symbols.expwxVERTICAL();
-var VSCROLL = lib.symbols.expwxVSCROLL();
-var WANTS_CHARS = lib.symbols.expwxWANTS_CHARS();
-var WEST = lib.symbols.expwxWEST();
+var TREE_HITTEST_ABOVE = _ints[1453];
+var TREE_HITTEST_BELOW = _ints[1454];
+var TREE_HITTEST_NOWHERE = _ints[1455];
+var TREE_HITTEST_ONITEM = _ints[1456];
+var TREE_HITTEST_ONITEMBUTTON = _ints[1457];
+var TREE_HITTEST_ONITEMICON = _ints[1458];
+var TREE_HITTEST_ONITEMINDENT = _ints[1459];
+var TREE_HITTEST_ONITEMLABEL = _ints[1460];
+var TREE_HITTEST_ONITEMLOWERPART = _ints[1461];
+var TREE_HITTEST_ONITEMRIGHT = _ints[1462];
+var TREE_HITTEST_ONITEMSTATEICON = _ints[1463];
+var TREE_HITTEST_ONITEMUPPERPART = _ints[1464];
+var TREE_HITTEST_TOLEFT = _ints[1465];
+var TREE_HITTEST_TORIGHT = _ints[1466];
+var TR_EDIT_LABELS = _ints[1467];
+var TR_FULL_ROW_HIGHLIGHT = _ints[1468];
+var TR_HAS_BUTTONS = _ints[1469];
+var TR_HAS_VARIABLE_ROW_HEIGHT = _ints[1470];
+var TR_HIDE_ROOT = _ints[1471];
+var TR_LINES_AT_ROOT = _ints[1472];
+var TR_MULTIPLE = _ints[1473];
+var TR_NO_BUTTONS = _ints[1474];
+var TR_NO_LINES = _ints[1475];
+var TR_ROW_LINES = _ints[1476];
+var TR_SINGLE = _ints[1477];
+var TR_TWIST_BUTTONS = _ints[1478];
+var TreeItemIcon_Expanded = _ints[1479];
+var TreeItemIcon_Normal = _ints[1480];
+var TreeItemIcon_Selected = _ints[1481];
+var TreeItemIcon_SelectedExpanded = _ints[1482];
+var UP = _ints[1483];
+var VERTICAL = _ints[1484];
+var VSCROLL = _ints[1485];
+var WANTS_CHARS = _ints[1486];
+var WEST = _ints[1487];
 var WHITE = lib.symbols.expwxWHITE();
 var WHITE_BRUSH = lib.symbols.expwxWHITE_BRUSH();
 var WHITE_PEN = lib.symbols.expwxWHITE_PEN();
-var WINDING_RULE = lib.symbols.expwxWINDING_RULE();
-var WS_EX_VALIDATE_RECURSIVELY = lib.symbols.expwxWS_EX_VALIDATE_RECURSIVELY();
-var XOR = lib.symbols.expwxXOR();
-var YES = lib.symbols.expwxYES();
-var YES_DEFAULT = lib.symbols.expwxYES_DEFAULT();
-var YES_NO = lib.symbols.expwxYES_NO();
+var WINDING_RULE = _ints[1488];
+var WS_EX_VALIDATE_RECURSIVELY = _ints[1489];
+var XOR = _ints[1490];
+var YES = _ints[1491];
+var YES_DEFAULT = _ints[1492];
+var YES_NO = _ints[1493];
 
 // ../../wx/kwx_free_functions_gen.ts
 function Null_AcceleratorTable() {
@@ -22302,8 +22617,11 @@ function expWEBVIEW_NAV_ACTION_OTHER() {
   return lib.symbols.expWEBVIEW_NAV_ACTION_OTHER();
 }
 
+// ../../wx/kwx_helpers_gen.ts
+var import_platform3 = require("kwx/platform");
+
 // ../../wx/wxString_gen.ts
-var wxString = class _wxString {
+var wxString = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -22311,21 +22629,6 @@ var wxString = class _wxString {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(buffer) {
-    const rawPtr = lib.symbols.wxString_Create(buffer);
-    if (rawPtr === null) return null;
-    return new _wxString(rawPtr);
-  }
-  static CreateUTF8(buffer) {
-    const rawPtr = lib.symbols.wxString_CreateUTF8(buffer);
-    if (rawPtr === null) return null;
-    return new _wxString(rawPtr);
-  }
-  static CreateLen(buffer, len) {
-    const rawPtr = lib.symbols.wxString_CreateLen(buffer, len);
-    if (rawPtr === null) return null;
-    return new _wxString(rawPtr);
   }
   Delete() {
     lib.symbols.wxString_Delete(this._ptr);
@@ -22340,12 +22643,27 @@ var wxString = class _wxString {
     return lib.symbols.wxString_Length(this._ptr);
   }
 };
+function createWxStringFromBuffer(buffer) {
+  const rawPtr = lib.symbols.wxString_Create(buffer);
+  if (rawPtr === null) return null;
+  return new wxString(rawPtr);
+}
+function createWxStringUTF8(buffer) {
+  const rawPtr = lib.symbols.wxString_CreateUTF8(buffer);
+  if (rawPtr === null) return null;
+  return new wxString(rawPtr);
+}
+function createWxStringLen(buffer, len) {
+  const rawPtr = lib.symbols.wxString_CreateLen(buffer, len);
+  if (rawPtr === null) return null;
+  return new wxString(rawPtr);
+}
 
 // ../../wx/kwx_helpers_gen.ts
 function createWxString(s) {
   const buf = new TextEncoder().encode(s + "\0");
-  const ptr = Deno.UnsafePointer.of(buf);
-  const result = wxString.CreateUTF8(ptr);
+  const ptr = (0, import_platform3.pointerOf)(buf);
+  const result = createWxStringUTF8(ptr);
   if (!result) {
     throw new Error(`Failed to create wxString for: ${s}`);
   }
@@ -22354,7 +22672,7 @@ function createWxString(s) {
 function readWxString(wxStrPtr) {
   const buf = lib.symbols.kwxUtf8Buffer_Create(wxStrPtr);
   const data = lib.symbols.kwxUtf8Buffer_Data(buf);
-  const result = data ? Deno.UnsafePointerView.getCString(data) : "";
+  const result = data ? (0, import_platform3.readCString)(data) : "";
   lib.symbols.kwxUtf8Buffer_Delete(buf);
   return result;
 }
@@ -22380,23 +22698,23 @@ var wxArtProvider = class {
 };
 
 // ../../wx/kwxArtProv_gen.ts
-var kwxArtProv = class _kwxArtProv extends wxArtProvider {
+var kwxArtProv = class extends wxArtProvider {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, callback) {
-    const rawPtr = lib.symbols.kwxArtProv_Create(pObject, callback);
-    if (rawPtr === null) return null;
-    return new _kwxArtProv(rawPtr);
   }
   Release() {
     lib.symbols.kwxArtProv_Release(this._ptr);
   }
 };
+function createKwxArtProv(pObject, callback) {
+  const rawPtr = lib.symbols.kwxArtProv_Create(pObject, callback);
+  if (rawPtr === null) return null;
+  return new kwxArtProv(rawPtr);
+}
 
 // ../../wx/kwxClient_gen.ts
-var kwxClient = class _kwxClient {
+var kwxClient = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -22404,11 +22722,6 @@ var kwxClient = class _kwxClient {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(kwxObject, connectFunc) {
-    const rawPtr = lib.symbols.kwxClient_Create(kwxObject, connectFunc);
-    if (rawPtr === null) return null;
-    return new _kwxClient(rawPtr);
   }
   Delete() {
     lib.symbols.kwxClient_Delete(this._ptr);
@@ -22420,9 +22733,14 @@ var kwxClient = class _kwxClient {
     lib.symbols.kwxClient_MakeConnection(this._ptr, host, server, topic);
   }
 };
+function createKwxClient(kwxObject, connectFunc) {
+  const rawPtr = lib.symbols.kwxClient_Create(kwxObject, connectFunc);
+  if (rawPtr === null) return null;
+  return new kwxClient(rawPtr);
+}
 
 // ../../wx/kwxCommand_gen.ts
-var kwxCommand = class _kwxCommand {
+var kwxCommand = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -22430,11 +22748,6 @@ var kwxCommand = class _kwxCommand {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(canUndo, name, pObject, callback) {
-    const rawPtr = lib.symbols.kwxCommand_Create(canUndo, name, pObject, callback);
-    if (rawPtr === null) return null;
-    return new _kwxCommand(rawPtr);
   }
   Delete() {
     lib.symbols.kwxCommand_Delete(this._ptr);
@@ -22449,9 +22762,14 @@ var kwxCommand = class _kwxCommand {
     return lib.symbols.kwxCommand_GetName(this._ptr);
   }
 };
+function createKwxCommand(canUndo, name, pObject, callback) {
+  const rawPtr = lib.symbols.kwxCommand_Create(canUndo, name, pObject, callback);
+  if (rawPtr === null) return null;
+  return new kwxCommand(rawPtr);
+}
 
 // ../../wx/kwxConnection_gen.ts
-var kwxConnection = class _kwxConnection {
+var kwxConnection = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -22459,11 +22777,6 @@ var kwxConnection = class _kwxConnection {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, buffer, size) {
-    const rawPtr = lib.symbols.kwxConnection_Create(pObject, buffer, size);
-    if (rawPtr === null) return null;
-    return new _kwxConnection(rawPtr);
   }
   Delete() {
     lib.symbols.kwxConnection_Delete(this._ptr);
@@ -22520,9 +22833,14 @@ var kwxConnection = class _kwxConnection {
     return lib.symbols.kwxConnection_StopAdvise(this._ptr, item) !== 0;
   }
 };
+function createKwxConnection(pObject, buffer, size) {
+  const rawPtr = lib.symbols.kwxConnection_Create(pObject, buffer, size);
+  if (rawPtr === null) return null;
+  return new kwxConnection(rawPtr);
+}
 
 // ../../wx/kwxDragDataObject_gen.ts
-var kwxDragDataObject = class _kwxDragDataObject {
+var kwxDragDataObject = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -22531,11 +22849,6 @@ var kwxDragDataObject = class _kwxDragDataObject {
   get ptr() {
     return this._ptr;
   }
-  static Create(pObject, format, fnGetDataSize, fnGetDataHere, fnSetData) {
-    const rawPtr = lib.symbols.kwxDragDataObject_Create(pObject, format, fnGetDataSize, fnGetDataHere, fnSetData);
-    if (rawPtr === null) return null;
-    return new _kwxDragDataObject(rawPtr);
-  }
   Delete() {
     lib.symbols.kwxDragDataObject_Delete(this._ptr);
   }
@@ -22543,6 +22856,11 @@ var kwxDragDataObject = class _kwxDragDataObject {
     this.Delete();
   }
 };
+function createKwxDragDataObject(pObject, format, fnGetDataSize, fnGetDataHere, fnSetData) {
+  const rawPtr = lib.symbols.kwxDragDataObject_Create(pObject, format, fnGetDataSize, fnGetDataHere, fnSetData);
+  if (rawPtr === null) return null;
+  return new kwxDragDataObject(rawPtr);
+}
 
 // ../../wx/wxDropTarget_gen.ts
 var wxDropTarget = class {
@@ -22563,15 +22881,10 @@ var wxDropTarget = class {
 };
 
 // ../../wx/kwxDropTarget_gen.ts
-var kwxDropTarget = class _kwxDropTarget extends wxDropTarget {
+var kwxDropTarget = class extends wxDropTarget {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject) {
-    const rawPtr = lib.symbols.kwxDropTarget_Create(pObject);
-    if (rawPtr === null) return null;
-    return new _kwxDropTarget(rawPtr);
   }
   Delete() {
     lib.symbols.kwxDropTarget_Delete(this._ptr);
@@ -22595,17 +22908,17 @@ var kwxDropTarget = class _kwxDropTarget extends wxDropTarget {
     lib.symbols.kwxDropTarget_SetOnLeave(this._ptr, pFunction);
   }
 };
+function createKwxDropTarget(pObject) {
+  const rawPtr = lib.symbols.kwxDropTarget_Create(pObject);
+  if (rawPtr === null) return null;
+  return new kwxDropTarget(rawPtr);
+}
 
 // ../../wx/kwxFileDropTarget_gen.ts
-var kwxFileDropTarget = class _kwxFileDropTarget extends wxDropTarget {
+var kwxFileDropTarget = class extends wxDropTarget {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, pFunction) {
-    const rawPtr = lib.symbols.kwxFileDropTarget_Create(pObject, pFunction);
-    if (rawPtr === null) return null;
-    return new _kwxFileDropTarget(rawPtr);
   }
   Delete() {
     lib.symbols.kwxFileDropTarget_Delete(this._ptr);
@@ -22629,9 +22942,14 @@ var kwxFileDropTarget = class _kwxFileDropTarget extends wxDropTarget {
     lib.symbols.kwxFileDropTarget_SetOnLeave(this._ptr, pFunction);
   }
 };
+function createKwxFileDropTarget(pObject, pFunction) {
+  const rawPtr = lib.symbols.kwxFileDropTarget_Create(pObject, pFunction);
+  if (rawPtr === null) return null;
+  return new kwxFileDropTarget(rawPtr);
+}
 
 // ../../wx/kwxGridTable_gen.ts
-var kwxGridTable = class _kwxGridTable {
+var kwxGridTable = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -22639,11 +22957,6 @@ var kwxGridTable = class _kwxGridTable {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, fnGetNumberRows, fnGetNumberCols, fnGetValue, fnSetValue, fnIsEmptyCell, fnClear, fnInsertRows, fnAppendRows, fnDeleteRows, fnInsertCols, fnAppendCols, fnDeleteCols, fnSetRowLabelValue, fnSetColLabelValue, fnGetRowLabelValue, fnGetColLabelValue) {
-    const rawPtr = lib.symbols.kwxGridTable_Create(pObject, fnGetNumberRows, fnGetNumberCols, fnGetValue, fnSetValue, fnIsEmptyCell, fnClear, fnInsertRows, fnAppendRows, fnDeleteRows, fnInsertCols, fnAppendCols, fnDeleteCols, fnSetRowLabelValue, fnSetColLabelValue, fnGetRowLabelValue, fnGetColLabelValue);
-    if (rawPtr === null) return null;
-    return new _kwxGridTable(rawPtr);
   }
   Delete() {
     lib.symbols.kwxGridTable_Delete(this._ptr);
@@ -22658,9 +22971,14 @@ var kwxGridTable = class _kwxGridTable {
     return lib.symbols.kwxGridTable_SendTableMessage(this._ptr, id, val1, val2);
   }
 };
+function createKwxGridTable(pObject, fnGetNumberRows, fnGetNumberCols, fnGetValue, fnSetValue, fnIsEmptyCell, fnClear, fnInsertRows, fnAppendRows, fnDeleteRows, fnInsertCols, fnAppendCols, fnDeleteCols, fnSetRowLabelValue, fnSetColLabelValue, fnGetRowLabelValue, fnGetColLabelValue) {
+  const rawPtr = lib.symbols.kwxGridTable_Create(pObject, fnGetNumberRows, fnGetNumberCols, fnGetValue, fnSetValue, fnIsEmptyCell, fnClear, fnInsertRows, fnAppendRows, fnDeleteRows, fnInsertCols, fnAppendCols, fnDeleteCols, fnSetRowLabelValue, fnSetColLabelValue, fnGetRowLabelValue, fnGetColLabelValue);
+  if (rawPtr === null) return null;
+  return new kwxGridTable(rawPtr);
+}
 
 // ../../wx/kwxLog_gen.ts
-var kwxLog = class _kwxLog {
+var kwxLog = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -22668,11 +22986,6 @@ var kwxLog = class _kwxLog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, pFunction) {
-    const rawPtr = lib.symbols.kwxLog_Create(pObject, pFunction);
-    if (rawPtr === null) return null;
-    return new _kwxLog(rawPtr);
   }
   Delete() {
     lib.symbols.kwxLog_Delete(this._ptr);
@@ -22735,9 +23048,14 @@ var kwxLog = class _kwxLog {
     lib.symbols.kwxLog_Suspend(this._ptr);
   }
 };
+function createKwxLog(pObject, pFunction) {
+  const rawPtr = lib.symbols.kwxLog_Create(pObject, pFunction);
+  if (rawPtr === null) return null;
+  return new kwxLog(rawPtr);
+}
 
 // ../../wx/wxEvtHandler_gen.ts
-var wxEvtHandler = class _wxEvtHandler {
+var wxEvtHandler = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -22745,11 +23063,6 @@ var wxEvtHandler = class _wxEvtHandler {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxEvtHandler_Create();
-    if (rawPtr === null) return null;
-    return new _wxEvtHandler(rawPtr);
   }
   Delete() {
     lib.symbols.wxEvtHandler_Delete(this._ptr);
@@ -22791,17 +23104,17 @@ var wxEvtHandler = class _wxEvtHandler {
     lib.symbols.wxEvtHandler_SetPreviousHandler(this._ptr, handler);
   }
 };
+function createWxEvtHandler() {
+  const rawPtr = lib.symbols.wxEvtHandler_Create();
+  if (rawPtr === null) return null;
+  return new wxEvtHandler(rawPtr);
+}
 
 // ../../wx/wxWindow_gen.ts
-var wxWindow = class _wxWindow extends wxEvtHandler {
+var wxWindow = class extends wxEvtHandler {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxWindow_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxWindow(rawPtr);
   }
   AddChild(child) {
     lib.symbols.wxWindow_AddChild(this._ptr, child);
@@ -22839,8 +23152,8 @@ var wxWindow = class _wxWindow extends wxEvtHandler {
   Disable() {
     return lib.symbols.wxWindow_Disable(this._ptr) !== 0;
   }
-  Enable() {
-    return lib.symbols.wxWindow_Enable(this._ptr) !== 0;
+  Enable(enable) {
+    return lib.symbols.wxWindow_Enable(this._ptr, enable ? 1 : 0) !== 0;
   }
   FindFocus() {
     return lib.symbols.wxWindow_FindFocus(this._ptr);
@@ -23053,7 +23366,7 @@ var wxWindow = class _wxWindow extends wxEvtHandler {
     lib.symbols.wxWindow_SetAutoLayout(this._ptr, autoLayout ? 1 : 0);
   }
   SetBackgroundColour(colour) {
-    return lib.symbols.wxWindow_SetBackgroundColour(this._ptr, colour);
+    return lib.symbols.wxWindow_SetBackgroundColour(this._ptr, colour) !== 0;
   }
   SetCaret(caret) {
     lib.symbols.wxWindow_SetCaret(this._ptr, caret);
@@ -23080,7 +23393,7 @@ var wxWindow = class _wxWindow extends wxEvtHandler {
     lib.symbols.wxWindow_SetFocus(this._ptr);
   }
   SetFont(font) {
-    return lib.symbols.wxWindow_SetFont(this._ptr, font);
+    return lib.symbols.wxWindow_SetFont(this._ptr, font) !== 0;
   }
   SetForegroundColour(colour) {
     return lib.symbols.wxWindow_SetForegroundColour(this._ptr, colour);
@@ -23155,17 +23468,17 @@ var wxWindow = class _wxWindow extends wxEvtHandler {
     lib.symbols.wxWindow_WarpPointer(this._ptr, x, y);
   }
 };
+function createWxWindow(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxWindow_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxWindow(rawPtr);
+}
 
 // ../../wx/wxPanel_gen.ts
-var wxPanel = class _wxPanel extends wxWindow {
+var wxPanel = class extends wxWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxPanel_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxPanel(rawPtr);
   }
   InitDialog() {
     lib.symbols.wxPanel_InitDialog(this._ptr);
@@ -23177,19 +23490,24 @@ var wxPanel = class _wxPanel extends wxWindow {
     lib.symbols.wxPanel_SetFocusIgnoringChildren(this._ptr);
   }
 };
+function createWxPanel(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxPanel_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxPanel(rawPtr);
+}
 
 // ../../wx/kwxPreviewControlBar_gen.ts
-var kwxPreviewControlBar = class _kwxPreviewControlBar extends wxPanel {
+var kwxPreviewControlBar = class extends wxPanel {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(preview, buttons, parent, title, x, y, width, height, style) {
-    const rawPtr = lib.symbols.kwxPreviewControlBar_Create(preview, buttons, parent, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _kwxPreviewControlBar(rawPtr);
-  }
 };
+function createKwxPreviewControlBar(preview, buttons, parent, title, x, y, width, height, style) {
+  const rawPtr = lib.symbols.kwxPreviewControlBar_Create(preview, buttons, parent, title, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new kwxPreviewControlBar(rawPtr);
+}
 
 // ../../wx/wxTopLevelWindow_gen.ts
 var wxTopLevelWindow = class extends wxWindow {
@@ -23290,21 +23608,16 @@ var wxTopLevelWindow = class extends wxWindow {
 };
 
 // ../../wx/wxFrame_gen.ts
-var wxFrame = class _wxFrame extends wxTopLevelWindow {
+var wxFrame = class extends wxTopLevelWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxFrame_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxFrame(rawPtr);
+  CreateStatusBar(number, style, id) {
+    return lib.symbols.wxFrame_CreateStatusBar(this._ptr, number, style, id);
   }
-  CreateStatusBar(number, style) {
-    return lib.symbols.wxFrame_CreateStatusBar(this._ptr, number, style);
-  }
-  CreateToolBar(style) {
-    return lib.symbols.wxFrame_CreateToolBar(this._ptr, style);
+  CreateToolBar(style, id) {
+    return lib.symbols.wxFrame_CreateToolBar(this._ptr, style, id);
   }
   GetClientAreaOrigin_left() {
     return lib.symbols.wxFrame_GetClientAreaOrigin_left(this._ptr);
@@ -23358,17 +23671,17 @@ var wxFrame = class _wxFrame extends wxTopLevelWindow {
     lib.symbols.wxFrame_PopStatusText(this._ptr, field);
   }
 };
+function createWxFrame(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxFrame_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxFrame(rawPtr);
+}
 
 // ../../wx/kwxPreviewFrame_gen.ts
-var kwxPreviewFrame = class _kwxPreviewFrame extends wxFrame {
+var kwxPreviewFrame = class extends wxFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, init, createCanvas, createToolbar, preview, parent, title, x, y, width, height, style) {
-    const rawPtr = lib.symbols.kwxPreviewFrame_Create(pObject, init, createCanvas, createToolbar, preview, parent, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _kwxPreviewFrame(rawPtr);
   }
   GetControlBar() {
     return lib.symbols.kwxPreviewFrame_GetControlBar(this._ptr);
@@ -23392,9 +23705,14 @@ var kwxPreviewFrame = class _kwxPreviewFrame extends wxFrame {
     lib.symbols.kwxPreviewFrame_SetPrintPreview(this._ptr, obj);
   }
 };
+function createKwxPreviewFrame(pObject, init, createCanvas, createToolbar, preview, parent, title, x, y, width, height, style) {
+  const rawPtr = lib.symbols.kwxPreviewFrame_Create(pObject, init, createCanvas, createToolbar, preview, parent, title, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new kwxPreviewFrame(rawPtr);
+}
 
 // ../../wx/kwxServer_gen.ts
-var kwxServer = class _kwxServer {
+var kwxServer = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -23402,11 +23720,6 @@ var kwxServer = class _kwxServer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(kwxObject, connectFunc) {
-    const rawPtr = lib.symbols.kwxServer_Create(kwxObject, connectFunc);
-    if (rawPtr === null) return null;
-    return new _kwxServer(rawPtr);
   }
   Delete() {
     lib.symbols.kwxServer_Delete(this._ptr);
@@ -23418,17 +23731,17 @@ var kwxServer = class _kwxServer {
     return lib.symbols.kwxServer_Initialize(this._ptr, name);
   }
 };
+function createKwxServer(kwxObject, connectFunc) {
+  const rawPtr = lib.symbols.kwxServer_Create(kwxObject, connectFunc);
+  if (rawPtr === null) return null;
+  return new kwxServer(rawPtr);
+}
 
 // ../../wx/kwxTextDropTarget_gen.ts
-var kwxTextDropTarget = class _kwxTextDropTarget extends wxDropTarget {
+var kwxTextDropTarget = class extends wxDropTarget {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, pFunction) {
-    const rawPtr = lib.symbols.kwxTextDropTarget_Create(pObject, pFunction);
-    if (rawPtr === null) return null;
-    return new _kwxTextDropTarget(rawPtr);
   }
   Delete() {
     lib.symbols.kwxTextDropTarget_Delete(this._ptr);
@@ -23452,17 +23765,17 @@ var kwxTextDropTarget = class _kwxTextDropTarget extends wxDropTarget {
     lib.symbols.kwxTextDropTarget_SetOnLeave(this._ptr, pFunction);
   }
 };
+function createKwxTextDropTarget(pObject, pFunction) {
+  const rawPtr = lib.symbols.kwxTextDropTarget_Create(pObject, pFunction);
+  if (rawPtr === null) return null;
+  return new kwxTextDropTarget(rawPtr);
+}
 
 // ../../wx/wxValidator_gen.ts
-var wxValidator = class _wxValidator extends wxEvtHandler {
+var wxValidator = class extends wxEvtHandler {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxValidator_Create();
-    if (rawPtr === null) return null;
-    return new _wxValidator(rawPtr);
   }
   Delete() {
     lib.symbols.wxValidator_Delete(this._ptr);
@@ -23489,17 +23802,17 @@ var wxValidator = class _wxValidator extends wxEvtHandler {
     return lib.symbols.wxValidator_Validate(this._ptr, parent) !== 0;
   }
 };
+function createWxValidator() {
+  const rawPtr = lib.symbols.wxValidator_Create();
+  if (rawPtr === null) return null;
+  return new wxValidator(rawPtr);
+}
 
 // ../../wx/wxTextValidator_gen.ts
-var wxTextValidator = class _wxTextValidator extends wxValidator {
+var wxTextValidator = class extends wxValidator {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(style, val) {
-    const rawPtr = lib.symbols.wxTextValidator_Create(style, val);
-    if (rawPtr === null) return null;
-    return new _wxTextValidator(rawPtr);
   }
   GetExcludes(ref) {
     return lib.symbols.wxTextValidator_GetExcludes(this._ptr, ref);
@@ -23532,22 +23845,27 @@ var wxTextValidator = class _wxTextValidator extends wxValidator {
     lib.symbols.wxTextValidator_SetStyle(this._ptr, style);
   }
 };
+function createWxTextValidator(style, val) {
+  const rawPtr = lib.symbols.wxTextValidator_Create(style, val);
+  if (rawPtr === null) return null;
+  return new wxTextValidator(rawPtr);
+}
 
 // ../../wx/kwxTextValidator_gen.ts
-var kwxTextValidator = class _kwxTextValidator extends wxTextValidator {
+var kwxTextValidator = class extends wxTextValidator {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(pObject, pFunction, text, style) {
-    const rawPtr = lib.symbols.kwxTextValidator_Create(pObject, pFunction, text, style);
-    if (rawPtr === null) return null;
-    return new _kwxTextValidator(rawPtr);
-  }
 };
+function createKwxTextValidator(pObject, pFunction, text, style) {
+  const rawPtr = lib.symbols.kwxTextValidator_Create(pObject, pFunction, text, style);
+  if (rawPtr === null) return null;
+  return new kwxTextValidator(rawPtr);
+}
 
 // ../../wx/wxAcceleratorEntry_gen.ts
-var wxAcceleratorEntry = class _wxAcceleratorEntry {
+var wxAcceleratorEntry = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -23555,11 +23873,6 @@ var wxAcceleratorEntry = class _wxAcceleratorEntry {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(flags, keyCode, cmd) {
-    const rawPtr = lib.symbols.wxAcceleratorEntry_Create(flags, keyCode, cmd);
-    if (rawPtr === null) return null;
-    return new _wxAcceleratorEntry(rawPtr);
   }
   Delete() {
     lib.symbols.wxAcceleratorEntry_Delete(this._ptr);
@@ -23580,9 +23893,14 @@ var wxAcceleratorEntry = class _wxAcceleratorEntry {
     lib.symbols.wxAcceleratorEntry_Set(this._ptr, flags, keyCode, cmd, item);
   }
 };
+function createWxAcceleratorEntry(flags, keyCode, cmd) {
+  const rawPtr = lib.symbols.wxAcceleratorEntry_Create(flags, keyCode, cmd);
+  if (rawPtr === null) return null;
+  return new wxAcceleratorEntry(rawPtr);
+}
 
 // ../../wx/wxAcceleratorTable_gen.ts
-var wxAcceleratorTable = class _wxAcceleratorTable {
+var wxAcceleratorTable = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -23591,11 +23909,6 @@ var wxAcceleratorTable = class _wxAcceleratorTable {
   get ptr() {
     return this._ptr;
   }
-  static Create(count, entries) {
-    const rawPtr = lib.symbols.wxAcceleratorTable_Create(count, entries);
-    if (rawPtr === null) return null;
-    return new _wxAcceleratorTable(rawPtr);
-  }
   Delete() {
     lib.symbols.wxAcceleratorTable_Delete(this._ptr);
   }
@@ -23603,6 +23916,11 @@ var wxAcceleratorTable = class _wxAcceleratorTable {
     this.Delete();
   }
 };
+function createWxAcceleratorTable(count, entries) {
+  const rawPtr = lib.symbols.wxAcceleratorTable_Create(count, entries);
+  if (rawPtr === null) return null;
+  return new wxAcceleratorTable(rawPtr);
+}
 
 // ../../wx/wxEvent_gen.ts
 var wxEvent = class {
@@ -23664,7 +23982,7 @@ var wxActivateEvent = class extends wxEvent {
 };
 
 // ../../wx/wxActivityIndicator_gen.ts
-var wxActivityIndicator = class _wxActivityIndicator {
+var wxActivityIndicator = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -23672,11 +23990,6 @@ var wxActivityIndicator = class _wxActivityIndicator {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxActivityIndicator_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxActivityIndicator(rawPtr);
   }
   IsRunning() {
     return lib.symbols.wxActivityIndicator_IsRunning(this._ptr) !== 0;
@@ -23688,9 +24001,14 @@ var wxActivityIndicator = class _wxActivityIndicator {
     lib.symbols.wxActivityIndicator_Stop(this._ptr);
   }
 };
+function createWxActivityIndicator(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxActivityIndicator_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxActivityIndicator(rawPtr);
+}
 
 // ../../wx/wxAnimation_gen.ts
-var wxAnimation = class _wxAnimation {
+var wxAnimation = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -23698,16 +24016,6 @@ var wxAnimation = class _wxAnimation {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxAnimation_Create();
-    if (rawPtr === null) return null;
-    return new _wxAnimation(rawPtr);
-  }
-  static CreateFromFile(filename, type_) {
-    const rawPtr = lib.symbols.wxAnimation_CreateFromFile(filename, type_);
-    if (rawPtr === null) return null;
-    return new _wxAnimation(rawPtr);
   }
   Delete() {
     lib.symbols.wxAnimation_Delete(this._ptr);
@@ -23737,9 +24045,19 @@ var wxAnimation = class _wxAnimation {
     return lib.symbols.wxAnimation_Load(this._ptr, stream, type_) !== 0;
   }
 };
+function createWxAnimation() {
+  const rawPtr = lib.symbols.wxAnimation_Create();
+  if (rawPtr === null) return null;
+  return new wxAnimation(rawPtr);
+}
+function createWxAnimationFromFile(filename, type_) {
+  const rawPtr = lib.symbols.wxAnimation_CreateFromFile(filename, type_);
+  if (rawPtr === null) return null;
+  return new wxAnimation(rawPtr);
+}
 
 // ../../wx/wxAnimationCtrl_gen.ts
-var wxAnimationCtrl = class _wxAnimationCtrl {
+var wxAnimationCtrl = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -23747,16 +24065,6 @@ var wxAnimationCtrl = class _wxAnimationCtrl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxAnimationCtrl_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxAnimationCtrl(rawPtr);
-  }
-  static CreateWithAnimation(parent, id, anim, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxAnimationCtrl_CreateWithAnimation(parent, id, anim, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxAnimationCtrl(rawPtr);
   }
   GetAnimation(anim) {
     lib.symbols.wxAnimationCtrl_GetAnimation(this._ptr, anim);
@@ -23786,6 +24094,16 @@ var wxAnimationCtrl = class _wxAnimationCtrl {
     lib.symbols.wxAnimationCtrl_Stop(this._ptr);
   }
 };
+function createWxAnimationCtrl(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxAnimationCtrl_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxAnimationCtrl(rawPtr);
+}
+function createWxAnimationCtrlWithAnimation(parent, id, anim, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxAnimationCtrl_CreateWithAnimation(parent, id, anim, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxAnimationCtrl(rawPtr);
+}
 
 // ../../wx/wxAuiTabArt_gen.ts
 var wxAuiTabArt = class {
@@ -23842,15 +24160,10 @@ var wxAuiTabArt = class {
 };
 
 // ../../wx/wxAuiDefaultTabArt_gen.ts
-var wxAuiDefaultTabArt = class _wxAuiDefaultTabArt extends wxAuiTabArt {
+var wxAuiDefaultTabArt = class extends wxAuiTabArt {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxAuiDefaultTabArt_Create();
-    if (rawPtr === null) return null;
-    return new _wxAuiDefaultTabArt(rawPtr);
   }
   Clone() {
     return lib.symbols.wxAuiDefaultTabArt_Clone(this._ptr);
@@ -23898,6 +24211,11 @@ var wxAuiDefaultTabArt = class _wxAuiDefaultTabArt extends wxAuiTabArt {
     return lib.symbols.wxAuiDefaultTabArt_GetBestTabCtrlSize(this._ptr, window, pages, width, height);
   }
 };
+function createWxAuiDefaultTabArt() {
+  const rawPtr = lib.symbols.wxAuiDefaultTabArt_Create();
+  if (rawPtr === null) return null;
+  return new wxAuiDefaultTabArt(rawPtr);
+}
 
 // ../../wx/wxAuiToolBarArt_gen.ts
 var wxAuiToolBarArt = class {
@@ -23975,15 +24293,10 @@ var wxAuiToolBarArt = class {
 };
 
 // ../../wx/wxAuiDefaultToolBarArt_gen.ts
-var wxAuiDefaultToolBarArt = class _wxAuiDefaultToolBarArt extends wxAuiToolBarArt {
+var wxAuiDefaultToolBarArt = class extends wxAuiToolBarArt {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxAuiDefaultToolBarArt_Create();
-    if (rawPtr === null) return null;
-    return new _wxAuiDefaultToolBarArt(rawPtr);
   }
   Clone() {
     return lib.symbols.wxAuiDefaultToolBarArt_Clone(this._ptr);
@@ -24049,6 +24362,11 @@ var wxAuiDefaultToolBarArt = class _wxAuiDefaultToolBarArt extends wxAuiToolBarA
     return lib.symbols.wxAuiDefaultToolBarArt_ShowDropDown(this._ptr, window, items);
   }
 };
+function createWxAuiDefaultToolBarArt() {
+  const rawPtr = lib.symbols.wxAuiDefaultToolBarArt_Create();
+  if (rawPtr === null) return null;
+  return new wxAuiDefaultToolBarArt(rawPtr);
+}
 
 // ../../wx/wxAuiDockArt_gen.ts
 var wxAuiDockArt = class {
@@ -24099,15 +24417,10 @@ var wxAuiDockArt = class {
 };
 
 // ../../wx/wxAuiMDIChildFrame_gen.ts
-var wxAuiMDIChildFrame = class _wxAuiMDIChildFrame extends wxFrame {
+var wxAuiMDIChildFrame = class extends wxFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, title, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxAuiMDIChildFrame_Create(parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxAuiMDIChildFrame(rawPtr);
   }
   Activate() {
     lib.symbols.wxAuiMDIChildFrame_Activate(this._ptr);
@@ -24152,17 +24465,17 @@ var wxAuiMDIChildFrame = class _wxAuiMDIChildFrame extends wxFrame {
     return lib.symbols.wxAuiMDIChildFrame_GetMDIParent(this._ptr);
   }
 };
+function createWxAuiMDIChildFrame(parent, id, title, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxAuiMDIChildFrame_Create(parent, id, title, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxAuiMDIChildFrame(rawPtr);
+}
 
 // ../../wx/wxAuiMDIParentFrame_gen.ts
-var wxAuiMDIParentFrame = class _wxAuiMDIParentFrame extends wxFrame {
+var wxAuiMDIParentFrame = class extends wxFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, title, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxAuiMDIParentFrame_Create(parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxAuiMDIParentFrame(rawPtr);
   }
   GetActiveChild() {
     return lib.symbols.wxAuiMDIParentFrame_GetActiveChild(this._ptr);
@@ -24204,17 +24517,17 @@ var wxAuiMDIParentFrame = class _wxAuiMDIParentFrame extends wxFrame {
     return lib.symbols.wxAuiMDIParentFrame_GetNotebook(this._ptr);
   }
 };
+function createWxAuiMDIParentFrame(parent, id, title, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxAuiMDIParentFrame_Create(parent, id, title, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxAuiMDIParentFrame(rawPtr);
+}
 
 // ../../wx/wxAuiManager_gen.ts
-var wxAuiManager = class _wxAuiManager extends wxEvtHandler {
+var wxAuiManager = class extends wxEvtHandler {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(managedWnd, flags) {
-    const rawPtr = lib.symbols.wxAuiManager_Create(managedWnd, flags);
-    if (rawPtr === null) return null;
-    return new _wxAuiManager(rawPtr);
   }
   Delete() {
     lib.symbols.wxAuiManager_Delete(this._ptr);
@@ -24298,17 +24611,17 @@ var wxAuiManager = class _wxAuiManager extends wxEvtHandler {
     return lib.symbols.wxAuiManager_GetManager(window);
   }
 };
+function createWxAuiManager(managedWnd, flags) {
+  const rawPtr = lib.symbols.wxAuiManager_Create(managedWnd, flags);
+  if (rawPtr === null) return null;
+  return new wxAuiManager(rawPtr);
+}
 
 // ../../wx/wxAuiManagerEvent_gen.ts
-var wxAuiManagerEvent = class _wxAuiManagerEvent extends wxEvtHandler {
+var wxAuiManagerEvent = class extends wxEvtHandler {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(type_) {
-    const rawPtr = lib.symbols.wxAuiManagerEvent_Create(type_);
-    if (rawPtr === null) return null;
-    return new _wxAuiManagerEvent(rawPtr);
   }
   CanVeto() {
     return lib.symbols.wxAuiManagerEvent_CanVeto(this._ptr) !== 0;
@@ -24347,6 +24660,11 @@ var wxAuiManagerEvent = class _wxAuiManagerEvent extends wxEvtHandler {
     lib.symbols.wxAuiManagerEvent_Veto(this._ptr, veto ? 1 : 0);
   }
 };
+function createWxAuiManagerEvent(type_) {
+  const rawPtr = lib.symbols.wxAuiManagerEvent_Create(type_);
+  if (rawPtr === null) return null;
+  return new wxAuiManagerEvent(rawPtr);
+}
 
 // ../../wx/wxControl_gen.ts
 var wxControl = class extends wxWindow {
@@ -24467,20 +24785,10 @@ var wxBookCtrlBase = class extends wxControl {
 };
 
 // ../../wx/wxAuiNotebook_gen.ts
-var wxAuiNotebook = class _wxAuiNotebook extends wxBookCtrlBase {
+var wxAuiNotebook = class extends wxBookCtrlBase {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxAuiNotebook_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxAuiNotebook(rawPtr);
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxAuiNotebook_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxAuiNotebook(rawPtr);
   }
   CreateFromDefault(parent, id, x, y, width, height, style) {
     return lib.symbols.wxAuiNotebook_CreateFromDefault(this._ptr, parent, id, x, y, width, height, style) !== 0;
@@ -24588,17 +24896,22 @@ var wxAuiNotebook = class _wxAuiNotebook extends wxBookCtrlBase {
     lib.symbols.wxAuiNotebook_Split(this._ptr, page, direction);
   }
 };
+function createWxAuiNotebookDefault() {
+  const rawPtr = lib.symbols.wxAuiNotebook_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxAuiNotebook(rawPtr);
+}
+function createWxAuiNotebook(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxAuiNotebook_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxAuiNotebook(rawPtr);
+}
 
 // ../../wx/wxCommandEvent_gen.ts
-var wxCommandEvent = class _wxCommandEvent extends wxEvent {
+var wxCommandEvent = class extends wxEvent {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(type_, id) {
-    const rawPtr = lib.symbols.wxCommandEvent_Create(type_, id);
-    if (rawPtr === null) return null;
-    return new _wxCommandEvent(rawPtr);
   }
   Delete() {
     lib.symbols.wxCommandEvent_Delete(this._ptr);
@@ -24646,6 +24959,11 @@ var wxCommandEvent = class _wxCommandEvent extends wxEvent {
     lib.symbols.wxCommandEvent_SetString(this._ptr, str);
   }
 };
+function createWxCommandEvent(type_, id) {
+  const rawPtr = lib.symbols.wxCommandEvent_Create(type_, id);
+  if (rawPtr === null) return null;
+  return new wxCommandEvent(rawPtr);
+}
 
 // ../../wx/wxNotifyEvent_gen.ts
 var wxNotifyEvent = class extends wxCommandEvent {
@@ -24665,15 +24983,10 @@ var wxNotifyEvent = class extends wxCommandEvent {
 };
 
 // ../../wx/wxBookCtrlEvent_gen.ts
-var wxBookCtrlEvent = class _wxBookCtrlEvent extends wxNotifyEvent {
+var wxBookCtrlEvent = class extends wxNotifyEvent {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(commandType, winid, nSel, nOldSel) {
-    const rawPtr = lib.symbols.wxBookCtrlEvent_Create(commandType, winid, nSel, nOldSel);
-    if (rawPtr === null) return null;
-    return new _wxBookCtrlEvent(rawPtr);
   }
   GetSelection() {
     return lib.symbols.wxBookCtrlEvent_GetSelection(this._ptr);
@@ -24682,22 +24995,27 @@ var wxBookCtrlEvent = class _wxBookCtrlEvent extends wxNotifyEvent {
     return lib.symbols.wxBookCtrlEvent_GetOldSelection(this._ptr);
   }
 };
+function createWxBookCtrlEvent(commandType, winid, nSel, nOldSel) {
+  const rawPtr = lib.symbols.wxBookCtrlEvent_Create(commandType, winid, nSel, nOldSel);
+  if (rawPtr === null) return null;
+  return new wxBookCtrlEvent(rawPtr);
+}
 
 // ../../wx/wxAuiNotebookEvent_gen.ts
-var wxAuiNotebookEvent = class _wxAuiNotebookEvent extends wxBookCtrlEvent {
+var wxAuiNotebookEvent = class extends wxBookCtrlEvent {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(command_type, win_id) {
-    const rawPtr = lib.symbols.wxAuiNotebookEvent_Create(command_type, win_id);
-    if (rawPtr === null) return null;
-    return new _wxAuiNotebookEvent(rawPtr);
   }
   GetDragSource() {
     return lib.symbols.wxAuiNotebookEvent_GetDragSource(this._ptr);
   }
 };
+function createWxAuiNotebookEvent(command_type, win_id) {
+  const rawPtr = lib.symbols.wxAuiNotebookEvent_Create(command_type, win_id);
+  if (rawPtr === null) return null;
+  return new wxAuiNotebookEvent(rawPtr);
+}
 
 // ../../wx/wxAuiNotebookPage_gen.ts
 var wxAuiNotebookPage = class {
@@ -24730,7 +25048,7 @@ var wxAuiNotebookPage = class {
 };
 
 // ../../wx/wxAuiNotebookPageArray_gen.ts
-var wxAuiNotebookPageArray = class _wxAuiNotebookPageArray {
+var wxAuiNotebookPageArray = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -24738,11 +25056,6 @@ var wxAuiNotebookPageArray = class _wxAuiNotebookPageArray {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxAuiNotebookPageArray_Create();
-    if (rawPtr === null) return null;
-    return new _wxAuiNotebookPageArray(rawPtr);
   }
   Delete() {
     lib.symbols.wxAuiNotebookPageArray_Delete(this._ptr);
@@ -24757,9 +25070,14 @@ var wxAuiNotebookPageArray = class _wxAuiNotebookPageArray {
     return lib.symbols.wxAuiNotebookPageArray_Item(this._ptr, index);
   }
 };
+function createWxAuiNotebookPageArray() {
+  const rawPtr = lib.symbols.wxAuiNotebookPageArray_Create();
+  if (rawPtr === null) return null;
+  return new wxAuiNotebookPageArray(rawPtr);
+}
 
 // ../../wx/wxAuiPaneInfo_gen.ts
-var wxAuiPaneInfo = class _wxAuiPaneInfo {
+var wxAuiPaneInfo = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -24767,16 +25085,6 @@ var wxAuiPaneInfo = class _wxAuiPaneInfo {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxAuiPaneInfo_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxAuiPaneInfo(rawPtr);
-  }
-  static Create(source) {
-    const rawPtr = lib.symbols.wxAuiPaneInfo_Create(source);
-    if (rawPtr === null) return null;
-    return new _wxAuiPaneInfo(rawPtr);
   }
   Bottom() {
     return lib.symbols.wxAuiPaneInfo_Bottom(this._ptr);
@@ -25010,9 +25318,19 @@ var wxAuiPaneInfo = class _wxAuiPaneInfo {
     return lib.symbols.wxAuiPaneInfo_MinSizeXY(this._ptr, x, y);
   }
 };
+function createWxAuiPaneInfoDefault() {
+  const rawPtr = lib.symbols.wxAuiPaneInfo_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxAuiPaneInfo(rawPtr);
+}
+function createWxAuiPaneInfo(source) {
+  const rawPtr = lib.symbols.wxAuiPaneInfo_Create(source);
+  if (rawPtr === null) return null;
+  return new wxAuiPaneInfo(rawPtr);
+}
 
 // ../../wx/wxAuiPaneInfoArray_gen.ts
-var wxAuiPaneInfoArray = class _wxAuiPaneInfoArray {
+var wxAuiPaneInfoArray = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -25020,11 +25338,6 @@ var wxAuiPaneInfoArray = class _wxAuiPaneInfoArray {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxAuiPaneInfoArray_Create();
-    if (rawPtr === null) return null;
-    return new _wxAuiPaneInfoArray(rawPtr);
   }
   Delete() {
     lib.symbols.wxAuiPaneInfoArray_Delete(this._ptr);
@@ -25039,17 +25352,17 @@ var wxAuiPaneInfoArray = class _wxAuiPaneInfoArray {
     return lib.symbols.wxAuiPaneInfoArray_Item(this._ptr, index);
   }
 };
+function createWxAuiPaneInfoArray() {
+  const rawPtr = lib.symbols.wxAuiPaneInfoArray_Create();
+  if (rawPtr === null) return null;
+  return new wxAuiPaneInfoArray(rawPtr);
+}
 
 // ../../wx/wxAuiSimpleTabArt_gen.ts
-var wxAuiSimpleTabArt = class _wxAuiSimpleTabArt extends wxAuiTabArt {
+var wxAuiSimpleTabArt = class extends wxAuiTabArt {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxAuiSimpleTabArt_Create();
-    if (rawPtr === null) return null;
-    return new _wxAuiSimpleTabArt(rawPtr);
   }
   Clone() {
     return lib.symbols.wxAuiSimpleTabArt_Clone(this._ptr);
@@ -25097,9 +25410,14 @@ var wxAuiSimpleTabArt = class _wxAuiSimpleTabArt extends wxAuiTabArt {
     return lib.symbols.wxAuiSimpleTabArt_GetBestTabCtrlSize(this._ptr, window, pages, width, height);
   }
 };
+function createWxAuiSimpleTabArt() {
+  const rawPtr = lib.symbols.wxAuiSimpleTabArt_Create();
+  if (rawPtr === null) return null;
+  return new wxAuiSimpleTabArt(rawPtr);
+}
 
 // ../../wx/wxAuiTabContainer_gen.ts
-var wxAuiTabContainer = class _wxAuiTabContainer {
+var wxAuiTabContainer = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -25107,11 +25425,6 @@ var wxAuiTabContainer = class _wxAuiTabContainer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxAuiTabContainer_Create();
-    if (rawPtr === null) return null;
-    return new _wxAuiTabContainer(rawPtr);
   }
   SetArtProvider(artId) {
     lib.symbols.wxAuiTabContainer_SetArtProvider(this._ptr, artId);
@@ -25204,6 +25517,11 @@ var wxAuiTabContainer = class _wxAuiTabContainer {
     lib.symbols.wxAuiTabContainer_MakeTabVisible(this._ptr, tabPage, win);
   }
 };
+function createWxAuiTabContainer() {
+  const rawPtr = lib.symbols.wxAuiTabContainer_Create();
+  if (rawPtr === null) return null;
+  return new wxAuiTabContainer(rawPtr);
+}
 
 // ../../wx/wxAuiTabContainerButton_gen.ts
 var wxAuiTabContainerButton = class {
@@ -25334,20 +25652,10 @@ var wxAuiTabCtrl = class extends wxControl {
 };
 
 // ../../wx/wxAuiToolBar_gen.ts
-var wxAuiToolBar = class _wxAuiToolBar extends wxControl {
+var wxAuiToolBar = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxAuiToolBar_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxAuiToolBar(rawPtr);
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxAuiToolBar_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxAuiToolBar(rawPtr);
   }
   Delete() {
     lib.symbols.wxAuiToolBar_Delete(this._ptr);
@@ -25560,6 +25868,16 @@ var wxAuiToolBar = class _wxAuiToolBar extends wxControl {
     return lib.symbols.wxAuiToolBar_IsPaneValid(this._ptr, pane) !== 0;
   }
 };
+function createWxAuiToolBarDefault() {
+  const rawPtr = lib.symbols.wxAuiToolBar_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxAuiToolBar(rawPtr);
+}
+function createWxAuiToolBar(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxAuiToolBar_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxAuiToolBar(rawPtr);
+}
 
 // ../../wx/wxAuiToolBarEvent_gen.ts
 var wxAuiToolBarEvent = class extends wxNotifyEvent {
@@ -25582,7 +25900,7 @@ var wxAuiToolBarEvent = class extends wxNotifyEvent {
 };
 
 // ../../wx/wxAuiToolBarItem_gen.ts
-var wxAuiToolBarItem = class _wxAuiToolBarItem {
+var wxAuiToolBarItem = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -25590,16 +25908,6 @@ var wxAuiToolBarItem = class _wxAuiToolBarItem {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxAuiToolBarItem_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxAuiToolBarItem(rawPtr);
-  }
-  static Create(source) {
-    const rawPtr = lib.symbols.wxAuiToolBarItem_Create(source);
-    if (rawPtr === null) return null;
-    return new _wxAuiToolBarItem(rawPtr);
   }
   Copy(source) {
     return lib.symbols.wxAuiToolBarItem_Copy(this._ptr, source);
@@ -25722,9 +26030,19 @@ var wxAuiToolBarItem = class _wxAuiToolBarItem {
     return lib.symbols.wxAuiToolBarItem_GetAlignment(this._ptr);
   }
 };
+function createWxAuiToolBarItemDefault() {
+  const rawPtr = lib.symbols.wxAuiToolBarItem_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxAuiToolBarItem(rawPtr);
+}
+function createWxAuiToolBarItem(source) {
+  const rawPtr = lib.symbols.wxAuiToolBarItem_Create(source);
+  if (rawPtr === null) return null;
+  return new wxAuiToolBarItem(rawPtr);
+}
 
 // ../../wx/wxAuiToolBarItemArray_gen.ts
-var wxAuiToolBarItemArray = class _wxAuiToolBarItemArray {
+var wxAuiToolBarItemArray = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -25732,11 +26050,6 @@ var wxAuiToolBarItemArray = class _wxAuiToolBarItemArray {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxAuiToolBarItemArray_Create();
-    if (rawPtr === null) return null;
-    return new _wxAuiToolBarItemArray(rawPtr);
   }
   Delete() {
     lib.symbols.wxAuiToolBarItemArray_Delete(this._ptr);
@@ -25751,6 +26064,11 @@ var wxAuiToolBarItemArray = class _wxAuiToolBarItemArray {
     return lib.symbols.wxAuiToolBarItemArray_Item(this._ptr, index);
   }
 };
+function createWxAuiToolBarItemArray() {
+  const rawPtr = lib.symbols.wxAuiToolBarItemArray_Create();
+  if (rawPtr === null) return null;
+  return new wxAuiToolBarItemArray(rawPtr);
+}
 
 // ../../wx/wxDC_gen.ts
 var wxDC = class {
@@ -26026,15 +26344,10 @@ var wxDC = class {
 };
 
 // ../../wx/wxAutoBufferedPaintDC_gen.ts
-var wxAutoBufferedPaintDC = class _wxAutoBufferedPaintDC extends wxDC {
+var wxAutoBufferedPaintDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(window) {
-    const rawPtr = lib.symbols.wxAutoBufferedPaintDC_Create(window);
-    if (rawPtr === null) return null;
-    return new _wxAutoBufferedPaintDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxAutoBufferedPaintDC_Delete(this._ptr);
@@ -26043,17 +26356,17 @@ var wxAutoBufferedPaintDC = class _wxAutoBufferedPaintDC extends wxDC {
     this.Delete();
   }
 };
+function createWxAutoBufferedPaintDC(window) {
+  const rawPtr = lib.symbols.wxAutoBufferedPaintDC_Create(window);
+  if (rawPtr === null) return null;
+  return new wxAutoBufferedPaintDC(rawPtr);
+}
 
 // ../../wx/wxBannerWindow_gen.ts
-var wxBannerWindow = class _wxBannerWindow extends wxWindow {
+var wxBannerWindow = class extends wxWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, dir, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxBannerWindow_Create(parent, id, dir, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxBannerWindow(rawPtr);
   }
   SetBitmap(bmp) {
     lib.symbols.wxBannerWindow_SetBitmap(this._ptr, bmp);
@@ -26065,9 +26378,14 @@ var wxBannerWindow = class _wxBannerWindow extends wxWindow {
     lib.symbols.wxBannerWindow_SetGradient(this._ptr, start, end);
   }
 };
+function createWxBannerWindow(parent, id, dir, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxBannerWindow_Create(parent, id, dir, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxBannerWindow(rawPtr);
+}
 
 // ../../wx/wxBitmap_gen.ts
-var wxBitmap = class _wxBitmap {
+var wxBitmap = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -26075,36 +26393,6 @@ var wxBitmap = class _wxBitmap {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(data, type_, width, height, depth) {
-    const rawPtr = lib.symbols.wxBitmap_Create(data, type_, width, height, depth);
-    if (rawPtr === null) return null;
-    return new _wxBitmap(rawPtr);
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxBitmap_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxBitmap(rawPtr);
-  }
-  static CreateEmpty(width, height, depth) {
-    const rawPtr = lib.symbols.wxBitmap_CreateEmpty(width, height, depth);
-    if (rawPtr === null) return null;
-    return new _wxBitmap(rawPtr);
-  }
-  static CreateLoad(name, type_) {
-    const rawPtr = lib.symbols.wxBitmap_CreateLoad(name, type_);
-    if (rawPtr === null) return null;
-    return new _wxBitmap(rawPtr);
-  }
-  static CreateFromData(data, size, bitmap_type) {
-    const rawPtr = lib.symbols.wxBitmap_CreateFromData(data, size, bitmap_type);
-    if (rawPtr === null) return null;
-    return new _wxBitmap(rawPtr);
-  }
-  static CreateFromBase64(base64, len, bitmap_type) {
-    const rawPtr = lib.symbols.wxBitmap_CreateFromBase64(base64, len, bitmap_type);
-    if (rawPtr === null) return null;
-    return new _wxBitmap(rawPtr);
   }
   Delete() {
     lib.symbols.wxBitmap_Delete(this._ptr);
@@ -26167,9 +26455,39 @@ var wxBitmap = class _wxBitmap {
     lib.symbols.wxBitmap_SetMask(this._ptr, mask);
   }
 };
+function createWxBitmap(data, type_, width, height, depth) {
+  const rawPtr = lib.symbols.wxBitmap_Create(data, type_, width, height, depth);
+  if (rawPtr === null) return null;
+  return new wxBitmap(rawPtr);
+}
+function createWxBitmapDefault() {
+  const rawPtr = lib.symbols.wxBitmap_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxBitmap(rawPtr);
+}
+function createWxBitmapEmpty(width, height, depth) {
+  const rawPtr = lib.symbols.wxBitmap_CreateEmpty(width, height, depth);
+  if (rawPtr === null) return null;
+  return new wxBitmap(rawPtr);
+}
+function createWxBitmapLoad(name, type_) {
+  const rawPtr = lib.symbols.wxBitmap_CreateLoad(name, type_);
+  if (rawPtr === null) return null;
+  return new wxBitmap(rawPtr);
+}
+function createWxBitmapFromData(data, size, bitmap_type) {
+  const rawPtr = lib.symbols.wxBitmap_CreateFromData(data, size, bitmap_type);
+  if (rawPtr === null) return null;
+  return new wxBitmap(rawPtr);
+}
+function createWxBitmapFromBase64(base64, len, bitmap_type) {
+  const rawPtr = lib.symbols.wxBitmap_CreateFromBase64(base64, len, bitmap_type);
+  if (rawPtr === null) return null;
+  return new wxBitmap(rawPtr);
+}
 
 // ../../wx/wxBitmapBundle_gen.ts
-var wxBitmapBundle = class _wxBitmapBundle {
+var wxBitmapBundle = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -26177,21 +26495,6 @@ var wxBitmapBundle = class _wxBitmapBundle {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateFromData(data, size, bitmap_type) {
-    const rawPtr = lib.symbols.wxBitmapBundle_CreateFromData(data, size, bitmap_type);
-    if (rawPtr === null) return null;
-    return new _wxBitmapBundle(rawPtr);
-  }
-  static CreateFromBase64(base64, len, bitmap_type) {
-    const rawPtr = lib.symbols.wxBitmapBundle_CreateFromBase64(base64, len, bitmap_type);
-    if (rawPtr === null) return null;
-    return new _wxBitmapBundle(rawPtr);
-  }
-  static CreateFromSVGBase64(base64, len, default_w, default_h) {
-    const rawPtr = lib.symbols.wxBitmapBundle_CreateFromSVGBase64(base64, len, default_w, default_h);
-    if (rawPtr === null) return null;
-    return new _wxBitmapBundle(rawPtr);
   }
   Delete() {
     lib.symbols.wxBitmapBundle_Delete(this._ptr);
@@ -26200,9 +26503,24 @@ var wxBitmapBundle = class _wxBitmapBundle {
     this.Delete();
   }
 };
+function createWxBitmapBundleFromData(data, size, bitmap_type) {
+  const rawPtr = lib.symbols.wxBitmapBundle_CreateFromData(data, size, bitmap_type);
+  if (rawPtr === null) return null;
+  return new wxBitmapBundle(rawPtr);
+}
+function createWxBitmapBundleFromBase64(base64, len, bitmap_type) {
+  const rawPtr = lib.symbols.wxBitmapBundle_CreateFromBase64(base64, len, bitmap_type);
+  if (rawPtr === null) return null;
+  return new wxBitmapBundle(rawPtr);
+}
+function createWxBitmapBundleFromSVGBase64(base64, len, default_w, default_h) {
+  const rawPtr = lib.symbols.wxBitmapBundle_CreateFromSVGBase64(base64, len, default_w, default_h);
+  if (rawPtr === null) return null;
+  return new wxBitmapBundle(rawPtr);
+}
 
 // ../../wx/wxBitmapBundleBuilder_gen.ts
-var wxBitmapBundleBuilder = class _wxBitmapBundleBuilder {
+var wxBitmapBundleBuilder = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -26210,11 +26528,6 @@ var wxBitmapBundleBuilder = class _wxBitmapBundleBuilder {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxBitmapBundleBuilder_Create();
-    if (rawPtr === null) return null;
-    return new _wxBitmapBundleBuilder(rawPtr);
   }
   AddData(data, size, bitmap_type) {
     lib.symbols.wxBitmapBundleBuilder_AddData(this._ptr, data, size, bitmap_type);
@@ -26226,36 +26539,36 @@ var wxBitmapBundleBuilder = class _wxBitmapBundleBuilder {
     return lib.symbols.wxBitmapBundleBuilder_Build(this._ptr);
   }
 };
+function createWxBitmapBundleBuilder() {
+  const rawPtr = lib.symbols.wxBitmapBundleBuilder_Create();
+  if (rawPtr === null) return null;
+  return new wxBitmapBundleBuilder(rawPtr);
+}
 
 // ../../wx/wxButton_gen.ts
-var wxButton = class _wxButton extends wxControl {
+var wxButton = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxButton_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxButton(rawPtr);
-  }
   SetBackgroundColour(colour) {
-    return lib.symbols.wxButton_SetBackgroundColour(this._ptr, colour);
+    return lib.symbols.wxButton_SetBackgroundColour(this._ptr, colour) !== 0;
   }
   SetDefault() {
     lib.symbols.wxButton_SetDefault(this._ptr);
   }
 };
+function createWxButton(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxButton_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxButton(rawPtr);
+}
 
 // ../../wx/wxBitmapButton_gen.ts
-var wxBitmapButton = class _wxBitmapButton extends wxButton {
+var wxBitmapButton = class extends wxButton {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, bitmap, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxBitmapButton_Create(parent, id, bitmap, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxBitmapButton(rawPtr);
   }
   GetBitmapDisabled(ref) {
     lib.symbols.wxBitmapButton_GetBitmapDisabled(this._ptr, ref);
@@ -26291,17 +26604,17 @@ var wxBitmapButton = class _wxBitmapButton extends wxButton {
     lib.symbols.wxBitmapButton_SetMargins(this._ptr, x, y);
   }
 };
+function createWxBitmapButton(parent, id, bitmap, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxBitmapButton_Create(parent, id, bitmap, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxBitmapButton(rawPtr);
+}
 
 // ../../wx/wxChoice_gen.ts
-var wxChoice = class _wxChoice extends wxControl {
+var wxChoice = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, n, str, style) {
-    const rawPtr = lib.symbols.wxChoice_Create(parent, id, left, top, width, height, n, str, style);
-    if (rawPtr === null) return null;
-    return new _wxChoice(rawPtr);
   }
   Append(item) {
     lib.symbols.wxChoice_Append(this._ptr, item);
@@ -26309,7 +26622,7 @@ var wxChoice = class _wxChoice extends wxControl {
   Clear() {
     lib.symbols.wxChoice_Clear(this._ptr);
   }
-  Delete(index) {
+  DeleteItem(index) {
     lib.symbols.wxChoice_Delete(this._ptr, index);
   }
   FindString(str) {
@@ -26340,17 +26653,17 @@ var wxChoice = class _wxChoice extends wxControl {
     return lib.symbols.wxChoice_GetCurrentSelection(this._ptr);
   }
 };
+function createWxChoice(parent, id, left, top, width, height, n, str, style) {
+  const rawPtr = lib.symbols.wxChoice_Create(parent, id, left, top, width, height, n, str, style);
+  if (rawPtr === null) return null;
+  return new wxChoice(rawPtr);
+}
 
 // ../../wx/wxComboBox_gen.ts
-var wxComboBox = class _wxComboBox extends wxChoice {
+var wxComboBox = class extends wxChoice {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, n, str, style) {
-    const rawPtr = lib.symbols.wxComboBox_Create(parent, id, text, left, top, width, height, n, str, style);
-    if (rawPtr === null) return null;
-    return new _wxComboBox(rawPtr);
   }
   Append(item) {
     lib.symbols.wxComboBox_Append(this._ptr, item);
@@ -26367,13 +26680,13 @@ var wxComboBox = class _wxComboBox extends wxChoice {
   Cut() {
     lib.symbols.wxComboBox_Cut(this._ptr);
   }
-  Delete(index) {
+  DeleteItem(index) {
     lib.symbols.wxComboBox_Delete(this._ptr, index);
   }
   FindString(str) {
     return lib.symbols.wxComboBox_FindString(this._ptr, str);
   }
-  GetClientData(index) {
+  GetItemClientData(index) {
     return lib.symbols.wxComboBox_GetClientData(this._ptr, index);
   }
   GetCount() {
@@ -26409,7 +26722,7 @@ var wxComboBox = class _wxComboBox extends wxChoice {
   Replace(from_, toPos, value) {
     lib.symbols.wxComboBox_Replace(this._ptr, from_, toPos, value);
   }
-  SetClientData(index, clientData) {
+  SetItemClientData(index, clientData) {
     lib.symbols.wxComboBox_SetClientData(this._ptr, index, clientData);
   }
   SetEditable(editable) {
@@ -26431,19 +26744,19 @@ var wxComboBox = class _wxComboBox extends wxChoice {
     lib.symbols.wxComboBox_SetTextSelection(this._ptr, from_, toPos);
   }
 };
+function createWxComboBox(parent, id, text, left, top, width, height, n, str, style) {
+  const rawPtr = lib.symbols.wxComboBox_Create(parent, id, text, left, top, width, height, n, str, style);
+  if (rawPtr === null) return null;
+  return new wxComboBox(rawPtr);
+}
 
 // ../../wx/wxBitmapComboBox_gen.ts
-var wxBitmapComboBox = class _wxBitmapComboBox extends wxComboBox {
+var wxBitmapComboBox = class extends wxComboBox {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(parent, id, value, x, y, width, height, n, str, style) {
-    const rawPtr = lib.symbols.wxBitmapComboBox_Create(parent, id, value, x, y, width, height, n, str, style);
-    if (rawPtr === null) return null;
-    return new _wxBitmapComboBox(rawPtr);
-  }
-  Append(item, bitmap) {
+  AppendWithBitmap(item, bitmap) {
     lib.symbols.wxBitmapComboBox_Append(this._ptr, item, bitmap);
   }
   AppendWithClientData(item, bitmap, data) {
@@ -26465,9 +26778,14 @@ var wxBitmapComboBox = class _wxBitmapComboBox extends wxComboBox {
     return lib.symbols.wxBitmapComboBox_GetBitmapSize(this._ptr);
   }
 };
+function createWxBitmapComboBox(parent, id, value, x, y, width, height, n, str, style) {
+  const rawPtr = lib.symbols.wxBitmapComboBox_Create(parent, id, value, x, y, width, height, n, str, style);
+  if (rawPtr === null) return null;
+  return new wxBitmapComboBox(rawPtr);
+}
 
 // ../../wx/wxBitmapDataObject_gen.ts
-var wxBitmapDataObject = class _wxBitmapDataObject {
+var wxBitmapDataObject = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -26475,16 +26793,6 @@ var wxBitmapDataObject = class _wxBitmapDataObject {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(bitmap) {
-    const rawPtr = lib.symbols.BitmapDataObject_Create(bitmap);
-    if (rawPtr === null) return null;
-    return new _wxBitmapDataObject(rawPtr);
-  }
-  static CreateEmpty() {
-    const rawPtr = lib.symbols.BitmapDataObject_CreateEmpty();
-    if (rawPtr === null) return null;
-    return new _wxBitmapDataObject(rawPtr);
   }
   Delete() {
     lib.symbols.BitmapDataObject_Delete(this._ptr);
@@ -26499,17 +26807,22 @@ var wxBitmapDataObject = class _wxBitmapDataObject {
     lib.symbols.BitmapDataObject_SetBitmap(this._ptr, bitmap);
   }
 };
+function createWxBitmapDataObject(bitmap) {
+  const rawPtr = lib.symbols.BitmapDataObject_Create(bitmap);
+  if (rawPtr === null) return null;
+  return new wxBitmapDataObject(rawPtr);
+}
+function createWxBitmapDataObjectEmpty() {
+  const rawPtr = lib.symbols.BitmapDataObject_CreateEmpty();
+  if (rawPtr === null) return null;
+  return new wxBitmapDataObject(rawPtr);
+}
 
 // ../../wx/wxToggleButton_gen.ts
-var wxToggleButton = class _wxToggleButton extends wxControl {
+var wxToggleButton = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, label, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxToggleButton_Create(parent, id, label, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxToggleButton(rawPtr);
   }
   Enable(enable) {
     return lib.symbols.wxToggleButton_Enable(this._ptr, enable ? 1 : 0) !== 0;
@@ -26524,17 +26837,17 @@ var wxToggleButton = class _wxToggleButton extends wxControl {
     lib.symbols.wxToggleButton_SetValue(this._ptr, state ? 1 : 0);
   }
 };
+function createWxToggleButton(parent, id, label, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxToggleButton_Create(parent, id, label, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxToggleButton(rawPtr);
+}
 
 // ../../wx/wxBitmapToggleButton_gen.ts
-var wxBitmapToggleButton = class _wxBitmapToggleButton extends wxToggleButton {
+var wxBitmapToggleButton = class extends wxToggleButton {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, bitmap, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxBitmapToggleButton_Create(parent, id, bitmap, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxBitmapToggleButton(rawPtr);
   }
   Enable(enable) {
     return lib.symbols.wxBitmapToggleButton_Enable(this._ptr, enable ? 1 : 0) !== 0;
@@ -26549,6 +26862,11 @@ var wxBitmapToggleButton = class _wxBitmapToggleButton extends wxToggleButton {
     lib.symbols.wxBitmapToggleButton_SetBitmapLabel(this._ptr, bitmap);
   }
 };
+function createWxBitmapToggleButton(parent, id, bitmap, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxBitmapToggleButton_Create(parent, id, bitmap, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxBitmapToggleButton(rawPtr);
+}
 
 // ../../wx/wxPGProperty_gen.ts
 var wxPGProperty = class {
@@ -26578,17 +26896,17 @@ var wxPGProperty = class {
 };
 
 // ../../wx/wxBoolProperty_gen.ts
-var wxBoolProperty = class _wxBoolProperty extends wxPGProperty {
+var wxBoolProperty = class extends wxPGProperty {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(label, name, value) {
-    const rawPtr = lib.symbols.wxBoolProperty_Create(label, name, value ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new _wxBoolProperty(rawPtr);
-  }
 };
+function createWxBoolProperty(label, name, value) {
+  const rawPtr = lib.symbols.wxBoolProperty_Create(label, name, value ? 1 : 0);
+  if (rawPtr === null) return null;
+  return new wxBoolProperty(rawPtr);
+}
 
 // ../../wx/wxSizer_gen.ts
 var wxSizer = class {
@@ -26753,15 +27071,10 @@ var wxSizer = class {
 };
 
 // ../../wx/wxBoxSizer_gen.ts
-var wxBoxSizer = class _wxBoxSizer extends wxSizer {
+var wxBoxSizer = class extends wxSizer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(orient) {
-    const rawPtr = lib.symbols.wxBoxSizer_Create(orient);
-    if (rawPtr === null) return null;
-    return new _wxBoxSizer(rawPtr);
   }
   CalcMin() {
     return lib.symbols.wxBoxSizer_CalcMin(this._ptr);
@@ -26773,9 +27086,14 @@ var wxBoxSizer = class _wxBoxSizer extends wxSizer {
     lib.symbols.wxBoxSizer_RecalcSizes(this._ptr);
   }
 };
+function createWxBoxSizer(orient) {
+  const rawPtr = lib.symbols.wxBoxSizer_Create(orient);
+  if (rawPtr === null) return null;
+  return new wxBoxSizer(rawPtr);
+}
 
 // ../../wx/wxBrush_gen.ts
-var wxBrush = class _wxBrush {
+var wxBrush = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -26783,26 +27101,6 @@ var wxBrush = class _wxBrush {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxBrush_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxBrush(rawPtr);
-  }
-  static CreateFromBitmap(bitmap) {
-    const rawPtr = lib.symbols.wxBrush_CreateFromBitmap(bitmap);
-    if (rawPtr === null) return null;
-    return new _wxBrush(rawPtr);
-  }
-  static CreateFromColour(col, style) {
-    const rawPtr = lib.symbols.wxBrush_CreateFromColour(col, style);
-    if (rawPtr === null) return null;
-    return new _wxBrush(rawPtr);
-  }
-  static CreateFromStock(id) {
-    const rawPtr = lib.symbols.wxBrush_CreateFromStock(id);
-    if (rawPtr === null) return null;
-    return new _wxBrush(rawPtr);
   }
   Delete() {
     lib.symbols.wxBrush_Delete(this._ptr);
@@ -26841,22 +27139,32 @@ var wxBrush = class _wxBrush {
     lib.symbols.wxBrush_SetStyle(this._ptr, style);
   }
 };
+function createWxBrushDefault() {
+  const rawPtr = lib.symbols.wxBrush_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxBrush(rawPtr);
+}
+function createWxBrushFromBitmap(bitmap) {
+  const rawPtr = lib.symbols.wxBrush_CreateFromBitmap(bitmap);
+  if (rawPtr === null) return null;
+  return new wxBrush(rawPtr);
+}
+function createWxBrushFromColour(col, style) {
+  const rawPtr = lib.symbols.wxBrush_CreateFromColour(col, style);
+  if (rawPtr === null) return null;
+  return new wxBrush(rawPtr);
+}
+function createWxBrushFromStock(id) {
+  const rawPtr = lib.symbols.wxBrush_CreateFromStock(id);
+  if (rawPtr === null) return null;
+  return new wxBrush(rawPtr);
+}
 
 // ../../wx/wxBufferedDC_gen.ts
-var wxBufferedDC = class _wxBufferedDC extends wxDC {
+var wxBufferedDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateByDCAndSize(dc, width, height, style) {
-    const rawPtr = lib.symbols.wxBufferedDC_CreateByDCAndSize(dc, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxBufferedDC(rawPtr);
-  }
-  static CreateByDCAndBitmap(dc, bitmap, style) {
-    const rawPtr = lib.symbols.wxBufferedDC_CreateByDCAndBitmap(dc, bitmap, style);
-    if (rawPtr === null) return null;
-    return new _wxBufferedDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxBufferedDC_Delete(this._ptr);
@@ -26865,22 +27173,22 @@ var wxBufferedDC = class _wxBufferedDC extends wxDC {
     this.Delete();
   }
 };
+function createWxBufferedDCByDCAndSize(dc, width, height, style) {
+  const rawPtr = lib.symbols.wxBufferedDC_CreateByDCAndSize(dc, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxBufferedDC(rawPtr);
+}
+function createWxBufferedDCByDCAndBitmap(dc, bitmap, style) {
+  const rawPtr = lib.symbols.wxBufferedDC_CreateByDCAndBitmap(dc, bitmap, style);
+  if (rawPtr === null) return null;
+  return new wxBufferedDC(rawPtr);
+}
 
 // ../../wx/wxBufferedPaintDC_gen.ts
-var wxBufferedPaintDC = class _wxBufferedPaintDC extends wxDC {
+var wxBufferedPaintDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(window, style) {
-    const rawPtr = lib.symbols.wxBufferedPaintDC_Create(window, style);
-    if (rawPtr === null) return null;
-    return new _wxBufferedPaintDC(rawPtr);
-  }
-  static CreateWithBitmap(window, bitmap, style) {
-    const rawPtr = lib.symbols.wxBufferedPaintDC_CreateWithBitmap(window, bitmap, style);
-    if (rawPtr === null) return null;
-    return new _wxBufferedPaintDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxBufferedPaintDC_Delete(this._ptr);
@@ -26889,9 +27197,19 @@ var wxBufferedPaintDC = class _wxBufferedPaintDC extends wxDC {
     this.Delete();
   }
 };
+function createWxBufferedPaintDC(window, style) {
+  const rawPtr = lib.symbols.wxBufferedPaintDC_Create(window, style);
+  if (rawPtr === null) return null;
+  return new wxBufferedPaintDC(rawPtr);
+}
+function createWxBufferedPaintDCWithBitmap(window, bitmap, style) {
+  const rawPtr = lib.symbols.wxBufferedPaintDC_CreateWithBitmap(window, bitmap, style);
+  if (rawPtr === null) return null;
+  return new wxBufferedPaintDC(rawPtr);
+}
 
 // ../../wx/wxBusyCursor_gen.ts
-var wxBusyCursor = class _wxBusyCursor {
+var wxBusyCursor = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -26899,11 +27217,6 @@ var wxBusyCursor = class _wxBusyCursor {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxBusyCursor_Create();
-    if (rawPtr === null) return null;
-    return new _wxBusyCursor(rawPtr);
   }
   Delete() {
     lib.symbols.wxBusyCursor_Delete(this._ptr);
@@ -26915,9 +27228,14 @@ var wxBusyCursor = class _wxBusyCursor {
     return lib.symbols.wxBusyCursor_CreateWithCursor(this._ptr);
   }
 };
+function createWxBusyCursor() {
+  const rawPtr = lib.symbols.wxBusyCursor_Create();
+  if (rawPtr === null) return null;
+  return new wxBusyCursor(rawPtr);
+}
 
 // ../../wx/wxBusyInfo_gen.ts
-var wxBusyInfo = class _wxBusyInfo {
+var wxBusyInfo = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -26926,11 +27244,6 @@ var wxBusyInfo = class _wxBusyInfo {
   get ptr() {
     return this._ptr;
   }
-  static Create(text, parent) {
-    const rawPtr = lib.symbols.wxBusyInfo_Create(text, parent);
-    if (rawPtr === null) return null;
-    return new _wxBusyInfo(rawPtr);
-  }
   Delete() {
     lib.symbols.wxBusyInfo_Delete(this._ptr);
   }
@@ -26938,17 +27251,17 @@ var wxBusyInfo = class _wxBusyInfo {
     this.Delete();
   }
 };
+function createWxBusyInfo(text, parent) {
+  const rawPtr = lib.symbols.wxBusyInfo_Create(text, parent);
+  if (rawPtr === null) return null;
+  return new wxBusyInfo(rawPtr);
+}
 
 // ../../wx/wxCalculateLayoutEvent_gen.ts
-var wxCalculateLayoutEvent = class _wxCalculateLayoutEvent extends wxEvent {
+var wxCalculateLayoutEvent = class extends wxEvent {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(id) {
-    const rawPtr = lib.symbols.wxCalculateLayoutEvent_Create(id);
-    if (rawPtr === null) return null;
-    return new _wxCalculateLayoutEvent(rawPtr);
   }
   GetFlags() {
     return lib.symbols.wxCalculateLayoutEvent_GetFlags(this._ptr);
@@ -26963,17 +27276,17 @@ var wxCalculateLayoutEvent = class _wxCalculateLayoutEvent extends wxEvent {
     lib.symbols.wxCalculateLayoutEvent_SetRect(this._ptr, x, y, width, height);
   }
 };
+function createWxCalculateLayoutEvent(id) {
+  const rawPtr = lib.symbols.wxCalculateLayoutEvent_Create(id);
+  if (rawPtr === null) return null;
+  return new wxCalculateLayoutEvent(rawPtr);
+}
 
 // ../../wx/wxCalendarCtrl_gen.ts
-var wxCalendarCtrl = class _wxCalendarCtrl extends wxControl {
+var wxCalendarCtrl = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, date, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxCalendarCtrl_Create(parent, id, date, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxCalendarCtrl(rawPtr);
   }
   EnableHolidayDisplay(display) {
     lib.symbols.wxCalendarCtrl_EnableHolidayDisplay(this._ptr, display);
@@ -27030,9 +27343,14 @@ var wxCalendarCtrl = class _wxCalendarCtrl extends wxControl {
     lib.symbols.wxCalendarCtrl_SetHolidayColours(this._ptr, colFg, colBg);
   }
 };
+function createWxCalendarCtrl(parent, id, date, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxCalendarCtrl_Create(parent, id, date, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxCalendarCtrl(rawPtr);
+}
 
 // ../../wx/wxCalendarDateAttr_gen.ts
-var wxCalendarDateAttr = class _wxCalendarDateAttr {
+var wxCalendarDateAttr = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -27040,16 +27358,6 @@ var wxCalendarDateAttr = class _wxCalendarDateAttr {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(textColour, backColour, borderColour, font, border) {
-    const rawPtr = lib.symbols.wxCalendarDateAttr_Create(textColour, backColour, borderColour, font, border);
-    if (rawPtr === null) return null;
-    return new _wxCalendarDateAttr(rawPtr);
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxCalendarDateAttr_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxCalendarDateAttr(rawPtr);
   }
   Delete() {
     lib.symbols.wxCalendarDateAttr_Delete(this._ptr);
@@ -27109,6 +27417,16 @@ var wxCalendarDateAttr = class _wxCalendarDateAttr {
     lib.symbols.wxCalendarDateAttr_SetTextColour(this._ptr, col);
   }
 };
+function createWxCalendarDateAttr(textColour, backColour, borderColour, font, border) {
+  const rawPtr = lib.symbols.wxCalendarDateAttr_Create(textColour, backColour, borderColour, font, border);
+  if (rawPtr === null) return null;
+  return new wxCalendarDateAttr(rawPtr);
+}
+function createWxCalendarDateAttrDefault() {
+  const rawPtr = lib.symbols.wxCalendarDateAttr_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxCalendarDateAttr(rawPtr);
+}
 
 // ../../wx/wxCalendarEvent_gen.ts
 var wxCalendarEvent = class extends wxCommandEvent {
@@ -27125,7 +27443,7 @@ var wxCalendarEvent = class extends wxCommandEvent {
 };
 
 // ../../wx/wxCaret_gen.ts
-var wxCaret = class _wxCaret {
+var wxCaret = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -27133,11 +27451,6 @@ var wxCaret = class _wxCaret {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(window, width, height) {
-    const rawPtr = lib.symbols.wxCaret_Create(window, width, height);
-    if (rawPtr === null) return null;
-    return new _wxCaret(rawPtr);
   }
   GetBlinkTime() {
     return lib.symbols.wxCaret_GetBlinkTime();
@@ -27173,17 +27486,17 @@ var wxCaret = class _wxCaret {
     lib.symbols.wxCaret_Show(this._ptr);
   }
 };
+function createWxCaret(window, width, height) {
+  const rawPtr = lib.symbols.wxCaret_Create(window, width, height);
+  if (rawPtr === null) return null;
+  return new wxCaret(rawPtr);
+}
 
 // ../../wx/wxCheckBox_gen.ts
-var wxCheckBox = class _wxCheckBox extends wxControl {
+var wxCheckBox = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxCheckBox_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxCheckBox(rawPtr);
   }
   Delete() {
     lib.symbols.wxCheckBox_Delete(this._ptr);
@@ -27210,17 +27523,17 @@ var wxCheckBox = class _wxCheckBox extends wxControl {
     return lib.symbols.wxCheckBox_Is3rdStateAllowedForUser(this._ptr) !== 0;
   }
 };
+function createWxCheckBox(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxCheckBox_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxCheckBox(rawPtr);
+}
 
 // ../../wx/wxListBox_gen.ts
-var wxListBox = class _wxListBox extends wxControl {
+var wxListBox = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, n, str, style) {
-    const rawPtr = lib.symbols.wxListBox_Create(parent, id, left, top, width, height, n, str, style);
-    if (rawPtr === null) return null;
-    return new _wxListBox(rawPtr);
   }
   Append(item) {
     lib.symbols.wxListBox_Append(this._ptr, item);
@@ -27231,13 +27544,13 @@ var wxListBox = class _wxListBox extends wxControl {
   Clear() {
     lib.symbols.wxListBox_Clear(this._ptr);
   }
-  Delete(index) {
+  DeleteItem(index) {
     lib.symbols.wxListBox_Delete(this._ptr, index);
   }
   FindString(str) {
     return lib.symbols.wxListBox_FindString(this._ptr, str);
   }
-  GetClientData(index) {
+  GetItemClientData(index) {
     return lib.symbols.wxListBox_GetClientData(this._ptr, index);
   }
   GetCount() {
@@ -27258,7 +27571,7 @@ var wxListBox = class _wxListBox extends wxControl {
   IsSelected(index) {
     return lib.symbols.wxListBox_IsSelected(this._ptr, index) !== 0;
   }
-  SetClientData(index, clientData) {
+  SetItemClientData(index, clientData) {
     lib.symbols.wxListBox_SetClientData(this._ptr, index, clientData);
   }
   SetFirstItem(index) {
@@ -27286,17 +27599,17 @@ var wxListBox = class _wxListBox extends wxControl {
     return lib.symbols.wxListBox_GetCountPerPage(this._ptr);
   }
 };
+function createWxListBox(parent, id, left, top, width, height, n, str, style) {
+  const rawPtr = lib.symbols.wxListBox_Create(parent, id, left, top, width, height, n, str, style);
+  if (rawPtr === null) return null;
+  return new wxListBox(rawPtr);
+}
 
 // ../../wx/wxCheckListBox_gen.ts
-var wxCheckListBox = class _wxCheckListBox extends wxListBox {
+var wxCheckListBox = class extends wxListBox {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, n, str, style) {
-    const rawPtr = lib.symbols.wxCheckListBox_Create(parent, id, left, top, width, height, n, str, style);
-    if (rawPtr === null) return null;
-    return new _wxCheckListBox(rawPtr);
   }
   Delete() {
     lib.symbols.wxCheckListBox_Delete(this._ptr);
@@ -27314,17 +27627,17 @@ var wxCheckListBox = class _wxCheckListBox extends wxListBox {
     return lib.symbols.wxCheckListBox_IsChecked(this._ptr, item) !== 0;
   }
 };
+function createWxCheckListBox(parent, id, left, top, width, height, n, str, style) {
+  const rawPtr = lib.symbols.wxCheckListBox_Create(parent, id, left, top, width, height, n, str, style);
+  if (rawPtr === null) return null;
+  return new wxCheckListBox(rawPtr);
+}
 
 // ../../wx/wxChoicebook_gen.ts
-var wxChoicebook = class _wxChoicebook extends wxBookCtrlBase {
+var wxChoicebook = class extends wxBookCtrlBase {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxChoicebook_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxChoicebook(rawPtr);
   }
   AddPage(pPage, strText, bSelect, imageId) {
     return lib.symbols.wxChoicebook_AddPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) !== 0;
@@ -27381,6 +27694,11 @@ var wxChoicebook = class _wxChoicebook extends wxBookCtrlBase {
     return lib.symbols.wxChoicebook_SetSelection(this._ptr, nPage);
   }
 };
+function createWxChoicebook(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxChoicebook_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxChoicebook(rawPtr);
+}
 
 // ../../wx/wxClassInfo_gen.ts
 var wxClassInfo = class {
@@ -27404,15 +27722,10 @@ var wxClassInfo = class {
 };
 
 // ../../wx/wxWindowDC_gen.ts
-var wxWindowDC = class _wxWindowDC extends wxDC {
+var wxWindowDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(win) {
-    const rawPtr = lib.symbols.wxWindowDC_Create(win);
-    if (rawPtr === null) return null;
-    return new _wxWindowDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxWindowDC_Delete(this._ptr);
@@ -27421,17 +27734,17 @@ var wxWindowDC = class _wxWindowDC extends wxDC {
     this.Delete();
   }
 };
+function createWxWindowDC(win) {
+  const rawPtr = lib.symbols.wxWindowDC_Create(win);
+  if (rawPtr === null) return null;
+  return new wxWindowDC(rawPtr);
+}
 
 // ../../wx/wxClientDC_gen.ts
-var wxClientDC = class _wxClientDC extends wxWindowDC {
+var wxClientDC = class extends wxWindowDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(win) {
-    const rawPtr = lib.symbols.wxClientDC_Create(win);
-    if (rawPtr === null) return null;
-    return new _wxClientDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxClientDC_Delete(this._ptr);
@@ -27440,9 +27753,14 @@ var wxClientDC = class _wxClientDC extends wxWindowDC {
     this.Delete();
   }
 };
+function createWxClientDC(win) {
+  const rawPtr = lib.symbols.wxClientDC_Create(win);
+  if (rawPtr === null) return null;
+  return new wxClientDC(rawPtr);
+}
 
 // ../../wx/wxClipboard_gen.ts
-var wxClipboard = class _wxClipboard {
+var wxClipboard = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -27450,11 +27768,6 @@ var wxClipboard = class _wxClipboard {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxClipboard_Create();
-    if (rawPtr === null) return null;
-    return new _wxClipboard(rawPtr);
   }
   AddData(data) {
     return lib.symbols.wxClipboard_AddData(this._ptr, data) !== 0;
@@ -27487,6 +27800,11 @@ var wxClipboard = class _wxClipboard {
     lib.symbols.wxClipboard_UsePrimarySelection(this._ptr, primary ? 1 : 0);
   }
 };
+function createWxClipboard() {
+  const rawPtr = lib.symbols.wxClipboard_Create();
+  if (rawPtr === null) return null;
+  return new wxClipboard(rawPtr);
+}
 
 // ../../wx/wxCloseEvent_gen.ts
 var wxCloseEvent = class extends wxEvent {
@@ -27515,7 +27833,7 @@ var wxCloseEvent = class extends wxEvent {
 };
 
 // ../../wx/wxClosure_gen.ts
-var wxClosure = class _wxClosure {
+var wxClosure = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -27524,26 +27842,21 @@ var wxClosure = class _wxClosure {
   get ptr() {
     return this._ptr;
   }
-  static Create(fun, data) {
-    const rawPtr = lib.symbols.wxClosure_Create(fun, data);
-    if (rawPtr === null) return null;
-    return new _wxClosure(rawPtr);
-  }
   GetData() {
     return lib.symbols.wxClosure_GetData(this._ptr);
   }
 };
+function createWxClosure(fun, data) {
+  const rawPtr = lib.symbols.wxClosure_Create(fun, data);
+  if (rawPtr === null) return null;
+  return new wxClosure(rawPtr);
+}
 
 // ../../wx/wxCollapsiblePane_gen.ts
-var wxCollapsiblePane = class _wxCollapsiblePane extends wxControl {
+var wxCollapsiblePane = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, label, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxCollapsiblePane_Create(parent, id, label, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxCollapsiblePane(rawPtr);
   }
   Collapse(collapse) {
     lib.symbols.wxCollapsiblePane_Collapse(this._ptr, collapse ? 1 : 0);
@@ -27567,6 +27880,11 @@ var wxCollapsiblePane = class _wxCollapsiblePane extends wxControl {
     lib.symbols.wxCollapsiblePane_SetLabel(this._ptr, label);
   }
 };
+function createWxCollapsiblePane(parent, id, label, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxCollapsiblePane_Create(parent, id, label, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxCollapsiblePane(rawPtr);
+}
 
 // ../../wx/wxCollapsiblePaneEvent_gen.ts
 var wxCollapsiblePaneEvent = class extends wxCommandEvent {
@@ -27583,7 +27901,7 @@ var wxCollapsiblePaneEvent = class extends wxCommandEvent {
 };
 
 // ../../wx/wxColour_gen.ts
-var wxColour = class _wxColour {
+var wxColour = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -27591,26 +27909,6 @@ var wxColour = class _wxColour {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateByName(name) {
-    const rawPtr = lib.symbols.wxColour_CreateByName(name);
-    if (rawPtr === null) return null;
-    return new _wxColour(rawPtr);
-  }
-  static CreateEmpty() {
-    const rawPtr = lib.symbols.wxColour_CreateEmpty();
-    if (rawPtr === null) return null;
-    return new _wxColour(rawPtr);
-  }
-  static CreateFromStock(id) {
-    const rawPtr = lib.symbols.wxColour_CreateFromStock(id);
-    if (rawPtr === null) return null;
-    return new _wxColour(rawPtr);
-  }
-  static CreateRGB(red, green, blue, alpha) {
-    const rawPtr = lib.symbols.wxColour_CreateRGB(red, green, blue, alpha);
-    if (rawPtr === null) return null;
-    return new _wxColour(rawPtr);
   }
   Delete() {
     lib.symbols.wxColour_Delete(this._ptr);
@@ -27649,9 +27947,29 @@ var wxColour = class _wxColour {
     return lib.symbols.wxColour_ValidName(name) !== 0;
   }
 };
+function createWxColourByName(name) {
+  const rawPtr = lib.symbols.wxColour_CreateByName(name);
+  if (rawPtr === null) return null;
+  return new wxColour(rawPtr);
+}
+function createWxColourEmpty() {
+  const rawPtr = lib.symbols.wxColour_CreateEmpty();
+  if (rawPtr === null) return null;
+  return new wxColour(rawPtr);
+}
+function createWxColourFromStock(id) {
+  const rawPtr = lib.symbols.wxColour_CreateFromStock(id);
+  if (rawPtr === null) return null;
+  return new wxColour(rawPtr);
+}
+function createWxColourRGB(red, green, blue, alpha) {
+  const rawPtr = lib.symbols.wxColour_CreateRGB(red, green, blue, alpha);
+  if (rawPtr === null) return null;
+  return new wxColour(rawPtr);
+}
 
 // ../../wx/wxColourData_gen.ts
-var wxColourData = class _wxColourData {
+var wxColourData = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -27659,11 +27977,6 @@ var wxColourData = class _wxColourData {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxColourData_Create();
-    if (rawPtr === null) return null;
-    return new _wxColourData(rawPtr);
   }
   Delete() {
     lib.symbols.wxColourData_Delete(this._ptr);
@@ -27690,17 +28003,17 @@ var wxColourData = class _wxColourData {
     lib.symbols.wxColourData_SetCustomColour(this._ptr, index, colour);
   }
 };
+function createWxColourData() {
+  const rawPtr = lib.symbols.wxColourData_Create();
+  if (rawPtr === null) return null;
+  return new wxColourData(rawPtr);
+}
 
 // ../../wx/wxDialog_gen.ts
-var wxDialog = class _wxDialog extends wxTopLevelWindow {
+var wxDialog = class extends wxTopLevelWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxDialog_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDialog(rawPtr);
   }
   EndModal(retCode) {
     lib.symbols.wxDialog_EndModal(this._ptr, retCode);
@@ -27739,33 +28052,33 @@ var wxDialog = class _wxDialog extends wxTopLevelWindow {
     return lib.symbols.wxDialog_CreateStdDialogButtonSizer(this._ptr, flags);
   }
 };
+function createWxDialog(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxDialog_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDialog(rawPtr);
+}
 
 // ../../wx/wxColourDialog_gen.ts
-var wxColourDialog = class _wxColourDialog extends wxDialog {
+var wxColourDialog = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, col) {
-    const rawPtr = lib.symbols.wxColourDialog_Create(parent, col);
-    if (rawPtr === null) return null;
-    return new _wxColourDialog(rawPtr);
   }
   GetColourData(ref) {
     lib.symbols.wxColourDialog_GetColourData(this._ptr, ref);
   }
 };
+function createWxColourDialog(parent, col) {
+  const rawPtr = lib.symbols.wxColourDialog_Create(parent, col);
+  if (rawPtr === null) return null;
+  return new wxColourDialog(rawPtr);
+}
 
 // ../../wx/wxCommandLinkButton_gen.ts
-var wxCommandLinkButton = class _wxCommandLinkButton extends wxButton {
+var wxCommandLinkButton = class extends wxButton {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, mainLabel, note, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxCommandLinkButton_Create(parent, id, mainLabel, note, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxCommandLinkButton(rawPtr);
   }
   SetMainLabel(mainLabel) {
     lib.symbols.wxCommandLinkButton_SetMainLabel(this._ptr, mainLabel);
@@ -27783,6 +28096,11 @@ var wxCommandLinkButton = class _wxCommandLinkButton extends wxButton {
     lib.symbols.wxCommandLinkButton_SetMainLabelAndNote(this._ptr, mainLabel, note);
   }
 };
+function createWxCommandLinkButton(parent, id, mainLabel, note, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxCommandLinkButton_Create(parent, id, mainLabel, note, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxCommandLinkButton(rawPtr);
+}
 
 // ../../wx/wxCommandProcessor_gen.ts
 var wxCommandProcessor = class {
@@ -27842,7 +28160,7 @@ var wxCommandProcessor = class {
 };
 
 // ../../wx/wxCondition_gen.ts
-var wxCondition = class _wxCondition {
+var wxCondition = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -27850,11 +28168,6 @@ var wxCondition = class _wxCondition {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(mutex) {
-    const rawPtr = lib.symbols.wxCondition_Create(mutex);
-    if (rawPtr === null) return null;
-    return new _wxCondition(rawPtr);
   }
   Delete() {
     lib.symbols.wxCondition_Delete(this._ptr);
@@ -27875,9 +28188,14 @@ var wxCondition = class _wxCondition {
     return lib.symbols.wxCondition_WaitFor(this._ptr, sec, nsec);
   }
 };
+function createWxCondition(mutex) {
+  const rawPtr = lib.symbols.wxCondition_Create(mutex);
+  if (rawPtr === null) return null;
+  return new wxCondition(rawPtr);
+}
 
 // ../../wx/wxConfigBase_gen.ts
-var wxConfigBase = class _wxConfigBase {
+var wxConfigBase = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -27885,11 +28203,6 @@ var wxConfigBase = class _wxConfigBase {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxConfigBase_Create();
-    if (rawPtr === null) return null;
-    return new _wxConfigBase(rawPtr);
   }
   Delete() {
     lib.symbols.wxConfigBase_Delete(this._ptr);
@@ -28012,9 +28325,14 @@ var wxConfigBase = class _wxConfigBase {
     return lib.symbols.wxConfigBase_WriteString(this._ptr, key, value) !== 0;
   }
 };
+function createWxConfigBase() {
+  const rawPtr = lib.symbols.wxConfigBase_Create();
+  if (rawPtr === null) return null;
+  return new wxConfigBase(rawPtr);
+}
 
 // ../../wx/wxContextHelp_gen.ts
-var wxContextHelp = class _wxContextHelp {
+var wxContextHelp = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28022,11 +28340,6 @@ var wxContextHelp = class _wxContextHelp {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(win, beginHelp) {
-    const rawPtr = lib.symbols.wxContextHelp_Create(win, beginHelp ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new _wxContextHelp(rawPtr);
   }
   Delete() {
     lib.symbols.wxContextHelp_Delete(this._ptr);
@@ -28041,22 +28354,27 @@ var wxContextHelp = class _wxContextHelp {
     return lib.symbols.wxContextHelp_EndContextHelp(this._ptr) !== 0;
   }
 };
+function createWxContextHelp(win, beginHelp) {
+  const rawPtr = lib.symbols.wxContextHelp_Create(win, beginHelp ? 1 : 0);
+  if (rawPtr === null) return null;
+  return new wxContextHelp(rawPtr);
+}
 
 // ../../wx/wxContextHelpButton_gen.ts
-var wxContextHelpButton = class _wxContextHelpButton extends wxBitmapButton {
+var wxContextHelpButton = class extends wxBitmapButton {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxContextHelpButton_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxContextHelpButton(rawPtr);
-  }
 };
+function createWxContextHelpButton(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxContextHelpButton_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxContextHelpButton(rawPtr);
+}
 
 // ../../wx/wxCriticalSection_gen.ts
-var wxCriticalSection = class _wxCriticalSection {
+var wxCriticalSection = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28064,11 +28382,6 @@ var wxCriticalSection = class _wxCriticalSection {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxCriticalSection_Create();
-    if (rawPtr === null) return null;
-    return new _wxCriticalSection(rawPtr);
   }
   Delete() {
     lib.symbols.wxCriticalSection_Delete(this._ptr);
@@ -28083,32 +28396,37 @@ var wxCriticalSection = class _wxCriticalSection {
     lib.symbols.wxCriticalSection_Leave(this._ptr);
   }
 };
+function createWxCriticalSection() {
+  const rawPtr = lib.symbols.wxCriticalSection_Create();
+  if (rawPtr === null) return null;
+  return new wxCriticalSection(rawPtr);
+}
 
 // ../../wx/wxCursor_gen.ts
-var wxCursor = class _wxCursor extends wxBitmap {
+var wxCursor = class extends wxBitmap {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static CreateFromStock(id) {
-    const rawPtr = lib.symbols.Cursor_CreateFromStock(id);
-    if (rawPtr === null) return null;
-    return new _wxCursor(rawPtr);
-  }
-  static CreateFromImage(image) {
-    const rawPtr = lib.symbols.Cursor_CreateFromImage(image);
-    if (rawPtr === null) return null;
-    return new _wxCursor(rawPtr);
-  }
-  static CreateLoad(name, type_, width, height) {
-    const rawPtr = lib.symbols.Cursor_CreateLoad(name, type_, width, height);
-    if (rawPtr === null) return null;
-    return new _wxCursor(rawPtr);
-  }
 };
+function createWxCursorFromStock(id) {
+  const rawPtr = lib.symbols.Cursor_CreateFromStock(id);
+  if (rawPtr === null) return null;
+  return new wxCursor(rawPtr);
+}
+function createWxCursorFromImage(image) {
+  const rawPtr = lib.symbols.Cursor_CreateFromImage(image);
+  if (rawPtr === null) return null;
+  return new wxCursor(rawPtr);
+}
+function createWxCursorLoad(name, type_, width, height) {
+  const rawPtr = lib.symbols.Cursor_CreateLoad(name, type_, width, height);
+  if (rawPtr === null) return null;
+  return new wxCursor(rawPtr);
+}
 
 // ../../wx/wxDataFormat_gen.ts
-var wxDataFormat = class _wxDataFormat {
+var wxDataFormat = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28116,16 +28434,6 @@ var wxDataFormat = class _wxDataFormat {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateFromId(name) {
-    const rawPtr = lib.symbols.wxDataFormat_CreateFromId(name);
-    if (rawPtr === null) return null;
-    return new _wxDataFormat(rawPtr);
-  }
-  static CreateFromType(typ) {
-    const rawPtr = lib.symbols.wxDataFormat_CreateFromType(typ);
-    if (rawPtr === null) return null;
-    return new _wxDataFormat(rawPtr);
   }
   Delete() {
     lib.symbols.wxDataFormat_Delete(this._ptr);
@@ -28149,9 +28457,19 @@ var wxDataFormat = class _wxDataFormat {
     lib.symbols.wxDataFormat_SetType(this._ptr, typ);
   }
 };
+function createWxDataFormatFromId(name) {
+  const rawPtr = lib.symbols.wxDataFormat_CreateFromId(name);
+  if (rawPtr === null) return null;
+  return new wxDataFormat(rawPtr);
+}
+function createWxDataFormatFromType(typ) {
+  const rawPtr = lib.symbols.wxDataFormat_CreateFromType(typ);
+  if (rawPtr === null) return null;
+  return new wxDataFormat(rawPtr);
+}
 
 // ../../wx/wxDataObjectComposite_gen.ts
-var wxDataObjectComposite = class _wxDataObjectComposite {
+var wxDataObjectComposite = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28159,11 +28477,6 @@ var wxDataObjectComposite = class _wxDataObjectComposite {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxDataObjectComposite_Create();
-    if (rawPtr === null) return null;
-    return new _wxDataObjectComposite(rawPtr);
   }
   Delete() {
     lib.symbols.wxDataObjectComposite_Delete(this._ptr);
@@ -28175,9 +28488,14 @@ var wxDataObjectComposite = class _wxDataObjectComposite {
     lib.symbols.wxDataObjectComposite_Add(this._ptr, data, preferred);
   }
 };
+function createWxDataObjectComposite() {
+  const rawPtr = lib.symbols.wxDataObjectComposite_Create();
+  if (rawPtr === null) return null;
+  return new wxDataObjectComposite(rawPtr);
+}
 
 // ../../wx/wxDataViewCtrl_gen.ts
-var wxDataViewCtrl = class _wxDataViewCtrl {
+var wxDataViewCtrl = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28185,11 +28503,6 @@ var wxDataViewCtrl = class _wxDataViewCtrl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxDataViewCtrl_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDataViewCtrl(rawPtr);
   }
   AssociateModel(model) {
     return lib.symbols.wxDataViewCtrl_AssociateModel(this._ptr, model) !== 0;
@@ -28360,9 +28673,14 @@ var wxDataViewCtrl = class _wxDataViewCtrl {
     return lib.symbols.wxDataViewCtrl_PrependBitmapColumn(this._ptr, label, model_column, mode, width, align, flags);
   }
 };
+function createWxDataViewCtrl(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxDataViewCtrl_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDataViewCtrl(rawPtr);
+}
 
 // ../../wx/wxDataViewItem_gen.ts
-var wxDataViewItem = class _wxDataViewItem {
+var wxDataViewItem = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28371,12 +28689,7 @@ var wxDataViewItem = class _wxDataViewItem {
   get ptr() {
     return this._ptr;
   }
-  static Create(id) {
-    const rawPtr = lib.symbols.wxDataViewItem_Create(id);
-    if (rawPtr === null) return null;
-    return new _wxDataViewItem(rawPtr);
-  }
-  Delete() {
+  DeleteItem() {
     lib.symbols.wxDataViewItem_Delete(this._ptr);
   }
   GetID() {
@@ -28386,9 +28699,14 @@ var wxDataViewItem = class _wxDataViewItem {
     return lib.symbols.wxDataViewItem_IsOk(this._ptr) !== 0;
   }
 };
+function createWxDataViewItem(id) {
+  const rawPtr = lib.symbols.wxDataViewItem_Create(id);
+  if (rawPtr === null) return null;
+  return new wxDataViewItem(rawPtr);
+}
 
 // ../../wx/wxDataViewItemArray_gen.ts
-var wxDataViewItemArray = class _wxDataViewItemArray {
+var wxDataViewItemArray = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28397,12 +28715,7 @@ var wxDataViewItemArray = class _wxDataViewItemArray {
   get ptr() {
     return this._ptr;
   }
-  static Create() {
-    const rawPtr = lib.symbols.wxDataViewItemArray_Create();
-    if (rawPtr === null) return null;
-    return new _wxDataViewItemArray(rawPtr);
-  }
-  Delete() {
+  DeleteItem() {
     lib.symbols.wxDataViewItemArray_Delete(this._ptr);
   }
   GetCount() {
@@ -28418,9 +28731,14 @@ var wxDataViewItemArray = class _wxDataViewItemArray {
     lib.symbols.wxDataViewItemArray_Clear(this._ptr);
   }
 };
+function createWxDataViewItemArray() {
+  const rawPtr = lib.symbols.wxDataViewItemArray_Create();
+  if (rawPtr === null) return null;
+  return new wxDataViewItemArray(rawPtr);
+}
 
 // ../../wx/wxDataViewListCtrl_gen.ts
-var wxDataViewListCtrl = class _wxDataViewListCtrl {
+var wxDataViewListCtrl = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28428,11 +28746,6 @@ var wxDataViewListCtrl = class _wxDataViewListCtrl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxDataViewListCtrl_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDataViewListCtrl(rawPtr);
   }
   GetStore() {
     return lib.symbols.wxDataViewListCtrl_GetStore(this._ptr);
@@ -28510,9 +28823,14 @@ var wxDataViewListCtrl = class _wxDataViewListCtrl {
     return lib.symbols.wxDataViewListCtrl_IsRowSelected(this._ptr, row) !== 0;
   }
 };
+function createWxDataViewListCtrl(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxDataViewListCtrl_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDataViewListCtrl(rawPtr);
+}
 
 // ../../wx/wxDatePickerCtrl_gen.ts
-var wxDatePickerCtrl = class _wxDatePickerCtrl {
+var wxDatePickerCtrl = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28520,11 +28838,6 @@ var wxDatePickerCtrl = class _wxDatePickerCtrl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxDatePickerCtrl_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDatePickerCtrl(rawPtr);
   }
   SetValue(dateTime) {
     lib.symbols.wxDatePickerCtrl_SetValue(this._ptr, dateTime);
@@ -28539,22 +28852,27 @@ var wxDatePickerCtrl = class _wxDatePickerCtrl {
     return lib.symbols.wxDatePickerCtrl_GetRange(this._ptr, dt1, dt2) !== 0;
   }
 };
+function createWxDatePickerCtrl(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxDatePickerCtrl_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDatePickerCtrl(rawPtr);
+}
 
 // ../../wx/wxDateProperty_gen.ts
-var wxDateProperty = class _wxDateProperty extends wxPGProperty {
+var wxDateProperty = class extends wxPGProperty {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(label, name, value) {
-    const rawPtr = lib.symbols.wxDateProperty_Create(label, name, value);
-    if (rawPtr === null) return null;
-    return new _wxDateProperty(rawPtr);
-  }
 };
+function createWxDateProperty(label, name, value) {
+  const rawPtr = lib.symbols.wxDateProperty_Create(label, name, value);
+  if (rawPtr === null) return null;
+  return new wxDateProperty(rawPtr);
+}
 
 // ../../wx/wxDateTime_gen.ts
-var wxDateTime = class _wxDateTime {
+var wxDateTime = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28562,11 +28880,6 @@ var wxDateTime = class _wxDateTime {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxDateTime_Create();
-    if (rawPtr === null) return null;
-    return new _wxDateTime(rawPtr);
   }
   AddDate(diff, ref) {
     lib.symbols.wxDateTime_AddDate(this._ptr, diff, ref);
@@ -28836,17 +29149,17 @@ var wxDateTime = class _wxDateTime {
     return lib.symbols.wxDateTime_wxDateTime(hi_long, lo_long);
   }
 };
+function createWxDateTime() {
+  const rawPtr = lib.symbols.wxDateTime_Create();
+  if (rawPtr === null) return null;
+  return new wxDateTime(rawPtr);
+}
 
 // ../../wx/wxDirDialog_gen.ts
-var wxDirDialog = class _wxDirDialog extends wxDialog {
+var wxDirDialog = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, message, directory, left, top, style) {
-    const rawPtr = lib.symbols.wxDirDialog_Create(parent, message, directory, left, top, style);
-    if (rawPtr === null) return null;
-    return new _wxDirDialog(rawPtr);
   }
   GetMessage() {
     return lib.symbols.wxDirDialog_GetMessage(this._ptr);
@@ -28870,9 +29183,14 @@ var wxDirDialog = class _wxDirDialog extends wxDialog {
     lib.symbols.wxDirDialog_SetStyle(this._ptr, style);
   }
 };
+function createWxDirDialog(parent, message, directory, left, top, style) {
+  const rawPtr = lib.symbols.wxDirDialog_Create(parent, message, directory, left, top, style);
+  if (rawPtr === null) return null;
+  return new wxDirDialog(rawPtr);
+}
 
 // ../../wx/wxDirPickerCtrl_gen.ts
-var wxDirPickerCtrl = class _wxDirPickerCtrl {
+var wxDirPickerCtrl = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -28880,11 +29198,6 @@ var wxDirPickerCtrl = class _wxDirPickerCtrl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, path, message, style) {
-    const rawPtr = lib.symbols.wxDirPickerCtrl_Create(parent, id, x, y, width, height, path, message, style);
-    if (rawPtr === null) return null;
-    return new _wxDirPickerCtrl(rawPtr);
   }
   GetPath() {
     return lib.symbols.wxDirPickerCtrl_GetPath(this._ptr);
@@ -28902,17 +29215,17 @@ var wxDirPickerCtrl = class _wxDirPickerCtrl {
     return lib.symbols.wxDirPickerCtrl_GetDirName(this._ptr);
   }
 };
+function createWxDirPickerCtrl(parent, id, x, y, width, height, path, message, style) {
+  const rawPtr = lib.symbols.wxDirPickerCtrl_Create(parent, id, x, y, width, height, path, message, style);
+  if (rawPtr === null) return null;
+  return new wxDirPickerCtrl(rawPtr);
+}
 
 // ../../wx/wxDocChildFrame_gen.ts
-var wxDocChildFrame = class _wxDocChildFrame extends wxFrame {
+var wxDocChildFrame = class extends wxFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(doc, view, parent, id, title, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxDocChildFrame_Create(doc, view, parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDocChildFrame(rawPtr);
   }
   GetDocument() {
     return lib.symbols.wxDocChildFrame_GetDocument(this._ptr);
@@ -28927,17 +29240,17 @@ var wxDocChildFrame = class _wxDocChildFrame extends wxFrame {
     lib.symbols.wxDocChildFrame_SetView(this._ptr, view);
   }
 };
+function createWxDocChildFrame(doc, view, parent, id, title, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxDocChildFrame_Create(doc, view, parent, id, title, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDocChildFrame(rawPtr);
+}
 
 // ../../wx/wxMDIChildFrame_gen.ts
-var wxMDIChildFrame = class _wxMDIChildFrame extends wxFrame {
+var wxMDIChildFrame = class extends wxFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxMDIChildFrame_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxMDIChildFrame(rawPtr);
   }
   Activate() {
     lib.symbols.wxMDIChildFrame_Activate(this._ptr);
@@ -28946,17 +29259,17 @@ var wxMDIChildFrame = class _wxMDIChildFrame extends wxFrame {
     return lib.symbols.wxMDIChildFrame_GetMDIParent(this._ptr);
   }
 };
+function createWxMDIChildFrame(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxMDIChildFrame_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxMDIChildFrame(rawPtr);
+}
 
 // ../../wx/wxDocMDIChildFrame_gen.ts
-var wxDocMDIChildFrame = class _wxDocMDIChildFrame extends wxMDIChildFrame {
+var wxDocMDIChildFrame = class extends wxMDIChildFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(doc, view, parent, id, title, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxDocMDIChildFrame_Create(doc, view, parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDocMDIChildFrame(rawPtr);
   }
   GetDocument() {
     return lib.symbols.wxDocMDIChildFrame_GetDocument(this._ptr);
@@ -28971,17 +29284,17 @@ var wxDocMDIChildFrame = class _wxDocMDIChildFrame extends wxMDIChildFrame {
     lib.symbols.wxDocMDIChildFrame_SetView(this._ptr, view);
   }
 };
+function createWxDocMDIChildFrame(doc, view, parent, id, title, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxDocMDIChildFrame_Create(doc, view, parent, id, title, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDocMDIChildFrame(rawPtr);
+}
 
 // ../../wx/wxMDIParentFrame_gen.ts
-var wxMDIParentFrame = class _wxMDIParentFrame extends wxFrame {
+var wxMDIParentFrame = class extends wxFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxMDIParentFrame_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxMDIParentFrame(rawPtr);
   }
   ActivateNext() {
     lib.symbols.wxMDIParentFrame_ActivateNext(this._ptr);
@@ -29014,67 +29327,72 @@ var wxMDIParentFrame = class _wxMDIParentFrame extends wxFrame {
     lib.symbols.wxMDIParentFrame_Tile(this._ptr, orient);
   }
 };
+function createWxMDIParentFrame(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxMDIParentFrame_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxMDIParentFrame(rawPtr);
+}
 
 // ../../wx/wxDocMDIParentFrame_gen.ts
-var wxDocMDIParentFrame = class _wxDocMDIParentFrame extends wxMDIParentFrame {
+var wxDocMDIParentFrame = class extends wxMDIParentFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(manager, parent, id, title, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxDocMDIParentFrame_Create(manager, parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDocMDIParentFrame(rawPtr);
   }
   GetDocumentManager() {
     return lib.symbols.wxDocMDIParentFrame_GetDocumentManager(this._ptr);
   }
 };
+function createWxDocMDIParentFrame(manager, parent, id, title, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxDocMDIParentFrame_Create(manager, parent, id, title, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDocMDIParentFrame(rawPtr);
+}
 
 // ../../wx/wxDocParentFrame_gen.ts
-var wxDocParentFrame = class _wxDocParentFrame extends wxFrame {
+var wxDocParentFrame = class extends wxFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(manager, parent, id, title, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxDocParentFrame_Create(manager, parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDocParentFrame(rawPtr);
   }
   GetDocumentManager() {
     return lib.symbols.wxDocParentFrame_GetDocumentManager(this._ptr);
   }
 };
+function createWxDocParentFrame(manager, parent, id, title, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxDocParentFrame_Create(manager, parent, id, title, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDocParentFrame(rawPtr);
+}
 
 // ../../wx/wxDrawControl_gen.ts
-var wxDrawControl = class _wxDrawControl extends wxControl {
+var wxDrawControl = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxDrawControl_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDrawControl(rawPtr);
-  }
 };
+function createWxDrawControl(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxDrawControl_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDrawControl(rawPtr);
+}
 
 // ../../wx/wxDrawWindow_gen.ts
-var wxDrawWindow = class _wxDrawWindow extends wxWindow {
+var wxDrawWindow = class extends wxWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxDrawWindow_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxDrawWindow(rawPtr);
-  }
 };
+function createWxDrawWindow(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxDrawWindow_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxDrawWindow(rawPtr);
+}
 
 // ../../wx/wxDropSource_gen.ts
-var wxDropSource = class _wxDropSource {
+var wxDropSource = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29082,11 +29400,6 @@ var wxDropSource = class _wxDropSource {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(data, win, copy, move, none) {
-    const rawPtr = lib.symbols.DropSource_Create(data, win, copy, move, none);
-    if (rawPtr === null) return null;
-    return new _wxDropSource(rawPtr);
   }
   Delete() {
     lib.symbols.DropSource_Delete(this._ptr);
@@ -29098,9 +29411,14 @@ var wxDropSource = class _wxDropSource {
     return lib.symbols.DropSource_DoDragDrop(this._ptr, move);
   }
 };
+function createWxDropSource(data, win, copy, move, none) {
+  const rawPtr = lib.symbols.DropSource_Create(data, win, copy, move, none);
+  if (rawPtr === null) return null;
+  return new wxDropSource(rawPtr);
+}
 
 // ../../wx/wxEncodingConverter_gen.ts
-var wxEncodingConverter = class _wxEncodingConverter {
+var wxEncodingConverter = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29108,11 +29426,6 @@ var wxEncodingConverter = class _wxEncodingConverter {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxEncodingConverter_Create();
-    if (rawPtr === null) return null;
-    return new _wxEncodingConverter(rawPtr);
   }
   Delete() {
     lib.symbols.wxEncodingConverter_Delete(this._ptr);
@@ -29133,6 +29446,11 @@ var wxEncodingConverter = class _wxEncodingConverter {
     return lib.symbols.wxEncodingConverter_Init(this._ptr, input_enc, output_enc, method);
   }
 };
+function createWxEncodingConverter() {
+  const rawPtr = lib.symbols.wxEncodingConverter_Create();
+  if (rawPtr === null) return null;
+  return new wxEncodingConverter(rawPtr);
+}
 
 // ../../wx/wxEraseEvent_gen.ts
 var wxEraseEvent = class extends wxEvent {
@@ -29146,15 +29464,10 @@ var wxEraseEvent = class extends wxEvent {
 };
 
 // ../../wx/wxFileCtrl_gen.ts
-var wxFileCtrl = class _wxFileCtrl extends wxControl {
+var wxFileCtrl = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, defaultDirectory, defaultFilename, wildCard, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxFileCtrl_Create(parent, id, defaultDirectory, defaultFilename, wildCard, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxFileCtrl(rawPtr);
   }
   GetDirectory() {
     return lib.symbols.wxFileCtrl_GetDirectory(this._ptr);
@@ -29196,9 +29509,14 @@ var wxFileCtrl = class _wxFileCtrl extends wxControl {
     lib.symbols.wxFileCtrl_ShowHidden(this._ptr, show ? 1 : 0);
   }
 };
+function createWxFileCtrl(parent, id, defaultDirectory, defaultFilename, wildCard, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxFileCtrl_Create(parent, id, defaultDirectory, defaultFilename, wildCard, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxFileCtrl(rawPtr);
+}
 
 // ../../wx/wxFileDataObject_gen.ts
-var wxFileDataObject = class _wxFileDataObject {
+var wxFileDataObject = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29206,11 +29524,6 @@ var wxFileDataObject = class _wxFileDataObject {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(count, list) {
-    const rawPtr = lib.symbols.FileDataObject_Create(count, list);
-    if (rawPtr === null) return null;
-    return new _wxFileDataObject(rawPtr);
   }
   Delete() {
     lib.symbols.FileDataObject_Delete(this._ptr);
@@ -29225,17 +29538,17 @@ var wxFileDataObject = class _wxFileDataObject {
     return lib.symbols.FileDataObject_GetFilenames(this._ptr, list);
   }
 };
+function createWxFileDataObject(count, list) {
+  const rawPtr = lib.symbols.FileDataObject_Create(count, list);
+  if (rawPtr === null) return null;
+  return new wxFileDataObject(rawPtr);
+}
 
 // ../../wx/wxFileDialog_gen.ts
-var wxFileDialog = class _wxFileDialog extends wxDialog {
+var wxFileDialog = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, message, directory, files, weekday, left, top, style, sz_w, sz_h) {
-    const rawPtr = lib.symbols.wxFileDialog_Create(parent, message, directory, files, weekday, left, top, style, sz_w, sz_h);
-    if (rawPtr === null) return null;
-    return new _wxFileDialog(rawPtr);
   }
   GetDirectory() {
     return lib.symbols.wxFileDialog_GetDirectory(this._ptr);
@@ -29292,9 +29605,14 @@ var wxFileDialog = class _wxFileDialog extends wxDialog {
     return lib.symbols.wxFileDialog_GetExtraControl(this._ptr);
   }
 };
+function createWxFileDialog(parent, message, directory, files, weekday, left, top, style, sz_w, sz_h) {
+  const rawPtr = lib.symbols.wxFileDialog_Create(parent, message, directory, files, weekday, left, top, style, sz_w, sz_h);
+  if (rawPtr === null) return null;
+  return new wxFileDialog(rawPtr);
+}
 
 // ../../wx/wxFileHistory_gen.ts
-var wxFileHistory = class _wxFileHistory {
+var wxFileHistory = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29302,11 +29620,6 @@ var wxFileHistory = class _wxFileHistory {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(maxFiles) {
-    const rawPtr = lib.symbols.wxFileHistory_Create(maxFiles);
-    if (rawPtr === null) return null;
-    return new _wxFileHistory(rawPtr);
   }
   Delete() {
     lib.symbols.wxFileHistory_Delete(this._ptr);
@@ -29348,9 +29661,14 @@ var wxFileHistory = class _wxFileHistory {
     lib.symbols.wxFileHistory_UseMenu(this._ptr, menu);
   }
 };
+function createWxFileHistory(maxFiles) {
+  const rawPtr = lib.symbols.wxFileHistory_Create(maxFiles);
+  if (rawPtr === null) return null;
+  return new wxFileHistory(rawPtr);
+}
 
 // ../../wx/wxFilePickerCtrl_gen.ts
-var wxFilePickerCtrl = class _wxFilePickerCtrl {
+var wxFilePickerCtrl = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29358,11 +29676,6 @@ var wxFilePickerCtrl = class _wxFilePickerCtrl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, path, message, wildcard, style) {
-    const rawPtr = lib.symbols.wxFilePickerCtrl_Create(parent, id, x, y, width, height, path, message, wildcard, style);
-    if (rawPtr === null) return null;
-    return new _wxFilePickerCtrl(rawPtr);
   }
   GetPath() {
     return lib.symbols.wxFilePickerCtrl_GetPath(this._ptr);
@@ -29380,19 +29693,24 @@ var wxFilePickerCtrl = class _wxFilePickerCtrl {
     return lib.symbols.wxFilePickerCtrl_GetFileName(this._ptr);
   }
 };
+function createWxFilePickerCtrl(parent, id, x, y, width, height, path, message, wildcard, style) {
+  const rawPtr = lib.symbols.wxFilePickerCtrl_Create(parent, id, x, y, width, height, path, message, wildcard, style);
+  if (rawPtr === null) return null;
+  return new wxFilePickerCtrl(rawPtr);
+}
 
 // ../../wx/wxFileProperty_gen.ts
-var wxFileProperty = class _wxFileProperty extends wxPGProperty {
+var wxFileProperty = class extends wxPGProperty {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(label, name, value) {
-    const rawPtr = lib.symbols.wxFileProperty_Create(label, name, value);
-    if (rawPtr === null) return null;
-    return new _wxFileProperty(rawPtr);
-  }
 };
+function createWxFileProperty(label, name, value) {
+  const rawPtr = lib.symbols.wxFileProperty_Create(label, name, value);
+  if (rawPtr === null) return null;
+  return new wxFileProperty(rawPtr);
+}
 
 // ../../wx/wxFileType_gen.ts
 var wxFileType = class {
@@ -29454,7 +29772,7 @@ var wxFindDialogEvent = class extends wxCommandEvent {
 };
 
 // ../../wx/wxFindReplaceData_gen.ts
-var wxFindReplaceData = class _wxFindReplaceData {
+var wxFindReplaceData = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29462,16 +29780,6 @@ var wxFindReplaceData = class _wxFindReplaceData {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(flags) {
-    const rawPtr = lib.symbols.wxFindReplaceData_Create(flags);
-    if (rawPtr === null) return null;
-    return new _wxFindReplaceData(rawPtr);
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxFindReplaceData_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxFindReplaceData(rawPtr);
   }
   Delete() {
     lib.symbols.wxFindReplaceData_Delete(this._ptr);
@@ -29498,17 +29806,22 @@ var wxFindReplaceData = class _wxFindReplaceData {
     lib.symbols.wxFindReplaceData_SetReplaceString(this._ptr, str);
   }
 };
+function createWxFindReplaceData(flags) {
+  const rawPtr = lib.symbols.wxFindReplaceData_Create(flags);
+  if (rawPtr === null) return null;
+  return new wxFindReplaceData(rawPtr);
+}
+function createWxFindReplaceDataDefault() {
+  const rawPtr = lib.symbols.wxFindReplaceData_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxFindReplaceData(rawPtr);
+}
 
 // ../../wx/wxFindReplaceDialog_gen.ts
-var wxFindReplaceDialog = class _wxFindReplaceDialog extends wxDialog {
+var wxFindReplaceDialog = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, data, title, style) {
-    const rawPtr = lib.symbols.wxFindReplaceDialog_Create(parent, data, title, style);
-    if (rawPtr === null) return null;
-    return new _wxFindReplaceDialog(rawPtr);
   }
   GetData() {
     return lib.symbols.wxFindReplaceDialog_GetData(this._ptr);
@@ -29517,17 +29830,17 @@ var wxFindReplaceDialog = class _wxFindReplaceDialog extends wxDialog {
     lib.symbols.wxFindReplaceDialog_SetData(this._ptr, data);
   }
 };
+function createWxFindReplaceDialog(parent, data, title, style) {
+  const rawPtr = lib.symbols.wxFindReplaceDialog_Create(parent, data, title, style);
+  if (rawPtr === null) return null;
+  return new wxFindReplaceDialog(rawPtr);
+}
 
 // ../../wx/wxGridSizer_gen.ts
-var wxGridSizer = class _wxGridSizer extends wxSizer {
+var wxGridSizer = class extends wxSizer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(rows, cols, vgap, hgap) {
-    const rawPtr = lib.symbols.wxGridSizer_Create(rows, cols, vgap, hgap);
-    if (rawPtr === null) return null;
-    return new _wxGridSizer(rawPtr);
   }
   CalcMin() {
     return lib.symbols.wxGridSizer_CalcMin(this._ptr);
@@ -29560,17 +29873,17 @@ var wxGridSizer = class _wxGridSizer extends wxSizer {
     lib.symbols.wxGridSizer_SetVGap(this._ptr, gap);
   }
 };
+function createWxGridSizer(rows, cols, vgap, hgap) {
+  const rawPtr = lib.symbols.wxGridSizer_Create(rows, cols, vgap, hgap);
+  if (rawPtr === null) return null;
+  return new wxGridSizer(rawPtr);
+}
 
 // ../../wx/wxFlexGridSizer_gen.ts
-var wxFlexGridSizer = class _wxFlexGridSizer extends wxGridSizer {
+var wxFlexGridSizer = class extends wxGridSizer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(rows, cols, vgap, hgap) {
-    const rawPtr = lib.symbols.wxFlexGridSizer_Create(rows, cols, vgap, hgap);
-    if (rawPtr === null) return null;
-    return new _wxFlexGridSizer(rawPtr);
   }
   AddGrowableCol(idx, proportion) {
     lib.symbols.wxFlexGridSizer_AddGrowableCol(this._ptr, idx, proportion);
@@ -29591,22 +29904,27 @@ var wxFlexGridSizer = class _wxFlexGridSizer extends wxGridSizer {
     lib.symbols.wxFlexGridSizer_RemoveGrowableRow(this._ptr, idx);
   }
 };
+function createWxFlexGridSizer(rows, cols, vgap, hgap) {
+  const rawPtr = lib.symbols.wxFlexGridSizer_Create(rows, cols, vgap, hgap);
+  if (rawPtr === null) return null;
+  return new wxFlexGridSizer(rawPtr);
+}
 
 // ../../wx/wxFloatProperty_gen.ts
-var wxFloatProperty = class _wxFloatProperty extends wxPGProperty {
+var wxFloatProperty = class extends wxPGProperty {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(label, name, value) {
-    const rawPtr = lib.symbols.wxFloatProperty_Create(label, name, value);
-    if (rawPtr === null) return null;
-    return new _wxFloatProperty(rawPtr);
-  }
 };
+function createWxFloatProperty(label, name, value) {
+  const rawPtr = lib.symbols.wxFloatProperty_Create(label, name, value);
+  if (rawPtr === null) return null;
+  return new wxFloatProperty(rawPtr);
+}
 
 // ../../wx/wxFont_gen.ts
-var wxFont = class _wxFont {
+var wxFont = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29614,21 +29932,6 @@ var wxFont = class _wxFont {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pointSize, family, style, weight, underlined, face, enc) {
-    const rawPtr = lib.symbols.wxFont_Create(pointSize, family, style, weight, underlined ? 1 : 0, face, enc);
-    if (rawPtr === null) return null;
-    return new _wxFont(rawPtr);
-  }
-  static CreateFromStock(id) {
-    const rawPtr = lib.symbols.wxFont_CreateFromStock(id);
-    if (rawPtr === null) return null;
-    return new _wxFont(rawPtr);
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxFont_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxFont(rawPtr);
   }
   Delete() {
     lib.symbols.wxFont_Delete(this._ptr);
@@ -29697,9 +30000,24 @@ var wxFont = class _wxFont {
     lib.symbols.wxFont_SetWeight(this._ptr, weight);
   }
 };
+function createWxFont(pointSize, family, style, weight, underlined, face, enc) {
+  const rawPtr = lib.symbols.wxFont_Create(pointSize, family, style, weight, underlined ? 1 : 0, face, enc);
+  if (rawPtr === null) return null;
+  return new wxFont(rawPtr);
+}
+function createWxFontFromStock(id) {
+  const rawPtr = lib.symbols.wxFont_CreateFromStock(id);
+  if (rawPtr === null) return null;
+  return new wxFont(rawPtr);
+}
+function createWxFontDefault() {
+  const rawPtr = lib.symbols.wxFont_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxFont(rawPtr);
+}
 
 // ../../wx/wxFontData_gen.ts
-var wxFontData = class _wxFontData {
+var wxFontData = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29707,11 +30025,6 @@ var wxFontData = class _wxFontData {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxFontData_Create();
-    if (rawPtr === null) return null;
-    return new _wxFontData(rawPtr);
   }
   Delete() {
     lib.symbols.wxFontData_Delete(this._ptr);
@@ -29765,25 +30078,30 @@ var wxFontData = class _wxFontData {
     lib.symbols.wxFontData_SetShowHelp(this._ptr, flag ? 1 : 0);
   }
 };
+function createWxFontData() {
+  const rawPtr = lib.symbols.wxFontData_Create();
+  if (rawPtr === null) return null;
+  return new wxFontData(rawPtr);
+}
 
 // ../../wx/wxFontDialog_gen.ts
-var wxFontDialog = class _wxFontDialog extends wxDialog {
+var wxFontDialog = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, fnt) {
-    const rawPtr = lib.symbols.wxFontDialog_Create(parent, fnt);
-    if (rawPtr === null) return null;
-    return new _wxFontDialog(rawPtr);
   }
   GetFontData(ref) {
     lib.symbols.wxFontDialog_GetFontData(this._ptr, ref);
   }
 };
+function createWxFontDialog(parent, fnt) {
+  const rawPtr = lib.symbols.wxFontDialog_Create(parent, fnt);
+  if (rawPtr === null) return null;
+  return new wxFontDialog(rawPtr);
+}
 
 // ../../wx/wxFontEnumerator_gen.ts
-var wxFontEnumerator = class _wxFontEnumerator {
+var wxFontEnumerator = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29791,11 +30109,6 @@ var wxFontEnumerator = class _wxFontEnumerator {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, pFunction) {
-    const rawPtr = lib.symbols.wxFontEnumerator_Create(pObject, pFunction);
-    if (rawPtr === null) return null;
-    return new _wxFontEnumerator(rawPtr);
   }
   Delete() {
     lib.symbols.wxFontEnumerator_Delete(this._ptr);
@@ -29810,9 +30123,14 @@ var wxFontEnumerator = class _wxFontEnumerator {
     return lib.symbols.wxFontEnumerator_EnumerateFacenames(this._ptr, encoding, fixedWidthOnly) !== 0;
   }
 };
+function createWxFontEnumerator(pObject, pFunction) {
+  const rawPtr = lib.symbols.wxFontEnumerator_Create(pObject, pFunction);
+  if (rawPtr === null) return null;
+  return new wxFontEnumerator(rawPtr);
+}
 
 // ../../wx/wxFontMapper_gen.ts
-var wxFontMapper = class _wxFontMapper {
+var wxFontMapper = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29820,11 +30138,6 @@ var wxFontMapper = class _wxFontMapper {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxFontMapper_Create();
-    if (rawPtr === null) return null;
-    return new _wxFontMapper(rawPtr);
   }
   GetAltForEncoding(encoding, alt_encoding, buffer) {
     return lib.symbols.wxFontMapper_GetAltForEncoding(this._ptr, encoding, alt_encoding, buffer) !== 0;
@@ -29833,9 +30146,14 @@ var wxFontMapper = class _wxFontMapper {
     return lib.symbols.wxFontMapper_IsEncodingAvailable(this._ptr, encoding, buffer) !== 0;
   }
 };
+function createWxFontMapper() {
+  const rawPtr = lib.symbols.wxFontMapper_Create();
+  if (rawPtr === null) return null;
+  return new wxFontMapper(rawPtr);
+}
 
 // ../../wx/wxFontPickerCtrl_gen.ts
-var wxFontPickerCtrl = class _wxFontPickerCtrl {
+var wxFontPickerCtrl = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -29843,11 +30161,6 @@ var wxFontPickerCtrl = class _wxFontPickerCtrl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, initial, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxFontPickerCtrl_Create(parent, id, initial, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxFontPickerCtrl(rawPtr);
   }
   GetSelectedFont() {
     return lib.symbols.wxFontPickerCtrl_GetSelectedFont(this._ptr);
@@ -29862,17 +30175,17 @@ var wxFontPickerCtrl = class _wxFontPickerCtrl {
     lib.symbols.wxFontPickerCtrl_SetMaxPointSize(this._ptr, maxSize);
   }
 };
+function createWxFontPickerCtrl(parent, id, initial, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxFontPickerCtrl_Create(parent, id, initial, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxFontPickerCtrl(rawPtr);
+}
 
 // ../../wx/wxGauge_gen.ts
-var wxGauge = class _wxGauge extends wxControl {
+var wxGauge = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, range, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxGauge_Create(parent, id, range, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxGauge(rawPtr);
   }
   GetRange() {
     return lib.symbols.wxGauge_GetRange(this._ptr);
@@ -29893,17 +30206,17 @@ var wxGauge = class _wxGauge extends wxControl {
     return lib.symbols.wxGauge_IsVertical(this._ptr) !== 0;
   }
 };
+function createWxGauge(parent, id, range, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxGauge_Create(parent, id, range, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxGauge(rawPtr);
+}
 
 // ../../wx/wxScrolledWindow_gen.ts
-var wxScrolledWindow = class _wxScrolledWindow extends wxPanel {
+var wxScrolledWindow = class extends wxPanel {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxScrolledWindow_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxScrolledWindow(rawPtr);
   }
   AdjustScrollbars() {
     lib.symbols.wxScrolledWindow_AdjustScrollbars(this._ptr);
@@ -29935,7 +30248,7 @@ var wxScrolledWindow = class _wxScrolledWindow extends wxPanel {
   GetViewStart(x, y) {
     lib.symbols.wxScrolledWindow_GetViewStart(this._ptr, x, y);
   }
-  GetVirtualSize(x, y) {
+  GetVirtualSizeXY(x, y) {
     lib.symbols.wxScrolledWindow_GetVirtualSize(this._ptr, x, y);
   }
   OnDraw(dc) {
@@ -29978,17 +30291,17 @@ var wxScrolledWindow = class _wxScrolledWindow extends wxPanel {
     lib.symbols.wxScrolledWindow_GetViewStartPixels(this._ptr, x, y);
   }
 };
+function createWxScrolledWindow(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxScrolledWindow_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxScrolledWindow(rawPtr);
+}
 
 // ../../wx/wxGrid_gen.ts
-var wxGrid = class _wxGrid extends wxScrolledWindow {
+var wxGrid = class extends wxScrolledWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxGrid_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxGrid(rawPtr);
   }
   AppendCols(numCols, updateLabels) {
     return lib.symbols.wxGrid_AppendCols(this._ptr, numCols, updateLabels ? 1 : 0) !== 0;
@@ -30501,25 +30814,25 @@ var wxGrid = class _wxGrid extends wxScrolledWindow {
     lib.symbols.wxGrid_SetCellSize(this._ptr, row, col, srow, scol);
   }
 };
+function createWxGrid(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxGrid_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxGrid(rawPtr);
+}
 
 // ../../wx/wxGridBagSizer_gen.ts
-var wxGridBagSizer = class _wxGridBagSizer extends wxGridSizer {
+var wxGridBagSizer = class extends wxGridSizer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(vgap, hgap) {
-    const rawPtr = lib.symbols.wxGridBagSizer_Create(vgap, hgap);
-    if (rawPtr === null) return null;
-    return new _wxGridBagSizer(rawPtr);
-  }
-  AddWindow(window, row, col, rowspan, colspan, flag, border, userData) {
+  AddWindowAt(window, row, col, rowspan, colspan, flag, border, userData) {
     return lib.symbols.wxGridBagSizer_AddWindow(this._ptr, window, row, col, rowspan, colspan, flag, border, userData);
   }
-  AddSizer(sizer, row, col, rowspan, colspan, flag, border, userData) {
+  AddSizerAt(sizer, row, col, rowspan, colspan, flag, border, userData) {
     return lib.symbols.wxGridBagSizer_AddSizer(this._ptr, sizer, row, col, rowspan, colspan, flag, border, userData);
   }
-  AddSpacer(width, height, row, col, rowspan, colspan, flag, border, userData) {
+  AddSpacerAt(width, height, row, col, rowspan, colspan, flag, border, userData) {
     return lib.symbols.wxGridBagSizer_AddSpacer(this._ptr, width, height, row, col, rowspan, colspan, flag, border, userData);
   }
   GetItemPosition(window, row, col) {
@@ -30574,6 +30887,11 @@ var wxGridBagSizer = class _wxGridBagSizer extends wxGridSizer {
     lib.symbols.wxGridBagSizer_SetEmptyCellSize(this._ptr, width, height);
   }
 };
+function createWxGridBagSizer(vgap, hgap) {
+  const rawPtr = lib.symbols.wxGridBagSizer_Create(vgap, hgap);
+  if (rawPtr === null) return null;
+  return new wxGridBagSizer(rawPtr);
+}
 
 // ../../wx/wxGridCellAttr_gen.ts
 var wxGridCellAttr = class {
@@ -30584,9 +30902,6 @@ var wxGridCellAttr = class {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  Ctor() {
-    return lib.symbols.wxGridCellAttr_Ctor();
   }
   DecRef() {
     lib.symbols.wxGridCellAttr_DecRef(this._ptr);
@@ -30658,6 +30973,11 @@ var wxGridCellAttr = class {
     lib.symbols.wxGridCellAttr_SetTextColour(this._ptr, colText);
   }
 };
+function createWxGridCellAttr() {
+  const rawPtr = lib.symbols.wxGridCellAttr_Ctor();
+  if (rawPtr === null) return null;
+  return new wxGridCellAttr(rawPtr);
+}
 
 // ../../wx/wxGridCellAutoWrapStringRenderer_gen.ts
 var wxGridCellAutoWrapStringRenderer = class {
@@ -30669,10 +30989,12 @@ var wxGridCellAutoWrapStringRenderer = class {
   get ptr() {
     return this._ptr;
   }
-  Ctor() {
-    return lib.symbols.wxGridCellAutoWrapStringRenderer_Ctor();
-  }
 };
+function createWxGridCellAutoWrapStringRenderer() {
+  const rawPtr = lib.symbols.wxGridCellAutoWrapStringRenderer_Ctor();
+  if (rawPtr === null) return null;
+  return new wxGridCellAutoWrapStringRenderer(rawPtr);
+}
 
 // ../../wx/wxGridCellEditor_gen.ts
 var wxGridCellEditor = class {
@@ -30740,10 +31062,12 @@ var wxGridCellBoolEditor = class extends wxGridCellEditor {
   get ptr() {
     return this._ptr;
   }
-  Ctor() {
-    return lib.symbols.wxGridCellBoolEditor_Ctor();
-  }
 };
+function createWxGridCellBoolEditor() {
+  const rawPtr = lib.symbols.wxGridCellBoolEditor_Ctor();
+  if (rawPtr === null) return null;
+  return new wxGridCellBoolEditor(rawPtr);
+}
 
 // ../../wx/wxGridCellChoiceEditor_gen.ts
 var wxGridCellChoiceEditor = class extends wxGridCellEditor {
@@ -30751,13 +31075,15 @@ var wxGridCellChoiceEditor = class extends wxGridCellEditor {
   get ptr() {
     return this._ptr;
   }
-  Ctor(count, choices, allowOthers) {
-    return lib.symbols.wxGridCellChoiceEditor_Ctor(count, choices, allowOthers ? 1 : 0);
-  }
 };
+function createWxGridCellChoiceEditor(count, choices, allowOthers) {
+  const rawPtr = lib.symbols.wxGridCellChoiceEditor_Ctor(count, choices, allowOthers ? 1 : 0);
+  if (rawPtr === null) return null;
+  return new wxGridCellChoiceEditor(rawPtr);
+}
 
 // ../../wx/wxGridCellCoordsArray_gen.ts
-var wxGridCellCoordsArray = class _wxGridCellCoordsArray {
+var wxGridCellCoordsArray = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -30765,11 +31091,6 @@ var wxGridCellCoordsArray = class _wxGridCellCoordsArray {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxGridCellCoordsArray_Create();
-    if (rawPtr === null) return null;
-    return new _wxGridCellCoordsArray(rawPtr);
   }
   Delete() {
     lib.symbols.wxGridCellCoordsArray_Delete(this._ptr);
@@ -30784,6 +31105,11 @@ var wxGridCellCoordsArray = class _wxGridCellCoordsArray {
     lib.symbols.wxGridCellCoordsArray_Item(this._ptr, index, col, row);
   }
 };
+function createWxGridCellCoordsArray() {
+  const rawPtr = lib.symbols.wxGridCellCoordsArray_Create();
+  if (rawPtr === null) return null;
+  return new wxGridCellCoordsArray(rawPtr);
+}
 
 // ../../wx/wxGridCellTextEditor_gen.ts
 var wxGridCellTextEditor = class extends wxGridCellEditor {
@@ -30791,10 +31117,12 @@ var wxGridCellTextEditor = class extends wxGridCellEditor {
   get ptr() {
     return this._ptr;
   }
-  Ctor() {
-    return lib.symbols.wxGridCellTextEditor_Ctor();
-  }
 };
+function createWxGridCellTextEditor() {
+  const rawPtr = lib.symbols.wxGridCellTextEditor_Ctor();
+  if (rawPtr === null) return null;
+  return new wxGridCellTextEditor(rawPtr);
+}
 
 // ../../wx/wxGridCellFloatEditor_gen.ts
 var wxGridCellFloatEditor = class extends wxGridCellTextEditor {
@@ -30802,10 +31130,12 @@ var wxGridCellFloatEditor = class extends wxGridCellTextEditor {
   get ptr() {
     return this._ptr;
   }
-  Ctor(width, precision) {
-    return lib.symbols.wxGridCellFloatEditor_Ctor(width, precision);
-  }
 };
+function createWxGridCellFloatEditor(width, precision) {
+  const rawPtr = lib.symbols.wxGridCellFloatEditor_Ctor(width, precision);
+  if (rawPtr === null) return null;
+  return new wxGridCellFloatEditor(rawPtr);
+}
 
 // ../../wx/wxGridCellNumberEditor_gen.ts
 var wxGridCellNumberEditor = class extends wxGridCellTextEditor {
@@ -30813,10 +31143,12 @@ var wxGridCellNumberEditor = class extends wxGridCellTextEditor {
   get ptr() {
     return this._ptr;
   }
-  Ctor(min, max) {
-    return lib.symbols.wxGridCellNumberEditor_Ctor(min, max);
-  }
 };
+function createWxGridCellNumberEditor(min, max) {
+  const rawPtr = lib.symbols.wxGridCellNumberEditor_Ctor(min, max);
+  if (rawPtr === null) return null;
+  return new wxGridCellNumberEditor(rawPtr);
+}
 
 // ../../wx/wxGridCellNumberRenderer_gen.ts
 var wxGridCellNumberRenderer = class {
@@ -30828,10 +31160,12 @@ var wxGridCellNumberRenderer = class {
   get ptr() {
     return this._ptr;
   }
-  Ctor() {
-    return lib.symbols.wxGridCellNumberRenderer_Ctor();
-  }
 };
+function createWxGridCellNumberRenderer() {
+  const rawPtr = lib.symbols.wxGridCellNumberRenderer_Ctor();
+  if (rawPtr === null) return null;
+  return new wxGridCellNumberRenderer(rawPtr);
+}
 
 // ../../wx/wxGridEditorCreatedEvent_gen.ts
 var wxGridEditorCreatedEvent = class extends wxCommandEvent {
@@ -30998,28 +31332,23 @@ var wxHelpProvider = class {
 };
 
 // ../../wx/wxSimpleHelpProvider_gen.ts
-var wxSimpleHelpProvider = class _wxSimpleHelpProvider extends wxHelpProvider {
+var wxSimpleHelpProvider = class extends wxHelpProvider {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxSimpleHelpProvider_Create();
-    if (rawPtr === null) return null;
-    return new _wxSimpleHelpProvider(rawPtr);
   }
 };
+function createWxSimpleHelpProvider() {
+  const rawPtr = lib.symbols.wxSimpleHelpProvider_Create();
+  if (rawPtr === null) return null;
+  return new wxSimpleHelpProvider(rawPtr);
+}
 
 // ../../wx/wxHelpControllerHelpProvider_gen.ts
-var wxHelpControllerHelpProvider = class _wxHelpControllerHelpProvider extends wxSimpleHelpProvider {
+var wxHelpControllerHelpProvider = class extends wxSimpleHelpProvider {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(ctr) {
-    const rawPtr = lib.symbols.wxHelpControllerHelpProvider_Create(ctr);
-    if (rawPtr === null) return null;
-    return new _wxHelpControllerHelpProvider(rawPtr);
   }
   GetHelpController() {
     return lib.symbols.wxHelpControllerHelpProvider_GetHelpController(this._ptr);
@@ -31028,6 +31357,11 @@ var wxHelpControllerHelpProvider = class _wxHelpControllerHelpProvider extends w
     lib.symbols.wxHelpControllerHelpProvider_SetHelpController(this._ptr, helpController);
   }
 };
+function createWxHelpControllerHelpProvider(ctr) {
+  const rawPtr = lib.symbols.wxHelpControllerHelpProvider_Create(ctr);
+  if (rawPtr === null) return null;
+  return new wxHelpControllerHelpProvider(rawPtr);
+}
 
 // ../../wx/wxHelpEvent_gen.ts
 var wxHelpEvent = class extends wxCommandEvent {
@@ -31056,7 +31390,7 @@ var wxHelpEvent = class extends wxCommandEvent {
 };
 
 // ../../wx/wxHtmlHelpController_gen.ts
-var wxHtmlHelpController = class _wxHtmlHelpController {
+var wxHtmlHelpController = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -31064,11 +31398,6 @@ var wxHtmlHelpController = class _wxHtmlHelpController {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(style, parentWindow) {
-    const rawPtr = lib.symbols.wxHtmlHelpController_Create(style, parentWindow);
-    if (rawPtr === null) return null;
-    return new _wxHtmlHelpController(rawPtr);
   }
   Delete() {
     lib.symbols.wxHtmlHelpController_Delete(this._ptr);
@@ -31140,22 +31469,17 @@ var wxHtmlHelpController = class _wxHtmlHelpController {
     lib.symbols.wxHtmlHelpController_WriteCustomization(this._ptr, cfg, path);
   }
 };
+function createWxHtmlHelpController(style, parentWindow) {
+  const rawPtr = lib.symbols.wxHtmlHelpController_Create(style, parentWindow);
+  if (rawPtr === null) return null;
+  return new wxHtmlHelpController(rawPtr);
+}
 
 // ../../wx/wxIcon_gen.ts
-var wxIcon = class _wxIcon extends wxBitmap {
+var wxIcon = class extends wxBitmap {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxIcon_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxIcon(rawPtr);
-  }
-  static CreateLoad(name, type_, width, height) {
-    const rawPtr = lib.symbols.wxIcon_CreateLoad(name, type_, width, height);
-    if (rawPtr === null) return null;
-    return new _wxIcon(rawPtr);
   }
   Delete() {
     lib.symbols.wxIcon_Delete(this._ptr);
@@ -31194,9 +31518,19 @@ var wxIcon = class _wxIcon extends wxBitmap {
     return lib.symbols.wxIcon_IsOk(this._ptr) !== 0;
   }
 };
+function createWxIconDefault() {
+  const rawPtr = lib.symbols.wxIcon_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxIcon(rawPtr);
+}
+function createWxIconLoad(name, type_, width, height) {
+  const rawPtr = lib.symbols.wxIcon_CreateLoad(name, type_, width, height);
+  if (rawPtr === null) return null;
+  return new wxIcon(rawPtr);
+}
 
 // ../../wx/wxIconBundle_gen.ts
-var wxIconBundle = class _wxIconBundle {
+var wxIconBundle = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -31204,31 +31538,6 @@ var wxIconBundle = class _wxIconBundle {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxIconBundle_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxIconBundle(rawPtr);
-  }
-  static CreateFromFile(file, type_) {
-    const rawPtr = lib.symbols.wxIconBundle_CreateFromFile(file, type_);
-    if (rawPtr === null) return null;
-    return new _wxIconBundle(rawPtr);
-  }
-  static CreateFromIcon(icon) {
-    const rawPtr = lib.symbols.wxIconBundle_CreateFromIcon(icon);
-    if (rawPtr === null) return null;
-    return new _wxIconBundle(rawPtr);
-  }
-  static CreateFromData(data, size, bitmap_type) {
-    const rawPtr = lib.symbols.wxIconBundle_CreateFromData(data, size, bitmap_type);
-    if (rawPtr === null) return null;
-    return new _wxIconBundle(rawPtr);
-  }
-  static CreateFromBase64(base64, len, bitmap_type) {
-    const rawPtr = lib.symbols.wxIconBundle_CreateFromBase64(base64, len, bitmap_type);
-    if (rawPtr === null) return null;
-    return new _wxIconBundle(rawPtr);
   }
   Delete() {
     lib.symbols.wxIconBundle_Delete(this._ptr);
@@ -31255,6 +31564,31 @@ var wxIconBundle = class _wxIconBundle {
     lib.symbols.wxIconBundle_AddIconFromBase64(this._ptr, base64, len, bitmap_type);
   }
 };
+function createWxIconBundleDefault() {
+  const rawPtr = lib.symbols.wxIconBundle_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxIconBundle(rawPtr);
+}
+function createWxIconBundleFromFile(file, type_) {
+  const rawPtr = lib.symbols.wxIconBundle_CreateFromFile(file, type_);
+  if (rawPtr === null) return null;
+  return new wxIconBundle(rawPtr);
+}
+function createWxIconBundleFromIcon(icon) {
+  const rawPtr = lib.symbols.wxIconBundle_CreateFromIcon(icon);
+  if (rawPtr === null) return null;
+  return new wxIconBundle(rawPtr);
+}
+function createWxIconBundleFromData(data, size, bitmap_type) {
+  const rawPtr = lib.symbols.wxIconBundle_CreateFromData(data, size, bitmap_type);
+  if (rawPtr === null) return null;
+  return new wxIconBundle(rawPtr);
+}
+function createWxIconBundleFromBase64(base64, len, bitmap_type) {
+  const rawPtr = lib.symbols.wxIconBundle_CreateFromBase64(base64, len, bitmap_type);
+  if (rawPtr === null) return null;
+  return new wxIconBundle(rawPtr);
+}
 
 // ../../wx/wxIdleEvent_gen.ts
 var wxIdleEvent = class extends wxEvent {
@@ -31271,7 +31605,7 @@ var wxIdleEvent = class extends wxEvent {
 };
 
 // ../../wx/wxImage_gen.ts
-var wxImage = class _wxImage {
+var wxImage = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -31279,51 +31613,6 @@ var wxImage = class _wxImage {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxImage_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxImage(rawPtr);
-  }
-  static CreateFromBitmap(bitmap) {
-    const rawPtr = lib.symbols.wxImage_CreateFromBitmap(bitmap);
-    if (rawPtr === null) return null;
-    return new _wxImage(rawPtr);
-  }
-  static CreateFromByteString(width, height, data, length) {
-    const rawPtr = lib.symbols.wxImage_CreateFromByteString(width, height, data, length);
-    if (rawPtr === null) return null;
-    return new _wxImage(rawPtr);
-  }
-  static CreateFromLazyByteString(width, height, data, length) {
-    const rawPtr = lib.symbols.wxImage_CreateFromLazyByteString(width, height, data, length);
-    if (rawPtr === null) return null;
-    return new _wxImage(rawPtr);
-  }
-  static CreateFromData(width, height, data) {
-    const rawPtr = lib.symbols.wxImage_CreateFromData(width, height, data);
-    if (rawPtr === null) return null;
-    return new _wxImage(rawPtr);
-  }
-  static CreateFromFile(name) {
-    const rawPtr = lib.symbols.wxImage_CreateFromFile(name);
-    if (rawPtr === null) return null;
-    return new _wxImage(rawPtr);
-  }
-  static CreateFromDataEncoded(data, size, bitmap_type) {
-    const rawPtr = lib.symbols.wxImage_CreateFromDataEncoded(data, size, bitmap_type);
-    if (rawPtr === null) return null;
-    return new _wxImage(rawPtr);
-  }
-  static CreateFromBase64(base64, len, bitmap_type) {
-    const rawPtr = lib.symbols.wxImage_CreateFromBase64(base64, len, bitmap_type);
-    if (rawPtr === null) return null;
-    return new _wxImage(rawPtr);
-  }
-  static CreateSized(width, height) {
-    const rawPtr = lib.symbols.wxImage_CreateSized(width, height);
-    if (rawPtr === null) return null;
-    return new _wxImage(rawPtr);
   }
   CanRead(name) {
     return lib.symbols.wxImage_CanRead(name) !== 0;
@@ -31464,9 +31753,54 @@ var wxImage = class _wxImage {
     lib.symbols.wxImage_SetRGB(this._ptr, x, y, r, g, b);
   }
 };
+function createWxImageDefault() {
+  const rawPtr = lib.symbols.wxImage_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxImage(rawPtr);
+}
+function createWxImageFromBitmap(bitmap) {
+  const rawPtr = lib.symbols.wxImage_CreateFromBitmap(bitmap);
+  if (rawPtr === null) return null;
+  return new wxImage(rawPtr);
+}
+function createWxImageFromByteString(width, height, data, length) {
+  const rawPtr = lib.symbols.wxImage_CreateFromByteString(width, height, data, length);
+  if (rawPtr === null) return null;
+  return new wxImage(rawPtr);
+}
+function createWxImageFromLazyByteString(width, height, data, length) {
+  const rawPtr = lib.symbols.wxImage_CreateFromLazyByteString(width, height, data, length);
+  if (rawPtr === null) return null;
+  return new wxImage(rawPtr);
+}
+function createWxImageFromData(width, height, data) {
+  const rawPtr = lib.symbols.wxImage_CreateFromData(width, height, data);
+  if (rawPtr === null) return null;
+  return new wxImage(rawPtr);
+}
+function createWxImageFromFile(name) {
+  const rawPtr = lib.symbols.wxImage_CreateFromFile(name);
+  if (rawPtr === null) return null;
+  return new wxImage(rawPtr);
+}
+function createWxImageFromDataEncoded(data, size, bitmap_type) {
+  const rawPtr = lib.symbols.wxImage_CreateFromDataEncoded(data, size, bitmap_type);
+  if (rawPtr === null) return null;
+  return new wxImage(rawPtr);
+}
+function createWxImageFromBase64(base64, len, bitmap_type) {
+  const rawPtr = lib.symbols.wxImage_CreateFromBase64(base64, len, bitmap_type);
+  if (rawPtr === null) return null;
+  return new wxImage(rawPtr);
+}
+function createWxImageSized(width, height) {
+  const rawPtr = lib.symbols.wxImage_CreateSized(width, height);
+  if (rawPtr === null) return null;
+  return new wxImage(rawPtr);
+}
 
 // ../../wx/wxImageList_gen.ts
-var wxImageList = class _wxImageList {
+var wxImageList = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -31474,11 +31808,6 @@ var wxImageList = class _wxImageList {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(width, height, mask, initialCount) {
-    const rawPtr = lib.symbols.wxImageList_Create(width, height, mask ? 1 : 0, initialCount);
-    if (rawPtr === null) return null;
-    return new _wxImageList(rawPtr);
   }
   Delete() {
     lib.symbols.wxImageList_Delete(this._ptr);
@@ -31517,9 +31846,14 @@ var wxImageList = class _wxImageList {
     return lib.symbols.wxImageList_ReplaceIcon(this._ptr, index, icon) !== 0;
   }
 };
+function createWxImageList(width, height, mask, initialCount) {
+  const rawPtr = lib.symbols.wxImageList_Create(width, height, mask ? 1 : 0, initialCount);
+  if (rawPtr === null) return null;
+  return new wxImageList(rawPtr);
+}
 
 // ../../wx/wxInfoBar_gen.ts
-var wxInfoBar = class _wxInfoBar {
+var wxInfoBar = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -31527,11 +31861,6 @@ var wxInfoBar = class _wxInfoBar {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id) {
-    const rawPtr = lib.symbols.wxInfoBar_Create(parent, id);
-    if (rawPtr === null) return null;
-    return new _wxInfoBar(rawPtr);
   }
   AddButton(btnid, label) {
     lib.symbols.wxInfoBar_AddButton(this._ptr, btnid, label);
@@ -31570,6 +31899,11 @@ var wxInfoBar = class _wxInfoBar {
     lib.symbols.wxInfoBar_ShowMessage(this._ptr, msg, flags);
   }
 };
+function createWxInfoBar(parent, id) {
+  const rawPtr = lib.symbols.wxInfoBar_Create(parent, id);
+  if (rawPtr === null) return null;
+  return new wxInfoBar(rawPtr);
+}
 
 // ../../wx/wxStreamBase_gen.ts
 var wxStreamBase = class {
@@ -31634,17 +31968,17 @@ var wxInputStream = class extends wxStreamBase {
 };
 
 // ../../wx/wxIntProperty_gen.ts
-var wxIntProperty = class _wxIntProperty extends wxPGProperty {
+var wxIntProperty = class extends wxPGProperty {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(label, name, value) {
-    const rawPtr = lib.symbols.wxIntProperty_Create(label, name, value);
-    if (rawPtr === null) return null;
-    return new _wxIntProperty(rawPtr);
-  }
 };
+function createWxIntProperty(label, name, value) {
+  const rawPtr = lib.symbols.wxIntProperty_Create(label, name, value);
+  if (rawPtr === null) return null;
+  return new wxIntProperty(rawPtr);
+}
 
 // ../../wx/wxItemContainer_gen.ts
 var wxItemContainer = class {
@@ -31704,7 +32038,7 @@ var wxItemContainer = class {
   Clear() {
     lib.symbols.wxItemContainer_Clear(this._ptr);
   }
-  Delete(pos) {
+  DeleteItem(pos) {
     lib.symbols.wxItemContainer_Delete(this._ptr, pos);
   }
   IsSorted() {
@@ -31722,7 +32056,7 @@ var wxItemContainer = class {
 };
 
 // ../../wx/wxJoystick_gen.ts
-var wxJoystick = class _wxJoystick {
+var wxJoystick = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -31730,11 +32064,6 @@ var wxJoystick = class _wxJoystick {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(joystick) {
-    const rawPtr = lib.symbols.wxJoystick_Create(joystick);
-    if (rawPtr === null) return null;
-    return new _wxJoystick(rawPtr);
   }
   Delete() {
     lib.symbols.wxJoystick_Delete(this._ptr);
@@ -31869,6 +32198,11 @@ var wxJoystick = class _wxJoystick {
     lib.symbols.wxJoystick_SetMovementThreshold(this._ptr, threshold);
   }
 };
+function createWxJoystick(joystick) {
+  const rawPtr = lib.symbols.wxJoystick_Create(joystick);
+  if (rawPtr === null) return null;
+  return new wxJoystick(rawPtr);
+}
 
 // ../../wx/wxJoystickEvent_gen.ts
 var wxJoystickEvent = class extends wxEvent {
@@ -31968,7 +32302,7 @@ var wxKeyEvent = class extends wxEvent {
 };
 
 // ../../wx/wxLayoutAlgorithm_gen.ts
-var wxLayoutAlgorithm = class _wxLayoutAlgorithm {
+var wxLayoutAlgorithm = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -31976,11 +32310,6 @@ var wxLayoutAlgorithm = class _wxLayoutAlgorithm {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxLayoutAlgorithm_Create();
-    if (rawPtr === null) return null;
-    return new _wxLayoutAlgorithm(rawPtr);
   }
   Delete() {
     lib.symbols.wxLayoutAlgorithm_Delete(this._ptr);
@@ -31998,17 +32327,17 @@ var wxLayoutAlgorithm = class _wxLayoutAlgorithm {
     return lib.symbols.wxLayoutAlgorithm_LayoutWindow(this._ptr, frame, mainWindow) !== 0;
   }
 };
+function createWxLayoutAlgorithm() {
+  const rawPtr = lib.symbols.wxLayoutAlgorithm_Create();
+  if (rawPtr === null) return null;
+  return new wxLayoutAlgorithm(rawPtr);
+}
 
 // ../../wx/wxListCtrl_gen.ts
-var wxListCtrl = class _wxListCtrl extends wxControl {
+var wxListCtrl = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxListCtrl_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxListCtrl(rawPtr);
   }
   Arrange(flag) {
     return lib.symbols.wxListCtrl_Arrange(this._ptr, flag) !== 0;
@@ -32134,7 +32463,7 @@ var wxListCtrl = class _wxListCtrl extends wxControl {
     return lib.symbols.wxListCtrl_ScrollList(this._ptr, dx, dy) !== 0;
   }
   SetBackgroundColour(col) {
-    lib.symbols.wxListCtrl_SetBackgroundColour(this._ptr, col);
+    return lib.symbols.wxListCtrl_SetBackgroundColour(this._ptr, col) !== 0;
   }
   SetColumn(col, item) {
     return lib.symbols.wxListCtrl_SetColumn(this._ptr, col, item) !== 0;
@@ -32218,6 +32547,11 @@ var wxListCtrl = class _wxListCtrl extends wxControl {
     return lib.symbols.wxListCtrl_SetHeaderAttr(this._ptr, attr) !== 0;
   }
 };
+function createWxListCtrl(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxListCtrl_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxListCtrl(rawPtr);
+}
 
 // ../../wx/wxListEvent_gen.ts
 var wxListEvent = class extends wxNotifyEvent {
@@ -32261,7 +32595,7 @@ var wxListEvent = class extends wxNotifyEvent {
 };
 
 // ../../wx/wxListItem_gen.ts
-var wxListItem = class _wxListItem {
+var wxListItem = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -32269,11 +32603,6 @@ var wxListItem = class _wxListItem {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxListItem_Create();
-    if (rawPtr === null) return null;
-    return new _wxListItem(rawPtr);
   }
   Delete() {
     lib.symbols.wxListItem_Delete(this._ptr);
@@ -32372,17 +32701,17 @@ var wxListItem = class _wxListItem {
     lib.symbols.wxListItem_SetWidth(this._ptr, width);
   }
 };
+function createWxListItem() {
+  const rawPtr = lib.symbols.wxListItem_Create();
+  if (rawPtr === null) return null;
+  return new wxListItem(rawPtr);
+}
 
 // ../../wx/wxListView_gen.ts
-var wxListView = class _wxListView extends wxListCtrl {
+var wxListView = class extends wxListCtrl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxListView_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxListView(rawPtr);
   }
   ClearColumnImage(col) {
     lib.symbols.wxListView_ClearColumnImage(this._ptr, col);
@@ -32409,17 +32738,17 @@ var wxListView = class _wxListView extends wxListCtrl {
     lib.symbols.wxListView_SetColumnImage(this._ptr, col, image);
   }
 };
+function createWxListView(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxListView_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxListView(rawPtr);
+}
 
 // ../../wx/wxListbook_gen.ts
-var wxListbook = class _wxListbook extends wxBookCtrlBase {
+var wxListbook = class extends wxBookCtrlBase {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxListbook_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxListbook(rawPtr);
   }
   AddPage(pPage, strText, bSelect, imageId) {
     return lib.symbols.wxListbook_AddPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) !== 0;
@@ -32476,9 +32805,14 @@ var wxListbook = class _wxListbook extends wxBookCtrlBase {
     return lib.symbols.wxListbook_SetSelection(this._ptr, nPage);
   }
 };
+function createWxListbook(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxListbook_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxListbook(rawPtr);
+}
 
 // ../../wx/wxLocale_gen.ts
-var wxLocale = class _wxLocale {
+var wxLocale = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -32486,11 +32820,6 @@ var wxLocale = class _wxLocale {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(name, flags) {
-    const rawPtr = lib.symbols.wxLocale_Create(name, flags);
-    if (rawPtr === null) return null;
-    return new _wxLocale(rawPtr);
   }
   Delete() {
     lib.symbols.wxLocale_Delete(this._ptr);
@@ -32520,9 +32849,14 @@ var wxLocale = class _wxLocale {
     return lib.symbols.wxLocale_IsOk(this._ptr) !== 0;
   }
 };
+function createWxLocale(name, flags) {
+  const rawPtr = lib.symbols.wxLocale_Create(name, flags);
+  if (rawPtr === null) return null;
+  return new wxLocale(rawPtr);
+}
 
 // ../../wx/wxLogChain_gen.ts
-var wxLogChain = class _wxLogChain {
+var wxLogChain = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -32530,11 +32864,6 @@ var wxLogChain = class _wxLogChain {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(logger) {
-    const rawPtr = lib.symbols.wxLogChain_Create(logger);
-    if (rawPtr === null) return null;
-    return new _wxLogChain(rawPtr);
   }
   Delete() {
     lib.symbols.wxLogChain_Delete(this._ptr);
@@ -32555,9 +32884,14 @@ var wxLogChain = class _wxLogChain {
     lib.symbols.wxLogChain_SetLog(this._ptr, logger);
   }
 };
+function createWxLogChain(logger) {
+  const rawPtr = lib.symbols.wxLogChain_Create(logger);
+  if (rawPtr === null) return null;
+  return new wxLogChain(rawPtr);
+}
 
 // ../../wx/wxMask_gen.ts
-var wxMask = class _wxMask {
+var wxMask = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -32566,36 +32900,21 @@ var wxMask = class _wxMask {
   get ptr() {
     return this._ptr;
   }
-  static Create(bitmap) {
-    const rawPtr = lib.symbols.wxMask_Create(bitmap);
-    if (rawPtr === null) return null;
-    return new _wxMask(rawPtr);
-  }
-  static CreateColoured(bitmap, colour) {
-    return lib.symbols.wxMask_CreateColoured(bitmap, colour);
-  }
 };
+function createWxMask(bitmap) {
+  const rawPtr = lib.symbols.wxMask_Create(bitmap);
+  if (rawPtr === null) return null;
+  return new wxMask(rawPtr);
+}
+function createWxMaskColoured(bitmap, colour) {
+  return lib.symbols.wxMask_CreateColoured(bitmap, colour);
+}
 
 // ../../wx/wxMemoryDC_gen.ts
-var wxMemoryDC = class _wxMemoryDC extends wxDC {
+var wxMemoryDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxMemoryDC_Create();
-    if (rawPtr === null) return null;
-    return new _wxMemoryDC(rawPtr);
-  }
-  static CreateCompatible(dc) {
-    const rawPtr = lib.symbols.wxMemoryDC_CreateCompatible(dc);
-    if (rawPtr === null) return null;
-    return new _wxMemoryDC(rawPtr);
-  }
-  static CreateWithBitmap(bitmap) {
-    const rawPtr = lib.symbols.wxMemoryDC_CreateWithBitmap(bitmap);
-    if (rawPtr === null) return null;
-    return new _wxMemoryDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxMemoryDC_Delete(this._ptr);
@@ -32607,17 +32926,27 @@ var wxMemoryDC = class _wxMemoryDC extends wxDC {
     lib.symbols.wxMemoryDC_SelectObject(this._ptr, bitmap);
   }
 };
+function createWxMemoryDC() {
+  const rawPtr = lib.symbols.wxMemoryDC_Create();
+  if (rawPtr === null) return null;
+  return new wxMemoryDC(rawPtr);
+}
+function createWxMemoryDCCompatible(dc) {
+  const rawPtr = lib.symbols.wxMemoryDC_CreateCompatible(dc);
+  if (rawPtr === null) return null;
+  return new wxMemoryDC(rawPtr);
+}
+function createWxMemoryDCWithBitmap(bitmap) {
+  const rawPtr = lib.symbols.wxMemoryDC_CreateWithBitmap(bitmap);
+  if (rawPtr === null) return null;
+  return new wxMemoryDC(rawPtr);
+}
 
 // ../../wx/wxMenu_gen.ts
-var wxMenu = class _wxMenu extends wxEvtHandler {
+var wxMenu = class extends wxEvtHandler {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(title, style) {
-    const rawPtr = lib.symbols.wxMenu_Create(title, style);
-    if (rawPtr === null) return null;
-    return new _wxMenu(rawPtr);
   }
   Append(id, text, help, isCheckable) {
     lib.symbols.wxMenu_Append(this._ptr, id, text, help, isCheckable ? 1 : 0);
@@ -32776,17 +33105,17 @@ var wxMenu = class _wxMenu extends wxEvtHandler {
     return lib.symbols.wxMenu_GetEventHandler(this._ptr);
   }
 };
+function createWxMenu(title, style) {
+  const rawPtr = lib.symbols.wxMenu_Create(title, style);
+  if (rawPtr === null) return null;
+  return new wxMenu(rawPtr);
+}
 
 // ../../wx/wxMenuBar_gen.ts
-var wxMenuBar = class _wxMenuBar extends wxEvtHandler {
+var wxMenuBar = class extends wxEvtHandler {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(style) {
-    const rawPtr = lib.symbols.wxMenuBar_Create(style);
-    if (rawPtr === null) return null;
-    return new _wxMenuBar(rawPtr);
   }
   Append(menu, title) {
     return lib.symbols.wxMenuBar_Append(this._ptr, menu, title);
@@ -32867,6 +33196,11 @@ var wxMenuBar = class _wxMenuBar extends wxEvtHandler {
     lib.symbols.wxMenuBar_UpdateMenus(this._ptr);
   }
 };
+function createWxMenuBar(style) {
+  const rawPtr = lib.symbols.wxMenuBar_Create(style);
+  if (rawPtr === null) return null;
+  return new wxMenuBar(rawPtr);
+}
 
 // ../../wx/wxMenuEvent_gen.ts
 var wxMenuEvent = class extends wxEvent {
@@ -32880,7 +33214,7 @@ var wxMenuEvent = class extends wxEvent {
 };
 
 // ../../wx/wxMenuItem_gen.ts
-var wxMenuItem = class _wxMenuItem {
+var wxMenuItem = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -32888,11 +33222,6 @@ var wxMenuItem = class _wxMenuItem {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxMenuItem_Create();
-    if (rawPtr === null) return null;
-    return new _wxMenuItem(rawPtr);
   }
   Delete() {
     lib.symbols.wxMenuItem_Delete(this._ptr);
@@ -32976,17 +33305,17 @@ var wxMenuItem = class _wxMenuItem {
     return lib.symbols.wxMenuItem_GetBitmap(this._ptr);
   }
 };
+function createWxMenuItem() {
+  const rawPtr = lib.symbols.wxMenuItem_Create();
+  if (rawPtr === null) return null;
+  return new wxMenuItem(rawPtr);
+}
 
 // ../../wx/wxMessageDialog_gen.ts
-var wxMessageDialog = class _wxMessageDialog extends wxDialog {
+var wxMessageDialog = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, message, caption, style) {
-    const rawPtr = lib.symbols.wxMessageDialog_Create(parent, message, caption, style);
-    if (rawPtr === null) return null;
-    return new _wxMessageDialog(rawPtr);
   }
   Delete() {
     lib.symbols.wxMessageDialog_Delete(this._ptr);
@@ -33025,9 +33354,14 @@ var wxMessageDialog = class _wxMessageDialog extends wxDialog {
     return lib.symbols.wxMessageDialog_SetHelpLabel(this._ptr, label) !== 0;
   }
 };
+function createWxMessageDialog(parent, message, caption, style) {
+  const rawPtr = lib.symbols.wxMessageDialog_Create(parent, message, caption, style);
+  if (rawPtr === null) return null;
+  return new wxMessageDialog(rawPtr);
+}
 
 // ../../wx/wxMetafile_gen.ts
-var wxMetafile = class _wxMetafile {
+var wxMetafile = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33035,11 +33369,6 @@ var wxMetafile = class _wxMetafile {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(filePath) {
-    const rawPtr = lib.symbols.wxMetafile_Create(filePath);
-    if (rawPtr === null) return null;
-    return new _wxMetafile(rawPtr);
   }
   Delete() {
     lib.symbols.wxMetafile_Delete(this._ptr);
@@ -33057,17 +33386,17 @@ var wxMetafile = class _wxMetafile {
     return lib.symbols.wxMetafile_SetClipboard(this._ptr, width, height) !== 0;
   }
 };
+function createWxMetafile(filePath) {
+  const rawPtr = lib.symbols.wxMetafile_Create(filePath);
+  if (rawPtr === null) return null;
+  return new wxMetafile(rawPtr);
+}
 
 // ../../wx/wxMetafileDC_gen.ts
-var wxMetafileDC = class _wxMetafileDC extends wxDC {
+var wxMetafileDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(filePath) {
-    const rawPtr = lib.symbols.wxMetafileDC_Create(filePath);
-    if (rawPtr === null) return null;
-    return new _wxMetafileDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxMetafileDC_Delete(this._ptr);
@@ -33079,9 +33408,14 @@ var wxMetafileDC = class _wxMetafileDC extends wxDC {
     return lib.symbols.wxMetafileDC_Close(this._ptr);
   }
 };
+function createWxMetafileDC(filePath) {
+  const rawPtr = lib.symbols.wxMetafileDC_Create(filePath);
+  if (rawPtr === null) return null;
+  return new wxMetafileDC(rawPtr);
+}
 
 // ../../wx/wxMimeTypesManager_gen.ts
-var wxMimeTypesManager = class _wxMimeTypesManager {
+var wxMimeTypesManager = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33089,11 +33423,6 @@ var wxMimeTypesManager = class _wxMimeTypesManager {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxMimeTypesManager_Create();
-    if (rawPtr === null) return null;
-    return new _wxMimeTypesManager(rawPtr);
   }
   AddFallbacks(types) {
     lib.symbols.wxMimeTypesManager_AddFallbacks(this._ptr, types);
@@ -33111,30 +33440,30 @@ var wxMimeTypesManager = class _wxMimeTypesManager {
     return lib.symbols.wxMimeTypesManager_IsOfType(this._ptr, type_, wildcard) !== 0;
   }
 };
+function createWxMimeTypesManager() {
+  const rawPtr = lib.symbols.wxMimeTypesManager_Create();
+  if (rawPtr === null) return null;
+  return new wxMimeTypesManager(rawPtr);
+}
 
 // ../../wx/wxMiniFrame_gen.ts
-var wxMiniFrame = class _wxMiniFrame extends wxFrame {
+var wxMiniFrame = class extends wxFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxMiniFrame_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxMiniFrame(rawPtr);
   }
 };
+function createWxMiniFrame(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxMiniFrame_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxMiniFrame(rawPtr);
+}
 
 // ../../wx/wxMirrorDC_gen.ts
-var wxMirrorDC = class _wxMirrorDC extends wxDC {
+var wxMirrorDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(dc) {
-    const rawPtr = lib.symbols.wxMirrorDC_Create(dc);
-    if (rawPtr === null) return null;
-    return new _wxMirrorDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxMirrorDC_Delete(this._ptr);
@@ -33143,6 +33472,11 @@ var wxMirrorDC = class _wxMirrorDC extends wxDC {
     this.Delete();
   }
 };
+function createWxMirrorDC(dc) {
+  const rawPtr = lib.symbols.wxMirrorDC_Create(dc);
+  if (rawPtr === null) return null;
+  return new wxMirrorDC(rawPtr);
+}
 
 // ../../wx/wxMouseEvent_gen.ts
 var wxMouseEvent = class extends wxEvent {
@@ -33254,7 +33588,7 @@ var wxMoveEvent = class extends wxEvent {
 };
 
 // ../../wx/wxMutex_gen.ts
-var wxMutex = class _wxMutex {
+var wxMutex = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33262,11 +33596,6 @@ var wxMutex = class _wxMutex {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxMutex_Create();
-    if (rawPtr === null) return null;
-    return new _wxMutex(rawPtr);
   }
   Delete() {
     lib.symbols.wxMutex_Delete(this._ptr);
@@ -33284,6 +33613,11 @@ var wxMutex = class _wxMutex {
     return lib.symbols.wxMutex_Unlock(this._ptr);
   }
 };
+function createWxMutex() {
+  const rawPtr = lib.symbols.wxMutex_Create();
+  if (rawPtr === null) return null;
+  return new wxMutex(rawPtr);
+}
 
 // ../../wx/wxNavigationKeyEvent_gen.ts
 var wxNavigationKeyEvent = class extends wxEvent {
@@ -33315,15 +33649,10 @@ var wxNavigationKeyEvent = class extends wxEvent {
 };
 
 // ../../wx/wxNotebook_gen.ts
-var wxNotebook = class _wxNotebook extends wxControl {
+var wxNotebook = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxNotebook_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxNotebook(rawPtr);
   }
   AddPage(pPage, strText, bSelect, imageId) {
     return lib.symbols.wxNotebook_AddPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) !== 0;
@@ -33386,6 +33715,11 @@ var wxNotebook = class _wxNotebook extends wxControl {
     return lib.symbols.wxNotebook_SetSelection(this._ptr, nPage);
   }
 };
+function createWxNotebook(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxNotebook_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxNotebook(rawPtr);
+}
 
 // ../../wx/wxOutputStream_gen.ts
 var wxOutputStream = class extends wxStreamBase {
@@ -33420,7 +33754,7 @@ var wxOutputStream = class extends wxStreamBase {
 };
 
 // ../../wx/wxPageSetupDialog_gen.ts
-var wxPageSetupDialog = class _wxPageSetupDialog {
+var wxPageSetupDialog = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33428,11 +33762,6 @@ var wxPageSetupDialog = class _wxPageSetupDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, data) {
-    const rawPtr = lib.symbols.wxPageSetupDialog_Create(parent, data);
-    if (rawPtr === null) return null;
-    return new _wxPageSetupDialog(rawPtr);
   }
   GetPageSetupData(ref) {
     lib.symbols.wxPageSetupDialog_GetPageSetupData(this._ptr, ref);
@@ -33441,9 +33770,14 @@ var wxPageSetupDialog = class _wxPageSetupDialog {
     return lib.symbols.wxPageSetupDialog_ShowModal(this._ptr);
   }
 };
+function createWxPageSetupDialog(parent, data) {
+  const rawPtr = lib.symbols.wxPageSetupDialog_Create(parent, data);
+  if (rawPtr === null) return null;
+  return new wxPageSetupDialog(rawPtr);
+}
 
 // ../../wx/wxPageSetupDialogData_gen.ts
-var wxPageSetupDialogData = class _wxPageSetupDialogData {
+var wxPageSetupDialogData = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33451,16 +33785,6 @@ var wxPageSetupDialogData = class _wxPageSetupDialogData {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxPageSetupDialogData_Create();
-    if (rawPtr === null) return null;
-    return new _wxPageSetupDialogData(rawPtr);
-  }
-  static CreateFromData(printData) {
-    const rawPtr = lib.symbols.wxPageSetupDialogData_CreateFromData(printData);
-    if (rawPtr === null) return null;
-    return new _wxPageSetupDialogData(rawPtr);
   }
   Delete() {
     lib.symbols.wxPageSetupDialogData_Delete(this._ptr);
@@ -33568,17 +33892,22 @@ var wxPageSetupDialogData = class _wxPageSetupDialogData {
     lib.symbols.wxPageSetupDialogData_SetPrintData(this._ptr, printData);
   }
 };
+function createWxPageSetupDialogData() {
+  const rawPtr = lib.symbols.wxPageSetupDialogData_Create();
+  if (rawPtr === null) return null;
+  return new wxPageSetupDialogData(rawPtr);
+}
+function createWxPageSetupDialogDataFromData(printData) {
+  const rawPtr = lib.symbols.wxPageSetupDialogData_CreateFromData(printData);
+  if (rawPtr === null) return null;
+  return new wxPageSetupDialogData(rawPtr);
+}
 
 // ../../wx/wxPaintDC_gen.ts
-var wxPaintDC = class _wxPaintDC extends wxWindowDC {
+var wxPaintDC = class extends wxWindowDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(win) {
-    const rawPtr = lib.symbols.wxPaintDC_Create(win);
-    if (rawPtr === null) return null;
-    return new _wxPaintDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxPaintDC_Delete(this._ptr);
@@ -33587,9 +33916,14 @@ var wxPaintDC = class _wxPaintDC extends wxWindowDC {
     this.Delete();
   }
 };
+function createWxPaintDC(win) {
+  const rawPtr = lib.symbols.wxPaintDC_Create(win);
+  if (rawPtr === null) return null;
+  return new wxPaintDC(rawPtr);
+}
 
 // ../../wx/wxPalette_gen.ts
-var wxPalette = class _wxPalette {
+var wxPalette = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33597,16 +33931,6 @@ var wxPalette = class _wxPalette {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxPalette_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxPalette(rawPtr);
-  }
-  static CreateRGB(count, red, green, blue) {
-    const rawPtr = lib.symbols.wxPalette_CreateRGB(count, red, green, blue);
-    if (rawPtr === null) return null;
-    return new _wxPalette(rawPtr);
   }
   Delete() {
     lib.symbols.wxPalette_Delete(this._ptr);
@@ -33630,6 +33954,16 @@ var wxPalette = class _wxPalette {
     return lib.symbols.wxPalette_IsOk(this._ptr) !== 0;
   }
 };
+function createWxPaletteDefault() {
+  const rawPtr = lib.symbols.wxPalette_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxPalette(rawPtr);
+}
+function createWxPaletteRGB(count, red, green, blue) {
+  const rawPtr = lib.symbols.wxPalette_CreateRGB(count, red, green, blue);
+  if (rawPtr === null) return null;
+  return new wxPalette(rawPtr);
+}
 
 // ../../wx/wxPaletteChangedEvent_gen.ts
 var wxPaletteChangedEvent = class extends wxEvent {
@@ -33646,7 +33980,7 @@ var wxPaletteChangedEvent = class extends wxEvent {
 };
 
 // ../../wx/wxPen_gen.ts
-var wxPen = class _wxPen {
+var wxPen = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33654,26 +33988,6 @@ var wxPen = class _wxPen {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxPen_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxPen(rawPtr);
-  }
-  static CreateFromBitmap(stipple, width) {
-    const rawPtr = lib.symbols.wxPen_CreateFromBitmap(stipple, width);
-    if (rawPtr === null) return null;
-    return new _wxPen(rawPtr);
-  }
-  static CreateFromColour(col, width, style) {
-    const rawPtr = lib.symbols.wxPen_CreateFromColour(col, width, style);
-    if (rawPtr === null) return null;
-    return new _wxPen(rawPtr);
-  }
-  static CreateFromStock(id) {
-    const rawPtr = lib.symbols.wxPen_CreateFromStock(id);
-    if (rawPtr === null) return null;
-    return new _wxPen(rawPtr);
   }
   Delete() {
     lib.symbols.wxPen_Delete(this._ptr);
@@ -33736,9 +34050,29 @@ var wxPen = class _wxPen {
     lib.symbols.wxPen_SetWidth(this._ptr, width);
   }
 };
+function createWxPenDefault() {
+  const rawPtr = lib.symbols.wxPen_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxPen(rawPtr);
+}
+function createWxPenFromBitmap(stipple, width) {
+  const rawPtr = lib.symbols.wxPen_CreateFromBitmap(stipple, width);
+  if (rawPtr === null) return null;
+  return new wxPen(rawPtr);
+}
+function createWxPenFromColour(col, width, style) {
+  const rawPtr = lib.symbols.wxPen_CreateFromColour(col, width, style);
+  if (rawPtr === null) return null;
+  return new wxPen(rawPtr);
+}
+function createWxPenFromStock(id) {
+  const rawPtr = lib.symbols.wxPen_CreateFromStock(id);
+  if (rawPtr === null) return null;
+  return new wxPen(rawPtr);
+}
 
 // ../../wx/wxPoint_gen.ts
-var wxPoint = class _wxPoint {
+var wxPoint = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33746,11 +34080,6 @@ var wxPoint = class _wxPoint {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(xx, yy) {
-    const rawPtr = lib.symbols.wxPoint_Create(xx, yy);
-    if (rawPtr === null) return null;
-    return new _wxPoint(rawPtr);
   }
   Delete() {
     lib.symbols.wxPoint_Delete(this._ptr);
@@ -33771,17 +34100,17 @@ var wxPoint = class _wxPoint {
     lib.symbols.wxPoint_SetY(this._ptr, height);
   }
 };
+function createWxPoint(xx, yy) {
+  const rawPtr = lib.symbols.wxPoint_Create(xx, yy);
+  if (rawPtr === null) return null;
+  return new wxPoint(rawPtr);
+}
 
 // ../../wx/wxPostScriptDC_gen.ts
-var wxPostScriptDC = class _wxPostScriptDC extends wxDC {
+var wxPostScriptDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(data) {
-    const rawPtr = lib.symbols.wxPostScriptDC_Create(data);
-    if (rawPtr === null) return null;
-    return new _wxPostScriptDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxPostScriptDC_Delete(this._ptr);
@@ -33796,9 +34125,14 @@ var wxPostScriptDC = class _wxPostScriptDC extends wxDC {
     return lib.symbols.wxPostScriptDC_GetResolution(this._ptr);
   }
 };
+function createWxPostScriptDC(data) {
+  const rawPtr = lib.symbols.wxPostScriptDC_Create(data);
+  if (rawPtr === null) return null;
+  return new wxPostScriptDC(rawPtr);
+}
 
 // ../../wx/wxPostScriptPrintNativeData_gen.ts
-var wxPostScriptPrintNativeData = class _wxPostScriptPrintNativeData {
+var wxPostScriptPrintNativeData = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33806,11 +34140,6 @@ var wxPostScriptPrintNativeData = class _wxPostScriptPrintNativeData {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxPostScriptPrintNativeData_Create();
-    if (rawPtr === null) return null;
-    return new _wxPostScriptPrintNativeData(rawPtr);
   }
   Delete() {
     lib.symbols.wxPostScriptPrintNativeData_Delete(this._ptr);
@@ -33819,22 +34148,27 @@ var wxPostScriptPrintNativeData = class _wxPostScriptPrintNativeData {
     this.Delete();
   }
 };
+function createWxPostScriptPrintNativeData() {
+  const rawPtr = lib.symbols.wxPostScriptPrintNativeData_Create();
+  if (rawPtr === null) return null;
+  return new wxPostScriptPrintNativeData(rawPtr);
+}
 
 // ../../wx/wxPreviewCanvas_gen.ts
-var wxPreviewCanvas = class _wxPreviewCanvas extends wxScrolledWindow {
+var wxPreviewCanvas = class extends wxScrolledWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(preview, parent, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxPreviewCanvas_Create(preview, parent, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxPreviewCanvas(rawPtr);
-  }
 };
+function createWxPreviewCanvas(preview, parent, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxPreviewCanvas_Create(preview, parent, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxPreviewCanvas(rawPtr);
+}
 
 // ../../wx/wxPrintData_gen.ts
-var wxPrintData = class _wxPrintData {
+var wxPrintData = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -33842,11 +34176,6 @@ var wxPrintData = class _wxPrintData {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxPrintData_Create();
-    if (rawPtr === null) return null;
-    return new _wxPrintData(rawPtr);
   }
   Delete() {
     lib.symbols.wxPrintData_Delete(this._ptr);
@@ -33978,17 +34307,17 @@ var wxPrintData = class _wxPrintData {
     lib.symbols.wxPrintData_SetQuality(this._ptr, quality);
   }
 };
+function createWxPrintData() {
+  const rawPtr = lib.symbols.wxPrintData_Create();
+  if (rawPtr === null) return null;
+  return new wxPrintData(rawPtr);
+}
 
 // ../../wx/wxPrintDialog_gen.ts
-var wxPrintDialog = class _wxPrintDialog extends wxDialog {
+var wxPrintDialog = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, data) {
-    const rawPtr = lib.symbols.wxPrintDialog_Create(parent, data);
-    if (rawPtr === null) return null;
-    return new _wxPrintDialog(rawPtr);
   }
   GetPrintDC() {
     return lib.symbols.wxPrintDialog_GetPrintDC(this._ptr);
@@ -34000,9 +34329,14 @@ var wxPrintDialog = class _wxPrintDialog extends wxDialog {
     return lib.symbols.wxPrintDialog_GetPrintDialogData(this._ptr);
   }
 };
+function createWxPrintDialog(parent, data) {
+  const rawPtr = lib.symbols.wxPrintDialog_Create(parent, data);
+  if (rawPtr === null) return null;
+  return new wxPrintDialog(rawPtr);
+}
 
 // ../../wx/wxPrintDialogData_gen.ts
-var wxPrintDialogData = class _wxPrintDialogData {
+var wxPrintDialogData = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -34010,16 +34344,6 @@ var wxPrintDialogData = class _wxPrintDialogData {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxPrintDialogData_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxPrintDialogData(rawPtr);
-  }
-  static CreateFromData(printData) {
-    const rawPtr = lib.symbols.wxPrintDialogData_CreateFromData(printData);
-    if (rawPtr === null) return null;
-    return new _wxPrintDialogData(rawPtr);
   }
   Delete() {
     lib.symbols.wxPrintDialogData_Delete(this._ptr);
@@ -34118,9 +34442,19 @@ var wxPrintDialogData = class _wxPrintDialogData {
     lib.symbols.wxPrintDialogData_SetToPage(this._ptr, value);
   }
 };
+function createWxPrintDialogDataDefault() {
+  const rawPtr = lib.symbols.wxPrintDialogData_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxPrintDialogData(rawPtr);
+}
+function createWxPrintDialogDataFromData(printData) {
+  const rawPtr = lib.symbols.wxPrintDialogData_CreateFromData(printData);
+  if (rawPtr === null) return null;
+  return new wxPrintDialogData(rawPtr);
+}
 
 // ../../wx/wxPrintPreview_gen.ts
-var wxPrintPreview = class _wxPrintPreview {
+var wxPrintPreview = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -34128,16 +34462,6 @@ var wxPrintPreview = class _wxPrintPreview {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateFromData(printout, printoutForPrinting, data) {
-    const rawPtr = lib.symbols.wxPrintPreview_CreateFromData(printout, printoutForPrinting, data);
-    if (rawPtr === null) return null;
-    return new _wxPrintPreview(rawPtr);
-  }
-  static CreateFromDialogData(printout, printoutForPrinting, data) {
-    const rawPtr = lib.symbols.wxPrintPreview_CreateFromDialogData(printout, printoutForPrinting, data);
-    if (rawPtr === null) return null;
-    return new _wxPrintPreview(rawPtr);
   }
   Delete() {
     lib.symbols.wxPrintPreview_Delete(this._ptr);
@@ -34209,9 +34533,19 @@ var wxPrintPreview = class _wxPrintPreview {
     lib.symbols.wxPrintPreview_SetZoom(this._ptr, percent);
   }
 };
+function createWxPrintPreviewFromData(printout, printoutForPrinting, data) {
+  const rawPtr = lib.symbols.wxPrintPreview_CreateFromData(printout, printoutForPrinting, data);
+  if (rawPtr === null) return null;
+  return new wxPrintPreview(rawPtr);
+}
+function createWxPrintPreviewFromDialogData(printout, printoutForPrinting, data) {
+  const rawPtr = lib.symbols.wxPrintPreview_CreateFromDialogData(printout, printoutForPrinting, data);
+  if (rawPtr === null) return null;
+  return new wxPrintPreview(rawPtr);
+}
 
 // ../../wx/wxPrinter_gen.ts
-var wxPrinter = class _wxPrinter {
+var wxPrinter = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -34219,11 +34553,6 @@ var wxPrinter = class _wxPrinter {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(data) {
-    const rawPtr = lib.symbols.wxPrinter_Create(data);
-    if (rawPtr === null) return null;
-    return new _wxPrinter(rawPtr);
   }
   Delete() {
     lib.symbols.wxPrinter_Delete(this._ptr);
@@ -34256,17 +34585,17 @@ var wxPrinter = class _wxPrinter {
     return lib.symbols.wxPrinter_Setup(this._ptr, parent) !== 0;
   }
 };
+function createWxPrinter(data) {
+  const rawPtr = lib.symbols.wxPrinter_Create(data);
+  if (rawPtr === null) return null;
+  return new wxPrinter(rawPtr);
+}
 
 // ../../wx/wxPrinterDC_gen.ts
-var wxPrinterDC = class _wxPrinterDC extends wxDC {
+var wxPrinterDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(data) {
-    const rawPtr = lib.symbols.wxPrinterDC_Create(data);
-    if (rawPtr === null) return null;
-    return new _wxPrinterDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxPrinterDC_Delete(this._ptr);
@@ -34278,22 +34607,17 @@ var wxPrinterDC = class _wxPrinterDC extends wxDC {
     return lib.symbols.wxPrinterDC_GetPaperRect(this._ptr);
   }
 };
+function createWxPrinterDC(data) {
+  const rawPtr = lib.symbols.wxPrinterDC_Create(data);
+  if (rawPtr === null) return null;
+  return new wxPrinterDC(rawPtr);
+}
 
 // ../../wx/wxProcess_gen.ts
-var wxProcess = class _wxProcess extends wxEvtHandler {
+var wxProcess = class extends wxEvtHandler {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault(parent, id) {
-    const rawPtr = lib.symbols.wxProcess_CreateDefault(parent, id);
-    if (rawPtr === null) return null;
-    return new _wxProcess(rawPtr);
-  }
-  static CreateRedirect(parent, redirect) {
-    const rawPtr = lib.symbols.wxProcess_CreateRedirect(parent, redirect ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new _wxProcess(rawPtr);
   }
   Delete() {
     lib.symbols.wxProcess_Delete(this._ptr);
@@ -34323,6 +34647,16 @@ var wxProcess = class _wxProcess extends wxEvtHandler {
     lib.symbols.wxProcess_Redirect(this._ptr);
   }
 };
+function createWxProcessDefault(parent, id) {
+  const rawPtr = lib.symbols.wxProcess_CreateDefault(parent, id);
+  if (rawPtr === null) return null;
+  return new wxProcess(rawPtr);
+}
+function createWxProcessRedirect(parent, redirect) {
+  const rawPtr = lib.symbols.wxProcess_CreateRedirect(parent, redirect ? 1 : 0);
+  if (rawPtr === null) return null;
+  return new wxProcess(rawPtr);
+}
 
 // ../../wx/wxProcessEvent_gen.ts
 var wxProcessEvent = class extends wxEvent {
@@ -34339,28 +34673,23 @@ var wxProcessEvent = class extends wxEvent {
 };
 
 // ../../wx/wxPropertyCategory_gen.ts
-var wxPropertyCategory = class _wxPropertyCategory extends wxPGProperty {
+var wxPropertyCategory = class extends wxPGProperty {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(label) {
-    const rawPtr = lib.symbols.wxPropertyCategory_Create(label);
-    if (rawPtr === null) return null;
-    return new _wxPropertyCategory(rawPtr);
   }
 };
+function createWxPropertyCategory(label) {
+  const rawPtr = lib.symbols.wxPropertyCategory_Create(label);
+  if (rawPtr === null) return null;
+  return new wxPropertyCategory(rawPtr);
+}
 
 // ../../wx/wxPropertyGrid_gen.ts
-var wxPropertyGrid = class _wxPropertyGrid extends wxControl {
+var wxPropertyGrid = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxPropertyGrid_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxPropertyGrid(rawPtr);
   }
   Append(prop) {
     return lib.symbols.wxPropertyGrid_Append(this._ptr, prop);
@@ -34369,6 +34698,11 @@ var wxPropertyGrid = class _wxPropertyGrid extends wxControl {
     return lib.symbols.wxPropertyGrid_DisableProperty(this._ptr, propName) !== 0;
   }
 };
+function createWxPropertyGrid(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxPropertyGrid_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxPropertyGrid(rawPtr);
+}
 
 // ../../wx/wxPropertyGridEvent_gen.ts
 var wxPropertyGridEvent = class extends wxNotifyEvent {
@@ -34385,15 +34719,10 @@ var wxPropertyGridEvent = class extends wxNotifyEvent {
 };
 
 // ../../wx/wxPropertyGridManager_gen.ts
-var wxPropertyGridManager = class _wxPropertyGridManager extends wxPanel {
+var wxPropertyGridManager = class extends wxPanel {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxPropertyGridManager_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxPropertyGridManager(rawPtr);
   }
   AddPage(label, bmp) {
     return lib.symbols.wxPropertyGridManager_AddPage(this._ptr, label, bmp);
@@ -34456,6 +34785,11 @@ var wxPropertyGridManager = class _wxPropertyGridManager extends wxPanel {
     lib.symbols.wxPropertyGridManager_Clear(this._ptr);
   }
 };
+function createWxPropertyGridManager(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxPropertyGridManager_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxPropertyGridManager(rawPtr);
+}
 
 // ../../wx/wxPropertyGridPage_gen.ts
 var wxPropertyGridPage = class extends wxEvtHandler {
@@ -34481,15 +34815,10 @@ var wxPropertyGridPage = class extends wxEvtHandler {
 };
 
 // ../../wx/wxPropertySheetDialog_gen.ts
-var wxPropertySheetDialog = class _wxPropertySheetDialog extends wxDialog {
+var wxPropertySheetDialog = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, title, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxPropertySheetDialog_Create(parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxPropertySheetDialog(rawPtr);
   }
   CreateButtons(flags) {
     lib.symbols.wxPropertySheetDialog_CreateButtons(this._ptr, flags);
@@ -34525,17 +34854,17 @@ var wxPropertySheetDialog = class _wxPropertySheetDialog extends wxDialog {
     lib.symbols.wxPropertySheetDialog_SetSheetInnerBorder(this._ptr, border);
   }
 };
+function createWxPropertySheetDialog(parent, id, title, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxPropertySheetDialog_Create(parent, id, title, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxPropertySheetDialog(rawPtr);
+}
 
 // ../../wx/wxQueryLayoutInfoEvent_gen.ts
-var wxQueryLayoutInfoEvent = class _wxQueryLayoutInfoEvent extends wxEvent {
+var wxQueryLayoutInfoEvent = class extends wxEvent {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(id) {
-    const rawPtr = lib.symbols.wxQueryLayoutInfoEvent_Create(id);
-    if (rawPtr === null) return null;
-    return new _wxQueryLayoutInfoEvent(rawPtr);
   }
   GetAlignment() {
     return lib.symbols.wxQueryLayoutInfoEvent_GetAlignment(this._ptr);
@@ -34568,6 +34897,11 @@ var wxQueryLayoutInfoEvent = class _wxQueryLayoutInfoEvent extends wxEvent {
     lib.symbols.wxQueryLayoutInfoEvent_SetSize(this._ptr, width, height);
   }
 };
+function createWxQueryLayoutInfoEvent(id) {
+  const rawPtr = lib.symbols.wxQueryLayoutInfoEvent_Create(id);
+  if (rawPtr === null) return null;
+  return new wxQueryLayoutInfoEvent(rawPtr);
+}
 
 // ../../wx/wxQueryNewPaletteEvent_gen.ts
 var wxQueryNewPaletteEvent = class extends wxEvent {
@@ -34584,15 +34918,10 @@ var wxQueryNewPaletteEvent = class extends wxEvent {
 };
 
 // ../../wx/wxRadioBox_gen.ts
-var wxRadioBox = class _wxRadioBox extends wxControl {
+var wxRadioBox = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, n, strings, dimension, style) {
-    const rawPtr = lib.symbols.wxRadioBox_Create(parent, id, text, left, top, width, height, n, strings, dimension, style);
-    if (rawPtr === null) return null;
-    return new _wxRadioBox(rawPtr);
   }
   EnableItem(item, enable) {
     lib.symbols.wxRadioBox_EnableItem(this._ptr, item, enable ? 1 : 0);
@@ -34646,17 +34975,17 @@ var wxRadioBox = class _wxRadioBox extends wxControl {
     return lib.symbols.wxRadioBox_GetCount(this._ptr);
   }
 };
+function createWxRadioBox(parent, id, text, left, top, width, height, n, strings, dimension, style) {
+  const rawPtr = lib.symbols.wxRadioBox_Create(parent, id, text, left, top, width, height, n, strings, dimension, style);
+  if (rawPtr === null) return null;
+  return new wxRadioBox(rawPtr);
+}
 
 // ../../wx/wxRadioButton_gen.ts
-var wxRadioButton = class _wxRadioButton extends wxControl {
+var wxRadioButton = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxRadioButton_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxRadioButton(rawPtr);
   }
   GetValue() {
     return lib.symbols.wxRadioButton_GetValue(this._ptr) !== 0;
@@ -34665,17 +34994,17 @@ var wxRadioButton = class _wxRadioButton extends wxControl {
     lib.symbols.wxRadioButton_SetValue(this._ptr, value ? 1 : 0);
   }
 };
+function createWxRadioButton(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxRadioButton_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxRadioButton(rawPtr);
+}
 
 // ../../wx/wxRearrangeCtrl_gen.ts
-var wxRearrangeCtrl = class _wxRearrangeCtrl extends wxPanel {
+var wxRearrangeCtrl = class extends wxPanel {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, order, items, style) {
-    const rawPtr = lib.symbols.wxRearrangeCtrl_Create(parent, id, x, y, width, height, order, items, style);
-    if (rawPtr === null) return null;
-    return new _wxRearrangeCtrl(rawPtr);
   }
   GetCurrentOrder() {
     return lib.symbols.wxRearrangeCtrl_GetCurrentOrder(this._ptr);
@@ -34696,9 +35025,14 @@ var wxRearrangeCtrl = class _wxRearrangeCtrl extends wxPanel {
     return lib.symbols.wxRearrangeCtrl_MoveCurrentDown(this._ptr) !== 0;
   }
 };
+function createWxRearrangeCtrl(parent, id, x, y, width, height, order, items, style) {
+  const rawPtr = lib.symbols.wxRearrangeCtrl_Create(parent, id, x, y, width, height, order, items, style);
+  if (rawPtr === null) return null;
+  return new wxRearrangeCtrl(rawPtr);
+}
 
 // ../../wx/wxRegion_gen.ts
-var wxRegion = class _wxRegion {
+var wxRegion = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -34706,16 +35040,6 @@ var wxRegion = class _wxRegion {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxRegion_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxRegion(rawPtr);
-  }
-  static CreateFromRect(x, y, width, height) {
-    const rawPtr = lib.symbols.wxRegion_CreateFromRect(x, y, width, height);
-    if (rawPtr === null) return null;
-    return new _wxRegion(rawPtr);
   }
   Delete() {
     lib.symbols.wxRegion_Delete(this._ptr);
@@ -34766,9 +35090,19 @@ var wxRegion = class _wxRegion {
     return lib.symbols.wxRegion_XorRegion(this._ptr, region) !== 0;
   }
 };
+function createWxRegionDefault() {
+  const rawPtr = lib.symbols.wxRegion_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxRegion(rawPtr);
+}
+function createWxRegionFromRect(x, y, width, height) {
+  const rawPtr = lib.symbols.wxRegion_CreateFromRect(x, y, width, height);
+  if (rawPtr === null) return null;
+  return new wxRegion(rawPtr);
+}
 
 // ../../wx/wxRegionIterator_gen.ts
-var wxRegionIterator = class _wxRegionIterator {
+var wxRegionIterator = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -34776,16 +35110,6 @@ var wxRegionIterator = class _wxRegionIterator {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxRegionIterator_Create();
-    if (rawPtr === null) return null;
-    return new _wxRegionIterator(rawPtr);
-  }
-  static CreateFromRegion(region) {
-    const rawPtr = lib.symbols.wxRegionIterator_CreateFromRegion(region);
-    if (rawPtr === null) return null;
-    return new _wxRegionIterator(rawPtr);
   }
   Delete() {
     lib.symbols.wxRegionIterator_Delete(this._ptr);
@@ -34818,9 +35142,19 @@ var wxRegionIterator = class _wxRegionIterator {
     lib.symbols.wxRegionIterator_ResetToRegion(this._ptr, region);
   }
 };
+function createWxRegionIterator() {
+  const rawPtr = lib.symbols.wxRegionIterator_Create();
+  if (rawPtr === null) return null;
+  return new wxRegionIterator(rawPtr);
+}
+function createWxRegionIteratorFromRegion(region) {
+  const rawPtr = lib.symbols.wxRegionIterator_CreateFromRegion(region);
+  if (rawPtr === null) return null;
+  return new wxRegionIterator(rawPtr);
+}
 
 // ../../wx/wxRibbonBar_gen.ts
-var wxRibbonBar = class _wxRibbonBar {
+var wxRibbonBar = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -34828,11 +35162,6 @@ var wxRibbonBar = class _wxRibbonBar {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxRibbonBar_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxRibbonBar(rawPtr);
   }
   DismissExpandedPanel() {
     lib.symbols.wxRibbonBar_DismissExpandedPanel(this._ptr);
@@ -34868,9 +35197,14 @@ var wxRibbonBar = class _wxRibbonBar {
     return lib.symbols.wxRibbonBar_GetArtProvider(this._ptr);
   }
 };
+function createWxRibbonBar(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxRibbonBar_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxRibbonBar(rawPtr);
+}
 
 // ../../wx/wxRibbonButtonBar_gen.ts
-var wxRibbonButtonBar = class _wxRibbonButtonBar {
+var wxRibbonButtonBar = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -34878,11 +35212,6 @@ var wxRibbonButtonBar = class _wxRibbonButtonBar {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxRibbonButtonBar_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxRibbonButtonBar(rawPtr);
   }
   AddButton(button_id, label, bitmap, help_string, kind, bitmap_small, bitmap_disabled, bitmap_small_disabled) {
     return lib.symbols.wxRibbonButtonBar_AddButton(this._ptr, button_id, label, bitmap, help_string, kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
@@ -34978,9 +35307,14 @@ var wxRibbonButtonBar = class _wxRibbonButtonBar {
     return lib.symbols.wxRibbonButtonBar_GetArtProvider(this._ptr);
   }
 };
+function createWxRibbonButtonBar(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxRibbonButtonBar_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxRibbonButtonBar(rawPtr);
+}
 
 // ../../wx/wxRibbonGallery_gen.ts
-var wxRibbonGallery = class _wxRibbonGallery {
+var wxRibbonGallery = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -34988,11 +35322,6 @@ var wxRibbonGallery = class _wxRibbonGallery {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxRibbonGallery_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxRibbonGallery(rawPtr);
   }
   Append(bitmap, id) {
     return lib.symbols.wxRibbonGallery_Append(this._ptr, bitmap, id);
@@ -35061,9 +35390,14 @@ var wxRibbonGallery = class _wxRibbonGallery {
     return lib.symbols.wxRibbonGallery_GetArtProvider(this._ptr);
   }
 };
+function createWxRibbonGallery(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxRibbonGallery_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxRibbonGallery(rawPtr);
+}
 
 // ../../wx/wxRibbonPage_gen.ts
-var wxRibbonPage = class _wxRibbonPage {
+var wxRibbonPage = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -35071,11 +35405,6 @@ var wxRibbonPage = class _wxRibbonPage {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, label, icon, style) {
-    const rawPtr = lib.symbols.wxRibbonPage_Create(parent, id, label, icon, style);
-    if (rawPtr === null) return null;
-    return new _wxRibbonPage(rawPtr);
   }
   DismissExpandedPanel() {
     lib.symbols.wxRibbonPage_DismissExpandedPanel(this._ptr);
@@ -35102,9 +35431,14 @@ var wxRibbonPage = class _wxRibbonPage {
     return lib.symbols.wxRibbonPage_GetArtProvider(this._ptr);
   }
 };
+function createWxRibbonPage(parent, id, label, icon, style) {
+  const rawPtr = lib.symbols.wxRibbonPage_Create(parent, id, label, icon, style);
+  if (rawPtr === null) return null;
+  return new wxRibbonPage(rawPtr);
+}
 
 // ../../wx/wxRibbonPanel_gen.ts
-var wxRibbonPanel = class _wxRibbonPanel {
+var wxRibbonPanel = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -35112,11 +35446,6 @@ var wxRibbonPanel = class _wxRibbonPanel {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, label, icon, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxRibbonPanel_Create(parent, id, label, icon, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxRibbonPanel(rawPtr);
   }
   GetLabel() {
     return lib.symbols.wxRibbonPanel_GetLabel(this._ptr);
@@ -35155,9 +35484,14 @@ var wxRibbonPanel = class _wxRibbonPanel {
     return lib.symbols.wxRibbonPanel_GetArtProvider(this._ptr);
   }
 };
+function createWxRibbonPanel(parent, id, label, icon, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxRibbonPanel_Create(parent, id, label, icon, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxRibbonPanel(rawPtr);
+}
 
 // ../../wx/wxRibbonToolBar_gen.ts
-var wxRibbonToolBar = class _wxRibbonToolBar {
+var wxRibbonToolBar = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -35165,11 +35499,6 @@ var wxRibbonToolBar = class _wxRibbonToolBar {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxRibbonToolBar_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxRibbonToolBar(rawPtr);
   }
   AddTool(tool_id, bitmap, help_string, kind, bitmap_disabled, client_data) {
     return lib.symbols.wxRibbonToolBar_AddTool(this._ptr, tool_id, bitmap, help_string, kind, bitmap_disabled, client_data);
@@ -35277,17 +35606,17 @@ var wxRibbonToolBar = class _wxRibbonToolBar {
     return lib.symbols.wxRibbonToolBar_GetArtProvider(this._ptr);
   }
 };
+function createWxRibbonToolBar(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxRibbonToolBar_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxRibbonToolBar(rawPtr);
+}
 
 // ../../wx/wxRichTextCtrl_gen.ts
-var wxRichTextCtrl = class _wxRichTextCtrl extends wxControl {
+var wxRichTextCtrl = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxRichTextCtrl_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxRichTextCtrl(rawPtr);
   }
   GetValue() {
     return lib.symbols.wxRichTextCtrl_GetValue(this._ptr);
@@ -35557,27 +35886,17 @@ var wxRichTextCtrl = class _wxRichTextCtrl extends wxControl {
     return lib.symbols.wxRichTextCtrl_LineBreak(this._ptr) !== 0;
   }
 };
+function createWxRichTextCtrl(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxRichTextCtrl_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxRichTextCtrl(rawPtr);
+}
 
 // ../../wx/wxSVGFileDC_gen.ts
-var wxSVGFileDC = class _wxSVGFileDC extends wxDC {
+var wxSVGFileDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(fileName) {
-    const rawPtr = lib.symbols.wxSVGFileDC_Create(fileName);
-    if (rawPtr === null) return null;
-    return new _wxSVGFileDC(rawPtr);
-  }
-  static CreateWithSize(fileName, width, height) {
-    const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSize(fileName, width, height);
-    if (rawPtr === null) return null;
-    return new _wxSVGFileDC(rawPtr);
-  }
-  static CreateWithSizeAndResolution(fileName, width, height, a_dpi) {
-    const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSizeAndResolution(fileName, width, height, a_dpi);
-    if (rawPtr === null) return null;
-    return new _wxSVGFileDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxSVGFileDC_Delete(this._ptr);
@@ -35586,17 +35905,27 @@ var wxSVGFileDC = class _wxSVGFileDC extends wxDC {
     this.Delete();
   }
 };
+function createWxSVGFileDC(fileName) {
+  const rawPtr = lib.symbols.wxSVGFileDC_Create(fileName);
+  if (rawPtr === null) return null;
+  return new wxSVGFileDC(rawPtr);
+}
+function createWxSVGFileDCWithSize(fileName, width, height) {
+  const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSize(fileName, width, height);
+  if (rawPtr === null) return null;
+  return new wxSVGFileDC(rawPtr);
+}
+function createWxSVGFileDCWithSizeAndResolution(fileName, width, height, a_dpi) {
+  const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSizeAndResolution(fileName, width, height, a_dpi);
+  if (rawPtr === null) return null;
+  return new wxSVGFileDC(rawPtr);
+}
 
 // ../../wx/wxSashEvent_gen.ts
-var wxSashEvent = class _wxSashEvent extends wxEvent {
+var wxSashEvent = class extends wxEvent {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(id, edge) {
-    const rawPtr = lib.symbols.wxSashEvent_Create(id, edge);
-    if (rawPtr === null) return null;
-    return new _wxSashEvent(rawPtr);
   }
   GetDragRect() {
     return lib.symbols.wxSashEvent_GetDragRect(this._ptr);
@@ -35617,17 +35946,17 @@ var wxSashEvent = class _wxSashEvent extends wxEvent {
     lib.symbols.wxSashEvent_SetEdge(this._ptr, edge);
   }
 };
+function createWxSashEvent(id, edge) {
+  const rawPtr = lib.symbols.wxSashEvent_Create(id, edge);
+  if (rawPtr === null) return null;
+  return new wxSashEvent(rawPtr);
+}
 
 // ../../wx/wxSashWindow_gen.ts
-var wxSashWindow = class _wxSashWindow extends wxWindow {
+var wxSashWindow = class extends wxWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxSashWindow_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxSashWindow(rawPtr);
   }
   GetDefaultBorderSize() {
     return lib.symbols.wxSashWindow_GetDefaultBorderSize(this._ptr);
@@ -35681,17 +36010,17 @@ var wxSashWindow = class _wxSashWindow extends wxWindow {
     lib.symbols.wxSashWindow_SetSashVisible(this._ptr, edge, sash ? 1 : 0);
   }
 };
+function createWxSashWindow(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxSashWindow_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxSashWindow(rawPtr);
+}
 
 // ../../wx/wxSashLayoutWindow_gen.ts
-var wxSashLayoutWindow = class _wxSashLayoutWindow extends wxSashWindow {
+var wxSashLayoutWindow = class extends wxSashWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxSashLayoutWindow_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxSashLayoutWindow(rawPtr);
   }
   GetAlignment() {
     return lib.symbols.wxSashLayoutWindow_GetAlignment(this._ptr);
@@ -35709,17 +36038,17 @@ var wxSashLayoutWindow = class _wxSashLayoutWindow extends wxSashWindow {
     lib.symbols.wxSashLayoutWindow_SetOrientation(this._ptr, orient);
   }
 };
+function createWxSashLayoutWindow(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxSashLayoutWindow_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxSashLayoutWindow(rawPtr);
+}
 
 // ../../wx/wxScreenDC_gen.ts
-var wxScreenDC = class _wxScreenDC extends wxDC {
+var wxScreenDC = class extends wxDC {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxScreenDC_Create();
-    if (rawPtr === null) return null;
-    return new _wxScreenDC(rawPtr);
   }
   Delete() {
     lib.symbols.wxScreenDC_Delete(this._ptr);
@@ -35728,17 +36057,17 @@ var wxScreenDC = class _wxScreenDC extends wxDC {
     this.Delete();
   }
 };
+function createWxScreenDC() {
+  const rawPtr = lib.symbols.wxScreenDC_Create();
+  if (rawPtr === null) return null;
+  return new wxScreenDC(rawPtr);
+}
 
 // ../../wx/wxScrollBar_gen.ts
-var wxScrollBar = class _wxScrollBar extends wxControl {
+var wxScrollBar = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxScrollBar_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxScrollBar(rawPtr);
   }
   GetPageSize() {
     return lib.symbols.wxScrollBar_GetPageSize(this._ptr);
@@ -35759,6 +36088,11 @@ var wxScrollBar = class _wxScrollBar extends wxControl {
     lib.symbols.wxScrollBar_SetThumbPosition(this._ptr, viewStart);
   }
 };
+function createWxScrollBar(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxScrollBar_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxScrollBar(rawPtr);
+}
 
 // ../../wx/wxScrollEvent_gen.ts
 var wxScrollEvent = class extends wxEvent {
@@ -35795,15 +36129,10 @@ var wxScrollWinEvent = class extends wxEvent {
 };
 
 // ../../wx/wxSearchCtrl_gen.ts
-var wxSearchCtrl = class _wxSearchCtrl extends wxControl {
+var wxSearchCtrl = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, value, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxSearchCtrl_Create(parent, id, value, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxSearchCtrl(rawPtr);
   }
   SetMenu(menu) {
     lib.symbols.wxSearchCtrl_SetMenu(this._ptr, menu);
@@ -35830,6 +36159,11 @@ var wxSearchCtrl = class _wxSearchCtrl extends wxControl {
     return lib.symbols.wxSearchCtrl_GetDescriptiveText(this._ptr);
   }
 };
+function createWxSearchCtrl(parent, id, value, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxSearchCtrl_Create(parent, id, value, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxSearchCtrl(rawPtr);
+}
 
 // ../../wx/wxSetCursorEvent_gen.ts
 var wxSetCursorEvent = class extends wxEvent {
@@ -35869,7 +36203,7 @@ var wxShowEvent = class extends wxEvent {
 };
 
 // ../../wx/wxSimpleHtmlListBox_gen.ts
-var wxSimpleHtmlListBox = class _wxSimpleHtmlListBox {
+var wxSimpleHtmlListBox = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -35878,15 +36212,10 @@ var wxSimpleHtmlListBox = class _wxSimpleHtmlListBox {
   get ptr() {
     return this._ptr;
   }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxSimpleHtmlListBox_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxSimpleHtmlListBox(rawPtr);
-  }
   Clear() {
     lib.symbols.wxSimpleHtmlListBox_Clear(this._ptr);
   }
-  Delete(index) {
+  DeleteItem(index) {
     lib.symbols.wxSimpleHtmlListBox_Delete(this._ptr, index);
   }
   GetCount() {
@@ -35932,17 +36261,17 @@ var wxSimpleHtmlListBox = class _wxSimpleHtmlListBox {
     return lib.symbols.wxSimpleHtmlListBox_GetItemCount(this._ptr);
   }
 };
+function createWxSimpleHtmlListBox(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxSimpleHtmlListBox_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxSimpleHtmlListBox(rawPtr);
+}
 
 // ../../wx/wxSimplebook_gen.ts
-var wxSimplebook = class _wxSimplebook extends wxBookCtrlBase {
+var wxSimplebook = class extends wxBookCtrlBase {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxSimplebook_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxSimplebook(rawPtr);
   }
   AddPage(pPage, strText, bSelect, imageId) {
     return lib.symbols.wxSimplebook_AddPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) !== 0;
@@ -36002,9 +36331,14 @@ var wxSimplebook = class _wxSimplebook extends wxBookCtrlBase {
     lib.symbols.wxSimplebook_SetEffectTimeout(this._ptr, timeout);
   }
 };
+function createWxSimplebook(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxSimplebook_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxSimplebook(rawPtr);
+}
 
 // ../../wx/wxSingleInstanceChecker_gen.ts
-var wxSingleInstanceChecker = class _wxSingleInstanceChecker {
+var wxSingleInstanceChecker = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -36012,14 +36346,6 @@ var wxSingleInstanceChecker = class _wxSingleInstanceChecker {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, name, path) {
-    return lib.symbols.wxSingleInstanceChecker_Create(pObject, name, path) !== 0;
-  }
-  static CreateDefault() {
-    const rawPtr = lib.symbols.wxSingleInstanceChecker_CreateDefault();
-    if (rawPtr === null) return null;
-    return new _wxSingleInstanceChecker(rawPtr);
   }
   Delete() {
     lib.symbols.wxSingleInstanceChecker_Delete(this._ptr);
@@ -36031,9 +36357,17 @@ var wxSingleInstanceChecker = class _wxSingleInstanceChecker {
     return lib.symbols.wxSingleInstanceChecker_IsAnotherRunning(this._ptr) !== 0;
   }
 };
+function createWxSingleInstanceChecker(pObject, name, path) {
+  return lib.symbols.wxSingleInstanceChecker_Create(pObject, name, path) !== 0;
+}
+function createWxSingleInstanceCheckerDefault() {
+  const rawPtr = lib.symbols.wxSingleInstanceChecker_CreateDefault();
+  if (rawPtr === null) return null;
+  return new wxSingleInstanceChecker(rawPtr);
+}
 
 // ../../wx/wxSize_gen.ts
-var wxSize = class _wxSize {
+var wxSize = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -36041,11 +36375,6 @@ var wxSize = class _wxSize {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(width, height) {
-    const rawPtr = lib.symbols.wxSize_Create(width, height);
-    if (rawPtr === null) return null;
-    return new _wxSize(rawPtr);
   }
   Delete() {
     lib.symbols.wxSize_Delete(this._ptr);
@@ -36066,6 +36395,11 @@ var wxSize = class _wxSize {
     lib.symbols.wxSize_SetWidth(this._ptr, width);
   }
 };
+function createWxSize(width, height) {
+  const rawPtr = lib.symbols.wxSize_Create(width, height);
+  if (rawPtr === null) return null;
+  return new wxSize(rawPtr);
+}
 
 // ../../wx/wxSizeEvent_gen.ts
 var wxSizeEvent = class extends wxEvent {
@@ -36079,7 +36413,7 @@ var wxSizeEvent = class extends wxEvent {
 };
 
 // ../../wx/wxSizerItem_gen.ts
-var wxSizerItem = class _wxSizerItem {
+var wxSizerItem = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -36087,17 +36421,6 @@ var wxSizerItem = class _wxSizerItem {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(width, height, option, flag, border, userData) {
-    const rawPtr = lib.symbols.wxSizerItem_Create(width, height, option, flag, border, userData);
-    if (rawPtr === null) return null;
-    return new _wxSizerItem(rawPtr);
-  }
-  static CreateInSizer(sizer, option, flag, border, userData) {
-    return lib.symbols.wxSizerItem_CreateInSizer(sizer, option, flag, border, userData);
-  }
-  static CreateInWindow(window, option, flag, border, userData) {
-    return lib.symbols.wxSizerItem_CreateInWindow(window, option, flag, border, userData);
   }
   Delete() {
     lib.symbols.wxSizerItem_Delete(this._ptr);
@@ -36196,17 +36519,23 @@ var wxSizerItem = class _wxSizerItem {
     lib.symbols.wxSizerItem_Show(this._ptr, show);
   }
 };
+function createWxSizerItem(width, height, option, flag, border, userData) {
+  const rawPtr = lib.symbols.wxSizerItem_Create(width, height, option, flag, border, userData);
+  if (rawPtr === null) return null;
+  return new wxSizerItem(rawPtr);
+}
+function createWxSizerItemInSizer(sizer, option, flag, border, userData) {
+  return lib.symbols.wxSizerItem_CreateInSizer(sizer, option, flag, border, userData);
+}
+function createWxSizerItemInWindow(window, option, flag, border, userData) {
+  return lib.symbols.wxSizerItem_CreateInWindow(window, option, flag, border, userData);
+}
 
 // ../../wx/wxSlider_gen.ts
-var wxSlider = class _wxSlider extends wxControl {
+var wxSlider = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, init, minVal, maxVal, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxSlider_Create(parent, id, init, minVal, maxVal, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxSlider(rawPtr);
   }
   ClearSel() {
     lib.symbols.wxSlider_ClearSel(this._ptr);
@@ -36263,17 +36592,17 @@ var wxSlider = class _wxSlider extends wxControl {
     lib.symbols.wxSlider_SetValue(this._ptr, value);
   }
 };
+function createWxSlider(parent, id, init, minVal, maxVal, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxSlider_Create(parent, id, init, minVal, maxVal, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxSlider(rawPtr);
+}
 
 // ../../wx/wxSpinButton_gen.ts
-var wxSpinButton = class _wxSpinButton extends wxControl {
+var wxSpinButton = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxSpinButton_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxSpinButton(rawPtr);
   }
   GetMax() {
     return lib.symbols.wxSpinButton_GetMax(this._ptr);
@@ -36291,17 +36620,17 @@ var wxSpinButton = class _wxSpinButton extends wxControl {
     lib.symbols.wxSpinButton_SetValue(this._ptr, val);
   }
 };
+function createWxSpinButton(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxSpinButton_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxSpinButton(rawPtr);
+}
 
 // ../../wx/wxSpinCtrl_gen.ts
-var wxSpinCtrl = class _wxSpinCtrl extends wxControl {
+var wxSpinCtrl = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style, minVal, maxVal, init) {
-    const rawPtr = lib.symbols.wxSpinCtrl_Create(parent, id, text, left, top, width, height, style, minVal, maxVal, init);
-    if (rawPtr === null) return null;
-    return new _wxSpinCtrl(rawPtr);
   }
   GetBase() {
     return lib.symbols.wxSpinCtrl_GetBase(this._ptr);
@@ -36325,17 +36654,17 @@ var wxSpinCtrl = class _wxSpinCtrl extends wxControl {
     lib.symbols.wxSpinCtrl_SetValue(this._ptr, val);
   }
 };
+function createWxSpinCtrl(parent, id, text, left, top, width, height, style, minVal, maxVal, init) {
+  const rawPtr = lib.symbols.wxSpinCtrl_Create(parent, id, text, left, top, width, height, style, minVal, maxVal, init);
+  if (rawPtr === null) return null;
+  return new wxSpinCtrl(rawPtr);
+}
 
 // ../../wx/wxSpinCtrlDouble_gen.ts
-var wxSpinCtrlDouble = class _wxSpinCtrlDouble extends wxControl {
+var wxSpinCtrlDouble = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, value, x, y, width, height, style, min, max, initial, inc) {
-    const rawPtr = lib.symbols.wxSpinCtrlDouble_Create(parent, id, value, x, y, width, height, style, min, max, initial, inc);
-    if (rawPtr === null) return null;
-    return new _wxSpinCtrlDouble(rawPtr);
   }
   GetValue() {
     return lib.symbols.wxSpinCtrlDouble_GetValue(this._ptr);
@@ -36368,6 +36697,11 @@ var wxSpinCtrlDouble = class _wxSpinCtrlDouble extends wxControl {
     return lib.symbols.wxSpinCtrlDouble_GetDigits(this._ptr);
   }
 };
+function createWxSpinCtrlDouble(parent, id, value, x, y, width, height, style, min, max, initial, inc) {
+  const rawPtr = lib.symbols.wxSpinCtrlDouble_Create(parent, id, value, x, y, width, height, style, min, max, initial, inc);
+  if (rawPtr === null) return null;
+  return new wxSpinCtrlDouble(rawPtr);
+}
 
 // ../../wx/wxSpinEvent_gen.ts
 var wxSpinEvent = class extends wxNotifyEvent {
@@ -36384,15 +36718,10 @@ var wxSpinEvent = class extends wxNotifyEvent {
 };
 
 // ../../wx/wxSplashScreen_gen.ts
-var wxSplashScreen = class _wxSplashScreen extends wxFrame {
+var wxSplashScreen = class extends wxFrame {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(bitmap, splashStyle, milliseconds, parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxSplashScreen_Create(bitmap, splashStyle, milliseconds, parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxSplashScreen(rawPtr);
   }
   GetSplashStyle() {
     return lib.symbols.wxSplashScreen_GetSplashStyle(this._ptr);
@@ -36401,17 +36730,17 @@ var wxSplashScreen = class _wxSplashScreen extends wxFrame {
     return lib.symbols.wxSplashScreen_GetTimeout(this._ptr);
   }
 };
+function createWxSplashScreen(bitmap, splashStyle, milliseconds, parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxSplashScreen_Create(bitmap, splashStyle, milliseconds, parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxSplashScreen(rawPtr);
+}
 
 // ../../wx/wxSplitterWindow_gen.ts
-var wxSplitterWindow = class _wxSplitterWindow extends wxWindow {
+var wxSplitterWindow = class extends wxWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxSplitterWindow_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxSplitterWindow(rawPtr);
   }
   GetBorderSize() {
     return lib.symbols.wxSplitterWindow_GetBorderSize(this._ptr);
@@ -36483,17 +36812,17 @@ var wxSplitterWindow = class _wxSplitterWindow extends wxWindow {
     return lib.symbols.wxSplitterWindow_GetDefaultSashSize(this._ptr);
   }
 };
+function createWxSplitterWindow(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxSplitterWindow_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxSplitterWindow(rawPtr);
+}
 
 // ../../wx/wxStaticBitmap_gen.ts
-var wxStaticBitmap = class _wxStaticBitmap extends wxControl {
+var wxStaticBitmap = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, bitmap, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxStaticBitmap_Create(parent, id, bitmap, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxStaticBitmap(rawPtr);
   }
   Delete() {
     lib.symbols.wxStaticBitmap_Delete(this._ptr);
@@ -36514,33 +36843,33 @@ var wxStaticBitmap = class _wxStaticBitmap extends wxControl {
     lib.symbols.wxStaticBitmap_SetIcon(this._ptr, icon);
   }
 };
+function createWxStaticBitmap(parent, id, bitmap, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxStaticBitmap_Create(parent, id, bitmap, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxStaticBitmap(rawPtr);
+}
 
 // ../../wx/wxStaticBox_gen.ts
-var wxStaticBox = class _wxStaticBox extends wxControl {
+var wxStaticBox = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxStaticBox_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxStaticBox(rawPtr);
   }
   GetBordersForSizer(borderTop, borderOther) {
     lib.symbols.wxStaticBox_GetBordersForSizer(this._ptr, borderTop, borderOther);
   }
 };
+function createWxStaticBox(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxStaticBox_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxStaticBox(rawPtr);
+}
 
 // ../../wx/wxStaticBoxSizer_gen.ts
-var wxStaticBoxSizer = class _wxStaticBoxSizer extends wxBoxSizer {
+var wxStaticBoxSizer = class extends wxBoxSizer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(box, orient) {
-    const rawPtr = lib.symbols.wxStaticBoxSizer_Create(box, orient);
-    if (rawPtr === null) return null;
-    return new _wxStaticBoxSizer(rawPtr);
   }
   CalcMin() {
     return lib.symbols.wxStaticBoxSizer_CalcMin(this._ptr);
@@ -36552,17 +36881,17 @@ var wxStaticBoxSizer = class _wxStaticBoxSizer extends wxBoxSizer {
     lib.symbols.wxStaticBoxSizer_RecalcSizes(this._ptr);
   }
 };
+function createWxStaticBoxSizer(box, orient) {
+  const rawPtr = lib.symbols.wxStaticBoxSizer_Create(box, orient);
+  if (rawPtr === null) return null;
+  return new wxStaticBoxSizer(rawPtr);
+}
 
 // ../../wx/wxStaticLine_gen.ts
-var wxStaticLine = class _wxStaticLine extends wxControl {
+var wxStaticLine = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxStaticLine_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxStaticLine(rawPtr);
   }
   GetDefaultSize() {
     return lib.symbols.wxStaticLine_GetDefaultSize(this._ptr);
@@ -36571,17 +36900,17 @@ var wxStaticLine = class _wxStaticLine extends wxControl {
     return lib.symbols.wxStaticLine_IsVertical(this._ptr) !== 0;
   }
 };
+function createWxStaticLine(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxStaticLine_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxStaticLine(rawPtr);
+}
 
 // ../../wx/wxStaticText_gen.ts
-var wxStaticText = class _wxStaticText extends wxControl {
+var wxStaticText = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxStaticText_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxStaticText(rawPtr);
   }
   Wrap(width) {
     lib.symbols.wxStaticText_Wrap(this._ptr, width);
@@ -36590,17 +36919,17 @@ var wxStaticText = class _wxStaticText extends wxControl {
     return lib.symbols.wxStaticText_IsEllipsized(this._ptr) !== 0;
   }
 };
+function createWxStaticText(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxStaticText_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxStaticText(rawPtr);
+}
 
 // ../../wx/wxStatusBar_gen.ts
-var wxStatusBar = class _wxStatusBar extends wxWindow {
+var wxStatusBar = class extends wxWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxStatusBar_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxStatusBar(rawPtr);
   }
   GetBorderX() {
     return lib.symbols.wxStatusBar_GetBorderX(this._ptr);
@@ -36645,17 +36974,17 @@ var wxStatusBar = class _wxStatusBar extends wxWindow {
     return lib.symbols.wxStatusBar_GetStatusStyle(this._ptr, n);
   }
 };
+function createWxStatusBar(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxStatusBar_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxStatusBar(rawPtr);
+}
 
 // ../../wx/wxStdDialogButtonSizer_gen.ts
-var wxStdDialogButtonSizer = class _wxStdDialogButtonSizer extends wxBoxSizer {
+var wxStdDialogButtonSizer = class extends wxBoxSizer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxStdDialogButtonSizer_Create();
-    if (rawPtr === null) return null;
-    return new _wxStdDialogButtonSizer(rawPtr);
   }
   AddButton(button) {
     lib.symbols.wxStdDialogButtonSizer_AddButton(this._ptr, button);
@@ -36688,9 +37017,14 @@ var wxStdDialogButtonSizer = class _wxStdDialogButtonSizer extends wxBoxSizer {
     return lib.symbols.wxStdDialogButtonSizer_GetHelpButton(this._ptr);
   }
 };
+function createWxStdDialogButtonSizer() {
+  const rawPtr = lib.symbols.wxStdDialogButtonSizer_Create();
+  if (rawPtr === null) return null;
+  return new wxStdDialogButtonSizer(rawPtr);
+}
 
 // ../../wx/wxStopWatch_gen.ts
-var wxStopWatch = class _wxStopWatch {
+var wxStopWatch = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -36698,11 +37032,6 @@ var wxStopWatch = class _wxStopWatch {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxStopWatch_Create();
-    if (rawPtr === null) return null;
-    return new _wxStopWatch(rawPtr);
   }
   Delete() {
     lib.symbols.wxStopWatch_Delete(this._ptr);
@@ -36723,19 +37052,24 @@ var wxStopWatch = class _wxStopWatch {
     return lib.symbols.wxStopWatch_Time(this._ptr);
   }
 };
+function createWxStopWatch() {
+  const rawPtr = lib.symbols.wxStopWatch_Create();
+  if (rawPtr === null) return null;
+  return new wxStopWatch(rawPtr);
+}
 
 // ../../wx/wxStringProperty_gen.ts
-var wxStringProperty = class _wxStringProperty extends wxPGProperty {
+var wxStringProperty = class extends wxPGProperty {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(label, name, value) {
-    const rawPtr = lib.symbols.wxStringProperty_Create(label, name, value);
-    if (rawPtr === null) return null;
-    return new _wxStringProperty(rawPtr);
-  }
 };
+function createWxStringProperty(label, name, value) {
+  const rawPtr = lib.symbols.wxStringProperty_Create(label, name, value);
+  if (rawPtr === null) return null;
+  return new wxStringProperty(rawPtr);
+}
 
 // ../../wx/wxSystemSettings_gen.ts
 var wxSystemSettings = class {
@@ -36762,15 +37096,10 @@ var wxSystemSettings = class {
 };
 
 // ../../wx/wxTaskBarIcon_gen.ts
-var wxTaskBarIcon = class _wxTaskBarIcon extends wxEvtHandler {
+var wxTaskBarIcon = class extends wxEvtHandler {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxTaskBarIcon_Create();
-    if (rawPtr === null) return null;
-    return new _wxTaskBarIcon(rawPtr);
   }
   Delete() {
     lib.symbols.wxTaskBarIcon_Delete(this._ptr);
@@ -36794,17 +37123,17 @@ var wxTaskBarIcon = class _wxTaskBarIcon extends wxEvtHandler {
     return lib.symbols.wxTaskBarIcon_SetIcon(this._ptr, icon, text) !== 0;
   }
 };
+function createWxTaskBarIcon() {
+  const rawPtr = lib.symbols.wxTaskBarIcon_Create();
+  if (rawPtr === null) return null;
+  return new wxTaskBarIcon(rawPtr);
+}
 
 // ../../wx/wxTextCtrl_gen.ts
-var wxTextCtrl = class _wxTextCtrl extends wxControl {
+var wxTextCtrl = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxTextCtrl_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxTextCtrl(rawPtr);
   }
   AppendText(text) {
     lib.symbols.wxTextCtrl_AppendText(this._ptr, text);
@@ -36945,9 +37274,14 @@ var wxTextCtrl = class _wxTextCtrl extends wxControl {
     return lib.symbols.wxTextCtrl_XYToPosition(this._ptr, x, y);
   }
 };
+function createWxTextCtrl(parent, id, text, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxTextCtrl_Create(parent, id, text, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxTextCtrl(rawPtr);
+}
 
 // ../../wx/wxTextDataObject_gen.ts
-var wxTextDataObject = class _wxTextDataObject {
+var wxTextDataObject = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -36955,11 +37289,6 @@ var wxTextDataObject = class _wxTextDataObject {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(text) {
-    const rawPtr = lib.symbols.TextDataObject_Create(text);
-    if (rawPtr === null) return null;
-    return new _wxTextDataObject(rawPtr);
   }
   Delete() {
     lib.symbols.TextDataObject_Delete(this._ptr);
@@ -36974,6 +37303,11 @@ var wxTextDataObject = class _wxTextDataObject {
     lib.symbols.TextDataObject_SetText(this._ptr, text);
   }
 };
+function createWxTextDataObject(text) {
+  const rawPtr = lib.symbols.TextDataObject_Create(text);
+  if (rawPtr === null) return null;
+  return new wxTextDataObject(rawPtr);
+}
 
 // ../../wx/wxTextEntry_gen.ts
 var wxTextEntry = class {
@@ -37114,15 +37448,10 @@ var wxTextEntry = class {
 };
 
 // ../../wx/wxTextEntryDialog_gen.ts
-var wxTextEntryDialog = class _wxTextEntryDialog extends wxDialog {
+var wxTextEntryDialog = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, message, caption, value, style, x, y, sz_w, sz_h) {
-    const rawPtr = lib.symbols.wxTextEntryDialog_Create(parent, message, caption, value, style, x, y, sz_w, sz_h);
-    if (rawPtr === null) return null;
-    return new _wxTextEntryDialog(rawPtr);
   }
   GetValue() {
     return lib.symbols.wxTextEntryDialog_GetValue(this._ptr);
@@ -37131,9 +37460,14 @@ var wxTextEntryDialog = class _wxTextEntryDialog extends wxDialog {
     lib.symbols.wxTextEntryDialog_SetValue(this._ptr, value);
   }
 };
+function createWxTextEntryDialog(parent, message, caption, value, style, x, y, sz_w, sz_h) {
+  const rawPtr = lib.symbols.wxTextEntryDialog_Create(parent, message, caption, value, style, x, y, sz_w, sz_h);
+  if (rawPtr === null) return null;
+  return new wxTextEntryDialog(rawPtr);
+}
 
 // ../../wx/wxTimePickerCtrl_gen.ts
-var wxTimePickerCtrl = class _wxTimePickerCtrl {
+var wxTimePickerCtrl = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -37141,11 +37475,6 @@ var wxTimePickerCtrl = class _wxTimePickerCtrl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxTimePickerCtrl_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxTimePickerCtrl(rawPtr);
   }
   SetValue(dateTime) {
     lib.symbols.wxTimePickerCtrl_SetValue(this._ptr, dateTime);
@@ -37160,9 +37489,14 @@ var wxTimePickerCtrl = class _wxTimePickerCtrl {
     return lib.symbols.wxTimePickerCtrl_GetTime(this._ptr, hour, min, sec) !== 0;
   }
 };
+function createWxTimePickerCtrl(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxTimePickerCtrl_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxTimePickerCtrl(rawPtr);
+}
 
 // ../../wx/wxTimer_gen.ts
-var wxTimer = class _wxTimer {
+var wxTimer = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -37170,11 +37504,6 @@ var wxTimer = class _wxTimer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id) {
-    const rawPtr = lib.symbols.wxTimer_Create(parent, id);
-    if (rawPtr === null) return null;
-    return new _wxTimer(rawPtr);
   }
   Delete() {
     lib.symbols.wxTimer_Delete(this._ptr);
@@ -37198,6 +37527,11 @@ var wxTimer = class _wxTimer {
     lib.symbols.wxTimer_Stop(this._ptr);
   }
 };
+function createWxTimer(parent, id) {
+  const rawPtr = lib.symbols.wxTimer_Create(parent, id);
+  if (rawPtr === null) return null;
+  return new wxTimer(rawPtr);
+}
 
 // ../../wx/wxTimerEvent_gen.ts
 var wxTimerEvent = class extends wxEvent {
@@ -37211,17 +37545,12 @@ var wxTimerEvent = class extends wxEvent {
 };
 
 // ../../wx/wxTipWindow_gen.ts
-var wxTipWindow = class _wxTipWindow extends wxWindow {
+var wxTipWindow = class extends wxWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
   }
-  static Create(parent, text, maxLength) {
-    const rawPtr = lib.symbols.wxTipWindow_Create(parent, text, maxLength);
-    if (rawPtr === null) return null;
-    return new _wxTipWindow(rawPtr);
-  }
-  Close() {
+  CloseTip() {
     lib.symbols.wxTipWindow_Close(this._ptr);
   }
   SetBoundingRect(x, y, width, height) {
@@ -37231,17 +37560,17 @@ var wxTipWindow = class _wxTipWindow extends wxWindow {
     lib.symbols.wxTipWindow_SetTipWindowPtr(this._ptr, windowPtr);
   }
 };
+function createWxTipWindow(parent, text, maxLength) {
+  const rawPtr = lib.symbols.wxTipWindow_Create(parent, text, maxLength);
+  if (rawPtr === null) return null;
+  return new wxTipWindow(rawPtr);
+}
 
 // ../../wx/wxToolBar_gen.ts
-var wxToolBar = class _wxToolBar extends wxControl {
+var wxToolBar = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxToolBar_Create(parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxToolBar(rawPtr);
   }
   Delete() {
     lib.symbols.wxToolBar_Delete(this._ptr);
@@ -37382,17 +37711,17 @@ var wxToolBar = class _wxToolBar extends wxControl {
     lib.symbols.wxToolBar_SetToggle(this._ptr, id, toggle ? 1 : 0);
   }
 };
+function createWxToolBar(parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxToolBar_Create(parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxToolBar(rawPtr);
+}
 
 // ../../wx/wxToolbook_gen.ts
-var wxToolbook = class _wxToolbook extends wxBookCtrlBase {
+var wxToolbook = class extends wxBookCtrlBase {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxToolbook_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxToolbook(rawPtr);
   }
   AddPage(pPage, strText, bSelect, imageId) {
     return lib.symbols.wxToolbook_AddPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) !== 0;
@@ -37449,17 +37778,17 @@ var wxToolbook = class _wxToolbook extends wxBookCtrlBase {
     return lib.symbols.wxToolbook_SetSelection(this._ptr, nPage);
   }
 };
+function createWxToolbook(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxToolbook_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxToolbook(rawPtr);
+}
 
 // ../../wx/wxTreeCtrl_gen.ts
-var wxTreeCtrl = class _wxTreeCtrl extends wxControl {
+var wxTreeCtrl = class extends wxControl {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(pObject, compareFunc, parent, id, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxTreeCtrl_Create(pObject, compareFunc, parent, id, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxTreeCtrl(rawPtr);
   }
   AddRoot(text, image, selectedImage, data, item) {
     lib.symbols.wxTreeCtrl_AddRoot(this._ptr, text, image, selectedImage, data, item);
@@ -37473,7 +37802,7 @@ var wxTreeCtrl = class _wxTreeCtrl extends wxControl {
   CollapseAndReset(item) {
     lib.symbols.wxTreeCtrl_CollapseAndReset(this._ptr, item);
   }
-  Delete(item) {
+  DeleteItem(item) {
     lib.symbols.wxTreeCtrl_Delete(this._ptr, item);
   }
   DeleteAllItems() {
@@ -37539,7 +37868,7 @@ var wxTreeCtrl = class _wxTreeCtrl extends wxControl {
   GetNextVisible(inputItem, result) {
     lib.symbols.wxTreeCtrl_GetNextVisible(this._ptr, inputItem, result);
   }
-  GetParent(inputItem, result) {
+  GetItemParent(inputItem, result) {
     lib.symbols.wxTreeCtrl_GetParent(this._ptr, inputItem, result);
   }
   GetPrevSibling(inputItem, result) {
@@ -37690,6 +38019,11 @@ var wxTreeCtrl = class _wxTreeCtrl extends wxControl {
     return lib.symbols.wxTreeCtrl_GetItemFont(this._ptr, item);
   }
 };
+function createWxTreeCtrl(pObject, compareFunc, parent, id, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxTreeCtrl_Create(pObject, compareFunc, parent, id, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxTreeCtrl(rawPtr);
+}
 
 // ../../wx/wxTreeEvent_gen.ts
 var wxTreeEvent = class extends wxNotifyEvent {
@@ -37715,7 +38049,7 @@ var wxTreeEvent = class extends wxNotifyEvent {
 };
 
 // ../../wx/wxTreeItemId_gen.ts
-var wxTreeItemId = class _wxTreeItemId {
+var wxTreeItemId = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -37723,11 +38057,6 @@ var wxTreeItemId = class _wxTreeItemId {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxTreeItemId_Create();
-    if (rawPtr === null) return null;
-    return new _wxTreeItemId(rawPtr);
   }
   Delete() {
     lib.symbols.wxTreeItemId_Delete(this._ptr);
@@ -37739,17 +38068,17 @@ var wxTreeItemId = class _wxTreeItemId {
     return lib.symbols.wxTreeItemId_IsOk(this._ptr) !== 0;
   }
 };
+function createWxTreeItemId() {
+  const rawPtr = lib.symbols.wxTreeItemId_Create();
+  if (rawPtr === null) return null;
+  return new wxTreeItemId(rawPtr);
+}
 
 // ../../wx/wxTreeListCtrl_gen.ts
-var wxTreeListCtrl = class _wxTreeListCtrl extends wxWindow {
+var wxTreeListCtrl = class extends wxWindow {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxTreeListCtrl_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxTreeListCtrl(rawPtr);
   }
   AppendColumn(title, width, align, flags) {
     return lib.symbols.wxTreeListCtrl_AppendColumn(this._ptr, title, width, align, flags);
@@ -37875,6 +38204,11 @@ var wxTreeListCtrl = class _wxTreeListCtrl extends wxWindow {
     return lib.symbols.wxTreeListCtrl_GetDataView(this._ptr);
   }
 };
+function createWxTreeListCtrl(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxTreeListCtrl_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxTreeListCtrl(rawPtr);
+}
 
 // ../../wx/wxTreeListEvent_gen.ts
 var wxTreeListEvent = class extends wxNotifyEvent {
@@ -37903,7 +38237,7 @@ var wxTreeListEvent = class extends wxNotifyEvent {
 };
 
 // ../../wx/wxTreeListItem_gen.ts
-var wxTreeListItem = class _wxTreeListItem {
+var wxTreeListItem = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -37911,11 +38245,6 @@ var wxTreeListItem = class _wxTreeListItem {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create() {
-    const rawPtr = lib.symbols.wxTreeListItem_Create();
-    if (rawPtr === null) return null;
-    return new _wxTreeListItem(rawPtr);
   }
   Delete() {
     lib.symbols.wxTreeListItem_Delete(this._ptr);
@@ -37930,17 +38259,17 @@ var wxTreeListItem = class _wxTreeListItem {
     return lib.symbols.wxTreeListItem_Clone(this._ptr);
   }
 };
+function createWxTreeListItem() {
+  const rawPtr = lib.symbols.wxTreeListItem_Create();
+  if (rawPtr === null) return null;
+  return new wxTreeListItem(rawPtr);
+}
 
 // ../../wx/wxTreebook_gen.ts
-var wxTreebook = class _wxTreebook extends wxBookCtrlBase {
+var wxTreebook = class extends wxBookCtrlBase {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, x, y, width, height, style) {
-    const rawPtr = lib.symbols.wxTreebook_Create(parent, id, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxTreebook(rawPtr);
   }
   AddPage(pPage, strText, bSelect, imageId) {
     return lib.symbols.wxTreebook_AddPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) !== 0;
@@ -38015,6 +38344,11 @@ var wxTreebook = class _wxTreebook extends wxBookCtrlBase {
     return lib.symbols.wxTreebook_SetSelection(this._ptr, nPage);
   }
 };
+function createWxTreebook(parent, id, x, y, width, height, style) {
+  const rawPtr = lib.symbols.wxTreebook_Create(parent, id, x, y, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxTreebook(rawPtr);
+}
 
 // ../../wx/wxUpdateUIEvent_gen.ts
 var wxUpdateUIEvent = class extends wxEvent {
@@ -38061,10 +38395,7 @@ var wxVariantVector = class {
   get ptr() {
     return this._ptr;
   }
-  static Create() {
-    return lib.symbols.wxVariantVector_Create();
-  }
-  Delete(vec) {
+  DeleteItem(vec) {
     lib.symbols.wxVariantVector_Delete(vec);
   }
   Add(vec, value) {
@@ -38086,6 +38417,9 @@ var wxVariantVector = class {
     lib.symbols.wxVariantVector_Clear(vec);
   }
 };
+function createWxVariantVector() {
+  return lib.symbols.wxVariantVector_Create();
+}
 
 // ../../wx/wxWebView_gen.ts
 var wxWebView = class extends wxControl {
@@ -38261,15 +38595,10 @@ var wxWindowDestroyEvent = class extends wxCommandEvent {
 };
 
 // ../../wx/wxWizard_gen.ts
-var wxWizard = class _wxWizard extends wxDialog {
+var wxWizard = class extends wxDialog {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, id, text, bitmap, left, top, width, height, style) {
-    const rawPtr = lib.symbols.wxWizard_Create(parent, id, text, bitmap, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new _wxWizard(rawPtr);
   }
   Chain(first, second) {
     lib.symbols.wxWizard_Chain(first, second);
@@ -38305,6 +38634,11 @@ var wxWizard = class _wxWizard extends wxDialog {
     lib.symbols.wxWizard_GetBitmap(this._ptr, ref);
   }
 };
+function createWxWizard(parent, id, text, bitmap, left, top, width, height, style) {
+  const rawPtr = lib.symbols.wxWizard_Create(parent, id, text, bitmap, left, top, width, height, style);
+  if (rawPtr === null) return null;
+  return new wxWizard(rawPtr);
+}
 
 // ../../wx/wxWizardEvent_gen.ts
 var wxWizardEvent = class extends wxNotifyEvent {
@@ -38318,15 +38652,10 @@ var wxWizardEvent = class extends wxNotifyEvent {
 };
 
 // ../../wx/wxWizardPageSimple_gen.ts
-var wxWizardPageSimple = class _wxWizardPageSimple extends wxPanel {
+var wxWizardPageSimple = class extends wxPanel {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(parent, prev, next, bitmap) {
-    const rawPtr = lib.symbols.wxWizardPageSimple_Create(parent, prev, next, bitmap);
-    if (rawPtr === null) return null;
-    return new _wxWizardPageSimple(rawPtr);
   }
   GetBitmap(ref) {
     lib.symbols.wxWizardPageSimple_GetBitmap(this._ptr, ref);
@@ -38344,17 +38673,17 @@ var wxWizardPageSimple = class _wxWizardPageSimple extends wxPanel {
     lib.symbols.wxWizardPageSimple_SetPrev(this._ptr, prev);
   }
 };
+function createWxWizardPageSimple(parent, prev, next, bitmap) {
+  const rawPtr = lib.symbols.wxWizardPageSimple_Create(parent, prev, next, bitmap);
+  if (rawPtr === null) return null;
+  return new wxWizardPageSimple(rawPtr);
+}
 
 // ../../wx/wxWrapSizer_gen.ts
-var wxWrapSizer = class _wxWrapSizer extends wxBoxSizer {
+var wxWrapSizer = class extends wxBoxSizer {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(orient, flags) {
-    const rawPtr = lib.symbols.wxWrapSizer_Create(orient, flags);
-    if (rawPtr === null) return null;
-    return new _wxWrapSizer(rawPtr);
   }
   GetOrientation() {
     return lib.symbols.wxWrapSizer_GetOrientation(this._ptr);
@@ -38366,9 +38695,14 @@ var wxWrapSizer = class _wxWrapSizer extends wxBoxSizer {
     return lib.symbols.wxWrapSizer_InformFirstDirection(this._ptr, direction, size, availableOtherDir) !== 0;
   }
 };
+function createWxWrapSizer(orient, flags) {
+  const rawPtr = lib.symbols.wxWrapSizer_Create(orient, flags);
+  if (rawPtr === null) return null;
+  return new wxWrapSizer(rawPtr);
+}
 
 // ../../wx/wxXmlResource_gen.ts
-var wxXmlResource = class _wxXmlResource {
+var wxXmlResource = class {
   constructor(ptr) {
     __publicField(this, "_ptr");
     this._ptr = ptr;
@@ -38376,16 +38710,6 @@ var wxXmlResource = class _wxXmlResource {
   /** Returns the underlying native pointer. */
   get ptr() {
     return this._ptr;
-  }
-  static Create(flags) {
-    const rawPtr = lib.symbols.wxXmlResource_Create(flags);
-    if (rawPtr === null) return null;
-    return new _wxXmlResource(rawPtr);
-  }
-  static CreateFromFile(filemask, flags) {
-    const rawPtr = lib.symbols.wxXmlResource_CreateFromFile(filemask, flags);
-    if (rawPtr === null) return null;
-    return new _wxXmlResource(rawPtr);
   }
   Delete() {
     lib.symbols.wxXmlResource_Delete(this._ptr);
@@ -38583,14 +38907,20 @@ var wxXmlResource = class _wxXmlResource {
     lib.symbols.wxXmlResource_SetFlags(this._ptr, flags);
   }
 };
+function createWxXmlResource(flags) {
+  const rawPtr = lib.symbols.wxXmlResource_Create(flags);
+  if (rawPtr === null) return null;
+  return new wxXmlResource(rawPtr);
+}
+function createWxXmlResourceFromFile(filemask, flags) {
+  const rawPtr = lib.symbols.wxXmlResource_CreateFromFile(filemask, flags);
+  if (rawPtr === null) return null;
+  return new wxXmlResource(rawPtr);
+}
 
 // ../../src/kwxApp.ts
-var _libName2 = {
-  windows: "kwxFFI.dll",
-  linux: "libkwxFFI.so",
-  darwin: "libkwxFFI.dylib"
-}[Deno.build.os] ?? "kwxFFI";
-var _appLib = Deno.dlopen(_libName2, {
+var import_platform4 = require("kwx/platform");
+var appLib = (0, import_platform4.dlopen)("kwxFFI", {
   // --- Application Lifecycle ---
   kwxApp_Initialize: { parameters: ["i32", "pointer"], result: "i32" },
   kwxApp_MainLoop: { parameters: [], result: "i32" },
@@ -38633,14 +38963,14 @@ var _appLib = Deno.dlopen(_libName2, {
   kwxApp_FindWindowByName: { parameters: ["pointer", "pointer"], result: "pointer" },
   kwxApp_FreeString: { parameters: ["pointer"], result: "void" }
 });
-var $ = _appLib.symbols;
+var $ = appLib.symbols;
 function initialize(argc = 0, argv = null) {
   return $.kwxApp_Initialize(argc, argv) !== 0;
 }
 function run() {
   return $.kwxApp_MainLoop();
 }
-function exit() {
+function exitMainLoop() {
   $.kwxApp_ExitMainLoop();
 }
 function shutdown() {
@@ -38651,19 +38981,19 @@ function isTerminating() {
 }
 function getAppName() {
   const ptr = $.kwxApp_GetAppName();
-  return ptr ? Deno.UnsafePointerView.getCString(ptr) : "";
+  return ptr ? (0, import_platform4.readCString)(ptr) : "";
 }
 function setAppName(name) {
   const buf = new TextEncoder().encode(name + "\0");
-  $.kwxApp_SetAppName(Deno.UnsafePointer.of(buf));
+  $.kwxApp_SetAppName((0, import_platform4.pointerOf)(buf));
 }
 function getVendorName() {
   const ptr = $.kwxApp_GetVendorName();
-  return ptr ? Deno.UnsafePointerView.getCString(ptr) : "";
+  return ptr ? (0, import_platform4.readCString)(ptr) : "";
 }
 function setVendorName(name) {
   const buf = new TextEncoder().encode(name + "\0");
-  $.kwxApp_SetVendorName(Deno.UnsafePointer.of(buf));
+  $.kwxApp_SetVendorName((0, import_platform4.pointerOf)(buf));
 }
 function getTopWindow() {
   return $.kwxApp_GetTopWindow();
@@ -38677,7 +39007,7 @@ function setExitOnFrameDelete(flag) {
 function getDisplaySize() {
   const wBuf = new Int32Array(1);
   const hBuf = new Int32Array(1);
-  $.kwxApp_GetDisplaySize(Deno.UnsafePointer.of(wBuf), Deno.UnsafePointer.of(hBuf));
+  $.kwxApp_GetDisplaySize((0, import_platform4.pointerOf)(wBuf), (0, import_platform4.pointerOf)(hBuf));
   return { width: wBuf[0], height: hBuf[0] };
 }
 function initAllImageHandlers() {

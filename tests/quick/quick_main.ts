@@ -1,11 +1,7 @@
-// Quick test entry point — the actual main() invoked by Deno.exit(main()).
+// Quick test entry point.
 //
-// Run with:
-//   deno run --allow-ffi --allow-read --allow-env tests/quick/quick_main.ts
-//
-// The kwxFFI.dll (or libkwxFFI.so / libkwxFFI.dylib) must be in the library
-// search path. Copy it from build/lib/ to the project root, or add the lib/
-// directory to PATH / LD_LIBRARY_PATH / DYLD_LIBRARY_PATH.
+// Run from the repository root:
+//   bin\Release\kwx_ts.exe tests\quick\quick_main.ts
 //
 // The frame is created hidden by quick_mainframe.ts and explicitly shown here.
 // Closing the window (title-bar close button) is the only way to exit.
@@ -16,7 +12,7 @@ import {
     setAppName,
     setTopWindow,
     shutdown,
-} from "../../dist/kwx.mjs";
+} from "kwx";
 import { createMainFrame } from "./quick_mainframe.ts";
 
 export function main(): number
@@ -46,4 +42,4 @@ export function main(): number
     return exitCode;
 }
 
-Deno.exit(main());
+main();

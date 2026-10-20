@@ -1,35 +1,75 @@
-// kwx_ts — Deno compatibility shim (Phase 4/5).
+// kwx_ts — host runtime.
 //
-// Exposes the small, deliberately-bounded slice of the Deno API that the
-// existing kwxFFI binding corpus uses, plus `console` and `TextEncoder`, and a
-// CommonJS-style module loader that transpiles TypeScript with the embedded
-// Sucrase bundle (Phase 5).
+// Publishes `globalThis.kwxHost` (the native binding bridge), installs
+// `console` and `TextEncoder`, and provides the CommonJS-style module loader
+// that transpiles TypeScript with the embedded Sucrase bundle.
 //
-// Everything here runs on top of the `__kwx_native` object: `Deno.dlopen` never
-// touches a real dynamic library, it resolves every requested symbol directly
-// from the statically linked kwxFFI surface. The Deno surface is intentionally
-// isolated in this file so it can be replaced without touching native code.
+// Everything here runs on top of the object created in quickjs_host.cpp:
+// `kwxHost.__kwx_resolve_symbol` returns a thunk for one statically linked
+// kwxFFI symbol. The public FFI surface lives in kwx_platform.js, which
+// generated bindings import through the bare specifier "kwx/platform".
 //
-// Supported Deno surface (exactly what the corpus needs):
-//   Deno.build.os, Deno.args, Deno.exit, Deno.dlopen,
-//   Deno.UnsafePointer.of, Deno.UnsafePointerView.getCString,
-//   Deno.UnsafeCallback.
-//
-// Module resolution (Phase 5): relative/absolute specifiers resolve to files on
-// disk; the bare specifiers "kwx", "kwxTypeScript", and "@kwx" resolve to the
-// embedded kwx_runtime asset, so importing the binding corpus never reads from
-// disk.
+// Bare specifiers resolved in-binary:
+//   "kwx", "kwxTypeScript", "@kwx" -> the embedded binding corpus
+//   "kwx/platform"                 -> the embedded platform module
 
 (function () {
     "use strict";
 
-    var native = globalThis.__kwx_native;
-    if (!native) {
-        throw new Error("kwx_ts: __kwx_native is not available");
+    var rawNative = globalThis.kwxHost;
+    if (!rawNative) {
+        throw new Error("kwx_ts: kwxHost is not available");
     }
 
+    // Generated FFI thunks are created on first use and cached here. Both
+    // dlopen() and direct `kwxHost.<symbol>` access go through this table, so
+    // the 5,803-symbol corpus costs nothing until a symbol is used.
+    var kwxSymbolCache = Object.create(null);
+    var kwxResolvedSymbolCount = 0;
+
+    function kwxResolveSymbolFunction(key) {
+        var cached = kwxSymbolCache[key];
+        if (cached !== undefined) {
+            return cached;
+        }
+        var fn = rawNative.__kwx_resolve_symbol(key);
+        if (typeof fn !== "function") {
+            return undefined;
+        }
+        kwxSymbolCache[key] = fn;
+        ++kwxResolvedSymbolCount;
+        return fn;
+    }
+
+    // `kwxHost` keeps its published shape (helpers are direct properties) but
+    // resolves a corpus symbol from the binding table the first time it is
+    // read. User scripts that call `kwxHost.SomeSymbol()` keep working.
+    var native = new Proxy(rawNative, {
+        get: function (target, key) {
+            var direct = target[key];
+            if (direct !== undefined) {
+                return direct;
+            }
+            if (typeof key !== "string") {
+                return undefined;
+            }
+            return kwxResolveSymbolFunction(key);
+        },
+        has: function (target, key) {
+            if (key in target) {
+                return true;
+            }
+            if (typeof key !== "string") {
+                return false;
+            }
+            return kwxResolveSymbolFunction(key) !== undefined;
+        }
+    });
+
+    globalThis.kwxHost = native;
+
     // ------------------------------------------------------------ trace marks
-    // Opt-in startup timing: __kwx_trace is a cheap no-op unless KWX_TS_TRACE is
+    // Opt-in startup timing: kwxTrace is a cheap no-op unless KWX_TS_TRACE is
     // set, so no JS-side enabled check is needed.
     function kwxTrace(label) {
         var trace = native.__kwx_trace;
@@ -68,94 +108,15 @@
 
     globalThis.TextEncoder = TextEncoder;
 
-    // ------------------------------------------------------------------- Deno
-    // argv is [program, entry, ...userArgs]; Deno.args excludes both leading
-    // entries, matching the real Deno behaviour.
-    var KWX_DENO_ARG_OFFSET = 2;
-
-    function kwxDenoDlopen(name, symbols) {
-        var resolved = {};
-        for (var key in symbols) {
-            if (Object.prototype.hasOwnProperty.call(symbols, key)) {
-                var fn = native[key];
-                if (typeof fn !== "function") {
-                    throw new Error(
-                        "kwx_ts: Deno.dlopen('" + name + "') cannot resolve symbol '" + key + "'"
-                    );
-                }
-                resolved[key] = fn;
-            }
-        }
-        return {
-            symbols: resolved,
-            close: function () {}
-        };
-    }
-
-    function kwxDenoExit(code) {
-        var actual = (code === undefined || code === null) ? 0 : code;
-        native.__kwx_set_exit_code(actual);
-        // Thrown so the module stack unwinds; the host recognises the flag and
-        // returns `actual` instead of reporting an uncaught error.
-        var sentinel = new Error("kwx_ts: Deno.exit(" + actual + ")");
-        sentinel.__kwx_exit = true;
-        sentinel.code = actual;
-        throw sentinel;
-    }
-
-    function UnsafeCallback(definition, callback) {
-        this.definition = definition;
-        this.callback = callback;
-        this._slot = native.__kwx_callback_create(callback);
-        if (this._slot < 0) {
-            throw new Error("kwx_ts: Deno.UnsafeCallback: no free native callback slot");
-        }
-        this.pointer = native.__kwx_callback_pointer(this._slot);
-        this._closed = false;
-    }
-
-    // Releases the native callback slot so it can be reused.
-    UnsafeCallback.prototype.close = function () {
-        if (!this._closed) {
-            native.__kwx_callback_close(this._slot);
-            this._closed = true;
-        }
-    };
-
-    UnsafeCallback.prototype.ref = function () {};
-    UnsafeCallback.prototype.unref = function () {};
-
-    var UnsafePointer = {
-        of: function (value) {
-            return native.__kwx_ptr_of(value);
-        }
-    };
-
-    var UnsafePointerView = {
-        getCString: function (pointer) {
-            return native.__kwx_get_cstring(pointer);
-        }
-    };
-
-    globalThis.Deno = {
-        build: {
-            get os() {
-                return native.__kwx_platform_os;
-            }
-        },
-        args: native.__kwx_get_args().slice(KWX_DENO_ARG_OFFSET),
-        exit: kwxDenoExit,
-        dlopen: kwxDenoDlopen,
-        UnsafeCallback: UnsafeCallback,
-        UnsafePointer: UnsafePointer,
-        UnsafePointerView: UnsafePointerView
-    };
-
     // ---------------------------------------------------------- transpilation
-    // Sucrase is embedded and loaded once by the host before any entry module
-    // runs; every module that is not already plain CommonJS goes through it with
-    // the `typescript` and `imports` transforms enabled.
+    // Sucrase is embedded but loaded lazily on the first transpile; every module
+    // that is not already plain CommonJS goes through it with the `typescript`
+    // and `imports` transforms enabled. TypeScript transpiles are cached on disk
+    // by the host, so an unchanged module can skip Sucrase entirely.
     function kwxTranspile(source, filePath) {
+        if (!native.__kwx_ensure_sucrase()) {
+            throw new Error("kwx_ts: the embedded Sucrase bundle failed to load");
+        }
         var sucrase = globalThis.__kwx_sucrase;
         if (!sucrase || typeof sucrase.transform !== "function") {
             throw new Error("kwx_ts: the embedded Sucrase bundle is not loaded");
@@ -188,10 +149,14 @@
     // Bare specifiers that resolve to an embedded (in-binary) asset instead of a
     // file on disk. "kwx" is the prebuilt binding corpus; the aliases match the
     // historical module names so existing sources keep working.
+    // "kwx/platform" is a separate asset on purpose: the corpus bundle calls
+    // dlopen() at module-eval time, so resolving it to the still-executing
+    // corpus bundle would hand back a half-populated exports object.
     var KWX_VIRTUAL_MODULES = {
         "kwx": "kwx_runtime",
         "kwxTypeScript": "kwx_runtime",
-        "@kwx": "kwx_runtime"
+        "@kwx": "kwx_runtime",
+        "kwx/platform": "kwx_platform"
     };
 
     function kwxDirname(filePath) {
@@ -246,7 +211,15 @@
         if (!kwxNeedsTranspile(filePath, source)) {
             return source;
         }
-        return kwxTranspile(source, filePath);
+        var cached = native.__kwx_transpile_cache_get(source, filePath);
+        if (cached !== null && cached !== undefined) {
+            kwxTrace("transpile-cache-hit:" + filePath);
+            return cached;
+        }
+        kwxTrace("transpile-cache-miss:" + filePath);
+        var code = kwxTranspile(source, filePath);
+        native.__kwx_transpile_cache_put(source, filePath, code);
+        return code;
     }
 
     function kwxLoadModule(filePath) {
@@ -284,6 +257,7 @@
         }
         kwxTrace("entry-resolved:" + resolved);
         kwxLoadModule(resolved);
+        kwxTrace("symbols-resolved:" + kwxResolvedSymbolCount);
         kwxTrace("run-main-return");
         return 0;
     };

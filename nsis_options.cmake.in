@@ -1,0 +1,16 @@
+# Registers the .kwxts file type with kwx_ts.exe. CPack evaluates this file
+# for the NSIS generator only.
+
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+  WriteRegStr HKCR '.kwxts' '' 'kwx_ts'
+  WriteRegStr HKCR 'kwx_ts' '' 'kwx_ts Script File'
+  WriteRegStr HKCR 'kwx_ts\\shell' '' 'open'
+  WriteRegStr HKCR 'kwx_ts\\DefaultIcon' '' '$INSTDIR\\bin\\kwx_ts.exe,0'
+  WriteRegStr HKCR 'kwx_ts\\shell\\open\\command' '' '$INSTDIR\\bin\\kwx_ts.exe \"%1\"'
+  System::Call 'Shell32::SHChangeNotify(i 0x8000000, i 0, i 0, i 0)'
+")
+
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+  DeleteRegKey HKCR '.kwxts'
+  DeleteRegKey HKCR 'kwx_ts'
+")

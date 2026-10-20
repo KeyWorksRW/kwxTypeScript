@@ -1,31 +1,37 @@
-// kwxTypeScript Demo — cross-platform wxWidgets GUI via Deno FFI
+// kwxTypeScript Demo — cross-platform wxWidgets GUI driven from TypeScript
 //
-// Run with:
-//   deno run --allow-ffi --allow-read --allow-env --allow-write examples/demo.ts
+// kwx_ts has no special entry convention: it loads the file you pass as a
+// CommonJS-style module, so the `main()` call at the bottom of this file is
+// what starts the application. Run it from the repository root:
+//   bin\Release\kwx_ts.exe examples/demo.ts
 //
-// The kwxFFI.dll (or libkwxFFI.so / libkwxFFI.dylib) must be in the
-// library search path. Copy it from build/lib/ to the project root, or
-// add the lib/ directory to PATH / LD_LIBRARY_PATH / DYLD_LIBRARY_PATH.
+// Everything imported below comes from the virtual module "kwx", which is
+// embedded in the kwx_ts executable. No dist/ bundle and no kwxFFI DLL are
+// read or loaded from disk at runtime.
 //
-// On Windows, make sure the MSVC runtime DLLs are available (vcruntime140.dll, etc.)
-// — they're in the Visual Studio install or the wxWidgets build output.
-//
-// This file imports from the kwx.mjs bundle (dist/kwx.mjs) rather than from
-// individual generated modules — that single import provides all constants,
-// wrappers, app functions, and the raw lib object.
-//
-// To rebuild the bundle after re-generation, run: deno bundle wx/mod.ts -o dist/kwx.mjs
+// After regenerating wx/, rebuild the embedded corpus with:
+//   cd kwx_ts/tools && node build_runtime_bundle.cjs
 
 import {
     ALIGN_CENTER_VERTICAL,
     ALL,
     BOTH,
+    createWxBoxSizer,
+    createWxButton,
+    createWxClosure,
+    createWxFrame,
+    createWxMenu,
+    createWxMenuBar,
+    createWxMessageDialog,
+    createWxPanel,
+    createWxStaticText,
     createWxString,
+    createWxTextCtrl,
     DEFAULT_FRAME_STYLE,
     EVT_BUTTON,
     EVT_CLOSE_WINDOW,
     EVT_MENU,
-    exit,
+    exitMainLoop,
     EXPAND,
     HORIZONTAL,
     ICON_INFORMATION,
@@ -41,17 +47,8 @@ import {
     setTopWindow,
     shutdown,
     VERTICAL,
-    wxBoxSizer,
-    wxButton,
-    wxClosure,
-    wxFrame,
-    wxMenu,
-    wxMenuBar,
-    wxMessageDialog,
-    wxPanel,
-    wxStaticText,
-    wxTextCtrl,
-} from "../dist/kwx.mjs";
+} from "kwx";
+import { Callback, Pointer } from "kwx/platform";
 
 export function main(): number
 {
@@ -70,7 +67,7 @@ export function main(): number
     // 2. Create the main frame
     const titleStr = createWxString("kwxTypeScript Demo");
 
-    const frame = wxFrame.Create(
+    const frame = createWxFrame(
         null, // parent
         ID_ANY, // id
         titleStr.ptr, // title (wxString*)
@@ -83,7 +80,7 @@ export function main(): number
     titleStr.Delete();
 
     // 3. Build menu bar
-    const fileMenu = wxMenu.Create(createWxString("&File").ptr, 0)!;
+    const fileMenu = createWxMenu(createWxString("&File").ptr, 0)!;
     fileMenu.ptr; // keep reference
 
     const menuNew = createWxString("&New\tCtrl+N");
@@ -105,7 +102,7 @@ export function main(): number
     fileMenu.Append(ID_EXIT, menuExit.ptr, createWxString("Exit application").ptr, false);
 
     // Edit menu
-    const editMenu = wxMenu.Create(createWxString("&Edit").ptr, 0)!;
+    const editMenu = createWxMenu(createWxString("&Edit").ptr, 0)!;
     editMenu.Append(ID_ANY, menuUndo.ptr, createWxString("").ptr, false);
     editMenu.Append(ID_ANY, menuRedo.ptr, createWxString("").ptr, false);
     editMenu.AppendSeparator();
@@ -114,11 +111,11 @@ export function main(): number
     editMenu.Append(ID_ANY, menuPaste.ptr, createWxString("").ptr, false);
 
     // Help menu
-    const helpMenu = wxMenu.Create(createWxString("&Help").ptr, 0)!;
+    const helpMenu = createWxMenu(createWxString("&Help").ptr, 0)!;
     helpMenu.Append(ID_ABOUT, menuAbout.ptr, createWxString("About this demo").ptr, false);
 
     // Menu bar
-    const menuBar = wxMenuBar.Create(0)!;
+    const menuBar = createWxMenuBar(0)!;
     menuBar.Append(fileMenu.ptr, createWxString("&File").ptr);
     menuBar.Append(editMenu.ptr, createWxString("&Edit").ptr);
     menuBar.Append(helpMenu.ptr, createWxString("&Help").ptr);
@@ -137,26 +134,26 @@ export function main(): number
     menuAbout.Delete();
 
     // 4. Status bar
-    frame.CreateStatusBar(1, 0);
+    frame.CreateStatusBar(1, 0, 0);
     const readyStr = createWxString("Ready");
     frame.SetStatusText(readyStr.ptr, 0);
     readyStr.Delete();
 
     // 5. Client area — panel + sizers
-    const panel = wxPanel.Create(frame.ptr, ID_ANY, 0, 0, 0, 0, 0)!;
+    const panel = createWxPanel(frame.ptr, ID_ANY, 0, 0, 0, 0, 0)!;
 
-    const topSizer = wxBoxSizer.Create(VERTICAL)!;
+    const topSizer = createWxBoxSizer(VERTICAL)!;
 
     // --- Horizontal sizer: label + text control ---
-    const hSizer = wxBoxSizer.Create(HORIZONTAL)!;
+    const hSizer = createWxBoxSizer(HORIZONTAL)!;
 
     const labelStr = createWxString("Text:");
     const hintStr = createWxString("hint text");
 
-    const label = wxStaticText.Create(panel.ptr, ID_ANY, labelStr.ptr, -1, -1, -1, -1, 0)!;
+    const label = createWxStaticText(panel.ptr, ID_ANY, labelStr.ptr, -1, -1, -1, -1, 0)!;
     labelStr.Delete();
 
-    const textCtrl = wxTextCtrl.Create(
+    const textCtrl = createWxTextCtrl(
         panel.ptr,
         ID_ANY,
         createWxString("").ptr,
@@ -175,7 +172,7 @@ export function main(): number
 
     // --- "Click Me" button (use known ID for event binding) ---
     const btnStr = createWxString("Click Me");
-    const button = wxButton.Create(panel.ptr, BTN_CLICK_ME, btnStr.ptr, -1, -1, -1, -1, 0)!;
+    const button = createWxButton(panel.ptr, BTN_CLICK_ME, btnStr.ptr, -1, -1, -1, -1, 0)!;
     btnStr.Delete();
 
     // Assemble sizers
@@ -183,17 +180,17 @@ export function main(): number
     topSizer.AddWindow(button.ptr, 0, ALL, 10, null);
 
     // Attach sizer to panel (inherited from wxWindow)
-    panel.SetSizer(topSizer.ptr);
+    panel.SetSizer(topSizer.ptr, false);
 
     // 6. Event handlers
     // IMPORTANT: Keep references to UnsafeCallback instances alive — if GC'd,
     // the native function pointer becomes dangling and causes a crash.
 
     // Button click
-    const btnCb = new Deno.UnsafeCallback({
+    const btnCb = new Callback({
         parameters: ["pointer", "pointer", "pointer"],
         result: "void",
-    }, (_closureFun: Deno.PointerValue, _data: Deno.PointerValue, _event: Deno.PointerValue) =>
+    }, (_closureFun: Pointer, _data: Pointer, _event: Pointer) =>
     {
         const wxStrPtr = lib.symbols.wxTextCtrl_GetValue(textCtrl.ptr);
         const text = readAndDeleteWxString(wxStrPtr);
@@ -202,7 +199,7 @@ export function main(): number
         {
             const msgStr = createWxString("(no text entered)");
             const titleStr2 = createWxString("Demo");
-            const dlg = wxMessageDialog.Create(
+            const dlg = createWxMessageDialog(
                 frame.ptr,
                 msgStr.ptr,
                 titleStr2.ptr,
@@ -216,7 +213,7 @@ export function main(): number
         {
             const msgStr = createWxString(text);
             const titleStr2 = createWxString("You typed");
-            const dlg = wxMessageDialog.Create(
+            const dlg = createWxMessageDialog(
                 frame.ptr,
                 msgStr.ptr,
                 titleStr2.ptr,
@@ -228,7 +225,7 @@ export function main(): number
             titleStr2.Delete();
         }
     });
-    const buttonClosure = wxClosure.Create(btnCb.pointer, null)!;
+    const buttonClosure = createWxClosure(btnCb.pointer, null)!;
     lib.symbols.wxEvtHandler_Connect(
         button.ptr,
         BTN_CLICK_ME,
@@ -238,14 +235,14 @@ export function main(): number
     );
 
     // File > Exit
-    const exitCb = new Deno.UnsafeCallback({
+    const exitCb = new Callback({
         parameters: ["pointer", "pointer", "pointer"],
         result: "void",
     }, () =>
     {
         frame.Close(true);
     });
-    const exitClosure = wxClosure.Create(exitCb.pointer, null)!;
+    const exitClosure = createWxClosure(exitCb.pointer, null)!;
     lib.symbols.wxEvtHandler_Connect(
         frame.ptr,
         ID_EXIT,
@@ -255,7 +252,7 @@ export function main(): number
     );
 
     // Help > About
-    const aboutCb = new Deno.UnsafeCallback({
+    const aboutCb = new Callback({
         parameters: ["pointer", "pointer", "pointer"],
         result: "void",
     }, () =>
@@ -264,7 +261,7 @@ export function main(): number
             "kwxTypeScript Demo\nTypeScript bindings for wxWidgets via kwxFFI",
         );
         const titleStr2 = createWxString("About Demo");
-        const dlg = wxMessageDialog.Create(
+        const dlg = createWxMessageDialog(
             frame.ptr,
             msgStr.ptr,
             titleStr2.ptr,
@@ -275,7 +272,7 @@ export function main(): number
         msgStr.Delete();
         titleStr2.Delete();
     });
-    const aboutClosure = wxClosure.Create(aboutCb.pointer, null)!;
+    const aboutClosure = createWxClosure(aboutCb.pointer, null)!;
     lib.symbols.wxEvtHandler_Connect(
         frame.ptr,
         ID_ABOUT,
@@ -285,14 +282,14 @@ export function main(): number
     );
 
     // Window close — exit main loop (do NOT call Close inside close handler)
-    const closeCb = new Deno.UnsafeCallback({
+    const closeCb = new Callback({
         parameters: ["pointer", "pointer", "pointer"],
         result: "void",
     }, () =>
     {
-        exit();
+        exitMainLoop();
     });
-    const closeClosure = wxClosure.Create(closeCb.pointer, null)!;
+    const closeClosure = createWxClosure(closeCb.pointer, null)!;
     lib.symbols.wxEvtHandler_Connect(
         frame.ptr,
         ID_ANY,
@@ -318,4 +315,4 @@ export function main(): number
     return exitCode;
 }
 
-Deno.exit(main());
+main();

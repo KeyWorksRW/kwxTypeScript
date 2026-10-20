@@ -1,17 +1,19 @@
 /*
  * kwx_ts — build-time binding generator.
  *
- * Parses the Deno FFI declaration corpus (`wx/kwx_ffi_gen.ts` and
- * `src/kwxApp.ts`) and emits `bindings_gen.h` / `bindings_gen.cpp` into the
- * build directory. Each parsed symbol becomes one QuickJS C function mounted on
- * the `__kwx_native` object by kwx_register_generated_bindings().
+ * Parses the FFI declaration corpus (`wx/kwx_ffi_gen.ts` and `src/kwxApp.ts`)
+ * and emits `bindings_gen.h` / `bindings_gen.cpp` into the build directory.
+ * Each parsed symbol becomes one QuickJS C function, but no thunk is created at
+ * startup: kwx_register_generated_bindings() only mounts a resolver, and a
+ * thunk is created the first time the corpus asks for it.
  *
  * This tool runs at build time only; it never ships with the executable and
- * needs no Node, Deno, or Python.
+ * needs no Node, npm, or Python.
  *
  * Usage: kwx_binding_gen <kwx_ffi_gen.ts> <kwxApp.ts> <output_dir>
  */
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <filesystem>
@@ -27,8 +29,8 @@
 
 namespace {
 
-// A single parsed declaration: its name, its Deno parameter types in order, and
-// its Deno result type.
+// A single parsed declaration: its name, its FFI parameter types in order, and
+// its FFI result type.
 struct Symbol {
   std::string name;
   std::vector<std::string> parameters;
@@ -312,11 +314,15 @@ void EmitExternExpressionPrototypes(std::ostream &out,
   // Every `exp*` entry is a zero-parameter constant. The kwxFFI headers
   // declare only a subset of them (events, keys, a few class constants and
   // expSetDefaultAssertHandler); the pointer-returning colour/brush/font/art
-  // constants are declared nowhere. Emit a prototype for each, matching the
-  // corpus result type, so the thunks compile and link.
+  // constants are declared nowhere. This also covers the generated
+  // constant-table accessors (kwxConstants_IntCount / kwxConstants_IntTable),
+  // which no installed kwxFFI header declares. Emit a prototype for each,
+  // matching the corpus result type, so the thunks compile and link.
   std::vector<const Symbol *> expression_symbols;
   for (const Symbol &symbol : symbols) {
-    if (symbol.name.starts_with("exp")) {
+    if (symbol.name.starts_with("exp") ||
+        symbol.name == "kwxConstants_IntCount" ||
+        symbol.name == "kwxConstants_IntTable") {
       expression_symbols.push_back(&symbol);
     }
   }
@@ -329,6 +335,10 @@ void EmitExternExpressionPrototypes(std::ostream &out,
          "resolves).\n"
       << "extern \"C\"\n{\n";
   for (const Symbol *symbol : expression_symbols) {
+    if (symbol->name == "kwxConstants_IntTable") {
+      out << "    const int *kwxConstants_IntTable();\n";
+      continue;
+    }
     out << "    "
         << (symbol->result == "pointer"
                 ? "void *"
@@ -364,6 +374,18 @@ int main(int argc, char **argv) {
     }
   }
 
+  // The lookup table is binary-searched at runtime, so emit it sorted by name
+  // while keeping thunk definitions in corpus order.
+  std::vector<const Symbol *> sorted_symbols;
+  sorted_symbols.reserve(symbols.size());
+  for (const Symbol &symbol : symbols) {
+    sorted_symbols.push_back(&symbol);
+  }
+  std::sort(sorted_symbols.begin(), sorted_symbols.end(),
+            [](const Symbol *left, const Symbol *right) {
+              return left->name < right->name;
+            });
+
   std::error_code error_code;
   std::filesystem::create_directories(output_dir, error_code);
   if (error_code) {
@@ -387,7 +409,8 @@ int main(int argc, char **argv) {
          << "#include \"kwx_js_marshal.h\"\n"
          << "#include \"kwx_host_app.h\"\n\n"
          << "#include <cstddef>\n"
-         << "#include <cstdint>\n\n"
+         << "#include <cstdint>\n"
+         << "#include <cstring>\n\n"
          << "// kwxFFI declares plain (unwrapped) C prototypes, so the headers "
             "must\n"
          << "// be included with C linkage.\n"
@@ -402,17 +425,83 @@ int main(int argc, char **argv) {
     EmitThunk(source, symbol);
   }
 
-  source << "} // namespace\n\n"
-         << "void kwx_register_generated_bindings(JSContext *ctx, JSValue "
-            "native_obj)\n{\n";
-  for (const Symbol &symbol : symbols) {
-    source << "    JS_SetPropertyStr(ctx, native_obj, \"" << symbol.name
-           << "\",\n"
-           << "                    JS_NewCFunction(ctx, js_" << symbol.name
-           << ", \"" << symbol.name << "\", " << symbol.parameters.size()
-           << "));\n";
+  source << "struct KwxGeneratedSymbol\n"
+         << "{\n"
+         << "    const char *name;\n"
+         << "    JSCFunction *function;\n"
+         << "    int length;\n"
+         << "};\n\n"
+         << "// Sorted by name so the resolver can binary-search it.\n"
+         << "static const KwxGeneratedSymbol kwx_generated_symbols[] = {\n";
+  for (const Symbol *symbol : sorted_symbols) {
+    source << "    {\"" << symbol->name << "\", js_" << symbol->name << ", "
+           << symbol->parameters.size() << "},\n";
   }
-  source << "}\n";
+  source
+      << "};\n\n"
+      << "const KwxGeneratedSymbol *KwxFindGeneratedSymbol(const char "
+         "*name)\n"
+      << "{\n"
+      << "    std::size_t low = 0;\n"
+      << "    std::size_t high =\n"
+      << "        sizeof(kwx_generated_symbols) / "
+         "sizeof(kwx_generated_symbols[0]);\n"
+      << "    while (low < high)\n"
+      << "    {\n"
+      << "        const std::size_t middle = low + ((high - low) / 2);\n"
+      << "        const int order =\n"
+      << "            std::strcmp(kwx_generated_symbols[middle].name, "
+         "name);\n"
+      << "        if (order == 0)\n"
+      << "        {\n"
+      << "            return &kwx_generated_symbols[middle];\n"
+      << "        }\n"
+      << "        if (order < 0)\n"
+      << "        {\n"
+      << "            low = middle + 1;\n"
+      << "        }\n"
+      << "        else\n"
+      << "        {\n"
+      << "            high = middle;\n"
+      << "        }\n"
+      << "    }\n"
+      << "    return nullptr;\n"
+      << "}\n\n"
+      << "// __kwx_resolve_symbol(name) — create the thunk for one corpus "
+         "symbol\n"
+      << "// on demand. Returns undefined when the name is not in the corpus.\n"
+      << "JSValue KwxJsResolveSymbol(JSContext *ctx,\n"
+      << "                           [[maybe_unused]] JSValueConst this_val,\n"
+      << "                           int argc, JSValueConst *argv)\n"
+      << "{\n"
+      << "    if (argc < 1)\n"
+      << "    {\n"
+      << "        return JS_UNDEFINED;\n"
+      << "    }\n"
+      << "    const char *name = JS_ToCString(ctx, argv[0]);\n"
+      << "    if (name == nullptr)\n"
+      << "    {\n"
+      << "        return JS_EXCEPTION;\n"
+      << "    }\n"
+      << "    const KwxGeneratedSymbol *entry = "
+         "KwxFindGeneratedSymbol(name);\n"
+      << "    JS_FreeCString(ctx, name);\n"
+      << "    if (entry == nullptr)\n"
+      << "    {\n"
+      << "        return JS_UNDEFINED;\n"
+      << "    }\n"
+      << "    return JS_NewCFunction(ctx, entry->function, entry->name, "
+         "entry->length);\n"
+      << "}\n"
+      << "} // namespace\n\n"
+      << "void kwx_register_generated_bindings(JSContext *ctx, JSValue "
+         "native_obj)\n"
+      << "{\n"
+      << "    JS_SetPropertyStr(\n"
+      << "        ctx, native_obj, \"__kwx_resolve_symbol\",\n"
+      << "        JS_NewCFunction(ctx, KwxJsResolveSymbol, "
+         "\"__kwx_resolve_symbol\", 1));\n"
+      << "}\n";
 
   if (!WriteFile(output_dir / "bindings_gen.h", header.str()) ||
       !WriteFile(output_dir / "bindings_gen.cpp", source.str())) {

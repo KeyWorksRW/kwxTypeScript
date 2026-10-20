@@ -1,16 +1,14 @@
 // kwxApp TypeScript FFI bindings — hand-written application lifecycle layer.
 //
 // kwxApp is NOT part of the standard kwxFFI headers — it's built from
-// kwxFFI's examples/CApp/ and linked into the same shared library.
-// This file opens the library a second time specifically for kwxApp symbols.
+// kwxFFI's examples/CApp/ and linked into the same static library.
+//
+// The symbol names below live in the same statically linked surface as the
+// generated corpus, so dlopen() treats the library name as informational.
 
-const _libName: string = ({
-  windows: "kwxFFI.dll",
-  linux:   "libkwxFFI.so",
-  darwin:  "libkwxFFI.dylib",
-} as Record<string, string>)[Deno.build.os] ?? "kwxFFI";
+import { dlopen, pointerOf, readCString, Pointer } from "kwx/platform";
 
-const _appLib = Deno.dlopen(_libName, {
+const appLib = dlopen("kwxFFI", {
   // --- Application Lifecycle ---
   kwxApp_Initialize:       { parameters: ["i32", "pointer"], result: "i32" },
   kwxApp_MainLoop:         { parameters: [], result: "i32" },
@@ -57,14 +55,14 @@ const _appLib = Deno.dlopen(_libName, {
   kwxApp_FindWindowByLabel:{ parameters: ["pointer", "pointer"], result: "pointer" },
   kwxApp_FindWindowByName: { parameters: ["pointer", "pointer"], result: "pointer" },
   kwxApp_FreeString:       { parameters: ["pointer"], result: "void" },
-});
+} as const);
 
-const $ = _appLib.symbols;
+const $ = appLib.symbols;
 
 // --- Public API ---
 
 /** Initialize wxWidgets. Call once before any other wx functions. */
-export function initialize(argc = 0, argv: Deno.PointerValue = null): boolean {
+export function initialize(argc = 0, argv: Pointer = null): boolean {
   return $.kwxApp_Initialize(argc, argv) !== 0;
 }
 
@@ -74,7 +72,7 @@ export function run(): number {
 }
 
 /** Exit the main event loop. Call from an event handler to quit. */
-export function exit(): void {
+export function exitMainLoop(): void {
   $.kwxApp_ExitMainLoop();
 }
 
@@ -92,29 +90,29 @@ export function isTerminating(): boolean {
 
 export function getAppName(): string {
   const ptr = $.kwxApp_GetAppName();
-  return ptr ? Deno.UnsafePointerView.getCString(ptr) : "";
+  return ptr ? readCString(ptr) : "";
 }
 
 export function setAppName(name: string): void {
   const buf = new TextEncoder().encode(name + "\0");
-  $.kwxApp_SetAppName(Deno.UnsafePointer.of(buf));
+  $.kwxApp_SetAppName(pointerOf(buf));
 }
 
 export function getVendorName(): string {
   const ptr = $.kwxApp_GetVendorName();
-  return ptr ? Deno.UnsafePointerView.getCString(ptr) : "";
+  return ptr ? readCString(ptr) : "";
 }
 
 export function setVendorName(name: string): void {
   const buf = new TextEncoder().encode(name + "\0");
-  $.kwxApp_SetVendorName(Deno.UnsafePointer.of(buf));
+  $.kwxApp_SetVendorName(pointerOf(buf));
 }
 
-export function getTopWindow(): Deno.PointerValue {
+export function getTopWindow(): Pointer {
   return $.kwxApp_GetTopWindow();
 }
 
-export function setTopWindow(window: Deno.PointerValue): void {
+export function setTopWindow(window: Pointer): void {
   $.kwxApp_SetTopWindow(window);
 }
 
@@ -127,7 +125,7 @@ export function setExitOnFrameDelete(flag: boolean): void {
 export function getDisplaySize(): { width: number; height: number } {
   const wBuf = new Int32Array(1);
   const hBuf = new Int32Array(1);
-  $.kwxApp_GetDisplaySize(Deno.UnsafePointer.of(wBuf), Deno.UnsafePointer.of(hBuf));
+  $.kwxApp_GetDisplaySize(pointerOf(wBuf), pointerOf(hBuf));
   return { width: wBuf[0], height: hBuf[0] };
 }
 

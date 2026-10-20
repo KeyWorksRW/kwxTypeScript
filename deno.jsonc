@@ -1,12 +1,15 @@
 {
-  // Deno project configuration for kwxTypeScript-dev
+  // Type-checking configuration. The runtime is kwx_ts; Deno is used here as
+  // the TypeScript compiler during development only. The import map resolves
+  // the bare specifiers that the embedded runtime provides at run time.
   "lock": false,
   "imports": {
+    "kwx": "./wx/mod.ts",
+    "kwx/platform": "./src/kwx_platform.ts",
     "esbuild": "https://deno.land/x/esbuild@v0.24.0/mod.js"
   },
   "tasks": {
-    "check": "deno check --no-lock src/kwxApp.ts examples/demo.ts",
-    "demo":  "deno run --allow-ffi --allow-read --allow-env examples/demo.ts",
+    "check": "deno check --no-lock src/kwx_platform.ts src/kwxApp.ts",
     "bundle": "deno run --allow-read --allow-write --allow-net --allow-env --allow-run make_dist_bundle.ts"
   }
 }

@@ -158,7 +158,8 @@ private:
   return true;
 }
 
-// Deno maps usize to bigint, but a plain Number must be accepted as well.
+// The FFI surface maps usize to bigint, but a plain Number must be accepted as
+// well.
 // JS_ToInt64Ext() already accepts both, so one conversion covers both shapes.
 [[nodiscard]] inline bool arg_usize(JSContext *ctx, JSValueConst value,
                                     std::size_t *out_value) {

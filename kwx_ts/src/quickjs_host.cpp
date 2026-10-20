@@ -1,11 +1,11 @@
 /*
  * kwx_ts — QuickJS runtime host implementation (Phase 1/4).
  *
- * Creates a runtime with an 8 MiB stack, a context, the `__kwx_native` global
- * object carrying `__kwx_print` plus the generated kwxFFI thunks and the
- * hand-written Deno helpers, and evaluates the embedded `runtime/deno_shim.js`
- * (which installs `console`, `TextEncoder`, and `Deno`) before loading the
- * entry module through the JS global `__kwx_run_main`.
+ * Creates a runtime with an 8 MiB stack, a context, the `kwxHost` global object
+ * carrying `__kwx_print` plus the generated kwxFFI thunks and the hand-written
+ * host helpers, and evaluates the embedded `runtime/host_runtime.js` (which
+ * installs `console` and `TextEncoder`) before loading the entry module through
+ * the JS global `__kwx_run_main`.
  */
 
 #include "quickjs_host.h"
@@ -19,17 +19,23 @@
 #include <tuple>
 #include <vector>
 
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+#endif
+
 #include "runtime_bindings.h"
 
-/* Embedded runtime/deno_shim.js, produced by kwx_ts_embed_file(). These have
- * external linkage and are defined in the generated embedding translation unit,
- * so they must stay outside the anonymous namespace. */
-extern const char kwx_deno_shim[];
-extern const unsigned int kwx_deno_shim_len;
+/* Embedded runtime/host_runtime.js, produced by kwx_ts_embed_file(). These
+ * have external linkage and are defined in the generated embedding translation
+ * unit, so they must stay outside the anonymous namespace. */
+extern const char kwx_host_runtime[];
+extern const unsigned int kwx_host_runtime_len;
 
 /* QuickJS bytecode for third_party/sucrase.bundle.js, generated at build time
- * by qjsc (see CMakeLists.txt). Evaluated once, after the Deno shim, so the
- * loader can transpile TypeScript. */
+ * by qjsc (see CMakeLists.txt). Loaded lazily by kwx_runtime_ensure_sucrase()
+ * on the first transpile, so plain .js entries never pay for it. */
 extern const std::uint8_t kwx_sucrase_bytecode[];
 extern const std::uint32_t kwx_sucrase_bytecode_size;
 
@@ -41,6 +47,10 @@ JSContext *kwx_g_context = nullptr;
 std::vector<std::string> kwx_g_args;
 int kwx_g_exit_code = 0;
 bool kwx_g_exit_requested = false;
+// Set once the Sucrase bytecode has been evaluated in the current context.
+// Reset by shutdown so a re-initialized runtime reloads it into the new
+// context.
+bool kwx_g_sucrase_loaded = false;
 
 void KwxTraceMark(const char *label);
 
@@ -160,6 +170,14 @@ bool kwx_trace_enabled() {
   return trace_enabled;
 }
 
+#if defined(_WIN32)
+/* FILETIME counts 100-nanosecond intervals since 1601-01-01 (UTC). */
+[[nodiscard]] std::uint64_t KwxFileTimeTo100ns(const FILETIME &file_time) {
+  return (static_cast<std::uint64_t>(file_time.dwHighDateTime) << 32U) |
+         static_cast<std::uint64_t>(file_time.dwLowDateTime);
+}
+#endif
+
 /* Emit one `[kwx-trace] <ms> ms  <label>` line to stderr when tracing is on.
  * The first call establishes the time origin (process/runtime init start). */
 void KwxTraceMark(const char *label) {
@@ -181,6 +199,52 @@ void KwxTraceMark(const char *label) {
 } // namespace
 
 void kwx_trace_mark(const char *label) { KwxTraceMark(label); }
+
+void kwx_trace_process_start() {
+#if defined(_WIN32)
+  if (!kwx_trace_enabled()) {
+    return;
+  }
+
+  FILETIME creation_time{};
+  FILETIME exit_time{};
+  FILETIME kernel_time{};
+  FILETIME user_time{};
+  FILETIME now_time{};
+  if (GetProcessTimes(GetCurrentProcess(), &creation_time, &exit_time,
+                      &kernel_time, &user_time) == 0) {
+    return;
+  }
+  GetSystemTimeAsFileTime(&now_time);
+
+  const std::uint64_t creation_100ns = KwxFileTimeTo100ns(creation_time);
+  const std::uint64_t now_100ns = KwxFileTimeTo100ns(now_time);
+  const double elapsed_ms =
+      static_cast<double>(now_100ns - creation_100ns) / 10000.0;
+  std::fprintf(stderr, "[kwx-trace] %9.2f ms  pre-main\n", elapsed_ms);
+  std::fflush(stderr);
+#endif
+}
+
+bool kwx_runtime_ensure_sucrase() {
+  if (kwx_g_sucrase_loaded) {
+    return true;
+  }
+
+  if (kwx_g_context == nullptr) {
+    return false;
+  }
+
+  const bool sucrase_ok = kwx_evaluate_bytecode(
+      kwx_sucrase_bytecode, kwx_sucrase_bytecode_size, "<kwx_sucrase_bundle>");
+  KwxTraceMark("sucrase-bundle-evaluated");
+  if (!sucrase_ok) {
+    return false;
+  }
+
+  kwx_g_sucrase_loaded = true;
+  return true;
+}
 
 bool kwx_runtime_init() {
   if (kwx_g_context != nullptr) {
@@ -228,38 +292,31 @@ bool kwx_runtime_init() {
 
   KwxTraceMark("bindings-registered");
 
-  JS_SetPropertyStr(kwx_g_context, global_object, "__kwx_native",
-                    native_object);
+  JS_SetPropertyStr(kwx_g_context, global_object, "kwxHost", native_object);
 
   JS_FreeValue(kwx_g_context, global_object);
 
-  // Deno shim (runtime/deno_shim.js) is embedded in the executable and
-  // evaluated once, after the native object is published and before any user
-  // module loads.
-  const bool deno_shim_ok = kwx_evaluate_global(
-      kwx_deno_shim, static_cast<std::size_t>(kwx_deno_shim_len),
-      "<kwx_deno_shim>");
-  KwxTraceMark("deno-shim-evaluated");
-  if (!deno_shim_ok) {
+  // The host runtime (runtime/host_runtime.js) is embedded in the executable
+  // and evaluated once, after the native object is published and before any
+  // user module loads.
+  const bool host_runtime_ok = kwx_evaluate_global(
+      kwx_host_runtime, static_cast<std::size_t>(kwx_host_runtime_len),
+      "<kwx_host_runtime>");
+  KwxTraceMark("host-runtime-evaluated");
+  if (!host_runtime_ok) {
     kwx_runtime_shutdown();
     return false;
   }
 
-  // Sucrase (third_party/sucrase.bundle.js) is precompiled to bytecode and
-  // evaluated once, after the Deno shim so __kwx_transpile() can use it, and
-  // before any module is loaded. It publishes the global `__kwx_sucrase`.
-  const bool sucrase_ok = kwx_evaluate_bytecode(
-      kwx_sucrase_bytecode, kwx_sucrase_bytecode_size, "<kwx_sucrase_bundle>");
-  KwxTraceMark("sucrase-bundle-evaluated");
-  if (!sucrase_ok) {
-    kwx_runtime_shutdown();
-    return false;
-  }
-
+  // Sucrase (third_party/sucrase.bundle.js) is NOT evaluated here: it is loaded
+  // lazily on the first transpile via kwx_runtime_ensure_sucrase(), so plain
+  // .js entries never pay for it.
   return true;
 }
 
 void kwx_runtime_shutdown() {
+  kwx_g_sucrase_loaded = false;
+
   if (kwx_g_context != nullptr) {
     // Release the callback slots while the context is still alive.
     kwx_host_release_callbacks(kwx_g_context);
@@ -304,8 +361,9 @@ bool kwx_runtime_eval_file(const std::string &path, int &exit_code) {
     return false;
   }
 
-  // The Deno shim owns module loading: hand the entry path to __kwx_run_main(),
-  // which resolves and evaluates it through the CommonJS-style loader.
+  // The host runtime owns module loading: hand the entry path to
+  // __kwx_run_main(), which resolves and evaluates it through the
+  // CommonJS-style loader.
   JSValue global_object = JS_GetGlobalObject(kwx_g_context);
   JSValue run_main =
       JS_GetPropertyStr(kwx_g_context, global_object, "__kwx_run_main");

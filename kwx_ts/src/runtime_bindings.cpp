@@ -2,12 +2,12 @@
  * kwx_ts — hand-written native bindings (Phase 3/4/5).
  *
  * Implements the helpers that are NOT part of the generated kwxFFI corpus: the
- * Phase 3 __kwx_test_after() event-loop probe (used by tests/loop_spike.js) and
- * the Deno support surface consumed by runtime/deno_shim.js, including the
- * Phase 5 __kwx_get_embedded_factory() accessor for the precompiled
- * kwx_runtime asset.
+ * __kwx_test_after() event-loop probe (used by tests/loop_spike.js) and the
+ * host support surface consumed by runtime/host_runtime.js and
+ * runtime/kwx_platform.js, including __kwx_get_embedded_factory() for the
+ * precompiled runtime assets.
  *
- * Everything here is registered on the existing `__kwx_native` object, which is
+ * Everything here is registered on the existing `kwxHost` object, which is
  * created once in quickjs_host.cpp and must never be recreated here.
  */
 
@@ -17,6 +17,8 @@
 #include <bit>
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iterator>
@@ -25,6 +27,12 @@
 #include <system_error>
 #include <utility>
 #include <vector>
+
+#if defined(_WIN32)
+#include <process.h>
+#else
+#include <unistd.h>
+#endif
 
 #include <wx/timer.h>
 
@@ -39,6 +47,13 @@
  * never parsed at startup. */
 extern const std::uint8_t kwx_runtime_bytecode[];
 extern const std::uint32_t kwx_runtime_bytecode_size;
+
+extern const std::uint8_t kwx_platform_bytecode[];
+extern const std::uint32_t kwx_platform_bytecode_size;
+
+/* Sucrase bytecode size, declared here so the transpile-cache source hash can
+ * mix it in: a Sucrase upgrade changes the size and invalidates every entry. */
+extern const std::uint32_t kwx_sucrase_bytecode_size;
 
 namespace {
 
@@ -75,7 +90,7 @@ public:
     JSValue result = JS_Call(ctx_, callback_, JS_UNDEFINED, 3, arguments);
     if (JS_IsException(result)) {
       if (kwx_host_consume_exit_exception(ctx_)) {
-        // A Deno.exit() sentinel unwound the timer: leave the event loop.
+        // A platform exit() sentinel unwound the timer: leave the event loop.
         kwxApp_ExitMainLoop();
       } else {
         kwx_host_report_exception(ctx_);
@@ -106,7 +121,8 @@ JSValue KwxJsTestAfter(JSContext *ctx, [[maybe_unused]] JSValueConst this_val,
   return JS_UNDEFINED;
 }
 
-/* ------------------------------------------------------------------ Deno ---
+/* -------------------------------------------------------------- host support
+ * ---
  */
 
 // __kwx_encode_utf8(text) — UTF-8 bytes as an ArrayBuffer, NUL bytes preserved.
@@ -188,6 +204,43 @@ JSValue KwxJsGetCString(JSContext *ctx, [[maybe_unused]] JSValueConst this_val,
 
   const char *text = static_cast<const char *>(pointer);
   return JS_NewString(ctx, text);
+}
+
+// __kwx_get_array_buffer(pointer, byteLength) — non-owning ArrayBuffer view
+// over native memory. The
+// caller must guarantee the memory outlives the ArrayBuffer; the kwxFFI
+// constant table is a process-lifetime static, which is the only current user.
+JSValue KwxJsGetArrayBuffer(JSContext *ctx,
+                            [[maybe_unused]] JSValueConst this_val, int argc,
+                            JSValueConst *argv) {
+  if (argc < 2) {
+    return JS_ThrowTypeError(
+        ctx, "__kwx_get_array_buffer expects (pointer, byteLength)");
+  }
+
+  KwxArgScope scope(ctx);
+  void *pointer = nullptr;
+  if (!arg_ptr(ctx, argv[0], &pointer, scope)) {
+    return JS_EXCEPTION;
+  }
+
+  std::int64_t byte_length = 0;
+  if (JS_ToInt64(ctx, &byte_length, argv[1]) < 0) {
+    return JS_EXCEPTION;
+  }
+  if (pointer == nullptr) {
+    return JS_ThrowTypeError(ctx, "__kwx_get_array_buffer: null pointer");
+  }
+  if (byte_length < 0) {
+    return JS_ThrowRangeError(ctx,
+                              "__kwx_get_array_buffer: negative byteLength");
+  }
+
+  auto *bytes = static_cast<std::uint8_t *>(pointer);
+  // max_len 0 marks the buffer non-resizable; any non-zero value would require
+  // a realloc callback we deliberately do not provide.
+  return JS_NewArrayBuffer(ctx, bytes, static_cast<std::size_t>(byte_length), 0,
+                           nullptr, nullptr, false);
 }
 
 // Strip a leading UTF-8 BOM so the module loader can wrap the source verbatim.
@@ -328,9 +381,32 @@ JSValue KwxJsSetExitCode(JSContext *ctx, [[maybe_unused]] JSValueConst this_val,
   return JS_UNDEFINED;
 }
 
+struct KwxEmbeddedAsset {
+  const std::uint8_t *bytecode;
+  std::uint32_t size;
+  const char *factory_name;
+};
+
+// Asset name → bytecode and the global its factory is published under.
+[[nodiscard]] bool KwxFindEmbeddedAsset(std::string_view name,
+                                        KwxEmbeddedAsset &asset) {
+  if (name == "kwx_runtime") {
+    asset = {kwx_runtime_bytecode, kwx_runtime_bytecode_size,
+             "__kwx_runtime_factory"};
+    return true;
+  }
+  if (name == "kwx_platform") {
+    asset = {kwx_platform_bytecode, kwx_platform_bytecode_size,
+             "__kwx_platform_factory"};
+    return true;
+  }
+  return false;
+}
+
 // __kwx_get_embedded_factory(name) — the precompiled CommonJS factory for an
-// embedded asset. Currently only "kwx_runtime" (the prebuilt binding corpus) is
-// exposed; loading it never touches the filesystem and never parses its source.
+// embedded asset. "kwx_runtime" is the binding corpus; "kwx_platform" is the
+// FFI surface module. Loading never touches the filesystem and never parses
+// source.
 JSValue KwxJsEmbeddedFactory(JSContext *ctx,
                              [[maybe_unused]] JSValueConst this_val, int argc,
                              JSValueConst *argv) {
@@ -343,19 +419,19 @@ JSValue KwxJsEmbeddedFactory(JSContext *ctx,
     return JS_EXCEPTION;
   }
 
-  if (std::string_view(name) != "kwx_runtime") {
+  KwxEmbeddedAsset asset{};
+  if (!KwxFindEmbeddedAsset(name, asset)) {
     JSValue error =
         JS_ThrowTypeError(ctx, "kwx_ts: unknown embedded asset '%s'", name);
     JS_FreeCString(ctx, name);
     return error;
   }
+  JS_FreeCString(ctx, name);
 
   JSValue compiled =
-      JS_ReadObject(ctx, kwx_runtime_bytecode,
-                    static_cast<std::size_t>(kwx_runtime_bytecode_size),
+      JS_ReadObject(ctx, asset.bytecode, static_cast<std::size_t>(asset.size),
                     JS_READ_OBJ_BYTECODE);
   if (JS_IsException(compiled)) {
-    JS_FreeCString(ctx, name);
     return JS_EXCEPTION;
   }
 
@@ -364,24 +440,273 @@ JSValue KwxJsEmbeddedFactory(JSContext *ctx,
   // so the result does not depend on script completion-value semantics.
   JSValue evaluated = JS_EvalFunction(ctx, compiled);
   if (JS_IsException(evaluated)) {
-    JS_FreeCString(ctx, name);
     return JS_EXCEPTION;
   }
   JS_FreeValue(ctx, evaluated);
 
   JSValue global_object = JS_GetGlobalObject(ctx);
-  JSValue factory =
-      JS_GetPropertyStr(ctx, global_object, "__kwx_runtime_factory");
+  JSValue factory = JS_GetPropertyStr(ctx, global_object, asset.factory_name);
   JS_FreeValue(ctx, global_object);
-  JS_FreeCString(ctx, name);
 
   if (!JS_IsFunction(ctx, factory)) {
     JS_FreeValue(ctx, factory);
-    return JS_ThrowTypeError(
-        ctx, "kwx_ts: embedded kwx_runtime factory is unavailable");
+    return JS_ThrowTypeError(ctx, "kwx_ts: embedded %s factory is unavailable",
+                             asset.factory_name);
   }
 
   return factory;
+}
+
+// ---------------------------------------------- transpile cache (Phase 6) ---
+
+constexpr std::uint64_t KWX_FNV_OFFSET_BASIS = 14695981039346656037ULL;
+constexpr std::uint64_t KWX_FNV_PRIME = 1099511628211ULL;
+constexpr std::size_t KWX_CACHE_MAX_SOURCE = 8U * 1024U * 1024U;
+
+[[nodiscard]] std::uint64_t
+KwxFnv1a64(std::uint64_t hash, const std::uint8_t *bytes, std::size_t length) {
+  for (std::size_t index = 0; index < length; ++index) {
+    hash ^= static_cast<std::uint64_t>(bytes[index]);
+    hash *= KWX_FNV_PRIME;
+  }
+  return hash;
+}
+
+// 64-bit FNV-1a over (Sucrase bytecode size, source bytes) as 16 lowercase hex
+// chars. Mixing in the bytecode size makes a Sucrase upgrade invalidate every
+// cached entry without a separate version bump.
+[[nodiscard]] std::string KwxSourceHash(const std::string &source) {
+  std::uint64_t hash = KWX_FNV_OFFSET_BASIS;
+  const std::uint32_t version = kwx_sucrase_bytecode_size;
+  const std::uint8_t version_bytes[4] = {
+      static_cast<std::uint8_t>(version & 0xFFU),
+      static_cast<std::uint8_t>((version >> 8U) & 0xFFU),
+      static_cast<std::uint8_t>((version >> 16U) & 0xFFU),
+      static_cast<std::uint8_t>((version >> 24U) & 0xFFU)};
+  hash = KwxFnv1a64(hash, version_bytes, 4U);
+  hash = KwxFnv1a64(hash, std::bit_cast<const std::uint8_t *>(source.data()),
+                    source.size());
+
+  char buffer[32] = {};
+  std::snprintf(buffer, sizeof(buffer), "%016llx",
+                static_cast<unsigned long long>(hash));
+  return std::string(buffer);
+}
+
+// 16 lowercase hex chars of the FNV-1a hash of the UTF-8 module path, plus
+// `.js`: one file per module path, so the cache cannot grow without bound.
+[[nodiscard]] std::string KwxCacheFileName(const std::string &file_path) {
+  const std::uint64_t hash = KwxFnv1a64(
+      KWX_FNV_OFFSET_BASIS,
+      std::bit_cast<const std::uint8_t *>(file_path.data()), file_path.size());
+  char buffer[32] = {};
+  std::snprintf(buffer, sizeof(buffer), "%016llx.js",
+                static_cast<unsigned long long>(hash));
+  return std::string(buffer);
+}
+
+// Caching is on by default; KWX_TS_NO_CACHE set to a non-empty value disables
+// it. Resolved once.
+[[nodiscard]] bool KwxTranspileCacheEnabled() {
+  static const bool enabled = [] {
+    const char *disabled = std::getenv("KWX_TS_NO_CACHE");
+    return disabled == nullptr || disabled[0] == '\0';
+  }();
+  return enabled;
+}
+
+// Cache directory, resolved at most once. Empty when no location is available.
+[[nodiscard]] const std::string &KwxTranspileCacheDir() {
+  static const std::string cache_dir = [] {
+    const char *override_dir = std::getenv("KWX_TS_CACHE_DIR");
+    if (override_dir != nullptr && override_dir[0] != '\0') {
+      return std::string(override_dir);
+    }
+#if defined(_WIN32)
+    const char *local_app_data = std::getenv("LOCALAPPDATA");
+    if (local_app_data == nullptr || local_app_data[0] == '\0') {
+      return std::string();
+    }
+    return std::string(local_app_data) + "\\kwx_ts\\transpile";
+#else
+    const char *xdg_cache = std::getenv("XDG_CACHE_HOME");
+    if (xdg_cache != nullptr && xdg_cache[0] != '\0') {
+      return std::string(xdg_cache) + "/kwx_ts/transpile";
+    }
+    const char *home = std::getenv("HOME");
+    if (home == nullptr || home[0] == '\0') {
+      return std::string();
+    }
+    return std::string(home) + "/.cache/kwx_ts/transpile";
+#endif
+  }();
+  return cache_dir;
+}
+
+// Create the cache directory once. Returns false (silent no-op) when caching is
+// disabled or the directory cannot be created.
+[[nodiscard]] bool KwxEnsureTranspileCache() {
+  static const bool ready = [] {
+    if (!KwxTranspileCacheEnabled()) {
+      return false;
+    }
+    const std::string &directory = KwxTranspileCacheDir();
+    if (directory.empty()) {
+      return false;
+    }
+    std::error_code create_error;
+    std::ignore = std::filesystem::create_directories(directory, create_error);
+    if (create_error) {
+      return false;
+    }
+    std::error_code check_error;
+    return std::filesystem::is_directory(directory, check_error) &&
+           !check_error;
+  }();
+  return ready;
+}
+
+[[nodiscard]] long KwxProcessId() {
+#if defined(_WIN32)
+  return static_cast<long>(::_getpid());
+#else
+  return static_cast<long>(::getpid());
+#endif
+}
+
+// Copy argv value as UTF-8 into `out`. On failure clears any pending exception
+// (callers treat that as a miss / no-op) and returns false.
+[[nodiscard]] bool KwxArgToString(JSContext *ctx, JSValueConst value,
+                                  std::string &out) {
+  std::size_t length = 0;
+  const char *text = JS_ToCStringLen2(ctx, &length, value, false);
+  if (text == nullptr) {
+    JS_FreeValue(ctx, JS_GetException(ctx));
+    return false;
+  }
+  out.assign(text, length);
+  JS_FreeCString(ctx, text);
+  return true;
+}
+
+// __kwx_ensure_sucrase() — true once the embedded Sucrase bytecode is loaded.
+JSValue KwxJsEnsureSucrase(JSContext *ctx,
+                           [[maybe_unused]] JSValueConst this_val,
+                           [[maybe_unused]] int argc,
+                           [[maybe_unused]] JSValueConst *argv) {
+  return JS_NewBool(ctx, kwx_runtime_ensure_sucrase());
+}
+
+// __kwx_transpile_cache_get(source, filePath) — cached transpiled code, or
+// JS_NULL on any miss. Never throws; every error is treated as a miss.
+JSValue KwxJsTranspileCacheGet(JSContext *ctx,
+                               [[maybe_unused]] JSValueConst this_val, int argc,
+                               JSValueConst *argv) {
+  if (argc < 2) {
+    return JS_NULL;
+  }
+
+  std::string source;
+  std::string file_path;
+  if (!KwxArgToString(ctx, argv[0], source) ||
+      !KwxArgToString(ctx, argv[1], file_path)) {
+    return JS_NULL;
+  }
+
+  if (source.size() > KWX_CACHE_MAX_SOURCE || !KwxEnsureTranspileCache()) {
+    return JS_NULL;
+  }
+
+  const std::filesystem::path cache_file =
+      std::filesystem::path(KwxTranspileCacheDir()) /
+      KwxCacheFileName(file_path);
+
+  std::ifstream input(cache_file, std::ios::binary);
+  if (!input.is_open()) {
+    return JS_NULL;
+  }
+  const std::string contents{std::istreambuf_iterator<char>(input),
+                             std::istreambuf_iterator<char>()};
+
+  const std::size_t newline = contents.find('\n');
+  if (newline == std::string::npos) {
+    return JS_NULL;
+  }
+
+  // Header: "KWC1 <hash> <length>" with single spaces. Parsed by hand rather
+  // than via <sstream>, whose iostream machinery is large and unnecessary here.
+  const std::string header = contents.substr(0, newline);
+  const std::size_t first_space = header.find(' ');
+  const std::size_t second_space = (first_space == std::string::npos)
+                                       ? std::string::npos
+                                       : header.find(' ', first_space + 1U);
+  if (first_space == std::string::npos || second_space == std::string::npos) {
+    return JS_NULL;
+  }
+  const std::string version_token = header.substr(0, first_space);
+  const std::string hash_token =
+      header.substr(first_space + 1U, second_space - first_space - 1U);
+  const std::string length_token = header.substr(second_space + 1U);
+  if (version_token != "KWC1" || hash_token != KwxSourceHash(source) ||
+      length_token != std::to_string(source.size())) {
+    return JS_NULL;
+  }
+
+  const std::string code = contents.substr(newline + 1);
+  return JS_NewStringLen(ctx, code.c_str(), code.size());
+}
+
+// __kwx_transpile_cache_put(source, filePath, code) — write the entry
+// atomically. Never throws; I/O failures are ignored.
+JSValue KwxJsTranspileCachePut(JSContext *ctx,
+                               [[maybe_unused]] JSValueConst this_val, int argc,
+                               JSValueConst *argv) {
+  if (argc < 3) {
+    return JS_UNDEFINED;
+  }
+
+  std::string source;
+  std::string file_path;
+  std::string code;
+  if (!KwxArgToString(ctx, argv[0], source) ||
+      !KwxArgToString(ctx, argv[1], file_path) ||
+      !KwxArgToString(ctx, argv[2], code)) {
+    return JS_UNDEFINED;
+  }
+
+  if (source.size() > KWX_CACHE_MAX_SOURCE || !KwxEnsureTranspileCache()) {
+    return JS_UNDEFINED;
+  }
+
+  std::string payload = "KWC1 " + KwxSourceHash(source) + ' ' +
+                        std::to_string(source.size()) + '\n';
+  payload += code;
+
+  const std::filesystem::path cache_file =
+      std::filesystem::path(KwxTranspileCacheDir()) /
+      KwxCacheFileName(file_path);
+  const std::filesystem::path temp_file = std::filesystem::path(
+      cache_file.string() + "." + std::to_string(KwxProcessId()) + ".tmp");
+
+  {
+    std::ofstream output(temp_file, std::ios::binary | std::ios::trunc);
+    if (!output.is_open()) {
+      return JS_UNDEFINED;
+    }
+    output.write(payload.data(), static_cast<std::streamsize>(payload.size()));
+    output.flush();
+    if (!output.good()) {
+      output.close();
+      std::error_code remove_error;
+      std::ignore = std::filesystem::remove(temp_file, remove_error);
+      return JS_UNDEFINED;
+    }
+  }
+
+  std::error_code rename_error;
+  std::filesystem::rename(temp_file, cache_file, rename_error);
+  std::ignore = rename_error;
+  return JS_UNDEFINED;
 }
 
 // -------------------------------------------------------------- callbacks ---
@@ -414,7 +739,7 @@ void KwxInvokeCallbackSlot(std::size_t slot, void *closure_fun, void *data,
 
   if (JS_IsException(result)) {
     if (kwx_host_consume_exit_exception(ctx)) {
-      // A Deno.exit() sentinel unwound the callback: leave the loop.
+      // A platform exit() sentinel unwound the callback: leave the loop.
       kwxApp_ExitMainLoop();
     } else {
       kwx_host_report_exception(ctx);
@@ -525,6 +850,9 @@ void kwx_runtime_register_helpers(JSContext *ctx, JSValue native_object) {
   JS_SetPropertyStr(
       ctx, native_object, "__kwx_get_cstring",
       JS_NewCFunction(ctx, KwxJsGetCString, "__kwx_get_cstring", 1));
+  JS_SetPropertyStr(
+      ctx, native_object, "__kwx_get_array_buffer",
+      JS_NewCFunction(ctx, KwxJsGetArrayBuffer, "__kwx_get_array_buffer", 2));
   JS_SetPropertyStr(ctx, native_object, "__kwx_read_file",
                     JS_NewCFunction(ctx, KwxJsReadFile, "__kwx_read_file", 1));
   JS_SetPropertyStr(
@@ -538,6 +866,16 @@ void kwx_runtime_register_helpers(JSContext *ctx, JSValue native_object) {
   JS_SetPropertyStr(ctx, native_object, "__kwx_get_embedded_factory",
                     JS_NewCFunction(ctx, KwxJsEmbeddedFactory,
                                     "__kwx_get_embedded_factory", 1));
+
+  JS_SetPropertyStr(
+      ctx, native_object, "__kwx_ensure_sucrase",
+      JS_NewCFunction(ctx, KwxJsEnsureSucrase, "__kwx_ensure_sucrase", 0));
+  JS_SetPropertyStr(ctx, native_object, "__kwx_transpile_cache_get",
+                    JS_NewCFunction(ctx, KwxJsTranspileCacheGet,
+                                    "__kwx_transpile_cache_get", 2));
+  JS_SetPropertyStr(ctx, native_object, "__kwx_transpile_cache_put",
+                    JS_NewCFunction(ctx, KwxJsTranspileCachePut,
+                                    "__kwx_transpile_cache_put", 3));
 
   JS_SetPropertyStr(
       ctx, native_object, "__kwx_callback_create",

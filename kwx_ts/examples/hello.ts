@@ -10,11 +10,17 @@
 import {
     ALL,
     BOTH,
+    createWxBoxSizer,
+    createWxButton,
+    createWxClosure,
+    createWxFrame,
+    createWxPanel,
+    createWxStaticText,
     createWxString,
     DEFAULT_FRAME_STYLE,
     EVT_BUTTON,
     EVT_CLOSE_WINDOW,
-    exit,
+    exitMainLoop,
     ID_ANY,
     initialize,
     lib,
@@ -22,14 +28,9 @@ import {
     setAppName,
     setTopWindow,
     shutdown,
-    VERTICAL,
-    wxBoxSizer,
-    wxButton,
-    wxClosure,
-    wxFrame,
-    wxPanel,
-    wxStaticText
+    VERTICAL
 } from "kwx";
+import { Callback, exit } from "kwx/platform";
 
 // Fixed command id so the click handler can be bound before the button exists.
 const BUTTON_ID = 1000;
@@ -46,7 +47,7 @@ export function main(): number
     setAppName("kwx_ts hello");
 
     const titleStr = createWxString("kwx_ts hello");
-    const frame = wxFrame.Create(
+    const frame = createWxFrame(
         null,
         ID_ANY,
         titleStr.ptr,
@@ -65,26 +66,26 @@ export function main(): number
         return 1;
     }
 
-    const panel = wxPanel.Create(frame.ptr, ID_ANY, 0, 0, 0, 0, 0)!;
-    const topSizer = wxBoxSizer.Create(VERTICAL)!;
+    const panel = createWxPanel(frame.ptr, ID_ANY, 0, 0, 0, 0, 0)!;
+    const topSizer = createWxBoxSizer(VERTICAL)!;
 
     const labelStr = createWxString("Press the button");
-    const label = wxStaticText.Create(panel.ptr, ID_ANY, labelStr.ptr, -1, -1, -1, -1, 0)!;
+    const label = createWxStaticText(panel.ptr, ID_ANY, labelStr.ptr, -1, -1, -1, -1, 0)!;
     labelStr.Delete();
 
     const buttonStr = createWxString("Click Me");
-    const button = wxButton.Create(panel.ptr, BUTTON_ID, buttonStr.ptr, -1, -1, -1, -1, 0)!;
+    const button = createWxButton(panel.ptr, BUTTON_ID, buttonStr.ptr, -1, -1, -1, -1, 0)!;
     buttonStr.Delete();
 
     topSizer.AddWindow(label.ptr, 0, ALL, 10, null);
     topSizer.AddWindow(button.ptr, 0, ALL, 10, null);
-    panel.SetSizer(topSizer.ptr);
+    panel.SetSizer(topSizer.ptr, false);
 
     let clickCount = 0;
 
     // Keep every callback and closure referenced until after run() returns — a
-    // collected UnsafeCallback leaves a dangling native function pointer.
-    const buttonCallback = new Deno.UnsafeCallback(
+    // collected Callback leaves a dangling native function pointer.
+    const buttonCallback = new Callback(
         { parameters: ["pointer", "pointer", "pointer"], result: "void" },
         () =>
         {
@@ -94,7 +95,7 @@ export function main(): number
             message.Delete();
         }
     );
-    const buttonClosure = wxClosure.Create(buttonCallback.pointer, null)!;
+    const buttonClosure = createWxClosure(buttonCallback.pointer, null)!;
     lib.symbols.wxEvtHandler_Connect(
         button.ptr,
         BUTTON_ID,
@@ -104,14 +105,14 @@ export function main(): number
     );
 
     // Window close — end the main loop (never Close() inside a close handler).
-    const closeCallback = new Deno.UnsafeCallback(
+    const closeCallback = new Callback(
         { parameters: ["pointer", "pointer", "pointer"], result: "void" },
         () =>
         {
-            exit();
+            exitMainLoop();
         }
     );
-    const closeClosure = wxClosure.Create(closeCallback.pointer, null)!;
+    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
     lib.symbols.wxEvtHandler_Connect(
         frame.ptr,
         ID_ANY,
@@ -136,4 +137,4 @@ export function main(): number
     return exitCode;
 }
 
-Deno.exit(main());
+exit(main());

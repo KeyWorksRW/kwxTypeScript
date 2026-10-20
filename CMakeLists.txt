@@ -60,6 +60,24 @@ if(APPLE)
     endif()
 endif()
 
+# ###################### Dead-code elimination #######################
+# The static dependencies (wxWidgets, kwxFFI, QuickJS-ng) otherwise pull whole
+# object files into the executable. One section per function/variable lets the
+# linker drop everything unreferenced, which reduces both the binary size and
+# the number of pages Windows must fault in before main() runs. These options
+# must be in place before FetchContent_MakeAvailable so the dependencies inherit
+# them; they are directory-scoped and apply to every target created afterwards.
+if(MSVC)
+    add_compile_options(/Gy /Gw)
+    add_link_options(/OPT:REF /OPT:ICF)
+elseif(APPLE)
+    add_compile_options(-ffunction-sections -fdata-sections)
+    add_link_options(-Wl,-dead_strip)
+else()
+    add_compile_options(-ffunction-sections -fdata-sections)
+    add_link_options(-Wl,--gc-sections)
+endif()
+
 # ###################### Static-only build #######################
 # kwx_ts is a single self-contained executable, so QuickJS-ng, kwxFFI and
 # wxWidgets must all be static libraries. Every option below has to be set
@@ -175,22 +193,22 @@ add_custom_command(
 )
 
 # ###################### Embedded runtime assets #######################
-# runtime/deno_shim.js is compiled into the executable so it is always
+# runtime/host_runtime.js is compiled into the executable so it is always
 # available without reading from disk.
 include(${KWX_TS_DIR}/cmake/EmbedFile.cmake)
 
 kwx_ts_embed_file(
-    ${KWX_TS_DIR}/runtime/deno_shim.js
-    kwx_deno_shim
-    KWX_DENO_SHIM_CPP
+    ${KWX_TS_DIR}/runtime/host_runtime.js
+    kwx_host_runtime
+    KWX_HOST_RUNTIME_CPP
 )
 
 # ###################### Precompiled runtime bytecode #######################
-# The two large assets (the Sucrase transpiler and the virtual "kwx" module)
-# are compiled to QuickJS bytecode at build time by qjsc, taken from the same
-# QuickJS-ng source as the runtime. JS_ReadObject + JS_EvalFunction then load
-# them ~20x faster than parsing the source on every launch, and the executable
-# carries no source text for either asset.
+# The large assets (the Sucrase transpiler, the virtual "kwx" module, and the
+# kwx/platform module) are compiled to QuickJS bytecode at build time by qjsc,
+# taken from the same QuickJS-ng source as the runtime. JS_ReadObject +
+# JS_EvalFunction then load them ~20x faster than parsing the source on every
+# launch, and the executable carries no source text for any asset.
 #
 # Bytecode is tied to the QuickJS version and build, so it is generated per
 # configuration: $<CONFIG> keeps Debug and Release artifacts apart.
@@ -233,6 +251,38 @@ add_custom_command(
     VERBATIM
 )
 
+# kwx_platform.js is a separate CommonJS asset: generated bindings call
+# dlopen() at module-eval time, so the corpus bundle must not resolve
+# "kwx/platform" to a bundle that is still executing.
+add_custom_command(
+    OUTPUT ${KWX_BYTECODE_DIR}/kwx_platform_factory.js
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
+    COMMAND ${CMAKE_COMMAND}
+        -DINPUT=${KWX_TS_DIR}/runtime/kwx_platform.js
+        -DOUTPUT=${KWX_BYTECODE_DIR}/kwx_platform_factory.js
+        -DFACTORY_NAME=__kwx_platform_factory
+        -P ${KWX_TS_DIR}/cmake/WrapFactory.cmake
+    DEPENDS
+        ${KWX_TS_DIR}/runtime/kwx_platform.js
+        ${KWX_TS_DIR}/cmake/WrapFactory.cmake
+    COMMENT "Wrapping kwx_platform.js as a CommonJS factory"
+    VERBATIM
+)
+
+add_custom_command(
+    OUTPUT ${KWX_BYTECODE_DIR}/kwx_platform_bytecode.c
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
+    COMMAND $<TARGET_FILE:qjsc>
+        -C -s
+        -N kwx_platform_bytecode
+        -n kwx_platform.js
+        -o ${KWX_BYTECODE_DIR}/kwx_platform_bytecode.c
+        ${KWX_BYTECODE_DIR}/kwx_platform_factory.js
+    DEPENDS ${KWX_BYTECODE_DIR}/kwx_platform_factory.js $<TARGET_FILE:qjsc>
+    COMMENT "Compiling kwx_platform.js to QuickJS bytecode"
+    VERBATIM
+)
+
 add_custom_command(
     OUTPUT ${KWX_BYTECODE_DIR}/sucrase_bytecode.c
     COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
@@ -256,8 +306,9 @@ add_executable(kwx_ts
     ${KWX_TS_DIR}/src/kwx_host_app.cpp
     ${KWX_TS_DIR}/src/runtime_bindings.cpp
     ${KWX_GENERATED_DIR}/bindings_gen.cpp
-    ${KWX_DENO_SHIM_CPP}
+    ${KWX_HOST_RUNTIME_CPP}
     ${KWX_BYTECODE_DIR}/kwx_runtime_bytecode.c
+    ${KWX_BYTECODE_DIR}/kwx_platform_bytecode.c
     ${KWX_BYTECODE_DIR}/sucrase_bytecode.c
 )
 
@@ -271,6 +322,16 @@ target_include_directories(kwx_ts PRIVATE
 # kwxFFI PUBLIC-links every wxWidgets component, so linking it transitively
 # supplies the wxWidgets libraries, headers and platform frameworks.
 target_link_libraries(kwx_ts PRIVATE qjs kwxFFI)
+
+# Debug info produced by the static dependencies ends up in the Release
+# executable even though none of this project's translation units is built with
+# -g. It is dead weight for a shipped binary, so strip it from Release only;
+# RelWithDebInfo and Debug keep their symbols.
+if(MSVC)
+    target_link_options(kwx_ts PRIVATE $<$<CONFIG:Release>:/DEBUG:NONE>)
+else()
+    target_link_options(kwx_ts PRIVATE $<$<CONFIG:Release>:-Wl,--strip-debug>)
+endif()
 
 # C declarations for the kwxFFI wrappers (wxFrame_Create, wxString_CreateUTF8, ...).
 target_include_directories(kwx_ts PRIVATE ${kwxFFI_SOURCE_DIR}/include)
@@ -291,11 +352,20 @@ elseif(UNIX)
     )
 endif()
 
-# ###################### Windows manifest (Common Controls v6) #######################
-# The executable embeds its own manifest with resource ID 1, so Windows applies
-# Common Controls v6 visual styles without any runtime activation context.
+# ###################### Windows resources (manifest, icon, version) #######################
+# res/kwx_ts.rc embeds the Common Controls v6 manifest with resource ID 1 (so
+# Windows applies visual styles without a runtime activation context), the
+# application icon, and the VERSIONINFO block. res/version.rc is generated from
+# the project version so the file properties track every build.
 if(WIN32)
-    target_sources(kwx_ts PRIVATE ${KWX_TS_DIR}/resources/kwx_ts.rc)
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/res/version.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/version.rc
+        @ONLY
+    )
+
+    target_sources(kwx_ts PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/res/kwx_ts.rc)
+    target_include_directories(kwx_ts PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
     # Only MSVC / clang-cl accept /MANIFEST:NO. GNU/Clang frontends on MSYS2
     # use a different linker and reject this flag.
@@ -327,3 +397,65 @@ set_target_properties(kwx_ts PROPERTIES OUTPUT_NAME kwx_ts)
 
 # Platform-specific compile definitions collected above (empty where unused).
 target_compile_definitions(kwx_ts PRIVATE ${KWX_TS_PLATFORM_DEFINITIONS})
+
+# ###################### Packaging Instructions #######################
+# install(TARGETS) places kwx_ts in bin/, so the NSIS registry entries and the
+# installed icon reference bin/kwx_ts.exe.
+set(CPACK_PACKAGE_VENDOR "KeyWorks Software")
+set(CPACK_VERBATIM_VARIABLES YES)
+set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_LIST_DIR}/LICENSE)
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "kwx_ts")
+set(CPACK_PACKAGE_EXECUTABLES "kwx_ts" "kwx_ts")
+set(CPACK_CREATE_DESKTOP_LINKS kwx_ts)
+
+set(CPACK_NSIS_MUI_ICON ${CMAKE_CURRENT_LIST_DIR}/res/kwx_ts_logo.ico)
+set(CPACK_NSIS_MUI_UNIICO ${CMAKE_CURRENT_LIST_DIR}/res/kwx_ts_logo.ico)
+set(CPACK_NSIS_INSTALLED_ICON_NAME bin/kwx_ts.exe)
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL YES)
+set(CPACK_NSIS_MUI_FINISHPAGE_RUN "kwx_ts.exe")
+set(CPACK_NSIS_BRANDING_TEXT "KeyWorks Software")
+set(CPACK_NSIS_BRANDING_TEXT_TRIM_POSITION CENTER)
+set(CPACK_NSIS_MODIFY_PATH YES)
+
+set(CPACK_RPM_PACKAGE_LICENSE ${CMAKE_CURRENT_LIST_DIR}/LICENSE)
+set(CPACK_RPM_PACKAGE_VENDOR "KeyWorks Software")
+set(CPACK_RPM_PACKAGE_GROUP "Development/Tools")
+set(CPACK_RPM_PACKAGE_REQUIRES "libgtk-3.so.0, glibc >= 2.38")
+set(CPACK_RPM_PACKAGE_URL "https://github.com/Randalphwa/kwxTypeScript-dev")
+set(CPACK_RPM_PACKAGE_DESCRIPTION "TypeScript runtime for wxWidgets")
+set(CPACK_RPM_PACKAGE_SUMMARY "kwx_ts TypeScript runtime for wxWidgets")
+
+# Use the build number to determine if the package is newer than the previous build.
+set(CPACK_RPM_PACKAGE_RELEASE ${PROJECT_VERSION_BUILD})
+
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "KeyWorks Software <https://github.com/KeyWorksRW>")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libgtk-3-0, libc6 (>= 2.31)")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/Randalphwa/kwxTypeScript-dev")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "TypeScript runtime for wxWidgets")
+set(CPACK_DEBIAN_PACKAGE_ICON ${CMAKE_CURRENT_LIST_DIR}/kwx_ts_logo.svg)
+set(CPACK_DEBIAN_PACKAGE_SUMMARY "kwx_ts TypeScript runtime for wxWidgets")
+
+# Use the build number to determine if the package is newer than the previous build.
+set(CPACK_DEBIAN_PACKAGE_RELEASE ${PROJECT_VERSION_BUILD})
+
+# Registers .kwxts files with kwx_ts.exe in the NSIS installer.
+configure_file("${CMAKE_CURRENT_LIST_DIR}/nsis_options.cmake.in"
+    "${PROJECT_BINARY_DIR}/nsis_options.cmake"
+    @ONLY)
+set(CPACK_PROJECT_CONFIG_FILE "${PROJECT_BINARY_DIR}/nsis_options.cmake")
+
+if(WIN32)
+    set(CPACK_GENERATOR ZIP NSIS)
+elseif(APPLE)
+    set(CPACK_GENERATOR DragNDrop)
+    set(CPACK_DMG_VOLUME_NAME "kwx_ts")
+    set(CPACK_DMG_FORMAT "UDBZ") # Compressed DMG
+elseif(UNIX)
+    set(CPACK_GENERATOR "DEB RPM")
+endif()
+
+include(CPack)
+
+install(TARGETS kwx_ts CONFIGURATIONS Release)
+
+set_property(INSTALL "bin/$<TARGET_FILE_NAME:kwx_ts>" PROPERTY CPACK_START_MENU_SHORTCUTS "kwx_ts")
