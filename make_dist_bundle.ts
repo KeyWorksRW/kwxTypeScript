@@ -15,11 +15,11 @@ await Deno.writeTextFile(barrelPath, barrelContent);
 await Deno.mkdir("dist", { recursive: true });
 
 await esbuild.build({
-  entryPoints: [barrelPath],
-  outfile: "dist/kwx.mjs",
-  bundle: true,
-  format: "esm",
-  platform: "neutral",
+    entryPoints: [barrelPath],
+    outfile: "dist/kwx.mjs",
+    bundle: true,
+    format: "esm",
+    platform: "neutral",
 });
 
 // Clean up the temporary barrel entry

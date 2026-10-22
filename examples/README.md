@@ -2,37 +2,25 @@
 
 ## Prerequisites
 
-1. **Build kwxFFI shared library** from the project root:
+1. **Build the runtime** from the repository root:
    ```sh
-   cmake --preset ninja-clang   # or your preferred preset
-   cmake --build build
+   cmake --preset ninja-multi
+   cmake --build build --config Release --target kwx_ts
    ```
-   This produces `lib/kwxFFI.dll` (Windows), `lib/libkwxFFI.so` (Linux), or `lib/libkwxFFI.dylib` (macOS).
-
-2. **Copy the DLL to the project root** (or ensure it's on the system library path):
-   ```sh
-   # Windows
-   copy lib\kwxFFI.dll .
-
-   # Linux / macOS
-   cp lib/libkwxFFI.so .   # or .dylib on macOS
-   ```
-
-3. **Install Deno**: https://deno.com
+   This produces `bin/Release/kwxts.exe` (Windows) or `bin/Release/kwxts`
+   (macOS/Linux). QuickJS-ng, kwxFFI, and wxWidgets are fetched and linked
+   statically; no shared library needs to be copied.
 
 ## Running the Demo
 
+From the repository root:
+
 ```sh
-deno run --allow-ffi --allow-read --allow-env examples/demo.ts
+bin/Release/kwxts examples/demo.ts
 ```
 
-### Permissions explained
-
-| Flag | Reason |
-|------|--------|
-| `--allow-ffi` | Required for `Deno.dlopen()` to load kwxFFI |
-| `--allow-read` | DLL loading may access the filesystem |
-| `--allow-env` | DLL path resolution on some platforms |
+`demo.ts` is both the module and the entry point — it ends with a `main()` call,
+which is all kwx_ts needs to start the application.
 
 ## Demo Description
 
@@ -43,15 +31,18 @@ A cross-platform native GUI window (480×320, centered) with:
 - **Text input** with hint text "hint text"
 - **"Click Me" button**: Shows the typed text in a message box (or "(no text entered)" if empty)
 - **About dialog**: Identifies the demo
-- **Window close**: Exits cleanly via `ExitMainLoop()`
+- **Window close**: Exits cleanly via `exitMainLoop()`
 
 ## Troubleshooting
 
-### "Cannot find module" or DLL not found
-Ensure `kwxFFI.dll` (or platform equivalent) is in the current working directory or on the system PATH.
+### "Cannot find module"
+Run the executable from the repository root so relative imports resolve, and
+pass the entry file path (`examples/demo.ts`).
 
 ### Missing MSVC runtime (Windows)
-Copy the required DLLs from your Visual Studio installation or the wxWidgets build output directory.
+Copy the required DLLs from your Visual Studio installation or the wxWidgets
+build output directory.
 
-### Permission denied
-Add `--allow-ffi --allow-read --allow-env` flags to the `deno run` command.
+### The window does not appear
+Widgets are created synchronously, so an uncaught error is reported on stderr.
+Set `KWX_TS_TRACE=1` to print startup phase timings.

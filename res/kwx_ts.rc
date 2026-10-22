@@ -1,0 +1,108 @@
+//Microsoft Developer Studio generated resource script.
+
+// CMake generated file
+//
+#include "version.rc"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+#pragma code_page(65001) // UTF-8
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+#if defined(APSTUDIO_INVOKED)
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE
+BEGIN
+    "version.rc\0"
+END
+
+2 TEXTINCLUDE
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\r\n"
+    "#pragma code_page(65001) // UTF-8\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE
+BEGIN
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// IDI_APPICON is referenced by the runtime; the value is local to this file
+// because the project has no resource.h.
+#ifndef IDI_APPICON
+#define IDI_APPICON 101
+#endif
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_APPICON                 ICON        "kwx_ts_logo.ico"
+
+#if !defined(_MAC)
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION FILEVER
+ PRODUCTVERSION PRODUCTVER
+ FILEFLAGSMASK 0x3fL
+#if defined(_DEBUG)
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "Comments", "https://github.com/Randalphwa/kwxTypeScript-dev\0"
+            VALUE "CompanyName", "KeyWorks Software\0"
+            VALUE "FileDescription", "TypeScript runtime for wxWidgets\0"
+            VALUE "FileVersion", STRFILEVER "\0"
+            VALUE "InternalName", "kwx_ts\0"
+            VALUE "LegalCopyright", "Copyright (c) " STRYEAR " KeyWorks Software\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "kwxts.exe\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "kwx_ts\0"
+            VALUE "ProductVersion", STRPRODUCTVER "\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+#endif    // !_MAC
+
+// The manifest lives in kwx_ts/resources and must keep resource ID 1; the
+// kwxFFI DLL uses ID 2.
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "../kwx_ts/resources/kwx_ts.manifest"

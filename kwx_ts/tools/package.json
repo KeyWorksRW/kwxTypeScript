@@ -1,0 +1,12 @@
+{
+  "name": "kwx-ts-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "One-time maintainer scripts that build the committed kwx_ts JS artifacts (binding corpus bundle, platform module). Users of kwx_ts never need Node.",
+  "scripts": {
+    "build-runtime": "node build_runtime_bundle.cjs"
+  },
+  "dependencies": {
+    "esbuild": "0.25.0"
+  }
+}

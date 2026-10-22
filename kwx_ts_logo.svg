@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  kwx_ts logo
+  wxWidgets "blocks" mark: (c) wxWidgets contributors, CC BY-SA 1.0
+  https://wxwidgets.org/downloads/logos/
+  Wordmark outlines derived from Montserrat ExtraBold, SIL Open Font License 1.1.
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="760" height="760" viewBox="0 0 760 760"
+     role="img" aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">kwx_ts</title>
+  <desc id="logo-desc">The wxWidgets three-block mark with a hollow, extruded TypeScript wordmark floating above it. The wordmark runs from dark red on the left through dark blue in the middle to dark yellow on the right. Light comes from the upper left, so the extrusion and drop shadow fall to the lower right.</desc>
+  <defs>
+
+    <linearGradient id="wxRed">
+      <stop offset="0" stop-color="#ff0000"/>
+      <stop offset="1" stop-color="#ffe0e0"/>
+    </linearGradient>
+    <linearGradient id="wxWhite">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="wxBlue">
+      <stop offset="0" stop-color="#0000ff"/>
+      <stop offset="1" stop-color="#e0e0ff"/>
+    </linearGradient>
+    <linearGradient id="wxYellow">
+      <stop offset="0" stop-color="#ffffe0"/>
+      <stop offset="1" stop-color="#ffff00"/>
+    </linearGradient>
+    <linearGradient id="wxRedFill" href="#wxRed" xlink:href="#wxRed" gradientUnits="userSpaceOnUse"
+      gradientTransform="matrix(1.000031,0,0,1.000031,-45.00832,-319.1057)"
+      x1="221.01576" y1="674.0849" x2="119.92342" y2="474.09103"/>
+    <linearGradient id="wxRedHi" href="#wxWhite" xlink:href="#wxWhite" gradientUnits="userSpaceOnUse"
+      gradientTransform="matrix(0.545556,0,0,0.350255,-38.51666,72.6073)"
+      x1="139.43112" y1="520.74255" x2="222.73912" y2="520.74255"/>
+    <linearGradient id="wxBlueFill" href="#wxBlue" xlink:href="#wxBlue" gradientUnits="userSpaceOnUse"
+      gradientTransform="matrix(1.334164,0,0,1.334164,-90.28301,-537.514)"
+      x1="296.20334" y1="571.52942" x2="220.84492" y2="421.62283"/>
+    <linearGradient id="wxBlueHi" href="#wxWhite" xlink:href="#wxWhite" gradientUnits="userSpaceOnUse"
+      gradientTransform="matrix(0.545558,0,0,0.350255,91.4834,-57.3926)"
+      x1="139.62971" y1="520.74225" x2="222.73819" y2="520.74225"/>
+    <linearGradient id="wxYellowFill" href="#wxYellow" xlink:href="#wxYellow" gradientUnits="userSpaceOnUse"
+      gradientTransform="matrix(1.334164,0,0,1.334164,54.71699,-442.514)"
+      x1="221.02206" y1="421.6228" x2="296.72556" y2="571.52942"/>
+    <linearGradient id="wxYellowHi" href="#wxWhite" xlink:href="#wxWhite" gradientUnits="userSpaceOnUse"
+      gradientTransform="matrix(0.545558,0,0,0.350255,236.4833,37.6074)"
+      x1="139.43103" y1="520.74225" x2="222.73837" y2="520.74225"/>
+
+    <linearGradient id="ts-face" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#8E1B1B"/>
+        <stop offset="0.5" stop-color="#1B4A87"/>
+        <stop offset="1" stop-color="#8A6D00"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-12" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#2B0F15"/>
+        <stop offset="0.5" stop-color="#0B1C33"/>
+        <stop offset="1" stop-color="#2A260D"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-11" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#2F0F15"/>
+        <stop offset="0.5" stop-color="#0C1D35"/>
+        <stop offset="1" stop-color="#2D280D"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-10" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#321015"/>
+        <stop offset="0.5" stop-color="#0C1F38"/>
+        <stop offset="1" stop-color="#302A0C"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-9" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#351015"/>
+        <stop offset="0.5" stop-color="#0D203B"/>
+        <stop offset="1" stop-color="#342D0C"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-8" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#381015"/>
+        <stop offset="0.5" stop-color="#0D223E"/>
+        <stop offset="1" stop-color="#372F0B"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-7" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#3B1116"/>
+        <stop offset="0.5" stop-color="#0E2340"/>
+        <stop offset="1" stop-color="#3A310B"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-6" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#3F1116"/>
+        <stop offset="0.5" stop-color="#0E2543"/>
+        <stop offset="1" stop-color="#3D340A"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-5" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#421216"/>
+        <stop offset="0.5" stop-color="#0F2646"/>
+        <stop offset="1" stop-color="#40360A"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-4" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#451216"/>
+        <stop offset="0.5" stop-color="#0F2849"/>
+        <stop offset="1" stop-color="#43380A"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-3" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#481216"/>
+        <stop offset="0.5" stop-color="#10294B"/>
+        <stop offset="1" stop-color="#463B09"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-2" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#4B1317"/>
+        <stop offset="0.5" stop-color="#102B4E"/>
+        <stop offset="1" stop-color="#493D09"/>
+    </linearGradient>
+    <linearGradient id="ts-wall-1" gradientUnits="userSpaceOnUse"
+        x1="53.76" y1="380.00" x2="668.13" y2="380.00">
+        <stop offset="0" stop-color="#4F1317"/>
+        <stop offset="0.5" stop-color="#112C51"/>
+        <stop offset="1" stop-color="#4C3F08"/>
+    </linearGradient>
+
+    <filter id="type-shadow-blur" x="-35%" y="-40%" width="170%" height="180%"
+            color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="9.10179640718563"/>
+    </filter>
+
+    <g id="type-shape" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M75.79 434.76V335.81H53.76V307.2H118.02V335.81H96.09V434.76Z"/>
+      <path d="M137.29 471.75Q132.89 471.75 128.43 469.38Q123.97 467.01 121.2 462.82L127.97 438.58Q129.71 441.32 132.01 442.87Q134.32 444.41 136.58 444.41Q139.45 444.41 141.19 442.41Q142.93 440.41 144.16 436.03L120.38 335.99H140.37L154 396.31L167.73 335.99H186.29L162.3 438.77Q159.43 451.52 155.69 458.72Q151.95 465.92 147.39 468.83Q142.83 471.75 137.29 471.75Z"/>
+      <path d="M229.34 436.4Q219.5 436.4 213.86 426.19V470.11H194.38V335.99H212.94V345.83Q218.47 334.35 229.34 334.35Q236.92 334.35 243.07 340.55Q249.22 346.75 252.91 358.22Q256.6 369.7 256.6 385.38Q256.6 401.05 252.91 412.53Q249.22 424.01 243.07 430.2Q236.92 436.4 229.34 436.4ZM225.24 408.88Q230.16 408.88 233.54 402.78Q236.92 396.67 236.92 385.38Q236.92 374.26 233.54 368.06Q230.16 361.87 225.24 361.87Q220.32 361.87 216.93 368.06Q213.55 374.26 213.55 385.38Q213.55 396.67 216.93 402.78Q220.32 408.88 225.24 408.88Z"/>
+      <path d="M297.8 436.4Q287.96 436.4 280.64 429.75Q273.31 423.09 269.26 411.52Q265.21 399.95 265.21 385.19Q265.21 370.43 269.21 358.95Q273.2 347.47 280.12 340.91Q287.04 334.35 295.75 334.35Q303.95 334.35 310.72 340.37Q317.48 346.38 321.48 357.77Q325.48 369.16 325.48 385.56Q325.48 387.38 325.38 389.75Q325.27 392.12 325.17 394.12H284.79Q286.02 401.59 289.55 405.78Q293.09 409.97 298.42 409.97Q302.52 409.97 305.44 407.88Q308.36 405.78 311.23 401.41L321.48 420.36Q313.38 436.4 297.8 436.4ZM284.48 375.9H307.23Q306.41 368.06 303.39 363.51Q300.37 358.95 295.86 358.95Q291.35 358.95 288.32 363.51Q285.3 368.06 284.48 375.9Z"/>
+      <path d="M363.71 437.31Q354.9 437.31 346.7 433.48Q338.5 429.65 333.47 423.28L340.14 396.67Q344.95 402.32 351.31 405.78Q357.66 409.25 363.81 409.25Q370.07 409.25 372.78 406.33Q375.5 403.42 375.5 398.86Q375.5 394.49 373.29 391.94Q371.09 389.38 367.45 387.74Q363.81 386.1 359.46 384.46Q355.1 382.82 350.74 380.36Q346.39 377.9 342.75 373.71Q339.11 369.52 336.91 362.78Q334.7 356.04 334.7 346.02Q334.7 334.72 338.24 325.33Q341.78 315.95 348.8 310.3Q355.82 304.65 366.48 304.65Q373.45 304.65 380.32 307.48Q387.18 310.3 392.51 315.77L386.26 342.55Q381.14 337.63 376.11 335.17Q371.09 332.71 366.38 332.71Q360.02 332.71 357.41 336.09Q354.79 339.46 354.79 344.19Q354.79 348.39 357 350.75Q359.2 353.12 362.84 354.76Q366.48 356.4 370.83 358.04Q375.19 359.68 379.5 362.14Q383.8 364.6 387.44 368.7Q391.08 372.8 393.28 379.45Q395.48 386.1 395.48 396.13Q395.48 407.24 392 416.63Q388.51 426.01 381.44 431.66Q374.37 437.31 363.71 437.31Z"/>
+      <path d="M435.36 436.4Q426.03 436.4 418.85 429.84Q411.68 423.28 407.58 411.8Q403.48 400.32 403.48 385.19Q403.48 370.43 407.58 358.86Q411.68 347.29 418.85 340.82Q426.03 334.35 435.36 334.35Q444.79 334.35 451.65 341.46Q458.52 348.57 461.39 361.5L446.32 375.17Q444.38 368.25 441.51 365.06Q438.64 361.87 435.25 361.87Q430.23 361.87 426.7 367.97Q423.16 374.08 423.16 385.19Q423.16 396.67 426.7 402.78Q430.23 408.88 435.25 408.88Q438.64 408.88 441.51 405.69Q444.38 402.5 446.32 395.58L461.39 409.25Q458.52 422 451.65 429.2Q444.79 436.4 435.36 436.4Z"/>
+      <path d="M471.85 434.76V335.99H490.4V347.84Q496.44 334.35 509.05 334.35V365.51Q506.59 364.97 504.64 364.97Q498.7 364.97 495.01 370.71Q491.32 376.45 491.32 389.38V434.76Z"/>
+      <path d="M520.33 434.76V335.99H539.8V434.76ZM530.06 325.06Q524.73 325.06 521.45 319.78Q518.17 314.49 518.17 306.66Q518.17 299 521.45 293.63Q524.73 288.25 530.06 288.25Q535.39 288.25 538.67 293.26Q541.95 298.28 541.95 306.11Q541.95 314.31 538.73 319.69Q535.5 325.06 530.06 325.06Z"/>
+      <path d="M590.44 436.4Q580.6 436.4 574.96 426.19V470.11H555.48V335.99H574.04V345.83Q579.57 334.35 590.44 334.35Q598.02 334.35 604.17 340.55Q610.32 346.75 614.01 358.22Q617.7 369.7 617.7 385.38Q617.7 401.05 614.01 412.53Q610.32 424.01 604.17 430.2Q598.02 436.4 590.44 436.4ZM586.34 408.88Q591.26 408.88 594.64 402.78Q598.02 396.67 598.02 385.38Q598.02 374.26 594.64 368.06Q591.26 361.87 586.34 361.87Q581.42 361.87 578.03 368.06Q574.65 374.26 574.65 385.38Q574.65 396.67 578.03 402.78Q581.42 408.88 586.34 408.88Z"/>
+      <path d="M654.6 436.4Q643.94 436.4 637.99 427.01Q632.05 417.63 632.05 398.68V361.69H623.95V335.99H632.05V313.95H651.52V335.99H664.23V361.69H651.52V398.31Q651.52 403.78 653.11 406.69Q654.7 409.61 657.37 409.61Q660.75 409.61 663.31 406.51L668.13 430.75Q665.57 433.66 661.98 435.03Q658.39 436.4 654.6 436.4Z"/>
+    </g>
+
+    <!-- Keeps the extruded walls outside the letterforms so the faces stay hollow. -->
+    <mask id="type-outside" maskUnits="userSpaceOnUse" x="0" y="0" width="760" height="760">
+      <rect width="760" height="760" fill="#ffffff"/>
+      <use href="#type-shape" xlink:href="#type-shape" fill="#000000"/>
+      <g fill="#000000">
+        <path d="M225.24 408.88Q230.16 408.88 233.54 402.78Q236.92 396.67 236.92 385.38Q236.92 374.26 233.54 368.06Q230.16 361.87 225.24 361.87Q220.32 361.87 216.93 368.06Q213.55 374.26 213.55 385.38Q213.55 396.67 216.93 402.78Q220.32 408.88 225.24 408.88Z"/>
+        <path d="M284.48 375.9H307.23Q306.41 368.06 303.39 363.51Q300.37 358.95 295.86 358.95Q291.35 358.95 288.32 363.51Q285.3 368.06 284.48 375.9Z"/>
+        <path d="M586.34 408.88Q591.26 408.88 594.64 402.78Q598.02 396.67 598.02 385.38Q598.02 374.26 594.64 368.06Q591.26 361.87 586.34 361.87Q581.42 361.87 578.03 368.06Q574.65 374.26 574.65 385.38Q574.65 396.67 578.03 402.78Q581.42 408.88 586.34 408.88Z"/>
+      </g>
+    </mask>
+  </defs>
+
+
+    <g id="wx-blocks" transform="translate(138.5,217.2) scale(0.92)">
+      <g id="wx-red">
+        <path fill="url(#wxRedFill)" d="m 69.33962,154.99997 111.32077,0 c 24.56415,0 44.33961,19.77547 44.33961,44.33962 l 0,111.32078 c 0,24.56414 -19.77546,44.33961 -44.33961,44.33961 l -111.32077,0 C 44.775476,354.99998 25,335.22451 25,310.66037 l 0,-111.32078 c 0,-24.56415 19.775476,-44.33962 44.33962,-44.33962 z"/>
+        <path fill="#ff0000" fill-opacity="0.25" fill-rule="evenodd" d="m 182.05654,230.00562 c -48.53089,0.52516 -61.79585,56.69111 -104.89889,57.24964 -18.6358,0.23541 -34.530378,-12.5544 -52.157599,-27.69878 l 0,51.65226 c 0,24.24869 19.796853,43.79127 44.361069,43.79124 l 111.31955,0 c 24.56422,0 44.31938,-19.54253 44.31938,-43.79124 l 0,-70.25531 c -12.03236,-6.60668 -25.96585,-11.13587 -42.94351,-10.94781 z"/>
+        <rect x="50" y="179.99998" width="33" height="150" rx="17.843672" fill="url(#wxRedHi)"/>
+        <path fill="none" stroke="#800000" stroke-opacity="0.50196078" stroke-width="12.686" stroke-linejoin="round" d="m 69.46811,161.34322 111.19211,0 c 21.12816,0 37.9969,16.87873 37.9969,38.00595 l 0,111.32031 c 0,21.13499 -16.86549,37.98752 -37.9969,37.98752 l -111.32032,0 c -21.131502,0 -37.9969,-16.86042 -37.9969,-37.98752 l 0,-111.35844 c 0,-21.13196 16.99051,-37.96782 38.12511,-37.96782 z"/>
+      </g>
+      <g id="wx-blue">
+        <path fill="url(#wxBlueFill)" d="m 199.33962,24.99998 111.32078,0 c 24.56415,0 44.3396,19.77547 44.3396,44.3396 l 0,111.32079 c 0,24.56414 -19.77545,44.33961 -44.3396,44.33961 l -111.32078,0 C 174.77548,224.99998 155,205.22451 155,180.66037 l 0,-111.32079 c 0,-24.56413 19.77548,-44.3396 44.33962,-44.3396 z"/>
+        <path fill="#0000ff" fill-opacity="0.25" fill-rule="evenodd" d="M 312.05649,100.00562 C 263.5256,100.5308 250.26065,156.69674 207.1576,157.25527 188.52179,157.49067 172.62722,144.70086 155,129.55648 l 0,51.65227 c 0,24.24868 19.79685,43.79126 44.36106,43.79123 l 111.31957,0 c 24.5642,0 44.31937,-19.54253 44.31937,-43.79123 l 0,-70.25531 c -12.03236,-6.60669 -25.96585,-11.13588 -42.94351,-10.94782 z"/>
+        <rect x="180" y="49.999981" width="33" height="150" rx="17.843672" fill="url(#wxBlueHi)"/>
+        <path fill="none" stroke="#000080" stroke-opacity="0.50196078" stroke-width="12.686" stroke-linejoin="round" d="m 199.46811,31.34322 111.19211,0 c 21.12816,0 37.9969,16.87873 37.9969,38.00595 l 0,111.32031 c 0,21.13499 -16.86549,37.98752 -37.9969,37.98752 l -111.32032,0 c -21.1315,0 -37.9969,-16.86042 -37.9969,-37.98752 l 0,-111.35844 c 0,-21.13196 16.99051,-37.96782 38.12511,-37.96782 z"/>
+      </g>
+      <g id="wx-yellow">
+        <path fill="url(#wxYellowFill)" d="m 344.33962,119.99997 111.32077,0 c 24.56415,0 44.33961,19.77547 44.33961,44.33962 l 0,111.32078 c 0,24.56414 -19.77546,44.33961 -44.33961,44.33961 l -111.32077,0 C 319.77547,319.99998 300,300.22451 300,275.66037 l 0,-111.32078 c 0,-24.56415 19.77547,-44.33962 44.33962,-44.33962 z"/>
+        <path fill="#c0c000" fill-opacity="0.25" fill-rule="evenodd" d="M 457.05649,195.00562 C 408.5256,195.53079 395.26065,251.69673 352.1576,252.25526 333.52179,252.49067 317.62722,239.70086 300,224.55647 l 0,51.65228 c 0,24.24868 19.79685,43.79126 44.36106,43.79123 l 111.31957,0 C 480.24484,319.99998 500,300.45745 500,276.20875 l 0,-70.25532 c -12.03236,-6.60669 -25.96584,-11.13587 -42.94351,-10.94781 z"/>
+        <rect x="325" y="144.99998" width="33" height="150" rx="17.843672" fill="url(#wxYellowHi)"/>
+        <path fill="none" stroke="#808000" stroke-opacity="0.50196078" stroke-width="12.686" stroke-linejoin="round" d="m 344.46811,126.34322 111.19211,0 c 21.12816,0 37.9969,16.87873 37.9969,38.00595 l 0,111.32031 c 0,21.13499 -16.86549,37.98752 -37.9969,37.98752 l -111.32032,0 c -21.1315,0 -37.9969,-16.86042 -37.9969,-37.98752 l 0,-111.35844 c 0,-21.13196 16.99051,-37.96782 38.12511,-37.96782 z"/>
+      </g>
+    </g>
+
+
+  <g id="type-shadow" filter="url(#type-shadow-blur)" mask="url(#type-outside)">
+    <use href="#type-shape" xlink:href="#type-shape" x="20.479041916167667" y="27.305389221556887" fill="none"
+         stroke="#04101c" stroke-opacity="0.42" stroke-width="11.377245508982037"/>
+  </g>
+
+  <g id="type-extrusion" mask="url(#type-outside)">
+      <use href="#type-shape" xlink:href="#type-shape" x="10.81" y="15.93" fill="none" stroke="url(#ts-wall-12)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="9.91" y="14.60" fill="none" stroke="url(#ts-wall-11)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="9.01" y="13.27" fill="none" stroke="url(#ts-wall-10)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="8.11" y="11.95" fill="none" stroke="url(#ts-wall-9)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="7.21" y="10.62" fill="none" stroke="url(#ts-wall-8)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="6.30" y="9.29" fill="none" stroke="url(#ts-wall-7)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="5.40" y="7.96" fill="none" stroke="url(#ts-wall-6)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="4.50" y="6.64" fill="none" stroke="url(#ts-wall-5)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="3.60" y="5.31" fill="none" stroke="url(#ts-wall-4)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="2.70" y="3.98" fill="none" stroke="url(#ts-wall-3)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="1.80" y="2.65" fill="none" stroke="url(#ts-wall-2)" stroke-width="9.1"/>
+      <use href="#type-shape" xlink:href="#type-shape" x="0.90" y="1.33" fill="none" stroke="url(#ts-wall-1)" stroke-width="9.1"/>
+  </g>
+
+  <g id="type-keyline" mask="url(#type-outside)">
+    <use href="#type-shape" xlink:href="#type-shape" fill="none"
+         stroke="#eef5ff" stroke-opacity="0.85" stroke-width="12.514970059880241"/>
+  </g>
+
+  <g id="type-front">
+    <use href="#type-shape" xlink:href="#type-shape" fill="none"
+         stroke="url(#ts-face)" stroke-width="9.10179640718563"/>
+  </g>
+</svg>

@@ -113,9 +113,9 @@ KWXAPP_API int kwxApp_Initialize(int argc, char **argv) {
   }
 
 #ifdef _WIN32
-  // Activate this DLL's embedded manifest (resource ID 2 = RT_MANIFEST)
-  // so that Common Controls v6 visual styles work when loaded by a script
-  // host (Deno) whose EXE does not have a manifest.
+  // Activate this module's embedded manifest (resource ID 2 = RT_MANIFEST)
+  // so that Common Controls v6 visual styles work even when the host EXE's
+  // manifest cannot be relied on.
   if (g_actCtx == INVALID_HANDLE_VALUE) {
     HMODULE hModule = nullptr;
     GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
