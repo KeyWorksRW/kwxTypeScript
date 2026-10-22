@@ -12,8 +12,9 @@ TypeScript language bindings for [wxWidgets](https://www.wxwidgets.org/) via [kw
 
 ## Requirements
 
-- **`kwx_ts` runtime** — the self-contained TypeScript runner built from this repository. It embeds QuickJS-ng, Sucrase, and kwxFFI, so no system Deno, Node, or npm install is required.
+- **`kwx_ts` runtime** — the self-contained TypeScript runner built from this repository. It embeds QuickJS-ng and kwxFFI and links an SWC-based TypeScript transformer, so no system Deno, Node, or npm install is required at runtime.
 - **CMake 3.30+** (for building the runtime)
+- **A Rust toolchain (`cargo`)** — the TypeScript transformer is compiled from source (see [Building](#building))
 - A supported C/C++ compiler (MSVC, MinGW, GCC, or Clang)
 
 ## Overview
@@ -94,7 +95,7 @@ A complete runnable example is in [`examples/demo.ts`](examples/demo.ts).
 Run it with:
 
 ```powershell
-bin\Release\kwx_ts.exe examples\demo.ts
+bin\Release\kwxts.exe examples\demo.ts
 ```
 
 ## Module Structure
@@ -177,6 +178,9 @@ kwxFFI and wxWidgets are built automatically from source by CMake via `FetchCont
 
 Prerequisites:
 - CMake 3.30+
+- A Rust toolchain (`cargo`, from https://rustup.rs). `kwx_ts` links a TypeScript
+  transformer built from source in `kwx_ts/third_party/swc_transformer`; CMake
+  fetches its crates from crates.io on the first build.
 - A supported C/C++ compiler (see above)
 - Internet access for FetchContent (QuickJS-ng, kwxFFI, and wxWidgets are fetched automatically)
 
@@ -185,7 +189,7 @@ Prerequisites:
 cmake --preset ninja-multi
 cmake --build build --config Release --target kwx_ts
 # Run the demo with the runtime built in the same configure step
-bin\Release\kwx_ts.exe examples\demo.ts
+bin\Release\kwxts.exe examples\demo.ts
 ```
 
 ## License

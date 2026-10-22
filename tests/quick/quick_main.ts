@@ -1,7 +1,7 @@
 // Quick test entry point.
 //
 // Run from the repository root:
-//   bin\Release\kwx_ts.exe tests\quick\quick_main.ts
+//   bin\Release\kwxts.exe tests\quick\quick_main.ts
 //
 // The frame is created hidden by quick_mainframe.ts and explicitly shown here.
 // Closing the window (title-bar close button) is the only way to exit.

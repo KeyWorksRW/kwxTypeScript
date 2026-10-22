@@ -2,7 +2,7 @@
 //
 // Publishes `globalThis.kwxHost` (the native binding bridge), installs
 // `console` and `TextEncoder`, and provides the CommonJS-style module loader
-// that transpiles TypeScript with the embedded Sucrase bundle.
+// that transpiles TypeScript with the statically linked SWC transformer.
 //
 // Everything here runs on top of the object created in quickjs_host.cpp:
 // `kwxHost.__kwx_resolve_symbol` returns a thunk for one statically linked
@@ -109,31 +109,26 @@
     globalThis.TextEncoder = TextEncoder;
 
     // ---------------------------------------------------------- transpilation
-    // Sucrase is embedded but loaded lazily on the first transpile; every module
-    // that is not already plain CommonJS goes through it with the `typescript`
-    // and `imports` transforms enabled. TypeScript transpiles are cached on disk
-    // by the host, so an unchanged module can skip Sucrase entirely.
+    // TypeScript is lowered to CommonJS by the SWC transformer linked into the
+    // executable (native.__kwx_swc_transpile) — no embedded JavaScript
+    // transpiler is loaded or evaluated. The host caches transpiles on disk, so
+    // an unchanged module never reaches the transformer at all.
+    var kwxSwcTransformSeen = false;
+
     function kwxTranspile(source, filePath) {
-        if (!native.__kwx_ensure_sucrase()) {
-            throw new Error("kwx_ts: the embedded Sucrase bundle failed to load");
-        }
-        var sucrase = globalThis.__kwx_sucrase;
-        if (!sucrase || typeof sucrase.transform !== "function") {
-            throw new Error("kwx_ts: the embedded Sucrase bundle is not loaded");
+        if (!kwxSwcTransformSeen) {
+            kwxSwcTransformSeen = true;
+            kwxTrace("swc-transform-first:" + filePath);
         }
         kwxTrace("transpile-begin:" + filePath);
-        var transformed = sucrase.transform(source, {
-            transforms: ["typescript", "imports"],
-            disableESTransforms: true,
-            filePath: filePath
-        }).code;
+        var transformed = native.__kwx_swc_transpile(source, filePath);
         kwxTrace("transpile-end:" + filePath);
         return transformed;
     }
 
     // Fast path: a .js/.cjs module with no import/export tokens is already valid
-    // CommonJS, so skip Sucrase entirely. Everything else (including every .ts
-    // file) is transpiled.
+    // CommonJS, so skip the transformer entirely. Everything else (including
+    // every .ts file) is transpiled.
     function kwxNeedsTranspile(filePath, source) {
         if (!/\.(c?js)$/i.test(filePath)) {
             return true;

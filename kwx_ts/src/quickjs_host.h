@@ -59,11 +59,6 @@ void kwx_trace_mark(const char *label);
 // is always a no-op. Called as the first statement of main().
 void kwx_trace_process_start();
 
-// Evaluate the embedded Sucrase bytecode on demand, exactly once. Returns false
-// before the runtime is initialized or when the bytecode fails to evaluate; the
-// eager `sucrase-bundle-evaluated` trace mark is emitted here on first success.
-bool kwx_runtime_ensure_sucrase();
-
 // If the pending exception is the platform exit() sentinel, consume it, record
 // its exit code, and return true. Otherwise leave the exception pending and
 // return false; the caller must then report it.

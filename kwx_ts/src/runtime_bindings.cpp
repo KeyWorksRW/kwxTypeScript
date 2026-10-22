@@ -41,6 +41,20 @@
 #include "kwx_js_marshal.h"
 #include "quickjs_host.h"
 
+/* TypeScript -> CommonJS transformer, built from kwx_ts/third_party/
+ * swc_transformer as a Rust `staticlib` and linked into this executable (see
+ * CMakeLists.txt). It needs no runtime loading: the first transpile calls
+ * straight into the linked code. kwx_swc_transform returns a NUL-terminated
+ * buffer owned by the caller (release it with kwx_swc_free) or NULL on
+ * failure. */
+extern "C" {
+const char *kwx_swc_version(void);
+char *kwx_swc_transform(const char *source, const char *file_name,
+                        std::size_t *out_len);
+const char *kwx_swc_last_error(void);
+void kwx_swc_free(char *ptr);
+}
+
 /* QuickJS bytecode for runtime/kwx_runtime.js, generated at build time by qjsc
  * (see CMakeLists.txt) and compiled as C. The bytecode is a small script that
  * publishes the CommonJS factory on globalThis, so the module body itself is
@@ -50,10 +64,6 @@ extern const std::uint32_t kwx_runtime_bytecode_size;
 
 extern const std::uint8_t kwx_platform_bytecode[];
 extern const std::uint32_t kwx_platform_bytecode_size;
-
-/* Sucrase bytecode size, declared here so the transpile-cache source hash can
- * mix it in: a Sucrase upgrade changes the size and invalidates every entry. */
-extern const std::uint32_t kwx_sucrase_bytecode_size;
 
 namespace {
 
@@ -472,18 +482,21 @@ KwxFnv1a64(std::uint64_t hash, const std::uint8_t *bytes, std::size_t length) {
   return hash;
 }
 
-// 64-bit FNV-1a over (Sucrase bytecode size, source bytes) as 16 lowercase hex
-// chars. Mixing in the bytecode size makes a Sucrase upgrade invalidate every
-// cached entry without a separate version bump.
+// 64-bit FNV-1a over (transformer version, source bytes) as 16 lowercase hex
+// chars. The version string is produced by the linked SWC static library, so
+// rebuilding against a different swc_core — or changing the transform pipeline
+// — invalidates every cached entry without a separate version bump.
 [[nodiscard]] std::string KwxSourceHash(const std::string &source) {
   std::uint64_t hash = KWX_FNV_OFFSET_BASIS;
-  const std::uint32_t version = kwx_sucrase_bytecode_size;
-  const std::uint8_t version_bytes[4] = {
-      static_cast<std::uint8_t>(version & 0xFFU),
-      static_cast<std::uint8_t>((version >> 8U) & 0xFFU),
-      static_cast<std::uint8_t>((version >> 16U) & 0xFFU),
-      static_cast<std::uint8_t>((version >> 24U) & 0xFFU)};
-  hash = KwxFnv1a64(hash, version_bytes, 4U);
+
+  const char *version = kwx_swc_version();
+  if (version != nullptr) {
+    const std::string_view version_text(version);
+    hash = KwxFnv1a64(hash,
+                      std::bit_cast<const std::uint8_t *>(version_text.data()),
+                      version_text.size());
+  }
+
   hash = KwxFnv1a64(hash, std::bit_cast<const std::uint8_t *>(source.data()),
                     source.size());
 
@@ -589,12 +602,39 @@ KwxFnv1a64(std::uint64_t hash, const std::uint8_t *bytes, std::size_t length) {
   return true;
 }
 
-// __kwx_ensure_sucrase() — true once the embedded Sucrase bytecode is loaded.
-JSValue KwxJsEnsureSucrase(JSContext *ctx,
-                           [[maybe_unused]] JSValueConst this_val,
-                           [[maybe_unused]] int argc,
-                           [[maybe_unused]] JSValueConst *argv) {
-  return JS_NewBool(ctx, kwx_runtime_ensure_sucrase());
+// __kwx_swc_transpile(source, filePath) — lower one TypeScript module to
+// CommonJS with the SWC transformer linked into the executable. Throws a JS
+// error carrying the transformer diagnostic when the module does not parse.
+JSValue KwxJsSwcTransform(JSContext *ctx,
+                          [[maybe_unused]] JSValueConst this_val, int argc,
+                          JSValueConst *argv) {
+  if (argc < 2) {
+    return JS_ThrowTypeError(ctx,
+                             "__kwx_swc_transpile expects (source, filePath)");
+  }
+
+  std::string source;
+  std::string file_path;
+  if (!KwxArgToString(ctx, argv[0], source) ||
+      !KwxArgToString(ctx, argv[1], file_path)) {
+    return JS_ThrowTypeError(
+        ctx, "__kwx_swc_transpile: source and filePath must be strings");
+  }
+
+  std::size_t length = 0;
+  char *code = kwx_swc_transform(source.c_str(), file_path.c_str(), &length);
+  if (code == nullptr) {
+    const char *message = kwx_swc_last_error();
+    const std::string detail =
+        (message != nullptr && message[0] != '\0')
+            ? std::string(message)
+            : std::string("the TypeScript transformer failed");
+    return JS_ThrowInternalError(ctx, "kwx_ts: %s", detail.c_str());
+  }
+
+  JSValue result = JS_NewStringLen(ctx, code, length);
+  kwx_swc_free(code);
+  return result;
 }
 
 // __kwx_transpile_cache_get(source, filePath) — cached transpiled code, or
@@ -633,7 +673,7 @@ JSValue KwxJsTranspileCacheGet(JSContext *ctx,
     return JS_NULL;
   }
 
-  // Header: "KWC1 <hash> <length>" with single spaces. Parsed by hand rather
+  // Header: "KWC2 <hash> <length>" with single spaces. Parsed by hand rather
   // than via <sstream>, whose iostream machinery is large and unnecessary here.
   const std::string header = contents.substr(0, newline);
   const std::size_t first_space = header.find(' ');
@@ -647,7 +687,7 @@ JSValue KwxJsTranspileCacheGet(JSContext *ctx,
   const std::string hash_token =
       header.substr(first_space + 1U, second_space - first_space - 1U);
   const std::string length_token = header.substr(second_space + 1U);
-  if (version_token != "KWC1" || hash_token != KwxSourceHash(source) ||
+  if (version_token != "KWC2" || hash_token != KwxSourceHash(source) ||
       length_token != std::to_string(source.size())) {
     return JS_NULL;
   }
@@ -678,7 +718,7 @@ JSValue KwxJsTranspileCachePut(JSContext *ctx,
     return JS_UNDEFINED;
   }
 
-  std::string payload = "KWC1 " + KwxSourceHash(source) + ' ' +
+  std::string payload = "KWC2 " + KwxSourceHash(source) + ' ' +
                         std::to_string(source.size()) + '\n';
   payload += code;
 
@@ -868,8 +908,8 @@ void kwx_runtime_register_helpers(JSContext *ctx, JSValue native_object) {
                                     "__kwx_get_embedded_factory", 1));
 
   JS_SetPropertyStr(
-      ctx, native_object, "__kwx_ensure_sucrase",
-      JS_NewCFunction(ctx, KwxJsEnsureSucrase, "__kwx_ensure_sucrase", 0));
+      ctx, native_object, "__kwx_swc_transpile",
+      JS_NewCFunction(ctx, KwxJsSwcTransform, "__kwx_swc_transpile", 2));
   JS_SetPropertyStr(ctx, native_object, "__kwx_transpile_cache_get",
                     JS_NewCFunction(ctx, KwxJsTranspileCacheGet,
                                     "__kwx_transpile_cache_get", 2));

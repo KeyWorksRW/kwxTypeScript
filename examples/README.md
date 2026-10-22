@@ -7,7 +7,7 @@
    cmake --preset ninja-multi
    cmake --build build --config Release --target kwx_ts
    ```
-   This produces `bin/Release/kwx_ts.exe` (Windows) or `bin/Release/kwx_ts`
+   This produces `bin/Release/kwxts.exe` (Windows) or `bin/Release/kwxts`
    (macOS/Linux). QuickJS-ng, kwxFFI, and wxWidgets are fetched and linked
    statically; no shared library needs to be copied.
 
@@ -16,7 +16,7 @@
 From the repository root:
 
 ```sh
-bin/Release/kwx_ts examples/demo.ts
+bin/Release/kwxts examples/demo.ts
 ```
 
 `demo.ts` is both the module and the entry point — it ends with a `main()` call,

@@ -33,12 +33,6 @@
 extern const char kwx_host_runtime[];
 extern const unsigned int kwx_host_runtime_len;
 
-/* QuickJS bytecode for third_party/sucrase.bundle.js, generated at build time
- * by qjsc (see CMakeLists.txt). Loaded lazily by kwx_runtime_ensure_sucrase()
- * on the first transpile, so plain .js entries never pay for it. */
-extern const std::uint8_t kwx_sucrase_bytecode[];
-extern const std::uint32_t kwx_sucrase_bytecode_size;
-
 namespace {
 constexpr std::int64_t KWX_MAX_STACK_SIZE = 8LL * 1024LL * 1024LL;
 
@@ -47,10 +41,6 @@ JSContext *kwx_g_context = nullptr;
 std::vector<std::string> kwx_g_args;
 int kwx_g_exit_code = 0;
 bool kwx_g_exit_requested = false;
-// Set once the Sucrase bytecode has been evaluated in the current context.
-// Reset by shutdown so a re-initialized runtime reloads it into the new
-// context.
-bool kwx_g_sucrase_loaded = false;
 
 void KwxTraceMark(const char *label);
 
@@ -226,26 +216,6 @@ void kwx_trace_process_start() {
 #endif
 }
 
-bool kwx_runtime_ensure_sucrase() {
-  if (kwx_g_sucrase_loaded) {
-    return true;
-  }
-
-  if (kwx_g_context == nullptr) {
-    return false;
-  }
-
-  const bool sucrase_ok = kwx_evaluate_bytecode(
-      kwx_sucrase_bytecode, kwx_sucrase_bytecode_size, "<kwx_sucrase_bundle>");
-  KwxTraceMark("sucrase-bundle-evaluated");
-  if (!sucrase_ok) {
-    return false;
-  }
-
-  kwx_g_sucrase_loaded = true;
-  return true;
-}
-
 bool kwx_runtime_init() {
   if (kwx_g_context != nullptr) {
     return true;
@@ -308,15 +278,10 @@ bool kwx_runtime_init() {
     return false;
   }
 
-  // Sucrase (third_party/sucrase.bundle.js) is NOT evaluated here: it is loaded
-  // lazily on the first transpile via kwx_runtime_ensure_sucrase(), so plain
-  // .js entries never pay for it.
   return true;
 }
 
 void kwx_runtime_shutdown() {
-  kwx_g_sucrase_loaded = false;
-
   if (kwx_g_context != nullptr) {
     // Release the callback slots while the context is still alive.
     kwx_host_release_callbacks(kwx_g_context);

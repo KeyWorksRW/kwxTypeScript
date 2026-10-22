@@ -5,7 +5,7 @@
 // set it as the top window, run the event loop, and shut down.
 //
 // Run from kwx_ts:
-//   build/Debug/kwx_ts.exe tests/hello_frame.ts
+//   build/Debug/kwxts.exe tests/hello_frame.ts
 //
 // The close handler ends the loop; a one-shot timer closes the frame after a
 // short delay so the test also completes unattended.

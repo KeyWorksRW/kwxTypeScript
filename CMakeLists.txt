@@ -204,11 +204,11 @@ kwx_ts_embed_file(
 )
 
 # ###################### Precompiled runtime bytecode #######################
-# The large assets (the Sucrase transpiler, the virtual "kwx" module, and the
-# kwx/platform module) are compiled to QuickJS bytecode at build time by qjsc,
-# taken from the same QuickJS-ng source as the runtime. JS_ReadObject +
-# JS_EvalFunction then load them ~20x faster than parsing the source on every
-# launch, and the executable carries no source text for any asset.
+# The two virtual modules (the "kwx" binding corpus and kwx/platform) are
+# compiled to QuickJS bytecode at build time by qjsc, taken from the same
+# QuickJS-ng source as the runtime. JS_ReadObject + JS_EvalFunction then load
+# them ~20x faster than parsing the source on every launch, and the executable
+# carries no source text for either asset.
 #
 # Bytecode is tied to the QuickJS version and build, so it is generated per
 # configuration: $<CONFIG> keeps Debug and Release artifacts apart.
@@ -283,21 +283,129 @@ add_custom_command(
     VERBATIM
 )
 
-add_custom_command(
-    OUTPUT ${KWX_BYTECODE_DIR}/sucrase_bytecode.c
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
-    COMMAND $<TARGET_FILE:qjsc>
-        -C -s
-        -N kwx_sucrase_bytecode
-        -n sucrase.bundle.js
-        -o ${KWX_BYTECODE_DIR}/sucrase_bytecode.c
-        ${KWX_TS_DIR}/third_party/sucrase.bundle.js
-    DEPENDS
-        ${KWX_TS_DIR}/third_party/sucrase.bundle.js
-        $<TARGET_FILE:qjsc>
-    COMMENT "Compiling sucrase.bundle.js to QuickJS bytecode"
-    VERBATIM
+# ###################### TypeScript transformer (Rust / SWC) #######################
+# TypeScript is lowered to CommonJS by kwx_ts/third_party/swc_transformer, a Rust
+# crate built as a `staticlib` and linked straight into the executable. That
+# replaces the embedded Sucrase bundle: there is no transpiler bytecode to load
+# and no JavaScript parser to evaluate before the first module can run.
+#
+# The crate is compiled from the sources Cargo fetches out of crates.io. The
+# repository ships no prebuilt binary, so a Rust toolchain is a build
+# requirement; the version of swc_core that gets built is pinned by Cargo.lock
+# and its version string is mixed into the transpile-cache key.
+find_program(CARGO_EXECUTABLE cargo
+    HINTS
+        "$ENV{CARGO_HOME}/bin"
+        "$ENV{USERPROFILE}/.cargo/bin"
+        "$ENV{HOME}/.cargo/bin"
 )
+if(NOT CARGO_EXECUTABLE)
+    message(FATAL_ERROR
+        "cargo was not found, but kwx_ts needs it to build the Rust SWC "
+        "transformer in kwx_ts/third_party/swc_transformer. Install a Rust "
+        "toolchain from https://rustup.rs and re-run CMake.")
+endif()
+message(STATUS "Using cargo: ${CARGO_EXECUTABLE}")
+
+set(KWX_SWC_DIR ${KWX_TS_DIR}/third_party/swc_transformer)
+# Cargo writes into the build tree so the source tree stays clean and the target
+# directory is discarded along with the rest of the build output.
+set(KWX_SWC_TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR}/swc-transformer)
+
+# The Rust library must match the C++ toolchain's ABI. On Windows the two are
+# independent choices (MSVC / clang-cl on one side, a MinGW-style clang on the
+# other), so the triple is derived from the compiler rather than from the host.
+# On macOS a Universal build needs one slice per architecture.
+set(KWX_SWC_RUST_TRIPLES "")
+if(WIN32)
+    if(MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
+        if(CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
+            list(APPEND KWX_SWC_RUST_TRIPLES aarch64-pc-windows-msvc)
+        else()
+            list(APPEND KWX_SWC_RUST_TRIPLES x86_64-pc-windows-msvc)
+        endif()
+    else()
+        if(CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
+            list(APPEND KWX_SWC_RUST_TRIPLES aarch64-pc-windows-gnullvm)
+        else()
+            list(APPEND KWX_SWC_RUST_TRIPLES x86_64-pc-windows-gnu)
+        endif()
+    endif()
+elseif(APPLE)
+    foreach(arch ${CMAKE_OSX_ARCHITECTURES})
+        if(arch STREQUAL "arm64")
+            list(APPEND KWX_SWC_RUST_TRIPLES aarch64-apple-darwin)
+        else()
+            list(APPEND KWX_SWC_RUST_TRIPLES ${arch}-apple-darwin)
+        endif()
+    endforeach()
+    if(NOT KWX_SWC_RUST_TRIPLES)
+        list(APPEND KWX_SWC_RUST_TRIPLES ${CMAKE_SYSTEM_PROCESSOR}-apple-darwin)
+    endif()
+else()
+    # Linux and other Unix: cargo's default (host) triple is the right one. The
+    # literal "host" keeps the list non-empty, which a bare "" would not.
+    list(APPEND KWX_SWC_RUST_TRIPLES host)
+endif()
+
+file(GLOB_RECURSE KWX_SWC_RUST_SOURCES CONFIGURE_DEPENDS ${KWX_SWC_DIR}/src/*.rs)
+
+# One cargo invocation per slice. The crate is always built in release mode,
+# whatever the executable's configuration: the transformer runs on every module
+# load and a debug build of SWC is an order of magnitude slower.
+set(KWX_SWC_COMMANDS "")
+set(KWX_SWC_ARTIFACTS "")
+foreach(triple ${KWX_SWC_RUST_TRIPLES})
+    if(triple STREQUAL "host")
+        set(target_arguments "")
+        set(artifact_directory ${KWX_SWC_TARGET_DIR}/release)
+    else()
+        set(target_arguments --target ${triple})
+        set(artifact_directory ${KWX_SWC_TARGET_DIR}/${triple}/release)
+    endif()
+
+    list(APPEND KWX_SWC_COMMANDS
+        COMMAND ${CMAKE_COMMAND} -E env CARGO_TARGET_DIR=${KWX_SWC_TARGET_DIR}
+            ${CARGO_EXECUTABLE} build --release ${target_arguments}
+            --manifest-path ${KWX_SWC_DIR}/Cargo.toml
+    )
+    list(APPEND KWX_SWC_ARTIFACTS
+        ${artifact_directory}/${CMAKE_STATIC_LIBRARY_PREFIX}kwx_swc_transformer${CMAKE_STATIC_LIBRARY_SUFFIX}
+    )
+endforeach()
+
+list(LENGTH KWX_SWC_ARTIFACTS kwx_swc_slice_count)
+if(kwx_swc_slice_count GREATER 1)
+    # Universal build: merge the per-architecture archives into one.
+    set(KWX_SWC_LIBRARY
+        ${KWX_SWC_TARGET_DIR}/universal/${CMAKE_STATIC_LIBRARY_PREFIX}kwx_swc_transformer${CMAKE_STATIC_LIBRARY_SUFFIX})
+    list(APPEND KWX_SWC_COMMANDS
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_SWC_TARGET_DIR}/universal
+        COMMAND lipo -create -output ${KWX_SWC_LIBRARY} ${KWX_SWC_ARTIFACTS}
+    )
+else()
+    list(GET KWX_SWC_ARTIFACTS 0 KWX_SWC_LIBRARY)
+endif()
+
+add_custom_command(
+    OUTPUT ${KWX_SWC_LIBRARY}
+    ${KWX_SWC_COMMANDS}
+    DEPENDS
+        ${KWX_SWC_RUST_SOURCES}
+        ${KWX_SWC_DIR}/Cargo.toml
+        ${KWX_SWC_DIR}/Cargo.lock
+    COMMENT "Building the SWC TypeScript transformer (cargo build --release)"
+    VERBATIM
+    USES_TERMINAL
+)
+
+add_custom_target(kwx_swc_transformer_build DEPENDS ${KWX_SWC_LIBRARY})
+
+add_library(kwx_swc_transformer STATIC IMPORTED GLOBAL)
+set_target_properties(kwx_swc_transformer PROPERTIES
+    IMPORTED_LOCATION ${KWX_SWC_LIBRARY}
+)
+add_dependencies(kwx_swc_transformer kwx_swc_transformer_build)
 
 # ###################### kwx_ts executable #######################
 add_executable(kwx_ts
@@ -309,7 +417,6 @@ add_executable(kwx_ts
     ${KWX_HOST_RUNTIME_CPP}
     ${KWX_BYTECODE_DIR}/kwx_runtime_bytecode.c
     ${KWX_BYTECODE_DIR}/kwx_platform_bytecode.c
-    ${KWX_BYTECODE_DIR}/sucrase_bytecode.c
 )
 
 # The generated header is included both by the generated source and by
@@ -321,7 +428,23 @@ target_include_directories(kwx_ts PRIVATE
 
 # kwxFFI PUBLIC-links every wxWidgets component, so linking it transitively
 # supplies the wxWidgets libraries, headers and platform frameworks.
-target_link_libraries(kwx_ts PRIVATE qjs kwxFFI)
+target_link_libraries(kwx_ts PRIVATE qjs kwxFFI kwx_swc_transformer)
+
+# A Rust `staticlib` carries its own copy of std, and that copy references the
+# platform libraries rustc would normally link for a Rust executable. MSVC does
+# not read those linker directives out of a static library, so they are listed
+# explicitly here. Over-linking these system libraries is harmless.
+if(WIN32)
+    target_link_libraries(kwx_ts PRIVATE
+        advapi32 userenv ws2_32 ntdll bcrypt ole32 shell32
+    )
+elseif(APPLE)
+    target_link_libraries(kwx_ts PRIVATE
+        "-framework Security" "-framework CoreFoundation"
+    )
+else()
+    target_link_libraries(kwx_ts PRIVATE dl pthread m)
+endif()
 
 # Debug info produced by the static dependencies ends up in the Release
 # executable even though none of this project's translation units is built with
@@ -375,8 +498,8 @@ if(WIN32)
 endif()
 
 # ###################### Native stack size #######################
-# The embedded Sucrase transpiler recurses during parsing, and QuickJS is
-# configured with an 8 MiB JS stack guard (JS_SetMaxStackSize). The OS main
+# The SWC parser, the TypeScript transforms and QuickJS all recurse, and QuickJS
+# is configured with an 8 MiB JS stack guard (JS_SetMaxStackSize). The OS main
 # thread stack must therefore be at least as large, or the OS guard fires as a
 # hard STATUS_STACK_OVERFLOW before QuickJS can raise a catchable RangeError.
 # The MSVC default is 1 MiB, which is far too small.
@@ -390,29 +513,29 @@ if(WIN32)
     endif()
 endif()
 
-# Windows produces kwx_ts.exe; macOS/Linux produce kwx_ts. The executable lands
+# Windows produces kwxts.exe; macOS/Linux produce kwxts. The executable lands
 # in the repository-level bin/<Config> (see CMAKE_RUNTIME_OUTPUT_DIRECTORY
 # above), alongside kwxgen and kwx_binding_gen.
-set_target_properties(kwx_ts PROPERTIES OUTPUT_NAME kwx_ts)
+set_target_properties(kwx_ts PROPERTIES OUTPUT_NAME kwxts)
 
 # Platform-specific compile definitions collected above (empty where unused).
 target_compile_definitions(kwx_ts PRIVATE ${KWX_TS_PLATFORM_DEFINITIONS})
 
 # ###################### Packaging Instructions #######################
-# install(TARGETS) places kwx_ts in bin/, so the NSIS registry entries and the
-# installed icon reference bin/kwx_ts.exe.
+# install(TARGETS) places kwxts in bin/, so the NSIS registry entries and the
+# installed icon reference bin/kwxts.exe.
 set(CPACK_PACKAGE_VENDOR "KeyWorks Software")
 set(CPACK_VERBATIM_VARIABLES YES)
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_LIST_DIR}/LICENSE)
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "kwx_ts")
-set(CPACK_PACKAGE_EXECUTABLES "kwx_ts" "kwx_ts")
-set(CPACK_CREATE_DESKTOP_LINKS kwx_ts)
+set(CPACK_PACKAGE_EXECUTABLES "kwxts" "kwx_ts")
+set(CPACK_CREATE_DESKTOP_LINKS kwxts)
 
 set(CPACK_NSIS_MUI_ICON ${CMAKE_CURRENT_LIST_DIR}/res/kwx_ts_logo.ico)
 set(CPACK_NSIS_MUI_UNIICO ${CMAKE_CURRENT_LIST_DIR}/res/kwx_ts_logo.ico)
-set(CPACK_NSIS_INSTALLED_ICON_NAME bin/kwx_ts.exe)
+set(CPACK_NSIS_INSTALLED_ICON_NAME bin/kwxts.exe)
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL YES)
-set(CPACK_NSIS_MUI_FINISHPAGE_RUN "kwx_ts.exe")
+set(CPACK_NSIS_MUI_FINISHPAGE_RUN "kwxts.exe")
 set(CPACK_NSIS_BRANDING_TEXT "KeyWorks Software")
 set(CPACK_NSIS_BRANDING_TEXT_TRIM_POSITION CENTER)
 set(CPACK_NSIS_MODIFY_PATH YES)
@@ -438,7 +561,7 @@ set(CPACK_DEBIAN_PACKAGE_SUMMARY "kwx_ts TypeScript runtime for wxWidgets")
 # Use the build number to determine if the package is newer than the previous build.
 set(CPACK_DEBIAN_PACKAGE_RELEASE ${PROJECT_VERSION_BUILD})
 
-# Registers .kwxts files with kwx_ts.exe in the NSIS installer.
+# Registers .kwxts files with kwxts.exe in the NSIS installer.
 configure_file("${CMAKE_CURRENT_LIST_DIR}/nsis_options.cmake.in"
     "${PROJECT_BINARY_DIR}/nsis_options.cmake"
     @ONLY)

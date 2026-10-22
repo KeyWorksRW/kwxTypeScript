@@ -1,9 +1,10 @@
 # kwx_ts
 
 `kwx_ts` is a standalone, self-contained TypeScript runner for the kwxFFI
-wxWidgets bindings. It embeds QuickJS-ng (JavaScript engine), Sucrase
-(TypeScript transpiler), and a statically linked kwxFFI/wxWidgets, so a single
-executable can run a `.ts` entry file that drives a native wxWidgets GUI.
+wxWidgets bindings. It links QuickJS-ng (JavaScript engine), an SWC-based
+TypeScript-to-CommonJS transformer written in Rust, and a statically linked
+kwxFFI/wxWidgets, so a single executable can run a `.ts` entry file that drives
+a native wxWidgets GUI.
 
 There is no dependency on a system Deno, Node, or npm install at runtime. The
 only dynamic libraries the executable loads are those provided by the operating
@@ -12,7 +13,7 @@ system.
 ## Usage
 
 ```
-kwx_ts <entry.ts> [args...]
+kwxts <entry.ts> [args...]
 ```
 
 - `entry.ts` — the entry module. Relative and absolute filesystem paths are
@@ -22,13 +23,13 @@ kwx_ts <entry.ts> [args...]
 Example (Windows, Release build, run from the repository root):
 
 ```
-bin\Release\kwx_ts.exe kwx_ts\examples\hello.ts
+bin\Release\kwxts.exe kwx_ts\examples\hello.ts
 ```
 
 Example (macOS / Linux, Release build):
 
 ```
-bin/Release/kwx_ts kwx_ts/examples/hello.ts
+bin/Release/kwxts kwx_ts/examples/hello.ts
 ```
 
 Use the Release binary when startup time matters: a Debug build is roughly 1.6x
@@ -52,7 +53,7 @@ printed and stdout is unaffected.
 
 ```
 set KWX_TS_TRACE=1
-bin\Release\kwx_ts.exe kwx_ts\examples\hello.ts
+bin\Release\kwxts.exe kwx_ts\examples\hello.ts
 ```
 
 ```
@@ -81,10 +82,11 @@ module: `entry-resolved`, `module-read`, `transpile-cache-hit` /
 demand so far). JavaScript can add its own mark with
 `kwxHost.__kwx_trace(label)`.
 
-Sucrase is no longer loaded during `kwx_runtime_init()`. It loads lazily on the
-**first transpile**, so a plain `.js` entry that never needs transpiling never
-pays the bundle cost; `sucrase-bundle-evaluated` is emitted at that point
-instead of during initialization.
+TypeScript is lowered by the SWC transformer linked into the executable, so there
+is no JavaScript transpiler to evaluate and no startup phase is deferred.
+`swc-transform-first:<path>` is emitted the first time a module reaches the
+transformer, which makes it easy to see in a trace whether the work happened at
+all.
 
 FFI thunks are registered lazily. Initialization installs only a name → thunk
 resolver: a thunk is created the first time the corpus (or a script) reads
@@ -100,9 +102,9 @@ table accessors — instead of the previous ~1,580.
 ### Transpile cache
 
 TypeScript transpiles are cached on disk so a repeat run of an unchanged module
-skips both the transpile and the Sucrase load. A cache hit is reported with the
+skips the transform entirely. A cache hit is reported with the
 `transpile-cache-hit` mark and a miss with `transpile-cache-miss`; a hit never
-touches Sucrase at all.
+reaches the transformer.
 
 - The cache is **enabled by default**.
 - Set `KWX_TS_NO_CACHE` to any non-empty value to disable it; the runtime then
@@ -110,15 +112,15 @@ touches Sucrase at all.
 - The cache directory is `KWX_TS_CACHE_DIR` when set; otherwise
   `%LOCALAPPDATA%\kwx_ts\transpile` on Windows, `$XDG_CACHE_HOME/kwx_ts/transpile`
   when `XDG_CACHE_HOME` is set, else `$HOME/.cache/kwx_ts/transpile`.
-- A source edit always produces a cache miss. The key also includes the embedded
-  Sucrase bytecode size, so rebuilding the bundle invalidates every entry.
+- A source edit always produces a cache miss. The key also includes the
+  transformer version string — the `swc_core` version plus a pipeline revision —
+  so upgrading or rebuilding SWC invalidates every entry.
 - Sources larger than 8 MiB are never cached.
 
-The Sucrase bundle and the embedded `kwx` corpus are precompiled to QuickJS
-bytecode at build time (see `CMakeLists.txt`), so an
-`<embedded:…>` module skips `transpile-*`, `module-compiled` and
-`module-factory-built`; `embedded-bytecode-loaded` marks the
-`JS_ReadObject` + `JS_EvalFunction` step instead.
+The embedded `kwx` corpus is precompiled to QuickJS bytecode at build time (see
+`CMakeLists.txt`), so an `<embedded:…>` module skips `transpile-*`,
+`module-compiled` and `module-factory-built`; `embedded-bytecode-loaded` marks
+the `JS_ReadObject` + `JS_EvalFunction` step instead.
 
 ## Platform surface (`kwx/platform`)
 
@@ -146,7 +148,7 @@ Not available: file and environment APIs, timers (`setTimeout` /
 
 ## Module resolution
 
-`kwx_ts` uses a CommonJS-style loader with a Sucrase transpile step:
+`kwx_ts` uses a CommonJS-style loader with a native transpile step:
 
 - Specifiers are **relative or absolute filesystem paths**. There is no npm
   resolution and no remote URL support.
@@ -155,8 +157,10 @@ Not available: file and environment APIs, timers (`setTimeout` /
   extension list.
 - `.js` / `.cjs` files that contain no `import` / `export` tokens are loaded
   directly (fast path). Everything else — including every `.ts` file — is
-  transpiled with the embedded Sucrase bundle using the `typescript` and
-  `imports` transforms.
+  lowered to CommonJS by the linked SWC transformer: types are stripped,
+  `enum` / `namespace` / `const enum` are lowered, legacy decorators
+  (`experimentalDecorators`) are applied, and ESM is rewritten to
+  `require` / `exports` with inlined interop helpers.
 - The bare specifiers `"kwx"`, `"kwxTypeScript"`, and `"@kwx"` resolve to the
   **embedded binding bundle** rather than a file on disk.
 - The bare specifier `"kwx/platform"` resolves to the embedded platform module.
@@ -242,7 +246,7 @@ cmake --preset ninja-multi
 cmake --build build --config Debug --target kwx_ts
 ```
 
-The executable is produced at `bin\Debug\kwx_ts.exe`.
+The executable is produced at `bin\Debug\kwxts.exe`.
 
 ### macOS Universal (`x86_64` + `arm64`)
 
@@ -251,7 +255,7 @@ Requires the Xcode command-line tools.
 ```
 cmake --preset macos-universal
 cmake --build build-macos --config Debug --target kwx_ts
-lipo -info bin/Debug/kwx_ts
+lipo -info bin/Debug/kwxts
 ```
 
 `lipo -info` should report the binary as containing both `x86_64` and `arm64`

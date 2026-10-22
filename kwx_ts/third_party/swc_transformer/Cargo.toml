@@ -1,0 +1,38 @@
+[package]
+name = "kwx_swc_transformer"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "TypeScript -> CommonJS transformer for the kwx_ts runtime, built on SWC."
+
+[lib]
+name = "kwx_swc_transformer"
+crate-type = ["staticlib", "rlib"]
+
+# Standalone crate: never absorbed into an enclosing workspace.
+[workspace]
+
+[dependencies]
+swc_core = { version = "=82.1.1", features = [
+    "common",
+    "ecma_ast",
+    "ecma_parser",
+    "ecma_parser_typescript",
+    "ecma_codegen",
+    "ecma_visit",
+    "ecma_transforms",
+    "ecma_transforms_typescript",
+    "ecma_transforms_module",
+    "ecma_transforms_proposal",
+    "ecma_utils",
+    "ecma_helpers_inline",
+] }
+
+[profile.release]
+# The transformer is I/O- and parse-bound, not arithmetic-bound, and the
+# executable is shipped with wxWidgets statically linked: optimising for size
+# shaves several megabytes off the binary without a measurable transpile cost.
+opt-level = "s"
+panic = "unwind"
+codegen-units = 1
+lto = false

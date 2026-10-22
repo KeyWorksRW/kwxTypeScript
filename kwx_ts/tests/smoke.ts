@@ -1,11 +1,11 @@
 // kwx_ts — Phase 5 TypeScript transpilation smoke test.
 //
 // Proves that a `.ts` entry file with a relative `.ts` import is transpiled by
-// the embedded Sucrase bundle and runs. No wxWidgets is involved here, so this
+// the linked SWC transformer and runs. No wxWidgets is involved here, so this
 // test exits 0 without opening a window.
 //
 // Run from kwx_ts:
-//   build/Debug/kwx_ts.exe tests/smoke.ts
+//   build/Debug/kwxts.exe tests/smoke.ts
 
 import {
     areaOfSquare,

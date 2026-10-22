@@ -1,7 +1,7 @@
 // kwx_ts example — minimal wxWidgets GUI driven from TypeScript.
 //
-// Run with the kwx_ts executable (build/Debug/kwx_ts.exe on Windows):
-//   build/Debug/kwx_ts.exe examples/hello.ts
+// Run with the kwxts executable (build/Debug/kwxts.exe on Windows):
+//   build/Debug/kwxts.exe examples/hello.ts
 //
 // Unlike examples/demo.ts this imports from the virtual module "kwx", which is
 // embedded inside the kwx_ts executable — no dist/ bundle and no wx/ sources are

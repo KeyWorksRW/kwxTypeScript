@@ -3,7 +3,7 @@
 // kwx_ts has no special entry convention: it loads the file you pass as a
 // CommonJS-style module, so the `main()` call at the bottom of this file is
 // what starts the application. Run it from the repository root:
-//   bin\Release\kwx_ts.exe examples/demo.ts
+//   bin\Release\kwxts.exe examples/demo.ts
 //
 // Everything imported below comes from the virtual module "kwx", which is
 // embedded in the kwx_ts executable. No dist/ bundle and no kwxFFI DLL are

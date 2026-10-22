@@ -88,7 +88,7 @@ BEGIN
             VALUE "InternalName", "kwx_ts\0"
             VALUE "LegalCopyright", "Copyright (c) " STRYEAR " KeyWorks Software\0"
             VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "kwx_ts.exe\0"
+            VALUE "OriginalFilename", "kwxts.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "kwx_ts\0"
             VALUE "ProductVersion", STRPRODUCTVER "\0"
