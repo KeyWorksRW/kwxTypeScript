@@ -11,6 +11,8 @@ export class wxValidator extends wxEvtHandler {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxValidator_Delete(this._ptr);
   }
 

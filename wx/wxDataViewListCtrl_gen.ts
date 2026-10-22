@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxDataViewListCtrl {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -13,6 +14,18 @@ export class wxDataViewListCtrl {
   /** Returns the underlying native pointer. */
   get ptr(): Pointer {
     return this._ptr;
+  }
+
+  AppendColumn(column: Pointer, variantType: Pointer): boolean {
+    return (lib.symbols.wxDataViewListCtrl_AppendColumn(this._ptr, column, variantType) as number) !== 0;
+  }
+
+  PrependColumn(column: Pointer, variantType: Pointer): boolean {
+    return (lib.symbols.wxDataViewListCtrl_PrependColumn(this._ptr, column, variantType) as number) !== 0;
+  }
+
+  InsertColumn(pos: number, column: Pointer, variantType: Pointer): boolean {
+    return (lib.symbols.wxDataViewListCtrl_InsertColumn(this._ptr, pos, column, variantType) as number) !== 0;
   }
 
   GetStore(): Pointer {
@@ -68,6 +81,7 @@ export class wxDataViewListCtrl {
   }
 
   DeleteItem(row: number): void {
+    if (this._disposed) return;
     lib.symbols.wxDataViewListCtrl_DeleteItem(this._ptr, row);
   }
 

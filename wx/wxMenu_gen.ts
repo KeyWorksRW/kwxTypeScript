@@ -10,6 +10,34 @@ export class wxMenu extends wxEvtHandler {
     return this._ptr;
   }
 
+  GetMenuBar(): Pointer {
+    return lib.symbols.wxMenu_GetMenuBar(this._ptr);
+  }
+
+  AppendSubMenu(submenu: Pointer, text: Pointer, help: Pointer): Pointer {
+    return lib.symbols.wxMenu_AppendSubMenu(this._ptr, submenu, text, help);
+  }
+
+  RemoveItem(id: number): Pointer {
+    return lib.symbols.wxMenu_RemoveItem(this._ptr, id);
+  }
+
+  GetLabel(id: number): Pointer {
+    return lib.symbols.wxMenu_GetLabel(this._ptr, id);
+  }
+
+  GetWindow(): Pointer {
+    return lib.symbols.wxMenu_GetWindow(this._ptr);
+  }
+
+  Detach(): void {
+    lib.symbols.wxMenu_Detach(this._ptr);
+  }
+
+  LockAccels(locked: boolean): void {
+    lib.symbols.wxMenu_LockAccels(locked ? 1 : 0);
+  }
+
   Append(id: number, text: Pointer, help: Pointer, isCheckable: boolean): void {
     lib.symbols.wxMenu_Append(this._ptr, id, text, help, isCheckable ? 1 : 0);
   }

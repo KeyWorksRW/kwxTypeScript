@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxSize {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -16,6 +17,8 @@ export class wxSize {
   }
 
   Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxSize_Delete(this._ptr);
   }
 

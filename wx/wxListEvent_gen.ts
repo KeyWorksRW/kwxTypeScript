@@ -10,6 +10,14 @@ export class wxListEvent extends wxNotifyEvent {
     return this._ptr;
   }
 
+  GetCacheFrom(): number {
+    return lib.symbols.wxListEvent_GetCacheFrom(this._ptr);
+  }
+
+  GetCacheTo(): number {
+    return lib.symbols.wxListEvent_GetCacheTo(this._ptr);
+  }
+
   Cancelled(): boolean {
     return (lib.symbols.wxListEvent_Cancelled(this._ptr) as number) !== 0;
   }

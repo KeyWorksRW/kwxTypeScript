@@ -2,24 +2,20 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxHtmlListBox } from "./wxHtmlListBox_gen.ts";
 
-export class wxSimpleHtmlListBox {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxSimpleHtmlListBox extends wxHtmlListBox {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Clear(): void {
+  override Clear(): void {
     lib.symbols.wxSimpleHtmlListBox_Clear(this._ptr);
   }
 
   DeleteItem(index: number): void {
+    if (this._disposed) return;
     lib.symbols.wxSimpleHtmlListBox_Delete(this._ptr, index);
   }
 
@@ -35,11 +31,11 @@ export class wxSimpleHtmlListBox {
     lib.symbols.wxSimpleHtmlListBox_SetString(this._ptr, index, str);
   }
 
-  GetSelection(): number {
+  override GetSelection(): number {
     return lib.symbols.wxSimpleHtmlListBox_GetSelection(this._ptr);
   }
 
-  SetSelection(index: number): void {
+  override SetSelection(index: number): void {
     lib.symbols.wxSimpleHtmlListBox_SetSelection(this._ptr, index);
   }
 
@@ -63,11 +59,11 @@ export class wxSimpleHtmlListBox {
     return lib.symbols.wxSimpleHtmlListBox_FindString(this._ptr, str, caseSensitive ? 1 : 0);
   }
 
-  GetClientData(index: number): Pointer {
+  GetClientData_1(index: number): Pointer {
     return lib.symbols.wxSimpleHtmlListBox_GetClientData(this._ptr, index);
   }
 
-  SetClientData(index: number, data: Pointer): void {
+  SetClientData_2(index: number, data: Pointer): void {
     lib.symbols.wxSimpleHtmlListBox_SetClientData(this._ptr, index, data);
   }
 
@@ -75,8 +71,8 @@ export class wxSimpleHtmlListBox {
     return (lib.symbols.wxSimpleHtmlListBox_IsEmpty(this._ptr) as number) !== 0;
   }
 
-  GetItemCount(): number {
-    return lib.symbols.wxSimpleHtmlListBox_GetItemCount(this._ptr);
+  override GetItemCount(): bigint {
+    return lib.symbols.wxSimpleHtmlListBox_GetItemCount(this._ptr) as bigint;
   }
 
 }

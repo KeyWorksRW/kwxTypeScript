@@ -10,6 +10,10 @@ export class wxWebView extends wxControl {
     return this._ptr;
   }
 
+  RegisterHandler(handler: Pointer): number {
+    return lib.symbols.wxWebView_RegisterHandler(this._ptr, handler);
+  }
+
   New(parent: Pointer, id: number, url: Pointer, x: number, y: number, width: number, height: number, backend: Pointer, style: number): Pointer {
     return lib.symbols.wxWebView_New(parent, id, url, x, y, width, height, backend, style);
   }

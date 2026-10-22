@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxDataViewItem {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -15,8 +16,14 @@ export class wxDataViewItem {
     return this._ptr;
   }
 
-  DeleteItem(): void {
+  Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxDataViewItem_Delete(this._ptr);
+  }
+
+  [Symbol.dispose](): void {
+    this.Delete();
   }
 
   GetID(): Pointer {

@@ -11,6 +11,8 @@ export class wxPaintDC extends wxWindowDC {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxPaintDC_Delete(this._ptr);
   }
 

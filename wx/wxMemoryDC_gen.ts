@@ -11,6 +11,8 @@ export class wxMemoryDC extends wxDC {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxMemoryDC_Delete(this._ptr);
   }
 

@@ -10,6 +10,22 @@ export class wxMenuBar extends wxEvtHandler {
     return this._ptr;
   }
 
+  GetFrame(): Pointer {
+    return lib.symbols.wxMenuBar_GetFrame(this._ptr);
+  }
+
+  IsAttached(): boolean {
+    return (lib.symbols.wxMenuBar_IsAttached(this._ptr) as number) !== 0;
+  }
+
+  Attach(frame: Pointer): void {
+    lib.symbols.wxMenuBar_Attach(this._ptr, frame);
+  }
+
+  Detach(): void {
+    lib.symbols.wxMenuBar_Detach(this._ptr);
+  }
+
   Append(menu: Pointer, title: Pointer): number {
     return lib.symbols.wxMenuBar_Append(this._ptr, menu, title);
   }

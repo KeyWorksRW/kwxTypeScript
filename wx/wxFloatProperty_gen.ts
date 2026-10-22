@@ -10,6 +10,16 @@ export class wxFloatProperty extends wxPGProperty {
     return this._ptr;
   }
 
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxFloatProperty_Delete(this._ptr);
+  }
+
+  override [Symbol.dispose](): void {
+    this.Delete();
+  }
+
 }
 
 export function createWxFloatProperty(label: Pointer, name: Pointer, value: number): wxFloatProperty | null {

@@ -2,16 +2,11 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxRibbonControl } from "./wxRibbonControl_gen.ts";
 
-export class wxRibbonGallery {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxRibbonGallery extends wxRibbonControl {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
@@ -63,7 +58,7 @@ export class wxRibbonGallery {
     return lib.symbols.wxRibbonGallery_GetItemClientData(this._ptr, item);
   }
 
-  ScrollLines(lines: number): boolean {
+  override ScrollLines(lines: number): boolean {
     return (lib.symbols.wxRibbonGallery_ScrollLines(this._ptr, lines) as number) !== 0;
   }
 
@@ -91,15 +86,15 @@ export class wxRibbonGallery {
     return (lib.symbols.wxRibbonGallery_IsHovered(this._ptr) as number) !== 0;
   }
 
-  IsSizingContinuous(): boolean {
+  override IsSizingContinuous(): boolean {
     return (lib.symbols.wxRibbonGallery_IsSizingContinuous(this._ptr) as number) !== 0;
   }
 
-  SetArtProvider(art: Pointer): void {
+  override SetArtProvider(art: Pointer): void {
     lib.symbols.wxRibbonGallery_SetArtProvider(this._ptr, art);
   }
 
-  GetArtProvider(): Pointer {
+  override GetArtProvider(): Pointer {
     return lib.symbols.wxRibbonGallery_GetArtProvider(this._ptr);
   }
 

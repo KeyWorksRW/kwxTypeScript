@@ -10,6 +10,38 @@ export class wxFlexGridSizer extends wxGridSizer {
     return this._ptr;
   }
 
+  IsRowGrowable(idx: bigint): boolean {
+    return (lib.symbols.wxFlexGridSizer_IsRowGrowable(this._ptr, idx) as number) !== 0;
+  }
+
+  IsColGrowable(idx: bigint): boolean {
+    return (lib.symbols.wxFlexGridSizer_IsColGrowable(this._ptr, idx) as number) !== 0;
+  }
+
+  SetFlexibleDirection(direction: number): void {
+    lib.symbols.wxFlexGridSizer_SetFlexibleDirection(this._ptr, direction);
+  }
+
+  GetFlexibleDirection(): number {
+    return lib.symbols.wxFlexGridSizer_GetFlexibleDirection(this._ptr);
+  }
+
+  SetNonFlexibleGrowMode(mode: number): void {
+    lib.symbols.wxFlexGridSizer_SetNonFlexibleGrowMode(this._ptr, mode);
+  }
+
+  GetNonFlexibleGrowMode(): number {
+    return lib.symbols.wxFlexGridSizer_GetNonFlexibleGrowMode(this._ptr);
+  }
+
+  GetRowHeights(heights: Pointer): number {
+    return lib.symbols.wxFlexGridSizer_GetRowHeights(this._ptr, heights);
+  }
+
+  GetColWidths(widths: Pointer): number {
+    return lib.symbols.wxFlexGridSizer_GetColWidths(this._ptr, widths);
+  }
+
   AddGrowableCol(idx: bigint, proportion: number): void {
     lib.symbols.wxFlexGridSizer_AddGrowableCol(this._ptr, idx, proportion);
   }

@@ -10,6 +10,16 @@ export class wxCursor extends wxBitmap {
     return this._ptr;
   }
 
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxCursor_Delete(this._ptr);
+  }
+
+  override [Symbol.dispose](): void {
+    this.Delete();
+  }
+
 }
 
 export function createWxCursorFromStock(id: number): wxCursor | null {

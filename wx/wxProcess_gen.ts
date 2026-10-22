@@ -11,11 +11,53 @@ export class wxProcess extends wxEvtHandler {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxProcess_Delete(this._ptr);
   }
 
   override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  Activate(): boolean {
+    return (lib.symbols.wxProcess_Activate(this._ptr) as number) !== 0;
+  }
+
+  GetPid(): number {
+    return lib.symbols.wxProcess_GetPid(this._ptr);
+  }
+
+  SetPriority(priority: number): void {
+    lib.symbols.wxProcess_SetPriority(this._ptr, priority);
+  }
+
+  GetPriority(): number {
+    return lib.symbols.wxProcess_GetPriority(this._ptr);
+  }
+
+  Kill(pid: number, sig: number, flags: number, rc: Pointer): number {
+    return lib.symbols.wxProcess_Kill(pid, sig, flags, rc);
+  }
+
+  Exists(pid: number): boolean {
+    return (lib.symbols.wxProcess_Exists(pid) as number) !== 0;
+  }
+
+  Open(cmd: Pointer, flags: number): Pointer {
+    return lib.symbols.wxProcess_Open(cmd, flags);
+  }
+
+  IsInputAvailable(): boolean {
+    return (lib.symbols.wxProcess_IsInputAvailable(this._ptr) as number) !== 0;
+  }
+
+  IsErrorAvailable(): boolean {
+    return (lib.symbols.wxProcess_IsErrorAvailable(this._ptr) as number) !== 0;
+  }
+
+  IsInputOpened(): boolean {
+    return (lib.symbols.wxProcess_IsInputOpened(this._ptr) as number) !== 0;
   }
 
   CloseOutput(): void {
@@ -46,6 +88,12 @@ export class wxProcess extends wxEvtHandler {
     lib.symbols.wxProcess_Redirect(this._ptr);
   }
 
+}
+
+export function createWxProcessFlags(flags: number): wxProcess | null {
+    const rawPtr = lib.symbols.wxProcess_CreateFlags(flags);
+    if (rawPtr === null) return null;
+    return new wxProcess(rawPtr);
 }
 
 export function createWxProcessDefault(parent: Pointer, id: number): wxProcess | null {

@@ -2,24 +2,21 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxMenuItem {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxMenuItem extends wxObject {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxMenuItem_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
   }
 
@@ -123,6 +120,18 @@ export class wxMenuItem {
     return lib.symbols.wxMenuItem_GetBitmap(this._ptr);
   }
 
+}
+
+export function createWxMenuItemEx(id: number, text: Pointer, helpstr: Pointer, itemkind: number, submenu: Pointer): wxMenuItem | null {
+    const rawPtr = lib.symbols.wxMenuItem_CreateEx(id, text, helpstr, itemkind, submenu);
+    if (rawPtr === null) return null;
+    return new wxMenuItem(rawPtr);
+}
+
+export function createWxMenuItemSeparator(): wxMenuItem | null {
+    const rawPtr = lib.symbols.wxMenuItem_CreateSeparator();
+    if (rawPtr === null) return null;
+    return new wxMenuItem(rawPtr);
 }
 
 export function createWxMenuItem(): wxMenuItem | null {

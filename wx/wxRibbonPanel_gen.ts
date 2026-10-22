@@ -2,20 +2,15 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxRibbonControl } from "./wxRibbonControl_gen.ts";
 
-export class wxRibbonPanel {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxRibbonPanel extends wxRibbonControl {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  GetLabel(): Pointer {
+  override GetLabel(): Pointer {
     return lib.symbols.wxRibbonPanel_GetLabel(this._ptr);
   }
 
@@ -47,19 +42,19 @@ export class wxRibbonPanel {
     return (lib.symbols.wxRibbonPanel_HideExpanded(this._ptr) as number) !== 0;
   }
 
-  Realize(): void {
-    lib.symbols.wxRibbonPanel_Realize(this._ptr);
+  override Realize(): boolean {
+    return (lib.symbols.wxRibbonPanel_Realize(this._ptr) as number) !== 0;
   }
 
-  GetMinSize(): Pointer {
+  override GetMinSize(): Pointer {
     return lib.symbols.wxRibbonPanel_GetMinSize(this._ptr);
   }
 
-  SetArtProvider(art: Pointer): void {
+  override SetArtProvider(art: Pointer): void {
     lib.symbols.wxRibbonPanel_SetArtProvider(this._ptr, art);
   }
 
-  GetArtProvider(): Pointer {
+  override GetArtProvider(): Pointer {
     return lib.symbols.wxRibbonPanel_GetArtProvider(this._ptr);
   }
 

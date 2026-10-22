@@ -11,11 +11,45 @@ export class wxToolBar extends wxControl {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxToolBar_Delete(this._ptr);
   }
 
   override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  AddTool2(toolId: number, label: Pointer, bmp: Pointer, bmpDisabled: Pointer, itemKind: number, shortHelp: Pointer, longHelp: Pointer): void {
+    lib.symbols.wxToolBar_AddTool2(this._ptr, toolId, label, bmp, bmpDisabled, itemKind, shortHelp, longHelp);
+  }
+
+  GetToolMargins(): Pointer {
+    return lib.symbols.wxToolBar_GetToolMargins(this._ptr);
+  }
+
+  SetMaxRowsCols(rows: number, cols: number): void {
+    lib.symbols.wxToolBar_SetMaxRowsCols(this._ptr, rows, cols);
+  }
+
+  GetMaxRows(): number {
+    return lib.symbols.wxToolBar_GetMaxRows(this._ptr);
+  }
+
+  GetMaxCols(): number {
+    return lib.symbols.wxToolBar_GetMaxCols(this._ptr);
+  }
+
+  GetDirection(): number {
+    return lib.symbols.wxToolBar_GetDirection(this._ptr);
+  }
+
+  GetToolByPos(pos: number): Pointer {
+    return lib.symbols.wxToolBar_GetToolByPos(this._ptr, pos);
+  }
+
+  SetRows(nRows: number): void {
+    lib.symbols.wxToolBar_SetRows(this._ptr, nRows);
   }
 
   AddControl(ctrl: Pointer): boolean {

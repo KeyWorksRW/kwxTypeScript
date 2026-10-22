@@ -10,6 +10,66 @@ export class wxTreeCtrl extends wxControl {
     return this._ptr;
   }
 
+  AssignImageList(imageList: Pointer): void {
+    lib.symbols.wxTreeCtrl_AssignImageList(this._ptr, imageList);
+  }
+
+  AssignStateImageList(imageList: Pointer): void {
+    lib.symbols.wxTreeCtrl_AssignStateImageList(this._ptr, imageList);
+  }
+
+  GetItemClientClosure(item: Pointer): Pointer {
+    return lib.symbols.wxTreeCtrl_GetItemClientClosure(this._ptr, item);
+  }
+
+  InsertItem2(parent: Pointer, idPrevious: Pointer, text: Pointer, image: number, selectedImage: number, closure: Pointer, item: Pointer): void {
+    lib.symbols.wxTreeCtrl_InsertItem2(this._ptr, parent, idPrevious, text, image, selectedImage, closure, item);
+  }
+
+  InsertItemByIndex2(parent: Pointer, index: number, text: Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
+    lib.symbols.wxTreeCtrl_InsertItemByIndex2(this._ptr, parent, index, text, image, selectedImage, data, item);
+  }
+
+  SetItemClientClosure(item: Pointer, closure: Pointer): void {
+    lib.symbols.wxTreeCtrl_SetItemClientClosure(this._ptr, item, closure);
+  }
+
+  HasImages(): boolean {
+    return (lib.symbols.wxTreeCtrl_HasImages(this._ptr) as number) !== 0;
+  }
+
+  GetImageCount(): number {
+    return lib.symbols.wxTreeCtrl_GetImageCount(this._ptr);
+  }
+
+  HasStateImages(): boolean {
+    return (lib.symbols.wxTreeCtrl_HasStateImages(this._ptr) as number) !== 0;
+  }
+
+  GetStateImageCount(): number {
+    return lib.symbols.wxTreeCtrl_GetStateImageCount(this._ptr);
+  }
+
+  HasChildren(item: Pointer): boolean {
+    return (lib.symbols.wxTreeCtrl_HasChildren(this._ptr, item) as number) !== 0;
+  }
+
+  IsEmpty(): boolean {
+    return (lib.symbols.wxTreeCtrl_IsEmpty(this._ptr) as number) !== 0;
+  }
+
+  UnselectItem(item: Pointer): void {
+    lib.symbols.wxTreeCtrl_UnselectItem(this._ptr, item);
+  }
+
+  ToggleItemSelection(item: Pointer): void {
+    lib.symbols.wxTreeCtrl_ToggleItemSelection(this._ptr, item);
+  }
+
+  EnableBellOnNoMatch(on: boolean): void {
+    lib.symbols.wxTreeCtrl_EnableBellOnNoMatch(this._ptr, on ? 1 : 0);
+  }
+
   AddRoot(text: Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
     lib.symbols.wxTreeCtrl_AddRoot(this._ptr, text, image, selectedImage, data, item);
   }
@@ -27,6 +87,7 @@ export class wxTreeCtrl extends wxControl {
   }
 
   DeleteItem(item: Pointer): void {
+    if (this._disposed) return;
     lib.symbols.wxTreeCtrl_Delete(this._ptr, item);
   }
 
@@ -146,7 +207,7 @@ export class wxTreeCtrl extends wxControl {
     return lib.symbols.wxTreeCtrl_GetStateImageList(this._ptr);
   }
 
-  HitTest(x: number, y: number, flags: Pointer, item: Pointer): void {
+  HitTest_4(x: number, y: number, flags: Pointer, item: Pointer): void {
     lib.symbols.wxTreeCtrl_HitTest(this._ptr, x, y, flags, item);
   }
 
@@ -314,6 +375,12 @@ export class wxTreeCtrl extends wxControl {
     return lib.symbols.wxTreeCtrl_GetItemFont(this._ptr, item);
   }
 
+}
+
+export function createWxTreeCtrl2(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): wxTreeCtrl | null {
+    const rawPtr = lib.symbols.wxTreeCtrl_Create2(parent, id, x, y, width, height, style);
+    if (rawPtr === null) return null;
+    return new wxTreeCtrl(rawPtr);
 }
 
 export function createWxTreeCtrl(pObject: Pointer, compareFunc: Pointer, parent: Pointer, id: number, left: number, top: number, width: number, height: number, style: number): wxTreeCtrl | null {

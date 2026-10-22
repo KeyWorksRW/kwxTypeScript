@@ -10,11 +10,13 @@ export class wxCommandEvent extends wxEvent {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxCommandEvent_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
   }
 

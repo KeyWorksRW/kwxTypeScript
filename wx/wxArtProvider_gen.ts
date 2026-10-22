@@ -2,17 +2,48 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxArtProvider {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
+export class wxArtProvider extends wxObject {
+  /** Returns the underlying native pointer. */
+  override get ptr(): Pointer {
+    return this._ptr;
   }
 
-  /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
-    return this._ptr;
+  GetBitmap(id: Pointer, client: Pointer, width: number, height: number): Pointer {
+    return lib.symbols.wxArtProvider_GetBitmap(id, client, width, height);
+  }
+
+  GetBitmapBundle(id: Pointer, client: Pointer, width: number, height: number): Pointer {
+    return lib.symbols.wxArtProvider_GetBitmapBundle(id, client, width, height);
+  }
+
+  GetIcon(id: Pointer, client: Pointer, width: number, height: number): Pointer {
+    return lib.symbols.wxArtProvider_GetIcon(id, client, width, height);
+  }
+
+  GetIconBundle(id: Pointer, client: Pointer): Pointer {
+    return lib.symbols.wxArtProvider_GetIconBundle(id, client);
+  }
+
+  GetNativeSizeHint(client: Pointer, window: Pointer): Pointer {
+    return lib.symbols.wxArtProvider_GetNativeSizeHint(client, window);
+  }
+
+  GetSizeHint(client: Pointer, window: Pointer): Pointer {
+    return lib.symbols.wxArtProvider_GetSizeHint(client, window);
+  }
+
+  HasNativeProvider(): boolean {
+    return (lib.symbols.wxArtProvider_HasNativeProvider() as number) !== 0;
+  }
+
+  PushBack(): void {
+    lib.symbols.wxArtProvider_PushBack(this._ptr);
+  }
+
+  DeleteProvider(): boolean {
+    return (lib.symbols.wxArtProvider_DeleteProvider(this._ptr) as number) !== 0;
   }
 
   PopProvider(): boolean {

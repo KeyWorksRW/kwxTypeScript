@@ -10,6 +10,426 @@ export class wxRichTextCtrl extends wxControl {
     return this._ptr;
   }
 
+  GetBuffer(): Pointer {
+    return lib.symbols.wxRichTextCtrl_GetBuffer(this._ptr);
+  }
+
+  GetFocusObject(): Pointer {
+    return lib.symbols.wxRichTextCtrl_GetFocusObject(this._ptr);
+  }
+
+  SetFocusObject(obj: Pointer, setCaretPosition: boolean): boolean {
+    return (lib.symbols.wxRichTextCtrl_SetFocusObject(this._ptr, obj, setCaretPosition ? 1 : 0) as number) !== 0;
+  }
+
+  IsSingleLine(): boolean {
+    return (lib.symbols.wxRichTextCtrl_IsSingleLine(this._ptr) as number) !== 0;
+  }
+
+  IsMultiLine(): boolean {
+    return (lib.symbols.wxRichTextCtrl_IsMultiLine(this._ptr) as number) !== 0;
+  }
+
+  HasSelection(): boolean {
+    return (lib.symbols.wxRichTextCtrl_HasSelection(this._ptr) as number) !== 0;
+  }
+
+  HasUnfocusedSelection(): boolean {
+    return (lib.symbols.wxRichTextCtrl_HasUnfocusedSelection(this._ptr) as number) !== 0;
+  }
+
+  GetSelectionRange(start: Pointer, end: Pointer): void {
+    lib.symbols.wxRichTextCtrl_GetSelectionRange(this._ptr, start, end);
+  }
+
+  SetSelectionRange(start: number, end: number): void {
+    lib.symbols.wxRichTextCtrl_SetSelectionRange(this._ptr, start, end);
+  }
+
+  GetInternalSelectionRange(start: Pointer, end: Pointer): void {
+    lib.symbols.wxRichTextCtrl_GetInternalSelectionRange(this._ptr, start, end);
+  }
+
+  SetInternalSelectionRange(start: number, end: number): void {
+    lib.symbols.wxRichTextCtrl_SetInternalSelectionRange(this._ptr, start, end);
+  }
+
+  SelectWord(position: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_SelectWord(this._ptr, position) as number) !== 0;
+  }
+
+  GetDelayedLayoutThreshold(): number {
+    return lib.symbols.wxRichTextCtrl_GetDelayedLayoutThreshold(this._ptr);
+  }
+
+  SetDelayedLayoutThreshold(threshold: number): void {
+    lib.symbols.wxRichTextCtrl_SetDelayedLayoutThreshold(this._ptr, threshold);
+  }
+
+  GetFullLayoutRequired(): boolean {
+    return (lib.symbols.wxRichTextCtrl_GetFullLayoutRequired(this._ptr) as number) !== 0;
+  }
+
+  SetFullLayoutRequired(required: boolean): void {
+    lib.symbols.wxRichTextCtrl_SetFullLayoutRequired(this._ptr, required ? 1 : 0);
+  }
+
+  GetFullLayoutSavedPosition(): number {
+    return lib.symbols.wxRichTextCtrl_GetFullLayoutSavedPosition(this._ptr);
+  }
+
+  SetFullLayoutSavedPosition(position: number): void {
+    lib.symbols.wxRichTextCtrl_SetFullLayoutSavedPosition(this._ptr, position);
+  }
+
+  GetCaretAtLineStart(): boolean {
+    return (lib.symbols.wxRichTextCtrl_GetCaretAtLineStart(this._ptr) as number) !== 0;
+  }
+
+  SetCaretAtLineStart(atStart: boolean): void {
+    lib.symbols.wxRichTextCtrl_SetCaretAtLineStart(this._ptr, atStart ? 1 : 0);
+  }
+
+  GetVerticalScrollbarEnabled(): boolean {
+    return (lib.symbols.wxRichTextCtrl_GetVerticalScrollbarEnabled(this._ptr) as number) !== 0;
+  }
+
+  EnableVerticalScrollbar(enable: boolean): void {
+    lib.symbols.wxRichTextCtrl_EnableVerticalScrollbar(this._ptr, enable ? 1 : 0);
+  }
+
+  GetVirtualAttributesEnabled(): boolean {
+    return (lib.symbols.wxRichTextCtrl_GetVirtualAttributesEnabled(this._ptr) as number) !== 0;
+  }
+
+  EnableVirtualAttributes(enable: boolean): void {
+    lib.symbols.wxRichTextCtrl_EnableVirtualAttributes(this._ptr, enable ? 1 : 0);
+  }
+
+  GetFontScale(): number {
+    return lib.symbols.wxRichTextCtrl_GetFontScale(this._ptr);
+  }
+
+  SetFontScale(fontScale: number, refresh: boolean): void {
+    lib.symbols.wxRichTextCtrl_SetFontScale(this._ptr, fontScale, refresh ? 1 : 0);
+  }
+
+  GetDimensionScale(): number {
+    return lib.symbols.wxRichTextCtrl_GetDimensionScale(this._ptr);
+  }
+
+  SetDimensionScale(dimScale: number, refresh: boolean): void {
+    lib.symbols.wxRichTextCtrl_SetDimensionScale(this._ptr, dimScale, refresh ? 1 : 0);
+  }
+
+  GetScale(): number {
+    return lib.symbols.wxRichTextCtrl_GetScale(this._ptr);
+  }
+
+  SetScale(scale: number, refresh: boolean): void {
+    lib.symbols.wxRichTextCtrl_SetScale(this._ptr, scale, refresh ? 1 : 0);
+  }
+
+  GetBasicStyle(style: Pointer): void {
+    lib.symbols.wxRichTextCtrl_GetBasicStyle(this._ptr, style);
+  }
+
+  SetBasicStyle(style: Pointer): void {
+    lib.symbols.wxRichTextCtrl_SetBasicStyle(this._ptr, style);
+  }
+
+  GetDefaultStyleEx(style: Pointer): void {
+    lib.symbols.wxRichTextCtrl_GetDefaultStyleEx(this._ptr, style);
+  }
+
+  GetHandlerFlags(): number {
+    return lib.symbols.wxRichTextCtrl_GetHandlerFlags(this._ptr);
+  }
+
+  SetHandlerFlags(flags: number): void {
+    lib.symbols.wxRichTextCtrl_SetHandlerFlags(this._ptr, flags);
+  }
+
+  GetStyleSheet(): Pointer {
+    return lib.symbols.wxRichTextCtrl_GetStyleSheet(this._ptr);
+  }
+
+  SetStyleSheet(styleSheet: Pointer): void {
+    lib.symbols.wxRichTextCtrl_SetStyleSheet(this._ptr, styleSheet);
+  }
+
+  PushStyleSheet(styleSheet: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_PushStyleSheet(this._ptr, styleSheet) as number) !== 0;
+  }
+
+  PopStyleSheet(): Pointer {
+    return lib.symbols.wxRichTextCtrl_PopStyleSheet(this._ptr);
+  }
+
+  ApplyStyleSheet(styleSheet: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_ApplyStyleSheet(this._ptr, styleSheet) as number) !== 0;
+  }
+
+  SetDefaultStyleToCursorStyle(): boolean {
+    return (lib.symbols.wxRichTextCtrl_SetDefaultStyleToCursorStyle(this._ptr) as number) !== 0;
+  }
+
+  AddParagraph(text: Pointer, start: Pointer, end: Pointer): void {
+    lib.symbols.wxRichTextCtrl_AddParagraph(this._ptr, text, start, end);
+  }
+
+  AddImage(image: Pointer, start: Pointer, end: Pointer): void {
+    lib.symbols.wxRichTextCtrl_AddImage(this._ptr, image, start, end);
+  }
+
+  WriteImageBitmap(bitmap: Pointer, bitmapType: number, textAttr: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_WriteImageBitmap(this._ptr, bitmap, bitmapType, textAttr) as number) !== 0;
+  }
+
+  WriteImageBlock(imageBlock: Pointer, textAttr: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_WriteImageBlock(this._ptr, imageBlock, textAttr) as number) !== 0;
+  }
+
+  DeleteRange(start: number, end: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_DeleteRange(this._ptr, start, end) as number) !== 0;
+  }
+
+  SetStyleEx(start: number, end: number, style: Pointer, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_SetStyleEx(this._ptr, start, end, style, flags) as number) !== 0;
+  }
+
+  GetUncombinedStyle(position: number, style: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_GetUncombinedStyle(this._ptr, position, style) as number) !== 0;
+  }
+
+  GetStyleForRange(start: number, end: number, style: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_GetStyleForRange(this._ptr, start, end, style) as number) !== 0;
+  }
+
+  BeginStyle(style: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_BeginStyle(this._ptr, style) as number) !== 0;
+  }
+
+  EndStyle(): boolean {
+    return (lib.symbols.wxRichTextCtrl_EndStyle(this._ptr) as number) !== 0;
+  }
+
+  EndAllStyles(): boolean {
+    return (lib.symbols.wxRichTextCtrl_EndAllStyles(this._ptr) as number) !== 0;
+  }
+
+  BeginCharacterStyle(name: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_BeginCharacterStyle(this._ptr, name) as number) !== 0;
+  }
+
+  EndCharacterStyle(): boolean {
+    return (lib.symbols.wxRichTextCtrl_EndCharacterStyle(this._ptr) as number) !== 0;
+  }
+
+  BeginParagraphStyle(name: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_BeginParagraphStyle(this._ptr, name) as number) !== 0;
+  }
+
+  EndParagraphStyle(): boolean {
+    return (lib.symbols.wxRichTextCtrl_EndParagraphStyle(this._ptr) as number) !== 0;
+  }
+
+  BeginListStyle(name: Pointer, level: number, number: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_BeginListStyle(this._ptr, name, level, number) as number) !== 0;
+  }
+
+  EndListStyle(): boolean {
+    return (lib.symbols.wxRichTextCtrl_EndListStyle(this._ptr) as number) !== 0;
+  }
+
+  SetListStyle(start: number, end: number, defName: Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_SetListStyle(this._ptr, start, end, defName, flags, startFrom, specifiedLevel) as number) !== 0;
+  }
+
+  ClearListStyle(start: number, end: number, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_ClearListStyle(this._ptr, start, end, flags) as number) !== 0;
+  }
+
+  NumberList(start: number, end: number, defName: Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_NumberList(this._ptr, start, end, defName, flags, startFrom, specifiedLevel) as number) !== 0;
+  }
+
+  PromoteList(promoteBy: number, start: number, end: number, defName: Pointer, flags: number, specifiedLevel: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_PromoteList(this._ptr, promoteBy, start, end, defName, flags, specifiedLevel) as number) !== 0;
+  }
+
+  ApplyStyle(def: Pointer): boolean {
+    return (lib.symbols.wxRichTextCtrl_ApplyStyle(this._ptr, def) as number) !== 0;
+  }
+
+  MoveCaret(position: number, showAtLineStart: boolean): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveCaret(this._ptr, position, showAtLineStart ? 1 : 0) as number) !== 0;
+  }
+
+  MoveRight(noPositions: number, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveRight(this._ptr, noPositions, flags) as number) !== 0;
+  }
+
+  MoveLeft(noPositions: number, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveLeft(this._ptr, noPositions, flags) as number) !== 0;
+  }
+
+  MoveUp(noLines: number, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveUp(this._ptr, noLines, flags) as number) !== 0;
+  }
+
+  MoveDown(noLines: number, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveDown(this._ptr, noLines, flags) as number) !== 0;
+  }
+
+  MoveToLineEnd(flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveToLineEnd(this._ptr, flags) as number) !== 0;
+  }
+
+  MoveToLineStart(flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveToLineStart(this._ptr, flags) as number) !== 0;
+  }
+
+  MoveToParagraphEnd(flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveToParagraphEnd(this._ptr, flags) as number) !== 0;
+  }
+
+  MoveToParagraphStart(flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveToParagraphStart(this._ptr, flags) as number) !== 0;
+  }
+
+  MoveHome(flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveHome(this._ptr, flags) as number) !== 0;
+  }
+
+  MoveEnd(flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_MoveEnd(this._ptr, flags) as number) !== 0;
+  }
+
+  PageUp_2(noPages: number, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_PageUp(this._ptr, noPages, flags) as number) !== 0;
+  }
+
+  PageDown_2(noPages: number, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_PageDown(this._ptr, noPages, flags) as number) !== 0;
+  }
+
+  WordLeft(noPages: number, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_WordLeft(this._ptr, noPages, flags) as number) !== 0;
+  }
+
+  WordRight(noPages: number, flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_WordRight(this._ptr, noPages, flags) as number) !== 0;
+  }
+
+  IsSelectionBold(): boolean {
+    return (lib.symbols.wxRichTextCtrl_IsSelectionBold(this._ptr) as number) !== 0;
+  }
+
+  IsSelectionItalics(): boolean {
+    return (lib.symbols.wxRichTextCtrl_IsSelectionItalics(this._ptr) as number) !== 0;
+  }
+
+  IsSelectionUnderlined(): boolean {
+    return (lib.symbols.wxRichTextCtrl_IsSelectionUnderlined(this._ptr) as number) !== 0;
+  }
+
+  DoesSelectionHaveTextEffectFlag(flag: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_DoesSelectionHaveTextEffectFlag(this._ptr, flag) as number) !== 0;
+  }
+
+  IsSelectionAligned(alignment: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_IsSelectionAligned(this._ptr, alignment) as number) !== 0;
+  }
+
+  ApplyBoldToSelection(): boolean {
+    return (lib.symbols.wxRichTextCtrl_ApplyBoldToSelection(this._ptr) as number) !== 0;
+  }
+
+  ApplyItalicToSelection(): boolean {
+    return (lib.symbols.wxRichTextCtrl_ApplyItalicToSelection(this._ptr) as number) !== 0;
+  }
+
+  ApplyUnderlineToSelection(): boolean {
+    return (lib.symbols.wxRichTextCtrl_ApplyUnderlineToSelection(this._ptr) as number) !== 0;
+  }
+
+  ApplyTextEffectToSelection(flags: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_ApplyTextEffectToSelection(this._ptr, flags) as number) !== 0;
+  }
+
+  ApplyAlignmentToSelection(alignment: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_ApplyAlignmentToSelection(this._ptr, alignment) as number) !== 0;
+  }
+
+  ShowContextMenu(menu: Pointer, x: number, y: number, addPropertyCommands: boolean): boolean {
+    return (lib.symbols.wxRichTextCtrl_ShowContextMenu(this._ptr, menu, x, y, addPropertyCommands ? 1 : 0) as number) !== 0;
+  }
+
+  PrepareContextMenu(menu: Pointer, x: number, y: number, addPropertyCommands: boolean): number {
+    return lib.symbols.wxRichTextCtrl_PrepareContextMenu(this._ptr, menu, x, y, addPropertyCommands ? 1 : 0);
+  }
+
+  SetContextMenu(menu: Pointer): void {
+    lib.symbols.wxRichTextCtrl_SetContextMenu(this._ptr, menu);
+  }
+
+  GetContextMenu(): Pointer {
+    return lib.symbols.wxRichTextCtrl_GetContextMenu(this._ptr);
+  }
+
+  GetSelectionAnchor(): number {
+    return lib.symbols.wxRichTextCtrl_GetSelectionAnchor(this._ptr);
+  }
+
+  SetSelectionAnchor(anchor: number): void {
+    lib.symbols.wxRichTextCtrl_SetSelectionAnchor(this._ptr, anchor);
+  }
+
+  GetSelectionAnchorObject(): Pointer {
+    return lib.symbols.wxRichTextCtrl_GetSelectionAnchorObject(this._ptr);
+  }
+
+  override Freeze(): void {
+    lib.symbols.wxRichTextCtrl_Freeze(this._ptr);
+  }
+
+  override Thaw(): void {
+    lib.symbols.wxRichTextCtrl_Thaw(this._ptr);
+  }
+
+  override IsFrozen(): boolean {
+    return (lib.symbols.wxRichTextCtrl_IsFrozen(this._ptr) as number) !== 0;
+  }
+
+  HitTest_3(x: number, y: number, position: Pointer): number {
+    return lib.symbols.wxRichTextCtrl_HitTest(this._ptr, x, y, position);
+  }
+
+  SetCaretPosition(position: number, showAtLineStart: boolean): void {
+    lib.symbols.wxRichTextCtrl_SetCaretPosition(this._ptr, position, showAtLineStart ? 1 : 0);
+  }
+
+  GetAdjustedCaretPosition(caretPosition: number): number {
+    return lib.symbols.wxRichTextCtrl_GetAdjustedCaretPosition(this._ptr, caretPosition);
+  }
+
+  FindNextWordPosition(direction: number): number {
+    return lib.symbols.wxRichTextCtrl_FindNextWordPosition(this._ptr, direction);
+  }
+
+  IsPositionVisible(position: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_IsPositionVisible(this._ptr, position) as number) !== 0;
+  }
+
+  GetFirstVisiblePosition(): number {
+    return lib.symbols.wxRichTextCtrl_GetFirstVisiblePosition(this._ptr);
+  }
+
+  GetFirstVisiblePoint(x: Pointer, y: Pointer): void {
+    lib.symbols.wxRichTextCtrl_GetFirstVisiblePoint(this._ptr, x, y);
+  }
+
   GetValue(): Pointer {
     return lib.symbols.wxRichTextCtrl_GetValue(this._ptr);
   }

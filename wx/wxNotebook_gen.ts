@@ -10,6 +10,82 @@ export class wxNotebook extends wxControl {
     return this._ptr;
   }
 
+  AssignImageList(imageList: Pointer): void {
+    lib.symbols.wxNotebook_AssignImageList(this._ptr, imageList);
+  }
+
+  GetCurrentPage(): Pointer {
+    return lib.symbols.wxNotebook_GetCurrentPage(this._ptr);
+  }
+
+  GetControllerSize(): Pointer {
+    return lib.symbols.wxNotebook_GetControllerSize(this._ptr);
+  }
+
+  CalcSizeFromPage(width: number, height: number): Pointer {
+    return lib.symbols.wxNotebook_CalcSizeFromPage(this._ptr, width, height);
+  }
+
+  GetInternalBorder(): number {
+    return lib.symbols.wxNotebook_GetInternalBorder(this._ptr);
+  }
+
+  SetInternalBorder(border: number): void {
+    lib.symbols.wxNotebook_SetInternalBorder(this._ptr, border);
+  }
+
+  SetControlMargin(margin: number): void {
+    lib.symbols.wxNotebook_SetControlMargin(this._ptr, margin);
+  }
+
+  GetControlMargin(): number {
+    return lib.symbols.wxNotebook_GetControlMargin(this._ptr);
+  }
+
+  IsVertical(): boolean {
+    return (lib.symbols.wxNotebook_IsVertical(this._ptr) as number) !== 0;
+  }
+
+  SetFitToCurrentPage(fit: boolean): void {
+    lib.symbols.wxNotebook_SetFitToCurrentPage(this._ptr, fit ? 1 : 0);
+  }
+
+  GetFitToCurrentPage(): boolean {
+    return (lib.symbols.wxNotebook_GetFitToCurrentPage(this._ptr) as number) !== 0;
+  }
+
+  ChangeSelection(nPage: number): number {
+    return lib.symbols.wxNotebook_ChangeSelection(this._ptr, nPage);
+  }
+
+  FindPage(page: Pointer): number {
+    return lib.symbols.wxNotebook_FindPage(this._ptr, page);
+  }
+
+  SetTabSize(width: number, height: number): void {
+    lib.symbols.wxNotebook_SetTabSize(this._ptr, width, height);
+  }
+
+  GetTabRect(page: number): Pointer {
+    return lib.symbols.wxNotebook_GetTabRect(this._ptr, page);
+  }
+
+  GetTabOrientation(): number {
+    return lib.symbols.wxNotebook_GetTabOrientation(this._ptr);
+  }
+
+  GetThemeBackgroundColour(): Pointer {
+    return lib.symbols.wxNotebook_GetThemeBackgroundColour(this._ptr);
+  }
+
+  SendPageChangingEvent(nPage: number): boolean {
+    return (lib.symbols.wxNotebook_SendPageChangingEvent(this._ptr, nPage) as number) !== 0;
+  }
+
+  SendPageChangedEvent(nPageOld: number, nPageNew: number): void {
+    lib.symbols.wxNotebook_SendPageChangedEvent(this._ptr, nPageOld, nPageNew);
+  }
+
   AddPage(pPage: Pointer, strText: Pointer, bSelect: boolean, imageId: number): boolean {
     return (lib.symbols.wxNotebook_AddPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) as number) !== 0;
   }
@@ -54,7 +130,7 @@ export class wxNotebook extends wxControl {
     return lib.symbols.wxNotebook_GetSelection(this._ptr);
   }
 
-  HitTest(x: number, y: number, flags: Pointer): number {
+  HitTest_3(x: number, y: number, flags: Pointer): number {
     return lib.symbols.wxNotebook_HitTest(this._ptr, x, y, flags);
   }
 

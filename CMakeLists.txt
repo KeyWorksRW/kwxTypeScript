@@ -408,11 +408,16 @@ set_target_properties(kwx_swc_transformer PROPERTIES
 add_dependencies(kwx_swc_transformer kwx_swc_transformer_build)
 
 # ###################### kwx_ts executable #######################
+# wx/kwx_constants_table_gen.cpp must be compiled here: kwxFFI ships its own
+# older copy, and the indices in wx/kwx_constants_gen.ts are generated against
+# this table. Overriding it keeps the constant values in sync.
 add_executable(kwx_ts
     ${KWX_TS_DIR}/src/main.cpp
     ${KWX_TS_DIR}/src/quickjs_host.cpp
     ${KWX_TS_DIR}/src/kwx_host_app.cpp
     ${KWX_TS_DIR}/src/runtime_bindings.cpp
+    ${KWX_TS_DIR}/src/wx_compat.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wx/kwx_constants_table_gen.cpp
     ${KWX_GENERATED_DIR}/bindings_gen.cpp
     ${KWX_HOST_RUNTIME_CPP}
     ${KWX_BYTECODE_DIR}/kwx_runtime_bytecode.c

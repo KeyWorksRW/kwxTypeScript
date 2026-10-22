@@ -11,6 +11,8 @@ export class wxStaticBitmap extends wxControl {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxStaticBitmap_Delete(this._ptr);
   }
 

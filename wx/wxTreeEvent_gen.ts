@@ -10,6 +10,18 @@ export class wxTreeEvent extends wxNotifyEvent {
     return this._ptr;
   }
 
+  override Allow(): void {
+    lib.symbols.wxTreeEvent_Allow(this._ptr);
+  }
+
+  GetKeyEvent(): Pointer {
+    return lib.symbols.wxTreeEvent_GetKeyEvent(this._ptr);
+  }
+
+  IsEditCancelled(): boolean {
+    return (lib.symbols.wxTreeEvent_IsEditCancelled(this._ptr) as number) !== 0;
+  }
+
   GetCode(): number {
     return lib.symbols.wxTreeEvent_GetCode(this._ptr);
   }

@@ -11,6 +11,8 @@ export class wxAuiToolBar extends wxControl {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxAuiToolBar_Delete(this._ptr);
   }
 

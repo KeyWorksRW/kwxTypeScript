@@ -2,9 +2,9 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxWindow } from "./wxWindow_gen.ts";
+import { wxPopupTransientWindow } from "./wxPopupTransientWindow_gen.ts";
 
-export class wxTipWindow extends wxWindow {
+export class wxTipWindow extends wxPopupTransientWindow {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;

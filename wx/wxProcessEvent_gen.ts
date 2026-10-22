@@ -19,3 +19,9 @@ export class wxProcessEvent extends wxEvent {
   }
 
 }
+
+export function createWxProcessEvent(id: number, pid: number, exitcode: number): wxProcessEvent | null {
+    const rawPtr = lib.symbols.wxProcessEvent_Create(id, pid, exitcode);
+    if (rawPtr === null) return null;
+    return new wxProcessEvent(rawPtr);
+}

@@ -2,17 +2,20 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxEvent {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
+export class wxEvent extends wxObject {
+  /** Returns the underlying native pointer. */
+  override get ptr(): Pointer {
+    return this._ptr;
   }
 
-  /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
-    return this._ptr;
+  GetCallbackUserData(): Pointer {
+    return lib.symbols.wxEvent_GetCallbackUserData(this._ptr);
+  }
+
+  SetCallbackUserData(obj: Pointer): void {
+    lib.symbols.wxEvent_SetCallbackUserData(this._ptr, obj);
   }
 
   GetEventObject(): Pointer {

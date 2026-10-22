@@ -10,6 +10,74 @@ export class wxFrame extends wxTopLevelWindow {
     return this._ptr;
   }
 
+  override Centre(orientation: number): void {
+    lib.symbols.wxFrame_Centre(this._ptr, orientation);
+  }
+
+  override GetIcon(): Pointer {
+    return lib.symbols.wxFrame_GetIcon(this._ptr);
+  }
+
+  override GetTitle(): Pointer {
+    return lib.symbols.wxFrame_GetTitle(this._ptr);
+  }
+
+  override Iconize(): boolean {
+    return (lib.symbols.wxFrame_Iconize(this._ptr) as number) !== 0;
+  }
+
+  override IsFullScreen(): boolean {
+    return (lib.symbols.wxFrame_IsFullScreen(this._ptr) as number) !== 0;
+  }
+
+  override IsIconized(): boolean {
+    return (lib.symbols.wxFrame_IsIconized(this._ptr) as number) !== 0;
+  }
+
+  override IsMaximized(): boolean {
+    return (lib.symbols.wxFrame_IsMaximized(this._ptr) as number) !== 0;
+  }
+
+  override Maximize(): void {
+    lib.symbols.wxFrame_Maximize(this._ptr);
+  }
+
+  override SetIcon(icon: Pointer): void {
+    lib.symbols.wxFrame_SetIcon(this._ptr, icon);
+  }
+
+  SetShape(region: Pointer): boolean {
+    return (lib.symbols.wxFrame_SetShape(this._ptr, region) as number) !== 0;
+  }
+
+  override SetTitle(text: Pointer): void {
+    lib.symbols.wxFrame_SetTitle(this._ptr, text);
+  }
+
+  override ShowFullScreen(show: boolean, style: number): boolean {
+    return (lib.symbols.wxFrame_ShowFullScreen(this._ptr, show ? 1 : 0, style) as number) !== 0;
+  }
+
+  GetClientAreaOriginPoint(): Pointer {
+    return lib.symbols.wxFrame_GetClientAreaOriginPoint(this._ptr);
+  }
+
+  SetWindowModality(modality: number): void {
+    lib.symbols.wxFrame_SetWindowModality(this._ptr, modality);
+  }
+
+  ProcessCommandItem(item: Pointer): boolean {
+    return (lib.symbols.wxFrame_ProcessCommandItem(this._ptr, item) as number) !== 0;
+  }
+
+  DoMenuUpdates(menu: Pointer): void {
+    lib.symbols.wxFrame_DoMenuUpdates(this._ptr, menu);
+  }
+
+  override IsClientAreaChild(child: Pointer): boolean {
+    return (lib.symbols.wxFrame_IsClientAreaChild(this._ptr, child) as number) !== 0;
+  }
+
   CreateStatusBar(number: number, style: number, id: number): Pointer {
     return lib.symbols.wxFrame_CreateStatusBar(this._ptr, number, style, id);
   }

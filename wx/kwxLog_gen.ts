@@ -2,96 +2,93 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxLog } from "./wxLog_gen.ts";
 
-export class kwxLog {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class kwxLog extends wxLog {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.kwxLog_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
   }
 
-  AddTraceMask(str: Pointer): void {
+  override AddTraceMask(str: Pointer): void {
     lib.symbols.kwxLog_AddTraceMask(this._ptr, str);
   }
 
-  DontCreateOnDemand(): void {
+  override DontCreateOnDemand(): void {
     lib.symbols.kwxLog_DontCreateOnDemand(this._ptr);
   }
 
-  EnableLogging(doIt: boolean): number {
-    return lib.symbols.kwxLog_EnableLogging(this._ptr, doIt ? 1 : 0);
+  override EnableLogging(doIt: boolean): boolean {
+    return (lib.symbols.kwxLog_EnableLogging(this._ptr, doIt ? 1 : 0) as number) !== 0;
   }
 
-  Flush(): void {
+  override Flush(): void {
     lib.symbols.kwxLog_Flush(this._ptr);
   }
 
-  FlushActive(): void {
+  override FlushActive(): void {
     lib.symbols.kwxLog_FlushActive(this._ptr);
   }
 
-  GetActiveTarget(): Pointer {
+  override GetActiveTarget(): Pointer {
     return lib.symbols.kwxLog_GetActiveTarget();
   }
 
-  GetTimestamp(): Pointer {
+  override GetTimestamp(): Pointer {
     return lib.symbols.kwxLog_GetTimestamp(this._ptr);
   }
 
-  GetVerbose(): number {
-    return lib.symbols.kwxLog_GetVerbose(this._ptr);
+  override GetVerbose(): boolean {
+    return (lib.symbols.kwxLog_GetVerbose(this._ptr) as number) !== 0;
   }
 
-  HasPendingMessages(): boolean {
+  override HasPendingMessages(): boolean {
     return (lib.symbols.kwxLog_HasPendingMessages(this._ptr) as number) !== 0;
   }
 
-  IsAllowedTraceMask(mask: Pointer): boolean {
+  override IsAllowedTraceMask(mask: Pointer): boolean {
     return (lib.symbols.kwxLog_IsAllowedTraceMask(this._ptr, mask) as number) !== 0;
   }
 
-  IsEnabled(): boolean {
+  override IsEnabled(): boolean {
     return (lib.symbols.kwxLog_IsEnabled(this._ptr) as number) !== 0;
   }
 
-  OnLog(level: number, szString: Pointer, timestamp: number): void {
+  override OnLog(level: number, szString: Pointer, timestamp: number): void {
     lib.symbols.kwxLog_OnLog(this._ptr, level, szString, timestamp);
   }
 
-  RemoveTraceMask(str: Pointer): void {
+  override RemoveTraceMask(str: Pointer): void {
     lib.symbols.kwxLog_RemoveTraceMask(this._ptr, str);
   }
 
-  Resume(): void {
+  override Resume(): void {
     lib.symbols.kwxLog_Resume(this._ptr);
   }
 
-  SetActiveTarget(): Pointer {
+  override SetActiveTarget(): Pointer {
     return lib.symbols.kwxLog_SetActiveTarget(this._ptr);
   }
 
-  SetTimestamp(timestamp: Pointer): void {
+  override SetTimestamp(timestamp: Pointer): void {
     lib.symbols.kwxLog_SetTimestamp(this._ptr, timestamp);
   }
 
-  SetVerbose(bVerbose: number): void {
-    lib.symbols.kwxLog_SetVerbose(this._ptr, bVerbose);
+  override SetVerbose(bVerbose: boolean): void {
+    lib.symbols.kwxLog_SetVerbose(this._ptr, bVerbose ? 1 : 0);
   }
 
-  Suspend(): void {
+  override Suspend(): void {
     lib.symbols.kwxLog_Suspend(this._ptr);
   }
 

@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxConfigBase {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -16,11 +17,21 @@ export class wxConfigBase {
   }
 
   Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxConfigBase_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  Get(): Pointer {
+    return lib.symbols.wxConfigBase_Get();
+  }
+
+  Set(): void {
+    lib.symbols.wxConfigBase_Set(this._ptr);
   }
 
   DeleteAll(): boolean {

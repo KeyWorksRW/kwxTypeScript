@@ -10,6 +10,66 @@ export class wxDialog extends wxTopLevelWindow {
     return this._ptr;
   }
 
+  ShowWindowModal(): void {
+    lib.symbols.wxDialog_ShowWindowModal(this._ptr);
+  }
+
+  GetModality(): number {
+    return lib.symbols.wxDialog_GetModality(this._ptr);
+  }
+
+  AddMainButtonId(id: number): void {
+    lib.symbols.wxDialog_AddMainButtonId(this._ptr, id);
+  }
+
+  IsMainButtonId(id: number): boolean {
+    return (lib.symbols.wxDialog_IsMainButtonId(this._ptr, id) as number) !== 0;
+  }
+
+  SetLayoutAdaptationLevel(level: number): void {
+    lib.symbols.wxDialog_SetLayoutAdaptationLevel(this._ptr, level);
+  }
+
+  GetLayoutAdaptationLevel(): number {
+    return lib.symbols.wxDialog_GetLayoutAdaptationLevel(this._ptr);
+  }
+
+  SetLayoutAdaptationMode(mode: number): void {
+    lib.symbols.wxDialog_SetLayoutAdaptationMode(this._ptr, mode);
+  }
+
+  GetLayoutAdaptationMode(): number {
+    return lib.symbols.wxDialog_GetLayoutAdaptationMode(this._ptr);
+  }
+
+  SetLayoutAdaptationDone(adaptationDone: boolean): void {
+    lib.symbols.wxDialog_SetLayoutAdaptationDone(this._ptr, adaptationDone ? 1 : 0);
+  }
+
+  GetLayoutAdaptationDone(): boolean {
+    return (lib.symbols.wxDialog_GetLayoutAdaptationDone(this._ptr) as number) !== 0;
+  }
+
+  IsLayoutAdaptationEnabled(): boolean {
+    return (lib.symbols.wxDialog_IsLayoutAdaptationEnabled() as number) !== 0;
+  }
+
+  EnableLayoutAdaptation(enable: boolean): void {
+    lib.symbols.wxDialog_EnableLayoutAdaptation(enable ? 1 : 0);
+  }
+
+  CanDoLayoutAdaptation(): boolean {
+    return (lib.symbols.wxDialog_CanDoLayoutAdaptation(this._ptr) as number) !== 0;
+  }
+
+  DoLayoutAdaptation(): boolean {
+    return (lib.symbols.wxDialog_DoLayoutAdaptation(this._ptr) as number) !== 0;
+  }
+
+  GetContentWindow(): Pointer {
+    return lib.symbols.wxDialog_GetContentWindow(this._ptr);
+  }
+
   EndModal(retCode: number): void {
     lib.symbols.wxDialog_EndModal(this._ptr, retCode);
   }

@@ -2,25 +2,94 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxBitmap {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxBitmap extends wxObject {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxBitmap_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  Init(width: number, height: number, depth: number): boolean {
+    return (lib.symbols.wxBitmap_Init(this._ptr, width, height, depth) as number) !== 0;
+  }
+
+  GetSize(): Pointer {
+    return lib.symbols.wxBitmap_GetSize(this._ptr);
+  }
+
+  SetScaleFactor(scale: number): void {
+    lib.symbols.wxBitmap_SetScaleFactor(this._ptr, scale);
+  }
+
+  GetScaleFactor(): number {
+    return lib.symbols.wxBitmap_GetScaleFactor(this._ptr);
+  }
+
+  GetDIPSize(): Pointer {
+    return lib.symbols.wxBitmap_GetDIPSize(this._ptr);
+  }
+
+  GetLogicalSize(): Pointer {
+    return lib.symbols.wxBitmap_GetLogicalSize(this._ptr);
+  }
+
+  GetLogicalWidth(): number {
+    return lib.symbols.wxBitmap_GetLogicalWidth(this._ptr);
+  }
+
+  GetLogicalHeight(): number {
+    return lib.symbols.wxBitmap_GetLogicalHeight(this._ptr);
+  }
+
+  CreateScaled(width: number, height: number, depth: number, scale: number): boolean {
+    return (lib.symbols.wxBitmap_CreateScaled(this._ptr, width, height, depth, scale) as number) !== 0;
+  }
+
+  ConvertToImage(): Pointer {
+    return lib.symbols.wxBitmap_ConvertToImage(this._ptr);
+  }
+
+  ConvertToDisabled(brightness: number): Pointer {
+    return lib.symbols.wxBitmap_ConvertToDisabled(this._ptr, brightness);
+  }
+
+  GetPalette(): Pointer {
+    return lib.symbols.wxBitmap_GetPalette(this._ptr);
+  }
+
+  SetPalette(palette: Pointer): void {
+    lib.symbols.wxBitmap_SetPalette(this._ptr, palette);
+  }
+
+  HasAlpha(): boolean {
+    return (lib.symbols.wxBitmap_HasAlpha(this._ptr) as number) !== 0;
+  }
+
+  UseAlpha(use: boolean): boolean {
+    return (lib.symbols.wxBitmap_UseAlpha(this._ptr, use ? 1 : 0) as number) !== 0;
+  }
+
+  ResetAlpha(): void {
+    lib.symbols.wxBitmap_ResetAlpha(this._ptr);
+  }
+
+  CopyFromIcon(icon: Pointer): boolean {
+    return (lib.symbols.wxBitmap_CopyFromIcon(this._ptr, icon) as number) !== 0;
+  }
+
+  NewFromPNGData(data: Pointer, size: bigint): Pointer {
+    return lib.symbols.wxBitmap_NewFromPNGData(data, size);
   }
 
   AddHandler(handler: Pointer): void {
@@ -95,6 +164,12 @@ export class wxBitmap {
     lib.symbols.wxBitmap_SetMask(this._ptr, mask);
   }
 
+}
+
+export function createWxBitmapFromImage(image: Pointer, depth: number): wxBitmap | null {
+    const rawPtr = lib.symbols.wxBitmap_CreateFromImage(image, depth);
+    if (rawPtr === null) return null;
+    return new wxBitmap(rawPtr);
 }
 
 export function createWxBitmap(data: Pointer, type_: number, width: number, height: number, depth: number): wxBitmap | null {

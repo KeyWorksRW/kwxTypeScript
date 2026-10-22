@@ -10,6 +10,26 @@ export class wxTopLevelWindow extends wxWindow {
     return this._ptr;
   }
 
+  IsAlwaysMaximized(): boolean {
+    return (lib.symbols.wxTopLevelWindow_IsAlwaysMaximized(this._ptr) as number) !== 0;
+  }
+
+  GetIcons(): Pointer {
+    return lib.symbols.wxTopLevelWindow_GetIcons(this._ptr);
+  }
+
+  EnableFullScreenView(enable: boolean, style: number): boolean {
+    return (lib.symbols.wxTopLevelWindow_EnableFullScreenView(this._ptr, enable ? 1 : 0, style) as number) !== 0;
+  }
+
+  GetContentProtection(): number {
+    return lib.symbols.wxTopLevelWindow_GetContentProtection(this._ptr);
+  }
+
+  GetDefaultSize(): Pointer {
+    return lib.symbols.wxTopLevelWindow_GetDefaultSize();
+  }
+
   EnableCloseButton(enable: boolean): boolean {
     return (lib.symbols.wxTopLevelWindow_EnableCloseButton(this._ptr, enable ? 1 : 0) as number) !== 0;
   }

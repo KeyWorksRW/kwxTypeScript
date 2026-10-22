@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxTreeItemId {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -16,6 +17,8 @@ export class wxTreeItemId {
   }
 
   Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxTreeItemId_Delete(this._ptr);
   }
 
@@ -23,10 +26,24 @@ export class wxTreeItemId {
     this.Delete();
   }
 
+  Clone(): Pointer {
+    return lib.symbols.wxTreeItemId_Clone(this._ptr);
+  }
+
+  GetValue(): number {
+    return lib.symbols.wxTreeItemId_GetValue(this._ptr);
+  }
+
   IsOk(): boolean {
     return (lib.symbols.wxTreeItemId_IsOk(this._ptr) as number) !== 0;
   }
 
+}
+
+export function createWxTreeItemIdFromValue(value: number): wxTreeItemId | null {
+    const rawPtr = lib.symbols.wxTreeItemId_CreateFromValue(value);
+    if (rawPtr === null) return null;
+    return new wxTreeItemId(rawPtr);
 }
 
 export function createWxTreeItemId(): wxTreeItemId | null {

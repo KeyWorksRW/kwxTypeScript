@@ -11,6 +11,8 @@ export class wxTaskBarIcon extends wxEvtHandler {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxTaskBarIcon_Delete(this._ptr);
   }
 

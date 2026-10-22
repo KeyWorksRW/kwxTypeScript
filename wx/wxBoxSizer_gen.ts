@@ -10,6 +10,14 @@ export class wxBoxSizer extends wxSizer {
     return this._ptr;
   }
 
+  IsVertical(): boolean {
+    return (lib.symbols.wxBoxSizer_IsVertical(this._ptr) as number) !== 0;
+  }
+
+  SetOrientation(orient: number): void {
+    lib.symbols.wxBoxSizer_SetOrientation(this._ptr, orient);
+  }
+
   override CalcMin(): Pointer {
     return lib.symbols.wxBoxSizer_CalcMin(this._ptr);
   }

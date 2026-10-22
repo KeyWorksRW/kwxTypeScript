@@ -23,6 +23,7 @@ export class wxListBox extends wxControl {
   }
 
   DeleteItem(index: number): void {
+    if (this._disposed) return;
     lib.symbols.wxListBox_Delete(this._ptr, index);
   }
 
@@ -82,7 +83,7 @@ export class wxListBox extends wxControl {
     lib.symbols.wxListBox_EnsureVisible(this._ptr, index);
   }
 
-  HitTest(x: number, y: number): number {
+  override HitTest(x: number, y: number): number {
     return lib.symbols.wxListBox_HitTest(this._ptr, x, y);
   }
 
@@ -92,6 +93,62 @@ export class wxListBox extends wxControl {
 
   GetCountPerPage(): number {
     return lib.symbols.wxListBox_GetCountPerPage(this._ptr);
+  }
+
+  AppendString(item: Pointer): void {
+    lib.symbols.wxItemContainer_AppendString(this._ptr, item);
+  }
+
+  GetClientObject(n: number): Pointer {
+    return lib.symbols.wxItemContainer_GetClientObject(this._ptr, n);
+  }
+
+  DetachClientObject(n: number): Pointer {
+    return lib.symbols.wxItemContainer_DetachClientObject(this._ptr, n);
+  }
+
+  GetClientDataType(): number {
+    return lib.symbols.wxItemContainer_GetClientDataType(this._ptr);
+  }
+
+  HasClientObjectData(): boolean {
+    return (lib.symbols.wxItemContainer_HasClientObjectData(this._ptr) as number) !== 0;
+  }
+
+  HasClientUntypedData(): boolean {
+    return (lib.symbols.wxItemContainer_HasClientUntypedData(this._ptr) as number) !== 0;
+  }
+
+  IsEmpty(): boolean {
+    return (lib.symbols.wxItemContainer_IsEmpty(this._ptr) as number) !== 0;
+  }
+
+  GetStringSelection(): Pointer {
+    return lib.symbols.wxItemContainer_GetStringSelection(this._ptr);
+  }
+
+  Select(n: number): void {
+    lib.symbols.wxItemContainer_Select(this._ptr, n);
+  }
+
+  AppendItems(count: number, items: Pointer): number {
+    return lib.symbols.wxItemContainer_AppendItems(this._ptr, count, items);
+  }
+
+  Insert(item: Pointer, pos: number): number {
+    return lib.symbols.wxItemContainer_Insert(this._ptr, item, pos);
+  }
+
+  Set(count: number, items: Pointer): void {
+    lib.symbols.wxItemContainer_Set(this._ptr, count, items);
+  }
+
+  IsSorted(): boolean {
+    return (lib.symbols.wxItemContainer_IsSorted(this._ptr) as number) !== 0;
+  }
+
+  HasClientData(): boolean {
+    return (lib.symbols.wxItemContainer_HasClientData(this._ptr) as number) !== 0;
   }
 
 }

@@ -10,6 +10,10 @@ export class wxScrolledWindow extends wxPanel {
     return this._ptr;
   }
 
+  SetScrollRate(xstep: number, ystep: number): void {
+    lib.symbols.wxScrolledWindow_SetScrollRate(this._ptr, xstep, ystep);
+  }
+
   AdjustScrollbars(): void {
     lib.symbols.wxScrolledWindow_AdjustScrollbars(this._ptr);
   }

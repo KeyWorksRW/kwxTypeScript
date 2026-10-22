@@ -2,25 +2,26 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxXmlResource {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxXmlResource extends wxObject {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxXmlResource_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  GetStyledTextCtrl(win: Pointer, strId: Pointer): Pointer {
+    return lib.symbols.wxXmlResource_GetStyledTextCtrl(win, strId);
   }
 
   AddHandler(handler: Pointer): void {

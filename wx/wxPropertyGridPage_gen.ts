@@ -10,6 +10,34 @@ export class wxPropertyGridPage extends wxEvtHandler {
     return this._ptr;
   }
 
+  FitColumns(): Pointer {
+    return lib.symbols.wxPropertyGridPage_FitColumns(this._ptr);
+  }
+
+  GetStatePtr(): Pointer {
+    return lib.symbols.wxPropertyGridPage_GetStatePtr(this._ptr);
+  }
+
+  GetToolId(): number {
+    return lib.symbols.wxPropertyGridPage_GetToolId(this._ptr);
+  }
+
+  Init(): void {
+    lib.symbols.wxPropertyGridPage_Init(this._ptr);
+  }
+
+  IsHandlingAllEvents(): boolean {
+    return (lib.symbols.wxPropertyGridPage_IsHandlingAllEvents(this._ptr) as number) !== 0;
+  }
+
+  OnShow(): void {
+    lib.symbols.wxPropertyGridPage_OnShow(this._ptr);
+  }
+
+  RefreshProperty(property: Pointer): void {
+    lib.symbols.wxPropertyGridPage_RefreshProperty(this._ptr, property);
+  }
+
   Clear(): void {
     lib.symbols.wxPropertyGridPage_Clear(this._ptr);
   }

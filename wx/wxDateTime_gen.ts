@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxDateTime {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -13,6 +14,16 @@ export class wxDateTime {
   /** Returns the underlying native pointer. */
   get ptr(): Pointer {
     return this._ptr;
+  }
+
+  Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxDateTime_Delete(this._ptr);
+  }
+
+  [Symbol.dispose](): void {
+    this.Delete();
   }
 
   AddDate(diff: Pointer, ref: Pointer): void {

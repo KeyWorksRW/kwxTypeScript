@@ -18,7 +18,7 @@ export class wxBookCtrlBase extends wxControl {
     lib.symbols.wxBookCtrlBase_SetPageSize(this._ptr, width, height);
   }
 
-  HitTest(x: number, y: number, flags: Pointer): number {
+  HitTest_3(x: number, y: number, flags: Pointer): number {
     return lib.symbols.wxBookCtrlBase_HitTest(this._ptr, x, y, flags);
   }
 

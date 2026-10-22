@@ -10,6 +10,18 @@ export class wxTreeListCtrl extends wxWindow {
     return this._ptr;
   }
 
+  SetItemTextSimple(item: Pointer, text: Pointer): void {
+    lib.symbols.wxTreeListCtrl_SetItemTextSimple(this._ptr, item, text);
+  }
+
+  GetItemData(item: Pointer): Pointer {
+    return lib.symbols.wxTreeListCtrl_GetItemData(this._ptr, item);
+  }
+
+  SetItemData(item: Pointer, data: Pointer): void {
+    lib.symbols.wxTreeListCtrl_SetItemData(this._ptr, item, data);
+  }
+
   AppendColumn(title: Pointer, width: number, align: number, flags: number): number {
     return lib.symbols.wxTreeListCtrl_AppendColumn(this._ptr, title, width, align, flags);
   }
@@ -51,6 +63,7 @@ export class wxTreeListCtrl extends wxWindow {
   }
 
   DeleteItem(item: Pointer): void {
+    if (this._disposed) return;
     lib.symbols.wxTreeListCtrl_DeleteItem(this._ptr, item);
   }
 

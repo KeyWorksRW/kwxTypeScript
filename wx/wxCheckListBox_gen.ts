@@ -11,6 +11,8 @@ export class wxCheckListBox extends wxListBox {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxCheckListBox_Delete(this._ptr);
   }
 

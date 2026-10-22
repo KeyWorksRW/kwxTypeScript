@@ -2,28 +2,25 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxGridTableBase } from "./wxGridTableBase_gen.ts";
 
-export class kwxGridTable {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class kwxGridTable extends wxGridTableBase {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.kwxGridTable_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
   }
 
-  GetView(): Pointer {
+  override GetView(): Pointer {
     return lib.symbols.kwxGridTable_GetView(this._ptr);
   }
 

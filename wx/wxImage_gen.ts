@@ -2,17 +2,266 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxImage {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
+export class wxImage extends wxObject {
+  /** Returns the underlying native pointer. */
+  override get ptr(): Pointer {
+    return this._ptr;
   }
 
-  /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
-    return this._ptr;
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxImage_Delete(this._ptr);
+  }
+
+  override [Symbol.dispose](): void {
+    this.Delete();
+  }
+
+  CreateFromXPMData(data: Pointer): boolean {
+    return (lib.symbols.wxImage_CreateFromXPMData(this._ptr, data) as number) !== 0;
+  }
+
+  Clear(value: number): void {
+    lib.symbols.wxImage_Clear(this._ptr, value);
+  }
+
+  Size(width: number, height: number, x: number, y: number, r: number, g: number, b: number): Pointer {
+    return lib.symbols.wxImage_Size(this._ptr, width, height, x, y, r, g, b);
+  }
+
+  ResampleNearest(width: number, height: number): Pointer {
+    return lib.symbols.wxImage_ResampleNearest(this._ptr, width, height);
+  }
+
+  ResampleBox(width: number, height: number): Pointer {
+    return lib.symbols.wxImage_ResampleBox(this._ptr, width, height);
+  }
+
+  ResampleBilinear(width: number, height: number): Pointer {
+    return lib.symbols.wxImage_ResampleBilinear(this._ptr, width, height);
+  }
+
+  ResampleBicubic(width: number, height: number): Pointer {
+    return lib.symbols.wxImage_ResampleBicubic(this._ptr, width, height);
+  }
+
+  Blur(radius: number): Pointer {
+    return lib.symbols.wxImage_Blur(this._ptr, radius);
+  }
+
+  BlurHorizontal(radius: number): Pointer {
+    return lib.symbols.wxImage_BlurHorizontal(this._ptr, radius);
+  }
+
+  BlurVertical(radius: number): Pointer {
+    return lib.symbols.wxImage_BlurVertical(this._ptr, radius);
+  }
+
+  ShrinkBy(xFactor: number, yFactor: number): Pointer {
+    return lib.symbols.wxImage_ShrinkBy(this._ptr, xFactor, yFactor);
+  }
+
+  Resize(width: number, height: number, x: number, y: number, r: number, g: number, b: number): void {
+    lib.symbols.wxImage_Resize(this._ptr, width, height, x, y, r, g, b);
+  }
+
+  Rotate180(): Pointer {
+    return lib.symbols.wxImage_Rotate180(this._ptr);
+  }
+
+  ConvertToGreyscale(): Pointer {
+    return lib.symbols.wxImage_ConvertToGreyscale(this._ptr);
+  }
+
+  ConvertToGreyscaleEx(weightR: number, weightG: number, weightB: number): Pointer {
+    return lib.symbols.wxImage_ConvertToGreyscaleEx(this._ptr, weightR, weightG, weightB);
+  }
+
+  ConvertToMono(r: number, g: number, b: number): Pointer {
+    return lib.symbols.wxImage_ConvertToMono(this._ptr, r, g, b);
+  }
+
+  ConvertToDisabled(brightness: number): Pointer {
+    return lib.symbols.wxImage_ConvertToDisabled(this._ptr, brightness);
+  }
+
+  ChangeLightness(alpha: number): Pointer {
+    return lib.symbols.wxImage_ChangeLightness(this._ptr, alpha);
+  }
+
+  SetRGBRect(x: number, y: number, width: number, height: number, r: number, g: number, b: number): void {
+    lib.symbols.wxImage_SetRGBRect(this._ptr, x, y, width, height, r, g, b);
+  }
+
+  SetAlpha(x: number, y: number, alpha: number): void {
+    lib.symbols.wxImage_SetAlpha(this._ptr, x, y, alpha);
+  }
+
+  GetAlphaPixel(x: number, y: number): number {
+    return lib.symbols.wxImage_GetAlphaPixel(this._ptr, x, y);
+  }
+
+  FindFirstUnusedColour(r: Pointer, g: Pointer, b: Pointer, startR: number, startG: number, startB: number): boolean {
+    return (lib.symbols.wxImage_FindFirstUnusedColour(this._ptr, r, g, b, startR, startG, startB) as number) !== 0;
+  }
+
+  SetMaskFromImage(mask: Pointer, mr: number, mg: number, mb: number): boolean {
+    return (lib.symbols.wxImage_SetMaskFromImage(this._ptr, mask, mr, mg, mb) as number) !== 0;
+  }
+
+  ConvertAlphaToMask(threshold: number): boolean {
+    return (lib.symbols.wxImage_ConvertAlphaToMask(this._ptr, threshold) as number) !== 0;
+  }
+
+  ConvertAlphaToMaskColour(mr: number, mg: number, mb: number, threshold: number): boolean {
+    return (lib.symbols.wxImage_ConvertAlphaToMaskColour(this._ptr, mr, mg, mb, threshold) as number) !== 0;
+  }
+
+  ConvertColourToAlpha(r: number, g: number, b: number): boolean {
+    return (lib.symbols.wxImage_ConvertColourToAlpha(this._ptr, r, g, b) as number) !== 0;
+  }
+
+  SetDefaultLoadFlags(flags: number): void {
+    lib.symbols.wxImage_SetDefaultLoadFlags(flags);
+  }
+
+  GetDefaultLoadFlags(): number {
+    return lib.symbols.wxImage_GetDefaultLoadFlags();
+  }
+
+  SetLoadFlags(flags: number): void {
+    lib.symbols.wxImage_SetLoadFlags(this._ptr, flags);
+  }
+
+  GetLoadFlags(): number {
+    return lib.symbols.wxImage_GetLoadFlags(this._ptr);
+  }
+
+  GetImageCount(name: Pointer, type_: number): number {
+    return lib.symbols.wxImage_GetImageCount(name, type_);
+  }
+
+  SaveFileMime(name: Pointer, mimetype: Pointer): boolean {
+    return (lib.symbols.wxImage_SaveFileMime(this._ptr, name, mimetype) as number) !== 0;
+  }
+
+  LoadFileMime(name: Pointer, mimetype: Pointer, index: number): boolean {
+    return (lib.symbols.wxImage_LoadFileMime(this._ptr, name, mimetype, index) as number) !== 0;
+  }
+
+  LoadStreamMime(stream: Pointer, mimetype: Pointer, index: number): boolean {
+    return (lib.symbols.wxImage_LoadStreamMime(this._ptr, stream, mimetype, index) as number) !== 0;
+  }
+
+  SaveStreamMime(stream: Pointer, mimetype: Pointer): boolean {
+    return (lib.symbols.wxImage_SaveStreamMime(this._ptr, stream, mimetype) as number) !== 0;
+  }
+
+  GetSize(): Pointer {
+    return lib.symbols.wxImage_GetSize(this._ptr);
+  }
+
+  SetDataRGBA(data: Pointer): void {
+    lib.symbols.wxImage_SetDataRGBA(this._ptr, data);
+  }
+
+  GetAlphaData(): Pointer {
+    return lib.symbols.wxImage_GetAlphaData(this._ptr);
+  }
+
+  HasAlpha(): boolean {
+    return (lib.symbols.wxImage_HasAlpha(this._ptr) as number) !== 0;
+  }
+
+  SetAlphaData(alpha: Pointer, staticData: boolean): void {
+    lib.symbols.wxImage_SetAlphaData(this._ptr, alpha, staticData ? 1 : 0);
+  }
+
+  InitAlpha(): void {
+    lib.symbols.wxImage_InitAlpha(this._ptr);
+  }
+
+  ClearAlpha(): void {
+    lib.symbols.wxImage_ClearAlpha(this._ptr);
+  }
+
+  IsTransparent(x: number, y: number, threshold: number): boolean {
+    return (lib.symbols.wxImage_IsTransparent(this._ptr, x, y, threshold) as number) !== 0;
+  }
+
+  GetOrFindMaskColour(r: Pointer, g: Pointer, b: Pointer): boolean {
+    return (lib.symbols.wxImage_GetOrFindMaskColour(this._ptr, r, g, b) as number) !== 0;
+  }
+
+  HasPalette(): boolean {
+    return (lib.symbols.wxImage_HasPalette(this._ptr) as number) !== 0;
+  }
+
+  GetPalette(): Pointer {
+    return lib.symbols.wxImage_GetPalette(this._ptr);
+  }
+
+  SetPalette(palette: Pointer): void {
+    lib.symbols.wxImage_SetPalette(this._ptr, palette);
+  }
+
+  RotateHue(angle: number): void {
+    lib.symbols.wxImage_RotateHue(this._ptr, angle);
+  }
+
+  ChangeSaturation(factor: number): void {
+    lib.symbols.wxImage_ChangeSaturation(this._ptr, factor);
+  }
+
+  ChangeBrightness(factor: number): void {
+    lib.symbols.wxImage_ChangeBrightness(this._ptr, factor);
+  }
+
+  ChangeHSV(angleH: number, factorS: number, factorV: number): void {
+    lib.symbols.wxImage_ChangeHSV(this._ptr, angleH, factorS, factorV);
+  }
+
+  AddHandler(handler: Pointer): void {
+    lib.symbols.wxImage_AddHandler(handler);
+  }
+
+  InsertHandler(handler: Pointer): void {
+    lib.symbols.wxImage_InsertHandler(handler);
+  }
+
+  RemoveHandler(name: Pointer): boolean {
+    return (lib.symbols.wxImage_RemoveHandler(name) as number) !== 0;
+  }
+
+  FindHandlerByName(name: Pointer): Pointer {
+    return lib.symbols.wxImage_FindHandlerByName(name);
+  }
+
+  FindHandlerByExtension(extension: Pointer, imageType: number): Pointer {
+    return lib.symbols.wxImage_FindHandlerByExtension(extension, imageType);
+  }
+
+  FindHandlerByType(imageType: number): Pointer {
+    return lib.symbols.wxImage_FindHandlerByType(imageType);
+  }
+
+  FindHandlerMime(mimetype: Pointer): Pointer {
+    return lib.symbols.wxImage_FindHandlerMime(mimetype);
+  }
+
+  GetImageExtWildcard(): Pointer {
+    return lib.symbols.wxImage_GetImageExtWildcard();
+  }
+
+  CleanUpHandlers(): void {
+    lib.symbols.wxImage_CleanUpHandlers();
+  }
+
+  InitStandardHandlers(): void {
+    lib.symbols.wxImage_InitStandardHandlers();
   }
 
   CanRead(name: Pointer): boolean {
@@ -199,6 +448,12 @@ export class wxImage {
     lib.symbols.wxImage_SetRGB(this._ptr, x, y, r, g, b);
   }
 
+}
+
+export function createWxImageFromDataEx(width: number, height: number, data: Pointer, isStaticData: boolean): wxImage | null {
+    const rawPtr = lib.symbols.wxImage_CreateFromDataEx(width, height, data, isStaticData ? 1 : 0);
+    if (rawPtr === null) return null;
+    return new wxImage(rawPtr);
 }
 
 export function createWxImageDefault(): wxImage | null {

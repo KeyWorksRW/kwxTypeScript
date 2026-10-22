@@ -54,7 +54,7 @@ export class wxToolbook extends wxBookCtrlBase {
     return lib.symbols.wxToolbook_GetToolBar(this._ptr);
   }
 
-  override HitTest(x: number, y: number, flags: Pointer): number {
+  override HitTest_3(x: number, y: number, flags: Pointer): number {
     return lib.symbols.wxToolbook_HitTest(this._ptr, x, y, flags);
   }
 

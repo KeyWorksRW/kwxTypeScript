@@ -2,23 +2,23 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxPanel } from "./wxPanel_gen.ts";
+import { wxWizardPage } from "./wxWizardPage_gen.ts";
 
-export class wxWizardPageSimple extends wxPanel {
+export class wxWizardPageSimple extends wxWizardPage {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;
   }
 
-  GetBitmap(ref: Pointer): void {
-    lib.symbols.wxWizardPageSimple_GetBitmap(this._ptr, ref);
+  override GetBitmap(): Pointer {
+    return lib.symbols.wxWizardPageSimple_GetBitmap(this._ptr);
   }
 
-  GetNext(): Pointer {
+  override GetNext(): Pointer {
     return lib.symbols.wxWizardPageSimple_GetNext(this._ptr);
   }
 
-  GetPrev(): Pointer {
+  override GetPrev(): Pointer {
     return lib.symbols.wxWizardPageSimple_GetPrev(this._ptr);
   }
 

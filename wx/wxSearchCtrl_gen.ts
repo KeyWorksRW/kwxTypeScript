@@ -42,6 +42,182 @@ export class wxSearchCtrl extends wxControl {
     return lib.symbols.wxSearchCtrl_GetDescriptiveText(this._ptr);
   }
 
+  ConvertToUpperCase(): void {
+    lib.symbols.wxTextEntry_ConvertToUpperCase(this._ptr);
+  }
+
+  ForwardEnableTextChangedEvents(enable: boolean): void {
+    lib.symbols.wxTextEntry_ForwardEnableTextChangedEvents(this._ptr, enable ? 1 : 0);
+  }
+
+  SetValue(value: Pointer): void {
+    lib.symbols.wxTextEntry_SetValue(this._ptr, value);
+  }
+
+  ChangeValue(value: Pointer): void {
+    lib.symbols.wxTextEntry_ChangeValue(this._ptr, value);
+  }
+
+  GetValue(): Pointer {
+    return lib.symbols.wxTextEntry_GetValue(this._ptr);
+  }
+
+  GetRange(from_: number, to: number): Pointer {
+    return lib.symbols.wxTextEntry_GetRange(this._ptr, from_, to);
+  }
+
+  IsEmpty(): boolean {
+    return (lib.symbols.wxTextEntry_IsEmpty(this._ptr) as number) !== 0;
+  }
+
+  WriteText(text: Pointer): void {
+    lib.symbols.wxTextEntry_WriteText(this._ptr, text);
+  }
+
+  AppendText(text: Pointer): void {
+    lib.symbols.wxTextEntry_AppendText(this._ptr, text);
+  }
+
+  Replace(from_: number, to: number, value: Pointer): void {
+    lib.symbols.wxTextEntry_Replace(this._ptr, from_, to, value);
+  }
+
+  Remove(from_: number, to: number): void {
+    lib.symbols.wxTextEntry_Remove(this._ptr, from_, to);
+  }
+
+  Clear(): void {
+    lib.symbols.wxTextEntry_Clear(this._ptr);
+  }
+
+  RemoveSelection(): void {
+    lib.symbols.wxTextEntry_RemoveSelection(this._ptr);
+  }
+
+  Copy(): void {
+    lib.symbols.wxTextEntry_Copy(this._ptr);
+  }
+
+  Cut(): void {
+    lib.symbols.wxTextEntry_Cut(this._ptr);
+  }
+
+  Paste(): void {
+    lib.symbols.wxTextEntry_Paste(this._ptr);
+  }
+
+  CanCopy(): boolean {
+    return (lib.symbols.wxTextEntry_CanCopy(this._ptr) as number) !== 0;
+  }
+
+  CanCut(): boolean {
+    return (lib.symbols.wxTextEntry_CanCut(this._ptr) as number) !== 0;
+  }
+
+  CanPaste(): boolean {
+    return (lib.symbols.wxTextEntry_CanPaste(this._ptr) as number) !== 0;
+  }
+
+  Undo(): void {
+    lib.symbols.wxTextEntry_Undo(this._ptr);
+  }
+
+  Redo(): void {
+    lib.symbols.wxTextEntry_Redo(this._ptr);
+  }
+
+  CanUndo(): boolean {
+    return (lib.symbols.wxTextEntry_CanUndo(this._ptr) as number) !== 0;
+  }
+
+  CanRedo(): boolean {
+    return (lib.symbols.wxTextEntry_CanRedo(this._ptr) as number) !== 0;
+  }
+
+  SetInsertionPoint(pos: number): void {
+    lib.symbols.wxTextEntry_SetInsertionPoint(this._ptr, pos);
+  }
+
+  SetInsertionPointEnd(): void {
+    lib.symbols.wxTextEntry_SetInsertionPointEnd(this._ptr);
+  }
+
+  GetInsertionPoint(): number {
+    return lib.symbols.wxTextEntry_GetInsertionPoint(this._ptr);
+  }
+
+  GetLastPosition(): number {
+    return lib.symbols.wxTextEntry_GetLastPosition(this._ptr);
+  }
+
+  SetSelection(from_: number, to: number): void {
+    lib.symbols.wxTextEntry_SetSelection(this._ptr, from_, to);
+  }
+
+  SelectAll(): void {
+    lib.symbols.wxTextEntry_SelectAll(this._ptr);
+  }
+
+  SelectNone(): void {
+    lib.symbols.wxTextEntry_SelectNone(this._ptr);
+  }
+
+  GetSelection(from_: Pointer, to: Pointer): void {
+    lib.symbols.wxTextEntry_GetSelection(this._ptr, from_, to);
+  }
+
+  HasSelection(): boolean {
+    return (lib.symbols.wxTextEntry_HasSelection(this._ptr) as number) !== 0;
+  }
+
+  GetStringSelection(): Pointer {
+    return lib.symbols.wxTextEntry_GetStringSelection(this._ptr);
+  }
+
+  IsEditable(): boolean {
+    return (lib.symbols.wxTextEntry_IsEditable(this._ptr) as number) !== 0;
+  }
+
+  SetEditable(editable: boolean): void {
+    lib.symbols.wxTextEntry_SetEditable(this._ptr, editable ? 1 : 0);
+  }
+
+  SetMaxLength(len: number): void {
+    lib.symbols.wxTextEntry_SetMaxLength(this._ptr, len);
+  }
+
+  ForceUpper(): void {
+    lib.symbols.wxTextEntry_ForceUpper(this._ptr);
+  }
+
+  SetHint(hint: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_SetHint(this._ptr, hint) as number) !== 0;
+  }
+
+  GetHint(): Pointer {
+    return lib.symbols.wxTextEntry_GetHint(this._ptr);
+  }
+
+  SetMargins(left: number, top: number): boolean {
+    return (lib.symbols.wxTextEntry_SetMargins(this._ptr, left, top) as number) !== 0;
+  }
+
+  GetMargins(left: Pointer, top: Pointer): void {
+    lib.symbols.wxTextEntry_GetMargins(this._ptr, left, top);
+  }
+
+  AutoComplete(count: number, items: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_AutoComplete(this._ptr, count, items) as number) !== 0;
+  }
+
+  AutoCompleteFileNames(): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteFileNames(this._ptr) as number) !== 0;
+  }
+
+  AutoCompleteDirectories(): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteDirectories(this._ptr) as number) !== 0;
+  }
+
 }
 
 export function createWxSearchCtrl(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: number): wxSearchCtrl | null {

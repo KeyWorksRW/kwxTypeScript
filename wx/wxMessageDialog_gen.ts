@@ -11,6 +11,8 @@ export class wxMessageDialog extends wxDialog {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxMessageDialog_Delete(this._ptr);
   }
 

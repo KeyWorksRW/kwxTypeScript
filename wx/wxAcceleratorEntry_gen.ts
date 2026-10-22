@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxAcceleratorEntry {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -16,11 +17,41 @@ export class wxAcceleratorEntry {
   }
 
   Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxAcceleratorEntry_Delete(this._ptr);
   }
 
   [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  SetMenuItem(item: Pointer): void {
+    lib.symbols.wxAcceleratorEntry_SetMenuItem(this._ptr, item);
+  }
+
+  GetMenuItem(): Pointer {
+    return lib.symbols.wxAcceleratorEntry_GetMenuItem(this._ptr);
+  }
+
+  IsOk(): boolean {
+    return (lib.symbols.wxAcceleratorEntry_IsOk(this._ptr) as number) !== 0;
+  }
+
+  MatchesEvent(event: Pointer): boolean {
+    return (lib.symbols.wxAcceleratorEntry_MatchesEvent(this._ptr, event) as number) !== 0;
+  }
+
+  ToString(): Pointer {
+    return lib.symbols.wxAcceleratorEntry_ToString(this._ptr);
+  }
+
+  ToRawString(): Pointer {
+    return lib.symbols.wxAcceleratorEntry_ToRawString(this._ptr);
+  }
+
+  FromString(str: Pointer): boolean {
+    return (lib.symbols.wxAcceleratorEntry_FromString(this._ptr, str) as number) !== 0;
   }
 
   GetCommand(): number {
@@ -39,6 +70,12 @@ export class wxAcceleratorEntry {
     lib.symbols.wxAcceleratorEntry_Set(this._ptr, flags, keyCode, cmd, item);
   }
 
+}
+
+export function createWxAcceleratorEntryFromString(str: Pointer): wxAcceleratorEntry | null {
+    const rawPtr = lib.symbols.wxAcceleratorEntry_CreateFromString(str);
+    if (rawPtr === null) return null;
+    return new wxAcceleratorEntry(rawPtr);
 }
 
 export function createWxAcceleratorEntry(flags: number, keyCode: number, cmd: number): wxAcceleratorEntry | null {

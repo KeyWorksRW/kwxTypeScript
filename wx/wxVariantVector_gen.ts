@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxVariantVector {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -16,6 +17,7 @@ export class wxVariantVector {
   }
 
   DeleteItem(vec: Pointer): void {
+    if (this._disposed) return;
     lib.symbols.wxVariantVector_Delete(vec);
   }
 
