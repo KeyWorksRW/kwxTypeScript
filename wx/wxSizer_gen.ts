@@ -2,17 +2,64 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxSizer {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
+export class wxSizer extends wxObject {
+  /** Returns the underlying native pointer. */
+  override get ptr(): Pointer {
+    return this._ptr;
   }
 
-  /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
-    return this._ptr;
+  RemoveSizer(sizer: Pointer): boolean {
+    return (lib.symbols.wxSizer_RemoveSizer(this._ptr, sizer) as number) !== 0;
+  }
+
+  Remove(index: number): boolean {
+    return (lib.symbols.wxSizer_Remove(this._ptr, index) as number) !== 0;
+  }
+
+  DeleteWindows(): void {
+    lib.symbols.wxSizer_DeleteWindows(this._ptr);
+  }
+
+  ComputeFittingClientSize(window: Pointer): Pointer {
+    return lib.symbols.wxSizer_ComputeFittingClientSize(this._ptr, window);
+  }
+
+  ComputeFittingWindowSize(window: Pointer): Pointer {
+    return lib.symbols.wxSizer_ComputeFittingWindowSize(this._ptr, window);
+  }
+
+  FitWithSize(window: Pointer): Pointer {
+    return lib.symbols.wxSizer_FitWithSize(this._ptr, window);
+  }
+
+  GetItemCount(): number {
+    return lib.symbols.wxSizer_GetItemCount(this._ptr);
+  }
+
+  IsEmpty(): boolean {
+    return (lib.symbols.wxSizer_IsEmpty(this._ptr) as number) !== 0;
+  }
+
+  GetItemById(id: number, recursive: boolean): Pointer {
+    return lib.symbols.wxSizer_GetItemById(this._ptr, id, recursive ? 1 : 0);
+  }
+
+  ShowItems(show: boolean): void {
+    lib.symbols.wxSizer_ShowItems(this._ptr, show ? 1 : 0);
+  }
+
+  AreAnyItemsShown(): boolean {
+    return (lib.symbols.wxSizer_AreAnyItemsShown(this._ptr) as number) !== 0;
+  }
+
+  InformFirstDirection(direction: number, size: number, availableOtherDir: number): boolean {
+    return (lib.symbols.wxSizer_InformFirstDirection(this._ptr, direction, size, availableOtherDir) as number) !== 0;
+  }
+
+  SetContainingWindow(window: Pointer): void {
+    lib.symbols.wxSizer_SetContainingWindow(this._ptr, window);
   }
 
   Add(width: number, height: number, option: number, flag: number, border: number, userData: Pointer): void {

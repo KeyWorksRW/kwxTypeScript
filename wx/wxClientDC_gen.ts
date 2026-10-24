@@ -11,6 +11,8 @@ export class wxClientDC extends wxWindowDC {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxClientDC_Delete(this._ptr);
   }
 

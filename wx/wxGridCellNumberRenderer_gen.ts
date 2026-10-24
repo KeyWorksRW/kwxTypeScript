@@ -2,16 +2,11 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxGridCellStringRenderer } from "./wxGridCellStringRenderer_gen.ts";
 
-export class wxGridCellNumberRenderer {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxGridCellNumberRenderer extends wxGridCellStringRenderer {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 

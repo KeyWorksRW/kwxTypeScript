@@ -10,6 +10,346 @@ export class wxPropertyGrid extends wxControl {
     return this._ptr;
   }
 
+  GetColumnCount(): number {
+    return lib.symbols.wxPropertyGrid_GetColumnCount(this._ptr);
+  }
+
+  GetRowHeight(): number {
+    return lib.symbols.wxPropertyGrid_GetRowHeight(this._ptr);
+  }
+
+  GetFontHeight(): number {
+    return lib.symbols.wxPropertyGrid_GetFontHeight(this._ptr);
+  }
+
+  GetMarginWidth(): number {
+    return lib.symbols.wxPropertyGrid_GetMarginWidth(this._ptr);
+  }
+
+  GetVerticalSpacing(): number {
+    return lib.symbols.wxPropertyGrid_GetVerticalSpacing(this._ptr);
+  }
+
+  GetSpacingY(): number {
+    return lib.symbols.wxPropertyGrid_GetSpacingY(this._ptr);
+  }
+
+  GetPanel(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetPanel(this._ptr);
+  }
+
+  GetGrid(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetGrid(this._ptr);
+  }
+
+  GetRoot(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetRoot(this._ptr);
+  }
+
+  GetLastItem(flags: number): Pointer {
+    return lib.symbols.wxPropertyGrid_GetLastItem(this._ptr, flags);
+  }
+
+  GetSelectedProperty(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetSelectedProperty(this._ptr);
+  }
+
+  GetSelection(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetSelection(this._ptr);
+  }
+
+  GetEditorTextCtrl(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetEditorTextCtrl(this._ptr);
+  }
+
+  GetEditorControl(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetEditorControl(this._ptr);
+  }
+
+  GetEditorControlSecondary(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetEditorControlSecondary(this._ptr);
+  }
+
+  GetLabelEditor(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetLabelEditor(this._ptr);
+  }
+
+  GetValidationInfo(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetValidationInfo(this._ptr);
+  }
+
+  GetImageSize(property: Pointer, item: number): Pointer {
+    return lib.symbols.wxPropertyGrid_GetImageSize(this._ptr, property, item);
+  }
+
+  GetImageRect(property: Pointer, item: number): Pointer {
+    return lib.symbols.wxPropertyGrid_GetImageRect(this._ptr, property, item);
+  }
+
+  GetPropertyRect(first: Pointer, last: Pointer): Pointer {
+    return lib.symbols.wxPropertyGrid_GetPropertyRect(this._ptr, first, last);
+  }
+
+  FitColumns(): Pointer {
+    return lib.symbols.wxPropertyGrid_FitColumns(this._ptr);
+  }
+
+  GetCaptionFont(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetCaptionFont(this._ptr);
+  }
+
+  GetCaptionBackgroundColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetCaptionBackgroundColour(this._ptr);
+  }
+
+  GetCaptionForegroundColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetCaptionForegroundColour(this._ptr);
+  }
+
+  GetCellBackgroundColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetCellBackgroundColour(this._ptr);
+  }
+
+  GetCellDisabledTextColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetCellDisabledTextColour(this._ptr);
+  }
+
+  GetCellTextColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetCellTextColour(this._ptr);
+  }
+
+  GetEmptySpaceColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetEmptySpaceColour(this._ptr);
+  }
+
+  GetLineColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetLineColour(this._ptr);
+  }
+
+  GetMarginColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetMarginColour(this._ptr);
+  }
+
+  GetSelectionBackgroundColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetSelectionBackgroundColour(this._ptr);
+  }
+
+  GetSelectionForegroundColour(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetSelectionForegroundColour(this._ptr);
+  }
+
+  SetCaptionBackgroundColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetCaptionBackgroundColour(this._ptr, colour);
+  }
+
+  SetCaptionTextColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetCaptionTextColour(this._ptr, colour);
+  }
+
+  SetCellBackgroundColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetCellBackgroundColour(this._ptr, colour);
+  }
+
+  SetCellDisabledTextColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetCellDisabledTextColour(this._ptr, colour);
+  }
+
+  SetCellTextColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetCellTextColour(this._ptr, colour);
+  }
+
+  SetEmptySpaceColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetEmptySpaceColour(this._ptr, colour);
+  }
+
+  SetLineColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetLineColour(this._ptr, colour);
+  }
+
+  SetMarginColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetMarginColour(this._ptr, colour);
+  }
+
+  SetSelectionBackgroundColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetSelectionBackgroundColour(this._ptr, colour);
+  }
+
+  SetSelectionTextColour(colour: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetSelectionTextColour(this._ptr, colour);
+  }
+
+  GetPropertyDefaultCell(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetPropertyDefaultCell(this._ptr);
+  }
+
+  GetCategoryDefaultCell(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetCategoryDefaultCell(this._ptr);
+  }
+
+  GetUnspecifiedValueAppearance(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetUnspecifiedValueAppearance(this._ptr);
+  }
+
+  SetUnspecifiedValueAppearance(cell: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetUnspecifiedValueAppearance(this._ptr, cell);
+  }
+
+  SetColumnCount(column_count: number): void {
+    lib.symbols.wxPropertyGrid_SetColumnCount(this._ptr, column_count);
+  }
+
+  SetSplitterPosition(position: number, column: number): void {
+    lib.symbols.wxPropertyGrid_SetSplitterPosition(this._ptr, position, column);
+  }
+
+  GetSplitterPosition(splitter_index: number): number {
+    return lib.symbols.wxPropertyGrid_GetSplitterPosition(this._ptr, splitter_index);
+  }
+
+  SetSplitterLeft(private_children_too: boolean): void {
+    lib.symbols.wxPropertyGrid_SetSplitterLeft(this._ptr, private_children_too ? 1 : 0);
+  }
+
+  SetVirtualWidth(width: number): void {
+    lib.symbols.wxPropertyGrid_SetVirtualWidth(this._ptr, width);
+  }
+
+  HasVirtualWidth(): boolean {
+    return (lib.symbols.wxPropertyGrid_HasVirtualWidth(this._ptr) as number) !== 0;
+  }
+
+  CenterSplitter(enable_auto_resizing: boolean): void {
+    lib.symbols.wxPropertyGrid_CenterSplitter(this._ptr, enable_auto_resizing ? 1 : 0);
+  }
+
+  ResetColumnSizes(enable_auto_resizing: boolean): void {
+    lib.symbols.wxPropertyGrid_ResetColumnSizes(this._ptr, enable_auto_resizing ? 1 : 0);
+  }
+
+  ResetColours(): void {
+    lib.symbols.wxPropertyGrid_ResetColours(this._ptr);
+  }
+
+  MakeColumnEditable(column: number, editable: boolean): void {
+    lib.symbols.wxPropertyGrid_MakeColumnEditable(this._ptr, column, editable ? 1 : 0);
+  }
+
+  SetVerticalSpacing(spacing: number): void {
+    lib.symbols.wxPropertyGrid_SetVerticalSpacing(this._ptr, spacing);
+  }
+
+  SelectProperty(id: Pointer, focus: boolean): boolean {
+    return (lib.symbols.wxPropertyGrid_SelectProperty(this._ptr, id, focus ? 1 : 0) as number) !== 0;
+  }
+
+  AddToSelection(id: Pointer): boolean {
+    return (lib.symbols.wxPropertyGrid_AddToSelection(this._ptr, id) as number) !== 0;
+  }
+
+  RemoveFromSelection(id: Pointer): boolean {
+    return (lib.symbols.wxPropertyGrid_RemoveFromSelection(this._ptr, id) as number) !== 0;
+  }
+
+  EnsureVisible(id: Pointer): boolean {
+    return (lib.symbols.wxPropertyGrid_EnsureVisible(this._ptr, id) as number) !== 0;
+  }
+
+  EnableCategories(enable: boolean): boolean {
+    return (lib.symbols.wxPropertyGrid_EnableCategories(this._ptr, enable ? 1 : 0) as number) !== 0;
+  }
+
+  CommitChangesFromEditor(flags: number): boolean {
+    return (lib.symbols.wxPropertyGrid_CommitChangesFromEditor(this._ptr, flags) as number) !== 0;
+  }
+
+  BeginLabelEdit(column: number): void {
+    lib.symbols.wxPropertyGrid_BeginLabelEdit(this._ptr, column);
+  }
+
+  EndLabelEdit(commit: boolean): void {
+    lib.symbols.wxPropertyGrid_EndLabelEdit(this._ptr, commit ? 1 : 0);
+  }
+
+  IsAnyModified(): boolean {
+    return (lib.symbols.wxPropertyGrid_IsAnyModified(this._ptr) as number) !== 0;
+  }
+
+  IsEditorFocused(): boolean {
+    return (lib.symbols.wxPropertyGrid_IsEditorFocused(this._ptr) as number) !== 0;
+  }
+
+  IsEditorsValueModified(): boolean {
+    return (lib.symbols.wxPropertyGrid_IsEditorsValueModified(this._ptr) as number) !== 0;
+  }
+
+  EditorsValueWasModified(): void {
+    lib.symbols.wxPropertyGrid_EditorsValueWasModified(this._ptr);
+  }
+
+  EditorsValueWasNotModified(): void {
+    lib.symbols.wxPropertyGrid_EditorsValueWasNotModified(this._ptr);
+  }
+
+  RefreshEditor(): void {
+    lib.symbols.wxPropertyGrid_RefreshEditor(this._ptr);
+  }
+
+  UnfocusEditor(): boolean {
+    return (lib.symbols.wxPropertyGrid_UnfocusEditor(this._ptr) as number) !== 0;
+  }
+
+  RefreshProperty(property: Pointer): void {
+    lib.symbols.wxPropertyGrid_RefreshProperty(this._ptr, property);
+  }
+
+  SetCurrentCategory(id: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetCurrentCategory(this._ptr, id);
+  }
+
+  DedicateKey(keycode: number): void {
+    lib.symbols.wxPropertyGrid_DedicateKey(this._ptr, keycode);
+  }
+
+  AddActionTrigger(action: number, keycode: number, modifiers: number): void {
+    lib.symbols.wxPropertyGrid_AddActionTrigger(this._ptr, action, keycode, modifiers);
+  }
+
+  ClearActionTriggers(action: number): void {
+    lib.symbols.wxPropertyGrid_ClearActionTriggers(this._ptr, action);
+  }
+
+  override SetFont(font: Pointer): boolean {
+    return (lib.symbols.wxPropertyGrid_SetFont(this._ptr, font) as number) !== 0;
+  }
+
+  GetPropertyValue(id: Pointer): Pointer {
+    return lib.symbols.wxPropertyGrid_GetPropertyValue(this._ptr, id);
+  }
+
+  SetPropertyValue(id: Pointer, value: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetPropertyValue(this._ptr, id, value);
+  }
+
+  SetPropertyValueUnspecified(id: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetPropertyValueUnspecified(this._ptr, id);
+  }
+
+  GetPropertyHelpString(id: Pointer): Pointer {
+    return lib.symbols.wxPropertyGrid_GetPropertyHelpString(this._ptr, id);
+  }
+
+  SetPropertyHelpString(id: Pointer, help: Pointer): void {
+    lib.symbols.wxPropertyGrid_SetPropertyHelpString(this._ptr, id, help);
+  }
+
+  IsPropertyModified(id: Pointer): boolean {
+    return (lib.symbols.wxPropertyGrid_IsPropertyModified(this._ptr, id) as number) !== 0;
+  }
+
+  GetUncommittedPropertyValue(): Pointer {
+    return lib.symbols.wxPropertyGrid_GetUncommittedPropertyValue(this._ptr);
+  }
+
   Append(prop: Pointer): Pointer {
     return lib.symbols.wxPropertyGrid_Append(this._ptr, prop);
   }

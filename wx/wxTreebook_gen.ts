@@ -66,7 +66,7 @@ export class wxTreebook extends wxBookCtrlBase {
     return lib.symbols.wxTreebook_GetTreeCtrl(this._ptr);
   }
 
-  override HitTest(x: number, y: number, flags: Pointer): number {
+  override HitTest_3(x: number, y: number, flags: Pointer): number {
     return lib.symbols.wxTreebook_HitTest(this._ptr, x, y, flags);
   }
 

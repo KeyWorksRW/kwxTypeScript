@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxFontMapper {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;

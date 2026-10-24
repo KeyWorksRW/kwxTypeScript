@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxAcceleratorTable {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -16,6 +17,8 @@ export class wxAcceleratorTable {
   }
 
   Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxAcceleratorTable_Delete(this._ptr);
   }
 
@@ -23,6 +26,20 @@ export class wxAcceleratorTable {
     this.Delete();
   }
 
+  IsOk(): boolean {
+    return (lib.symbols.wxAcceleratorTable_IsOk(this._ptr) as number) !== 0;
+  }
+
+  GetEntry(event: Pointer): Pointer {
+    return lib.symbols.wxAcceleratorTable_GetEntry(this._ptr, event);
+  }
+
+}
+
+export function createWxAcceleratorTableFromResource(resource: Pointer): wxAcceleratorTable | null {
+    const rawPtr = lib.symbols.wxAcceleratorTable_CreateFromResource(resource);
+    if (rawPtr === null) return null;
+    return new wxAcceleratorTable(rawPtr);
 }
 
 export function createWxAcceleratorTable(count: number, entries: Pointer): wxAcceleratorTable | null {

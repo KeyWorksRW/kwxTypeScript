@@ -2,9 +2,9 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxFrame } from "./wxFrame_gen.ts";
+import { wxPreviewFrame } from "./wxPreviewFrame_gen.ts";
 
-export class kwxPreviewFrame extends wxFrame {
+export class kwxPreviewFrame extends wxPreviewFrame {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;
@@ -22,7 +22,7 @@ export class kwxPreviewFrame extends wxFrame {
     return lib.symbols.kwxPreviewFrame_GetPrintPreview(this._ptr);
   }
 
-  Initialize(): void {
+  override Initialize(): void {
     lib.symbols.kwxPreviewFrame_Initialize(this._ptr);
   }
 

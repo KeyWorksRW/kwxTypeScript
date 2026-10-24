@@ -50,7 +50,7 @@ export class wxAuiMDIChildFrame extends wxFrame {
     lib.symbols.wxAuiMDIChildFrame_SetIcons(this._ptr, icons);
   }
 
-  GetIcons(): Pointer {
+  override GetIcons(): Pointer {
     return lib.symbols.wxAuiMDIChildFrame_GetIcons(this._ptr);
   }
 

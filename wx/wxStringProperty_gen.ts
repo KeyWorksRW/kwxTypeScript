@@ -10,6 +10,16 @@ export class wxStringProperty extends wxPGProperty {
     return this._ptr;
   }
 
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxStringProperty_Delete(this._ptr);
+  }
+
+  override [Symbol.dispose](): void {
+    this.Delete();
+  }
+
 }
 
 export function createWxStringProperty(label: Pointer, name: Pointer, value: Pointer): wxStringProperty | null {

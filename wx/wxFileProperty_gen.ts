@@ -10,6 +10,16 @@ export class wxFileProperty extends wxPGProperty {
     return this._ptr;
   }
 
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxFileProperty_Delete(this._ptr);
+  }
+
+  override [Symbol.dispose](): void {
+    this.Delete();
+  }
+
 }
 
 export function createWxFileProperty(label: Pointer, name: Pointer, value: Pointer): wxFileProperty | null {

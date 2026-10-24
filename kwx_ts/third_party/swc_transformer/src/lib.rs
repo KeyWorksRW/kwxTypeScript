@@ -35,8 +35,11 @@
 //!
 //! `kwx_swc_transform` returns a NUL-terminated buffer the caller must release
 //! with `kwx_swc_free`, or NULL when the module does not parse; in that case
-//! `kwx_swc_last_error()` describes the failure. Both the message and the
-//! buffer are thread-local, which matches the single-threaded QuickJS host.
+//! `kwx_swc_last_error()` describes the failure. The buffer holds the generated
+//! CommonJS code followed by one blank line and one
+//! `//# sourceMappingURL=data:application/json;base64,<map>` line, so the source
+//! map travels inside the payload and is cached with it. Both the message and
+//! the buffer are thread-local, which matches the single-threaded QuickJS host.
 
 use std::cell::RefCell;
 use std::ffi::{c_char, CStr, CString};
@@ -44,7 +47,10 @@ use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::ptr;
 use std::sync::OnceLock;
 
-use swc_core::common::{sync::Lrc, FileName, Globals, Mark, SourceMap, Spanned, GLOBALS};
+use swc_core::common::source_map::DefaultSourceMapGenConfig;
+use swc_core::common::{
+    sync::Lrc, BytePos, FileName, Globals, LineCol, Mark, SourceMap, Spanned, GLOBALS,
+};
 use swc_core::ecma::ast::{EsVersion, Program};
 use swc_core::ecma::codegen::{text_writer::JsWriter, Config as CodegenConfig, Emitter};
 use swc_core::ecma::parser::{lexer::Lexer, Parser, StringInput, Syntax, TsSyntax};
@@ -59,7 +65,7 @@ use swc_core::ecma::transforms::typescript::strip;
 /// Version of the *transpile semantics* below. Folded into the version string,
 /// which the C++ side mixes into the transpile-cache key, so any change in the
 /// pipeline invalidates previously cached modules.
-const CACHE_ABI: &str = "2";
+const CACHE_ABI: &str = "3";
 
 fn version_string() -> String {
     format!(
@@ -68,6 +74,39 @@ fn version_string() -> String {
         swc_core::SWC_CORE_VERSION.trim(),
         CACHE_ABI
     )
+}
+
+/// Encodes `input` as standard base64 (RFC 4648 alphabet, `=` padding, no
+/// line breaks) for the inline `//# sourceMappingURL` payload.
+///
+/// A local encoder keeps the crate free of a dependency for ~20 lines of code;
+/// the output is consumed by the host's JavaScript decoder, which expects the
+/// canonical alphabet and padding.
+fn kwx_base64_encode(input: &[u8]) -> String {
+    const ALPHABET: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    let mut encoded = String::with_capacity(input.len().div_ceil(3) * 4);
+    for chunk in input.chunks(3) {
+        let byte0 = chunk[0] as u32;
+        let byte1 = chunk.get(1).copied().unwrap_or(0) as u32;
+        let byte2 = chunk.get(2).copied().unwrap_or(0) as u32;
+        let triple = (byte0 << 16) | (byte1 << 8) | byte2;
+
+        encoded.push(ALPHABET[(triple >> 18) as usize & 0x3f] as char);
+        encoded.push(ALPHABET[(triple >> 12) as usize & 0x3f] as char);
+        if chunk.len() > 1 {
+            encoded.push(ALPHABET[(triple >> 6) as usize & 0x3f] as char);
+        } else {
+            encoded.push('=');
+        }
+        if chunk.len() > 2 {
+            encoded.push(ALPHABET[triple as usize & 0x3f] as char);
+        } else {
+            encoded.push('=');
+        }
+    }
+
+    encoded
 }
 
 fn transform_impl(source: &str, file_name: &str) -> Result<Vec<u8>, String> {
@@ -163,8 +202,14 @@ fn run_passes(
     program.mutate(fixer(None));
 
     let mut output = Vec::new();
+    let mut src_map_buf: Vec<(BytePos, LineCol)> = Vec::new();
     {
-        let writer = JsWriter::new(source_map.clone(), "\n", &mut output, None);
+        let writer = JsWriter::new(
+            source_map.clone(),
+            "\n",
+            &mut output,
+            Some(&mut src_map_buf),
+        );
         let mut emitter = Emitter {
             cfg: CodegenConfig::default().with_target(EsVersion::latest()),
             cm: source_map.clone(),
@@ -175,6 +220,18 @@ fn run_passes(
             .emit_program(program)
             .map_err(|error| format!("{file_name}: code generation failed: {error}"))?;
     }
+
+    // An inline v3 map rides along with the code: the host stores the whole
+    // buffer in the transpile cache and decodes the map when an error needs a
+    // stack trace, so no side file or extra cache field is required.
+    let generated = source_map.build_source_map(&src_map_buf, None, DefaultSourceMapGenConfig);
+    let mut map_json = Vec::new();
+    generated
+        .to_writer(&mut map_json)
+        .map_err(|error| format!("{file_name}: source map serialization failed: {error}"))?;
+    output.extend_from_slice(b"\n//# sourceMappingURL=data:application/json;base64,");
+    output.extend_from_slice(kwx_base64_encode(&map_json).as_bytes());
+    output.push(b'\n');
 
     Ok(output)
 }
@@ -337,6 +394,61 @@ mod tests {
             .expect("output is not UTF-8")
     }
 
+    const MAP_MARKER: &str = "//# sourceMappingURL=data:application/json;base64,";
+
+    /// Reverses [`kwx_base64_encode`] for the test assertions. Padding and
+    /// non-alphabet characters are ignored, which is enough for our own output.
+    fn base64_decode(text: &str) -> Vec<u8> {
+        fn value_of(byte: u8) -> Option<u32> {
+            match byte {
+                b'A'..=b'Z' => Some((byte - b'A') as u32),
+                b'a'..=b'z' => Some((byte - b'a') as u32 + 26),
+                b'0'..=b'9' => Some((byte - b'0') as u32 + 52),
+                b'+' => Some(62),
+                b'/' => Some(63),
+                _ => None,
+            }
+        }
+
+        let mut accumulator = 0u32;
+        let mut pending_bits = 0u32;
+        let mut decoded = Vec::new();
+        for &byte in text.as_bytes() {
+            let Some(value) = value_of(byte) else {
+                continue;
+            };
+            accumulator = (accumulator << 6) | value;
+            pending_bits += 6;
+            if pending_bits >= 8 {
+                pending_bits -= 8;
+                decoded.push((accumulator >> pending_bits) as u8);
+                accumulator &= (1 << pending_bits) - 1;
+            }
+        }
+        decoded
+    }
+
+    /// Returns the decoded v3 map JSON carried by `code`.
+    fn inline_source_map_json(code: &str) -> String {
+        let start = code
+            .find(MAP_MARKER)
+            .expect("output carries no inline source map")
+            + MAP_MARKER.len();
+        let rest = &code[start..];
+        let end = rest.find('\n').unwrap_or(rest.len());
+        String::from_utf8(base64_decode(&rest[..end])).expect("decoded map is not UTF-8")
+    }
+
+    /// Reads the `mappings` string out of the map JSON. The value is VLQ text,
+    /// so it never contains a quote and a plain scan is sufficient.
+    fn source_map_mappings(map_json: &str) -> String {
+        const KEY: &str = "\"mappings\":\"";
+        let start = map_json.find(KEY).expect("map has no mappings field") + KEY.len();
+        let rest = &map_json[start..];
+        let end = rest.find('"').expect("unterminated mappings value");
+        rest[..end].to_string()
+    }
+
     #[test]
     fn strips_types() {
         let code = transform("const value: number = 1;\nexport { value };\n");
@@ -386,5 +498,31 @@ mod tests {
     #[test]
     fn version_is_stable() {
         assert!(version_string().starts_with("kwx-swc/"));
+    }
+
+    #[test]
+    fn emits_inline_source_map() {
+        let code = transform("export const value: number = 1;\n");
+
+        assert!(code.contains(MAP_MARKER), "{code}");
+        assert_eq!(code.matches(MAP_MARKER).count(), 1, "{code}");
+        assert!(code.ends_with('\n'), "{code}");
+
+        let map_json = inline_source_map_json(&code);
+        assert!(map_json.contains("\"version\":3"), "{map_json}");
+        assert!(map_json.contains("\"test.ts\""), "{map_json}");
+        assert!(!source_map_mappings(&map_json).is_empty(), "{map_json}");
+    }
+
+    #[test]
+    fn inline_source_map_maps_statements() {
+        let code = transform(
+            "const first: number = 1;\nconst second: number = 2;\nconst third: number = 3;\n",
+        );
+
+        let mappings = source_map_mappings(&inline_source_map_json(&code));
+        // A three-statement module spans more than one generated line, which the
+        // map expresses as `;` separators between line groups.
+        assert!(mappings.contains(';'), "{mappings}");
     }
 }

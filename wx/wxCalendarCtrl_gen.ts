@@ -50,7 +50,7 @@ export class wxCalendarCtrl extends wxControl {
     lib.symbols.wxCalendarCtrl_GetHolidayColourFg(this._ptr, ref);
   }
 
-  HitTest(x: number, y: number, date: Pointer, weekday: Pointer): number {
+  HitTest_4(x: number, y: number, date: Pointer, weekday: Pointer): number {
     return lib.symbols.wxCalendarCtrl_HitTest(this._ptr, x, y, date, weekday);
   }
 

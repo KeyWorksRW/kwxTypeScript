@@ -2,17 +2,22 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxClipboard {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
+export class wxClipboard extends wxObject {
+  /** Returns the underlying native pointer. */
+  override get ptr(): Pointer {
+    return this._ptr;
   }
 
-  /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
-    return this._ptr;
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxClipboard_Delete(this._ptr);
+  }
+
+  override [Symbol.dispose](): void {
+    this.Delete();
   }
 
   AddData(data: Pointer): boolean {

@@ -10,6 +10,14 @@ export class wxPanel extends wxWindow {
     return this._ptr;
   }
 
+  GetDefaultItem(pObject: Pointer): Pointer {
+    return lib.symbols.wxPanel_GetDefaultItem(pObject);
+  }
+
+  SetDefaultItem(pObject: Pointer, btn: Pointer): void {
+    lib.symbols.wxPanel_SetDefaultItem(pObject, btn);
+  }
+
   override InitDialog(): void {
     lib.symbols.wxPanel_InitDialog(this._ptr);
   }

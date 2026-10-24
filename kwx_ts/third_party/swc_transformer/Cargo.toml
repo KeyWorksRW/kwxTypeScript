@@ -15,6 +15,7 @@ crate-type = ["staticlib", "rlib"]
 [dependencies]
 swc_core = { version = "=82.1.1", features = [
     "common",
+    "common_sourcemap",
     "ecma_ast",
     "ecma_parser",
     "ecma_parser_typescript",

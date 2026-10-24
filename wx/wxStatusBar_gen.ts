@@ -10,6 +10,14 @@ export class wxStatusBar extends wxWindow {
     return this._ptr;
   }
 
+  GetBorders(): Pointer {
+    return lib.symbols.wxStatusBar_GetBorders(this._ptr);
+  }
+
+  AddFieldControl(n: number, win: Pointer): boolean {
+    return (lib.symbols.wxStatusBar_AddFieldControl(this._ptr, n, win) as number) !== 0;
+  }
+
   GetBorderX(): number {
     return lib.symbols.wxStatusBar_GetBorderX(this._ptr);
   }

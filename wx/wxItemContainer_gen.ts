@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxItemContainer {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -13,6 +14,34 @@ export class wxItemContainer {
   /** Returns the underlying native pointer. */
   get ptr(): Pointer {
     return this._ptr;
+  }
+
+  AppendString(item: Pointer): void {
+    lib.symbols.wxItemContainer_AppendString(this._ptr, item);
+  }
+
+  SetClientObject(n: number, clientData: Pointer): void {
+    lib.symbols.wxItemContainer_SetClientObject(this._ptr, n, clientData);
+  }
+
+  GetClientObject(n: number): Pointer {
+    return lib.symbols.wxItemContainer_GetClientObject(this._ptr, n);
+  }
+
+  DetachClientObject(n: number): Pointer {
+    return lib.symbols.wxItemContainer_DetachClientObject(this._ptr, n);
+  }
+
+  GetClientDataType(): number {
+    return lib.symbols.wxItemContainer_GetClientDataType(this._ptr);
+  }
+
+  HasClientObjectData(): boolean {
+    return (lib.symbols.wxItemContainer_HasClientObjectData(this._ptr) as number) !== 0;
+  }
+
+  HasClientUntypedData(): boolean {
+    return (lib.symbols.wxItemContainer_HasClientUntypedData(this._ptr) as number) !== 0;
   }
 
   GetCount(): number {
@@ -80,6 +109,7 @@ export class wxItemContainer {
   }
 
   DeleteItem(pos: number): void {
+    if (this._disposed) return;
     lib.symbols.wxItemContainer_Delete(this._ptr, pos);
   }
 

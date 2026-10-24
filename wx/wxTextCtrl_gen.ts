@@ -10,6 +10,46 @@ export class wxTextCtrl extends wxControl {
     return this._ptr;
   }
 
+  EmulateKeyPress(keyevent: Pointer): number {
+    return lib.symbols.wxTextCtrl_EmulateKeyPress(this._ptr, keyevent);
+  }
+
+  GetRange(from_: number, toPos: number): Pointer {
+    return lib.symbols.wxTextCtrl_GetRange(this._ptr, from_, toPos);
+  }
+
+  GetStringSelection(): Pointer {
+    return lib.symbols.wxTextCtrl_GetStringSelection(this._ptr);
+  }
+
+  PositionToCoords(pos: number): Pointer {
+    return lib.symbols.wxTextCtrl_PositionToCoords(this._ptr, pos);
+  }
+
+  HitTest_3(x: number, y: number, pos: Pointer): number {
+    return lib.symbols.wxTextCtrl_HitTest(this._ptr, x, y, pos);
+  }
+
+  HitTestColumnRow(x: number, y: number, column: Pointer, row: Pointer): number {
+    return lib.symbols.wxTextCtrl_HitTestColumnRow(this._ptr, x, y, column, row);
+  }
+
+  IsRTFSupported(): boolean {
+    return (lib.symbols.wxTextCtrl_IsRTFSupported(this._ptr) as number) !== 0;
+  }
+
+  GetRTFValue(): Pointer {
+    return lib.symbols.wxTextCtrl_GetRTFValue(this._ptr);
+  }
+
+  SetRTFValue(value: Pointer): void {
+    lib.symbols.wxTextCtrl_SetRTFValue(this._ptr, value);
+  }
+
+  override ShouldInheritColours(): boolean {
+    return (lib.symbols.wxTextCtrl_ShouldInheritColours(this._ptr) as number) !== 0;
+  }
+
   AppendText(text: Pointer): void {
     lib.symbols.wxTextCtrl_AppendText(this._ptr, text);
   }
@@ -192,6 +232,66 @@ export class wxTextCtrl extends wxControl {
 
   XYToPosition(x: number, y: number): number {
     return lib.symbols.wxTextCtrl_XYToPosition(this._ptr, x, y);
+  }
+
+  ConvertToUpperCase(): void {
+    lib.symbols.wxTextEntry_ConvertToUpperCase(this._ptr);
+  }
+
+  ForwardEnableTextChangedEvents(enable: boolean): void {
+    lib.symbols.wxTextEntry_ForwardEnableTextChangedEvents(this._ptr, enable ? 1 : 0);
+  }
+
+  IsEmpty(): boolean {
+    return (lib.symbols.wxTextEntry_IsEmpty(this._ptr) as number) !== 0;
+  }
+
+  RemoveSelection(): void {
+    lib.symbols.wxTextEntry_RemoveSelection(this._ptr);
+  }
+
+  SelectAll(): void {
+    lib.symbols.wxTextEntry_SelectAll(this._ptr);
+  }
+
+  SelectNone(): void {
+    lib.symbols.wxTextEntry_SelectNone(this._ptr);
+  }
+
+  HasSelection(): boolean {
+    return (lib.symbols.wxTextEntry_HasSelection(this._ptr) as number) !== 0;
+  }
+
+  ForceUpper(): void {
+    lib.symbols.wxTextEntry_ForceUpper(this._ptr);
+  }
+
+  SetHint(hint: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_SetHint(this._ptr, hint) as number) !== 0;
+  }
+
+  GetHint(): Pointer {
+    return lib.symbols.wxTextEntry_GetHint(this._ptr);
+  }
+
+  SetMargins(left: number, top: number): boolean {
+    return (lib.symbols.wxTextEntry_SetMargins(this._ptr, left, top) as number) !== 0;
+  }
+
+  GetMargins(left: Pointer, top: Pointer): void {
+    lib.symbols.wxTextEntry_GetMargins(this._ptr, left, top);
+  }
+
+  AutoComplete(count: number, items: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_AutoComplete(this._ptr, count, items) as number) !== 0;
+  }
+
+  AutoCompleteFileNames(): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteFileNames(this._ptr) as number) !== 0;
+  }
+
+  AutoCompleteDirectories(): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteDirectories(this._ptr) as number) !== 0;
   }
 
 }

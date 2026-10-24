@@ -107,6 +107,470 @@ export function kwxUtf8Buffer_Delete(buf: Pointer): void {
     lib.symbols.kwxUtf8Buffer_Delete(buf);
 }
 
+export function wxGetOsDescription(): Pointer {
+    return lib.symbols.wxGetOsDescription();
+}
+
+export function wxGetOsVersion(major: Pointer, minor: Pointer, micro: Pointer): number {
+    return lib.symbols.wxGetOsVersion(major, minor, micro);
+}
+
+export function wxCheckOsVersion(major: number, minor: number, micro: number): boolean {
+    return (lib.symbols.wxCheckOsVersion(major, minor, micro) as number) !== 0;
+}
+
+export function wxIsPlatformLittleEndian(): boolean {
+    return (lib.symbols.wxIsPlatformLittleEndian() as number) !== 0;
+}
+
+export function wxIsPlatform64Bit(): boolean {
+    return (lib.symbols.wxIsPlatform64Bit() as number) !== 0;
+}
+
+export function wxGetCpuArchitectureName(): Pointer {
+    return lib.symbols.wxGetCpuArchitectureName();
+}
+
+export function wxGetNativeCpuArchitectureName(): Pointer {
+    return lib.symbols.wxGetNativeCpuArchitectureName();
+}
+
+export function wxNow(): Pointer {
+    return lib.symbols.wxNow();
+}
+
+export function wxGetInstallPrefix(): Pointer {
+    return lib.symbols.wxGetInstallPrefix();
+}
+
+export function wxGetDataDir(): Pointer {
+    return lib.symbols.wxGetDataDir();
+}
+
+export function wxGetFreeMemory(): number {
+    return lib.symbols.wxGetFreeMemory();
+}
+
+export function wxHandleFatalExceptions(doit: boolean): boolean {
+    return (lib.symbols.wxHandleFatalExceptions(doit ? 1 : 0) as number) !== 0;
+}
+
+export function wxGetKeyState(key: number): boolean {
+    return (lib.symbols.wxGetKeyState(key) as number) !== 0;
+}
+
+export function wxSetDetectableAutoRepeat(flag: boolean): boolean {
+    return (lib.symbols.wxSetDetectableAutoRepeat(flag ? 1 : 0) as number) !== 0;
+}
+
+export function wxGetMousePosition(x: Pointer, y: Pointer): void {
+    lib.symbols.wxGetMousePosition(x, y);
+}
+
+export function wxInfoMessageBox(parent: Pointer): void {
+    lib.symbols.wxInfoMessageBox(parent);
+}
+
+export function wxRegisterId(id: number): void {
+    lib.symbols.wxRegisterId(id);
+}
+
+export function wxGetCurrentId(): number {
+    return lib.symbols.wxGetCurrentId();
+}
+
+export function wxNewId(): number {
+    return lib.symbols.wxNewId();
+}
+
+export function wxHexToDec(buf: Pointer): number {
+    return lib.symbols.wxHexToDec(buf);
+}
+
+export function wxDecToHex(dec: number): Pointer {
+    return lib.symbols.wxDecToHex(dec);
+}
+
+export function wxSecureZeroMemory(data: Pointer, count: number): void {
+    lib.symbols.wxSecureZeroMemory(data, count);
+}
+
+export function wxGetEnv(var_: Pointer, value: Pointer): boolean {
+    return (lib.symbols.wxGetEnv(var_, value) as number) !== 0;
+}
+
+export function wxSetEnv(var_: Pointer, value: Pointer): boolean {
+    return (lib.symbols.wxSetEnv(var_, value) as number) !== 0;
+}
+
+export function wxUnsetEnv(var_: Pointer): boolean {
+    return (lib.symbols.wxUnsetEnv(var_) as number) !== 0;
+}
+
+export function wxGetEnvMap(env_map: Pointer): boolean {
+    return (lib.symbols.wxGetEnvMap(env_map) as number) !== 0;
+}
+
+export function wxGetEmailAddress(): Pointer {
+    return lib.symbols.wxGetEmailAddress();
+}
+
+export function wxGetHostName(): Pointer {
+    return lib.symbols.wxGetHostName();
+}
+
+export function wxGetFullHostName(): Pointer {
+    return lib.symbols.wxGetFullHostName();
+}
+
+export function wxGetUserId(): Pointer {
+    return lib.symbols.wxGetUserId();
+}
+
+export function wxGetUserName(): Pointer {
+    return lib.symbols.wxGetUserName();
+}
+
+export function wxGetHomeDir(): Pointer {
+    return lib.symbols.wxGetHomeDir();
+}
+
+export function wxGetUserHome(user: Pointer): Pointer {
+    return lib.symbols.wxGetUserHome(user);
+}
+
+export function wxGetDiskSpace(path: Pointer, total_bytes: Pointer, free_bytes: Pointer): boolean {
+    return (lib.symbols.wxGetDiskSpace(path, total_bytes, free_bytes) as number) !== 0;
+}
+
+export function wxExecute(command: Pointer, flags: number, process: Pointer, execute_env: Pointer): number {
+    return lib.symbols.wxExecute(command, flags, process, execute_env);
+}
+
+export function wxExecuteWithOutput(command: Pointer, output: Pointer, flags: number, execute_env: Pointer): number {
+    return lib.symbols.wxExecuteWithOutput(command, output, flags, execute_env);
+}
+
+export function wxExecuteWithOutputAndError(command: Pointer, output: Pointer, errors: Pointer, flags: number, execute_env: Pointer): number {
+    return lib.symbols.wxExecuteWithOutputAndError(command, output, errors, flags, execute_env);
+}
+
+export function wxExecuteArgv(n: number, argv: Pointer, flags: number, process: Pointer, execute_env: Pointer): number {
+    return lib.symbols.wxExecuteArgv(n, argv, flags, process, execute_env);
+}
+
+export function wxExecuteDDE(server: Pointer, topic: Pointer, command: Pointer): boolean {
+    return (lib.symbols.wxExecuteDDE(server, topic, command) as number) !== 0;
+}
+
+export function wxShutdown(flags: number): boolean {
+    return (lib.symbols.wxShutdown(flags) as number) !== 0;
+}
+
+export function wxKill(pid: number, sig: number, rc: Pointer, flags: number): number {
+    return lib.symbols.wxKill(pid, sig, rc, flags);
+}
+
+export function wxShell(command: Pointer): boolean {
+    return (lib.symbols.wxShell(command) as number) !== 0;
+}
+
+export function wxShellWithOutput(command: Pointer, output: Pointer): boolean {
+    return (lib.symbols.wxShellWithOutput(command, output) as number) !== 0;
+}
+
+export function wxSleep(seconds: number): void {
+    lib.symbols.wxSleep(seconds);
+}
+
+export function wxMilliSleep(milliseconds: number): void {
+    lib.symbols.wxMilliSleep(milliseconds);
+}
+
+export function wxMicroSleep(microseconds: number): void {
+    lib.symbols.wxMicroSleep(microseconds);
+}
+
+export function wxGetProcessId(): number {
+    return lib.symbols.wxGetProcessId();
+}
+
+export function wxLaunchDefaultBrowser(url: Pointer, flags: number): boolean {
+    return (lib.symbols.wxLaunchDefaultBrowser(url, flags) as number) !== 0;
+}
+
+export function wxLaunchDefaultApplication(path: Pointer, flags: number): boolean {
+    return (lib.symbols.wxLaunchDefaultApplication(path, flags) as number) !== 0;
+}
+
+export function wxStripMenuCodes(text: Pointer, flags: number): Pointer {
+    return lib.symbols.wxStripMenuCodes(text, flags);
+}
+
+export function wxFindMenuItemId(frame: Pointer, menu_string: Pointer, item_string: Pointer): number {
+    return lib.symbols.wxFindMenuItemId(frame, menu_string, item_string);
+}
+
+export function wxGenericFindWindowAtPoint(x: number, y: number): Pointer {
+    return lib.symbols.wxGenericFindWindowAtPoint(x, y);
+}
+
+export function wxFindWindowAtPoint(x: number, y: number): Pointer {
+    return lib.symbols.wxFindWindowAtPoint(x, y);
+}
+
+export function wxFindWindowByLabel(title: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxFindWindowByLabel(title, parent);
+}
+
+export function wxFindWindowByName(name: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxFindWindowByName(name, parent);
+}
+
+export function wxSafeYield(window: Pointer, only_if_needed: boolean): boolean {
+    return (lib.symbols.wxSafeYield(window, only_if_needed ? 1 : 0) as number) !== 0;
+}
+
+export function wxEnableTopLevelWindows(enable: boolean): void {
+    lib.symbols.wxEnableTopLevelWindows(enable ? 1 : 0);
+}
+
+export function wxCheckForInterrupt(window: Pointer): boolean {
+    return (lib.symbols.wxCheckForInterrupt(window) as number) !== 0;
+}
+
+export function wxFlushEvents(): void {
+    lib.symbols.wxFlushEvents();
+}
+
+export function wxYield(): boolean {
+    return (lib.symbols.wxYield() as number) !== 0;
+}
+
+export function wxYieldIfNeeded(): boolean {
+    return (lib.symbols.wxYieldIfNeeded() as number) !== 0;
+}
+
+export function wxMSWIsOnSecureScreen(): boolean {
+    return (lib.symbols.wxMSWIsOnSecureScreen() as number) !== 0;
+}
+
+export function wxFileSelector(message: Pointer, default_path: Pointer, default_filename: Pointer, default_extension: Pointer, wildcard: Pointer, flags: number, parent: Pointer, x: number, y: number): Pointer {
+    return lib.symbols.wxFileSelector(message, default_path, default_filename, default_extension, wildcard, flags, parent, x, y);
+}
+
+export function wxFileSelectorEx(message: Pointer, default_path: Pointer, default_filename: Pointer, index_default_extension: Pointer, wildcard: Pointer, flags: number, parent: Pointer, x: number, y: number): Pointer {
+    return lib.symbols.wxFileSelectorEx(message, default_path, default_filename, index_default_extension, wildcard, flags, parent, x, y);
+}
+
+export function wxLoadFileSelector(what: Pointer, extension: Pointer, default_name: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxLoadFileSelector(what, extension, default_name, parent);
+}
+
+export function wxSaveFileSelector(what: Pointer, extension: Pointer, default_name: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxSaveFileSelector(what, extension, default_name, parent);
+}
+
+export function wxIsStockID(id: number): boolean {
+    return (lib.symbols.wxIsStockID(id) as number) !== 0;
+}
+
+export function wxIsStockLabel(id: number, label: Pointer): boolean {
+    return (lib.symbols.wxIsStockLabel(id, label) as number) !== 0;
+}
+
+export function wxGetStockLabel(id: number, flags: number): Pointer {
+    return lib.symbols.wxGetStockLabel(id, flags);
+}
+
+export function wxGetStockAccelerator(id: number): Pointer {
+    return lib.symbols.wxGetStockAccelerator(id);
+}
+
+export function wxGetStockHelpString(id: number, client: number): Pointer {
+    return lib.symbols.wxGetStockHelpString(id, client);
+}
+
+export function LogError(message: Pointer): void {
+    lib.symbols.LogError(message);
+}
+
+export function LogFatalError(message: Pointer): void {
+    lib.symbols.LogFatalError(message);
+}
+
+export function LogWarning(message: Pointer): void {
+    lib.symbols.LogWarning(message);
+}
+
+export function LogMessage(message: Pointer): void {
+    lib.symbols.LogMessage(message);
+}
+
+export function LogVerbose(message: Pointer): void {
+    lib.symbols.LogVerbose(message);
+}
+
+export function LogStatus(message: Pointer): void {
+    lib.symbols.LogStatus(message);
+}
+
+export function LogSysError(message: Pointer): void {
+    lib.symbols.LogSysError(message);
+}
+
+export function LogDebug(message: Pointer): void {
+    lib.symbols.LogDebug(message);
+}
+
+export function LogTrace(mask: Pointer, message: Pointer): void {
+    lib.symbols.LogTrace(mask, message);
+}
+
+export function kwxBeginBusyCursor(): void {
+    lib.symbols.kwxBeginBusyCursor();
+}
+
+export function kwxBell(): void {
+    lib.symbols.kwxBell();
+}
+
+export function kwxEndBusyCursor(): void {
+    lib.symbols.kwxEndBusyCursor();
+}
+
+export function kwxFree(pObject: Pointer): void {
+    lib.symbols.kwxFree(pObject);
+}
+
+export function kwxGetMousePosition(): Pointer {
+    return lib.symbols.kwxGetMousePosition();
+}
+
+export function kwxGetPixelRGB(buffer: Pointer, width: number, x: number, y: number): number {
+    return lib.symbols.kwxGetPixelRGB(buffer, width, x, y);
+}
+
+export function kwxGetPixelRGBA(buffer: Pointer, width: number, x: number, y: number): number {
+    return lib.symbols.kwxGetPixelRGBA(buffer, width, x, y);
+}
+
+export function kwxInitPixelsRGB(buffer: Pointer, width: number, height: number, rgb: number): void {
+    lib.symbols.kwxInitPixelsRGB(buffer, width, height, rgb);
+}
+
+export function kwxInitPixelsRGBA(buffer: Pointer, width: number, height: number, rgba: number): void {
+    lib.symbols.kwxInitPixelsRGBA(buffer, width, height, rgba);
+}
+
+export function kwxIsBusy(): number {
+    return lib.symbols.kwxIsBusy();
+}
+
+export function kwxMalloc(size: number): Pointer {
+    return lib.symbols.kwxMalloc(size);
+}
+
+export function kwxSetPixelRGB(buffer: Pointer, width: number, x: number, y: number, rgb: number): void {
+    lib.symbols.kwxSetPixelRGB(buffer, width, x, y, rgb);
+}
+
+export function kwxSetPixelRGBA(buffer: Pointer, width: number, x: number, y: number, rgba: number): void {
+    lib.symbols.kwxSetPixelRGBA(buffer, width, x, y, rgba);
+}
+
+export function kwxSetPixelRowRGB(buffer: Pointer, width: number, x: number, y: number, rgb0: number, rgb1: number, count: number): void {
+    lib.symbols.kwxSetPixelRowRGB(buffer, width, x, y, rgb0, rgb1, count);
+}
+
+export function kwxSetPixelRowRGBA(buffer: Pointer, width: number, x: number, y: number, rgba0: number, rgba1: number, count: number): void {
+    lib.symbols.kwxSetPixelRowRGBA(buffer, width, x, y, rgba0, rgba1, count);
+}
+
+export function kwxSystemSettingsGetColour(systemColour: number): Pointer {
+    return lib.symbols.kwxSystemSettingsGetColour(systemColour);
+}
+
+export function kwxWakeUpIdle(): void {
+    lib.symbols.kwxWakeUpIdle();
+}
+
+export function wxAboutBox(info: Pointer, parent: Pointer): void {
+    lib.symbols.wxAboutBox(info, parent);
+}
+
+export function wxDragIcon(icon: Pointer, x: number, y: number): Pointer {
+    return lib.symbols.wxDragIcon(icon, x, y);
+}
+
+export function wxDragListItem(listCtrl: Pointer, id: number): Pointer {
+    return lib.symbols.wxDragListItem(listCtrl, id);
+}
+
+export function wxDragString(text: Pointer, x: number, y: number): Pointer {
+    return lib.symbols.wxDragString(text, x, y);
+}
+
+export function wxDragTreeItem(treeCtrl: Pointer, id: Pointer): Pointer {
+    return lib.symbols.wxDragTreeItem(treeCtrl, id);
+}
+
+export function wxGenericDragIcon(icon: Pointer): Pointer {
+    return lib.symbols.wxGenericDragIcon(icon);
+}
+
+export function wxGenericDragListItem(listCtrl: Pointer, id: number): Pointer {
+    return lib.symbols.wxGenericDragListItem(listCtrl, id);
+}
+
+export function wxGenericDragString(text: Pointer): Pointer {
+    return lib.symbols.wxGenericDragString(text);
+}
+
+export function wxGenericDragTreeItem(treeCtrl: Pointer, id: Pointer): Pointer {
+    return lib.symbols.wxGenericDragTreeItem(treeCtrl, id);
+}
+
+export function wxGetApplicationDir(): Pointer {
+    return lib.symbols.wxGetApplicationDir();
+}
+
+export function wxGetApplicationPath(): Pointer {
+    return lib.symbols.wxGetApplicationPath();
+}
+
+export function wxGetColourFromUser(parent: Pointer, colInit: Pointer, colour: Pointer): void {
+    lib.symbols.wxGetColourFromUser(parent, colInit, colour);
+}
+
+export function wxGetFontFromUser(parent: Pointer, fontInit: Pointer, font: Pointer): void {
+    lib.symbols.wxGetFontFromUser(parent, fontInit, font);
+}
+
+export function wxGetNumberFromUser(message: Pointer, prompt: Pointer, caption: Pointer, value: number, min: number, max: number, parent: Pointer, x: number, y: number): number {
+    return lib.symbols.wxGetNumberFromUser(message, prompt, caption, value, min, max, parent, x, y);
+}
+
+export function wxGetPasswordFromUser(message: Pointer, caption: Pointer, defaultText: Pointer, parent: Pointer, buffer: Pointer): number {
+    return lib.symbols.wxGetPasswordFromUser(message, caption, defaultText, parent, buffer);
+}
+
+export function wxGetTextFromUser(message: Pointer, caption: Pointer, defaultText: Pointer, parent: Pointer, x: number, y: number, center: number, buffer: Pointer): number {
+    return lib.symbols.wxGetTextFromUser(message, caption, defaultText, parent, x, y, center, buffer);
+}
+
+export function wxIsDefined(name: Pointer): number {
+    return lib.symbols.wxIsDefined(name);
+}
+
+export function wxVersionNumber(): number {
+    return lib.symbols.wxVersionNumber();
+}
+
+export function wxVersionString(): Pointer {
+    return lib.symbols.wxVersionString();
+}
+
 export function PushProvider(provider: Pointer): void {
     lib.symbols.PushProvider(provider);
 }

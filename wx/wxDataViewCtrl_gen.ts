@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxDataViewCtrl {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -13,6 +14,10 @@ export class wxDataViewCtrl {
   /** Returns the underlying native pointer. */
   get ptr(): Pointer {
     return this._ptr;
+  }
+
+  SetHeaderAttr(attr: Pointer): boolean {
+    return (lib.symbols.wxDataViewCtrl_SetHeaderAttr(this._ptr, attr) as number) !== 0;
   }
 
   AssociateModel(model: Pointer): boolean {

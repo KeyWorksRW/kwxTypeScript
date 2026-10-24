@@ -11,6 +11,8 @@ export class wxBufferedPaintDC extends wxDC {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxBufferedPaintDC_Delete(this._ptr);
   }
 

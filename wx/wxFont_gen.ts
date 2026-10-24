@@ -2,25 +2,166 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxFont {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxFont extends wxObject {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxFont_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  GetFractionalPointSize(): number {
+    return lib.symbols.wxFont_GetFractionalPointSize(this._ptr);
+  }
+
+  GetPixelSize(): Pointer {
+    return lib.symbols.wxFont_GetPixelSize(this._ptr);
+  }
+
+  IsUsingSizeInPixels(): boolean {
+    return (lib.symbols.wxFont_IsUsingSizeInPixels(this._ptr) as number) !== 0;
+  }
+
+  GetNumericWeight(): number {
+    return lib.symbols.wxFont_GetNumericWeight(this._ptr);
+  }
+
+  GetStrikethrough(): boolean {
+    return (lib.symbols.wxFont_GetStrikethrough(this._ptr) as number) !== 0;
+  }
+
+  GetNativeFontInfoDesc(): Pointer {
+    return lib.symbols.wxFont_GetNativeFontInfoDesc(this._ptr);
+  }
+
+  GetNativeFontInfoUserDesc(): Pointer {
+    return lib.symbols.wxFont_GetNativeFontInfoUserDesc(this._ptr);
+  }
+
+  IsFixedWidth(): boolean {
+    return (lib.symbols.wxFont_IsFixedWidth(this._ptr) as number) !== 0;
+  }
+
+  SetFractionalPointSize(pointSize: number): void {
+    lib.symbols.wxFont_SetFractionalPointSize(this._ptr, pointSize);
+  }
+
+  SetPixelSize(width: number, height: number): void {
+    lib.symbols.wxFont_SetPixelSize(this._ptr, width, height);
+  }
+
+  SetNumericWeight(weight: number): void {
+    lib.symbols.wxFont_SetNumericWeight(this._ptr, weight);
+  }
+
+  SetStrikethrough(strikethrough: boolean): void {
+    lib.symbols.wxFont_SetStrikethrough(this._ptr, strikethrough ? 1 : 0);
+  }
+
+  SetNativeFontInfo(info: Pointer): boolean {
+    return (lib.symbols.wxFont_SetNativeFontInfo(this._ptr, info) as number) !== 0;
+  }
+
+  SetNativeFontInfoUserDesc(info: Pointer): boolean {
+    return (lib.symbols.wxFont_SetNativeFontInfoUserDesc(this._ptr, info) as number) !== 0;
+  }
+
+  SetSymbolicSize(size: number): void {
+    lib.symbols.wxFont_SetSymbolicSize(this._ptr, size);
+  }
+
+  SetSymbolicSizeRelativeTo(size: number, base: number): void {
+    lib.symbols.wxFont_SetSymbolicSizeRelativeTo(this._ptr, size, base);
+  }
+
+  AdjustToSymbolicSize(size: number, base: number): number {
+    return lib.symbols.wxFont_AdjustToSymbolicSize(size, base);
+  }
+
+  ConvertFromLegacyWeightIfNecessary(weight: number): number {
+    return lib.symbols.wxFont_ConvertFromLegacyWeightIfNecessary(weight);
+  }
+
+  GetNumericWeightOf(weight: number): number {
+    return lib.symbols.wxFont_GetNumericWeightOf(weight);
+  }
+
+  MakeBold(): void {
+    lib.symbols.wxFont_MakeBold(this._ptr);
+  }
+
+  MakeItalic(): void {
+    lib.symbols.wxFont_MakeItalic(this._ptr);
+  }
+
+  MakeUnderlined(): void {
+    lib.symbols.wxFont_MakeUnderlined(this._ptr);
+  }
+
+  MakeStrikethrough(): void {
+    lib.symbols.wxFont_MakeStrikethrough(this._ptr);
+  }
+
+  MakeLarger(): void {
+    lib.symbols.wxFont_MakeLarger(this._ptr);
+  }
+
+  MakeSmaller(): void {
+    lib.symbols.wxFont_MakeSmaller(this._ptr);
+  }
+
+  Scale(factor: number): void {
+    lib.symbols.wxFont_Scale(this._ptr, factor);
+  }
+
+  Bold(): Pointer {
+    return lib.symbols.wxFont_Bold(this._ptr);
+  }
+
+  Italic(): Pointer {
+    return lib.symbols.wxFont_Italic(this._ptr);
+  }
+
+  Underlined(): Pointer {
+    return lib.symbols.wxFont_Underlined(this._ptr);
+  }
+
+  Strikethrough(): Pointer {
+    return lib.symbols.wxFont_Strikethrough(this._ptr);
+  }
+
+  Larger(): Pointer {
+    return lib.symbols.wxFont_Larger(this._ptr);
+  }
+
+  Smaller(): Pointer {
+    return lib.symbols.wxFont_Smaller(this._ptr);
+  }
+
+  Scaled(factor: number): Pointer {
+    return lib.symbols.wxFont_Scaled(this._ptr, factor);
+  }
+
+  GetBaseFont(): Pointer {
+    return lib.symbols.wxFont_GetBaseFont(this._ptr);
+  }
+
+  AddPrivateFont(filename: Pointer): boolean {
+    return (lib.symbols.wxFont_AddPrivateFont(filename) as number) !== 0;
+  }
+
+  IsEqual(font: Pointer): boolean {
+    return (lib.symbols.wxFont_IsEqual(this._ptr, font) as number) !== 0;
   }
 
   GetDefaultEncoding(): number {

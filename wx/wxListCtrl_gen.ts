@@ -10,6 +10,106 @@ export class wxListCtrl extends wxControl {
     return this._ptr;
   }
 
+  AssignImageList(images: Pointer, which: number): void {
+    lib.symbols.wxListCtrl_AssignImageList(this._ptr, images, which);
+  }
+
+  GetColumn2(col: number, item: Pointer): void {
+    lib.symbols.wxListCtrl_GetColumn2(this._ptr, col, item);
+  }
+
+  GetItem2(info: Pointer): void {
+    lib.symbols.wxListCtrl_GetItem2(this._ptr, info);
+  }
+
+  GetItemPosition2(item: number): Pointer {
+    return lib.symbols.wxListCtrl_GetItemPosition2(this._ptr, item);
+  }
+
+  RefreshItems(from_: number, toPos: number): void {
+    lib.symbols.wxListCtrl_RefreshItems(this._ptr, from_, toPos);
+  }
+
+  SortItems2(closure: Pointer): boolean {
+    return (lib.symbols.wxListCtrl_SortItems2(this._ptr, closure) as number) !== 0;
+  }
+
+  GetColumnOrder(col: number): number {
+    return lib.symbols.wxListCtrl_GetColumnOrder(this._ptr, col);
+  }
+
+  GetColumnIndexFromOrder(order: number): number {
+    return lib.symbols.wxListCtrl_GetColumnIndexFromOrder(this._ptr, order);
+  }
+
+  SetItemColumnImage(item: number, column: number, image: number): boolean {
+    return (lib.symbols.wxListCtrl_SetItemColumnImage(this._ptr, item, column, image) as number) !== 0;
+  }
+
+  SetItemPtrData(item: number, data: bigint): boolean {
+    return (lib.symbols.wxListCtrl_SetItemPtrData(this._ptr, item, data) as number) !== 0;
+  }
+
+  GetItemTextColour(item: number): Pointer {
+    return lib.symbols.wxListCtrl_GetItemTextColour(this._ptr, item);
+  }
+
+  SetItemTextColour(item: number, col: Pointer): void {
+    lib.symbols.wxListCtrl_SetItemTextColour(this._ptr, item, col);
+  }
+
+  GetItemBackgroundColour(item: number): Pointer {
+    return lib.symbols.wxListCtrl_GetItemBackgroundColour(this._ptr, item);
+  }
+
+  SetItemBackgroundColour(item: number, col: Pointer): void {
+    lib.symbols.wxListCtrl_SetItemBackgroundColour(this._ptr, item, col);
+  }
+
+  SetItemFont(item: number, font: Pointer): void {
+    lib.symbols.wxListCtrl_SetItemFont(this._ptr, item, font);
+  }
+
+  AppendColumn(heading: Pointer, format: number, width: number): number {
+    return lib.symbols.wxListCtrl_AppendColumn(this._ptr, heading, format, width);
+  }
+
+  IsEmpty(): boolean {
+    return (lib.symbols.wxListCtrl_IsEmpty(this._ptr) as number) !== 0;
+  }
+
+  InReportView(): boolean {
+    return (lib.symbols.wxListCtrl_InReportView(this._ptr) as number) !== 0;
+  }
+
+  EnableBellOnNoMatch(on: boolean): void {
+    lib.symbols.wxListCtrl_EnableBellOnNoMatch(this._ptr, on ? 1 : 0);
+  }
+
+  EnableAlternateRowColours(enable: boolean): void {
+    lib.symbols.wxListCtrl_EnableAlternateRowColours(this._ptr, enable ? 1 : 0);
+  }
+
+  SetAlternateRowColour(colour: Pointer): void {
+    lib.symbols.wxListCtrl_SetAlternateRowColour(this._ptr, colour);
+  }
+
+  GetAlternateRowColour(): Pointer {
+    return lib.symbols.wxListCtrl_GetAlternateRowColour(this._ptr);
+  }
+
+  ExtendRulesAndAlternateColour(extend: boolean): void {
+    lib.symbols.wxListCtrl_ExtendRulesAndAlternateColour(this._ptr, extend ? 1 : 0);
+  }
+
+  RemoveSortIndicator(): void {
+    lib.symbols.wxListCtrl_RemoveSortIndicator(this._ptr);
+  }
+
+  GetUpdatedAscendingSortIndicator(col: number): boolean {
+    return (lib.symbols.wxListCtrl_GetUpdatedAscendingSortIndicator(this._ptr, col) as number) !== 0;
+  }
+
   Arrange(flag: number): boolean {
     return (lib.symbols.wxListCtrl_Arrange(this._ptr, flag) as number) !== 0;
   }
@@ -31,6 +131,7 @@ export class wxListCtrl extends wxControl {
   }
 
   DeleteItem(item: number): boolean {
+    if (this._disposed) return false;
     return (lib.symbols.wxListCtrl_DeleteItem(this._ptr, item) as number) !== 0;
   }
 
@@ -134,7 +235,7 @@ export class wxListCtrl extends wxControl {
     return lib.symbols.wxListCtrl_GetTopItem(this._ptr);
   }
 
-  HitTest(x: number, y: number, flags: Pointer, pSubItem: Pointer): number {
+  HitTest_4(x: number, y: number, flags: Pointer, pSubItem: Pointer): number {
     return lib.symbols.wxListCtrl_HitTest(this._ptr, x, y, flags, pSubItem);
   }
 

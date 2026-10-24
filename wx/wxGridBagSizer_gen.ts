@@ -10,6 +10,26 @@ export class wxGridBagSizer extends wxGridSizer {
     return this._ptr;
   }
 
+  GetCellSize(row: number, col: number): Pointer {
+    return lib.symbols.wxGridBagSizer_GetCellSize(this._ptr, row, col);
+  }
+
+  FindItem(window: Pointer): Pointer {
+    return lib.symbols.wxGridBagSizer_FindItem(this._ptr, window);
+  }
+
+  FindItemSizer(sizer: Pointer): Pointer {
+    return lib.symbols.wxGridBagSizer_FindItemSizer(this._ptr, sizer);
+  }
+
+  FindItemAtPoint(x: number, y: number): Pointer {
+    return lib.symbols.wxGridBagSizer_FindItemAtPoint(this._ptr, x, y);
+  }
+
+  FindItemWithData(userData: Pointer): Pointer {
+    return lib.symbols.wxGridBagSizer_FindItemWithData(this._ptr, userData);
+  }
+
   AddWindowAt(window: Pointer, row: number, col: number, rowspan: number, colspan: number, flag: number, border: number, userData: Pointer): Pointer {
     return lib.symbols.wxGridBagSizer_AddWindow(this._ptr, window, row, col, rowspan, colspan, flag, border, userData);
   }

@@ -2,25 +2,26 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxLog } from "./wxLog_gen.ts";
 
-export class wxLogChain {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxLogChain extends wxLog {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxLogChain_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  DetachOldLog(): void {
+    lib.symbols.wxLogChain_DetachOldLog(this._ptr);
   }
 
   GetOldLog(): Pointer {

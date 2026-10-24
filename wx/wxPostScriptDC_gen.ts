@@ -11,6 +11,8 @@ export class wxPostScriptDC extends wxDC {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxPostScriptDC_Delete(this._ptr);
   }
 
@@ -22,7 +24,7 @@ export class wxPostScriptDC extends wxDC {
     lib.symbols.wxPostScriptDC_SetResolution(this._ptr, ppi);
   }
 
-  GetResolution(): number {
+  override GetResolution(): number {
     return lib.symbols.wxPostScriptDC_GetResolution(this._ptr);
   }
 

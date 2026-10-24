@@ -11,6 +11,8 @@ export class kwxFileDropTarget extends wxDropTarget {
   }
 
   Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.kwxFileDropTarget_Delete(this._ptr);
   }
 

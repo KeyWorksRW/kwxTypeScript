@@ -14,11 +14,11 @@ export class wxWrapSizer extends wxBoxSizer {
     return lib.symbols.wxWrapSizer_GetOrientation(this._ptr);
   }
 
-  SetOrientation(orient: number): void {
+  override SetOrientation(orient: number): void {
     lib.symbols.wxWrapSizer_SetOrientation(this._ptr, orient);
   }
 
-  InformFirstDirection(direction: number, size: number, availableOtherDir: number): boolean {
+  override InformFirstDirection(direction: number, size: number, availableOtherDir: number): boolean {
     return (lib.symbols.wxWrapSizer_InformFirstDirection(this._ptr, direction, size, availableOtherDir) as number) !== 0;
   }
 

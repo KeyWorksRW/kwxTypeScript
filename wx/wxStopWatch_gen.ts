@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxStopWatch {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -16,6 +17,8 @@ export class wxStopWatch {
   }
 
   Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxStopWatch_Delete(this._ptr);
   }
 

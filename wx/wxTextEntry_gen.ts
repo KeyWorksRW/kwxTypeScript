@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxTextEntry {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -13,6 +14,14 @@ export class wxTextEntry {
   /** Returns the underlying native pointer. */
   get ptr(): Pointer {
     return this._ptr;
+  }
+
+  ConvertToUpperCase(): void {
+    lib.symbols.wxTextEntry_ConvertToUpperCase(this._ptr);
+  }
+
+  ForwardEnableTextChangedEvents(enable: boolean): void {
+    lib.symbols.wxTextEntry_ForwardEnableTextChangedEvents(this._ptr, enable ? 1 : 0);
   }
 
   SetValue(value: Pointer): void {

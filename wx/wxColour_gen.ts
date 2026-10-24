@@ -2,25 +2,30 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxColour {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxColour extends wxObject {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxColour_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  GetInt(): number {
+    return lib.symbols.wxColour_GetInt(this._ptr);
+  }
+
+  GetUnsignedInt(): number {
+    return lib.symbols.wxColour_GetUnsignedInt(this._ptr);
   }
 
   Alpha(): number {
@@ -63,6 +68,18 @@ export class wxColour {
     return (lib.symbols.wxColour_ValidName(name) as number) !== 0;
   }
 
+}
+
+export function createWxColourFromInt(rgb: number): wxColour | null {
+    const rawPtr = lib.symbols.wxColour_CreateFromInt(rgb);
+    if (rawPtr === null) return null;
+    return new wxColour(rawPtr);
+}
+
+export function createWxColourFromUnsignedInt(rgba: number): wxColour | null {
+    const rawPtr = lib.symbols.wxColour_CreateFromUnsignedInt(rgba);
+    if (rawPtr === null) return null;
+    return new wxColour(rawPtr);
 }
 
 export function createWxColourByName(name: Pointer): wxColour | null {

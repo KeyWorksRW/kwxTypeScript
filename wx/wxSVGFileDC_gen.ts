@@ -11,6 +11,8 @@ export class wxSVGFileDC extends wxDC {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxSVGFileDC_Delete(this._ptr);
   }
 

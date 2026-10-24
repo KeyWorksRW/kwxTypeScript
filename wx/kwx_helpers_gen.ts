@@ -20,6 +20,7 @@ export function createWxString(s: string): wxString
 // --- Helper: read a JS string from a wxString* ---
 export function readWxString(wxStrPtr: Pointer): string
 {
+    if (!wxStrPtr) return "";
     const buf = lib.symbols.kwxUtf8Buffer_Create(wxStrPtr);
     const data = lib.symbols.kwxUtf8Buffer_Data(buf);
     const result = data ? readCString(data) : "";
@@ -28,8 +29,11 @@ export function readWxString(wxStrPtr: Pointer): string
 }
 
 // --- Helper: read and delete a wxString* returned from a getter ---
+// The pointer is assumed to be owned by the caller and is consumed (freed) by this
+// call.  Never pass a borrowed or const pointer, and never call it twice.
 export function readAndDeleteWxString(wxStrPtr: Pointer): string
 {
+    if (!wxStrPtr) return "";
     const result = readWxString(wxStrPtr);
     lib.symbols.wxString_Delete(wxStrPtr);
     return result;

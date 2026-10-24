@@ -2,25 +2,170 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxDC {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxDC extends wxObject {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxDC_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  GetPixel2(x: number, y: number, col: Pointer): void {
+    lib.symbols.wxDC_GetPixel2(this._ptr, x, y, col);
+  }
+
+  GetUserScaleX(): number {
+    return lib.symbols.wxDC_GetUserScaleX(this._ptr);
+  }
+
+  GetUserScaleY(): number {
+    return lib.symbols.wxDC_GetUserScaleY(this._ptr);
+  }
+
+  GetWindow(): Pointer {
+    return lib.symbols.wxDC_GetWindow(this._ptr);
+  }
+
+  GetResolution(): number {
+    return lib.symbols.wxDC_GetResolution(this._ptr);
+  }
+
+  GetContentScaleFactor(): number {
+    return lib.symbols.wxDC_GetContentScaleFactor(this._ptr);
+  }
+
+  FromDIP(value: number): number {
+    return lib.symbols.wxDC_FromDIP(this._ptr, value);
+  }
+
+  ToDIP(value: number): number {
+    return lib.symbols.wxDC_ToDIP(this._ptr, value);
+  }
+
+  FromDIPSize(width: number, height: number): Pointer {
+    return lib.symbols.wxDC_FromDIPSize(this._ptr, width, height);
+  }
+
+  ToDIPSize(width: number, height: number): Pointer {
+    return lib.symbols.wxDC_ToDIPSize(this._ptr, width, height);
+  }
+
+  SetLayoutDirection(direction: number): void {
+    lib.symbols.wxDC_SetLayoutDirection(this._ptr, direction);
+  }
+
+  GetLayoutDirection(): number {
+    return lib.symbols.wxDC_GetLayoutDirection(this._ptr);
+  }
+
+  GetTextExtentSize(string: Pointer): Pointer {
+    return lib.symbols.wxDC_GetTextExtentSize(this._ptr, string);
+  }
+
+  GetMultiLineTextExtentSize(string: Pointer): Pointer {
+    return lib.symbols.wxDC_GetMultiLineTextExtentSize(this._ptr, string);
+  }
+
+  GetPartialTextExtents(text: Pointer, count: number, widths: Pointer): boolean {
+    return (lib.symbols.wxDC_GetPartialTextExtents(this._ptr, text, count, widths) as number) !== 0;
+  }
+
+  DeviceToLogical(x: number, y: number): Pointer {
+    return lib.symbols.wxDC_DeviceToLogical(this._ptr, x, y);
+  }
+
+  LogicalToDevice(x: number, y: number): Pointer {
+    return lib.symbols.wxDC_LogicalToDevice(this._ptr, x, y);
+  }
+
+  DeviceToLogicalRel(width: number, height: number): Pointer {
+    return lib.symbols.wxDC_DeviceToLogicalRel(this._ptr, width, height);
+  }
+
+  LogicalToDeviceRel(width: number, height: number): Pointer {
+    return lib.symbols.wxDC_LogicalToDeviceRel(this._ptr, width, height);
+  }
+
+  GetLogicalOriginPoint(): Pointer {
+    return lib.symbols.wxDC_GetLogicalOriginPoint(this._ptr);
+  }
+
+  GetDeviceOriginPoint(): Pointer {
+    return lib.symbols.wxDC_GetDeviceOriginPoint(this._ptr);
+  }
+
+  CopyAttributes(dc: Pointer): void {
+    lib.symbols.wxDC_CopyAttributes(this._ptr, dc);
+  }
+
+  GetHandle(): Pointer {
+    return lib.symbols.wxDC_GetHandle(this._ptr);
+  }
+
+  DisableAutomaticBoundingBoxUpdates(): void {
+    lib.symbols.wxDC_DisableAutomaticBoundingBoxUpdates(this._ptr);
+  }
+
+  AreAutomaticBoundingBoxUpdatesEnabled(): boolean {
+    return (lib.symbols.wxDC_AreAutomaticBoundingBoxUpdatesEnabled(this._ptr) as number) !== 0;
+  }
+
+  SetClippingRegionPoint(x: number, y: number, width: number, height: number): void {
+    lib.symbols.wxDC_SetClippingRegionPoint(this._ptr, x, y, width, height);
+  }
+
+  GetClippingRect(x: Pointer, y: Pointer, width: Pointer, height: Pointer): boolean {
+    return (lib.symbols.wxDC_GetClippingRect(this._ptr, x, y, width, height) as number) !== 0;
+  }
+
+  FloodFillEx(x: number, y: number, col: Pointer, style: number): boolean {
+    return (lib.symbols.wxDC_FloodFillEx(this._ptr, x, y, col, style) as number) !== 0;
+  }
+
+  GradientFillConcentric(x: number, y: number, width: number, height: number, initialColour: Pointer, destColour: Pointer): void {
+    lib.symbols.wxDC_GradientFillConcentric(this._ptr, x, y, width, height, initialColour, destColour);
+  }
+
+  GradientFillConcentricCenter(x: number, y: number, width: number, height: number, initialColour: Pointer, destColour: Pointer, cx: number, cy: number): void {
+    lib.symbols.wxDC_GradientFillConcentricCenter(this._ptr, x, y, width, height, initialColour, destColour, cx, cy);
+  }
+
+  GradientFillLinear(x: number, y: number, width: number, height: number, initialColour: Pointer, destColour: Pointer, direction: number): void {
+    lib.symbols.wxDC_GradientFillLinear(this._ptr, x, y, width, height, initialColour, destColour, direction);
+  }
+
+  StretchBlit(dstX: number, dstY: number, dstWidth: number, dstHeight: number, source: Pointer, srcX: number, srcY: number, srcWidth: number, srcHeight: number, rop: number, useMask: boolean, maskX: number, maskY: number): boolean {
+    return (lib.symbols.wxDC_StretchBlit(this._ptr, dstX, dstY, dstWidth, dstHeight, source, srcX, srcY, srcWidth, srcHeight, rop, useMask ? 1 : 0, maskX, maskY) as number) !== 0;
+  }
+
+  GetAsBitmap(x: number, y: number, width: number, height: number, useRect: boolean): Pointer {
+    return lib.symbols.wxDC_GetAsBitmap(this._ptr, x, y, width, height, useRect ? 1 : 0);
+  }
+
+  DrawSpline(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number): void {
+    lib.symbols.wxDC_DrawSpline(this._ptr, x1, y1, x2, y2, x3, y3);
+  }
+
+  DrawSplinePoints(count: number, x: Pointer, y: Pointer): void {
+    lib.symbols.wxDC_DrawSplinePoints(this._ptr, count, x, y);
+  }
+
+  GetGraphicsContext(): Pointer {
+    return lib.symbols.wxDC_GetGraphicsContext(this._ptr);
+  }
+
+  SetGraphicsContext(ctx: Pointer): void {
+    lib.symbols.wxDC_SetGraphicsContext(this._ptr, ctx);
   }
 
   Blit(xdest: number, ydest: number, width: number, height: number, source: Pointer, xsrc: number, ysrc: number, rop: number, useMask: boolean, xsrcMask: number, ysrcMask: number): boolean {

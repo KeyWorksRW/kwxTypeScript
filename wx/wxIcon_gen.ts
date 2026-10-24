@@ -11,6 +11,8 @@ export class wxIcon extends wxBitmap {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxIcon_Delete(this._ptr);
   }
 

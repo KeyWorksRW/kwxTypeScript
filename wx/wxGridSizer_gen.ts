@@ -10,6 +10,14 @@ export class wxGridSizer extends wxSizer {
     return this._ptr;
   }
 
+  GetEffectiveColsCount(): number {
+    return lib.symbols.wxGridSizer_GetEffectiveColsCount(this._ptr);
+  }
+
+  GetEffectiveRowsCount(): number {
+    return lib.symbols.wxGridSizer_GetEffectiveRowsCount(this._ptr);
+  }
+
   override CalcMin(): Pointer {
     return lib.symbols.wxGridSizer_CalcMin(this._ptr);
   }

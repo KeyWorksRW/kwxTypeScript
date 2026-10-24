@@ -10,6 +10,16 @@ export class wxIntProperty extends wxPGProperty {
     return this._ptr;
   }
 
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxIntProperty_Delete(this._ptr);
+  }
+
+  override [Symbol.dispose](): void {
+    this.Delete();
+  }
+
 }
 
 export function createWxIntProperty(label: Pointer, name: Pointer, value: number): wxIntProperty | null {

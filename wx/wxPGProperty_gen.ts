@@ -2,17 +2,80 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxPGProperty {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
+export class wxPGProperty extends wxObject {
+  /** Returns the underlying native pointer. */
+  override get ptr(): Pointer {
+    return this._ptr;
   }
 
-  /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
-    return this._ptr;
+  GetBaseName(): Pointer {
+    return lib.symbols.wxPGProperty_GetBaseName(this._ptr);
+  }
+
+  GetY(): number {
+    return lib.symbols.wxPGProperty_GetY(this._ptr);
+  }
+
+  GetValue(): Pointer {
+    return lib.symbols.wxPGProperty_GetValue(this._ptr);
+  }
+
+  GetHintText(): Pointer {
+    return lib.symbols.wxPGProperty_GetHintText(this._ptr);
+  }
+
+  GetGrid(): Pointer {
+    return lib.symbols.wxPGProperty_GetGrid(this._ptr);
+  }
+
+  GetGridIfDisplayed(): Pointer {
+    return lib.symbols.wxPGProperty_GetGridIfDisplayed(this._ptr);
+  }
+
+  GetMainParent(): Pointer {
+    return lib.symbols.wxPGProperty_GetMainParent(this._ptr);
+  }
+
+  GetParent(): Pointer {
+    return lib.symbols.wxPGProperty_GetParent(this._ptr);
+  }
+
+  Item(index: number): Pointer {
+    return lib.symbols.wxPGProperty_Item(this._ptr, index);
+  }
+
+  GetChildCount(): number {
+    return lib.symbols.wxPGProperty_GetChildCount(this._ptr);
+  }
+
+  GetChoiceSelection(): number {
+    return lib.symbols.wxPGProperty_GetChoiceSelection(this._ptr);
+  }
+
+  SetChoiceSelection(selection: number): void {
+    lib.symbols.wxPGProperty_SetChoiceSelection(this._ptr, selection);
+  }
+
+  Enable(enable: boolean): void {
+    lib.symbols.wxPGProperty_Enable(this._ptr, enable ? 1 : 0);
+  }
+
+  AreChildrenComponents(): boolean {
+    return (lib.symbols.wxPGProperty_AreChildrenComponents(this._ptr) as number) !== 0;
+  }
+
+  GetDisplayedCommonValueCount(): number {
+    return lib.symbols.wxPGProperty_GetDisplayedCommonValueCount(this._ptr);
+  }
+
+  SetLabel(label: Pointer): void {
+    lib.symbols.wxPGProperty_SetLabel(this._ptr, label);
+  }
+
+  SetName(name: Pointer): void {
+    lib.symbols.wxPGProperty_SetName(this._ptr, name);
   }
 
   GetLabel(): Pointer {

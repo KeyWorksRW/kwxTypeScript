@@ -11,6 +11,8 @@ export class wxMirrorDC extends wxDC {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxMirrorDC_Delete(this._ptr);
   }
 

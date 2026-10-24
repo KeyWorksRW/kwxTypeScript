@@ -10,6 +10,16 @@ export class wxPropertyCategory extends wxPGProperty {
     return this._ptr;
   }
 
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxPropertyCategory_Delete(this._ptr);
+  }
+
+  override [Symbol.dispose](): void {
+    this.Delete();
+  }
+
 }
 
 export function createWxPropertyCategory(label: Pointer): wxPropertyCategory | null {

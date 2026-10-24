@@ -10,6 +10,566 @@ export class wxWindow extends wxEvtHandler {
     return this._ptr;
   }
 
+  SetAccessible(accessible: Pointer): void {
+    lib.symbols.wxWindow_SetAccessible(this._ptr, accessible);
+  }
+
+  GetAccessible(): Pointer {
+    return lib.symbols.wxWindow_GetAccessible(this._ptr);
+  }
+
+  GetOrCreateAccessible(): Pointer {
+    return lib.symbols.wxWindow_GetOrCreateAccessible(this._ptr);
+  }
+
+  SetAccessibleName(name: Pointer): void {
+    lib.symbols.wxWindow_SetAccessibleName(this._ptr, name);
+  }
+
+  ConvertDialogToPixelsEx(x: number, y: number): Pointer {
+    return lib.symbols.wxWindow_ConvertDialogToPixelsEx(this._ptr, x, y);
+  }
+
+  ConvertPixelsToDialogEx(x: number, y: number): Pointer {
+    return lib.symbols.wxWindow_ConvertPixelsToDialogEx(this._ptr, x, y);
+  }
+
+  ScreenToClient2(x: number, y: number): Pointer {
+    return lib.symbols.wxWindow_ScreenToClient2(this._ptr, x, y);
+  }
+
+  NewControlId(count: number): number {
+    return lib.symbols.wxWindow_NewControlId(count);
+  }
+
+  UnreserveControlId(id: number, count: number): void {
+    lib.symbols.wxWindow_UnreserveControlId(id, count);
+  }
+
+  GetWindowVariant(): number {
+    return lib.symbols.wxWindow_GetWindowVariant(this._ptr);
+  }
+
+  SetWindowVariant(variant: number): void {
+    lib.symbols.wxWindow_SetWindowVariant(this._ptr, variant);
+  }
+
+  GetLayoutDirection(): number {
+    return lib.symbols.wxWindow_GetLayoutDirection(this._ptr);
+  }
+
+  SetLayoutDirection(direction: number): void {
+    lib.symbols.wxWindow_SetLayoutDirection(this._ptr, direction);
+  }
+
+  SetPosition(x: number, y: number): void {
+    lib.symbols.wxWindow_SetPosition(this._ptr, x, y);
+  }
+
+  GetScreenPosition(x: Pointer, y: Pointer): void {
+    lib.symbols.wxWindow_GetScreenPosition(this._ptr, x, y);
+  }
+
+  GetScreenRect(): Pointer {
+    return lib.symbols.wxWindow_GetScreenRect(this._ptr);
+  }
+
+  GetClientAreaOrigin(x: Pointer, y: Pointer): void {
+    lib.symbols.wxWindow_GetClientAreaOrigin(this._ptr, x, y);
+  }
+
+  GetClientRect(): Pointer {
+    return lib.symbols.wxWindow_GetClientRect(this._ptr);
+  }
+
+  ClientToWindowSize(width: Pointer, height: Pointer): void {
+    lib.symbols.wxWindow_ClientToWindowSize(this._ptr, width, height);
+  }
+
+  WindowToClientSize(width: Pointer, height: Pointer): void {
+    lib.symbols.wxWindow_WindowToClientSize(this._ptr, width, height);
+  }
+
+  GetBestHeight(width: number): number {
+    return lib.symbols.wxWindow_GetBestHeight(this._ptr, width);
+  }
+
+  GetBestWidth(height: number): number {
+    return lib.symbols.wxWindow_GetBestWidth(this._ptr, height);
+  }
+
+  InvalidateBestSize(): void {
+    lib.symbols.wxWindow_InvalidateBestSize(this._ptr);
+  }
+
+  CacheBestSize(width: number, height: number): void {
+    lib.symbols.wxWindow_CacheBestSize(this._ptr, width, height);
+  }
+
+  SetInitialSize(width: number, height: number): boolean {
+    return (lib.symbols.wxWindow_SetInitialSize(this._ptr, width, height) as number) !== 0;
+  }
+
+  Centre(direction: number): void {
+    lib.symbols.wxWindow_Centre(this._ptr, direction);
+  }
+
+  GetMinSize(): Pointer {
+    return lib.symbols.wxWindow_GetMinSize(this._ptr);
+  }
+
+  GetMaxSize(): Pointer {
+    return lib.symbols.wxWindow_GetMaxSize(this._ptr);
+  }
+
+  SetMinClientSize(width: number, height: number): void {
+    lib.symbols.wxWindow_SetMinClientSize(this._ptr, width, height);
+  }
+
+  SetMaxClientSize(width: number, height: number): void {
+    lib.symbols.wxWindow_SetMaxClientSize(this._ptr, width, height);
+  }
+
+  GetMinClientSize(): Pointer {
+    return lib.symbols.wxWindow_GetMinClientSize(this._ptr);
+  }
+
+  GetMaxClientSize(): Pointer {
+    return lib.symbols.wxWindow_GetMaxClientSize(this._ptr);
+  }
+
+  GetBestVirtualSize(): Pointer {
+    return lib.symbols.wxWindow_GetBestVirtualSize(this._ptr);
+  }
+
+  GetContentScaleFactor(): number {
+    return lib.symbols.wxWindow_GetContentScaleFactor(this._ptr);
+  }
+
+  GetDPIScaleFactor(): number {
+    return lib.symbols.wxWindow_GetDPIScaleFactor(this._ptr);
+  }
+
+  GetWindowBorderSize(): Pointer {
+    return lib.symbols.wxWindow_GetWindowBorderSize(this._ptr);
+  }
+
+  SendSizeEvent(flags: number): void {
+    lib.symbols.wxWindow_SendSizeEvent(this._ptr, flags);
+  }
+
+  SendSizeEventToParent(flags: number): void {
+    lib.symbols.wxWindow_SendSizeEventToParent(this._ptr, flags);
+  }
+
+  ShowWithEffect(effect: number, timeout: number): boolean {
+    return (lib.symbols.wxWindow_ShowWithEffect(this._ptr, effect, timeout) as number) !== 0;
+  }
+
+  HideWithEffect(effect: number, timeout: number): boolean {
+    return (lib.symbols.wxWindow_HideWithEffect(this._ptr, effect, timeout) as number) !== 0;
+  }
+
+  IsThisEnabled(): boolean {
+    return (lib.symbols.wxWindow_IsThisEnabled(this._ptr) as number) !== 0;
+  }
+
+  IsShownOnScreen(): boolean {
+    return (lib.symbols.wxWindow_IsShownOnScreen(this._ptr) as number) !== 0;
+  }
+
+  SetWindowStyle(style: number): void {
+    lib.symbols.wxWindow_SetWindowStyle(this._ptr, style);
+  }
+
+  GetWindowStyle(): number {
+    return lib.symbols.wxWindow_GetWindowStyle(this._ptr);
+  }
+
+  IsRetained(): boolean {
+    return (lib.symbols.wxWindow_IsRetained(this._ptr) as number) !== 0;
+  }
+
+  ToggleWindowStyle(flag: number): boolean {
+    return (lib.symbols.wxWindow_ToggleWindowStyle(this._ptr, flag) as number) !== 0;
+  }
+
+  GetExtraStyle(): number {
+    return lib.symbols.wxWindow_GetExtraStyle(this._ptr);
+  }
+
+  HasExtraStyle(exFlag: number): boolean {
+    return (lib.symbols.wxWindow_HasExtraStyle(this._ptr, exFlag) as number) !== 0;
+  }
+
+  SetThemeEnabled(enableTheme: boolean): void {
+    lib.symbols.wxWindow_SetThemeEnabled(this._ptr, enableTheme ? 1 : 0);
+  }
+
+  GetThemeEnabled(): boolean {
+    return (lib.symbols.wxWindow_GetThemeEnabled(this._ptr) as number) !== 0;
+  }
+
+  SetFocusFromKbd(): void {
+    lib.symbols.wxWindow_SetFocusFromKbd(this._ptr);
+  }
+
+  AcceptsFocus(): boolean {
+    return (lib.symbols.wxWindow_AcceptsFocus(this._ptr) as number) !== 0;
+  }
+
+  AcceptsFocusRecursively(): boolean {
+    return (lib.symbols.wxWindow_AcceptsFocusRecursively(this._ptr) as number) !== 0;
+  }
+
+  AcceptsFocusFromKeyboard(): boolean {
+    return (lib.symbols.wxWindow_AcceptsFocusFromKeyboard(this._ptr) as number) !== 0;
+  }
+
+  DisableFocusFromKeyboard(): void {
+    lib.symbols.wxWindow_DisableFocusFromKeyboard(this._ptr);
+  }
+
+  EnableFocusFromKeyboard(): void {
+    lib.symbols.wxWindow_EnableFocusFromKeyboard(this._ptr);
+  }
+
+  CanBeFocused(): boolean {
+    return (lib.symbols.wxWindow_CanBeFocused(this._ptr) as number) !== 0;
+  }
+
+  IsFocusable(): boolean {
+    return (lib.symbols.wxWindow_IsFocusable(this._ptr) as number) !== 0;
+  }
+
+  CanAcceptFocus(): boolean {
+    return (lib.symbols.wxWindow_CanAcceptFocus(this._ptr) as number) !== 0;
+  }
+
+  CanAcceptFocusFromKeyboard(): boolean {
+    return (lib.symbols.wxWindow_CanAcceptFocusFromKeyboard(this._ptr) as number) !== 0;
+  }
+
+  SetCanFocus(canFocus: boolean): void {
+    lib.symbols.wxWindow_SetCanFocus(this._ptr, canFocus ? 1 : 0);
+  }
+
+  EnableVisibleFocus(enabled: boolean): void {
+    lib.symbols.wxWindow_EnableVisibleFocus(this._ptr, enabled ? 1 : 0);
+  }
+
+  NavigateIn(flags: number): boolean {
+    return (lib.symbols.wxWindow_NavigateIn(this._ptr, flags) as number) !== 0;
+  }
+
+  Navigate(flags: number): boolean {
+    return (lib.symbols.wxWindow_Navigate(this._ptr, flags) as number) !== 0;
+  }
+
+  MoveBeforeInTabOrder(win: Pointer): void {
+    lib.symbols.wxWindow_MoveBeforeInTabOrder(this._ptr, win);
+  }
+
+  MoveAfterInTabOrder(win: Pointer): void {
+    lib.symbols.wxWindow_MoveAfterInTabOrder(this._ptr, win);
+  }
+
+  IsDescendant(win: Pointer): boolean {
+    return (lib.symbols.wxWindow_IsDescendant(this._ptr, win) as number) !== 0;
+  }
+
+  SetParent(parent: Pointer): void {
+    lib.symbols.wxWindow_SetParent(this._ptr, parent);
+  }
+
+  SetEventHandler(handler: Pointer): void {
+    lib.symbols.wxWindow_SetEventHandler(this._ptr, handler);
+  }
+
+  RemoveEventHandler(handler: Pointer): boolean {
+    return (lib.symbols.wxWindow_RemoveEventHandler(this._ptr, handler) as number) !== 0;
+  }
+
+  ProcessWindowEvent(event: Pointer): boolean {
+    return (lib.symbols.wxWindow_ProcessWindowEvent(this._ptr, event) as number) !== 0;
+  }
+
+  ProcessWindowEventLocally(event: Pointer): boolean {
+    return (lib.symbols.wxWindow_ProcessWindowEventLocally(this._ptr, event) as number) !== 0;
+  }
+
+  HandleWindowEvent(event: Pointer): boolean {
+    return (lib.symbols.wxWindow_HandleWindowEvent(this._ptr, event) as number) !== 0;
+  }
+
+  GetAcceleratorTable(): Pointer {
+    return lib.symbols.wxWindow_GetAcceleratorTable(this._ptr);
+  }
+
+  RegisterHotKey(hotkeyId: number, modifiers: number, keycode: number): boolean {
+    return (lib.symbols.wxWindow_RegisterHotKey(this._ptr, hotkeyId, modifiers, keycode) as number) !== 0;
+  }
+
+  UnregisterHotKey(hotkeyId: number): boolean {
+    return (lib.symbols.wxWindow_UnregisterHotKey(this._ptr, hotkeyId) as number) !== 0;
+  }
+
+  GetDPI(): Pointer {
+    return lib.symbols.wxWindow_GetDPI(this._ptr);
+  }
+
+  FromDIP(value: number): number {
+    return lib.symbols.wxWindow_FromDIP(this._ptr, value);
+  }
+
+  ToDIP(value: number): number {
+    return lib.symbols.wxWindow_ToDIP(this._ptr, value);
+  }
+
+  HasCapture(): boolean {
+    return (lib.symbols.wxWindow_HasCapture(this._ptr) as number) !== 0;
+  }
+
+  EnableTouchEvents(eventsMask: number): boolean {
+    return (lib.symbols.wxWindow_EnableTouchEvents(this._ptr, eventsMask) as number) !== 0;
+  }
+
+  IsFrozen(): boolean {
+    return (lib.symbols.wxWindow_IsFrozen(this._ptr) as number) !== 0;
+  }
+
+  SetDoubleBuffered(on: boolean): void {
+    lib.symbols.wxWindow_SetDoubleBuffered(this._ptr, on ? 1 : 0);
+  }
+
+  IsDoubleBuffered(): boolean {
+    return (lib.symbols.wxWindow_IsDoubleBuffered(this._ptr) as number) !== 0;
+  }
+
+  GetUpdateClientRect(): Pointer {
+    return lib.symbols.wxWindow_GetUpdateClientRect(this._ptr);
+  }
+
+  SetOwnBackgroundColour(colour: Pointer): void {
+    lib.symbols.wxWindow_SetOwnBackgroundColour(this._ptr, colour);
+  }
+
+  UseBgCol(): boolean {
+    return (lib.symbols.wxWindow_UseBgCol(this._ptr) as number) !== 0;
+  }
+
+  UseBackgroundColour(): boolean {
+    return (lib.symbols.wxWindow_UseBackgroundColour(this._ptr) as number) !== 0;
+  }
+
+  InheritsBackgroundColour(): boolean {
+    return (lib.symbols.wxWindow_InheritsBackgroundColour(this._ptr) as number) !== 0;
+  }
+
+  SetOwnForegroundColour(colour: Pointer): void {
+    lib.symbols.wxWindow_SetOwnForegroundColour(this._ptr, colour);
+  }
+
+  UseForegroundColour(): boolean {
+    return (lib.symbols.wxWindow_UseForegroundColour(this._ptr) as number) !== 0;
+  }
+
+  InheritsForegroundColour(): boolean {
+    return (lib.symbols.wxWindow_InheritsForegroundColour(this._ptr) as number) !== 0;
+  }
+
+  SetBackgroundStyle(style: number): boolean {
+    return (lib.symbols.wxWindow_SetBackgroundStyle(this._ptr, style) as number) !== 0;
+  }
+
+  GetBackgroundStyle(): number {
+    return lib.symbols.wxWindow_GetBackgroundStyle(this._ptr);
+  }
+
+  HasTransparentBackground(): boolean {
+    return (lib.symbols.wxWindow_HasTransparentBackground(this._ptr) as number) !== 0;
+  }
+
+  SetOwnFont(font: Pointer): void {
+    lib.symbols.wxWindow_SetOwnFont(this._ptr, font);
+  }
+
+  EnableInputMethod(enable: boolean): void {
+    lib.symbols.wxWindow_EnableInputMethod(this._ptr, enable ? 1 : 0);
+  }
+
+  IsInputMethodEnabled(): boolean {
+    return (lib.symbols.wxWindow_IsInputMethodEnabled(this._ptr) as number) !== 0;
+  }
+
+  UpdateInputMethodCursorRect(x: number, y: number, width: number, height: number): void {
+    lib.symbols.wxWindow_UpdateInputMethodCursorRect(this._ptr, x, y, width, height);
+  }
+
+  GetInputMethodCursorRect(): Pointer {
+    return lib.symbols.wxWindow_GetInputMethodCursorRect(this._ptr);
+  }
+
+  HitTest(x: number, y: number): number {
+    return lib.symbols.wxWindow_HitTest(this._ptr, x, y);
+  }
+
+  GetBorder(flags: number): number {
+    return lib.symbols.wxWindow_GetBorder(this._ptr, flags);
+  }
+
+  HasMultiplePages(): boolean {
+    return (lib.symbols.wxWindow_HasMultiplePages(this._ptr) as number) !== 0;
+  }
+
+  CanScroll(orient: number): boolean {
+    return (lib.symbols.wxWindow_CanScroll(this._ptr, orient) as number) !== 0;
+  }
+
+  HasScrollbar(orient: number): boolean {
+    return (lib.symbols.wxWindow_HasScrollbar(this._ptr, orient) as number) !== 0;
+  }
+
+  GetScrollbarSize(orient: number): number {
+    return lib.symbols.wxWindow_GetScrollbarSize(this._ptr, orient);
+  }
+
+  ScrollLines(lines: number): boolean {
+    return (lib.symbols.wxWindow_ScrollLines(this._ptr, lines) as number) !== 0;
+  }
+
+  ScrollPages(pages: number): boolean {
+    return (lib.symbols.wxWindow_ScrollPages(this._ptr, pages) as number) !== 0;
+  }
+
+  LineUp(): boolean {
+    return (lib.symbols.wxWindow_LineUp(this._ptr) as number) !== 0;
+  }
+
+  LineDown(): boolean {
+    return (lib.symbols.wxWindow_LineDown(this._ptr) as number) !== 0;
+  }
+
+  PageUp(): boolean {
+    return (lib.symbols.wxWindow_PageUp(this._ptr) as number) !== 0;
+  }
+
+  PageDown(): boolean {
+    return (lib.symbols.wxWindow_PageDown(this._ptr) as number) !== 0;
+  }
+
+  AlwaysShowScrollbars(horz: boolean, vert: boolean): void {
+    lib.symbols.wxWindow_AlwaysShowScrollbars(this._ptr, horz ? 1 : 0, vert ? 1 : 0);
+  }
+
+  IsScrollbarAlwaysShown(orient: number): boolean {
+    return (lib.symbols.wxWindow_IsScrollbarAlwaysShown(this._ptr, orient) as number) !== 0;
+  }
+
+  SetHelpText(text: Pointer): void {
+    lib.symbols.wxWindow_SetHelpText(this._ptr, text);
+  }
+
+  GetHelpText(): Pointer {
+    return lib.symbols.wxWindow_GetHelpText(this._ptr);
+  }
+
+  UnsetToolTip(): void {
+    lib.symbols.wxWindow_UnsetToolTip(this._ptr);
+  }
+
+  GetToolTipText(): Pointer {
+    return lib.symbols.wxWindow_GetToolTipText(this._ptr);
+  }
+
+  DragAcceptFiles(accept: boolean): void {
+    lib.symbols.wxWindow_DragAcceptFiles(this._ptr, accept ? 1 : 0);
+  }
+
+  SetContainingSizer(sizer: Pointer): void {
+    lib.symbols.wxWindow_SetContainingSizer(this._ptr, sizer);
+  }
+
+  SetTransparent(alpha: number): boolean {
+    return (lib.symbols.wxWindow_SetTransparent(this._ptr, alpha) as number) !== 0;
+  }
+
+  CanSetTransparent(): boolean {
+    return (lib.symbols.wxWindow_CanSetTransparent(this._ptr) as number) !== 0;
+  }
+
+  GetPalette(): Pointer {
+    return lib.symbols.wxWindow_GetPalette(this._ptr);
+  }
+
+  SetPalette(palette: Pointer): void {
+    lib.symbols.wxWindow_SetPalette(this._ptr, palette);
+  }
+
+  HasCustomPalette(): boolean {
+    return (lib.symbols.wxWindow_HasCustomPalette(this._ptr) as number) !== 0;
+  }
+
+  InheritAttributes(): void {
+    lib.symbols.wxWindow_InheritAttributes(this._ptr);
+  }
+
+  ShouldInheritColours(): boolean {
+    return (lib.symbols.wxWindow_ShouldInheritColours(this._ptr) as number) !== 0;
+  }
+
+  GetPopupMenuSelectionFromUser(menu: Pointer, x: number, y: number): number {
+    return lib.symbols.wxWindow_GetPopupMenuSelectionFromUser(this._ptr, menu, x, y);
+  }
+
+  AdjustForLayoutDirection(x: number, width: number, widthTotal: number): number {
+    return lib.symbols.wxWindow_AdjustForLayoutDirection(this._ptr, x, width, widthTotal);
+  }
+
+  BeginRepositioningChildren(): boolean {
+    return (lib.symbols.wxWindow_BeginRepositioningChildren(this._ptr) as number) !== 0;
+  }
+
+  EndRepositioningChildren(): void {
+    lib.symbols.wxWindow_EndRepositioningChildren(this._ptr);
+  }
+
+  IsClientAreaChild(child: Pointer): boolean {
+    return (lib.symbols.wxWindow_IsClientAreaChild(this._ptr, child) as number) !== 0;
+  }
+
+  FromPhys(value: number): number {
+    return lib.symbols.wxWindow_FromPhys(this._ptr, value);
+  }
+
+  ToPhys(value: number): number {
+    return lib.symbols.wxWindow_ToPhys(this._ptr, value);
+  }
+
+  GetHelpTextAtPoint(x: number, y: number, origin: number): Pointer {
+    return lib.symbols.wxWindow_GetHelpTextAtPoint(this._ptr, x, y, origin);
+  }
+
+  GetHelpIdAtPoint(x: number, y: number): number {
+    return lib.symbols.wxWindow_GetHelpIdAtPoint(this._ptr, x, y);
+  }
+
+  CopyToolTip(tip: Pointer): boolean {
+    return (lib.symbols.wxWindow_CopyToolTip(this._ptr, tip) as number) !== 0;
+  }
+
+  CanBeOutsideClientArea(): boolean {
+    return (lib.symbols.wxWindow_CanBeOutsideClientArea(this._ptr) as number) !== 0;
+  }
+
+  CanApplyThemeBorder(): boolean {
+    return (lib.symbols.wxWindow_CanApplyThemeBorder(this._ptr) as number) !== 0;
+  }
+
+  IsTopNavigationDomain(kind: number): boolean {
+    return (lib.symbols.wxWindow_IsTopNavigationDomain(this._ptr, kind) as number) !== 0;
+  }
+
   AddChild(child: Pointer): void {
     lib.symbols.wxWindow_AddChild(this._ptr, child);
   }

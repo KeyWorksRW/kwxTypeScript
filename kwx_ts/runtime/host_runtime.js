@@ -138,6 +138,321 @@
 
     globalThis.__kwx_transpile = kwxTranspile;
 
+    // ------------------------------------------------------ source locations
+    // The transpiled code carries an inline base64 v3 source map. It is stored
+    // per module so `Error.prepareStackTrace` can translate a generated frame
+    // back to its original `.ts` position. Decoding is lazy: a program that
+    // never builds a stack trace never pays for it.
+    var KWX_SOURCE_MAP_PREFIX = "sourceMappingURL=data:";
+    var kwxModuleSources = Object.create(null);
+
+    // Record the map text for `filePath`; the map itself is decoded on the
+    // first error. A module without a marker (the `.js` fast path) keeps a null
+    // mapText so it is never decoded at all.
+    function kwxRegisterModuleSource(filePath, code) {
+        var markerIndex = code.lastIndexOf(KWX_SOURCE_MAP_PREFIX);
+        var mapText = null;
+        if (markerIndex >= 0) {
+            var payloadIndex =
+                code.indexOf(",", markerIndex + KWX_SOURCE_MAP_PREFIX.length);
+            if (payloadIndex >= 0) {
+                var newlineIndex = code.indexOf("\n", payloadIndex);
+                mapText = (newlineIndex < 0)
+                    ? code.slice(payloadIndex + 1)
+                    : code.slice(payloadIndex + 1, newlineIndex);
+                mapText = mapText.trim();
+            }
+        }
+        kwxModuleSources[filePath] = { mapText: mapText, map: undefined };
+    }
+
+    function kwxBase64Value(code) {
+        if (code >= 65 && code <= 90) {
+            return code - 65;
+        }
+        if (code >= 97 && code <= 122) {
+            return code - 71;
+        }
+        if (code >= 48 && code <= 57) {
+            return code + 4;
+        }
+        if (code === 43) {
+            return 62;
+        }
+        if (code === 47) {
+            return 63;
+        }
+        return -1;
+    }
+
+    // Standard RFC 4648 alphabet; '=' padding and whitespace are ignored, so a
+    // payload without padding still decodes.
+    function kwxBase64Decode(text) {
+        var bytes = [];
+        var buffer = 0;
+        var bits = 0;
+        for (var index = 0; index < text.length; ++index) {
+            var value = kwxBase64Value(text.charCodeAt(index));
+            if (value < 0) {
+                continue;
+            }
+            buffer = ((buffer << 6) | value) & 0xFFFFFF;
+            bits += 6;
+            if (bits >= 8) {
+                bits -= 8;
+                bytes.push((buffer >>> bits) & 0xFF);
+            }
+        }
+        return bytes;
+    }
+
+    // Module paths may be non-ASCII, so decode UTF-8 instead of treating one
+    // byte as one character.
+    function kwxUtf8Decode(bytes) {
+        var text = "";
+        var index = 0;
+        while (index < bytes.length) {
+            var first = bytes[index++];
+            var codePoint;
+            if (first < 0x80) {
+                codePoint = first;
+            } else if (first < 0xE0) {
+                codePoint = ((first & 0x1F) << 6) | (bytes[index++] & 0x3F);
+            } else if (first < 0xF0) {
+                codePoint = ((first & 0x0F) << 12) |
+                    ((bytes[index++] & 0x3F) << 6) | (bytes[index++] & 0x3F);
+            } else {
+                codePoint = ((first & 0x07) << 18) |
+                    ((bytes[index++] & 0x3F) << 12) |
+                    ((bytes[index++] & 0x3F) << 6) | (bytes[index++] & 0x3F);
+            }
+            if (codePoint > 0xFFFF) {
+                codePoint -= 0x10000;
+                text += String.fromCharCode(0xD800 + (codePoint >> 10));
+                text += String.fromCharCode(0xDC00 + (codePoint & 0x3FF));
+            } else {
+                text += String.fromCharCode(codePoint);
+            }
+        }
+        return text;
+    }
+
+    // Base64 VLQ: low five bits per digit, bit 5 continues, bit 0 is the sign.
+    function kwxDecodeVlq(text, index) {
+        var value = 0;
+        var shift = 0;
+        var digit;
+        do {
+            digit = kwxBase64Value(text.charCodeAt(index++));
+            if (digit < 0) {
+                return [0, index];
+            }
+            value += (digit & 0x1F) << shift;
+            shift += 5;
+        } while (digit & 0x20);
+        return [(value & 1) ? -(value >>> 1) : (value >>> 1), index];
+    }
+
+    // One entry per generated line; each entry lists its segments as
+    // [generatedColumn, sourceIndex, originalLine, originalColumn] with 0-based
+    // fields, after the deltas are accumulated.
+    function kwxDecodeMappings(mappings) {
+        var lines = [];
+        var sourceIndex = 0;
+        var originalLine = 0;
+        var originalColumn = 0;
+        var lineTexts = mappings.split(";");
+        for (var lineIndex = 0; lineIndex < lineTexts.length; ++lineIndex) {
+            var segments = [];
+            var generatedColumn = 0;
+            var segmentTexts = lineTexts[lineIndex].split(",");
+            for (var segmentIndex = 0;
+                segmentIndex < segmentTexts.length; ++segmentIndex) {
+                var segmentText = segmentTexts[segmentIndex];
+                if (segmentText.length === 0) {
+                    continue;
+                }
+                var fields = [];
+                var cursor = 0;
+                while (cursor < segmentText.length) {
+                    var decoded = kwxDecodeVlq(segmentText, cursor);
+                    fields.push(decoded[0]);
+                    if (decoded[1] <= cursor) {
+                        break;
+                    }
+                    cursor = decoded[1];
+                }
+                if (fields.length === 0) {
+                    continue;
+                }
+                generatedColumn += fields[0];
+                if (fields.length >= 4) {
+                    sourceIndex += fields[1];
+                    originalLine += fields[2];
+                    originalColumn += fields[3];
+                    segments.push(
+                        [generatedColumn, sourceIndex, originalLine, originalColumn]
+                    );
+                } else {
+                    segments.push([generatedColumn, -1, -1, -1]);
+                }
+            }
+            lines.push(segments);
+        }
+        return lines;
+    }
+
+    function kwxParseSourceMap(text) {
+        var parsed = JSON.parse(kwxUtf8Decode(kwxBase64Decode(text)));
+        if (!parsed || parsed.version !== 3 || typeof parsed.mappings !== "string") {
+            throw new Error("kwx_ts: unsupported source map");
+        }
+        return {
+            sources: parsed.sources || [],
+            lines: kwxDecodeMappings(parsed.mappings)
+        };
+    }
+
+    // `undefined` means "not decoded yet"; null means "no usable map", which is
+    // remembered so a broken map is decoded once and not on every error.
+    function kwxModuleSourceMap(filePath) {
+        var entry = kwxModuleSources[filePath];
+        if (!entry) {
+            return null;
+        }
+        if (entry.map === undefined) {
+            entry.map = null;
+            if (entry.mapText) {
+                try {
+                    entry.map = kwxParseSourceMap(entry.mapText);
+                } catch (error) {
+                    entry.map = null;
+                }
+            }
+        }
+        return entry.map;
+    }
+
+    function kwxLookupOriginal(map, generatedLine, generatedColumn) {
+        if (!map || generatedLine < 0 || generatedLine >= map.lines.length) {
+            return null;
+        }
+        var segments = map.lines[generatedLine];
+        var found = null;
+        for (var index = 0; index < segments.length; ++index) {
+            var segment = segments[index];
+            if (segment[1] < 0) {
+                continue;
+            }
+            if (segment[0] > generatedColumn) {
+                break;
+            }
+            found = segment;
+        }
+        if (found) {
+            return found;
+        }
+        for (var firstIndex = 0; firstIndex < segments.length; ++firstIndex) {
+            if (segments[firstIndex][1] >= 0) {
+                return segments[firstIndex];
+            }
+        }
+        return null;
+    }
+
+    // The prologue occupies eval line 1, so the generated line is `line - 1` and
+    // the generated columns are unshifted — exactly what the map describes.
+    function kwxBuildFactory(filePath, code) {
+        kwxRegisterModuleSource(filePath, code);
+        if (typeof native.__kwx_eval_factory !== "function") {
+            throw new Error("kwx_ts: __kwx_eval_factory is unavailable");
+        }
+        return native.__kwx_eval_factory(
+            "(function (exports, module, require, __filename, __dirname) {\n" +
+                code + "\n})\n",
+            filePath
+        );
+    }
+
+    // Translate one call site into a `    at fn (location)` line, or null to drop
+    // the frame.
+    function kwxFormatFrame(frame) {
+        var fileName = frame.getFileName();
+        var functionName = frame.getFunctionName();
+        var hasFunction = (functionName !== null && functionName !== undefined &&
+            functionName !== "");
+        if (fileName === null || fileName === undefined) {
+            return hasFunction ? "    at " + functionName + " (native)" : "    at <native>";
+        }
+        if (fileName === "<kwx_host_runtime>") {
+            return null;
+        }
+        var line = frame.getLineNumber();
+        var column = frame.getColumnNumber();
+        var hasLine = (line !== null && line !== undefined);
+        var location;
+        if (kwxModuleSources[fileName] && hasLine && line > 1) {
+            var generatedLine = line - 1;
+            var map = kwxModuleSourceMap(fileName);
+            var original = kwxLookupOriginal(
+                map, generatedLine - 1, (column || 1) - 1
+            );
+            if (original) {
+                location = (map.sources[original[1]] || fileName) + ":" +
+                    (original[2] + 1) + ":" + (original[3] + 1);
+            } else {
+                location = fileName + ":" + generatedLine + ":" + column;
+            }
+        } else {
+            location = fileName;
+            if (hasLine) {
+                location += ":" + line + ":" + column;
+            }
+        }
+        return hasFunction
+            ? "    at " + functionName + " (" + location + ")"
+            : "    at " + location;
+    }
+
+    Error.prepareStackTrace = function (error, frames) {
+        try {
+            var lines = [];
+            for (var index = 0; index < frames.length; ++index) {
+                var formatted = kwxFormatFrame(frames[index]);
+                if (formatted !== null) {
+                    lines.push(formatted);
+                }
+            }
+            return lines.join("\n");
+        } catch (ignoredError) {
+            // QuickJS sets `stack` to null when this callback throws, so a
+            // decoding failure must never escape: report coordinates that do
+            // not need a source map instead.
+            var fallbackLines = [];
+            try {
+                for (var frameIndex = 0; frameIndex < frames.length; ++frameIndex) {
+                    var fallbackFrame = frames[frameIndex];
+                    var fallbackName = fallbackFrame.getFileName();
+                    if (fallbackName === null || fallbackName === undefined ||
+                        fallbackName === "<kwx_host_runtime>") {
+                        continue;
+                    }
+                    var fallbackLine = fallbackFrame.getLineNumber();
+                    if (fallbackLine === null || fallbackLine === undefined) {
+                        fallbackLines.push("    at " + fallbackName);
+                    } else {
+                        fallbackLines.push(
+                            "    at " + fallbackName + ":" + fallbackLine
+                        );
+                    }
+                }
+            } catch (ignoredFallbackError) {
+                return "";
+            }
+            return fallbackLines.join("\n");
+        }
+    };
+
     // ------------------------------------------------ CommonJS-style loader
     var kwxModuleCache = Object.create(null);
 
@@ -195,9 +510,7 @@
 
         var code = kwxCompileSource(filePath, source);
         kwxTrace("module-compiled:" + moduleId);
-        var factory = new Function(
-            "exports", "module", "require", "__filename", "__dirname", code
-        );
+        var factory = kwxBuildFactory(filePath, code);
         kwxTrace("module-factory-built:" + moduleId);
         return kwxExecuteFactory(moduleId, filePath, factory);
     }

@@ -2,16 +2,11 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxRibbonControl } from "./wxRibbonControl_gen.ts";
 
-export class wxRibbonToolBar {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxRibbonToolBar extends wxRibbonControl {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
@@ -143,15 +138,15 @@ export class wxRibbonToolBar {
     lib.symbols.wxRibbonToolBar_SetRows(this._ptr, nMin, nMax);
   }
 
-  Realize(): void {
-    lib.symbols.wxRibbonToolBar_Realize(this._ptr);
+  override Realize(): boolean {
+    return (lib.symbols.wxRibbonToolBar_Realize(this._ptr) as number) !== 0;
   }
 
-  SetArtProvider(art: Pointer): void {
+  override SetArtProvider(art: Pointer): void {
     lib.symbols.wxRibbonToolBar_SetArtProvider(this._ptr, art);
   }
 
-  GetArtProvider(): Pointer {
+  override GetArtProvider(): Pointer {
     return lib.symbols.wxRibbonToolBar_GetArtProvider(this._ptr);
   }
 

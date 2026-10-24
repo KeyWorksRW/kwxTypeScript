@@ -18,7 +18,7 @@ export class wxBitmapComboBox extends wxComboBox {
     lib.symbols.wxBitmapComboBox_AppendWithClientData(this._ptr, item, bitmap, data);
   }
 
-  Insert(item: Pointer, bitmap: Pointer, pos: number): void {
+  Insert_3(item: Pointer, bitmap: Pointer, pos: number): void {
     lib.symbols.wxBitmapComboBox_Insert(this._ptr, item, bitmap, pos);
   }
 

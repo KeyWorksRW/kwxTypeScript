@@ -5,6 +5,7 @@ import { Pointer } from "kwx/platform";
 
 export class wxClassInfo {
   protected readonly _ptr: Pointer;
+  protected _disposed: boolean = false;
 
   constructor(ptr: Pointer) {
     this._ptr = ptr;
@@ -13,6 +14,30 @@ export class wxClassInfo {
   /** Returns the underlying native pointer. */
   get ptr(): Pointer {
     return this._ptr;
+  }
+
+  FindClass(name: Pointer): Pointer {
+    return lib.symbols.wxClassInfo_FindClass(name);
+  }
+
+  GetBaseClassName1(): Pointer {
+    return lib.symbols.wxClassInfo_GetBaseClassName1(this._ptr);
+  }
+
+  GetBaseClassName2(): Pointer {
+    return lib.symbols.wxClassInfo_GetBaseClassName2(this._ptr);
+  }
+
+  GetClassNameEx(): Pointer {
+    return lib.symbols.wxClassInfo_GetClassNameEx(this._ptr);
+  }
+
+  GetSize(): number {
+    return lib.symbols.wxClassInfo_GetSize(this._ptr);
+  }
+
+  IsKindOfEx(classInfo: Pointer): boolean {
+    return (lib.symbols.wxClassInfo_IsKindOfEx(this._ptr, classInfo) as number) !== 0;
   }
 
   CreateClassByName(): Pointer {

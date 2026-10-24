@@ -10,6 +10,14 @@ export class wxControl extends wxWindow {
     return this._ptr;
   }
 
+  FindAccelIndex(label: Pointer): number {
+    return lib.symbols.wxControl_FindAccelIndex(label);
+  }
+
+  override ShouldInheritColours(): boolean {
+    return (lib.symbols.wxControl_ShouldInheritColours(this._ptr) as number) !== 0;
+  }
+
   Command(event: Pointer): void {
     lib.symbols.wxControl_Command(this._ptr, event);
   }

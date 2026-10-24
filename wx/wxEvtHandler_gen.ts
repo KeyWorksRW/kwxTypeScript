@@ -2,25 +2,38 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxEvtHandler {
-  protected readonly _ptr: Pointer;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxEvtHandler extends wxObject {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxEvtHandler_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  GetClientClosure_1(pObject: Pointer): Pointer {
+    return lib.symbols.wxEvtHandler_GetClientClosure(pObject);
+  }
+
+  SetClientClosure_2(pObject: Pointer, closure: Pointer): void {
+    lib.symbols.wxEvtHandler_SetClientClosure(pObject, closure);
+  }
+
+  AddFilter(filter: Pointer): void {
+    lib.symbols.wxEvtHandler_AddFilter(filter);
+  }
+
+  RemoveFilter(filter: Pointer): void {
+    lib.symbols.wxEvtHandler_RemoveFilter(filter);
   }
 
   AddPendingEvent(event: Pointer): void {

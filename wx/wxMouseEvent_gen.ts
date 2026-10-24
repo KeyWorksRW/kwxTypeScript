@@ -10,6 +10,18 @@ export class wxMouseEvent extends wxEvent {
     return this._ptr;
   }
 
+  GetButton(): number {
+    return lib.symbols.wxMouseEvent_GetButton(this._ptr);
+  }
+
+  GetWheelDelta(): number {
+    return lib.symbols.wxMouseEvent_GetWheelDelta(this._ptr);
+  }
+
+  GetWheelRotation(): number {
+    return lib.symbols.wxMouseEvent_GetWheelRotation(this._ptr);
+  }
+
   AltDown(): boolean {
     return (lib.symbols.wxMouseEvent_AltDown(this._ptr) as number) !== 0;
   }

@@ -10,12 +10,18 @@ export class wxInputStream extends wxStreamBase {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxInputStream_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
+  }
+
+  CanRead(): boolean {
+    return (lib.symbols.wxInputStream_CanRead(this._ptr) as number) !== 0;
   }
 
   Eof(): boolean {

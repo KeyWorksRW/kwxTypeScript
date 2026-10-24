@@ -11,6 +11,8 @@ export class wxMetafileDC extends wxDC {
   }
 
   override Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
     lib.symbols.wxMetafileDC_Delete(this._ptr);
   }
 
