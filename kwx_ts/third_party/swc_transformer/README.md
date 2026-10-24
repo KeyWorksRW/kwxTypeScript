@@ -11,8 +11,8 @@ between a JS bundle and the host.
 ## What it does
 
 Given one TypeScript module, it produces the CommonJS source the host compiles
-with `new Function("exports", "module", "require", "__filename", "__dirname",
-code)`. The pipeline is:
+through `__kwx_eval_factory(source, filePath)` with the real module path, which
+is what makes stack frames name the file. The pipeline is:
 
 1. parse with `Syntax::Typescript` (JSX off, decorators on);
 2. `resolver` — assign syntax contexts so type-only imports can be elided;
@@ -22,6 +22,13 @@ code)`. The pipeline is:
 6. `inject_helpers` — inline the helpers the passes above enabled;
 7. `fixer`;
 8. codegen at `EsVersion::latest()` (nothing is downlevelled).
+
+The emitted buffer ends with a single line
+`//# sourceMappingURL=data:application/json;base64,<data>`. The map is produced
+by `SourceMap::build_source_map` with `DefaultSourceMapGenConfig`, which requires
+the `swc_core` `common_sourcemap` feature; `sources[0]` is the `file_name` string
+passed to `kwx_swc_transform`, so the host can map a frame back to the module
+path and original position.
 
 Two details matter for parity with the previous Sucrase pipeline:
 
@@ -46,8 +53,12 @@ void        kwx_swc_free(char *ptr);
 ```
 
 - `kwx_swc_transform` returns a NUL-terminated buffer of `*out_len` bytes, or
-  NULL on failure. The caller owns the buffer and releases it with
-  `kwx_swc_free`.
+  NULL on failure. The buffer is the CommonJS code, one blank line, then the
+  `//# sourceMappingURL=data:application/json;base64,<map>` line. The caller owns
+  the buffer and releases it with `kwx_swc_free`.
+- Appending the map changed the output without changing the dependency versions,
+  so `CACHE_ABI` in `src/lib.rs` was bumped to `"3"`. Cached modules written by
+  an older pipeline are therefore never reused.
 - `kwx_swc_last_error` describes the last failure on the calling thread. It is
   overwritten by the next call on that thread, which matches the
   single-threaded QuickJS host.
@@ -81,7 +92,9 @@ cargo test --release
 
 The tests cover type stripping, enum/namespace lowering, legacy decorators
 (including that `_ts_decorate` is defined inline), CommonJS interop without
-`@swc/helpers`, and syntax-error reporting.
+`@swc/helpers`, syntax-error reporting, and the appended inline source map
+(marker present, base64-decoded JSON is version 3 with the input file name and
+non-empty mappings that span more than one generated line).
 
 ## Upgrading SWC
 

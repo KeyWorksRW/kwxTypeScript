@@ -637,6 +637,31 @@ JSValue KwxJsSwcTransform(JSContext *ctx,
   return result;
 }
 
+// __kwx_eval_factory(source, filePath) — compile a CommonJS factory
+// expression with the module path as the eval script name, so stack frames
+// name the real file instead of "<input>". The caller wraps the CommonJS
+// body in a function expression whose prologue occupies one line, so an eval
+// line number is one greater than the generated line.
+JSValue KwxJsEvalFactory(JSContext *ctx,
+                         [[maybe_unused]] JSValueConst this_val, int argc,
+                         JSValueConst *argv) {
+  if (argc < 2) {
+    return JS_ThrowTypeError(ctx,
+                             "__kwx_eval_factory expects (source, filePath)");
+  }
+
+  std::string source;
+  std::string file_path;
+  if (!KwxArgToString(ctx, argv[0], source) ||
+      !KwxArgToString(ctx, argv[1], file_path)) {
+    return JS_ThrowTypeError(
+        ctx, "__kwx_eval_factory: source and filePath must be strings");
+  }
+
+  return JS_Eval(ctx, source.c_str(), source.size(), file_path.c_str(),
+                 JS_EVAL_TYPE_GLOBAL);
+}
+
 // __kwx_transpile_cache_get(source, filePath) — cached transpiled code, or
 // JS_NULL on any miss. Never throws; every error is treated as a miss.
 JSValue KwxJsTranspileCacheGet(JSContext *ctx,
@@ -916,6 +941,9 @@ void kwx_runtime_register_helpers(JSContext *ctx, JSValue native_object) {
   JS_SetPropertyStr(ctx, native_object, "__kwx_transpile_cache_put",
                     JS_NewCFunction(ctx, KwxJsTranspileCachePut,
                                     "__kwx_transpile_cache_put", 3));
+  JS_SetPropertyStr(
+      ctx, native_object, "__kwx_eval_factory",
+      JS_NewCFunction(ctx, KwxJsEvalFactory, "__kwx_eval_factory", 2));
 
   JS_SetPropertyStr(
       ctx, native_object, "__kwx_callback_create",

@@ -77,7 +77,7 @@ Native phases: `pre-main` (Windows), `main-begin`, `runtime-created`,
 `host-runtime-evaluated`, `run-main-begin`, `run-main-end`. Loader phases, per
 module: `entry-resolved`, `module-read`, `transpile-cache-hit` /
 `transpile-cache-miss`, `transpile-begin` / `transpile-end`,
-`module-compiled`, `module-factory-built` (the `new Function` compile) and
+`module-compiled`, `module-factory-built` (the `__kwx_eval_factory` compile) and
 `module-executed`, plus `symbols-resolved:<count>` (FFI thunks created on
 demand so far). JavaScript can add its own mark with
 `kwxHost.__kwx_trace(label)`.
@@ -99,6 +99,20 @@ than one FFI call per constant, so importing `kwx` creates about 90 thunks —
 the pointer-valued constants (colours, brushes, fonts, art IDs) plus the two
 table accessors — instead of the previous ~1,580.
 
+### Diagnostics and source locations
+
+Uncaught errors and `error.stack` report the original `.ts` path, line, and column
+for every module frame, instead of `<input>` with a generated-JavaScript line
+number.
+
+- The transpiled artifact carries an inline base64 v3 source map on its last
+  line, and it is stored in the transpile cache together with the code, so a
+  cache hit maps exactly like a fresh transform.
+- Frames from the host runtime (`<kwx_host_runtime>`) are omitted, so a report
+  starts at user code.
+- A module with no usable map, or a `.js` file loaded through the fast path,
+  reports generated-JavaScript coordinates.
+
 ### Transpile cache
 
 TypeScript transpiles are cached on disk so a repeat run of an unchanged module
@@ -116,6 +130,9 @@ reaches the transformer.
   transformer version string — the `swc_core` version plus a pipeline revision —
   so upgrading or rebuilding SWC invalidates every entry.
 - Sources larger than 8 MiB are never cached.
+- An entry stores the inline source map together with the produced code, so a
+  cache hit reports the same `.ts` locations as a fresh transform. The cache key
+  and the `KWC2` header are unchanged.
 
 The embedded `kwx` corpus is precompiled to QuickJS bytecode at build time (see
 `CMakeLists.txt`), so an `<embedded:…>` module skips `transpile-*`,
