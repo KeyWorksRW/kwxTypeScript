@@ -9,8 +9,8 @@
 // embedded in the kwx_ts executable. No dist/ bundle and no kwxFFI DLL are
 // read or loaded from disk at runtime.
 //
-// After regenerating wx/, rebuild the embedded corpus with:
-//   cd kwx_ts/tools && node build_runtime_bundle.cjs
+// After regenerating wx/, no separate step is needed: the build rebundles the
+// embedded corpus from wx/ and src/ and recompiles it to bytecode.
 
 import {
     ALIGN_CENTER_VERTICAL,

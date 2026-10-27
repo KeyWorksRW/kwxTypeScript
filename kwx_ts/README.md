@@ -260,10 +260,12 @@ Requires MSVC (or clang-cl) and Ninja.
 
 ```
 cmake --preset ninja-multi
-cmake --build build --config Debug --target kwx_ts
+cmake --build --preset debug      # or --preset release
 ```
 
-The executable is produced at `bin\Debug\kwxts.exe`.
+The executable is produced at `bin\Debug\kwxts.exe` (or `bin\Release`). The
+build also regenerates the embedded binding bundle, so `wx/*.ts` changes are
+picked up without any extra step.
 
 ### macOS Universal (`x86_64` + `arm64`)
 
@@ -306,20 +308,19 @@ DLLs, macOS frameworks, Linux GTK3/X11 plus libc) nothing is loaded at runtime.
 
 Windows ARM64 is unsupported.
 
-## Maintainer note: regenerating the runtime bundle
+## Build assets: bundled at build time
 
-`runtime/kwx_runtime.js` is a snapshot of the generated `wx/` corpus (it is the
-embedded `"kwx"` virtual module) and `runtime/kwx_platform.js` is the snapshot
-of `src/kwx_platform.ts`. **Regenerate both whenever `wx/` or
-`src/kwx_platform.ts` changes** so the embedded assets stay in sync:
+Neither `kwx_runtime.js` (the embedded `"kwx"` virtual module) nor
+`kwx_platform.js` (the `kwx/platform` module) is committed. The build produces
+both in the build tree from `wx/`, `src/kwxApp.ts`, and `src/kwx_platform.ts`:
 
-```
-cd tools
-npm install
-node build_runtime_bundle.cjs
-```
+- `tools/gen_bundle.cpp` is a host tool built by CMake. It resolves the
+  CommonJS module graph and transpiles every module with the same SWC
+  transformer the runtime links, so the bundle has exactly the semantics the
+  runtime applies to user code. It needs no Node, npm, or Deno.
+- CMake wraps each bundle as a CommonJS factory and compiles it to QuickJS
+  bytecode with `qjsc`.
 
-The regenerated assets are committed. Users of `kwx_ts` never
-need Node or npm. The build compiles it to QuickJS bytecode with `qjsc`, so no
-separate step is required after regeneration. See `third_party/README.md` for
-the full set of one-time maintainer scripts.
+Editing `wx/`, `src/kwxApp.ts`, or `src/kwx_platform.ts` is therefore enough:
+the next `cmake --build` regenerates the bundle, its bytecode, and the
+executable. There is no snapshot to refresh and nothing to commit.

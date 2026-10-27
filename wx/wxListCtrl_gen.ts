@@ -235,7 +235,7 @@ export class wxListCtrl extends wxControl {
     return lib.symbols.wxListCtrl_GetTopItem(this._ptr);
   }
 
-  HitTest_4(x: number, y: number, flags: Pointer, pSubItem: Pointer): number {
+  HitTestItem(x: number, y: number, flags: Pointer, pSubItem: Pointer): number {
     return lib.symbols.wxListCtrl_HitTest(this._ptr, x, y, flags, pSubItem);
   }
 

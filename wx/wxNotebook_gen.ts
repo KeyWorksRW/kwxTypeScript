@@ -130,7 +130,7 @@ export class wxNotebook extends wxControl {
     return lib.symbols.wxNotebook_GetSelection(this._ptr);
   }
 
-  HitTest_3(x: number, y: number, flags: Pointer): number {
+  HitTestPage(x: number, y: number, flags: Pointer): number {
     return lib.symbols.wxNotebook_HitTest(this._ptr, x, y, flags);
   }
 

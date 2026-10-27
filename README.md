@@ -187,10 +187,13 @@ Prerequisites:
 ```powershell
 # Configure and build (Windows, Ninja Multi-Config)
 cmake --preset ninja-multi
-cmake --build build --config Release --target kwx_ts
+cmake --build --preset release
 # Run the demo with the runtime built in the same configure step
 bin\Release\kwxts.exe examples\demo.ts
 ```
+
+The build regenerates the embedded binding bundle from `wx/` and `src/`, so no
+extra step is needed after kwxgen updates the corpus.
 
 ## License
 

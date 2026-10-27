@@ -306,11 +306,11 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_MoveEnd(this._ptr, flags) as number) !== 0;
   }
 
-  PageUp_2(noPages: number, flags: number): boolean {
+  PageUpBy(noPages: number, flags: number): boolean {
     return (lib.symbols.wxRichTextCtrl_PageUp(this._ptr, noPages, flags) as number) !== 0;
   }
 
-  PageDown_2(noPages: number, flags: number): boolean {
+  PageDownBy(noPages: number, flags: number): boolean {
     return (lib.symbols.wxRichTextCtrl_PageDown(this._ptr, noPages, flags) as number) !== 0;
   }
 
@@ -402,7 +402,7 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_IsFrozen(this._ptr) as number) !== 0;
   }
 
-  HitTest_3(x: number, y: number, position: Pointer): number {
+  HitTestPosition(x: number, y: number, position: Pointer): number {
     return lib.symbols.wxRichTextCtrl_HitTest(this._ptr, x, y, position);
   }
 

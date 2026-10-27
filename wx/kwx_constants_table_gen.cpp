@@ -669,6 +669,15 @@ int expwxDF_TIFF();
 int expwxDF_UNICODETEXT();
 int expwxDF_WAVE();
 int expwxDIALOG_EX_CONTEXTHELP();
+int expwxDIR_CONTINUE();
+int expwxDIR_DEFAULT();
+int expwxDIR_DIRS();
+int expwxDIR_DOTDOT();
+int expwxDIR_FILES();
+int expwxDIR_HIDDEN();
+int expwxDIR_IGNORE();
+int expwxDIR_NO_FOLLOW();
+int expwxDIR_STOP();
 int expwxDOWN();
 int expwxDUPLEX_HORIZONTAL();
 int expwxDUPLEX_SIMPLEX();
@@ -695,6 +704,14 @@ int expwxFD_OVERWRITE_PROMPT();
 int expwxFD_PREVIEW();
 int expwxFD_SAVE();
 int expwxFD_SHOW_HIDDEN();
+int expwxFILE_EXISTS_ANY();
+int expwxFILE_EXISTS_DEVICE();
+int expwxFILE_EXISTS_DIR();
+int expwxFILE_EXISTS_FIFO();
+int expwxFILE_EXISTS_NO_FOLLOW();
+int expwxFILE_EXISTS_REGULAR();
+int expwxFILE_EXISTS_SOCKET();
+int expwxFILE_EXISTS_SYMLINK();
 int expwxFILTER_ALPHA();
 int expwxFILTER_ALPHANUMERIC();
 int expwxFILTER_ASCII();
@@ -1307,6 +1324,13 @@ int expwxPAPER_QUARTO();
 int expwxPAPER_STATEMENT();
 int expwxPAPER_TABLOID();
 int expwxPAPER_TABLOID_EXTRA();
+int expwxPATH_GET_SEPARATOR();
+int expwxPATH_GET_VOLUME();
+int expwxPATH_MKDIR_FULL();
+int expwxPATH_NO_SEPARATOR();
+int expwxPATH_RMDIR_FULL();
+int expwxPATH_RMDIR_PARENTS();
+int expwxPATH_RMDIR_RECURSIVE();
 int expwxPDP_ENDIAN();
 int expwxPENSTYLE_DOT();
 int expwxPENSTYLE_DOT_DASH();
@@ -1681,12 +1705,12 @@ int expwxYES();
 int expwxYES_DEFAULT();
 int expwxYES_NO();
 
-static int s_values[1676];
+static int s_values[1700];
 static std::once_flag s_once;
 
 WXFFI_EXPORT(int, kwxConstants_IntCount)()
 {
-    return 1676;
+    return 1700;
 }
 
 WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
@@ -2358,6 +2382,15 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxDF_UNICODETEXT();
         s_values[i++] = expwxDF_WAVE();
         s_values[i++] = expwxDIALOG_EX_CONTEXTHELP();
+        s_values[i++] = expwxDIR_CONTINUE();
+        s_values[i++] = expwxDIR_DEFAULT();
+        s_values[i++] = expwxDIR_DIRS();
+        s_values[i++] = expwxDIR_DOTDOT();
+        s_values[i++] = expwxDIR_FILES();
+        s_values[i++] = expwxDIR_HIDDEN();
+        s_values[i++] = expwxDIR_IGNORE();
+        s_values[i++] = expwxDIR_NO_FOLLOW();
+        s_values[i++] = expwxDIR_STOP();
         s_values[i++] = expwxDOWN();
         s_values[i++] = expwxDUPLEX_HORIZONTAL();
         s_values[i++] = expwxDUPLEX_SIMPLEX();
@@ -2384,6 +2417,14 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxFD_PREVIEW();
         s_values[i++] = expwxFD_SAVE();
         s_values[i++] = expwxFD_SHOW_HIDDEN();
+        s_values[i++] = expwxFILE_EXISTS_ANY();
+        s_values[i++] = expwxFILE_EXISTS_DEVICE();
+        s_values[i++] = expwxFILE_EXISTS_DIR();
+        s_values[i++] = expwxFILE_EXISTS_FIFO();
+        s_values[i++] = expwxFILE_EXISTS_NO_FOLLOW();
+        s_values[i++] = expwxFILE_EXISTS_REGULAR();
+        s_values[i++] = expwxFILE_EXISTS_SOCKET();
+        s_values[i++] = expwxFILE_EXISTS_SYMLINK();
         s_values[i++] = expwxFILTER_ALPHA();
         s_values[i++] = expwxFILTER_ALPHANUMERIC();
         s_values[i++] = expwxFILTER_ASCII();
@@ -2996,6 +3037,13 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxPAPER_STATEMENT();
         s_values[i++] = expwxPAPER_TABLOID();
         s_values[i++] = expwxPAPER_TABLOID_EXTRA();
+        s_values[i++] = expwxPATH_GET_SEPARATOR();
+        s_values[i++] = expwxPATH_GET_VOLUME();
+        s_values[i++] = expwxPATH_MKDIR_FULL();
+        s_values[i++] = expwxPATH_NO_SEPARATOR();
+        s_values[i++] = expwxPATH_RMDIR_FULL();
+        s_values[i++] = expwxPATH_RMDIR_PARENTS();
+        s_values[i++] = expwxPATH_RMDIR_RECURSIVE();
         s_values[i++] = expwxPDP_ENDIAN();
         s_values[i++] = expwxPENSTYLE_DOT();
         s_values[i++] = expwxPENSTYLE_DOT_DASH();

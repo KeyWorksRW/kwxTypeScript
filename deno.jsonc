@@ -5,11 +5,9 @@
   "lock": false,
   "imports": {
     "kwx": "./wx/mod.ts",
-    "kwx/platform": "./src/kwx_platform.ts",
-    "esbuild": "https://deno.land/x/esbuild@v0.24.0/mod.js"
+    "kwx/platform": "./src/kwx_platform.ts"
   },
   "tasks": {
-    "check": "deno check --no-lock src/kwx_platform.ts src/kwxApp.ts",
-    "bundle": "deno run --allow-read --allow-write --allow-net --allow-env --allow-run make_dist_bundle.ts"
+    "check": "deno check --no-lock src/kwx_platform.ts src/kwxApp.ts"
   }
 }

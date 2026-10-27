@@ -14,7 +14,7 @@ export class wxProgressDialog extends wxFrame {
     lib.symbols.wxProgressDialog_Resume(this._ptr);
   }
 
-  Update_1(value: number): boolean {
+  UpdateProgress(value: number): boolean {
     return (lib.symbols.wxProgressDialog_Update(this._ptr, value) as number) !== 0;
   }
 

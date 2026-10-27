@@ -26,7 +26,7 @@ export class wxTextCtrl extends wxControl {
     return lib.symbols.wxTextCtrl_PositionToCoords(this._ptr, pos);
   }
 
-  HitTest_3(x: number, y: number, pos: Pointer): number {
+  HitTestPosition(x: number, y: number, pos: Pointer): number {
     return lib.symbols.wxTextCtrl_HitTest(this._ptr, x, y, pos);
   }
 

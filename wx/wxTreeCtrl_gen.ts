@@ -207,7 +207,7 @@ export class wxTreeCtrl extends wxControl {
     return lib.symbols.wxTreeCtrl_GetStateImageList(this._ptr);
   }
 
-  HitTest_4(x: number, y: number, flags: Pointer, item: Pointer): void {
+  HitTestItem(x: number, y: number, flags: Pointer, item: Pointer): void {
     lib.symbols.wxTreeCtrl_HitTest(this._ptr, x, y, flags, item);
   }
 

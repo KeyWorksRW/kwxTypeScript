@@ -203,86 +203,6 @@ kwx_ts_embed_file(
     KWX_HOST_RUNTIME_CPP
 )
 
-# ###################### Precompiled runtime bytecode #######################
-# The two virtual modules (the "kwx" binding corpus and kwx/platform) are
-# compiled to QuickJS bytecode at build time by qjsc, taken from the same
-# QuickJS-ng source as the runtime. JS_ReadObject + JS_EvalFunction then load
-# them ~20x faster than parsing the source on every launch, and the executable
-# carries no source text for either asset.
-#
-# Bytecode is tied to the QuickJS version and build, so it is generated per
-# configuration: $<CONFIG> keeps Debug and Release artifacts apart.
-set(KWX_BYTECODE_DIR ${CMAKE_CURRENT_BINARY_DIR}/bytecode/$<CONFIG>)
-
-# kwx_runtime.js is a CommonJS module body, so qjsc compiles a generated wrapper
-# that publishes the factory function on globalThis. WrapFactory.cmake explains
-# why the body cannot be compiled directly.
-add_custom_command(
-    OUTPUT ${KWX_BYTECODE_DIR}/kwx_runtime_factory.js
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
-    COMMAND ${CMAKE_COMMAND}
-        -DINPUT=${KWX_TS_DIR}/runtime/kwx_runtime.js
-        -DOUTPUT=${KWX_BYTECODE_DIR}/kwx_runtime_factory.js
-        -DFACTORY_NAME=__kwx_runtime_factory
-        -P ${KWX_TS_DIR}/cmake/WrapFactory.cmake
-    DEPENDS
-        ${KWX_TS_DIR}/runtime/kwx_runtime.js
-        ${KWX_TS_DIR}/cmake/WrapFactory.cmake
-    COMMENT "Wrapping kwx_runtime.js as a CommonJS factory"
-    VERBATIM
-)
-
-# -C forces classic-script compilation (qjsc otherwise auto-detects an ES
-# module from import/export tokens). -s strips the source text but keeps the
-# debug info, so stack traces still carry line numbers.
-add_custom_command(
-    OUTPUT ${KWX_BYTECODE_DIR}/kwx_runtime_bytecode.c
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
-    COMMAND $<TARGET_FILE:qjsc>
-        -C -s
-        -N kwx_runtime_bytecode
-        -n kwx_runtime.js
-        -o ${KWX_BYTECODE_DIR}/kwx_runtime_bytecode.c
-        ${KWX_BYTECODE_DIR}/kwx_runtime_factory.js
-    # $<TARGET_FILE:qjsc> is a file-level dependency: a QuickJS upgrade must
-    # regenerate the bytecode, because bytecode is tied to the engine build.
-    DEPENDS ${KWX_BYTECODE_DIR}/kwx_runtime_factory.js $<TARGET_FILE:qjsc>
-    COMMENT "Compiling kwx_runtime.js to QuickJS bytecode"
-    VERBATIM
-)
-
-# kwx_platform.js is a separate CommonJS asset: generated bindings call
-# dlopen() at module-eval time, so the corpus bundle must not resolve
-# "kwx/platform" to a bundle that is still executing.
-add_custom_command(
-    OUTPUT ${KWX_BYTECODE_DIR}/kwx_platform_factory.js
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
-    COMMAND ${CMAKE_COMMAND}
-        -DINPUT=${KWX_TS_DIR}/runtime/kwx_platform.js
-        -DOUTPUT=${KWX_BYTECODE_DIR}/kwx_platform_factory.js
-        -DFACTORY_NAME=__kwx_platform_factory
-        -P ${KWX_TS_DIR}/cmake/WrapFactory.cmake
-    DEPENDS
-        ${KWX_TS_DIR}/runtime/kwx_platform.js
-        ${KWX_TS_DIR}/cmake/WrapFactory.cmake
-    COMMENT "Wrapping kwx_platform.js as a CommonJS factory"
-    VERBATIM
-)
-
-add_custom_command(
-    OUTPUT ${KWX_BYTECODE_DIR}/kwx_platform_bytecode.c
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
-    COMMAND $<TARGET_FILE:qjsc>
-        -C -s
-        -N kwx_platform_bytecode
-        -n kwx_platform.js
-        -o ${KWX_BYTECODE_DIR}/kwx_platform_bytecode.c
-        ${KWX_BYTECODE_DIR}/kwx_platform_factory.js
-    DEPENDS ${KWX_BYTECODE_DIR}/kwx_platform_factory.js $<TARGET_FILE:qjsc>
-    COMMENT "Compiling kwx_platform.js to QuickJS bytecode"
-    VERBATIM
-)
-
 # ###################### TypeScript transformer (Rust / SWC) #######################
 # TypeScript is lowered to CommonJS by kwx_ts/third_party/swc_transformer, a Rust
 # crate built as a `staticlib` and linked straight into the executable. That
@@ -406,6 +326,154 @@ set_target_properties(kwx_swc_transformer PROPERTIES
     IMPORTED_LOCATION ${KWX_SWC_LIBRARY}
 )
 add_dependencies(kwx_swc_transformer kwx_swc_transformer_build)
+
+# ###################### Runtime bundle (build-time host tool) #######################
+# The embedded "kwx" virtual module is one CommonJS module built from the whole
+# TypeScript corpus, and "kwx/platform" is built from src/kwx_platform.ts. This
+# host tool resolves each graph and transpiles every module with the same SWC
+# transformer the runtime uses, so a bundle always matches the sources it was
+# built from. Nothing outside the C++ and Rust toolchains is involved.
+add_executable(kwx_bundle_gen ${KWX_TS_DIR}/tools/gen_bundle.cpp)
+target_compile_features(kwx_bundle_gen PRIVATE cxx_std_23)
+target_link_libraries(kwx_bundle_gen PRIVATE kwx_swc_transformer)
+# A Rust staticlib carries linker directives MSVC does not read out of an
+# archive; over-linking these system libraries is harmless.
+if(WIN32)
+    target_link_libraries(kwx_bundle_gen PRIVATE
+        advapi32 userenv ws2_32 ntdll bcrypt ole32 shell32
+    )
+elseif(APPLE)
+    target_link_libraries(kwx_bundle_gen PRIVATE
+        "-framework Security" "-framework CoreFoundation"
+    )
+else()
+    target_link_libraries(kwx_bundle_gen PRIVATE dl pthread m)
+endif()
+
+# Every module both bundles can reach. CONFIGURE_DEPENDS re-globs at build time,
+# so a file added by kwxgen is picked up without a manual re-configure.
+file(GLOB KWX_CORPUS_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/wx/*.ts)
+list(APPEND KWX_CORPUS_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/kwxApp.ts
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/kwx_platform.ts
+)
+
+# Generated into the build tree, never into kwx_ts/runtime/: the embedded assets
+# must be rebuilt from wx/ and src/ on every build that changes them.
+set(KWX_GEN_JS_DIR ${KWX_GENERATED_DIR}/runtime)
+set(KWX_RUNTIME_JS ${KWX_GEN_JS_DIR}/kwx_runtime.js)
+set(KWX_PLATFORM_JS ${KWX_GEN_JS_DIR}/kwx_platform.js)
+
+add_custom_command(
+    OUTPUT ${KWX_RUNTIME_JS}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_GEN_JS_DIR}
+    COMMAND kwx_bundle_gen
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${KWX_RUNTIME_JS}
+        wx/mod.ts
+        --dir ${CMAKE_CURRENT_SOURCE_DIR}/wx
+        --file ${CMAKE_CURRENT_SOURCE_DIR}/src/kwxApp.ts
+    DEPENDS
+        kwx_bundle_gen
+        ${KWX_CORPUS_SOURCES}
+    COMMENT "Bundling the kwx binding corpus"
+    VERBATIM
+)
+
+add_custom_command(
+    OUTPUT ${KWX_PLATFORM_JS}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_GEN_JS_DIR}
+    COMMAND kwx_bundle_gen
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${KWX_PLATFORM_JS}
+        src/kwx_platform.ts
+        --file ${CMAKE_CURRENT_SOURCE_DIR}/src/kwx_platform.ts
+    DEPENDS
+        kwx_bundle_gen
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/kwx_platform.ts
+    COMMENT "Bundling kwx/platform"
+    VERBATIM
+)
+
+# ###################### Precompiled runtime bytecode #######################
+# The two virtual modules (the "kwx" binding corpus and kwx/platform) are
+# compiled to QuickJS bytecode at build time by qjsc, taken from the same
+# QuickJS-ng source as the runtime. JS_ReadObject + JS_EvalFunction then load
+# them ~20x faster than parsing the source on every launch, and the executable
+# carries no source text for either asset.
+#
+# Bytecode is tied to the QuickJS version and build, so it is generated per
+# configuration: $<CONFIG> keeps Debug and Release artifacts apart.
+set(KWX_BYTECODE_DIR ${CMAKE_CURRENT_BINARY_DIR}/bytecode/$<CONFIG>)
+
+# The bundles are CommonJS module bodies, so qjsc compiles a generated wrapper
+# that publishes the factory function on globalThis. WrapFactory.cmake explains
+# why the body cannot be compiled directly.
+add_custom_command(
+    OUTPUT ${KWX_BYTECODE_DIR}/kwx_runtime_factory.js
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
+    COMMAND ${CMAKE_COMMAND}
+        -DINPUT=${KWX_RUNTIME_JS}
+        -DOUTPUT=${KWX_BYTECODE_DIR}/kwx_runtime_factory.js
+        -DFACTORY_NAME=__kwx_runtime_factory
+        -P ${KWX_TS_DIR}/cmake/WrapFactory.cmake
+    DEPENDS
+        ${KWX_RUNTIME_JS}
+        ${KWX_TS_DIR}/cmake/WrapFactory.cmake
+    COMMENT "Wrapping kwx_runtime.js as a CommonJS factory"
+    VERBATIM
+)
+
+# -C forces classic-script compilation (qjsc otherwise auto-detects an ES
+# module from import/export tokens). -s strips the source text but keeps the
+# debug info, so stack traces still carry line numbers.
+add_custom_command(
+    OUTPUT ${KWX_BYTECODE_DIR}/kwx_runtime_bytecode.c
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
+    COMMAND $<TARGET_FILE:qjsc>
+        -C -s
+        -N kwx_runtime_bytecode
+        -n kwx_runtime.js
+        -o ${KWX_BYTECODE_DIR}/kwx_runtime_bytecode.c
+        ${KWX_BYTECODE_DIR}/kwx_runtime_factory.js
+    # $<TARGET_FILE:qjsc> is a file-level dependency: a QuickJS upgrade must
+    # regenerate the bytecode, because bytecode is tied to the engine build.
+    DEPENDS ${KWX_BYTECODE_DIR}/kwx_runtime_factory.js $<TARGET_FILE:qjsc>
+    COMMENT "Compiling kwx_runtime.js to QuickJS bytecode"
+    VERBATIM
+)
+
+# kwx_platform.js is a separate CommonJS asset: generated bindings call
+# dlopen() at module-eval time, so the corpus bundle must not resolve
+# "kwx/platform" to a bundle that is still executing.
+add_custom_command(
+    OUTPUT ${KWX_BYTECODE_DIR}/kwx_platform_factory.js
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
+    COMMAND ${CMAKE_COMMAND}
+        -DINPUT=${KWX_PLATFORM_JS}
+        -DOUTPUT=${KWX_BYTECODE_DIR}/kwx_platform_factory.js
+        -DFACTORY_NAME=__kwx_platform_factory
+        -P ${KWX_TS_DIR}/cmake/WrapFactory.cmake
+    DEPENDS
+        ${KWX_PLATFORM_JS}
+        ${KWX_TS_DIR}/cmake/WrapFactory.cmake
+    COMMENT "Wrapping kwx_platform.js as a CommonJS factory"
+    VERBATIM
+)
+
+add_custom_command(
+    OUTPUT ${KWX_BYTECODE_DIR}/kwx_platform_bytecode.c
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${KWX_BYTECODE_DIR}
+    COMMAND $<TARGET_FILE:qjsc>
+        -C -s
+        -N kwx_platform_bytecode
+        -n kwx_platform.js
+        -o ${KWX_BYTECODE_DIR}/kwx_platform_bytecode.c
+        ${KWX_BYTECODE_DIR}/kwx_platform_factory.js
+    DEPENDS ${KWX_BYTECODE_DIR}/kwx_platform_factory.js $<TARGET_FILE:qjsc>
+    COMMENT "Compiling kwx_platform.js to QuickJS bytecode"
+    VERBATIM
+)
 
 # ###################### kwx_ts executable #######################
 # wx/kwx_constants_table_gen.cpp must be compiled here: kwxFFI ships its own

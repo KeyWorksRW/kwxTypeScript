@@ -10171,6 +10171,546 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "pointer",
   },
+  wxFileName_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxFileName_CreateFromPath: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileName_CreateWithName: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileName_CreateWithExt: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileName_CreateFull: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileName_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFileName_DirName: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileName_FileName: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileName_URLToFileName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_GetFullPath: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileName_GetPath: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxFileName_GetPathWithSep: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileName_GetFullName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_GetExt: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_GetVolume: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_GetDirCount: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxFileName_GetDirs: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFileName_HasName: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_HasExt: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_HasVolume: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_SetPath: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxFileName_SetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileName_SetFullName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileName_SetExt: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileName_SetEmptyExt: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFileName_ClearExt: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFileName_SetVolume: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileName_Assign: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxFileName_AssignDir: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxFileName_AssignCwd: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileName_AssignHomeDir: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFileName_Clear: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFileName_AppendDir: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFileName_PrependDir: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileName_InsertDir: {
+    parameters: ["pointer", "usize", "pointer"],
+    result: "i32",
+  },
+  wxFileName_RemoveDir: {
+    parameters: ["pointer", "usize"],
+    result: "void",
+  },
+  wxFileName_RemoveLastDir: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFileName_Normalize: {
+    parameters: ["pointer", "i32", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_MakeAbsolute: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_MakeRelativeTo: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_GetAbsolutePath: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileName_ReplaceEnvVariable: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_ReplaceHomeDir: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_IsOk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsDir: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsAbsolute: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_IsRelative: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_FileExists: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_DirExists: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_Exists: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_IsFileReadable: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsFileWritable: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsFileExecutable: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsDirReadable: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsDirWritable: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_SameAs: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_ShouldFollowLink: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_DontFollowLink: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFileName_ResolveLink: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_Mkdir: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxFileName_Rmdir: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_SetPermissions: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_Touch: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_GetTimes: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxFileName_GetModificationTime: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_GetSize: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxFileName_GetHumanReadableSize: {
+    parameters: ["pointer", "pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxFileName_FileNameToURL: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_FileExistsForPath: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_DirExistsForPath: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_ExistsForPath: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_IsFileReadableForPath: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsFileWritableForPath: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsFileExecutableForPath: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsDirReadableForPath: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_IsDirWritableForPath: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_MkdirForPath: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxFileName_RmdirForPath: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxFileName_SetCwdForPath: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileName_GetCwd: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_GetHomeDir: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxFileName_GetTempDir: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxFileName_GetTempFileName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_GetForbiddenChars: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxFileName_StripExtension: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileName_IsCaseSensitive: {
+    parameters: ["i32"],
+    result: "i32",
+  },
+  wxDir_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxDir_CreateFromPath: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDir_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxDir_Open: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDir_Close: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxDir_IsOpened: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDir_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDir_GetNameWithSep: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDir_GetFirst: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxDir_GetNext: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDir_HasFiles: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDir_HasSubDirs: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDir_Traverse: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "usize",
+  },
+  wxDir_GetAllFiles: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "usize",
+  },
+  wxDir_FindFirst: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxDir_GetTotalSize: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxDir_Exists: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDir_Make: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxDir_Remove: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxDirTraverser_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxDirTraverser_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStandardPaths_Get: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxStandardPaths_GetConfigDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetUserConfigDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetDataDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetLocalDataDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetUserDataDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetUserLocalDataDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetDocumentsDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetAppDocumentsDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetExecutablePath: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetPluginsDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetResourcesDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetSharedLibrariesDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetTempDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetUserDir: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetLocalizedResourcesDir: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxStandardPaths_AppendAppInfo: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_MakeConfigFileName: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxStandardPaths_GetFileLayout: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStandardPaths_SetFileLayout: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStandardPaths_UseAppInfo: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStandardPaths_GetInstallPrefix: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStandardPaths_SetInstallPrefix: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxStandardPaths_IgnoreAppSubDir: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxStandardPaths_IgnoreAppBuildSubDirs: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStandardPaths_DontIgnoreAppSubDir: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStandardPaths_MSWGetShellDir: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
   wxPersistenceManager_Get: {
     parameters: [],
     result: "pointer",
@@ -30814,6 +31354,30 @@ export const lib = dlopen("kwxFFI", {
   expwxACC_EVENT_OBJECT_HELPCHANGE: { parameters: [], result: "i32" },
   expwxACC_EVENT_OBJECT_DEFACTIONCHANGE: { parameters: [], result: "i32" },
   expwxACC_EVENT_OBJECT_ACCELERATORCHANGE: { parameters: [], result: "i32" },
+  expwxDIR_FILES: { parameters: [], result: "i32" },
+  expwxDIR_DIRS: { parameters: [], result: "i32" },
+  expwxDIR_HIDDEN: { parameters: [], result: "i32" },
+  expwxDIR_DOTDOT: { parameters: [], result: "i32" },
+  expwxDIR_NO_FOLLOW: { parameters: [], result: "i32" },
+  expwxDIR_DEFAULT: { parameters: [], result: "i32" },
+  expwxDIR_IGNORE: { parameters: [], result: "i32" },
+  expwxDIR_STOP: { parameters: [], result: "i32" },
+  expwxDIR_CONTINUE: { parameters: [], result: "i32" },
+  expwxPATH_NO_SEPARATOR: { parameters: [], result: "i32" },
+  expwxPATH_GET_VOLUME: { parameters: [], result: "i32" },
+  expwxPATH_GET_SEPARATOR: { parameters: [], result: "i32" },
+  expwxPATH_MKDIR_FULL: { parameters: [], result: "i32" },
+  expwxPATH_RMDIR_FULL: { parameters: [], result: "i32" },
+  expwxPATH_RMDIR_RECURSIVE: { parameters: [], result: "i32" },
+  expwxPATH_RMDIR_PARENTS: { parameters: [], result: "i32" },
+  expwxFILE_EXISTS_REGULAR: { parameters: [], result: "i32" },
+  expwxFILE_EXISTS_DIR: { parameters: [], result: "i32" },
+  expwxFILE_EXISTS_SYMLINK: { parameters: [], result: "i32" },
+  expwxFILE_EXISTS_DEVICE: { parameters: [], result: "i32" },
+  expwxFILE_EXISTS_FIFO: { parameters: [], result: "i32" },
+  expwxFILE_EXISTS_SOCKET: { parameters: [], result: "i32" },
+  expwxFILE_EXISTS_NO_FOLLOW: { parameters: [], result: "i32" },
+  expwxFILE_EXISTS_ANY: { parameters: [], result: "i32" },
   expRIBBON_BAR_DEFAULT_STYLE: { parameters: [], result: "i32" },
   expRIBBON_BAR_FOLDBAR_STYLE: { parameters: [], result: "i32" },
   expRIBBON_BAR_SHOW_PAGE_LABELS: { parameters: [], result: "i32" },
