@@ -23,13 +23,13 @@ kwxts <entry.ts> [args...]
 Example (Windows, Release build, run from the repository root):
 
 ```
-bin\Release\kwxts.exe kwx_ts\examples\hello.ts
+bin\Release\kwxts.exe kwxts\examples\hello.ts
 ```
 
 Example (macOS / Linux, Release build):
 
 ```
-bin/Release/kwxts kwx_ts/examples/hello.ts
+bin/Release/kwxts kwxts/examples/hello.ts
 ```
 
 Use the Release binary when startup time matters: a Debug build is roughly 1.6x
@@ -53,7 +53,7 @@ printed and stdout is unaffected.
 
 ```
 set KWX_TS_TRACE=1
-bin\Release\kwxts.exe kwx_ts\examples\hello.ts
+bin\Release\kwxts.exe kwxts\examples\hello.ts
 ```
 
 ```

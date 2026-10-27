@@ -86,7 +86,7 @@ slice per architecture and merge them with `lipo`.
 To build and test the crate on its own:
 
 ```
-cd kwx_ts/third_party/swc_transformer
+cd kwxts/third_party/swc_transformer
 cargo test --release
 ```
 
@@ -101,7 +101,7 @@ non-empty mappings that span more than one generated line).
 1. Change the pinned version in `Cargo.toml` (`swc_core = "=x.y.z"`).
 2. Run `cargo update` here and commit the new `Cargo.lock`.
 3. Run `cargo test --release`, then rebuild `kwx_ts` and run
-   `bin\Release\kwxts.exe kwx_ts\tests\smoke.ts`.
+   `bin\Release\kwxts.exe kwxts\tests\smoke.ts`.
 
 The version string changes with the `swc_core` version, so old cache entries
 become unreachable automatically; there is no separate cache-version bump to

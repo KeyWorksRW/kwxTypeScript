@@ -16,12 +16,12 @@ build.
   `CMakeLists.txt` via
   `FetchContent` (`GIT_TAG v0.17.0`) and linked statically as the `qjs` target.
 - **SWC** — the TypeScript transpiler, used through the `swc_core` facade. The
-  wrapper crate lives in `kwx_ts/third_party/swc_transformer` (see its README);
+  wrapper crate lives in `kwxts/third_party/swc_transformer` (see its README);
   it is built as a Rust `staticlib` and linked into the executable, so the
   transform runs as native code with no JavaScript transpiler to embed, load or
   evaluate. `Cargo.lock` pins the exact crate graph and Cargo fetches the
   sources from crates.io on the first build. The same library also backs
-  `kwx_ts/tools/gen_bundle.cpp`, the build-time bundler, so the embedded
+  `kwxts/tools/gen_bundle.cpp`, the build-time bundler, so the embedded
   bindings are transpiled with identical semantics.
 - **kwxFFI** — the C ABI bindings library over wxWidgets. Fetched via
   `FetchContent` (`GIT_TAG origin/main`, `GIT_SHALLOW TRUE`) and linked

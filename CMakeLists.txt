@@ -133,10 +133,10 @@ message(NOTICE "kwxFFI has been fetched and configured.")
 message(STATUS "kwxFFI sources: ${kwxFFI_SOURCE_DIR}")
 
 # ###################### Source layout #######################
-# The kwx_ts C++ sources, CMake helpers and build-time assets live in kwx_ts/.
+# The kwx_ts C++ sources, CMake helpers and build-time assets live in kwxts/.
 # The TypeScript corpus consumed by the binding generator stays in the
 # repository root (src/ and wx/).
-set(KWX_TS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kwx_ts)
+set(KWX_TS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kwxts)
 
 # ###################### Platform support #######################
 set(KWX_TS_PLATFORM_DEFINITIONS)
@@ -157,7 +157,7 @@ endif()
 # ###################### Executable output directory #######################
 # Set after the FetchContent targets so it only affects this project's own
 # executables: kwx_binding_gen and kwx_ts are placed in the repository-level
-# bin/<Config> alongside kwxgen -- never in kwx_ts/bin/<Config>. $<CONFIG>
+# bin/<Config> alongside kwxgen -- never in kwxts/bin/<Config>. $<CONFIG>
 # keeps multi-config generators from appending a second configuration directory.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin/$<CONFIG>")
 
@@ -169,7 +169,7 @@ set_target_properties(kwx_binding_gen PROPERTIES OUTPUT_NAME kwx_binding_gen)
 
 target_compile_features(kwx_binding_gen PRIVATE cxx_std_23)
 
-# Generated binding sources live in the build tree, never in kwx_ts/src/.
+# Generated binding sources live in the build tree, never in kwxts/src/.
 # $<CONFIG> keeps the output distinct for every configuration so multi-config
 # generators do not collide on the same file.
 set(KWX_GENERATED_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated/$<CONFIG>)
@@ -204,7 +204,7 @@ kwx_ts_embed_file(
 )
 
 # ###################### TypeScript transformer (Rust / SWC) #######################
-# TypeScript is lowered to CommonJS by kwx_ts/third_party/swc_transformer, a Rust
+# TypeScript is lowered to CommonJS by kwxts/third_party/swc_transformer, a Rust
 # crate built as a `staticlib` and linked straight into the executable. That
 # replaces the embedded Sucrase bundle: there is no transpiler bytecode to load
 # and no JavaScript parser to evaluate before the first module can run.
@@ -222,7 +222,7 @@ find_program(CARGO_EXECUTABLE cargo
 if(NOT CARGO_EXECUTABLE)
     message(FATAL_ERROR
         "cargo was not found, but kwx_ts needs it to build the Rust SWC "
-        "transformer in kwx_ts/third_party/swc_transformer. Install a Rust "
+        "transformer in kwxts/third_party/swc_transformer. Install a Rust "
         "toolchain from https://rustup.rs and re-run CMake.")
 endif()
 message(STATUS "Using cargo: ${CARGO_EXECUTABLE}")
@@ -358,7 +358,7 @@ list(APPEND KWX_CORPUS_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/kwx_platform.ts
 )
 
-# Generated into the build tree, never into kwx_ts/runtime/: the embedded assets
+# Generated into the build tree, never into kwxts/runtime/: the embedded assets
 # must be rebuilt from wx/ and src/ on every build that changes them.
 set(KWX_GEN_JS_DIR ${KWX_GENERATED_DIR}/runtime)
 set(KWX_RUNTIME_JS ${KWX_GEN_JS_DIR}/kwx_runtime.js)

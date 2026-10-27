@@ -13,7 +13,7 @@
  * the embedded bindings following.
  *
  * This tool runs at build time only; it never ships with the executable and
- * needs no Node, npm, or Python. It links kwx_ts/third_party/swc_transformer,
+ * needs no Node, npm, or Python. It links kwxts/third_party/swc_transformer,
  * which CMake already builds for the runtime.
  *
  * Usage:
@@ -39,7 +39,7 @@
 namespace
 {
 
-    // C ABI of the Rust transformer (kwx_ts/third_party/swc_transformer).
+    // C ABI of the Rust transformer (kwxts/third_party/swc_transformer).
     extern "C" char* kwx_swc_transform(const char* source, const char* file_name,
                                        std::size_t* out_len);
     extern "C" const char* kwx_swc_last_error(void);
