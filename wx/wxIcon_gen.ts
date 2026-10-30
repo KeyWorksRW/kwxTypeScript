@@ -52,7 +52,7 @@ export class wxIcon extends wxBitmap {
     return (lib.symbols.wxIcon_IsEqual(this._ptr, this._ptr) as number) !== 0;
   }
 
-  Load(name: Pointer, type_: number, width: number, height: number): number {
+  Load(name: Pointer, type_: bigint, width: number, height: number): number {
     return lib.symbols.wxIcon_Load(this._ptr, name, type_, width, height);
   }
 
@@ -68,7 +68,7 @@ export function createWxIconDefault(): wxIcon | null {
     return new wxIcon(rawPtr);
 }
 
-export function createWxIconLoad(name: Pointer, type_: number, width: number, height: number): wxIcon | null {
+export function createWxIconLoad(name: Pointer, type_: bigint, width: number, height: number): wxIcon | null {
     const rawPtr = lib.symbols.wxIcon_CreateLoad(name, type_, width, height);
     if (rawPtr === null) return null;
     return new wxIcon(rawPtr);

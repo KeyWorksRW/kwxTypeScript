@@ -14,7 +14,7 @@ tests/quick
 build/
 CMakeFiles/
 
-# Rust (kwx_ts/third_party/swc_transformer). The real build writes into the CMake
+# Rust (kwxts/third_party/swc_transformer). The real build writes into the CMake
 # build tree; this only covers a standalone `cargo build`/`cargo test` run.
 target/
 

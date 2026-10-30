@@ -56,7 +56,7 @@ export class wxRichTextObject extends wxObject {
     lib.symbols.wxRichTextObject_GetRange(this._ptr, start, end);
   }
 
-  SetRange(start: number, end: number): void {
+  SetRange(start: bigint, end: bigint): void {
     lib.symbols.wxRichTextObject_SetRange(this._ptr, start, end);
   }
 
@@ -76,7 +76,7 @@ export class wxRichTextObject extends wxObject {
     lib.symbols.wxRichTextObject_SetName(this._ptr, name);
   }
 
-  GetTextForRange(start: number, end: number): Pointer {
+  GetTextForRange(start: bigint, end: bigint): Pointer {
     return lib.symbols.wxRichTextObject_GetTextForRange(this._ptr, start, end);
   }
 

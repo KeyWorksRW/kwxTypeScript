@@ -154,8 +154,8 @@ export class wxDateTime {
     return lib.symbols.wxDateTime_GetSecond(this._ptr, timeZone);
   }
 
-  GetTicks(): number {
-    return lib.symbols.wxDateTime_GetTicks(this._ptr);
+  GetTicks(): bigint {
+    return lib.symbols.wxDateTime_GetTicks(this._ptr) as bigint;
   }
 
   GetTimeNow(): number {

@@ -84,7 +84,7 @@ export class wxSlider extends wxControl {
 
 }
 
-export function createWxSlider(parent: Pointer, id: number, init: number, minVal: number, maxVal: number, left: number, top: number, width: number, height: number, style: number): wxSlider | null {
+export function createWxSlider(parent: Pointer, id: number, init: number, minVal: number, maxVal: number, left: number, top: number, width: number, height: number, style: bigint): wxSlider | null {
     const rawPtr = lib.symbols.wxSlider_Create(parent, id, init, minVal, maxVal, left, top, width, height, style);
     if (rawPtr === null) return null;
     return new wxSlider(rawPtr);

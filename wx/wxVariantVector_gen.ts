@@ -29,7 +29,7 @@ export class wxVariantVector {
     lib.symbols.wxVariantVector_AddString(vec, value);
   }
 
-  AddLong(vec: Pointer, value: number): void {
+  AddLong(vec: Pointer, value: bigint): void {
     lib.symbols.wxVariantVector_AddLong(vec, value);
   }
 

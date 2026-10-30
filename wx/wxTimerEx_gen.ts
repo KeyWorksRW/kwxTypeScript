@@ -10,7 +10,7 @@ export class wxTimerEx extends wxTimer {
     return this._ptr;
   }
 
-  Connect(closure: Pointer): void {
+  SetClosure(closure: Pointer): void {
     lib.symbols.wxTimerEx_Connect(this._ptr, closure);
   }
 

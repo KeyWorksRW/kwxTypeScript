@@ -50,8 +50,8 @@ export class wxGridTableBase extends wxObject {
     return (lib.symbols.wxGridTableBase_CanSetValueAs(this._ptr, row, col, type_name) as number) !== 0;
   }
 
-  GetValueAsLong(row: number, col: number): number {
-    return lib.symbols.wxGridTableBase_GetValueAsLong(this._ptr, row, col);
+  GetValueAsLong(row: number, col: number): bigint {
+    return lib.symbols.wxGridTableBase_GetValueAsLong(this._ptr, row, col) as bigint;
   }
 
   GetValueAsDouble(row: number, col: number): number {
@@ -62,7 +62,7 @@ export class wxGridTableBase extends wxObject {
     return (lib.symbols.wxGridTableBase_GetValueAsBool(this._ptr, row, col) as number) !== 0;
   }
 
-  SetValueAsLong(row: number, col: number, value: number): void {
+  SetValueAsLong(row: number, col: number, value: bigint): void {
     lib.symbols.wxGridTableBase_SetValueAsLong(this._ptr, row, col, value);
   }
 

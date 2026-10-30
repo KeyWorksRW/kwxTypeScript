@@ -34,7 +34,7 @@ export class wxAuiMDIChildFrame extends wxFrame {
     return lib.symbols.wxAuiMDIChildFrame_GetToolBar(this._ptr);
   }
 
-  override CreateToolBar(style: number, id: number): Pointer {
+  CreateToolBar_2(style: number, id: number): Pointer {
     return lib.symbols.wxAuiMDIChildFrame_CreateToolBar(this._ptr, style, id);
   }
 

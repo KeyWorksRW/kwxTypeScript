@@ -146,8 +146,8 @@ export class wxWebView extends wxControl {
     return (lib.symbols.wxWebView_HasSelection(this._ptr) as number) !== 0;
   }
 
-  Find(text: Pointer, flags: number): number {
-    return lib.symbols.wxWebView_Find(this._ptr, text, flags);
+  Find(text: Pointer, flags: number): bigint {
+    return lib.symbols.wxWebView_Find(this._ptr, text, flags) as bigint;
   }
 
   Print(): void {

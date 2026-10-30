@@ -22,11 +22,11 @@ export class wxToolTip extends wxObject {
     return lib.symbols.wxToolTip_GetWindow(this._ptr);
   }
 
-  SetAutoPop(milliseconds: number): void {
+  SetAutoPop(milliseconds: bigint): void {
     lib.symbols.wxToolTip_SetAutoPop(milliseconds);
   }
 
-  SetDelay(milliseconds: number): void {
+  SetDelay(milliseconds: bigint): void {
     lib.symbols.wxToolTip_SetDelay(milliseconds);
   }
 
@@ -34,7 +34,7 @@ export class wxToolTip extends wxObject {
     lib.symbols.wxToolTip_SetMaxWidth(width);
   }
 
-  SetReshow(milliseconds: number): void {
+  SetReshow(milliseconds: bigint): void {
     lib.symbols.wxToolTip_SetReshow(milliseconds);
   }
 

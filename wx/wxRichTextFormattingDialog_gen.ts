@@ -20,7 +20,7 @@ export class wxRichTextFormattingDialog extends wxPropertySheetDialog {
     this.Delete();
   }
 
-  GetStyle(ctrl: Pointer, start: number, end: number): boolean {
+  GetStyle(ctrl: Pointer, start: bigint, end: bigint): boolean {
     return (lib.symbols.wxRichTextFormattingDialog_GetStyle(this._ptr, ctrl, start, end) as number) !== 0;
   }
 
@@ -44,7 +44,7 @@ export class wxRichTextFormattingDialog extends wxPropertySheetDialog {
     return (lib.symbols.wxRichTextFormattingDialog_UpdateDisplay(this._ptr) as number) !== 0;
   }
 
-  ApplyStyle(ctrl: Pointer, start: number, end: number, flags: number): boolean {
+  ApplyStyle(ctrl: Pointer, start: bigint, end: bigint, flags: number): boolean {
     return (lib.symbols.wxRichTextFormattingDialog_ApplyStyle(this._ptr, ctrl, start, end, flags) as number) !== 0;
   }
 
@@ -86,6 +86,6 @@ export class wxRichTextFormattingDialog extends wxPropertySheetDialog {
 
 }
 
-export function createWxRichTextFormattingDialog(flags: number, parent: Pointer, title: Pointer, id: number, x: number, y: number, w: number, h: number, style: number): number {
+export function createWxRichTextFormattingDialog(flags: bigint, parent: Pointer, title: Pointer, id: number, x: number, y: number, w: number, h: number, style: bigint): number {
     return lib.symbols.wxRichTextFormattingDialog_Create(flags, parent, title, id, x, y, w, h, style);
 }

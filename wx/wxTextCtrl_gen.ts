@@ -14,7 +14,7 @@ export class wxTextCtrl extends wxControl {
     return lib.symbols.wxTextCtrl_EmulateKeyPress(this._ptr, keyevent);
   }
 
-  GetRange(from_: number, toPos: number): Pointer {
+  GetRange(from_: bigint, toPos: bigint): Pointer {
     return lib.symbols.wxTextCtrl_GetRange(this._ptr, from_, toPos);
   }
 
@@ -22,11 +22,11 @@ export class wxTextCtrl extends wxControl {
     return lib.symbols.wxTextCtrl_GetStringSelection(this._ptr);
   }
 
-  PositionToCoords(pos: number): Pointer {
+  PositionToCoords(pos: bigint): Pointer {
     return lib.symbols.wxTextCtrl_PositionToCoords(this._ptr, pos);
   }
 
-  HitTest_3(x: number, y: number, pos: Pointer): number {
+  HitTestPosition(x: number, y: number, pos: Pointer): number {
     return lib.symbols.wxTextCtrl_HitTest(this._ptr, x, y, pos);
   }
 
@@ -94,19 +94,19 @@ export class wxTextCtrl extends wxControl {
     lib.symbols.wxTextCtrl_DiscardEdits(this._ptr);
   }
 
-  GetInsertionPoint(): number {
-    return lib.symbols.wxTextCtrl_GetInsertionPoint(this._ptr);
+  GetInsertionPoint(): bigint {
+    return lib.symbols.wxTextCtrl_GetInsertionPoint(this._ptr) as bigint;
   }
 
-  GetLastPosition(): number {
-    return lib.symbols.wxTextCtrl_GetLastPosition(this._ptr);
+  GetLastPosition(): bigint {
+    return lib.symbols.wxTextCtrl_GetLastPosition(this._ptr) as bigint;
   }
 
-  GetLineLength(lineNo: number): number {
+  GetLineLength(lineNo: bigint): number {
     return lib.symbols.wxTextCtrl_GetLineLength(this._ptr, lineNo);
   }
 
-  GetLineText(lineNo: number): Pointer {
+  GetLineText(lineNo: bigint): Pointer {
     return lib.symbols.wxTextCtrl_GetLineText(this._ptr, lineNo);
   }
 
@@ -138,7 +138,7 @@ export class wxTextCtrl extends wxControl {
     lib.symbols.wxTextCtrl_Paste(this._ptr);
   }
 
-  PositionToXY(pos: number, x: Pointer, y: Pointer): number {
+  PositionToXY(pos: bigint, x: Pointer, y: Pointer): number {
     return lib.symbols.wxTextCtrl_PositionToXY(this._ptr, pos, x, y);
   }
 
@@ -146,11 +146,11 @@ export class wxTextCtrl extends wxControl {
     lib.symbols.wxTextCtrl_Redo(this._ptr);
   }
 
-  Remove(from_: number, toPos: number): void {
+  Remove(from_: bigint, toPos: bigint): void {
     lib.symbols.wxTextCtrl_Remove(this._ptr, from_, toPos);
   }
 
-  Replace(from_: number, toPos: number, value: Pointer): void {
+  Replace(from_: bigint, toPos: bigint, value: Pointer): void {
     lib.symbols.wxTextCtrl_Replace(this._ptr, from_, toPos, value);
   }
 
@@ -186,7 +186,7 @@ export class wxTextCtrl extends wxControl {
     return lib.symbols.wxTextCtrl_GetDefaultStyle(this._ptr);
   }
 
-  GetStyle(position: number, style: Pointer): boolean {
+  GetStyle(position: bigint, style: Pointer): boolean {
     return (lib.symbols.wxTextCtrl_GetStyle(this._ptr, position, style) as number) !== 0;
   }
 
@@ -194,15 +194,15 @@ export class wxTextCtrl extends wxControl {
     return (lib.symbols.wxTextCtrl_SetDefaultStyle(this._ptr, style) as number) !== 0;
   }
 
-  SetMaxLength(len: number): void {
+  SetMaxLength(len: bigint): void {
     lib.symbols.wxTextCtrl_SetMaxLength(this._ptr, len);
   }
 
-  SetStyle(start: number, end: number, style: Pointer): boolean {
+  SetStyle(start: bigint, end: bigint, style: Pointer): boolean {
     return (lib.symbols.wxTextCtrl_SetStyle(this._ptr, start, end, style) as number) !== 0;
   }
 
-  SetInsertionPoint(pos: number): void {
+  SetInsertionPoint(pos: bigint): void {
     lib.symbols.wxTextCtrl_SetInsertionPoint(this._ptr, pos);
   }
 
@@ -210,7 +210,7 @@ export class wxTextCtrl extends wxControl {
     lib.symbols.wxTextCtrl_SetInsertionPointEnd(this._ptr);
   }
 
-  SetSelection(from_: number, toPos: number): void {
+  SetSelection(from_: bigint, toPos: bigint): void {
     lib.symbols.wxTextCtrl_SetSelection(this._ptr, from_, toPos);
   }
 
@@ -218,7 +218,7 @@ export class wxTextCtrl extends wxControl {
     lib.symbols.wxTextCtrl_SetValue(this._ptr, value);
   }
 
-  ShowPosition(pos: number): void {
+  ShowPosition(pos: bigint): void {
     lib.symbols.wxTextCtrl_ShowPosition(this._ptr, pos);
   }
 
@@ -230,8 +230,8 @@ export class wxTextCtrl extends wxControl {
     lib.symbols.wxTextCtrl_WriteText(this._ptr, text);
   }
 
-  XYToPosition(x: number, y: number): number {
-    return lib.symbols.wxTextCtrl_XYToPosition(this._ptr, x, y);
+  XYToPosition(x: bigint, y: bigint): bigint {
+    return lib.symbols.wxTextCtrl_XYToPosition(this._ptr, x, y) as bigint;
   }
 
   ConvertToUpperCase(): void {
@@ -296,7 +296,7 @@ export class wxTextCtrl extends wxControl {
 
 }
 
-export function createWxTextCtrl(parent: Pointer, id: number, text: Pointer, left: number, top: number, width: number, height: number, style: number): wxTextCtrl | null {
+export function createWxTextCtrl(parent: Pointer, id: number, text: Pointer, left: number, top: number, width: number, height: number, style: bigint): wxTextCtrl | null {
     const rawPtr = lib.symbols.wxTextCtrl_Create(parent, id, text, left, top, width, height, style);
     if (rawPtr === null) return null;
     return new wxTextCtrl(rawPtr);

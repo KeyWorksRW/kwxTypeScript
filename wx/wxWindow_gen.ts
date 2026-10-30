@@ -178,12 +178,12 @@ export class wxWindow extends wxEvtHandler {
     return (lib.symbols.wxWindow_IsShownOnScreen(this._ptr) as number) !== 0;
   }
 
-  SetWindowStyle(style: number): void {
+  SetWindowStyle(style: bigint): void {
     lib.symbols.wxWindow_SetWindowStyle(this._ptr, style);
   }
 
-  GetWindowStyle(): number {
-    return lib.symbols.wxWindow_GetWindowStyle(this._ptr);
+  GetWindowStyle(): bigint {
+    return lib.symbols.wxWindow_GetWindowStyle(this._ptr) as bigint;
   }
 
   IsRetained(): boolean {
@@ -194,8 +194,8 @@ export class wxWindow extends wxEvtHandler {
     return (lib.symbols.wxWindow_ToggleWindowStyle(this._ptr, flag) as number) !== 0;
   }
 
-  GetExtraStyle(): number {
-    return lib.symbols.wxWindow_GetExtraStyle(this._ptr);
+  GetExtraStyle(): bigint {
+    return lib.symbols.wxWindow_GetExtraStyle(this._ptr) as bigint;
   }
 
   HasExtraStyle(exFlag: number): boolean {
@@ -414,7 +414,7 @@ export class wxWindow extends wxEvtHandler {
     return lib.symbols.wxWindow_HitTest(this._ptr, x, y);
   }
 
-  GetBorder(flags: number): number {
+  GetBorder(flags: bigint): number {
     return lib.symbols.wxWindow_GetBorder(this._ptr, flags);
   }
 
@@ -930,7 +930,7 @@ export class wxWindow extends wxEvtHandler {
     lib.symbols.wxWindow_SetDropTarget(this._ptr, dropTarget);
   }
 
-  SetExtraStyle(exStyle: number): void {
+  SetExtraStyle(exStyle: bigint): void {
     lib.symbols.wxWindow_SetExtraStyle(this._ptr, exStyle);
   }
 
@@ -998,7 +998,7 @@ export class wxWindow extends wxEvtHandler {
     lib.symbols.wxWindow_SetValidator(this._ptr, validator);
   }
 
-  SetWindowStyleFlag(style: number): void {
+  SetWindowStyleFlag(style: bigint): void {
     lib.symbols.wxWindow_SetWindowStyleFlag(this._ptr, style);
   }
 
@@ -1022,7 +1022,7 @@ export class wxWindow extends wxEvtHandler {
     lib.symbols.wxWindow_Update(this._ptr);
   }
 
-  UpdateWindowUI(flags: number): void {
+  UpdateWindowUI(flags: bigint): void {
     lib.symbols.wxWindow_UpdateWindowUI(this._ptr, flags);
   }
 

@@ -42,8 +42,8 @@ export class wxMediaCtrl {
     return lib.symbols.wxMediaCtrl_GetVolume(this._ptr);
   }
 
-  Length(): number {
-    return lib.symbols.wxMediaCtrl_Length(this._ptr);
+  Length(): bigint {
+    return lib.symbols.wxMediaCtrl_Length(this._ptr) as bigint;
   }
 
   Load(fileName: Pointer): boolean {
@@ -66,8 +66,8 @@ export class wxMediaCtrl {
     return (lib.symbols.wxMediaCtrl_Play(this._ptr) as number) !== 0;
   }
 
-  Seek(offsetWhere: number, mode: number): number {
-    return lib.symbols.wxMediaCtrl_Seek(this._ptr, offsetWhere, mode);
+  Seek(offsetWhere: bigint, mode: number): bigint {
+    return lib.symbols.wxMediaCtrl_Seek(this._ptr, offsetWhere, mode) as bigint;
   }
 
   SetPlaybackRate(dRate: number): boolean {
@@ -86,13 +86,13 @@ export class wxMediaCtrl {
     return (lib.symbols.wxMediaCtrl_Stop(this._ptr) as number) !== 0;
   }
 
-  Tell(): number {
-    return lib.symbols.wxMediaCtrl_Tell(this._ptr);
+  Tell(): bigint {
+    return lib.symbols.wxMediaCtrl_Tell(this._ptr) as bigint;
   }
 
 }
 
-export function createWxMediaCtrl(parent: Pointer, id: number, fileName: Pointer, x: number, y: number, width: number, height: number, style: number, szBackend: Pointer, name: Pointer): wxMediaCtrl | null {
+export function createWxMediaCtrl(parent: Pointer, id: number, fileName: Pointer, x: number, y: number, width: number, height: number, style: bigint, szBackend: Pointer, name: Pointer): wxMediaCtrl | null {
     const rawPtr = lib.symbols.wxMediaCtrl_Create(parent, id, fileName, x, y, width, height, style, szBackend, name);
     if (rawPtr === null) return null;
     return new wxMediaCtrl(rawPtr);

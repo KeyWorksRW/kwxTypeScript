@@ -14,27 +14,27 @@ export class wxListView extends wxListCtrl {
     lib.symbols.wxListView_ClearColumnImage(this._ptr, col);
   }
 
-  Focus(index: number): void {
+  Focus(index: bigint): void {
     lib.symbols.wxListView_Focus(this._ptr, index);
   }
 
-  GetFirstSelected(): number {
-    return lib.symbols.wxListView_GetFirstSelected(this._ptr);
+  GetFirstSelected(): bigint {
+    return lib.symbols.wxListView_GetFirstSelected(this._ptr) as bigint;
   }
 
-  GetFocusedItem(): number {
-    return lib.symbols.wxListView_GetFocusedItem(this._ptr);
+  GetFocusedItem(): bigint {
+    return lib.symbols.wxListView_GetFocusedItem(this._ptr) as bigint;
   }
 
-  GetNextSelected(item: number): number {
-    return lib.symbols.wxListView_GetNextSelected(this._ptr, item);
+  GetNextSelected(item: bigint): bigint {
+    return lib.symbols.wxListView_GetNextSelected(this._ptr, item) as bigint;
   }
 
-  IsSelected(index: number): boolean {
+  IsSelected(index: bigint): boolean {
     return (lib.symbols.wxListView_IsSelected(this._ptr, index) as number) !== 0;
   }
 
-  Select(index: number, select: boolean): void {
+  Select(index: bigint, select: boolean): void {
     lib.symbols.wxListView_Select(this._ptr, index, select ? 1 : 0);
   }
 

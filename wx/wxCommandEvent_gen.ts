@@ -28,12 +28,12 @@ export class wxCommandEvent extends wxEvent {
     return lib.symbols.wxCommandEvent_GetClientObject(this._ptr);
   }
 
-  GetExtraLong(): number {
-    return lib.symbols.wxCommandEvent_GetExtraLong(this._ptr);
+  GetExtraLong(): bigint {
+    return lib.symbols.wxCommandEvent_GetExtraLong(this._ptr) as bigint;
   }
 
-  GetInt(): number {
-    return lib.symbols.wxCommandEvent_GetInt(this._ptr);
+  GetInt(): bigint {
+    return lib.symbols.wxCommandEvent_GetInt(this._ptr) as bigint;
   }
 
   GetSelection(): number {
@@ -60,7 +60,7 @@ export class wxCommandEvent extends wxEvent {
     lib.symbols.wxCommandEvent_SetClientObject(this._ptr, clientObject);
   }
 
-  SetExtraLong(extraLong: number): void {
+  SetExtraLong(extraLong: bigint): void {
     lib.symbols.wxCommandEvent_SetExtraLong(this._ptr, extraLong);
   }
 

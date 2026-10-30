@@ -74,6 +74,6 @@ export class wxSymbolPickerDialog extends wxDialog {
 
 }
 
-export function createWxSymbolPickerDialog(symbol: Pointer, fontName: Pointer, normalTextFont: Pointer, parent: Pointer, id: number, caption: Pointer, x: number, y: number, w: number, h: number, style: number): number {
+export function createWxSymbolPickerDialog(symbol: Pointer, fontName: Pointer, normalTextFont: Pointer, parent: Pointer, id: number, caption: Pointer, x: number, y: number, w: number, h: number, style: bigint): number {
     return lib.symbols.wxSymbolPickerDialog_Create(symbol, fontName, normalTextFont, parent, id, caption, x, y, w, h, style);
 }

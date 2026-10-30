@@ -12,7 +12,7 @@ export class wxContextHelpButton extends wxBitmapButton {
 
 }
 
-export function createWxContextHelpButton(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): wxContextHelpButton | null {
+export function createWxContextHelpButton(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): wxContextHelpButton | null {
     const rawPtr = lib.symbols.wxContextHelpButton_Create(parent, id, x, y, width, height, style);
     if (rawPtr === null) return null;
     return new wxContextHelpButton(rawPtr);

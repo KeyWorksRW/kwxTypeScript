@@ -36,11 +36,11 @@ export class wxThreadEvent extends wxEvent {
     lib.symbols.wxThreadEvent_SetInt(this._ptr, value);
   }
 
-  GetExtraLong(): number {
-    return lib.symbols.wxThreadEvent_GetExtraLong(this._ptr);
+  GetExtraLong(): bigint {
+    return lib.symbols.wxThreadEvent_GetExtraLong(this._ptr) as bigint;
   }
 
-  SetExtraLong(value: number): void {
+  SetExtraLong(value: bigint): void {
     lib.symbols.wxThreadEvent_SetExtraLong(this._ptr, value);
   }
 

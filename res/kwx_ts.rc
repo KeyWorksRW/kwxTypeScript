@@ -103,6 +103,6 @@ END
 
 #endif    // !_MAC
 
-// The manifest lives in kwx_ts/resources and must keep resource ID 1; the
+// The manifest lives in kwxts/resources and must keep resource ID 1; the
 // kwxFFI DLL uses ID 2.
-CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "../kwx_ts/resources/kwx_ts.manifest"
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "../kwxts/resources/kwx_ts.manifest"

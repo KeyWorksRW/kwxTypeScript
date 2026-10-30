@@ -91,10 +91,10 @@ export class wxOwnerDrawnComboBox {
 
 }
 
-export function createWxOwnerDrawnComboBox(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: number): Pointer {
+export function createWxOwnerDrawnComboBox(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: bigint): Pointer {
     return lib.symbols.wxOwnerDrawnComboBox_Create(parent, id, value, x, y, width, height, style);
 }
 
-export function createWxOwnerDrawnComboBoxWithChoices(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, count: number, choices: Pointer, style: number): Pointer {
+export function createWxOwnerDrawnComboBoxWithChoices(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, count: number, choices: Pointer, style: bigint): Pointer {
     return lib.symbols.wxOwnerDrawnComboBox_CreateWithChoices(parent, id, value, x, y, width, height, count, choices, style);
 }

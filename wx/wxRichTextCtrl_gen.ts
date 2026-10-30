@@ -42,7 +42,7 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxRichTextCtrl_GetSelectionRange(this._ptr, start, end);
   }
 
-  SetSelectionRange(start: number, end: number): void {
+  SetSelectionRange(start: bigint, end: bigint): void {
     lib.symbols.wxRichTextCtrl_SetSelectionRange(this._ptr, start, end);
   }
 
@@ -50,19 +50,19 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxRichTextCtrl_GetInternalSelectionRange(this._ptr, start, end);
   }
 
-  SetInternalSelectionRange(start: number, end: number): void {
+  SetInternalSelectionRange(start: bigint, end: bigint): void {
     lib.symbols.wxRichTextCtrl_SetInternalSelectionRange(this._ptr, start, end);
   }
 
-  SelectWord(position: number): boolean {
+  SelectWord(position: bigint): boolean {
     return (lib.symbols.wxRichTextCtrl_SelectWord(this._ptr, position) as number) !== 0;
   }
 
-  GetDelayedLayoutThreshold(): number {
-    return lib.symbols.wxRichTextCtrl_GetDelayedLayoutThreshold(this._ptr);
+  GetDelayedLayoutThreshold(): bigint {
+    return lib.symbols.wxRichTextCtrl_GetDelayedLayoutThreshold(this._ptr) as bigint;
   }
 
-  SetDelayedLayoutThreshold(threshold: number): void {
+  SetDelayedLayoutThreshold(threshold: bigint): void {
     lib.symbols.wxRichTextCtrl_SetDelayedLayoutThreshold(this._ptr, threshold);
   }
 
@@ -74,11 +74,11 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxRichTextCtrl_SetFullLayoutRequired(this._ptr, required ? 1 : 0);
   }
 
-  GetFullLayoutSavedPosition(): number {
-    return lib.symbols.wxRichTextCtrl_GetFullLayoutSavedPosition(this._ptr);
+  GetFullLayoutSavedPosition(): bigint {
+    return lib.symbols.wxRichTextCtrl_GetFullLayoutSavedPosition(this._ptr) as bigint;
   }
 
-  SetFullLayoutSavedPosition(position: number): void {
+  SetFullLayoutSavedPosition(position: bigint): void {
     lib.symbols.wxRichTextCtrl_SetFullLayoutSavedPosition(this._ptr, position);
   }
 
@@ -190,19 +190,19 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_WriteImageBlock(this._ptr, imageBlock, textAttr) as number) !== 0;
   }
 
-  DeleteRange(start: number, end: number): boolean {
+  DeleteRange(start: bigint, end: bigint): boolean {
     return (lib.symbols.wxRichTextCtrl_DeleteRange(this._ptr, start, end) as number) !== 0;
   }
 
-  SetStyleEx(start: number, end: number, style: Pointer, flags: number): boolean {
+  SetStyleEx(start: bigint, end: bigint, style: Pointer, flags: number): boolean {
     return (lib.symbols.wxRichTextCtrl_SetStyleEx(this._ptr, start, end, style, flags) as number) !== 0;
   }
 
-  GetUncombinedStyle(position: number, style: Pointer): boolean {
+  GetUncombinedStyle(position: bigint, style: Pointer): boolean {
     return (lib.symbols.wxRichTextCtrl_GetUncombinedStyle(this._ptr, position, style) as number) !== 0;
   }
 
-  GetStyleForRange(start: number, end: number, style: Pointer): boolean {
+  GetStyleForRange(start: bigint, end: bigint, style: Pointer): boolean {
     return (lib.symbols.wxRichTextCtrl_GetStyleForRange(this._ptr, start, end, style) as number) !== 0;
   }
 
@@ -242,19 +242,19 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_EndListStyle(this._ptr) as number) !== 0;
   }
 
-  SetListStyle(start: number, end: number, defName: Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
+  SetListStyle(start: bigint, end: bigint, defName: Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
     return (lib.symbols.wxRichTextCtrl_SetListStyle(this._ptr, start, end, defName, flags, startFrom, specifiedLevel) as number) !== 0;
   }
 
-  ClearListStyle(start: number, end: number, flags: number): boolean {
+  ClearListStyle(start: bigint, end: bigint, flags: number): boolean {
     return (lib.symbols.wxRichTextCtrl_ClearListStyle(this._ptr, start, end, flags) as number) !== 0;
   }
 
-  NumberList(start: number, end: number, defName: Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
+  NumberList(start: bigint, end: bigint, defName: Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
     return (lib.symbols.wxRichTextCtrl_NumberList(this._ptr, start, end, defName, flags, startFrom, specifiedLevel) as number) !== 0;
   }
 
-  PromoteList(promoteBy: number, start: number, end: number, defName: Pointer, flags: number, specifiedLevel: number): boolean {
+  PromoteList(promoteBy: number, start: bigint, end: bigint, defName: Pointer, flags: number, specifiedLevel: number): boolean {
     return (lib.symbols.wxRichTextCtrl_PromoteList(this._ptr, promoteBy, start, end, defName, flags, specifiedLevel) as number) !== 0;
   }
 
@@ -262,7 +262,7 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_ApplyStyle(this._ptr, def) as number) !== 0;
   }
 
-  MoveCaret(position: number, showAtLineStart: boolean): boolean {
+  MoveCaret(position: bigint, showAtLineStart: boolean): boolean {
     return (lib.symbols.wxRichTextCtrl_MoveCaret(this._ptr, position, showAtLineStart ? 1 : 0) as number) !== 0;
   }
 
@@ -306,11 +306,11 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_MoveEnd(this._ptr, flags) as number) !== 0;
   }
 
-  PageUp_2(noPages: number, flags: number): boolean {
+  PageUpBy(noPages: number, flags: number): boolean {
     return (lib.symbols.wxRichTextCtrl_PageUp(this._ptr, noPages, flags) as number) !== 0;
   }
 
-  PageDown_2(noPages: number, flags: number): boolean {
+  PageDownBy(noPages: number, flags: number): boolean {
     return (lib.symbols.wxRichTextCtrl_PageDown(this._ptr, noPages, flags) as number) !== 0;
   }
 
@@ -378,11 +378,11 @@ export class wxRichTextCtrl extends wxControl {
     return lib.symbols.wxRichTextCtrl_GetContextMenu(this._ptr);
   }
 
-  GetSelectionAnchor(): number {
-    return lib.symbols.wxRichTextCtrl_GetSelectionAnchor(this._ptr);
+  GetSelectionAnchor(): bigint {
+    return lib.symbols.wxRichTextCtrl_GetSelectionAnchor(this._ptr) as bigint;
   }
 
-  SetSelectionAnchor(anchor: number): void {
+  SetSelectionAnchor(anchor: bigint): void {
     lib.symbols.wxRichTextCtrl_SetSelectionAnchor(this._ptr, anchor);
   }
 
@@ -402,28 +402,28 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_IsFrozen(this._ptr) as number) !== 0;
   }
 
-  HitTest_3(x: number, y: number, position: Pointer): number {
+  HitTestPosition(x: number, y: number, position: Pointer): number {
     return lib.symbols.wxRichTextCtrl_HitTest(this._ptr, x, y, position);
   }
 
-  SetCaretPosition(position: number, showAtLineStart: boolean): void {
+  SetCaretPosition(position: bigint, showAtLineStart: boolean): void {
     lib.symbols.wxRichTextCtrl_SetCaretPosition(this._ptr, position, showAtLineStart ? 1 : 0);
   }
 
-  GetAdjustedCaretPosition(caretPosition: number): number {
-    return lib.symbols.wxRichTextCtrl_GetAdjustedCaretPosition(this._ptr, caretPosition);
+  GetAdjustedCaretPosition(caretPosition: bigint): bigint {
+    return lib.symbols.wxRichTextCtrl_GetAdjustedCaretPosition(this._ptr, caretPosition) as bigint;
   }
 
-  FindNextWordPosition(direction: number): number {
-    return lib.symbols.wxRichTextCtrl_FindNextWordPosition(this._ptr, direction);
+  FindNextWordPosition(direction: number): bigint {
+    return lib.symbols.wxRichTextCtrl_FindNextWordPosition(this._ptr, direction) as bigint;
   }
 
-  IsPositionVisible(position: number): boolean {
+  IsPositionVisible(position: bigint): boolean {
     return (lib.symbols.wxRichTextCtrl_IsPositionVisible(this._ptr, position) as number) !== 0;
   }
 
-  GetFirstVisiblePosition(): number {
-    return lib.symbols.wxRichTextCtrl_GetFirstVisiblePosition(this._ptr);
+  GetFirstVisiblePosition(): bigint {
+    return lib.symbols.wxRichTextCtrl_GetFirstVisiblePosition(this._ptr) as bigint;
   }
 
   GetFirstVisiblePoint(x: Pointer, y: Pointer): void {
@@ -438,15 +438,15 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxRichTextCtrl_SetValue(this._ptr, value);
   }
 
-  GetRange(from_: number, toPos: number): Pointer {
+  GetRange(from_: bigint, toPos: bigint): Pointer {
     return lib.symbols.wxRichTextCtrl_GetRange(this._ptr, from_, toPos);
   }
 
-  GetLineLength(lineNo: number): number {
+  GetLineLength(lineNo: bigint): number {
     return lib.symbols.wxRichTextCtrl_GetLineLength(this._ptr, lineNo);
   }
 
-  GetLineText(lineNo: number): Pointer {
+  GetLineText(lineNo: bigint): Pointer {
     return lib.symbols.wxRichTextCtrl_GetLineText(this._ptr, lineNo);
   }
 
@@ -478,7 +478,7 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxRichTextCtrl_GetSelection(this._ptr, from_, to);
   }
 
-  SetSelection(from_: number, toPos: number): void {
+  SetSelection(from_: bigint, toPos: bigint): void {
     lib.symbols.wxRichTextCtrl_SetSelection(this._ptr, from_, toPos);
   }
 
@@ -494,15 +494,15 @@ export class wxRichTextCtrl extends wxControl {
     return lib.symbols.wxRichTextCtrl_GetStringSelection(this._ptr);
   }
 
-  GetInsertionPoint(): number {
-    return lib.symbols.wxRichTextCtrl_GetInsertionPoint(this._ptr);
+  GetInsertionPoint(): bigint {
+    return lib.symbols.wxRichTextCtrl_GetInsertionPoint(this._ptr) as bigint;
   }
 
-  GetLastPosition(): number {
-    return lib.symbols.wxRichTextCtrl_GetLastPosition(this._ptr);
+  GetLastPosition(): bigint {
+    return lib.symbols.wxRichTextCtrl_GetLastPosition(this._ptr) as bigint;
   }
 
-  SetInsertionPoint(pos: number): void {
+  SetInsertionPoint(pos: bigint): void {
     lib.symbols.wxRichTextCtrl_SetInsertionPoint(this._ptr, pos);
   }
 
@@ -522,11 +522,11 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxRichTextCtrl_Clear(this._ptr);
   }
 
-  Replace(from_: number, toPos: number, value: Pointer): void {
+  Replace(from_: bigint, toPos: bigint, value: Pointer): void {
     lib.symbols.wxRichTextCtrl_Replace(this._ptr, from_, toPos, value);
   }
 
-  Remove(from_: number, toPos: number): void {
+  Remove(from_: bigint, toPos: bigint): void {
     lib.symbols.wxRichTextCtrl_Remove(this._ptr, from_, toPos);
   }
 
@@ -594,11 +594,11 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_CanDeleteSelection(this._ptr) as number) !== 0;
   }
 
-  SetStyle(start: number, end: number, style: Pointer): boolean {
+  SetStyle(start: bigint, end: bigint, style: Pointer): boolean {
     return (lib.symbols.wxRichTextCtrl_SetStyle(this._ptr, start, end, style) as number) !== 0;
   }
 
-  GetStyle(position: number, style: Pointer): boolean {
+  GetStyle(position: bigint, style: Pointer): boolean {
     return (lib.symbols.wxRichTextCtrl_GetStyle(this._ptr, position, style) as number) !== 0;
   }
 
@@ -614,19 +614,19 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_SetFont(this._ptr, font) as number) !== 0;
   }
 
-  SetFontStyle(start: number, end: number, font: Pointer): boolean {
+  SetFontStyle(start: bigint, end: bigint, font: Pointer): boolean {
     return (lib.symbols.wxRichTextCtrl_SetFontStyle(this._ptr, start, end, font) as number) !== 0;
   }
 
-  XYToPosition(x: number, y: number): number {
-    return lib.symbols.wxRichTextCtrl_XYToPosition(this._ptr, x, y);
+  XYToPosition(x: bigint, y: bigint): bigint {
+    return lib.symbols.wxRichTextCtrl_XYToPosition(this._ptr, x, y) as bigint;
   }
 
-  PositionToXY(pos: number, x: Pointer, y: Pointer): boolean {
+  PositionToXY(pos: bigint, x: Pointer, y: Pointer): boolean {
     return (lib.symbols.wxRichTextCtrl_PositionToXY(this._ptr, pos, x, y) as number) !== 0;
   }
 
-  ShowPosition(position: number): void {
+  ShowPosition(position: bigint): void {
     lib.symbols.wxRichTextCtrl_ShowPosition(this._ptr, position);
   }
 
@@ -646,7 +646,7 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxRichTextCtrl_ForceDelayedLayout(this._ptr);
   }
 
-  ScrollIntoView(position: number, keyCode: number): void {
+  ScrollIntoView(position: bigint, keyCode: number): void {
     lib.symbols.wxRichTextCtrl_ScrollIntoView(this._ptr, position, keyCode);
   }
 

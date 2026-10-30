@@ -164,8 +164,8 @@ export class wxPropertyGridInterface {
     return lib.symbols.wxPropertyGridInterface_GetPropertyValueAsString(this._ptr, id);
   }
 
-  GetPropertyValueAsLong(id: Pointer): number {
-    return lib.symbols.wxPropertyGridInterface_GetPropertyValueAsLong(this._ptr, id);
+  GetPropertyValueAsLong(id: Pointer): bigint {
+    return lib.symbols.wxPropertyGridInterface_GetPropertyValueAsLong(this._ptr, id) as bigint;
   }
 
   GetPropertyValueAsInt(id: Pointer): number {
@@ -188,7 +188,7 @@ export class wxPropertyGridInterface {
     lib.symbols.wxPropertyGridInterface_SetPropertyValueString(this._ptr, id, value);
   }
 
-  SetPropertyValueLong(id: Pointer, value: number): void {
+  SetPropertyValueLong(id: Pointer, value: bigint): void {
     lib.symbols.wxPropertyGridInterface_SetPropertyValueLong(this._ptr, id, value);
   }
 

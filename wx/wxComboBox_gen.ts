@@ -127,7 +127,7 @@ export class wxComboBox extends wxChoice {
     lib.symbols.wxTextEntry_ChangeValue(this._ptr, value);
   }
 
-  GetRange(from_: number, to: number): Pointer {
+  GetRange(from_: bigint, to: bigint): Pointer {
     return lib.symbols.wxTextEntry_GetRange(this._ptr, from_, to);
   }
 
@@ -187,7 +187,7 @@ export class wxComboBox extends wxChoice {
     return (lib.symbols.wxTextEntry_IsEditable(this._ptr) as number) !== 0;
   }
 
-  SetMaxLength(len: number): void {
+  SetMaxLength(len: bigint): void {
     lib.symbols.wxTextEntry_SetMaxLength(this._ptr, len);
   }
 

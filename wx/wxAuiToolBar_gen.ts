@@ -20,16 +20,16 @@ export class wxAuiToolBar extends wxControl {
     this.Delete();
   }
 
-  CreateFromDefault(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): boolean {
+  CreateFromDefault(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): boolean {
     return (lib.symbols.wxAuiToolBar_CreateFromDefault(this._ptr, parent, id, x, y, width, height, style) as number) !== 0;
   }
 
-  override SetWindowStyleFlag(style: number): void {
+  override SetWindowStyleFlag(style: bigint): void {
     lib.symbols.wxAuiToolBar_SetWindowStyleFlag(this._ptr, style);
   }
 
-  override GetWindowStyleFlag(): number {
-    return lib.symbols.wxAuiToolBar_GetWindowStyleFlag(this._ptr);
+  GetWindowStyleFlag_0(): bigint {
+    return lib.symbols.wxAuiToolBar_GetWindowStyleFlag(this._ptr) as bigint;
   }
 
   SetArtProvider(artId: Pointer): void {
@@ -300,7 +300,7 @@ export function createWxAuiToolBarDefault(): wxAuiToolBar | null {
     return new wxAuiToolBar(rawPtr);
 }
 
-export function createWxAuiToolBar(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): wxAuiToolBar | null {
+export function createWxAuiToolBar(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): wxAuiToolBar | null {
     const rawPtr = lib.symbols.wxAuiToolBar_Create(parent, id, x, y, width, height, style);
     if (rawPtr === null) return null;
     return new wxAuiToolBar(rawPtr);

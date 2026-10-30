@@ -59,11 +59,11 @@ export class wxSimpleHtmlListBox extends wxHtmlListBox {
     return lib.symbols.wxSimpleHtmlListBox_FindString(this._ptr, str, caseSensitive ? 1 : 0);
   }
 
-  GetClientData_1(index: number): Pointer {
+  GetItemClientData(index: number): Pointer {
     return lib.symbols.wxSimpleHtmlListBox_GetClientData(this._ptr, index);
   }
 
-  SetClientData_2(index: number, data: Pointer): void {
+  SetItemClientData(index: number, data: Pointer): void {
     lib.symbols.wxSimpleHtmlListBox_SetClientData(this._ptr, index, data);
   }
 

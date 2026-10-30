@@ -10,7 +10,7 @@ export class wxProcessEx extends wxProcess {
     return this._ptr;
   }
 
-  Connect_1(closure: Pointer): void {
+  SetClosure(closure: Pointer): void {
     lib.symbols.wxProcessEx_Connect(this._ptr, closure);
   }
 

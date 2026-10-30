@@ -46,6 +46,6 @@ export class wxHeaderCtrlSimple {
 
 }
 
-export function createWxHeaderCtrlSimple(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): Pointer {
+export function createWxHeaderCtrlSimple(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): Pointer {
     return lib.symbols.wxHeaderCtrlSimple_Create(parent, id, x, y, width, height, style);
 }

@@ -20,12 +20,12 @@ export class wxEvtHandler extends wxObject {
     this.Delete();
   }
 
-  GetClientClosure_1(pObject: Pointer): Pointer {
-    return lib.symbols.wxEvtHandler_GetClientClosure(pObject);
+  override GetClientClosure(): Pointer {
+    return lib.symbols.wxEvtHandler_GetClientClosure(this._ptr);
   }
 
-  SetClientClosure_2(pObject: Pointer, closure: Pointer): void {
-    lib.symbols.wxEvtHandler_SetClientClosure(pObject, closure);
+  override SetClientClosure(closure: Pointer): void {
+    lib.symbols.wxEvtHandler_SetClientClosure(this._ptr, closure);
   }
 
   AddFilter(filter: Pointer): void {

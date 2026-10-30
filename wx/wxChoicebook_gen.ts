@@ -54,7 +54,7 @@ export class wxChoicebook extends wxBookCtrlBase {
     return lib.symbols.wxChoicebook_GetSelection(this._ptr);
   }
 
-  override HitTest_3(x: number, y: number, flags: Pointer): number {
+  override HitTestPage(x: number, y: number, flags: Pointer): number {
     return lib.symbols.wxChoicebook_HitTest(this._ptr, x, y, flags);
   }
 

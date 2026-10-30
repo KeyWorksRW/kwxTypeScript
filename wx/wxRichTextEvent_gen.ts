@@ -10,11 +10,11 @@ export class wxRichTextEvent extends wxNotifyEvent {
     return this._ptr;
   }
 
-  GetPosition(): number {
-    return lib.symbols.wxRichTextEvent_GetPosition(this._ptr);
+  GetPosition(): bigint {
+    return lib.symbols.wxRichTextEvent_GetPosition(this._ptr) as bigint;
   }
 
-  SetPosition(position: number): void {
+  SetPosition(position: bigint): void {
     lib.symbols.wxRichTextEvent_SetPosition(this._ptr, position);
   }
 
@@ -46,7 +46,7 @@ export class wxRichTextEvent extends wxNotifyEvent {
     lib.symbols.wxRichTextEvent_GetRange(this._ptr, start, end);
   }
 
-  SetRange(start: number, end: number): void {
+  SetRange(start: bigint, end: bigint): void {
     lib.symbols.wxRichTextEvent_SetRange(this._ptr, start, end);
   }
 

@@ -179,7 +179,7 @@ kwxFFI and wxWidgets are built automatically from source by CMake via `FetchCont
 Prerequisites:
 - CMake 3.30+
 - A Rust toolchain (`cargo`, from https://rustup.rs). `kwx_ts` links a TypeScript
-  transformer built from source in `kwx_ts/third_party/swc_transformer`; CMake
+  transformer built from source in `kwxts/third_party/swc_transformer`; CMake
   fetches its crates from crates.io on the first build.
 - A supported C/C++ compiler (see above)
 - Internet access for FetchContent (QuickJS-ng, kwxFFI, and wxWidgets are fetched automatically)
@@ -187,10 +187,13 @@ Prerequisites:
 ```powershell
 # Configure and build (Windows, Ninja Multi-Config)
 cmake --preset ninja-multi
-cmake --build build --config Release --target kwx_ts
+cmake --build --preset release
 # Run the demo with the runtime built in the same configure step
 bin\Release\kwxts.exe examples\demo.ts
 ```
+
+The build regenerates the embedded binding bundle from `wx/` and `src/`, so no
+extra step is needed after kwxgen updates the corpus.
 
 ## License
 

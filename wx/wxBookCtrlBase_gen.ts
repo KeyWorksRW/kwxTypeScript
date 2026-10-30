@@ -10,7 +10,7 @@ export class wxBookCtrlBase extends wxControl {
     return this._ptr;
   }
 
-  CreateFromDefault(parent: Pointer, winid: number, x: number, y: number, width: number, height: number, style: number, name: Pointer): boolean {
+  CreateFromDefault(parent: Pointer, winid: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): boolean {
     return (lib.symbols.wxBookCtrlBase_CreateFromDefault(this._ptr, parent, winid, x, y, width, height, style, name) as number) !== 0;
   }
 
@@ -18,7 +18,7 @@ export class wxBookCtrlBase extends wxControl {
     lib.symbols.wxBookCtrlBase_SetPageSize(this._ptr, width, height);
   }
 
-  HitTest_3(x: number, y: number, flags: Pointer): number {
+  HitTestPage(x: number, y: number, flags: Pointer): number {
     return lib.symbols.wxBookCtrlBase_HitTest(this._ptr, x, y, flags);
   }
 

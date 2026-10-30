@@ -36,12 +36,12 @@ export class wxComboCtrl {
     return lib.symbols.wxComboCtrl_GetCustomPaintWidth(this._ptr);
   }
 
-  GetInsertionPoint(): number {
-    return lib.symbols.wxComboCtrl_GetInsertionPoint(this._ptr);
+  GetInsertionPoint(): bigint {
+    return lib.symbols.wxComboCtrl_GetInsertionPoint(this._ptr) as bigint;
   }
 
-  GetLastPosition(): number {
-    return lib.symbols.wxComboCtrl_GetLastPosition(this._ptr);
+  GetLastPosition(): bigint {
+    return lib.symbols.wxComboCtrl_GetLastPosition(this._ptr) as bigint;
   }
 
   GetPopupWindow(): Pointer {
@@ -84,11 +84,11 @@ export class wxComboCtrl {
     lib.symbols.wxComboCtrl_Popup(this._ptr);
   }
 
-  Remove(from_: number, toPos: number): void {
+  Remove(from_: bigint, toPos: bigint): void {
     lib.symbols.wxComboCtrl_Remove(this._ptr, from_, toPos);
   }
 
-  Replace(from_: number, toPos: number, value: Pointer): void {
+  Replace(from_: bigint, toPos: bigint, value: Pointer): void {
     lib.symbols.wxComboCtrl_Replace(this._ptr, from_, toPos, value);
   }
 
@@ -108,7 +108,7 @@ export class wxComboCtrl {
     lib.symbols.wxComboCtrl_SetCustomPaintWidth(this._ptr, width);
   }
 
-  SetInsertionPoint(pos: number): void {
+  SetInsertionPoint(pos: bigint): void {
     lib.symbols.wxComboCtrl_SetInsertionPoint(this._ptr, pos);
   }
 
@@ -136,7 +136,7 @@ export class wxComboCtrl {
     lib.symbols.wxComboCtrl_SetPopupMinWidth(this._ptr, width);
   }
 
-  SetSelection(from_: number, toPos: number): void {
+  SetSelection(from_: bigint, toPos: bigint): void {
     lib.symbols.wxComboCtrl_SetSelection(this._ptr, from_, toPos);
   }
 
@@ -162,6 +162,6 @@ export class wxComboCtrl {
 
 }
 
-export function createWxComboCtrl(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: number): Pointer {
+export function createWxComboCtrl(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: bigint): Pointer {
     return lib.symbols.wxComboCtrl_Create(parent, id, value, x, y, width, height, style);
 }

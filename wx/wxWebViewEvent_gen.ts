@@ -22,7 +22,7 @@ export class wxWebViewEvent extends wxNotifyEvent {
     return lib.symbols.wxWebViewEvent_GetNavigationAction(this._ptr);
   }
 
-  override GetInt(): number {
+  GetInt_0(): number {
     return lib.symbols.wxWebViewEvent_GetInt(this._ptr);
   }
 

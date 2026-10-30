@@ -10,7 +10,7 @@ export class wxAuiNotebook extends wxBookCtrlBase {
     return this._ptr;
   }
 
-  override CreateFromDefault(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): boolean {
+  override CreateFromDefault(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): boolean {
     return (lib.symbols.wxAuiNotebook_CreateFromDefault(this._ptr, parent, id, x, y, width, height, style) as number) !== 0;
   }
 
@@ -158,7 +158,7 @@ export function createWxAuiNotebookDefault(): wxAuiNotebook | null {
     return new wxAuiNotebook(rawPtr);
 }
 
-export function createWxAuiNotebook(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): wxAuiNotebook | null {
+export function createWxAuiNotebook(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): wxAuiNotebook | null {
     const rawPtr = lib.symbols.wxAuiNotebook_Create(parent, id, x, y, width, height, style);
     if (rawPtr === null) return null;
     return new wxAuiNotebook(rawPtr);

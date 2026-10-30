@@ -14,7 +14,7 @@ export class wxVListBox extends wxVScrolledWindow {
     lib.symbols.wxVListBox_Clear(this._ptr);
   }
 
-  override Create(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number, name: Pointer): boolean {
+  override Create(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): boolean {
     return (lib.symbols.wxVListBox_Create(this._ptr, parent, id, x, y, width, height, style, name) as number) !== 0;
   }
 

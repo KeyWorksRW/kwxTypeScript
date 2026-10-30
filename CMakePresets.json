@@ -40,5 +40,22 @@
                 "CMAKE_OSX_ARCHITECTURES": "x86_64;arm64"
             }
         }
+    ],
+    "buildPresets": [
+        {
+            "name": "release",
+            "displayName": "Release (kwx_ts)",
+            "description": "Builds the Release kwx_ts executable, regenerating the embedded bundle from wx/ and src/",
+            "configurePreset": "ninja-multi",
+            "configuration": "Release",
+            "targets": ["kwx_ts"]
+        },
+        {
+            "name": "debug",
+            "displayName": "Debug (kwx_ts)",
+            "configurePreset": "ninja-multi",
+            "configuration": "Debug",
+            "targets": ["kwx_ts"]
+        }
     ]
 }

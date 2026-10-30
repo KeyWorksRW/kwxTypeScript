@@ -106,15 +106,15 @@ export class wxDialog extends wxTopLevelWindow {
     return lib.symbols.wxDialog_GetEscapeId(this._ptr);
   }
 
-  CreateButtonSizer(flags: number): Pointer {
+  CreateButtonSizer(flags: bigint): Pointer {
     return lib.symbols.wxDialog_CreateButtonSizer(this._ptr, flags);
   }
 
-  CreateSeparatedButtonSizer(flags: number): Pointer {
+  CreateSeparatedButtonSizer(flags: bigint): Pointer {
     return lib.symbols.wxDialog_CreateSeparatedButtonSizer(this._ptr, flags);
   }
 
-  CreateStdDialogButtonSizer(flags: number): Pointer {
+  CreateStdDialogButtonSizer(flags: bigint): Pointer {
     return lib.symbols.wxDialog_CreateStdDialogButtonSizer(this._ptr, flags);
   }
 
