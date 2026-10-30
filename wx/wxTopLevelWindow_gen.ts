@@ -18,7 +18,7 @@ export class wxTopLevelWindow extends wxWindow {
     return lib.symbols.wxTopLevelWindow_GetIcons(this._ptr);
   }
 
-  EnableFullScreenView(enable: boolean, style: number): boolean {
+  EnableFullScreenView(enable: boolean, style: bigint): boolean {
     return (lib.symbols.wxTopLevelWindow_EnableFullScreenView(this._ptr, enable ? 1 : 0, style) as number) !== 0;
   }
 
@@ -110,7 +110,7 @@ export class wxTopLevelWindow extends wxWindow {
     lib.symbols.wxTopLevelWindow_Restore(this._ptr);
   }
 
-  ShowFullScreen(show: boolean, style: number): boolean {
+  ShowFullScreen(show: boolean, style: bigint): boolean {
     return (lib.symbols.wxTopLevelWindow_ShowFullScreen(this._ptr, show ? 1 : 0, style) as number) !== 0;
   }
 

@@ -38,7 +38,7 @@ export class wxDirPickerCtrl {
 
 }
 
-export function createWxDirPickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, path: Pointer, message: Pointer, style: number): wxDirPickerCtrl | null {
+export function createWxDirPickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, path: Pointer, message: Pointer, style: bigint): wxDirPickerCtrl | null {
     const rawPtr = lib.symbols.wxDirPickerCtrl_Create(parent, id, x, y, width, height, path, message, style);
     if (rawPtr === null) return null;
     return new wxDirPickerCtrl(rawPtr);

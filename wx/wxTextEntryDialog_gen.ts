@@ -20,7 +20,7 @@ export class wxTextEntryDialog extends wxDialog {
 
 }
 
-export function createWxTextEntryDialog(parent: Pointer, message: Pointer, caption: Pointer, value: Pointer, style: number, x: number, y: number, sz_w: number, sz_h: number): wxTextEntryDialog | null {
+export function createWxTextEntryDialog(parent: Pointer, message: Pointer, caption: Pointer, value: Pointer, style: bigint, x: number, y: number, sz_w: number, sz_h: number): wxTextEntryDialog | null {
     const rawPtr = lib.symbols.wxTextEntryDialog_Create(parent, message, caption, value, style, x, y, sz_w, sz_h);
     if (rawPtr === null) return null;
     return new wxTextEntryDialog(rawPtr);

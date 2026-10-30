@@ -147,8 +147,8 @@ export function wxGetDataDir(): Pointer {
     return lib.symbols.wxGetDataDir();
 }
 
-export function wxGetFreeMemory(): number {
-    return lib.symbols.wxGetFreeMemory();
+export function wxGetFreeMemory(): bigint {
+    return lib.symbols.wxGetFreeMemory() as bigint;
 }
 
 export function wxHandleFatalExceptions(doit: boolean): boolean {
@@ -243,20 +243,20 @@ export function wxGetDiskSpace(path: Pointer, total_bytes: Pointer, free_bytes: 
     return (lib.symbols.wxGetDiskSpace(path, total_bytes, free_bytes) as number) !== 0;
 }
 
-export function wxExecute(command: Pointer, flags: number, process: Pointer, execute_env: Pointer): number {
-    return lib.symbols.wxExecute(command, flags, process, execute_env);
+export function wxExecute(command: Pointer, flags: number, process: Pointer, execute_env: Pointer): bigint {
+    return lib.symbols.wxExecute(command, flags, process, execute_env) as bigint;
 }
 
-export function wxExecuteWithOutput(command: Pointer, output: Pointer, flags: number, execute_env: Pointer): number {
-    return lib.symbols.wxExecuteWithOutput(command, output, flags, execute_env);
+export function wxExecuteWithOutput(command: Pointer, output: Pointer, flags: number, execute_env: Pointer): bigint {
+    return lib.symbols.wxExecuteWithOutput(command, output, flags, execute_env) as bigint;
 }
 
-export function wxExecuteWithOutputAndError(command: Pointer, output: Pointer, errors: Pointer, flags: number, execute_env: Pointer): number {
-    return lib.symbols.wxExecuteWithOutputAndError(command, output, errors, flags, execute_env);
+export function wxExecuteWithOutputAndError(command: Pointer, output: Pointer, errors: Pointer, flags: number, execute_env: Pointer): bigint {
+    return lib.symbols.wxExecuteWithOutputAndError(command, output, errors, flags, execute_env) as bigint;
 }
 
-export function wxExecuteArgv(n: number, argv: Pointer, flags: number, process: Pointer, execute_env: Pointer): number {
-    return lib.symbols.wxExecuteArgv(n, argv, flags, process, execute_env);
+export function wxExecuteArgv(n: number, argv: Pointer, flags: number, process: Pointer, execute_env: Pointer): bigint {
+    return lib.symbols.wxExecuteArgv(n, argv, flags, process, execute_env) as bigint;
 }
 
 export function wxExecuteDDE(server: Pointer, topic: Pointer, command: Pointer): boolean {
@@ -267,7 +267,7 @@ export function wxShutdown(flags: number): boolean {
     return (lib.symbols.wxShutdown(flags) as number) !== 0;
 }
 
-export function wxKill(pid: number, sig: number, rc: Pointer, flags: number): number {
+export function wxKill(pid: bigint, sig: number, rc: Pointer, flags: number): number {
     return lib.symbols.wxKill(pid, sig, rc, flags);
 }
 
@@ -283,16 +283,16 @@ export function wxSleep(seconds: number): void {
     lib.symbols.wxSleep(seconds);
 }
 
-export function wxMilliSleep(milliseconds: number): void {
+export function wxMilliSleep(milliseconds: bigint): void {
     lib.symbols.wxMilliSleep(milliseconds);
 }
 
-export function wxMicroSleep(microseconds: number): void {
+export function wxMicroSleep(microseconds: bigint): void {
     lib.symbols.wxMicroSleep(microseconds);
 }
 
-export function wxGetProcessId(): number {
-    return lib.symbols.wxGetProcessId();
+export function wxGetProcessId(): bigint {
+    return lib.symbols.wxGetProcessId() as bigint;
 }
 
 export function wxLaunchDefaultBrowser(url: Pointer, flags: number): boolean {
@@ -379,7 +379,7 @@ export function wxIsStockLabel(id: number, label: Pointer): boolean {
     return (lib.symbols.wxIsStockLabel(id, label) as number) !== 0;
 }
 
-export function wxGetStockLabel(id: number, flags: number): Pointer {
+export function wxGetStockLabel(id: number, flags: bigint): Pointer {
     return lib.symbols.wxGetStockLabel(id, flags);
 }
 
@@ -503,7 +503,7 @@ export function wxDragIcon(icon: Pointer, x: number, y: number): Pointer {
     return lib.symbols.wxDragIcon(icon, x, y);
 }
 
-export function wxDragListItem(listCtrl: Pointer, id: number): Pointer {
+export function wxDragListItem(listCtrl: Pointer, id: bigint): Pointer {
     return lib.symbols.wxDragListItem(listCtrl, id);
 }
 
@@ -519,7 +519,7 @@ export function wxGenericDragIcon(icon: Pointer): Pointer {
     return lib.symbols.wxGenericDragIcon(icon);
 }
 
-export function wxGenericDragListItem(listCtrl: Pointer, id: number): Pointer {
+export function wxGenericDragListItem(listCtrl: Pointer, id: bigint): Pointer {
     return lib.symbols.wxGenericDragListItem(listCtrl, id);
 }
 
@@ -547,8 +547,8 @@ export function wxGetFontFromUser(parent: Pointer, fontInit: Pointer, font: Poin
     lib.symbols.wxGetFontFromUser(parent, fontInit, font);
 }
 
-export function wxGetNumberFromUser(message: Pointer, prompt: Pointer, caption: Pointer, value: number, min: number, max: number, parent: Pointer, x: number, y: number): number {
-    return lib.symbols.wxGetNumberFromUser(message, prompt, caption, value, min, max, parent, x, y);
+export function wxGetNumberFromUser(message: Pointer, prompt: Pointer, caption: Pointer, value: bigint, min: bigint, max: bigint, parent: Pointer, x: number, y: number): bigint {
+    return lib.symbols.wxGetNumberFromUser(message, prompt, caption, value, min, max, parent, x, y) as bigint;
 }
 
 export function wxGetPasswordFromUser(message: Pointer, caption: Pointer, defaultText: Pointer, parent: Pointer, buffer: Pointer): number {

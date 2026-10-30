@@ -10,7 +10,7 @@ export class wxVScrolledWindow extends wxPanel {
     return this._ptr;
   }
 
-  Create(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number, name: Pointer): boolean {
+  Create(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): boolean {
     return (lib.symbols.wxVScrolledWindow_Create(this._ptr, parent, id, x, y, width, height, style, name) as number) !== 0;
   }
 

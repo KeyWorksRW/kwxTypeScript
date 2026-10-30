@@ -132,19 +132,19 @@ export class wxSocketBase extends wxObject {
     return lib.symbols.wxSocketBase_Unread(this._ptr, buffer, nbytes);
   }
 
-  Wait(seconds: number, millisecond: number): boolean {
+  Wait(seconds: bigint, millisecond: bigint): boolean {
     return (lib.symbols.wxSocketBase_Wait(this._ptr, seconds, millisecond) as number) !== 0;
   }
 
-  WaitForLost(seconds: number, millisecond: number): boolean {
+  WaitForLost(seconds: bigint, millisecond: bigint): boolean {
     return (lib.symbols.wxSocketBase_WaitForLost(this._ptr, seconds, millisecond) as number) !== 0;
   }
 
-  WaitForRead(seconds: number, millisecond: number): boolean {
+  WaitForRead(seconds: bigint, millisecond: bigint): boolean {
     return (lib.symbols.wxSocketBase_WaitForRead(this._ptr, seconds, millisecond) as number) !== 0;
   }
 
-  WaitForWrite(seconds: number, millisecond: number): boolean {
+  WaitForWrite(seconds: bigint, millisecond: bigint): boolean {
     return (lib.symbols.wxSocketBase_WaitForWrite(this._ptr, seconds, millisecond) as number) !== 0;
   }
 

@@ -26,7 +26,7 @@ export class wxDirFilterListCtrl extends wxChoice {
 
 }
 
-export function createWxDirFilterListCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): wxDirFilterListCtrl | null {
+export function createWxDirFilterListCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): wxDirFilterListCtrl | null {
     const rawPtr = lib.symbols.wxDirFilterListCtrl_Create(parent, id, x, y, width, height, style);
     if (rawPtr === null) return null;
     return new wxDirFilterListCtrl(rawPtr);

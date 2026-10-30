@@ -248,7 +248,7 @@ export class wxMenu extends wxEvtHandler {
 
 }
 
-export function createWxMenu(title: Pointer, style: number): wxMenu | null {
+export function createWxMenu(title: Pointer, style: bigint): wxMenu | null {
     const rawPtr = lib.symbols.wxMenu_Create(title, style);
     if (rawPtr === null) return null;
     return new wxMenu(rawPtr);

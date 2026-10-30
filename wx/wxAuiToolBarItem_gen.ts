@@ -160,12 +160,12 @@ export class wxAuiToolBarItem {
     return (lib.symbols.wxAuiToolBarItem_IsSticky(this._ptr) as number) !== 0;
   }
 
-  SetUserData(userData: number): void {
+  SetUserData(userData: bigint): void {
     lib.symbols.wxAuiToolBarItem_SetUserData(this._ptr, userData);
   }
 
-  GetUserData(): number {
-    return lib.symbols.wxAuiToolBarItem_GetUserData(this._ptr);
+  GetUserData(): bigint {
+    return lib.symbols.wxAuiToolBarItem_GetUserData(this._ptr) as bigint;
   }
 
   SetAlignment(alignment: number): void {

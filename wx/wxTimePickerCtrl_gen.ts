@@ -34,7 +34,7 @@ export class wxTimePickerCtrl {
 
 }
 
-export function createWxTimePickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): wxTimePickerCtrl | null {
+export function createWxTimePickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): wxTimePickerCtrl | null {
     const rawPtr = lib.symbols.wxTimePickerCtrl_Create(parent, id, x, y, width, height, style);
     if (rawPtr === null) return null;
     return new wxTimePickerCtrl(rawPtr);

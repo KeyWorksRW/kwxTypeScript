@@ -62,7 +62,7 @@ export class wxGUIEventLoop {
     return (lib.symbols.wxGUIEventLoop_Dispatch(this._ptr) as number) !== 0;
   }
 
-  DispatchTimeout(timeout: number): number {
+  DispatchTimeout(timeout: bigint): number {
     return lib.symbols.wxGUIEventLoop_DispatchTimeout(this._ptr, timeout);
   }
 
@@ -82,7 +82,7 @@ export class wxGUIEventLoop {
     return (lib.symbols.wxGUIEventLoop_Yield(this._ptr, onlyIfNeeded ? 1 : 0) as number) !== 0;
   }
 
-  YieldFor(eventsToProcess: number): boolean {
+  YieldFor(eventsToProcess: bigint): boolean {
     return (lib.symbols.wxGUIEventLoop_YieldFor(this._ptr, eventsToProcess) as number) !== 0;
   }
 

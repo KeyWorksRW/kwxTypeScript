@@ -28,7 +28,7 @@ export class wxRichTextCompositeObject extends wxRichTextObject {
     return lib.symbols.wxRichTextCompositeObject_GetChild(this._ptr, index);
   }
 
-  GetChildAtPosition(position: number): Pointer {
+  GetChildAtPosition(position: bigint): Pointer {
     return lib.symbols.wxRichTextCompositeObject_GetChildAtPosition(this._ptr, position);
   }
 

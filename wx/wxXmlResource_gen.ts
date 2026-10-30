@@ -56,8 +56,8 @@ export class wxXmlResource extends wxObject {
     return lib.symbols.wxXmlResource_GetFlags(this._ptr);
   }
 
-  GetVersion(): number {
-    return lib.symbols.wxXmlResource_GetVersion(this._ptr);
+  GetVersion(): bigint {
+    return lib.symbols.wxXmlResource_GetVersion(this._ptr) as bigint;
   }
 
   GetXRCID(str_id: Pointer, value_if_not_found: number): number {

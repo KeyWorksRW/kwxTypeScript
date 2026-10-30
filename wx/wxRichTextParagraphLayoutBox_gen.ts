@@ -44,19 +44,19 @@ export class wxRichTextParagraphLayoutBox extends wxRichTextCompositeObject {
     return lib.symbols.wxRichTextParagraphLayoutBox_GetText(this._ptr);
   }
 
-  DeleteRange(start: number, end: number): boolean {
+  DeleteRange(start: bigint, end: bigint): boolean {
     return (lib.symbols.wxRichTextParagraphLayoutBox_DeleteRange(this._ptr, start, end) as number) !== 0;
   }
 
-  SetStyle(start: number, end: number, style: Pointer, flags: number): boolean {
+  SetStyle(start: bigint, end: bigint, style: Pointer, flags: number): boolean {
     return (lib.symbols.wxRichTextParagraphLayoutBox_SetStyle(this._ptr, start, end, style, flags) as number) !== 0;
   }
 
-  GetStyle(position: number, style: Pointer): boolean {
+  GetStyle(position: bigint, style: Pointer): boolean {
     return (lib.symbols.wxRichTextParagraphLayoutBox_GetStyle(this._ptr, position, style) as number) !== 0;
   }
 
-  GetUncombinedStyle(position: number, style: Pointer): boolean {
+  GetUncombinedStyle(position: bigint, style: Pointer): boolean {
     return (lib.symbols.wxRichTextParagraphLayoutBox_GetUncombinedStyle(this._ptr, position, style) as number) !== 0;
   }
 
@@ -64,19 +64,19 @@ export class wxRichTextParagraphLayoutBox extends wxRichTextCompositeObject {
     return lib.symbols.wxRichTextParagraphLayoutBox_GetParagraphCount(this._ptr);
   }
 
-  GetParagraphText(paragraphNumber: number): Pointer {
+  GetParagraphText(paragraphNumber: bigint): Pointer {
     return lib.symbols.wxRichTextParagraphLayoutBox_GetParagraphText(this._ptr, paragraphNumber);
   }
 
-  GetParagraphLength(paragraphNumber: number): number {
+  GetParagraphLength(paragraphNumber: bigint): number {
     return lib.symbols.wxRichTextParagraphLayoutBox_GetParagraphLength(this._ptr, paragraphNumber);
   }
 
-  XYToPosition(x: number, y: number): number {
-    return lib.symbols.wxRichTextParagraphLayoutBox_XYToPosition(this._ptr, x, y);
+  XYToPosition(x: bigint, y: bigint): bigint {
+    return lib.symbols.wxRichTextParagraphLayoutBox_XYToPosition(this._ptr, x, y) as bigint;
   }
 
-  PositionToXY(position: number, x: Pointer, y: Pointer): boolean {
+  PositionToXY(position: bigint, x: Pointer, y: Pointer): boolean {
     return (lib.symbols.wxRichTextParagraphLayoutBox_PositionToXY(this._ptr, position, x, y) as number) !== 0;
   }
 

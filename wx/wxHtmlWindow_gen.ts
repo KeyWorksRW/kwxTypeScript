@@ -124,7 +124,7 @@ export class wxHtmlWindow extends wxScrolledWindow {
 
 }
 
-export function createWxHtmlWindow(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number, name: Pointer): wxHtmlWindow | null {
+export function createWxHtmlWindow(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): wxHtmlWindow | null {
     const rawPtr = lib.symbols.wxHtmlWindow_Create(parent, id, x, y, width, height, style, name);
     if (rawPtr === null) return null;
     return new wxHtmlWindow(rawPtr);

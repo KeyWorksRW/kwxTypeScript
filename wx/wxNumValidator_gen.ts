@@ -24,16 +24,16 @@ export class wxNumValidator extends wxValidator {
     return lib.symbols.wxNumValidator_GetMaxDouble(this._ptr);
   }
 
-  GetMax(): number {
-    return lib.symbols.wxNumValidator_GetMax(this._ptr);
+  GetMax(): bigint {
+    return lib.symbols.wxNumValidator_GetMax(this._ptr) as bigint;
   }
 
   GetMinDouble(): number {
     return lib.symbols.wxNumValidator_GetMinDouble(this._ptr);
   }
 
-  GetMin(): number {
-    return lib.symbols.wxNumValidator_GetMin(this._ptr);
+  GetMin(): bigint {
+    return lib.symbols.wxNumValidator_GetMin(this._ptr) as bigint;
   }
 
   GetStyle(): number {
@@ -44,11 +44,11 @@ export class wxNumValidator extends wxValidator {
     return lib.symbols.wxNumValidator_GetValueDouble(this._ptr);
   }
 
-  GetValue(): number {
-    return lib.symbols.wxNumValidator_GetValue(this._ptr);
+  GetValue(): bigint {
+    return lib.symbols.wxNumValidator_GetValue(this._ptr) as bigint;
   }
 
-  IsInRange(value: number): boolean {
+  IsInRange(value: bigint): boolean {
     return (lib.symbols.wxNumValidator_IsInRange(this._ptr, value) as number) !== 0;
   }
 
@@ -56,7 +56,7 @@ export class wxNumValidator extends wxValidator {
     return (lib.symbols.wxNumValidator_IsInRangeDouble(this._ptr, value) as number) !== 0;
   }
 
-  SetMax(max_value: number): void {
+  SetMax(max_value: bigint): void {
     lib.symbols.wxNumValidator_SetMax(this._ptr, max_value);
   }
 
@@ -64,7 +64,7 @@ export class wxNumValidator extends wxValidator {
     lib.symbols.wxNumValidator_SetMaxDouble(this._ptr, max_value);
   }
 
-  SetMin(min_value: number): void {
+  SetMin(min_value: bigint): void {
     lib.symbols.wxNumValidator_SetMin(this._ptr, min_value);
   }
 
@@ -72,7 +72,7 @@ export class wxNumValidator extends wxValidator {
     lib.symbols.wxNumValidator_SetMinDouble(this._ptr, min_value);
   }
 
-  SetRange(min_value: number, max_value: number): void {
+  SetRange(min_value: bigint, max_value: bigint): void {
     lib.symbols.wxNumValidator_SetRange(this._ptr, min_value, max_value);
   }
 
@@ -84,7 +84,7 @@ export class wxNumValidator extends wxValidator {
     lib.symbols.wxNumValidator_SetStyle(this._ptr, style);
   }
 
-  SetValue(value: number): void {
+  SetValue(value: bigint): void {
     lib.symbols.wxNumValidator_SetValue(this._ptr, value);
   }
 

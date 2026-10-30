@@ -22,7 +22,7 @@ export class wxUIntProperty extends wxPGProperty {
 
 }
 
-export function createWxUIntProperty(label: Pointer, name: Pointer, value: number): wxUIntProperty | null {
+export function createWxUIntProperty(label: Pointer, name: Pointer, value: bigint): wxUIntProperty | null {
     const rawPtr = lib.symbols.wxUIntProperty_Create(label, name, value);
     if (rawPtr === null) return null;
     return new wxUIntProperty(rawPtr);

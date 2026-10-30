@@ -36,8 +36,8 @@ export class wxVariant extends wxObject {
     return (lib.symbols.wxVariant_GetBool(this._ptr) as number) !== 0;
   }
 
-  GetLong(): number {
-    return lib.symbols.wxVariant_GetLong(this._ptr);
+  GetLong(): bigint {
+    return lib.symbols.wxVariant_GetLong(this._ptr) as bigint;
   }
 
   GetDouble(): number {

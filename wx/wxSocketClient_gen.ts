@@ -28,7 +28,7 @@ export class wxSocketClient extends wxSocketBase {
     return (lib.symbols.wxSocketClient_ConnectLocal(this._ptr, address, local, wait ? 1 : 0) as number) !== 0;
   }
 
-  WaitOnConnect(seconds: number, millisecond: number): boolean {
+  WaitOnConnect(seconds: bigint, millisecond: bigint): boolean {
     return (lib.symbols.wxSocketClient_WaitOnConnect(this._ptr, seconds, millisecond) as number) !== 0;
   }
 

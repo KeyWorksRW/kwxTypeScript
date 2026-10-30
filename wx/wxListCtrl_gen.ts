@@ -26,7 +26,7 @@ export class wxListCtrl extends wxControl {
     return lib.symbols.wxListCtrl_GetItemPosition2(this._ptr, item);
   }
 
-  RefreshItems(from_: number, toPos: number): void {
+  RefreshItems(from_: bigint, toPos: bigint): void {
     lib.symbols.wxListCtrl_RefreshItems(this._ptr, from_, toPos);
   }
 
@@ -42,31 +42,31 @@ export class wxListCtrl extends wxControl {
     return lib.symbols.wxListCtrl_GetColumnIndexFromOrder(this._ptr, order);
   }
 
-  SetItemColumnImage(item: number, column: number, image: number): boolean {
+  SetItemColumnImage(item: bigint, column: bigint, image: number): boolean {
     return (lib.symbols.wxListCtrl_SetItemColumnImage(this._ptr, item, column, image) as number) !== 0;
   }
 
-  SetItemPtrData(item: number, data: bigint): boolean {
+  SetItemPtrData(item: bigint, data: bigint): boolean {
     return (lib.symbols.wxListCtrl_SetItemPtrData(this._ptr, item, data) as number) !== 0;
   }
 
-  GetItemTextColour(item: number): Pointer {
+  GetItemTextColour(item: bigint): Pointer {
     return lib.symbols.wxListCtrl_GetItemTextColour(this._ptr, item);
   }
 
-  SetItemTextColour(item: number, col: Pointer): void {
+  SetItemTextColour(item: bigint, col: Pointer): void {
     lib.symbols.wxListCtrl_SetItemTextColour(this._ptr, item, col);
   }
 
-  GetItemBackgroundColour(item: number): Pointer {
+  GetItemBackgroundColour(item: bigint): Pointer {
     return lib.symbols.wxListCtrl_GetItemBackgroundColour(this._ptr, item);
   }
 
-  SetItemBackgroundColour(item: number, col: Pointer): void {
+  SetItemBackgroundColour(item: bigint, col: Pointer): void {
     lib.symbols.wxListCtrl_SetItemBackgroundColour(this._ptr, item, col);
   }
 
-  SetItemFont(item: number, font: Pointer): void {
+  SetItemFont(item: bigint, font: Pointer): void {
     lib.symbols.wxListCtrl_SetItemFont(this._ptr, item, font);
   }
 
@@ -195,7 +195,7 @@ export class wxListCtrl extends wxControl {
     return lib.symbols.wxListCtrl_GetItemData(this._ptr, item);
   }
 
-  GetItemFont(item: number): Pointer {
+  GetItemFont(item: bigint): Pointer {
     return lib.symbols.wxListCtrl_GetItemFont(this._ptr, item);
   }
 
@@ -267,7 +267,7 @@ export class wxListCtrl extends wxControl {
     return (lib.symbols.wxListCtrl_IsVirtual(this._ptr) as number) !== 0;
   }
 
-  RefreshItem(item: number): void {
+  RefreshItem(item: bigint): void {
     lib.symbols.wxListCtrl_RefreshItem(this._ptr, item);
   }
 
@@ -331,7 +331,7 @@ export class wxListCtrl extends wxControl {
     lib.symbols.wxListCtrl_SetTextColour(this._ptr, col);
   }
 
-  override SetWindowStyleFlag(style: number): void {
+  SetWindowStyleFlag_1(style: number): void {
     lib.symbols.wxListCtrl_SetWindowStyleFlag(this._ptr, style);
   }
 
@@ -339,7 +339,7 @@ export class wxListCtrl extends wxControl {
     return (lib.symbols.wxListCtrl_SortItems(this._ptr, compareFunc, obj) as number) !== 0;
   }
 
-  GetSubItemRect(item: number, subItem: number, x: Pointer, y: Pointer, width: Pointer, height: Pointer, code: number): boolean {
+  GetSubItemRect(item: bigint, subItem: bigint, x: Pointer, y: Pointer, width: Pointer, height: Pointer, code: number): boolean {
     return (lib.symbols.wxListCtrl_GetSubItemRect(this._ptr, item, subItem, x, y, width, height, code) as number) !== 0;
   }
 
@@ -355,11 +355,11 @@ export class wxListCtrl extends wxControl {
     return (lib.symbols.wxListCtrl_EnableCheckBoxes(this._ptr, enable ? 1 : 0) as number) !== 0;
   }
 
-  IsItemChecked(item: number): boolean {
+  IsItemChecked(item: bigint): boolean {
     return (lib.symbols.wxListCtrl_IsItemChecked(this._ptr, item) as number) !== 0;
   }
 
-  CheckItem(item: number, check: boolean): void {
+  CheckItem(item: bigint, check: boolean): void {
     lib.symbols.wxListCtrl_CheckItem(this._ptr, item, check ? 1 : 0);
   }
 
@@ -375,11 +375,11 @@ export class wxListCtrl extends wxControl {
     return (lib.symbols.wxListCtrl_IsAscendingSortIndicator(this._ptr) as number) !== 0;
   }
 
-  IsVisible(item: number): boolean {
+  IsVisible(item: bigint): boolean {
     return (lib.symbols.wxListCtrl_IsVisible(this._ptr, item) as number) !== 0;
   }
 
-  SetItemCount(count: number): void {
+  SetItemCount(count: bigint): void {
     lib.symbols.wxListCtrl_SetItemCount(this._ptr, count);
   }
 

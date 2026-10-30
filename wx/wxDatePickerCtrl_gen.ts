@@ -34,7 +34,7 @@ export class wxDatePickerCtrl {
 
 }
 
-export function createWxDatePickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): wxDatePickerCtrl | null {
+export function createWxDatePickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): wxDatePickerCtrl | null {
     const rawPtr = lib.symbols.wxDatePickerCtrl_Create(parent, id, x, y, width, height, style);
     if (rawPtr === null) return null;
     return new wxDatePickerCtrl(rawPtr);

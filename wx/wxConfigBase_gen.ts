@@ -178,7 +178,7 @@ export class wxConfigBase {
     return (lib.symbols.wxConfigBase_WriteInteger(this._ptr, key, value) as number) !== 0;
   }
 
-  WriteLong(key: Pointer, value: number): boolean {
+  WriteLong(key: Pointer, value: bigint): boolean {
     return (lib.symbols.wxConfigBase_WriteLong(this._ptr, key, value) as number) !== 0;
   }
 

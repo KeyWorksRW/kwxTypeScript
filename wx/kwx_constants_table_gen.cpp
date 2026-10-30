@@ -1631,6 +1631,14 @@ int expwxStrip_All();
 int expwxStrip_CJKMnemonics();
 int expwxStrip_Menu();
 int expwxStrip_Mnemonics();
+int expwxStyle_Currency();
+int expwxStyle_CurrencyCode();
+int expwxStyle_CurrencySymbol();
+int expwxStyle_NoTrailingZeroes();
+int expwxStyle_None();
+int expwxStyle_SignPlus();
+int expwxStyle_SignSpace();
+int expwxStyle_WithThousandsSep();
 int expwxTAB_TRAVERSAL();
 int expwxTB_DOCKABLE();
 int expwxTB_FLAT();
@@ -1705,12 +1713,12 @@ int expwxYES();
 int expwxYES_DEFAULT();
 int expwxYES_NO();
 
-static int s_values[1700];
+static int s_values[1708];
 static std::once_flag s_once;
 
 WXFFI_EXPORT(int, kwxConstants_IntCount)()
 {
-    return 1700;
+    return 1708;
 }
 
 WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
@@ -3344,6 +3352,14 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxStrip_CJKMnemonics();
         s_values[i++] = expwxStrip_Menu();
         s_values[i++] = expwxStrip_Mnemonics();
+        s_values[i++] = expwxStyle_Currency();
+        s_values[i++] = expwxStyle_CurrencyCode();
+        s_values[i++] = expwxStyle_CurrencySymbol();
+        s_values[i++] = expwxStyle_NoTrailingZeroes();
+        s_values[i++] = expwxStyle_None();
+        s_values[i++] = expwxStyle_SignPlus();
+        s_values[i++] = expwxStyle_SignSpace();
+        s_values[i++] = expwxStyle_WithThousandsSep();
         s_values[i++] = expwxTAB_TRAVERSAL();
         s_values[i++] = expwxTB_DOCKABLE();
         s_values[i++] = expwxTB_FLAT();

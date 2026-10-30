@@ -24,8 +24,8 @@ export class wxProcess extends wxEvtHandler {
     return (lib.symbols.wxProcess_Activate(this._ptr) as number) !== 0;
   }
 
-  GetPid(): number {
-    return lib.symbols.wxProcess_GetPid(this._ptr);
+  GetPid(): bigint {
+    return lib.symbols.wxProcess_GetPid(this._ptr) as bigint;
   }
 
   SetPriority(priority: number): void {

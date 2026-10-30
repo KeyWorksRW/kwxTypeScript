@@ -260,12 +260,12 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxWindow_SetWindowStyle: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxWindow_GetWindowStyle: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxWindow_IsRetained: {
     parameters: ["pointer"],
@@ -277,7 +277,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxWindow_GetExtraStyle: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxWindow_HasExtraStyle: {
     parameters: ["pointer", "i32"],
@@ -496,7 +496,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxWindow_GetBorder: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxWindow_HasMultiplePages: {
@@ -1016,7 +1016,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxWindow_SetExtraStyle: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxWindow_SetFocus: {
@@ -1084,7 +1084,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxWindow_SetWindowStyleFlag: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxWindow_Show: {
@@ -1108,7 +1108,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxWindow_UpdateWindowUI: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxWindow_Validate: {
@@ -1148,7 +1148,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   kwxHtmlWindow_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64", "pointer"],
     result: "pointer",
   },
   kwxPrintout_Create: {
@@ -1688,7 +1688,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxComboCtrl_Create: {
-    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxComboCtrl_Cut: {
@@ -1709,11 +1709,11 @@ export const lib = dlopen("kwxFFI", {
   },
   wxComboCtrl_GetInsertionPoint: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxComboCtrl_GetLastPosition: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxComboCtrl_GetPopupWindow: {
     parameters: ["pointer"],
@@ -1756,11 +1756,11 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxComboCtrl_Remove: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxComboCtrl_Replace: {
-    parameters: ["pointer", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i64", "i64", "pointer"],
     result: "void",
   },
   wxComboCtrl_SelectAll: {
@@ -1780,7 +1780,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxComboCtrl_SetInsertionPoint: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxComboCtrl_SetInsertionPointEnd: {
@@ -1808,7 +1808,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxComboCtrl_SetSelection: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxComboCtrl_SetText: {
@@ -1992,7 +1992,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxConfigBase_WriteLong: {
-    parameters: ["pointer", "pointer", "i32"],
+    parameters: ["pointer", "pointer", "i64"],
     result: "i32",
   },
   wxConfigBase_WriteString: {
@@ -2052,7 +2052,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   Cursor_CreateLoad: {
-    parameters: ["pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32", "i32"],
     result: "pointer",
   },
   wxDateTime_Delete: {
@@ -2193,7 +2193,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxDateTime_GetTicks: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxDateTime_GetTimeNow: {
     parameters: [],
@@ -3228,7 +3228,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxFrame_CreateToolBar: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32"],
     result: "pointer",
   },
   wxFrame_GetClientAreaOrigin_left: {
@@ -3332,7 +3332,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxGenericDirCtrl_Create: {
-    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "i32"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64", "pointer", "i32"],
     result: "pointer",
   },
   wxGenericDirCtrl_ExpandPath: {
@@ -3948,7 +3948,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxHeaderCtrlSimple_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxHeaderCtrlSimple_DeleteColumn: {
@@ -3976,7 +3976,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxHScrolledWindow_Create: {
-    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32", "pointer"],
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64", "pointer"],
     result: "i32",
   },
   wxHScrolledWindow_GetColumnCount: {
@@ -4024,7 +4024,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxHtmlWindow_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64", "pointer"],
     result: "pointer",
   },
   wxHtmlWindow_GetInternalRepresentation: {
@@ -4136,7 +4136,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxHVScrolledWindow_Create: {
-    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32", "pointer"],
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64", "pointer"],
     result: "i32",
   },
   wxHVScrolledWindow_RefreshRowColumn: {
@@ -4796,7 +4796,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxListCtrl_RefreshItems: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxListCtrl_SortItems2: {
@@ -4812,31 +4812,31 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxListCtrl_SetItemColumnImage: {
-    parameters: ["pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64", "i32"],
     result: "i32",
   },
   wxListCtrl_SetItemPtrData: {
-    parameters: ["pointer", "i32", "usize"],
+    parameters: ["pointer", "i64", "usize"],
     result: "i32",
   },
   wxListCtrl_GetItemTextColour: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxListCtrl_SetItemTextColour: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "i64", "pointer"],
     result: "void",
   },
   wxListCtrl_GetItemBackgroundColour: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxListCtrl_SetItemBackgroundColour: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "i64", "pointer"],
     result: "void",
   },
   wxListCtrl_SetItemFont: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "i64", "pointer"],
     result: "void",
   },
   wxListCtrl_AppendColumn: {
@@ -4968,7 +4968,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxListCtrl_GetItemFont: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxListCtrl_GetItemPosition: {
@@ -5040,7 +5040,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxListCtrl_RefreshItem: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxListCtrl_ScrollList: {
@@ -5112,7 +5112,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxListCtrl_GetSubItemRect: {
-    parameters: ["pointer", "i32", "i32", "pointer", "pointer", "pointer", "pointer", "i32"],
+    parameters: ["pointer", "i64", "i64", "pointer", "pointer", "pointer", "pointer", "i32"],
     result: "i32",
   },
   wxListCtrl_GetViewRect: {
@@ -5128,11 +5128,11 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxListCtrl_IsItemChecked: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxListCtrl_CheckItem: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32"],
     result: "void",
   },
   wxListCtrl_ShowSortIndicator: {
@@ -5148,11 +5148,11 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxListCtrl_IsVisible: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxListCtrl_SetItemCount: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxListCtrl_SetHeaderAttr: {
@@ -5212,7 +5212,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxMediaCtrl_Create: {
-    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "pointer"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64", "pointer", "pointer"],
     result: "pointer",
   },
   wxMediaCtrl_Delete: {
@@ -5237,7 +5237,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxMediaCtrl_Length: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxMediaCtrl_Load: {
     parameters: ["pointer", "pointer"],
@@ -5260,8 +5260,8 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxMediaCtrl_Seek: {
-    parameters: ["pointer", "i32", "i32"],
-    result: "i32",
+    parameters: ["pointer", "i64", "i32"],
+    result: "i64",
   },
   wxMediaCtrl_SetPlaybackRate: {
     parameters: ["pointer", "f64"],
@@ -5281,7 +5281,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxMediaCtrl_Tell: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxMemoryInputStream_Create: {
     parameters: ["pointer", "i32"],
@@ -5344,7 +5344,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxMenu_Create: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxMenu_DeleteById: {
@@ -6148,11 +6148,11 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxOwnerDrawnComboBox_Create: {
-    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxOwnerDrawnComboBox_CreateWithChoices: {
-    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "i32"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "i64"],
     result: "pointer",
   },
   wxOwnerDrawnComboBox_Delete: {
@@ -6608,19 +6608,19 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxSocketBase_Wait: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "i32",
   },
   wxSocketBase_WaitForLost: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "i32",
   },
   wxSocketBase_WaitForRead: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "i32",
   },
   wxSocketBase_WaitForWrite: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "i32",
   },
   wxSocketBase_Write: {
@@ -6648,7 +6648,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxSocketClient_WaitOnConnect: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "i32",
   },
   wxSocketEvent_Create: {
@@ -6688,7 +6688,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxSocketServer_WaitForAccept: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "i32",
   },
   wxSound_Create: {
@@ -8276,7 +8276,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxTextCtrl_GetRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "pointer",
   },
   wxTextCtrl_GetStringSelection: {
@@ -8284,7 +8284,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxTextCtrl_PositionToCoords: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxTextCtrl_HitTest: {
@@ -8348,7 +8348,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTextCtrl_Create: {
-    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxTextCtrl_Cut: {
@@ -8361,18 +8361,18 @@ export const lib = dlopen("kwxFFI", {
   },
   wxTextCtrl_GetInsertionPoint: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxTextCtrl_GetLastPosition: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxTextCtrl_GetLineLength: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxTextCtrl_GetLineText: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxTextCtrl_GetNumberOfLines: {
@@ -8404,7 +8404,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTextCtrl_PositionToXY: {
-    parameters: ["pointer", "i32", "pointer", "pointer"],
+    parameters: ["pointer", "i64", "pointer", "pointer"],
     result: "i32",
   },
   wxTextCtrl_Redo: {
@@ -8412,11 +8412,11 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTextCtrl_Remove: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxTextCtrl_Replace: {
-    parameters: ["pointer", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i64", "i64", "pointer"],
     result: "void",
   },
   wxTextCtrl_SaveFile: {
@@ -8452,7 +8452,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxTextCtrl_GetStyle: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "i64", "pointer"],
     result: "i32",
   },
   wxTextCtrl_SetDefaultStyle: {
@@ -8460,15 +8460,15 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxTextCtrl_SetMaxLength: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxTextCtrl_SetStyle: {
-    parameters: ["pointer", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i64", "i64", "pointer"],
     result: "i32",
   },
   wxTextCtrl_SetInsertionPoint: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxTextCtrl_SetInsertionPointEnd: {
@@ -8476,7 +8476,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTextCtrl_SetSelection: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxTextCtrl_SetValue: {
@@ -8484,7 +8484,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTextCtrl_ShowPosition: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxTextCtrl_Undo: {
@@ -8496,8 +8496,8 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTextCtrl_XYToPosition: {
-    parameters: ["pointer", "i32", "i32"],
-    result: "i32",
+    parameters: ["pointer", "i64", "i64"],
+    result: "i64",
   },
   wxTextInputStream_Create: {
     parameters: ["pointer", "pointer"],
@@ -8768,11 +8768,11 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxToolTip_SetAutoPop: {
-    parameters: ["i32"],
+    parameters: ["i64"],
     result: "void",
   },
   wxToolTip_SetDelay: {
-    parameters: ["i32"],
+    parameters: ["i64"],
     result: "void",
   },
   wxToolTip_SetMaxWidth: {
@@ -8780,7 +8780,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxToolTip_SetReshow: {
-    parameters: ["i32"],
+    parameters: ["i64"],
     result: "void",
   },
   wxToolTip_SetTip: {
@@ -9304,7 +9304,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxVListBox_Create: {
-    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32", "pointer"],
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64", "pointer"],
     result: "i32",
   },
   wxVListBox_DeselectAll: {
@@ -9384,7 +9384,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxVScrolledWindow_Create: {
-    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32", "pointer"],
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64", "pointer"],
     result: "i32",
   },
   wxVScrolledWindow_GetRowCount: {
@@ -9485,7 +9485,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxXmlResource_GetVersion: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxXmlResource_GetXRCID: {
     parameters: ["pointer", "pointer", "i32"],
@@ -10908,7 +10908,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxDirFilterListCtrl_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxDirFilterListCtrl_FillFilterList: {
@@ -10924,7 +10924,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxExtHelpController_DisplayBlock: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxExtHelpController_DisplayContents: {
@@ -10956,7 +10956,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxExtHelpController_SetViewer: {
-    parameters: ["pointer", "pointer", "i32"],
+    parameters: ["pointer", "pointer", "i64"],
     result: "void",
   },
   wxExtHelpController_Delete: {
@@ -11052,7 +11052,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxMultiChoiceDialog_Create: {
-    parameters: ["pointer", "pointer", "pointer", "i32", "pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "pointer", "pointer", "i32", "pointer", "i64", "i32", "i32"],
     result: "pointer",
   },
   wxMultiChoiceDialog_GetSelections: {
@@ -11072,12 +11072,12 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxNumberEntryDialog_Create: {
-    parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i64", "i64", "i64", "i32", "i32"],
     result: "pointer",
   },
   wxNumberEntryDialog_GetValue: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxNumberEntryDialog_Delete: {
     parameters: ["pointer"],
@@ -11093,7 +11093,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxNumValidator_GetMax: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxNumValidator_GetMinDouble: {
     parameters: ["pointer"],
@@ -11101,7 +11101,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxNumValidator_GetMin: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxNumValidator_GetStyle: {
     parameters: ["pointer"],
@@ -11113,10 +11113,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxNumValidator_GetValue: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxNumValidator_IsInRange: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxNumValidator_IsInRangeDouble: {
@@ -11124,7 +11124,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxNumValidator_SetMax: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxNumValidator_SetMaxDouble: {
@@ -11132,7 +11132,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxNumValidator_SetMin: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxNumValidator_SetMinDouble: {
@@ -11140,7 +11140,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxNumValidator_SetRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxNumValidator_SetRangeDouble: {
@@ -11152,7 +11152,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxNumValidator_SetValue: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxNumValidator_SetValueDouble: {
@@ -11460,7 +11460,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxHtmlCell_SetScriptMode: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "i64"],
     result: "void",
   },
   wxHtmlCell_GetScriptMode: {
@@ -11469,7 +11469,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxHtmlCell_GetScriptBaseline: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxHtmlCell_IsFormattingCell: {
     parameters: ["pointer"],
@@ -12061,7 +12061,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxLogRecordInfo_GetTimestamp: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxLogRecordInfo_GetLevel: {
     parameters: ["pointer"],
@@ -13548,7 +13548,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxTextEntry_GetRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "pointer",
   },
   wxTextEntry_IsEmpty: {
@@ -13564,11 +13564,11 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTextEntry_Replace: {
-    parameters: ["pointer", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i64", "i64", "pointer"],
     result: "void",
   },
   wxTextEntry_Remove: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxTextEntry_Clear: {
@@ -13620,7 +13620,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxTextEntry_SetInsertionPoint: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxTextEntry_SetInsertionPointEnd: {
@@ -13629,14 +13629,14 @@ export const lib = dlopen("kwxFFI", {
   },
   wxTextEntry_GetInsertionPoint: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxTextEntry_GetLastPosition: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxTextEntry_SetSelection: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxTextEntry_SelectAll: {
@@ -13668,7 +13668,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTextEntry_SetMaxLength: {
-    parameters: ["pointer", "u32"],
+    parameters: ["pointer", "u64"],
     result: "void",
   },
   wxTextEntry_ForceUpper: {
@@ -13916,15 +13916,15 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxDialog_CreateButtonSizer: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxDialog_CreateSeparatedButtonSizer: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxDialog_CreateStdDialogButtonSizer: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxTopLevelWindow_IsAlwaysMaximized: {
@@ -13936,7 +13936,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxTopLevelWindow_EnableFullScreenView: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "i64"],
     result: "i32",
   },
   wxTopLevelWindow_GetContentProtection: {
@@ -14028,7 +14028,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTopLevelWindow_ShowFullScreen: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "i64"],
     result: "i32",
   },
   wxTopLevelWindow_IsFullScreen: {
@@ -14208,7 +14208,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxGUIEventLoop_DispatchTimeout: {
-    parameters: ["pointer", "u32"],
+    parameters: ["pointer", "u64"],
     result: "i32",
   },
   wxGUIEventLoop_WakeUp: {
@@ -14228,7 +14228,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxGUIEventLoop_YieldFor: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxGUIEventLoop_IsYielding: {
@@ -14269,7 +14269,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxProcess_GetPid: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxProcess_SetPriority: {
     parameters: ["pointer", "u32"],
@@ -14757,7 +14757,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxPropertyGridInterface_GetPropertyValueAsLong: {
     parameters: ["pointer", "pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxPropertyGridInterface_GetPropertyValueAsInt: {
     parameters: ["pointer", "pointer"],
@@ -14780,7 +14780,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxPropertyGridInterface_SetPropertyValueLong: {
-    parameters: ["pointer", "pointer", "i32"],
+    parameters: ["pointer", "pointer", "i64"],
     result: "void",
   },
   wxPropertyGridInterface_SetPropertyValueInt: {
@@ -15340,7 +15340,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxUIntProperty_Create: {
-    parameters: ["pointer", "pointer", "u32"],
+    parameters: ["pointer", "pointer", "u64"],
     result: "pointer",
   },
   wxUIntProperty_Delete: {
@@ -15749,7 +15749,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxWebView_Find: {
     parameters: ["pointer", "pointer", "i32"],
-    result: "i32",
+    result: "i64",
   },
   wxWebView_Print: {
     parameters: ["pointer"],
@@ -15812,7 +15812,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextObject_SetRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxRichTextObject_GetAttributes: {
@@ -15832,7 +15832,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextObject_GetTextForRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "pointer",
   },
   wxRichTextObject_IsComposite: {
@@ -15868,7 +15868,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxRichTextCompositeObject_GetChildAtPosition: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxRichTextCompositeObject_AppendChild: {
@@ -15924,19 +15924,19 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxRichTextParagraphLayoutBox_DeleteRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "i32",
   },
   wxRichTextParagraphLayoutBox_SetStyle: {
-    parameters: ["pointer", "i32", "i32", "pointer", "i32"],
+    parameters: ["pointer", "i64", "i64", "pointer", "i32"],
     result: "i32",
   },
   wxRichTextParagraphLayoutBox_GetStyle: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "i64", "pointer"],
     result: "i32",
   },
   wxRichTextParagraphLayoutBox_GetUncombinedStyle: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "i64", "pointer"],
     result: "i32",
   },
   wxRichTextParagraphLayoutBox_GetParagraphCount: {
@@ -15944,19 +15944,19 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextParagraphLayoutBox_GetParagraphText: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxRichTextParagraphLayoutBox_GetParagraphLength: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxRichTextParagraphLayoutBox_XYToPosition: {
-    parameters: ["pointer", "i32", "i32"],
-    result: "i32",
+    parameters: ["pointer", "i64", "i64"],
+    result: "i64",
   },
   wxRichTextParagraphLayoutBox_PositionToXY: {
-    parameters: ["pointer", "i32", "pointer", "pointer"],
+    parameters: ["pointer", "i64", "pointer", "pointer"],
     result: "i32",
   },
   wxRichTextParagraphLayoutBox_SetDefaultStyle: {
@@ -16088,7 +16088,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextBuffer_DeleteRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "i32",
   },
   wxRichTextBuffer_GetRange: {
@@ -16285,10 +16285,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextEvent_GetPosition: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxRichTextEvent_SetPosition: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxRichTextEvent_GetFlags: {
@@ -16320,7 +16320,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextEvent_SetRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxRichTextEvent_GetCharacter: {
@@ -16380,7 +16380,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextCtrl_SetSelectionRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxRichTextCtrl_GetInternalSelectionRange: {
@@ -16388,19 +16388,19 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextCtrl_SetInternalSelectionRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxRichTextCtrl_SelectWord: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxRichTextCtrl_GetDelayedLayoutThreshold: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxRichTextCtrl_SetDelayedLayoutThreshold: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxRichTextCtrl_GetFullLayoutRequired: {
@@ -16413,10 +16413,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextCtrl_GetFullLayoutSavedPosition: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxRichTextCtrl_SetFullLayoutSavedPosition: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxRichTextCtrl_GetCaretAtLineStart: {
@@ -16528,19 +16528,19 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextCtrl_DeleteRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "i32",
   },
   wxRichTextCtrl_SetStyleEx: {
-    parameters: ["pointer", "i32", "i32", "pointer", "i32"],
+    parameters: ["pointer", "i64", "i64", "pointer", "i32"],
     result: "i32",
   },
   wxRichTextCtrl_GetUncombinedStyle: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "i64", "pointer"],
     result: "i32",
   },
   wxRichTextCtrl_GetStyleForRange: {
-    parameters: ["pointer", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i64", "i64", "pointer"],
     result: "i32",
   },
   wxRichTextCtrl_BeginStyle: {
@@ -16580,19 +16580,19 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextCtrl_SetListStyle: {
-    parameters: ["pointer", "i32", "i32", "pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64", "pointer", "i32", "i32", "i32"],
     result: "i32",
   },
   wxRichTextCtrl_ClearListStyle: {
-    parameters: ["pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64", "i32"],
     result: "i32",
   },
   wxRichTextCtrl_NumberList: {
-    parameters: ["pointer", "i32", "i32", "pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64", "pointer", "i32", "i32", "i32"],
     result: "i32",
   },
   wxRichTextCtrl_PromoteList: {
-    parameters: ["pointer", "i32", "i32", "i32", "pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "i64", "i64", "pointer", "i32", "i32"],
     result: "i32",
   },
   wxRichTextCtrl_ApplyStyle: {
@@ -16600,7 +16600,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextCtrl_MoveCaret: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32"],
     result: "i32",
   },
   wxRichTextCtrl_MoveRight: {
@@ -16717,10 +16717,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextCtrl_GetSelectionAnchor: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxRichTextCtrl_SetSelectionAnchor: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxRichTextCtrl_GetSelectionAnchorObject: {
@@ -16744,24 +16744,24 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextCtrl_SetCaretPosition: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32"],
     result: "void",
   },
   wxRichTextCtrl_GetAdjustedCaretPosition: {
-    parameters: ["pointer", "i32"],
-    result: "i32",
+    parameters: ["pointer", "i64"],
+    result: "i64",
   },
   wxRichTextCtrl_FindNextWordPosition: {
     parameters: ["pointer", "i32"],
-    result: "i32",
+    result: "i64",
   },
   wxRichTextCtrl_IsPositionVisible: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxRichTextCtrl_GetFirstVisiblePosition: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxRichTextCtrl_GetFirstVisiblePoint: {
     parameters: ["pointer", "pointer", "pointer"],
@@ -16780,15 +16780,15 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextCtrl_GetRange: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "pointer",
   },
   wxRichTextCtrl_GetLineLength: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxRichTextCtrl_GetLineText: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxRichTextCtrl_GetNumberOfLines: {
@@ -16820,7 +16820,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextCtrl_SetSelection: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxRichTextCtrl_SelectAll: {
@@ -16837,14 +16837,14 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextCtrl_GetInsertionPoint: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxRichTextCtrl_GetLastPosition: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxRichTextCtrl_SetInsertionPoint: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxRichTextCtrl_SetInsertionPointEnd: {
@@ -16864,11 +16864,11 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextCtrl_Replace: {
-    parameters: ["pointer", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i64", "i64", "pointer"],
     result: "void",
   },
   wxRichTextCtrl_Remove: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i64"],
     result: "void",
   },
   wxRichTextCtrl_LoadFile: {
@@ -16936,11 +16936,11 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextCtrl_SetStyle: {
-    parameters: ["pointer", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i64", "i64", "pointer"],
     result: "i32",
   },
   wxRichTextCtrl_GetStyle: {
-    parameters: ["pointer", "i32", "pointer"],
+    parameters: ["pointer", "i64", "pointer"],
     result: "i32",
   },
   wxRichTextCtrl_SetDefaultStyle: {
@@ -16956,19 +16956,19 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextCtrl_SetFontStyle: {
-    parameters: ["pointer", "i32", "i32", "pointer"],
+    parameters: ["pointer", "i64", "i64", "pointer"],
     result: "i32",
   },
   wxRichTextCtrl_XYToPosition: {
-    parameters: ["pointer", "i32", "i32"],
-    result: "i32",
+    parameters: ["pointer", "i64", "i64"],
+    result: "i64",
   },
   wxRichTextCtrl_PositionToXY: {
-    parameters: ["pointer", "i32", "pointer", "pointer"],
+    parameters: ["pointer", "i64", "pointer", "pointer"],
     result: "i32",
   },
   wxRichTextCtrl_ShowPosition: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxRichTextCtrl_SetReadOnly: {
@@ -16988,7 +16988,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextCtrl_ScrollIntoView: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32"],
     result: "void",
   },
   wxRichTextCtrl_BeginBold: {
@@ -17312,7 +17312,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxSymbolPickerDialog_Create: {
-    parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
     result: "i32",
   },
   wxSymbolPickerDialog_Delete: {
@@ -17372,7 +17372,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextFormattingDialog_Create: {
-    parameters: ["i32", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["i64", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "i32",
   },
   wxRichTextFormattingDialog_Delete: {
@@ -17380,7 +17380,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextFormattingDialog_GetStyle: {
-    parameters: ["pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "pointer", "i64", "i64"],
     result: "i32",
   },
   wxRichTextFormattingDialog_SetStyle: {
@@ -17404,7 +17404,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextFormattingDialog_ApplyStyle: {
-    parameters: ["pointer", "pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "pointer", "i64", "i64", "i32"],
     result: "i32",
   },
   wxRichTextFormattingDialog_GetAttributes: {
@@ -17444,7 +17444,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextStyleOrganiserDialog_Create: {
-    parameters: ["i32", "pointer", "pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["i32", "pointer", "pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
     result: "i32",
   },
   wxRichTextStyleOrganiserDialog_Delete: {
@@ -17504,7 +17504,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxRichTextStyleListBox_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "i32",
   },
   wxRichTextStyleListBox_Delete: {
@@ -17797,10 +17797,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxThreadEvent_GetExtraLong: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxThreadEvent_SetExtraLong: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxSplitterEvent_Create: {
@@ -18297,7 +18297,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxGridTableBase_GetValueAsLong: {
     parameters: ["pointer", "i32", "i32"],
-    result: "i32",
+    result: "i64",
   },
   wxGridTableBase_GetValueAsDouble: {
     parameters: ["pointer", "i32", "i32"],
@@ -18308,7 +18308,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxGridTableBase_SetValueAsLong: {
-    parameters: ["pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i64"],
     result: "void",
   },
   wxGridTableBase_SetValueAsDouble: {
@@ -18481,7 +18481,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxVariant_GetLong: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxVariant_GetDouble: {
     parameters: ["pointer"],
@@ -19296,12 +19296,12 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxAuiToolBarItem_SetUserData: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxAuiToolBarItem_GetUserData: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxAuiToolBarItem_SetAlignment: {
     parameters: ["pointer", "i32"],
@@ -19488,11 +19488,11 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxAuiToolBar_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxAuiToolBar_CreateFromDefault: {
-    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "i32",
   },
   wxAuiToolBar_Delete: {
@@ -19500,12 +19500,12 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxAuiToolBar_SetWindowStyleFlag: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxAuiToolBar_GetWindowStyleFlag: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxAuiToolBar_SetArtProvider: {
     parameters: ["pointer", "pointer"],
@@ -19772,11 +19772,11 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxAuiNotebook_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxAuiNotebook_CreateFromDefault: {
-    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "i32",
   },
   wxAuiNotebook_AddPageWithBitmap: {
@@ -20848,7 +20848,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxBookCtrlBase_CreateFromDefault: {
-    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32", "pointer"],
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64", "pointer"],
     result: "i32",
   },
   wxBookCtrlBase_SetPageSize: {
@@ -21909,11 +21909,11 @@ export const lib = dlopen("kwxFFI", {
   },
   wxCommandEvent_GetExtraLong: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxCommandEvent_GetInt: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxCommandEvent_GetSelection: {
     parameters: ["pointer"],
@@ -21940,7 +21940,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxCommandEvent_SetExtraLong: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxCommandEvent_SetInt: {
@@ -22048,7 +22048,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxContextHelpButton_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxCriticalSection_Create: {
@@ -23984,7 +23984,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxIcon_CreateLoad: {
-    parameters: ["pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32", "i32"],
     result: "pointer",
   },
   wxIcon_Delete: {
@@ -24016,7 +24016,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxIcon_Load: {
-    parameters: ["pointer", "pointer", "i32", "i32", "i32"],
+    parameters: ["pointer", "pointer", "i64", "i32", "i32"],
     result: "i32",
   },
   wxIcon_IsOk: {
@@ -24708,27 +24708,27 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxListView_Focus: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxListView_GetFirstSelected: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxListView_GetFocusedItem: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxListView_GetNextSelected: {
-    parameters: ["pointer", "i32"],
-    result: "i32",
+    parameters: ["pointer", "i64"],
+    result: "i64",
   },
   wxListView_IsSelected: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "i32",
   },
   wxListView_Select: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32"],
     result: "void",
   },
   wxListView_SetColumnImage: {
@@ -24769,6 +24769,34 @@ export const lib = dlopen("kwxFFI", {
   },
   wxLocale_IsOk: {
     parameters: ["pointer"],
+    result: "i32",
+  },
+  wxNumberFormatter_GetDecimalSeparator: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxNumberFormatter_GetThousandsSeparator: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxNumberFormatter_ToStringDouble: {
+    parameters: ["f64", "i32", "i32"],
+    result: "pointer",
+  },
+  wxNumberFormatter_ToStringLongLong: {
+    parameters: ["i64", "i32"],
+    result: "pointer",
+  },
+  wxUILocale_GetInfo: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxUILocale_IsSet: {
+    parameters: [],
+    result: "i32",
+  },
+  wxUILocale_UseDefault: {
+    parameters: [],
     result: "i32",
   },
   wxMDIChildFrame_Activate: {
@@ -25492,7 +25520,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxVariantVector_AddLong: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "void",
   },
   wxVariantVector_AddBool: {
@@ -25508,7 +25536,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxDatePickerCtrl_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxDatePickerCtrl_SetValue: {
@@ -25528,7 +25556,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxDirPickerCtrl_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "pointer", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "pointer", "i64"],
     result: "pointer",
   },
   wxDirPickerCtrl_GetPath: {
@@ -25552,7 +25580,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxFilePickerCtrl_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "pointer", "pointer", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "pointer", "pointer", "i64"],
     result: "pointer",
   },
   wxFilePickerCtrl_GetPath: {
@@ -25576,7 +25604,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxFontPickerCtrl_Create: {
-    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxFontPickerCtrl_GetSelectedFont: {
@@ -25596,7 +25624,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTimePickerCtrl_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxTimePickerCtrl_SetValue: {
@@ -27904,7 +27932,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxSlider_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxSlider_GetLineSize: {
@@ -27972,7 +28000,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxSpinButton_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxSpinButton_GetMax: {
@@ -27996,7 +28024,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxSpinCtrl_Create: {
-    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64", "i32", "i32", "i32"],
     result: "pointer",
   },
   wxSpinCtrl_GetBase: {
@@ -28080,12 +28108,12 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxSplashScreen_Create: {
-    parameters: ["pointer", "i32", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxSplashScreen_GetSplashStyle: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxSplashScreen_GetTimeout: {
     parameters: ["pointer"],
@@ -28412,7 +28440,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTextEntryDialog_Create: {
-    parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i64", "i32", "i32", "i32", "i32"],
     result: "pointer",
   },
   wxTextEntryDialog_GetValue: {
@@ -28700,7 +28728,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxWizard_Create: {
-    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxWizard_GetCurrentPage: {
@@ -28925,7 +28953,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxGetFreeMemory: {
     parameters: [],
-    result: "i32",
+    result: "i64",
   },
   wxHandleFatalExceptions: {
     parameters: ["i32"],
@@ -29021,19 +29049,19 @@ export const lib = dlopen("kwxFFI", {
   },
   wxExecute: {
     parameters: ["pointer", "i32", "pointer", "pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxExecuteWithOutput: {
     parameters: ["pointer", "pointer", "i32", "pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxExecuteWithOutputAndError: {
     parameters: ["pointer", "pointer", "pointer", "i32", "pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxExecuteArgv: {
     parameters: ["i32", "pointer", "i32", "pointer", "pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxExecuteDDE: {
     parameters: ["pointer", "pointer", "pointer"],
@@ -29044,7 +29072,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxKill: {
-    parameters: ["i32", "i32", "pointer", "i32"],
+    parameters: ["i64", "i32", "pointer", "i32"],
     result: "i32",
   },
   wxShell: {
@@ -29060,16 +29088,16 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxMilliSleep: {
-    parameters: ["u32"],
+    parameters: ["u64"],
     result: "void",
   },
   wxMicroSleep: {
-    parameters: ["u32"],
+    parameters: ["u64"],
     result: "void",
   },
   wxGetProcessId: {
     parameters: [],
-    result: "u32",
+    result: "u64",
   },
   wxLaunchDefaultBrowser: {
     parameters: ["pointer", "i32"],
@@ -29156,7 +29184,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxGetStockLabel: {
-    parameters: ["i32", "i32"],
+    parameters: ["i32", "i64"],
     result: "pointer",
   },
   wxGetStockAccelerator: {
@@ -29280,7 +29308,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxDragListItem: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxDragString: {
@@ -29296,7 +29324,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxGenericDragListItem: {
-    parameters: ["pointer", "i32"],
+    parameters: ["pointer", "i64"],
     result: "pointer",
   },
   wxGenericDragString: {
@@ -29324,8 +29352,8 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxGetNumberFromUser: {
-    parameters: ["pointer", "pointer", "pointer", "i32", "i32", "i32", "pointer", "i32", "i32"],
-    result: "i32",
+    parameters: ["pointer", "pointer", "pointer", "i64", "i64", "i64", "pointer", "i32", "i32"],
+    result: "i64",
   },
   wxGetPasswordFromUser: {
     parameters: ["pointer", "pointer", "pointer", "pointer", "pointer"],
@@ -30990,6 +31018,14 @@ export const lib = dlopen("kwxFFI", {
   expwxLOCALE_THOUSANDS_SEP: { parameters: [], result: "i32" },
   expwxLOCALE_DECIMAL_POINT: { parameters: [], result: "i32" },
   expwxLOCALE_LOAD_DEFAULT: { parameters: [], result: "i32" },
+  expwxStyle_None: { parameters: [], result: "i32" },
+  expwxStyle_WithThousandsSep: { parameters: [], result: "i32" },
+  expwxStyle_NoTrailingZeroes: { parameters: [], result: "i32" },
+  expwxStyle_SignPlus: { parameters: [], result: "i32" },
+  expwxStyle_SignSpace: { parameters: [], result: "i32" },
+  expwxStyle_Currency: { parameters: [], result: "i32" },
+  expwxStyle_CurrencySymbol: { parameters: [], result: "i32" },
+  expwxStyle_CurrencyCode: { parameters: [], result: "i32" },
   expwxBU_EXACTFIT: { parameters: [], result: "i32" },
   expwxTE_PROCESS_ENTER: { parameters: [], result: "i32" },
   expwxTE_PASSWORD: { parameters: [], result: "i32" },

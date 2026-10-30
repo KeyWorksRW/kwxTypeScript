@@ -34,7 +34,7 @@ export class wxFontPickerCtrl {
 
 }
 
-export function createWxFontPickerCtrl(parent: Pointer, id: number, initial: Pointer, x: number, y: number, width: number, height: number, style: number): wxFontPickerCtrl | null {
+export function createWxFontPickerCtrl(parent: Pointer, id: number, initial: Pointer, x: number, y: number, width: number, height: number, style: bigint): wxFontPickerCtrl | null {
     const rawPtr = lib.symbols.wxFontPickerCtrl_Create(parent, id, initial, x, y, width, height, style);
     if (rawPtr === null) return null;
     return new wxFontPickerCtrl(rawPtr);

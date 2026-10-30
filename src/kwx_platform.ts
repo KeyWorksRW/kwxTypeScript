@@ -20,6 +20,8 @@ export type NativeType =
     | "u32"
     | "u8"
     | "usize"
+    | "i64"
+    | "u64"
     | "f32"
     | "f64";
 
@@ -35,11 +37,11 @@ export interface SymbolDefinitions {
 }
 
 /** The JavaScript value a native type is marshalled to. */
-// usize is 64-bit on every supported platform, so it marshals as a bigint.
+// usize, i64, and u64 are 64-bit, so they marshal as a bigint.
 type NativeTypeToJs<T extends NativeType | "void"> =
     T extends "pointer" | "function" ? Pointer
         : T extends "void" ? void
-            : T extends "usize" ? bigint
+            : T extends "usize" | "i64" | "u64" ? bigint
                 : number;
 
 /** The JavaScript argument tuple for one declaration. */

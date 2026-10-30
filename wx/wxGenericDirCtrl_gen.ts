@@ -96,6 +96,6 @@ export class wxGenericDirCtrl extends wxControl {
 
 }
 
-export function createWxGenericDirCtrl(parent: Pointer, id: number, dir: Pointer, x: number, y: number, width: number, height: number, style: number, filter: Pointer, defaultFilter: number): Pointer {
+export function createWxGenericDirCtrl(parent: Pointer, id: number, dir: Pointer, x: number, y: number, width: number, height: number, style: bigint, filter: Pointer, defaultFilter: number): Pointer {
     return lib.symbols.wxGenericDirCtrl_Create(parent, id, dir, x, y, width, height, style, filter, defaultFilter);
 }

@@ -34,7 +34,7 @@ export class wxMultiChoiceDialog extends wxDialog {
 
 }
 
-export function createWxMultiChoiceDialog(parent: Pointer, message: Pointer, caption: Pointer, n: number, choices: Pointer, style: number, x: number, y: number): wxMultiChoiceDialog | null {
+export function createWxMultiChoiceDialog(parent: Pointer, message: Pointer, caption: Pointer, n: number, choices: Pointer, style: bigint, x: number, y: number): wxMultiChoiceDialog | null {
     const rawPtr = lib.symbols.wxMultiChoiceDialog_Create(parent, message, caption, n, choices, style, x, y);
     if (rawPtr === null) return null;
     return new wxMultiChoiceDialog(rawPtr);

@@ -34,7 +34,7 @@ export function createWxCursorFromImage(image: Pointer): wxCursor | null {
     return new wxCursor(rawPtr);
 }
 
-export function createWxCursorLoad(name: Pointer, type_: number, width: number, height: number): wxCursor | null {
+export function createWxCursorLoad(name: Pointer, type_: bigint, width: number, height: number): wxCursor | null {
     const rawPtr = lib.symbols.Cursor_CreateLoad(name, type_, width, height);
     if (rawPtr === null) return null;
     return new wxCursor(rawPtr);

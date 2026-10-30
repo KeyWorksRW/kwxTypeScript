@@ -82,6 +82,6 @@ export class wxRichTextStyleListBox extends wxHtmlListBox {
 
 }
 
-export function createWxRichTextStyleListBox(parent: Pointer, id: number, x: number, y: number, w: number, h: number, style: number): number {
+export function createWxRichTextStyleListBox(parent: Pointer, id: number, x: number, y: number, w: number, h: number, style: bigint): number {
     return lib.symbols.wxRichTextStyleListBox_Create(parent, id, x, y, w, h, style);
 }

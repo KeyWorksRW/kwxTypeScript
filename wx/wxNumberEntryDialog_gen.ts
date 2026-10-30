@@ -20,13 +20,13 @@ export class wxNumberEntryDialog extends wxDialog {
     this.Delete();
   }
 
-  GetValue(): number {
-    return lib.symbols.wxNumberEntryDialog_GetValue(this._ptr);
+  GetValue(): bigint {
+    return lib.symbols.wxNumberEntryDialog_GetValue(this._ptr) as bigint;
   }
 
 }
 
-export function createWxNumberEntryDialog(parent: Pointer, message: Pointer, prompt: Pointer, caption: Pointer, value: number, min_value: number, max_value: number, x: number, y: number): wxNumberEntryDialog | null {
+export function createWxNumberEntryDialog(parent: Pointer, message: Pointer, prompt: Pointer, caption: Pointer, value: bigint, min_value: bigint, max_value: bigint, x: number, y: number): wxNumberEntryDialog | null {
     const rawPtr = lib.symbols.wxNumberEntryDialog_Create(parent, message, prompt, caption, value, min_value, max_value, x, y);
     if (rawPtr === null) return null;
     return new wxNumberEntryDialog(rawPtr);

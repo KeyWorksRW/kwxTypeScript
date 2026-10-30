@@ -10,8 +10,8 @@ export class wxSplashScreen extends wxFrame {
     return this._ptr;
   }
 
-  GetSplashStyle(): number {
-    return lib.symbols.wxSplashScreen_GetSplashStyle(this._ptr);
+  GetSplashStyle(): bigint {
+    return lib.symbols.wxSplashScreen_GetSplashStyle(this._ptr) as bigint;
   }
 
   GetTimeout(): number {
@@ -20,7 +20,7 @@ export class wxSplashScreen extends wxFrame {
 
 }
 
-export function createWxSplashScreen(bitmap: Pointer, splashStyle: number, milliseconds: number, parent: Pointer, id: number, left: number, top: number, width: number, height: number, style: number): wxSplashScreen | null {
+export function createWxSplashScreen(bitmap: Pointer, splashStyle: bigint, milliseconds: number, parent: Pointer, id: number, left: number, top: number, width: number, height: number, style: bigint): wxSplashScreen | null {
     const rawPtr = lib.symbols.wxSplashScreen_Create(bitmap, splashStyle, milliseconds, parent, id, left, top, width, height, style);
     if (rawPtr === null) return null;
     return new wxSplashScreen(rawPtr);

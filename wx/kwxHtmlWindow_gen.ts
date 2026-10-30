@@ -18,7 +18,7 @@ export class kwxHtmlWindow {
 
 }
 
-export function createKwxHtmlWindow(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number, name: Pointer): kwxHtmlWindow | null {
+export function createKwxHtmlWindow(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): kwxHtmlWindow | null {
     const rawPtr = lib.symbols.kwxHtmlWindow_Create(parent, id, x, y, width, height, style, name);
     if (rawPtr === null) return null;
     return new kwxHtmlWindow(rawPtr);

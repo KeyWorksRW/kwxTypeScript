@@ -84,7 +84,7 @@ namespace
 
     std::set<std::string> ParamTypes()
     {
-        return { "pointer", "function", "i32", "u32", "u8", "usize", "f32", "f64" };
+        return { "pointer", "function", "i32", "u32", "u8", "usize", "i64", "u64", "f32", "f64" };
     }
 
     bool IsKnownParamType(const std::string& type)
@@ -185,6 +185,14 @@ namespace
         {
             return "std::size_t ";
         }
+        if (type == "i64")
+        {
+            return "std::int64_t ";
+        }
+        if (type == "u64")
+        {
+            return "std::uint64_t ";
+        }
         if (type == "f32")
         {
             return "float ";
@@ -228,6 +236,14 @@ namespace
         if (type == "usize")
         {
             return "arg_usize";
+        }
+        if (type == "i64")
+        {
+            return "arg_i64";
+        }
+        if (type == "u64")
+        {
+            return "arg_u64";
         }
         if (type == "f32")
         {
@@ -299,6 +315,14 @@ namespace
         if (type == "usize")
         {
             return "ret_usize";
+        }
+        if (type == "i64")
+        {
+            return "ret_i64";
+        }
+        if (type == "u64")
+        {
+            return "ret_u64";
         }
         if (type == "f32")
         {

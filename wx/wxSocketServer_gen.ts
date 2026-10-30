@@ -28,7 +28,7 @@ export class wxSocketServer extends wxSocketBase {
     return (lib.symbols.wxSocketServer_AcceptWith(this._ptr, socket, wait ? 1 : 0) as number) !== 0;
   }
 
-  WaitForAccept(seconds: number, millisecond: number): boolean {
+  WaitForAccept(seconds: bigint, millisecond: bigint): boolean {
     return (lib.symbols.wxSocketServer_WaitForAccept(this._ptr, seconds, millisecond) as number) !== 0;
   }
 

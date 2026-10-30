@@ -24,7 +24,7 @@ export class wxRichTextBuffer extends wxRichTextParagraphLayoutBox {
     lib.symbols.wxRichTextBuffer_AddParagraph(this._ptr, text, paraStyle, start, end);
   }
 
-  override DeleteRange(start: number, end: number): boolean {
+  override DeleteRange(start: bigint, end: bigint): boolean {
     return (lib.symbols.wxRichTextBuffer_DeleteRange(this._ptr, start, end) as number) !== 0;
   }
 

@@ -38,7 +38,7 @@ export class wxFilePickerCtrl {
 
 }
 
-export function createWxFilePickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, path: Pointer, message: Pointer, wildcard: Pointer, style: number): wxFilePickerCtrl | null {
+export function createWxFilePickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, path: Pointer, message: Pointer, wildcard: Pointer, style: bigint): wxFilePickerCtrl | null {
     const rawPtr = lib.symbols.wxFilePickerCtrl_Create(parent, id, x, y, width, height, path, message, wildcard, style);
     if (rawPtr === null) return null;
     return new wxFilePickerCtrl(rawPtr);

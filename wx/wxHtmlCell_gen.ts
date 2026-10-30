@@ -64,7 +64,7 @@ export class wxHtmlCell extends wxObject {
     return (lib.symbols.wxHtmlCell_IsTerminalCell(this._ptr) as number) !== 0;
   }
 
-  SetScriptMode(mode: number, previousBase: number): void {
+  SetScriptMode(mode: number, previousBase: bigint): void {
     lib.symbols.wxHtmlCell_SetScriptMode(this._ptr, mode, previousBase);
   }
 
@@ -72,8 +72,8 @@ export class wxHtmlCell extends wxObject {
     return lib.symbols.wxHtmlCell_GetScriptMode(this._ptr);
   }
 
-  GetScriptBaseline(): number {
-    return lib.symbols.wxHtmlCell_GetScriptBaseline(this._ptr);
+  GetScriptBaseline(): bigint {
+    return lib.symbols.wxHtmlCell_GetScriptBaseline(this._ptr) as bigint;
   }
 
   IsFormattingCell(): boolean {

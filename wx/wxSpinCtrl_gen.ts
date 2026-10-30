@@ -40,7 +40,7 @@ export class wxSpinCtrl extends wxControl {
 
 }
 
-export function createWxSpinCtrl(parent: Pointer, id: number, text: Pointer, left: number, top: number, width: number, height: number, style: number, minVal: number, maxVal: number, init: number): wxSpinCtrl | null {
+export function createWxSpinCtrl(parent: Pointer, id: number, text: Pointer, left: number, top: number, width: number, height: number, style: bigint, minVal: number, maxVal: number, init: number): wxSpinCtrl | null {
     const rawPtr = lib.symbols.wxSpinCtrl_Create(parent, id, text, left, top, width, height, style, minVal, maxVal, init);
     if (rawPtr === null) return null;
     return new wxSpinCtrl(rawPtr);

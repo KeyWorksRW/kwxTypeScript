@@ -32,7 +32,7 @@ export class wxSpinButton extends wxControl {
 
 }
 
-export function createWxSpinButton(parent: Pointer, id: number, left: number, top: number, width: number, height: number, style: number): wxSpinButton | null {
+export function createWxSpinButton(parent: Pointer, id: number, left: number, top: number, width: number, height: number, style: bigint): wxSpinButton | null {
     const rawPtr = lib.symbols.wxSpinButton_Create(parent, id, left, top, width, height, style);
     if (rawPtr === null) return null;
     return new wxSpinButton(rawPtr);

@@ -36,7 +36,7 @@ export class wxTextEntry {
     return lib.symbols.wxTextEntry_GetValue(this._ptr);
   }
 
-  GetRange(from_: number, to: number): Pointer {
+  GetRange(from_: bigint, to: bigint): Pointer {
     return lib.symbols.wxTextEntry_GetRange(this._ptr, from_, to);
   }
 
@@ -52,11 +52,11 @@ export class wxTextEntry {
     lib.symbols.wxTextEntry_AppendText(this._ptr, text);
   }
 
-  Replace(from_: number, to: number, value: Pointer): void {
+  Replace(from_: bigint, to: bigint, value: Pointer): void {
     lib.symbols.wxTextEntry_Replace(this._ptr, from_, to, value);
   }
 
-  Remove(from_: number, to: number): void {
+  Remove(from_: bigint, to: bigint): void {
     lib.symbols.wxTextEntry_Remove(this._ptr, from_, to);
   }
 
@@ -108,7 +108,7 @@ export class wxTextEntry {
     return (lib.symbols.wxTextEntry_CanRedo(this._ptr) as number) !== 0;
   }
 
-  SetInsertionPoint(pos: number): void {
+  SetInsertionPoint(pos: bigint): void {
     lib.symbols.wxTextEntry_SetInsertionPoint(this._ptr, pos);
   }
 
@@ -116,15 +116,15 @@ export class wxTextEntry {
     lib.symbols.wxTextEntry_SetInsertionPointEnd(this._ptr);
   }
 
-  GetInsertionPoint(): number {
-    return lib.symbols.wxTextEntry_GetInsertionPoint(this._ptr);
+  GetInsertionPoint(): bigint {
+    return lib.symbols.wxTextEntry_GetInsertionPoint(this._ptr) as bigint;
   }
 
-  GetLastPosition(): number {
-    return lib.symbols.wxTextEntry_GetLastPosition(this._ptr);
+  GetLastPosition(): bigint {
+    return lib.symbols.wxTextEntry_GetLastPosition(this._ptr) as bigint;
   }
 
-  SetSelection(from_: number, to: number): void {
+  SetSelection(from_: bigint, to: bigint): void {
     lib.symbols.wxTextEntry_SetSelection(this._ptr, from_, to);
   }
 
@@ -156,7 +156,7 @@ export class wxTextEntry {
     lib.symbols.wxTextEntry_SetEditable(this._ptr, editable ? 1 : 0);
   }
 
-  SetMaxLength(len: number): void {
+  SetMaxLength(len: bigint): void {
     lib.symbols.wxTextEntry_SetMaxLength(this._ptr, len);
   }
 

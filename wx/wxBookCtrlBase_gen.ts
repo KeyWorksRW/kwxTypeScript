@@ -10,7 +10,7 @@ export class wxBookCtrlBase extends wxControl {
     return this._ptr;
   }
 
-  CreateFromDefault(parent: Pointer, winid: number, x: number, y: number, width: number, height: number, style: number, name: Pointer): boolean {
+  CreateFromDefault(parent: Pointer, winid: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): boolean {
     return (lib.symbols.wxBookCtrlBase_CreateFromDefault(this._ptr, parent, winid, x, y, width, height, style, name) as number) !== 0;
   }
 

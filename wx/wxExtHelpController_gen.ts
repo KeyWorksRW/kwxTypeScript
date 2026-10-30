@@ -20,7 +20,7 @@ export class wxExtHelpController extends wxObject {
     this.Delete();
   }
 
-  DisplayBlock(block_no: number): boolean {
+  DisplayBlock(block_no: bigint): boolean {
     return (lib.symbols.wxExtHelpController_DisplayBlock(this._ptr, block_no) as number) !== 0;
   }
 
@@ -52,7 +52,7 @@ export class wxExtHelpController extends wxObject {
     return (lib.symbols.wxExtHelpController_Quit(this._ptr) as number) !== 0;
   }
 
-  SetViewer(viewer: Pointer, flags: number): void {
+  SetViewer(viewer: Pointer, flags: bigint): void {
     lib.symbols.wxExtHelpController_SetViewer(this._ptr, viewer, flags);
   }
 

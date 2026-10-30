@@ -32,8 +32,8 @@ export class wxLogRecordInfo {
     return lib.symbols.wxLogRecordInfo_GetComponent(this._ptr);
   }
 
-  GetTimestamp(): number {
-    return lib.symbols.wxLogRecordInfo_GetTimestamp(this._ptr);
+  GetTimestamp(): bigint {
+    return lib.symbols.wxLogRecordInfo_GetTimestamp(this._ptr) as bigint;
   }
 
   GetLevel(): number {

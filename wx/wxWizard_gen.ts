@@ -56,7 +56,7 @@ export class wxWizard extends wxDialog {
 
 }
 
-export function createWxWizard(parent: Pointer, id: number, text: Pointer, bitmap: Pointer, left: number, top: number, width: number, height: number, style: number): wxWizard | null {
+export function createWxWizard(parent: Pointer, id: number, text: Pointer, bitmap: Pointer, left: number, top: number, width: number, height: number, style: bigint): wxWizard | null {
     const rawPtr = lib.symbols.wxWizard_Create(parent, id, text, bitmap, left, top, width, height, style);
     if (rawPtr === null) return null;
     return new wxWizard(rawPtr);

@@ -54,7 +54,7 @@ export class wxFrame extends wxTopLevelWindow {
     lib.symbols.wxFrame_SetTitle(this._ptr, text);
   }
 
-  override ShowFullScreen(show: boolean, style: number): boolean {
+  ShowFullScreen_2(show: boolean, style: number): boolean {
     return (lib.symbols.wxFrame_ShowFullScreen(this._ptr, show ? 1 : 0, style) as number) !== 0;
   }
 
@@ -82,7 +82,7 @@ export class wxFrame extends wxTopLevelWindow {
     return lib.symbols.wxFrame_CreateStatusBar(this._ptr, number, style, id);
   }
 
-  CreateToolBar(style: number, id: number): Pointer {
+  CreateToolBar(style: bigint, id: number): Pointer {
     return lib.symbols.wxFrame_CreateToolBar(this._ptr, style, id);
   }
 
