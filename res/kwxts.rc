@@ -56,7 +56,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_APPICON                 ICON        "kwx_ts_logo.ico"
+IDI_APPICON                 ICON        "kwxts_logo.ico"
 
 #if !defined(_MAC)
 /////////////////////////////////////////////////////////////////////////////
@@ -105,4 +105,4 @@ END
 
 // The manifest lives in kwxts/resources and must keep resource ID 1; the
 // kwxFFI DLL uses ID 2.
-CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "../kwxts/resources/kwx_ts.manifest"
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "../kwxts/resources/kwxts.manifest"

@@ -560,7 +560,7 @@ if(WIN32)
         @ONLY
     )
 
-    target_sources(kwx_ts PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/res/kwx_ts.rc)
+    target_sources(kwx_ts PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/res/kwxts.rc)
     target_include_directories(kwx_ts PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
     # Only MSVC / clang-cl accept /MANIFEST:NO. GNU/Clang frontends on MSYS2
