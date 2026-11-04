@@ -1,0 +1,109 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 KeyWorks Software
+#
+# Weekly GUI regression run for the kwxTypeScript port. The comparison happens
+# entirely on this runner: the reference C++ sample from wxSamples and the
+# TypeScript port are both built here, launched here, captured here and compared
+# here. No baseline PNG is committed to the repository, so the comparison never
+# depends on a developer machine's DPI, theme or font metrics.
+#
+# Not PR-gated: a screenshot comparison is sensitive to runner theme and DPI, so
+# the first failure of a freshly-ported sample should not block unrelated work.
+#
+# PRIVATE wxSamples: if the reference repository is ever made private, the
+# checkout steps below need a PAT or GitHub App token secret (for example
+# `secrets.WXSAMPLES_TOKEN`) passed to `actions/checkout` as `token:`.
+
+name: gui-compare
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly, Monday 04:17 UTC.
+    - cron: '17 4 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  # Build both sides of every sample. This job is the build gate: it fails when
+  # the port stops compiling, before any window is launched.
+  build:
+    name: build reference and candidate
+    runs-on: windows-latest
+    steps:
+      - name: Checkout kwxTypeScript
+        uses: actions/checkout@v4
+
+      - name: Checkout wxSamples
+        uses: actions/checkout@v4
+        with:
+          repository: KeyWorksRW/wxSamples
+          path: wxSamples
+
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure kwxts
+        shell: pwsh
+        run: cmake --preset ninja-multi
+
+      - name: Build kwxts (Release)
+        shell: pwsh
+        run: cmake --build --preset release
+
+      - name: Configure wxSamples
+        shell: pwsh
+        working-directory: wxSamples
+        run: cmake --preset ninja-msvc
+
+      - name: Build wxSamples (Release)
+        shell: pwsh
+        run: cmake --build build --config Release
+
+      # Both sides are published so the manual `workflow_dispatch` path can be
+      # reproduced locally, and so the comparison job can consume them as soon
+      # as the reusable workflow gains an artifact-restore step (see the note on
+      # the gui job).
+      - name: Upload candidate binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: kwxts-bin
+          path: bin/Release/
+          if-no-files-found: error
+
+      - name: Upload reference binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: wxsamples-bin
+          path: |
+            wxSamples/bin/Release/
+            wxSamples/src/html/about/data/
+          if-no-files-found: error
+
+  # KNOWN LIMITATION: a job either runs `steps` or calls a reusable workflow
+  # with `uses`, never both, so this job cannot unpack the artifacts the build
+  # job published. The reusable workflow also checks out the *caller* repository
+  # only. Consequences until the reusable workflow (wxShot, Phase 5) gains an
+  # optional artifact-restore or reference-repository checkout input:
+  #
+  #   - `reference-root: wxSamples/bin/Release` only resolves when wxSamples is
+  #     checked out inside the caller workspace (for example a submodule at
+  #     `wxSamples`).
+  #   - `bin/Release/kwxts.exe` must likewise be produced inside the caller
+  #     workspace before this job runs.
+  #
+  # Neither is true on a hosted runner today, so the first scheduled run is
+  # expected to fail with a missing-reference-binary manifest or launch error
+  # rather than a comparison result. This is recorded as a pending item rather
+  # than worked around by committing binaries or baselines.
+  gui:
+    name: wxshot gui-test
+    needs: build
+    uses: KeyWorksRW/wxShot/.github/workflows/reusable-gui-test.yml@v1
+    with:
+      manifest: tests/gui/samples.json
+      reference-root: wxSamples/bin/Release
+      mode: reference
+      only: about
+      tool-version: latest

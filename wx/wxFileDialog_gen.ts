@@ -10,6 +10,18 @@ export class wxFileDialog extends wxDialog {
     return this._ptr;
   }
 
+  AddShortcut(directory: Pointer, flags: number): boolean {
+    return (lib.symbols.wxFileDialog_AddShortcut(this._ptr, directory, flags) as number) !== 0;
+  }
+
+  GetCurrentlySelectedFilterIndex(): number {
+    return lib.symbols.wxFileDialog_GetCurrentlySelectedFilterIndex(this._ptr);
+  }
+
+  SetCustomizeHook(customizeHook: Pointer): boolean {
+    return (lib.symbols.wxFileDialog_SetCustomizeHook(this._ptr, customizeHook) as number) !== 0;
+  }
+
   GetDirectory(): Pointer {
     return lib.symbols.wxFileDialog_GetDirectory(this._ptr);
   }

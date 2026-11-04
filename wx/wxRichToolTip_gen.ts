@@ -26,6 +26,10 @@ export class wxRichToolTip {
     this.Delete();
   }
 
+  SetTipKind(tipKind: number): void {
+    lib.symbols.wxRichToolTip_SetTipKind(this._ptr, tipKind);
+  }
+
   SetBackgroundColour(colour: Pointer, colour_end: Pointer): void {
     lib.symbols.wxRichToolTip_SetBackgroundColour(this._ptr, colour, colour_end);
   }

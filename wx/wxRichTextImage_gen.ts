@@ -50,14 +50,20 @@ export class wxRichTextImage extends wxRichTextObject {
 
 }
 
-export function createWxRichTextImage(parent: Pointer): number {
-    return lib.symbols.wxRichTextImage_Create(parent);
+export function createWxRichTextImage(parent: Pointer): wxRichTextImage | null {
+    const rawPtr = lib.symbols.wxRichTextImage_Create(parent);
+    if (rawPtr === null) return null;
+    return new wxRichTextImage(rawPtr);
 }
 
-export function createWxRichTextImageFromImage(image: Pointer, parent: Pointer, charStyle: Pointer): number {
-    return lib.symbols.wxRichTextImage_CreateFromImage(image, parent, charStyle);
+export function createWxRichTextImageFromImage(image: Pointer, parent: Pointer, charStyle: Pointer): wxRichTextImage | null {
+    const rawPtr = lib.symbols.wxRichTextImage_CreateFromImage(image, parent, charStyle);
+    if (rawPtr === null) return null;
+    return new wxRichTextImage(rawPtr);
 }
 
-export function createWxRichTextImageFromImageBlock(imageBlock: Pointer, parent: Pointer, charStyle: Pointer): number {
-    return lib.symbols.wxRichTextImage_CreateFromImageBlock(imageBlock, parent, charStyle);
+export function createWxRichTextImageFromImageBlock(imageBlock: Pointer, parent: Pointer, charStyle: Pointer): wxRichTextImage | null {
+    const rawPtr = lib.symbols.wxRichTextImage_CreateFromImageBlock(imageBlock, parent, charStyle);
+    if (rawPtr === null) return null;
+    return new wxRichTextImage(rawPtr);
 }

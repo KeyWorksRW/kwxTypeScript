@@ -2,9 +2,9 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxObject } from "./wxObject_gen.ts";
+import { wxHelpControllerBase } from "./wxHelpControllerBase_gen.ts";
 
-export class wxHtmlHelpController extends wxObject {
+export class wxHtmlHelpController extends wxHelpControllerBase {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;
@@ -24,6 +24,10 @@ export class wxHtmlHelpController extends wxObject {
     return (lib.symbols.wxHtmlHelpController_AddBook(this._ptr, book, show_wait_msg) as number) !== 0;
   }
 
+  SetShouldPreventAppExit(enable: boolean): void {
+    lib.symbols.wxHtmlHelpController_SetShouldPreventAppExit(this._ptr, enable ? 1 : 0);
+  }
+
   Display(x: Pointer): number {
     return lib.symbols.wxHtmlHelpController_Display(this._ptr, x);
   }
@@ -32,8 +36,8 @@ export class wxHtmlHelpController extends wxObject {
     return (lib.symbols.wxHtmlHelpController_DisplayBlock(this._ptr, blockNo) as number) !== 0;
   }
 
-  DisplayContents(): number {
-    return lib.symbols.wxHtmlHelpController_DisplayContents(this._ptr);
+  override DisplayContents(): boolean {
+    return (lib.symbols.wxHtmlHelpController_DisplayContents(this._ptr) as number) !== 0;
   }
 
   DisplayIndex(): number {
@@ -44,8 +48,15 @@ export class wxHtmlHelpController extends wxObject {
     return lib.symbols.wxHtmlHelpController_DisplayNumber(this._ptr, id);
   }
 
-  DisplaySection(section: Pointer): boolean {
-    return (lib.symbols.wxHtmlHelpController_DisplaySection(this._ptr, section) as number) !== 0;
+  override DisplaySection(section: Pointer): boolean;
+  override DisplaySection(sectionNo: number): boolean;
+  override DisplaySection(section: Pointer | number): boolean {
+    if (arguments.length === 1 && typeof section === "number") {
+      return super.DisplaySection(section as number);
+    }
+    else {
+      return (lib.symbols.wxHtmlHelpController_DisplaySection(this._ptr, section as Pointer) as number) !== 0;
+    }
   }
 
   DisplaySectionNumber(sectionNo: number): boolean {
@@ -64,7 +75,7 @@ export class wxHtmlHelpController extends wxObject {
     return (lib.symbols.wxHtmlHelpController_Initialize(this._ptr, file) as number) !== 0;
   }
 
-  KeywordSearch(keyword: Pointer): boolean {
+  override KeywordSearch(keyword: Pointer): boolean {
     return (lib.symbols.wxHtmlHelpController_KeywordSearch(this._ptr, keyword) as number) !== 0;
   }
 

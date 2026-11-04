@@ -4,6 +4,7 @@
 
 extern "C"
 {
+int exp_wxEVT_ACCELERATOR_KEY();
 int exp_wxEVT_ACTIVATE();
 int exp_wxEVT_ACTIVATE_APP();
 int exp_wxEVT_AUINOTEBOOK_ALLOW_DND();
@@ -38,6 +39,8 @@ int exp_wxEVT_AUX1_UP();
 int exp_wxEVT_AUX2_DCLICK();
 int exp_wxEVT_AUX2_DOWN();
 int exp_wxEVT_AUX2_UP();
+int exp_wxEVT_BACKSTAGE_CLICKED();
+int exp_wxEVT_BACKSTAGE_ITEM_CLICKED();
 int exp_wxEVT_BUTTON();
 int exp_wxEVT_CALCULATE_LAYOUT();
 int exp_wxEVT_CALENDAR_DAY_CHANGED();
@@ -58,28 +61,44 @@ int exp_wxEVT_CHOICEBOOK_PAGE_CHANGED();
 int exp_wxEVT_CHOICEBOOK_PAGE_CHANGING();
 int exp_wxEVT_CLIPBOARD_CHANGED();
 int exp_wxEVT_CLOSE_WINDOW();
+int exp_wxEVT_COLLAPSIBLEHEADER_CHANGED();
 int exp_wxEVT_COLLAPSIBLEPANE_CHANGED();
 int exp_wxEVT_COLOURPICKER_CHANGED();
+int exp_wxEVT_COLOURPICKER_CURRENT_CHANGED();
+int exp_wxEVT_COLOURPICKER_DIALOG_CANCELLED();
+int exp_wxEVT_COLOUR_CHANGED();
 int exp_wxEVT_COMBOBOX();
 int exp_wxEVT_COMBOBOX_CLOSEUP();
 int exp_wxEVT_COMBOBOX_DROPDOWN();
 int exp_wxEVT_CONTEXT_MENU();
 int exp_wxEVT_CREATE();
+int exp_wxEVT_DATAVIEW_COLUMN_HEADER_CLICK();
+int exp_wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK();
+int exp_wxEVT_DATAVIEW_COLUMN_REORDERED();
+int exp_wxEVT_DATAVIEW_COLUMN_SORTED();
 int exp_wxEVT_DATAVIEW_ITEM_ACTIVATED();
+int exp_wxEVT_DATAVIEW_ITEM_BEGIN_DRAG();
 int exp_wxEVT_DATAVIEW_ITEM_COLLAPSED();
 int exp_wxEVT_DATAVIEW_ITEM_COLLAPSING();
+int exp_wxEVT_DATAVIEW_ITEM_CONTEXT_MENU();
+int exp_wxEVT_DATAVIEW_ITEM_DROP();
+int exp_wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE();
 int exp_wxEVT_DATAVIEW_ITEM_EDITING_DONE();
 int exp_wxEVT_DATAVIEW_ITEM_EDITING_STARTED();
 int exp_wxEVT_DATAVIEW_ITEM_EXPANDED();
 int exp_wxEVT_DATAVIEW_ITEM_EXPANDING();
+int exp_wxEVT_DATAVIEW_ITEM_START_EDITING();
 int exp_wxEVT_DATAVIEW_ITEM_VALUE_CHANGED();
 int exp_wxEVT_DATAVIEW_SELECTION_CHANGED();
 int exp_wxEVT_DATE_CHANGED();
 int exp_wxEVT_DELETE();
 int exp_wxEVT_DESTROY();
 int exp_wxEVT_DETAILED_HELP();
+int exp_wxEVT_DIRCTRL_FILEACTIVATED();
+int exp_wxEVT_DIRCTRL_SELECTIONCHANGED();
 int exp_wxEVT_DIRPICKER_CHANGED();
 int exp_wxEVT_DISPLAY_CHANGED();
+int exp_wxEVT_DPI_CHANGED();
 int exp_wxEVT_DROP_FILES();
 int exp_wxEVT_END_PROCESS();
 int exp_wxEVT_END_SESSION();
@@ -90,9 +109,17 @@ int exp_wxEVT_FILECTRL_FILTERCHANGED();
 int exp_wxEVT_FILECTRL_FOLDERCHANGED();
 int exp_wxEVT_FILECTRL_SELECTIONCHANGED();
 int exp_wxEVT_FILEPICKER_CHANGED();
+int exp_wxEVT_FIND();
+int exp_wxEVT_FIND_CLOSE();
+int exp_wxEVT_FIND_NEXT();
+int exp_wxEVT_FIND_REPLACE();
+int exp_wxEVT_FIND_REPLACE_ALL();
 int exp_wxEVT_FIRST();
 int exp_wxEVT_FONTPICKER_CHANGED();
 int exp_wxEVT_FSWATCHER();
+int exp_wxEVT_GESTURE_PAN();
+int exp_wxEVT_GESTURE_ROTATE();
+int exp_wxEVT_GESTURE_ZOOM();
 int exp_wxEVT_GRID_CELL_BEGIN_DRAG();
 int exp_wxEVT_GRID_CELL_CHANGE();
 int exp_wxEVT_GRID_CELL_CHANGED();
@@ -101,6 +128,8 @@ int exp_wxEVT_GRID_CELL_LEFT_CLICK();
 int exp_wxEVT_GRID_CELL_LEFT_DCLICK();
 int exp_wxEVT_GRID_CELL_RIGHT_CLICK();
 int exp_wxEVT_GRID_CELL_RIGHT_DCLICK();
+int exp_wxEVT_GRID_COL_AUTO_SIZE();
+int exp_wxEVT_GRID_COL_LABEL_SIZE();
 int exp_wxEVT_GRID_COL_MOVE();
 int exp_wxEVT_GRID_COL_SIZE();
 int exp_wxEVT_GRID_COL_SORT();
@@ -112,12 +141,21 @@ int exp_wxEVT_GRID_LABEL_LEFT_DCLICK();
 int exp_wxEVT_GRID_LABEL_RIGHT_CLICK();
 int exp_wxEVT_GRID_LABEL_RIGHT_DCLICK();
 int exp_wxEVT_GRID_RANGE_SELECT();
+int exp_wxEVT_GRID_RANGE_SELECTED();
+int exp_wxEVT_GRID_RANGE_SELECTING();
+int exp_wxEVT_GRID_ROW_LABEL_SIZE();
+int exp_wxEVT_GRID_ROW_MOVE();
 int exp_wxEVT_GRID_ROW_SIZE();
 int exp_wxEVT_GRID_SELECT_CELL();
+int exp_wxEVT_GRID_TABBING();
+int exp_wxEVT_HEADER_BEGIN_RESIZE();
+int exp_wxEVT_HEADER_END_RESIZE();
+int exp_wxEVT_HEADER_RESIZING();
 int exp_wxEVT_HELP();
 int exp_wxEVT_HIBERNATE();
 int exp_wxEVT_HOTKEY();
 int exp_wxEVT_HTML_CELL_CLICKED();
+int exp_wxEVT_HTML_CELL_HOVER();
 int exp_wxEVT_HTML_CELL_MOUSE_HOVER();
 int exp_wxEVT_HTML_LINK_CLICKED();
 int exp_wxEVT_HTML_SET_TITLE();
@@ -144,19 +182,33 @@ int exp_wxEVT_LISTBOX_DCLICK();
 int exp_wxEVT_LIST_BEGIN_DRAG();
 int exp_wxEVT_LIST_BEGIN_LABEL_EDIT();
 int exp_wxEVT_LIST_BEGIN_RDRAG();
+int exp_wxEVT_LIST_CACHE_HINT();
+int exp_wxEVT_LIST_COL_BEGIN_DRAG();
 int exp_wxEVT_LIST_COL_CLICK();
+int exp_wxEVT_LIST_COL_DRAGGING();
+int exp_wxEVT_LIST_COL_END_DRAG();
+int exp_wxEVT_LIST_COL_RIGHT_CLICK();
 int exp_wxEVT_LIST_DELETE_ALL_ITEMS();
 int exp_wxEVT_LIST_DELETE_ITEM();
 int exp_wxEVT_LIST_END_LABEL_EDIT();
 int exp_wxEVT_LIST_INSERT_ITEM();
 int exp_wxEVT_LIST_ITEM_ACTIVATED();
+int exp_wxEVT_LIST_ITEM_CHECKED();
 int exp_wxEVT_LIST_ITEM_DESELECTED();
 int exp_wxEVT_LIST_ITEM_FOCUSED();
 int exp_wxEVT_LIST_ITEM_MIDDLE_CLICK();
 int exp_wxEVT_LIST_ITEM_RIGHT_CLICK();
 int exp_wxEVT_LIST_ITEM_SELECTED();
+int exp_wxEVT_LIST_ITEM_UNCHECKED();
 int exp_wxEVT_LIST_KEY_DOWN();
+int exp_wxEVT_LONG_PRESS();
+int exp_wxEVT_MAGNIFY();
 int exp_wxEVT_MAXIMIZE();
+int exp_wxEVT_MEDIA_FINISHED();
+int exp_wxEVT_MEDIA_LOADED();
+int exp_wxEVT_MEDIA_PAUSE();
+int exp_wxEVT_MEDIA_PLAY();
+int exp_wxEVT_MEDIA_STOP();
 int exp_wxEVT_MENU();
 int exp_wxEVT_MENU_CLOSE();
 int exp_wxEVT_MENU_HIGHLIGHT();
@@ -172,19 +224,28 @@ int exp_wxEVT_MOVE();
 int exp_wxEVT_MOVE_END();
 int exp_wxEVT_MOVE_START();
 int exp_wxEVT_MOVING();
+int exp_wxEVT_MY_CUSTOM_COMMAND();
 int exp_wxEVT_NAVIGATION_KEY();
 int exp_wxEVT_NC_PAINT();
 int exp_wxEVT_NOTEBOOK_PAGE_CHANGED();
 int exp_wxEVT_NOTEBOOK_PAGE_CHANGING();
+int exp_wxEVT_NOTIFICATION_MESSAGE_ACTION();
+int exp_wxEVT_NOTIFICATION_MESSAGE_CLICK();
+int exp_wxEVT_NOTIFICATION_MESSAGE_DISMISSED();
 int exp_wxEVT_NULL();
 int exp_wxEVT_PAINT();
 int exp_wxEVT_PALETTE_CHANGED();
 int exp_wxEVT_PG_CHANGED();
 int exp_wxEVT_PG_CHANGING();
+int exp_wxEVT_PG_COL_BEGIN_DRAG();
+int exp_wxEVT_PG_COL_DRAGGING();
+int exp_wxEVT_PG_COL_END_DRAG();
 int exp_wxEVT_PG_DOUBLE_CLICK();
 int exp_wxEVT_PG_HIGHLIGHTED();
 int exp_wxEVT_PG_ITEM_COLLAPSED();
 int exp_wxEVT_PG_ITEM_EXPANDED();
+int exp_wxEVT_PG_LABEL_EDIT_BEGIN();
+int exp_wxEVT_PG_LABEL_EDIT_ENDING();
 int exp_wxEVT_PG_PAGE_CHANGED();
 int exp_wxEVT_PG_RIGHT_CLICK();
 int exp_wxEVT_PG_SELECTED();
@@ -192,11 +253,22 @@ int exp_wxEVT_POWER_RESUME();
 int exp_wxEVT_POWER_SUSPENDED();
 int exp_wxEVT_POWER_SUSPENDING();
 int exp_wxEVT_POWER_SUSPEND_CANCEL();
+int exp_wxEVT_PRESS_AND_TAP();
 int exp_wxEVT_QUERY_END_SESSION();
 int exp_wxEVT_QUERY_LAYOUT_INFO();
 int exp_wxEVT_QUERY_NEW_PALETTE();
 int exp_wxEVT_RADIOBOX();
 int exp_wxEVT_RADIOBUTTON();
+int exp_wxEVT_RIBBONBAR_HELP_CLICK();
+int exp_wxEVT_RIBBONBAR_TOGGLED();
+int exp_wxEVT_RIBBONBUTTONBAR_CLICKED();
+int exp_wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED();
+int exp_wxEVT_RIBBONGALLERY_HOVER_CHANGED();
+int exp_wxEVT_RIBBONGALLERY_SELECTED();
+int exp_wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED();
+int exp_wxEVT_RIBBONTOOLBAR_CLICKED();
+int exp_wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED();
+int exp_wxEVT_RICHTEXT_STYLESHEET_REPLACING();
 int exp_wxEVT_RIGHT_DCLICK();
 int exp_wxEVT_RIGHT_DOWN();
 int exp_wxEVT_RIGHT_UP();
@@ -219,8 +291,10 @@ int exp_wxEVT_SCROLL_PAGEUP();
 int exp_wxEVT_SCROLL_THUMBRELEASE();
 int exp_wxEVT_SCROLL_THUMBTRACK();
 int exp_wxEVT_SCROLL_TOP();
+int exp_wxEVT_SEARCH();
 int exp_wxEVT_SEARCHCTRL_CANCEL_BTN();
 int exp_wxEVT_SEARCHCTRL_SEARCH_BTN();
+int exp_wxEVT_SEARCH_CANCEL();
 int exp_wxEVT_SET_CURSOR();
 int exp_wxEVT_SET_FOCUS();
 int exp_wxEVT_SHOW();
@@ -237,8 +311,14 @@ int exp_wxEVT_SPIN_UP();
 int exp_wxEVT_SPLITTER_DOUBLECLICKED();
 int exp_wxEVT_SPLITTER_SASH_POS_CHANGED();
 int exp_wxEVT_SPLITTER_SASH_POS_CHANGING();
+int exp_wxEVT_SPLITTER_SASH_POS_RESIZE();
 int exp_wxEVT_SPLITTER_UNSPLIT();
+int exp_wxEVT_STC_CALLTIP_CLICK();
+int exp_wxEVT_STC_CHANGE();
+int exp_wxEVT_STC_CHARADDED();
+int exp_wxEVT_STC_MARGINCLICK();
 int exp_wxEVT_SYS_COLOUR_CHANGED();
+int exp_wxEVT_SYS_METRIC_CHANGED();
 int exp_wxEVT_TASKBAR_BALLOON_CLICK();
 int exp_wxEVT_TASKBAR_BALLOON_TIMEOUT();
 int exp_wxEVT_TASKBAR_LEFT_DCLICK();
@@ -257,6 +337,7 @@ int exp_wxEVT_TEXT_PASTE();
 int exp_wxEVT_TEXT_URL();
 int exp_wxEVT_THREAD();
 int exp_wxEVT_TIMER();
+int exp_wxEVT_TIME_CHANGED();
 int exp_wxEVT_TOGGLEBUTTON();
 int exp_wxEVT_TOOL();
 int exp_wxEVT_TOOLBOOK_PAGE_CHANGED();
@@ -264,6 +345,10 @@ int exp_wxEVT_TOOLBOOK_PAGE_CHANGING();
 int exp_wxEVT_TOOL_DROPDOWN();
 int exp_wxEVT_TOOL_ENTER();
 int exp_wxEVT_TOOL_RCLICKED();
+int exp_wxEVT_TOUCH_BEGIN();
+int exp_wxEVT_TOUCH_CANCEL();
+int exp_wxEVT_TOUCH_END();
+int exp_wxEVT_TOUCH_MOVE();
 int exp_wxEVT_TREEBOOK_NODE_COLLAPSED();
 int exp_wxEVT_TREEBOOK_NODE_EXPANDED();
 int exp_wxEVT_TREEBOOK_PAGE_CHANGED();
@@ -287,24 +372,34 @@ int exp_wxEVT_TREE_ITEM_COLLAPSED();
 int exp_wxEVT_TREE_ITEM_COLLAPSING();
 int exp_wxEVT_TREE_ITEM_EXPANDED();
 int exp_wxEVT_TREE_ITEM_EXPANDING();
+int exp_wxEVT_TREE_ITEM_MENU();
 int exp_wxEVT_TREE_ITEM_MIDDLE_CLICK();
 int exp_wxEVT_TREE_ITEM_RIGHT_CLICK();
 int exp_wxEVT_TREE_KEY_DOWN();
 int exp_wxEVT_TREE_SEL_CHANGED();
 int exp_wxEVT_TREE_SEL_CHANGING();
 int exp_wxEVT_TREE_SET_INFO();
+int exp_wxEVT_TREE_STATE_IMAGE_CLICK();
+int exp_wxEVT_TWO_FINGER_TAP();
 int exp_wxEVT_UPDATE_UI();
 int exp_wxEVT_USER_FIRST();
 int exp_wxEVT_VLBOX();
+int exp_wxEVT_WEBREQUEST_DATA();
+int exp_wxEVT_WEBREQUEST_STATE();
+int exp_wxEVT_WEBVIEW_BROWSING_DATA_CLEARED();
+int exp_wxEVT_WEBVIEW_CREATED();
 int exp_wxEVT_WEBVIEW_ERROR();
 int exp_wxEVT_WEBVIEW_FULLSCREEN_CHANGED();
 int exp_wxEVT_WEBVIEW_LOADED();
 int exp_wxEVT_WEBVIEW_NAVIGATED();
 int exp_wxEVT_WEBVIEW_NAVIGATING();
 int exp_wxEVT_WEBVIEW_NEWWINDOW();
+int exp_wxEVT_WEBVIEW_NEWWINDOW_FEATURES();
+int exp_wxEVT_WEBVIEW_PDF_SAVED();
 int exp_wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED();
 int exp_wxEVT_WEBVIEW_SCRIPT_RESULT();
 int exp_wxEVT_WEBVIEW_TITLE_CHANGED();
+int exp_wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED();
 int exp_wxEVT_WINDOW_MODAL_DIALOG_CLOSED();
 int exp_wxEVT_WIZARD_CANCEL();
 int exp_wxEVT_WIZARD_FINISHED();
@@ -312,6 +407,7 @@ int exp_wxEVT_WIZARD_HELP();
 int exp_wxEVT_WIZARD_PAGE_CHANGED();
 int exp_wxEVT_WIZARD_PAGE_CHANGING();
 int exp_wxEVT_WIZARD_PAGE_SHOWN();
+int exp_wxEVT_WORKER();
 int expK_ADD();
 int expK_ALT();
 int expK_BACK();
@@ -496,6 +592,9 @@ int expwxACC_STATE_SYSTEM_SELECTABLE();
 int expwxACC_STATE_SYSTEM_SELECTED();
 int expwxACC_STATE_SYSTEM_SELFVOICING();
 int expwxACC_STATE_SYSTEM_UNAVAILABLE();
+int expwxAC_DEFAULT_STYLE();
+int expwxAC_NO_AUTORESIZE();
+int expwxAEDIALOG_STYLE();
 int expwxALIGN_BOTTOM();
 int expwxALIGN_CENTER();
 int expwxALIGN_CENTER_HORIZONTAL();
@@ -503,7 +602,9 @@ int expwxALIGN_CENTER_VERTICAL();
 int expwxALIGN_CENTRE();
 int expwxALIGN_CENTRE_HORIZONTAL();
 int expwxALIGN_CENTRE_VERTICAL();
+int expwxALIGN_INVALID();
 int expwxALIGN_LEFT();
+int expwxALIGN_MASK();
 int expwxALIGN_NOT();
 int expwxALIGN_RIGHT();
 int expwxALIGN_TOP();
@@ -512,9 +613,71 @@ int expwxALWAYS_SHOW_SB();
 int expwxAND();
 int expwxAND_INVERT();
 int expwxAND_REVERSE();
+int expwxANTIALIAS_DEFAULT();
+int expwxANTIALIAS_NONE();
+int expwxAUI_DOCKART_ACTIVE_CAPTION_COLOUR();
+int expwxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR();
+int expwxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR();
+int expwxAUI_DOCKART_BACKGROUND_COLOUR();
+int expwxAUI_DOCKART_BORDER_COLOUR();
+int expwxAUI_DOCKART_CAPTION_SIZE();
+int expwxAUI_DOCKART_GRADIENT_TYPE();
+int expwxAUI_DOCKART_GRIPPER_COLOUR();
+int expwxAUI_DOCKART_INACTIVE_CAPTION_COLOUR();
+int expwxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR();
+int expwxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR();
+int expwxAUI_DOCKART_PANE_BORDER_SIZE();
+int expwxAUI_DOCKART_SASH_COLOUR();
+int expwxAUI_DOCKART_SASH_SIZE();
+int expwxAUI_GRADIENT_HORIZONTAL();
+int expwxAUI_GRADIENT_NONE();
+int expwxAUI_GRADIENT_VERTICAL();
+int expwxAUI_MGR_ALLOW_ACTIVE_PANE();
+int expwxAUI_MGR_ALLOW_FLOATING();
+int expwxAUI_MGR_HINT_FADE();
+int expwxAUI_MGR_LIVE_RESIZE();
+int expwxAUI_MGR_RECTANGLE_HINT();
+int expwxAUI_MGR_TRANSPARENT_DRAG();
+int expwxAUI_MGR_TRANSPARENT_HINT();
+int expwxAUI_MGR_VENETIAN_BLINDS_HINT();
+int expwxAUI_MIN_DOCK_BOTH();
+int expwxAUI_MIN_DOCK_ICONS();
+int expwxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT();
+int expwxAUI_MIN_DOCK_TEXT();
+int expwxAUI_NB_BOTTOM();
+int expwxAUI_NB_CLOSE_BUTTON();
+int expwxAUI_NB_CLOSE_ON_ACTIVE_TAB();
+int expwxAUI_NB_CLOSE_ON_ALL_TABS();
+int expwxAUI_NB_DEFAULT_STYLE();
+int expwxAUI_NB_MULTILINE();
+int expwxAUI_NB_PIN_ON_ACTIVE_TAB();
+int expwxAUI_NB_SCROLL_BUTTONS();
+int expwxAUI_NB_TAB_EXTERNAL_MOVE();
+int expwxAUI_NB_TAB_FIXED_WIDTH();
+int expwxAUI_NB_TAB_MOVE();
+int expwxAUI_NB_TAB_SPLIT();
+int expwxAUI_NB_TOP();
+int expwxAUI_NB_UNPIN_ON_ALL_PINNED();
+int expwxAUI_NB_WINDOWLIST_BUTTON();
+int expwxAUI_TB_DEFAULT_STYLE();
+int expwxAUI_TB_HORIZONTAL();
+int expwxAUI_TB_HORZ_TEXT();
+int expwxAUI_TB_OVERFLOW();
+int expwxAUI_TB_TEXT();
+int expwxAUI_TB_VERTICAL();
 int expwxBACKINGSTORE();
 int expwxBACKWARD();
+int expwxBATTERY_CRITICAL_STATE();
+int expwxBATTERY_LOW_STATE();
+int expwxBATTERY_NORMAL_STATE();
+int expwxBATTERY_SHUTDOWN_STATE();
+int expwxBATTERY_UNKNOWN_STATE();
+int expwxBG_STYLE_ERASE();
+int expwxBG_STYLE_PAINT();
+int expwxBG_STYLE_TRANSPARENT();
 int expwxBIG_ENDIAN();
+int expwxBITMAP_SCREEN_DEPTH();
+int expwxBITMAP_TYPE_ANI();
 int expwxBITMAP_TYPE_ANY();
 int expwxBITMAP_TYPE_BMP();
 int expwxBITMAP_TYPE_BMP_RESOURCE();
@@ -540,13 +703,31 @@ int expwxBITMAP_TYPE_PNG_RESOURCE();
 int expwxBITMAP_TYPE_PNM();
 int expwxBITMAP_TYPE_PNM_RESOURCE();
 int expwxBITMAP_TYPE_RESOURCE();
+int expwxBITMAP_TYPE_TGA();
 int expwxBITMAP_TYPE_TIF();
+int expwxBITMAP_TYPE_TIFF();
 int expwxBITMAP_TYPE_TIF_RESOURCE();
+int expwxBITMAP_TYPE_WEBP();
 int expwxBITMAP_TYPE_XBM();
 int expwxBITMAP_TYPE_XBM_DATA();
 int expwxBITMAP_TYPE_XPM();
 int expwxBITMAP_TYPE_XPM_DATA();
+int expwxBK_HITTEST_NOWHERE();
+int expwxBK_HITTEST_ONICON();
+int expwxBK_HITTEST_ONITEM();
+int expwxBK_HITTEST_ONLABEL();
+int expwxBK_HITTEST_ONPAGE();
+int expwxBMP_1BPP();
+int expwxBMP_1BPP_BW();
+int expwxBMP_24BPP();
+int expwxBMP_4BPP();
+int expwxBMP_8BPP();
+int expwxBMP_8BPP_GREY();
+int expwxBMP_8BPP_PALETTE();
+int expwxBMP_8BPP_RED();
 int expwxBORDER_DEFAULT();
+int expwxBORDER_DOUBLE();
+int expwxBORDER_MASK();
 int expwxBORDER_NONE();
 int expwxBORDER_RAISED();
 int expwxBORDER_SIMPLE();
@@ -576,16 +757,24 @@ int expwxBU_LEFT();
 int expwxBU_NOAUTODRAW();
 int expwxBU_RIGHT();
 int expwxBU_TOP();
+int expwxC2S_CSS_SYNTAX();
+int expwxC2S_HTML_SYNTAX();
 int expwxCAL_BORDER_NONE();
 int expwxCAL_BORDER_ROUND();
 int expwxCAL_BORDER_SQUARE();
 int expwxCAL_HITTEST_DAY();
+int expwxCAL_HITTEST_DECMONTH();
 int expwxCAL_HITTEST_HEADER();
+int expwxCAL_HITTEST_INCMONTH();
 int expwxCAL_HITTEST_NOWHERE();
+int expwxCAL_HITTEST_SURROUNDING_WEEK();
 int expwxCAL_MONDAY_FIRST();
 int expwxCAL_NO_MONTH_CHANGE();
 int expwxCAL_NO_YEAR_CHANGE();
+int expwxCAL_SEQUENTIAL_MONTH_SELECTION();
 int expwxCAL_SHOW_HOLIDAYS();
+int expwxCAL_SHOW_SURROUNDING_WEEKS();
+int expwxCAL_SHOW_WEEK_NUMBERS();
 int expwxCAL_SUNDAY_FIRST();
 int expwxCANCEL();
 int expwxCAPTION();
@@ -596,6 +785,8 @@ int expwxCB_DROPDOWN();
 int expwxCB_READONLY();
 int expwxCB_SIMPLE();
 int expwxCB_SORT();
+int expwxCC_SPECIAL_DCLICK();
+int expwxCC_STD_BUTTON();
 int expwxCENTER();
 int expwxCENTER_FRAME();
 int expwxCENTRE();
@@ -610,13 +801,46 @@ int expwxCLEAR();
 int expwxCLIP_CHILDREN();
 int expwxCLIP_SIBLINGS();
 int expwxCLOSE_BOX();
+int expwxCLRP_USE_TEXTCTRL();
+int expwxCMD_LINE_HIDDEN();
+int expwxCMD_LINE_NONE();
+int expwxCMD_LINE_OPTION_HELP();
+int expwxCMD_LINE_PARAM_MULTIPLE();
+int expwxCMD_LINE_PARAM_OPTIONAL();
+int expwxCMD_LINE_SWITCH();
+int expwxCMD_LINE_VAL_NONE();
+int expwxCMD_LINE_VAL_NUMBER();
+int expwxCMD_LINE_VAL_STRING();
+int expwxCMD_SWITCH_ON();
 int expwxCOLOURED();
+int expwxCOL_DEFAULT_FLAGS();
+int expwxCOL_HIDDEN();
+int expwxCOL_REORDERABLE();
+int expwxCOL_RESIZABLE();
+int expwxCOL_SORTABLE();
+int expwxCOL_WIDTH_AUTOSIZE();
+int expwxCOL_WIDTH_DEFAULT();
+int expwxCOMPOSITION_ADD();
+int expwxCOMPOSITION_DIFF();
+int expwxCOMPOSITION_OVER();
 int expwxCONFIG_USE_GLOBAL_FILE();
 int expwxCONFIG_USE_LOCAL_FILE();
 int expwxCONFIG_USE_NO_ESCAPE_CHARACTERS();
 int expwxCONFIG_USE_RELATIVE_PATH();
+int expwxCONTENT_PROTECTION_ENABLED();
+int expwxCONTENT_PROTECTION_NONE();
+int expwxCONTROL_CHECKED();
+int expwxCONTROL_CURRENT();
+int expwxCONTROL_DIRTY();
+int expwxCONTROL_DISABLED();
+int expwxCONTROL_FOCUSED();
+int expwxCONTROL_PRESSED();
+int expwxCONTROL_SELECTED();
+int expwxCONTROL_SPECIAL();
+int expwxCONTROL_UNDETERMINED();
 int expwxCOPY();
 int expwxCURSOR_ARROW();
+int expwxCURSOR_ARROWWAIT();
 int expwxCURSOR_BLANK();
 int expwxCURSOR_BULLSEYE();
 int expwxCURSOR_CHAR();
@@ -643,11 +867,18 @@ int expwxCURSOR_SIZING();
 int expwxCURSOR_SPRAYCAN();
 int expwxCURSOR_WAIT();
 int expwxCURSOR_WATCH();
+int expwxDATAVIEW_CELL_ACTIVATABLE();
+int expwxDATAVIEW_CELL_EDITABLE();
+int expwxDATAVIEW_CELL_INERT();
+int expwxDATAVIEW_COL_REORDERABLE();
+int expwxDATAVIEW_COL_RESIZABLE();
+int expwxDATAVIEW_COL_SORTABLE();
 int expwxDD_CHANGE_DIR();
 int expwxDD_DEFAULT_STYLE();
 int expwxDD_DIR_MUST_EXIST();
 int expwxDD_MULTIPLE();
 int expwxDD_SHOW_HIDDEN();
+int expwxDEFAULT_DIALOG_STYLE();
 int expwxDEFAULT_FRAME_STYLE();
 int expwxDF_BITMAP();
 int expwxDF_DIB();
@@ -668,7 +899,17 @@ int expwxDF_TEXT();
 int expwxDF_TIFF();
 int expwxDF_UNICODETEXT();
 int expwxDF_WAVE();
+int expwxDIALOG_ADAPTATION_MODE_ENABLED();
 int expwxDIALOG_EX_CONTEXTHELP();
+int expwxDIRCTRL_3D_INTERNAL();
+int expwxDIRCTRL_DIR_ONLY();
+int expwxDIRCTRL_EDIT_LABELS();
+int expwxDIRCTRL_MULTIPLE();
+int expwxDIRCTRL_SELECT_FIRST();
+int expwxDIRCTRL_SHOW_FILTERS();
+int expwxDIRP_DEFAULT_STYLE();
+int expwxDIRP_SMALL();
+int expwxDIRP_USE_TEXTCTRL();
 int expwxDIR_CONTINUE();
 int expwxDIR_DEFAULT();
 int expwxDIR_DIRS();
@@ -678,12 +919,28 @@ int expwxDIR_HIDDEN();
 int expwxDIR_IGNORE();
 int expwxDIR_NO_FOLLOW();
 int expwxDIR_STOP();
+int expwxDOC_SILENT();
+int expwxDOUBLE_BORDER();
 int expwxDOWN();
+int expwxDP_ALLOWNONE();
+int expwxDP_DEFAULT();
+int expwxDP_DROPDOWN();
+int expwxDP_SHOWCENTURY();
+int expwxDP_SPIN();
 int expwxDUPLEX_HORIZONTAL();
 int expwxDUPLEX_SIMPLEX();
 int expwxDUPLEX_VERTICAL();
 int expwxDefaultCoord();
+int expwxDragCancel();
+int expwxDragCopy();
+int expwxDragError();
+int expwxDragLink();
+int expwxDragMove();
+int expwxDragNone();
+int expwxDrag_AllowMove();
+int expwxDrag_DefaultMove();
 int expwxEAST();
+int expwxELLIPSIZE_MIDDLE();
 int expwxEQUIV();
 int expwxEXEC_ASYNC();
 int expwxEXEC_BLOCK();
@@ -692,8 +949,14 @@ int expwxEXEC_MAKE_GROUP_LEADER();
 int expwxEXEC_NODISABLE();
 int expwxEXEC_NOEVENTS();
 int expwxEXEC_NOHIDE();
+int expwxEXEC_SHOW_CONSOLE();
 int expwxEXEC_SYNC();
 int expwxEXPAND();
+int expwxFC_DEFAULT_STYLE();
+int expwxFC_MULTIPLE();
+int expwxFC_NOSHOWHIDDEN();
+int expwxFC_OPEN();
+int expwxFC_SAVE();
 int expwxFD_CHANGE_DIR();
 int expwxFD_DEFAULT_STYLE();
 int expwxFD_FILE_MUST_EXIST();
@@ -703,7 +966,11 @@ int expwxFD_OPEN();
 int expwxFD_OVERWRITE_PROMPT();
 int expwxFD_PREVIEW();
 int expwxFD_SAVE();
+int expwxFD_SHORTCUT_TOP();
 int expwxFD_SHOW_HIDDEN();
+int expwxFH_PATH_SHOW_ALWAYS();
+int expwxFH_PATH_SHOW_IF_DIFFERENT();
+int expwxFH_PATH_SHOW_NEVER();
 int expwxFILE_EXISTS_ANY();
 int expwxFILE_EXISTS_DEVICE();
 int expwxFILE_EXISTS_DIR();
@@ -715,13 +982,26 @@ int expwxFILE_EXISTS_SYMLINK();
 int expwxFILTER_ALPHA();
 int expwxFILTER_ALPHANUMERIC();
 int expwxFILTER_ASCII();
+int expwxFILTER_DIGITS();
+int expwxFILTER_EMPTY();
+int expwxFILTER_EXCLUDE_CHAR_LIST();
 int expwxFILTER_EXCLUDE_LIST();
+int expwxFILTER_INCLUDE_CHAR_LIST();
 int expwxFILTER_INCLUDE_LIST();
 int expwxFILTER_NONE();
 int expwxFILTER_NUMERIC();
+int expwxFILTER_SPACE();
+int expwxFILTER_XDIGITS();
 int expwxFIXED_LENGTH();
+int expwxFLEX_GROWMODE_ALL();
+int expwxFLEX_GROWMODE_NONE();
 int expwxFLOOD_BORDER();
 int expwxFLOOD_SURFACE();
+int expwxFLP_DEFAULT_STYLE();
+int expwxFLP_SMALL();
+int expwxFLP_USE_TEXTCTRL();
+int expwxFNTP_DEFAULT_STYLE();
+int expwxFNTP_USE_TEXTCTRL();
 int expwxFONTENCODING_ALTERNATIVE();
 int expwxFONTENCODING_BULGARIAN();
 int expwxFONTENCODING_CP1250();
@@ -760,6 +1040,7 @@ int expwxFONTENCODING_KOI8();
 int expwxFONTENCODING_MAX();
 int expwxFONTENCODING_SYSTEM();
 int expwxFONTENCODING_UNICODE();
+int expwxFONTENCODING_UTF8();
 int expwxFONTFAMILY_DECORATIVE();
 int expwxFONTFAMILY_DEFAULT();
 int expwxFONTFAMILY_MODERN();
@@ -767,7 +1048,9 @@ int expwxFONTFAMILY_ROMAN();
 int expwxFONTFAMILY_SCRIPT();
 int expwxFONTFAMILY_SWISS();
 int expwxFONTFAMILY_TELETYPE();
+int expwxFONTFAMILY_UNKNOWN();
 int expwxFONTSTYLE_ITALIC();
+int expwxFONTSTYLE_MAX();
 int expwxFONTSTYLE_NORMAL();
 int expwxFONTSTYLE_SLANT();
 int expwxFONTWEIGHT_BOLD();
@@ -789,6 +1072,23 @@ int expwxFRAME_NO_TASKBAR();
 int expwxFRAME_NO_WINDOW_MENU();
 int expwxFRAME_SHAPED();
 int expwxFRAME_TOOL_WINDOW();
+int expwxFR_DOWN();
+int expwxFR_MATCHCASE();
+int expwxFR_NOWHOLEWORD();
+int expwxFR_REPLACEDIALOG();
+int expwxFR_WHOLEWORD();
+int expwxFSWPath_Dir();
+int expwxFSWPath_File();
+int expwxFSWPath_None();
+int expwxFSWPath_Tree();
+int expwxFSW_EVENT_ACCESS();
+int expwxFSW_EVENT_ATTRIB();
+int expwxFSW_EVENT_CREATE();
+int expwxFSW_EVENT_DELETE();
+int expwxFSW_EVENT_ERROR();
+int expwxFSW_EVENT_MODIFY();
+int expwxFSW_EVENT_RENAME();
+int expwxFSW_EVENT_WARNING();
 int expwxFULLSCREEN_ALL();
 int expwxFULLSCREEN_NOBORDER();
 int expwxFULLSCREEN_NOCAPTION();
@@ -796,6 +1096,7 @@ int expwxFULLSCREEN_NOMENUBAR();
 int expwxFULLSCREEN_NOSTATUSBAR();
 int expwxFULLSCREEN_NOTOOLBAR();
 int expwxFULL_REPAINT_ON_RESIZE();
+int expwxFromEnd();
 int expwxGA_SMOOTH();
 int expwxGRIDTABLE_NOTIFY_COLS_APPENDED();
 int expwxGRIDTABLE_NOTIFY_COLS_DELETED();
@@ -803,25 +1104,47 @@ int expwxGRIDTABLE_NOTIFY_COLS_INSERTED();
 int expwxGRIDTABLE_NOTIFY_ROWS_APPENDED();
 int expwxGRIDTABLE_NOTIFY_ROWS_DELETED();
 int expwxGRIDTABLE_NOTIFY_ROWS_INSERTED();
+int expwxGRID_AUTOSIZE();
+int expwxGRID_COLUMN();
+int expwxGRID_DRAW_BOX_RECT();
+int expwxGRID_DRAW_CELL_LINES();
+int expwxGRID_DRAW_COLS_HEADER();
+int expwxGRID_DRAW_ROWS_HEADER();
+int expwxGRID_DRAW_SELECTION();
+int expwxGRID_ROW();
 int expwxGROW();
+int expwxGridSelectCells();
+int expwxGridSelectColumns();
+int expwxGridSelectNone();
+int expwxGridSelectRows();
+int expwxGridSelectRowsOrColumns();
 int expwxHATCHSTYLE_BDIAGONAL();
 int expwxHATCHSTYLE_CROSS();
 int expwxHATCHSTYLE_CROSSDIAG();
 int expwxHATCHSTYLE_FDIAGONAL();
 int expwxHATCHSTYLE_HORIZONTAL();
 int expwxHATCHSTYLE_VERTICAL();
+int expwxHDR_SORT_ICON_NONE();
+int expwxHDR_SORT_ICON_UP();
+int expwxHD_ALLOW_HIDE();
+int expwxHD_ALLOW_REORDER();
+int expwxHD_BITMAP_ON_RIGHT();
+int expwxHD_DEFAULT_STYLE();
 int expwxHELP();
 int expwxHF_BOOKMARKS();
 int expwxHF_CONTENTS();
 int expwxHF_DEFAULTSTYLE();
+int expwxHF_DEFAULT_STYLE();
 int expwxHF_FLATTOOLBAR();
 int expwxHF_INDEX();
 int expwxHF_OPENFILES();
 int expwxHF_PRINT();
 int expwxHF_SEARCH();
 int expwxHF_TOOLBAR();
+int expwxHL_DEFAULT_STYLE();
 int expwxHORIZONTAL();
 int expwxHSCROLL();
+int expwxHTML_OPEN();
 int expwxHW_SCROLLBAR_AUTO();
 int expwxHW_SCROLLBAR_NEVER();
 int expwxICONIZE();
@@ -829,18 +1152,30 @@ int expwxICON_ERROR();
 int expwxICON_INFORMATION();
 int expwxICON_QUESTION();
 int expwxICON_WARNING();
+int expwxID_ABORT();
 int expwxID_ABOUT();
+int expwxID_ADD();
 int expwxID_ANY();
 int expwxID_APPLY();
 int expwxID_BACKWARD();
+int expwxID_BOLD();
+int expwxID_BOTTOM();
 int expwxID_CANCEL();
+int expwxID_CDROM();
 int expwxID_CLEAR();
 int expwxID_CLOSE();
+int expwxID_CLOSE_ALL();
+int expwxID_CONVERT();
 int expwxID_COPY();
 int expwxID_CUT();
 int expwxID_DEFAULT();
+int expwxID_DELETE();
+int expwxID_DOWN();
 int expwxID_DUPLICATE();
+int expwxID_EDIT();
+int expwxID_EXECUTE();
 int expwxID_EXIT();
+int expwxID_FILE();
 int expwxID_FILE1();
 int expwxID_FILE2();
 int expwxID_FILE3();
@@ -852,20 +1187,41 @@ int expwxID_FILE8();
 int expwxID_FILE9();
 int expwxID_FILEDLGG();
 int expwxID_FIND();
+int expwxID_FIRST();
+int expwxID_FLOPPY();
 int expwxID_FORWARD();
+int expwxID_HARDDISK();
 int expwxID_HELP();
 int expwxID_HELP_COMMANDS();
 int expwxID_HELP_CONTENTS();
 int expwxID_HELP_CONTEXT();
 int expwxID_HELP_PROCEDURES();
 int expwxID_HIGHEST();
+int expwxID_HOME();
+int expwxID_INDENT();
+int expwxID_INDEX();
+int expwxID_INFO();
+int expwxID_ITALIC();
+int expwxID_JUMP_TO();
+int expwxID_JUSTIFY_CENTER();
+int expwxID_JUSTIFY_FILL();
+int expwxID_JUSTIFY_LEFT();
+int expwxID_JUSTIFY_RIGHT();
+int expwxID_LAST();
 int expwxID_LOWEST();
+int expwxID_MDI_WINDOW_ARRANGE_ICONS();
+int expwxID_MDI_WINDOW_CASCADE();
+int expwxID_MDI_WINDOW_TILE_HORZ();
+int expwxID_MDI_WINDOW_TILE_VERT();
 int expwxID_MORE();
+int expwxID_NETWORK();
 int expwxID_NEW();
 int expwxID_NO();
+int expwxID_NONE();
 int expwxID_OK();
 int expwxID_OPEN();
 int expwxID_PASTE();
+int expwxID_PREFERENCES();
 int expwxID_PREVIEW();
 int expwxID_PREVIEW_CLOSE();
 int expwxID_PREVIEW_FIRST();
@@ -877,21 +1233,60 @@ int expwxID_PREVIEW_PRINT();
 int expwxID_PREVIEW_ZOOM();
 int expwxID_PRINT();
 int expwxID_PRINT_SETUP();
+int expwxID_PROPERTIES();
 int expwxID_REDO();
+int expwxID_REFRESH();
+int expwxID_REMOVE();
+int expwxID_REPLACE();
 int expwxID_RESET();
+int expwxID_RESIZE_FRAME();
 int expwxID_REVERT();
+int expwxID_REVERT_TO_SAVED();
 int expwxID_SAVE();
 int expwxID_SAVEAS();
 int expwxID_SELECTALL();
+int expwxID_SELECT_COLOR();
+int expwxID_SELECT_FONT();
+int expwxID_SEPARATOR();
 int expwxID_SETUP();
+int expwxID_SORT_ASCENDING();
+int expwxID_SORT_DESCENDING();
+int expwxID_SPELL_CHECK();
 int expwxID_STATIC();
+int expwxID_STOP();
+int expwxID_STRIKETHROUGH();
+int expwxID_TOP();
+int expwxID_UNDELETE();
+int expwxID_UNDERLINE();
 int expwxID_UNDO();
+int expwxID_UNINDENT();
+int expwxID_UP();
 int expwxID_YES();
+int expwxID_ZOOM_100();
+int expwxID_ZOOM_FIT();
+int expwxID_ZOOM_IN();
+int expwxID_ZOOM_OUT();
 int expwxIMAGE_LIST_NORMAL();
 int expwxIMAGE_LIST_SMALL();
 int expwxIMAGE_LIST_STATE();
+int expwxIMAGE_QUALITY_BICUBIC();
+int expwxIMAGE_QUALITY_BILINEAR();
+int expwxIMAGE_QUALITY_BOX_AVERAGE();
+int expwxIMAGE_QUALITY_HIGH();
+int expwxIMAGE_QUALITY_NEAREST();
+int expwxIMAGE_QUALITY_NORMAL();
+int expwxIMAGE_RESOLUTION_CM();
+int expwxIMAGE_RESOLUTION_INCHES();
+int expwxIMAGE_RESOLUTION_NONE();
+int expwxINFOBAR_CHECKBOX();
 int expwxINVERT();
+int expwxIPC_INVALID();
+int expwxIPC_PRIVATE();
+int expwxIPC_TEXT();
+int expwxIPC_UNICODETEXT();
+int expwxIPC_UTF8TEXT();
 int expwxITEM_CHECK();
+int expwxITEM_DROPDOWN();
 int expwxITEM_MAX();
 int expwxITEM_NORMAL();
 int expwxITEM_RADIO();
@@ -1165,6 +1560,7 @@ int expwxLC_EDIT_LABELS();
 int expwxLC_HRULES();
 int expwxLC_ICON();
 int expwxLC_LIST();
+int expwxLC_MASK_TYPE();
 int expwxLC_NO_HEADER();
 int expwxLC_NO_SORT_HEADER();
 int expwxLC_REPORT();
@@ -1175,6 +1571,8 @@ int expwxLC_SORT_DESCENDING();
 int expwxLC_USER_TEXT();
 int expwxLC_VRULES();
 int expwxLEFT();
+int expwxLIST_AUTOSIZE();
+int expwxLIST_AUTOSIZE_USEHEADER();
 int expwxLIST_FORMAT_CENTER();
 int expwxLIST_FORMAT_CENTRE();
 int expwxLIST_FORMAT_LEFT();
@@ -1190,6 +1588,9 @@ int expwxLIST_NEXT_ALL();
 int expwxLIST_NEXT_BELOW();
 int expwxLIST_NEXT_LEFT();
 int expwxLIST_NEXT_RIGHT();
+int expwxLIST_RECT_BOUNDS();
+int expwxLIST_RECT_ICON();
+int expwxLIST_RECT_LABEL();
 int expwxLIST_STATE_CUT();
 int expwxLIST_STATE_DONTCARE();
 int expwxLIST_STATE_DROPHILITED();
@@ -1197,11 +1598,21 @@ int expwxLIST_STATE_FOCUSED();
 int expwxLIST_STATE_SELECTED();
 int expwxLITTLE_ENDIAN();
 int expwxLOCALE_DECIMAL_POINT();
+int expwxLOCALE_FORM_ENGLISH();
+int expwxLOCALE_FORM_NATIVE();
 int expwxLOCALE_LOAD_DEFAULT();
+int expwxLOCALE_NAME_LOCALE();
 int expwxLOCALE_THOUSANDS_SEP();
+int expwxLayout_Default();
+int expwxLayout_LeftToRight();
+int expwxLayout_RightToLeft();
 int expwxMAXIMIZE();
 int expwxMAXIMIZE_BOX();
 int expwxMB_DOCKABLE();
+int expwxMEDIACTRLPLAYERCONTROLS_DEFAULT();
+int expwxMEDIACTRLPLAYERCONTROLS_NONE();
+int expwxMEDIASTATE_PLAYING();
+int expwxMEDIASTATE_STOPPED();
 int expwxMENU_TEAROFF();
 int expwxMINIMIZE_BOX();
 int expwxMM_LOMETRIC();
@@ -1218,6 +1629,8 @@ int expwxMOD_META();
 int expwxMOD_SHIFT();
 int expwxMOD_WIN();
 int expwxMORE();
+int expwxMOUSE_BTN_LEFT();
+int expwxMOUSE_WHEEL_VERTICAL();
 int expwxNAND();
 int expwxNAVDIR_DOWN();
 int expwxNAVDIR_FIRSTCHILD();
@@ -1240,6 +1653,10 @@ int expwxNOT_FOUND();
 int expwxNO_DEFAULT();
 int expwxNO_FULL_REPAINT_ON_RESIZE();
 int expwxNO_OP();
+int expwxNUM_VAL_NO_TRAILING_ZEROES();
+int expwxNUM_VAL_SIGN_PLUS();
+int expwxNUM_VAL_THOUSANDS_SEPARATOR();
+int expwxNUM_VAL_ZERO_AS_BLANK();
 int expwxOBJID_ALERT();
 int expwxOBJID_CARET();
 int expwxOBJID_CLIENT();
@@ -1252,11 +1669,16 @@ int expwxOBJID_SYSMENU();
 int expwxOBJID_TITLEBAR();
 int expwxOBJID_VSCROLL();
 int expwxOBJID_WINDOW();
+int expwxODCB_DCLICK_CYCLES();
+int expwxODCB_PAINTING_CONTROL();
+int expwxODCB_PAINTING_SELECTED();
 int expwxODDEVEN_RULE();
 int expwxOK();
 int expwxOR();
 int expwxOR_INVERT();
 int expwxOR_REVERSE();
+int expwxOS_WINDOWS();
+int expwxPAGE_ALL();
 int expwxPAPER_10X11();
 int expwxPAPER_10X14();
 int expwxPAPER_11X17();
@@ -1331,10 +1753,16 @@ int expwxPATH_NO_SEPARATOR();
 int expwxPATH_RMDIR_FULL();
 int expwxPATH_RMDIR_PARENTS();
 int expwxPATH_RMDIR_RECURSIVE();
+int expwxPATH_UNIX();
 int expwxPDP_ENDIAN();
+int expwxPENSTYLE_BDIAGONAL_HATCH();
+int expwxPENSTYLE_CROSSDIAG_HATCH();
+int expwxPENSTYLE_CROSS_HATCH();
 int expwxPENSTYLE_DOT();
 int expwxPENSTYLE_DOT_DASH();
+int expwxPENSTYLE_FDIAGONAL_HATCH();
 int expwxPENSTYLE_FIRST_HATCH();
+int expwxPENSTYLE_HORIZONTAL_HATCH();
 int expwxPENSTYLE_INVALID();
 int expwxPENSTYLE_LAST_HATCH();
 int expwxPENSTYLE_LONG_DASH();
@@ -1345,12 +1773,51 @@ int expwxPENSTYLE_STIPPLE_MASK();
 int expwxPENSTYLE_STIPPLE_MASK_OPAQUE();
 int expwxPENSTYLE_TRANSPARENT();
 int expwxPENSTYLE_USER_DASH();
+int expwxPENSTYLE_VERTICAL_HATCH();
+int expwxPG_AUTO_SORT();
+int expwxPG_BOLD_MODIFIED();
+int expwxPG_DESCRIPTION();
+int expwxPG_EX_ALWAYS_ALLOW_FOCUS();
+int expwxPG_EX_AUTO_UNSPECIFIED_VALUES();
+int expwxPG_EX_ENABLE_TLP_TRACKING();
+int expwxPG_EX_HELP_AS_TOOLTIPS();
+int expwxPG_EX_HIDE_PAGE_BUTTONS();
+int expwxPG_EX_INIT_NOCAT();
+int expwxPG_EX_MODE_BUTTONS();
+int expwxPG_EX_MULTIPLE_SELECTION();
+int expwxPG_EX_NATIVE_DOUBLE_BUFFERING();
+int expwxPG_EX_NO_FLAT_TOOLBAR();
+int expwxPG_EX_NO_TOOLBAR_DIVIDER();
+int expwxPG_EX_TOOLBAR_SEPARATOR();
+int expwxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES();
+int expwxPG_HIDE_CATEGORIES();
+int expwxPG_HIDE_MARGIN();
+int expwxPG_ITERATE_ALL();
+int expwxPG_ITERATE_CATEGORIES();
+int expwxPG_ITERATE_DEFAULT();
+int expwxPG_ITERATE_VISIBLE();
+int expwxPG_LIMITED_EDITING();
+int expwxPG_NO_INTERNAL_BORDER();
+int expwxPG_SPLITTER_AUTO_CENTER();
+int expwxPG_STATIC_LAYOUT();
+int expwxPG_STATIC_SPLITTER();
+int expwxPG_TOOLBAR();
+int expwxPG_TOOLTIPS();
 int expwxPLATFORM_CURRENT();
 int expwxPLATFORM_MAC();
 int expwxPLATFORM_UNIX();
 int expwxPLATFORM_WINDOWS();
+int expwxPNG_TYPE_COLOUR();
+int expwxPNG_TYPE_GREY();
+int expwxPNG_TYPE_GREY_RED();
 int expwxPOPUP_WINDOW();
 int expwxPORTRAIT();
+int expwxPORT_MAC();
+int expwxPOWER_BATTERY();
+int expwxPOWER_DELAY();
+int expwxPOWER_RESOURCE_SYSTEM();
+int expwxPOWER_SOCKET();
+int expwxPOWER_UNKNOWN();
 int expwxPREVIEW_DEFAULT();
 int expwxPREVIEW_FIRST();
 int expwxPREVIEW_GOTO();
@@ -1366,25 +1833,35 @@ int expwxPRINT_MODE_FILE();
 int expwxPRINT_MODE_NONE();
 int expwxPRINT_MODE_PREVIEW();
 int expwxPRINT_MODE_PRINTER();
+int expwxPRIORITY_DEFAULT();
+int expwxPRIORITY_MAX();
+int expwxPRIORITY_MIN();
 int expwxPROCESS_DEFAULT();
 int expwxPROCESS_REDIRECT();
+int expwxPROPSHEET_BUTTONTOOLBOOK();
+int expwxPROPSHEET_SHRINKTOFIT();
+int expwxPROPSHEET_TOOLBOOK();
 int expwxRA_SPECIFY_COLS();
 int expwxRA_SPECIFY_ROWS();
 int expwxRB_GROUP();
+int expwxREMOVE_LEADING_SPACES();
 int expwxRESET();
 int expwxRESIZE_BORDER();
 int expwxRETAINED();
+int expwxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR();
+int expwxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR();
+int expwxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR();
 int expRIBBON_BAR_ALWAYS_SHOW_TABS();
-int expRIBBON_BAR_DEFAULT_STYLE();
-int expRIBBON_BAR_FLOW_HORIZONTAL();
-int expRIBBON_BAR_FLOW_VERTICAL();
+int expwxRIBBON_BAR_DEFAULT_STYLE();
+int expwxRIBBON_BAR_FLOW_HORIZONTAL();
+int expwxRIBBON_BAR_FLOW_VERTICAL();
 int expRIBBON_BAR_FOLDBAR_STYLE();
-int expRIBBON_BAR_SHOW_HELP_BUTTON();
-int expRIBBON_BAR_SHOW_PAGE_ICONS();
-int expRIBBON_BAR_SHOW_PAGE_LABELS();
-int expRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS();
+int expwxRIBBON_BAR_SHOW_HELP_BUTTON();
+int expwxRIBBON_BAR_SHOW_PAGE_ICONS();
+int expwxRIBBON_BAR_SHOW_PAGE_LABELS();
+int expwxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS();
 int expRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS();
-int expRIBBON_BAR_SHOW_TOGGLE_BUTTON();
+int expwxRIBBON_BAR_SHOW_TOGGLE_BUTTON();
 int expwxRIBBON_BUTTONBAR_BUTTON_LARGE();
 int expwxRIBBON_BUTTONBAR_BUTTON_MEDIUM();
 int expwxRIBBON_BUTTONBAR_BUTTON_SMALL();
@@ -1396,12 +1873,22 @@ int expwxRIBBON_GALLERY_BUTTON_ACTIVE();
 int expwxRIBBON_GALLERY_BUTTON_DISABLED();
 int expwxRIBBON_GALLERY_BUTTON_HOVERED();
 int expwxRIBBON_GALLERY_BUTTON_NORMAL();
-int expRIBBON_PANEL_DEFAULT_STYLE();
-int expRIBBON_PANEL_EXT_BUTTON();
+int expwxRIBBON_PANEL_DEFAULT_STYLE();
+int expwxRIBBON_PANEL_EXT_BUTTON();
 int expRIBBON_PANEL_FLEXIBLE();
 int expRIBBON_PANEL_MINIMISE_BUTTON();
-int expRIBBON_PANEL_NO_AUTO_MINIMISE();
+int expwxRIBBON_PANEL_NO_AUTO_MINIMISE();
 int expRIBBON_PANEL_STRETCH();
+int expwxRICHTEXT_FIELD_STYLE_COMPOSITE();
+int expwxRICHTEXT_FIELD_STYLE_END_TAG();
+int expwxRICHTEXT_FIELD_STYLE_NO_BORDER();
+int expwxRICHTEXT_FIELD_STYLE_RECTANGLE();
+int expwxRICHTEXT_FIELD_STYLE_START_TAG();
+int expwxRICHTEXT_ORGANISER_BROWSE_NUMBERING();
+int expwxRICHTEXT_PAGE_ALL();
+int expwxRICHTEXT_PAGE_CENTRE();
+int expwxRICHTEXT_PAGE_RIGHT();
+int expwxRICHTEXT_TYPE_TEXT();
 int expwxRIGHT();
 int expwxROLE_NONE();
 int expwxROLE_SYSTEM_ALERT();
@@ -1478,6 +1965,20 @@ int expwxSASH_TOP();
 int expwxSET();
 int expwxSETUP();
 int expwxSHAPED();
+int expwxSHOW_EFFECT_BLEND();
+int expwxSHOW_EFFECT_EXPAND();
+int expwxSHOW_EFFECT_MAX();
+int expwxSHOW_EFFECT_NONE();
+int expwxSHOW_EFFECT_ROLL_TO_BOTTOM();
+int expwxSHOW_EFFECT_ROLL_TO_LEFT();
+int expwxSHOW_EFFECT_ROLL_TO_RIGHT();
+int expwxSHOW_EFFECT_ROLL_TO_TOP();
+int expwxSHOW_EFFECT_SLIDE_TO_BOTTOM();
+int expwxSHOW_EFFECT_SLIDE_TO_LEFT();
+int expwxSHOW_EFFECT_SLIDE_TO_RIGHT();
+int expwxSHOW_EFFECT_SLIDE_TO_TOP();
+int expwxSHOW_SB_DEFAULT();
+int expwxSHOW_SB_NEVER();
 int expwxSHRINK();
 int expwxSHUTDOWN_FORCE();
 int expwxSHUTDOWN_LOGOFF();
@@ -1513,6 +2014,27 @@ int expwxSL_LEFT();
 int expwxSL_RIGHT();
 int expwxSL_SELRANGE();
 int expwxSL_TOP();
+int expwxSOCKET_BLOCK();
+int expwxSOCKET_CONNECTION();
+int expwxSOCKET_CONNECTION_FLAG();
+int expwxSOCKET_INPUT();
+int expwxSOCKET_INPUT_FLAG();
+int expwxSOCKET_INVADDR();
+int expwxSOCKET_INVOP();
+int expwxSOCKET_INVPORT();
+int expwxSOCKET_IOERR();
+int expwxSOCKET_LOST();
+int expwxSOCKET_LOST_FLAG();
+int expwxSOCKET_MEMERR();
+int expwxSOCKET_NOERROR();
+int expwxSOCKET_NOHOST();
+int expwxSOCKET_NOWAIT();
+int expwxSOCKET_OUTPUT();
+int expwxSOCKET_OUTPUT_FLAG();
+int expwxSOCKET_REUSEADDR();
+int expwxSOCKET_TIMEDOUT();
+int expwxSOCKET_WAITALL();
+int expwxSOCKET_WOULDBLOCK();
 int expwxSOUND_ASYNC();
 int expwxSOUND_LOOP();
 int expwxSOUND_SYNC();
@@ -1531,8 +2053,11 @@ int expwxSP_PERMIT_UNSPLIT();
 int expwxSP_WRAP();
 int expwxSRC_INVERT();
 int expwxSTAY_ON_TOP();
+int expwxSTB_DEFAULT_STYLE();
 int expwxSTREAM_EOF();
+int expwxSTREAM_FILEEXT();
 int expwxSTREAM_NO_ERROR();
+int expwxSTREAM_PROTOCOL();
 int expwxSTREAM_READ_ERROR();
 int expwxSTREAM_WRITE_ERROR();
 int expwxSTRETCH_NOT();
@@ -1566,16 +2091,26 @@ int expwxSYS_COLOUR_BTNSHADOW();
 int expwxSYS_COLOUR_BTNTEXT();
 int expwxSYS_COLOUR_CAPTIONTEXT();
 int expwxSYS_COLOUR_DESKTOP();
+int expwxSYS_COLOUR_GRADIENTACTIVECAPTION();
+int expwxSYS_COLOUR_GRADIENTINACTIVECAPTION();
 int expwxSYS_COLOUR_GRAYTEXT();
+int expwxSYS_COLOUR_GRIDLINES();
 int expwxSYS_COLOUR_HIGHLIGHT();
 int expwxSYS_COLOUR_HIGHLIGHTTEXT();
+int expwxSYS_COLOUR_HOTLIGHT();
 int expwxSYS_COLOUR_INACTIVEBORDER();
 int expwxSYS_COLOUR_INACTIVECAPTION();
 int expwxSYS_COLOUR_INACTIVECAPTIONTEXT();
 int expwxSYS_COLOUR_INFOBK();
 int expwxSYS_COLOUR_INFOTEXT();
 int expwxSYS_COLOUR_LISTBOX();
+int expwxSYS_COLOUR_LISTBOXHIGHLIGHT();
+int expwxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT();
+int expwxSYS_COLOUR_LISTBOXTEXT();
+int expwxSYS_COLOUR_MAX();
 int expwxSYS_COLOUR_MENU();
+int expwxSYS_COLOUR_MENUBAR();
+int expwxSYS_COLOUR_MENUHILIGHT();
 int expwxSYS_COLOUR_MENUTEXT();
 int expwxSYS_COLOUR_SCROLLBAR();
 int expwxSYS_COLOUR_WINDOW();
@@ -1626,6 +2161,7 @@ int expwxSYS_VSCROLL_X();
 int expwxSYS_VTHUMB_Y();
 int expwxSYS_WINDOWMIN_X();
 int expwxSYS_WINDOWMIN_Y();
+int expwxS_DIR_DEFAULT();
 int expwxStrip_Accel();
 int expwxStrip_All();
 int expwxStrip_CJKMnemonics();
@@ -1640,20 +2176,79 @@ int expwxStyle_SignPlus();
 int expwxStyle_SignSpace();
 int expwxStyle_WithThousandsSep();
 int expwxTAB_TRAVERSAL();
+int expwxTASKBAR_BUTTON_ERROR();
+int expwxTASKBAR_BUTTON_INDETERMINATE();
+int expwxTASKBAR_BUTTON_NORMAL();
+int expwxTASKBAR_BUTTON_NO_PROGRESS();
+int expwxTASKBAR_BUTTON_PAUSED();
+int expwxTASKBAR_JUMP_LIST_DESTINATION();
+int expwxTASKBAR_JUMP_LIST_SEPARATOR();
+int expwxTASKBAR_JUMP_LIST_TASK();
+int expwxTB_BOTTOM();
 int expwxTB_DOCKABLE();
 int expwxTB_FLAT();
 int expwxTB_HORIZONTAL();
+int expwxTB_HORZ_LAYOUT();
+int expwxTB_HORZ_TEXT();
+int expwxTB_LEFT();
 int expwxTB_NOALIGN();
 int expwxTB_NODIVIDER();
 int expwxTB_NOICONS();
+int expwxTB_NO_TOOLTIPS();
+int expwxTB_RIGHT();
 int expwxTB_TEXT();
+int expwxTB_TOP();
 int expwxTB_VERTICAL();
 int expwxTC_FIXEDWIDTH();
 int expwxTC_MULTILINE();
 int expwxTC_OWNERDRAW();
 int expwxTC_RIGHTJUSTIFY();
+int expwxTEXT_ALIGNMENT_CENTRE();
+int expwxTEXT_ALIGNMENT_JUSTIFIED();
+int expwxTEXT_ALIGNMENT_LEFT();
+int expwxTEXT_ALIGNMENT_RIGHT();
+int expwxTEXT_ATTR_ALIGNMENT();
+int expwxTEXT_ATTR_BACKGROUND_COLOUR();
+int expwxTEXT_ATTR_BULLET_NUMBER();
+int expwxTEXT_ATTR_BULLET_STYLE();
+int expwxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT();
+int expwxTEXT_ATTR_BULLET_STYLE_ARABIC();
+int expwxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER();
+int expwxTEXT_ATTR_BULLET_STYLE_OUTLINE();
+int expwxTEXT_ATTR_BULLET_STYLE_PARENTHESES();
+int expwxTEXT_ATTR_BULLET_STYLE_PERIOD();
+int expwxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER();
+int expwxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER();
+int expwxTEXT_ATTR_BULLET_STYLE_STANDARD();
+int expwxTEXT_ATTR_EFFECT_STRIKETHROUGH();
+int expwxTEXT_ATTR_EFFECT_SUBSCRIPT();
+int expwxTEXT_ATTR_EFFECT_SUPERSCRIPT();
+int expwxTEXT_ATTR_FONT();
+int expwxTEXT_ATTR_FONT_FACE();
+int expwxTEXT_ATTR_FONT_ITALIC();
+int expwxTEXT_ATTR_FONT_WEIGHT();
+int expwxTEXT_ATTR_LEFT_INDENT();
+int expwxTEXT_ATTR_LINE_SPACING();
+int expwxTEXT_ATTR_LINE_SPACING_HALF();
+int expwxTEXT_ATTR_PARA_SPACING_AFTER();
+int expwxTEXT_ATTR_PARA_SPACING_BEFORE();
+int expwxTEXT_ATTR_RIGHT_INDENT();
+int expwxTEXT_ATTR_TABS();
+int expwxTEXT_ATTR_TEXT_COLOUR();
+int expwxTEXT_ATTR_UNDERLINE_DOUBLE();
+int expwxTEXT_ATTR_UNDERLINE_SPECIAL();
+int expwxTEXT_ATTR_UNITS_PIXELS();
+int expwxTEXT_BOX_ATTR_BORDER_SOLID();
+int expwxTEXT_BOX_ATTR_FLOAT_LEFT();
+int expwxTEXT_BOX_ATTR_FLOAT_RIGHT();
+int expwxTEXT_TYPE_RTF();
 int expwxTE_AUTO_URL();
 int expwxTE_CENTRE();
+int expwxTE_HT_BEFORE();
+int expwxTE_HT_BELOW();
+int expwxTE_HT_BEYOND();
+int expwxTE_HT_ON_TEXT();
+int expwxTE_HT_UNKNOWN();
 int expwxTE_LEFT();
 int expwxTE_MULTILINE();
 int expwxTE_NOHIDESEL();
@@ -1666,11 +2261,28 @@ int expwxTE_RICH();
 int expwxTE_RICH2();
 int expwxTE_RIGHT();
 int expwxTE_WORDWRAP();
+int expwxTHREAD_DETACHED();
+int expwxTHREAD_JOINABLE();
+int expwxTHREAD_NO_ERROR();
+int expwxTITLEBAR_BUTTON_CLOSE();
+int expwxTITLEBAR_BUTTON_HELP();
+int expwxTITLEBAR_BUTTON_ICONIZE();
+int expwxTITLEBAR_BUTTON_MAXIMIZE();
+int expwxTITLEBAR_BUTTON_RESTORE();
+int expwxTL_3STATE();
+int expwxTL_CHECKBOX();
+int expwxTL_DEFAULT_STYLE();
+int expwxTL_MULTIPLE();
+int expwxTL_USER_3STATE();
+int expwxTOKEN_RET_EMPTY();
 int expwxTOOL_BOTTOM();
 int expwxTOOL_LEFT();
 int expwxTOOL_RIGHT();
 int expwxTOOL_TOP();
 int expwxTOP();
+int expwxTOUCH_ALL_GESTURES();
+int expwxTOUCH_RAW_EVENTS();
+int expwxTRANSPARENT();
 int expwxTREE_HITTEST_ABOVE();
 int expwxTREE_HITTEST_BELOW();
 int expwxTREE_HITTEST_NOWHERE();
@@ -1685,6 +2297,7 @@ int expwxTREE_HITTEST_ONITEMSTATEICON();
 int expwxTREE_HITTEST_ONITEMUPPERPART();
 int expwxTREE_HITTEST_TOLEFT();
 int expwxTREE_HITTEST_TORIGHT();
+int expwxTR_DEFAULT_STYLE();
 int expwxTR_EDIT_LABELS();
 int expwxTR_FULL_ROW_HIGHLIGHT();
 int expwxTR_HAS_BUTTONS();
@@ -1697,34 +2310,76 @@ int expwxTR_NO_LINES();
 int expwxTR_ROW_LINES();
 int expwxTR_SINGLE();
 int expwxTR_TWIST_BUTTONS();
+int expwxTipKind_Auto();
 int expwxTreeItemIcon_Expanded();
 int expwxTreeItemIcon_Normal();
 int expwxTreeItemIcon_Selected();
 int expwxTreeItemIcon_SelectedExpanded();
 int expwxUP();
+int expwxURL_NOERR();
+int expwxUSER_ATTENTION_ERROR();
 int expwxVERTICAL();
 int expwxVSCROLL();
 int expwxWANTS_CHARS();
+int expwxWEBVIEW_BROWSING_DATA_ALL();
+int expwxWEBVIEW_BROWSING_DATA_CACHE();
+int expwxWEBVIEW_BROWSING_DATA_COOKIES();
+int expwxWEBVIEW_BROWSING_DATA_DOM_STORAGE();
+int expwxWEBVIEW_BROWSING_DATA_OTHER();
+int expwxWEBVIEW_FIND_BACKWARDS();
+int expwxWEBVIEW_FIND_DEFAULT();
+int expwxWEBVIEW_FIND_ENTIRE_WORD();
+int expwxWEBVIEW_FIND_HIGHLIGHT_RESULT();
+int expwxWEBVIEW_FIND_MATCH_CASE();
+int expwxWEBVIEW_FIND_WRAP();
+int expwxWEBVIEW_NAV_ACTION_USER();
+int expwxWEBVIEW_NAV_ERR_AUTH();
+int expwxWEBVIEW_NAV_ERR_CERTIFICATE();
+int expwxWEBVIEW_NAV_ERR_CONNECTION();
+int expwxWEBVIEW_NAV_ERR_NOT_FOUND();
+int expwxWEBVIEW_NAV_ERR_OTHER();
+int expwxWEBVIEW_NAV_ERR_REQUEST();
+int expwxWEBVIEW_NAV_ERR_SECURITY();
+int expwxWEBVIEW_NAV_ERR_USER_CANCELLED();
+int expwxWEBVIEW_PRINT_DEFAULT();
+int expwxWEBVIEW_PRINT_HIDE_HEADER_FOOTER();
+int expwxWEBVIEW_ZOOM_LARGE();
+int expwxWEBVIEW_ZOOM_LARGEST();
+int expwxWEBVIEW_ZOOM_MEDIUM();
+int expwxWEBVIEW_ZOOM_SMALL();
+int expwxWEBVIEW_ZOOM_TINY();
+int expwxWEBVIEW_ZOOM_TYPE_LAYOUT();
+int expwxWEBVIEW_ZOOM_TYPE_TEXT();
 int expwxWEST();
 int expwxWINDING_RULE();
+int expwxWINDOW_VARIANT_LARGE();
+int expwxWINDOW_VARIANT_MINI();
+int expwxWINDOW_VARIANT_NORMAL();
+int expwxWINDOW_VARIANT_SMALL();
 int expwxWS_EX_VALIDATE_RECURSIVELY();
+int expwxXML_ELEMENT_NODE();
+int expwxXML_TEXT_NODE();
 int expwxXOR();
+int expwxXRC_USE_ENVVARS();
+int expwxXRC_USE_LOCALE();
 int expwxYES();
 int expwxYES_DEFAULT();
 int expwxYES_NO();
+int expwxZIP_FORMAT_ZIP64();
 
-static int s_values[1708];
+static int s_values[2362];
 static std::once_flag s_once;
 
 WXFFI_EXPORT(int, kwxConstants_IntCount)()
 {
-    return 1708;
+    return 2362;
 }
 
 WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
 {
     std::call_once(s_once, [] {
         int i = 0;
+        s_values[i++] = exp_wxEVT_ACCELERATOR_KEY();
         s_values[i++] = exp_wxEVT_ACTIVATE();
         s_values[i++] = exp_wxEVT_ACTIVATE_APP();
         s_values[i++] = exp_wxEVT_AUINOTEBOOK_ALLOW_DND();
@@ -1759,6 +2414,8 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_AUX2_DCLICK();
         s_values[i++] = exp_wxEVT_AUX2_DOWN();
         s_values[i++] = exp_wxEVT_AUX2_UP();
+        s_values[i++] = exp_wxEVT_BACKSTAGE_CLICKED();
+        s_values[i++] = exp_wxEVT_BACKSTAGE_ITEM_CLICKED();
         s_values[i++] = exp_wxEVT_BUTTON();
         s_values[i++] = exp_wxEVT_CALCULATE_LAYOUT();
         s_values[i++] = exp_wxEVT_CALENDAR_DAY_CHANGED();
@@ -1779,28 +2436,44 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_CHOICEBOOK_PAGE_CHANGING();
         s_values[i++] = exp_wxEVT_CLIPBOARD_CHANGED();
         s_values[i++] = exp_wxEVT_CLOSE_WINDOW();
+        s_values[i++] = exp_wxEVT_COLLAPSIBLEHEADER_CHANGED();
         s_values[i++] = exp_wxEVT_COLLAPSIBLEPANE_CHANGED();
         s_values[i++] = exp_wxEVT_COLOURPICKER_CHANGED();
+        s_values[i++] = exp_wxEVT_COLOURPICKER_CURRENT_CHANGED();
+        s_values[i++] = exp_wxEVT_COLOURPICKER_DIALOG_CANCELLED();
+        s_values[i++] = exp_wxEVT_COLOUR_CHANGED();
         s_values[i++] = exp_wxEVT_COMBOBOX();
         s_values[i++] = exp_wxEVT_COMBOBOX_CLOSEUP();
         s_values[i++] = exp_wxEVT_COMBOBOX_DROPDOWN();
         s_values[i++] = exp_wxEVT_CONTEXT_MENU();
         s_values[i++] = exp_wxEVT_CREATE();
+        s_values[i++] = exp_wxEVT_DATAVIEW_COLUMN_HEADER_CLICK();
+        s_values[i++] = exp_wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK();
+        s_values[i++] = exp_wxEVT_DATAVIEW_COLUMN_REORDERED();
+        s_values[i++] = exp_wxEVT_DATAVIEW_COLUMN_SORTED();
         s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_ACTIVATED();
+        s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_BEGIN_DRAG();
         s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_COLLAPSED();
         s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_COLLAPSING();
+        s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_CONTEXT_MENU();
+        s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_DROP();
+        s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE();
         s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_EDITING_DONE();
         s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_EDITING_STARTED();
         s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_EXPANDED();
         s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_EXPANDING();
+        s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_START_EDITING();
         s_values[i++] = exp_wxEVT_DATAVIEW_ITEM_VALUE_CHANGED();
         s_values[i++] = exp_wxEVT_DATAVIEW_SELECTION_CHANGED();
         s_values[i++] = exp_wxEVT_DATE_CHANGED();
         s_values[i++] = exp_wxEVT_DELETE();
         s_values[i++] = exp_wxEVT_DESTROY();
         s_values[i++] = exp_wxEVT_DETAILED_HELP();
+        s_values[i++] = exp_wxEVT_DIRCTRL_FILEACTIVATED();
+        s_values[i++] = exp_wxEVT_DIRCTRL_SELECTIONCHANGED();
         s_values[i++] = exp_wxEVT_DIRPICKER_CHANGED();
         s_values[i++] = exp_wxEVT_DISPLAY_CHANGED();
+        s_values[i++] = exp_wxEVT_DPI_CHANGED();
         s_values[i++] = exp_wxEVT_DROP_FILES();
         s_values[i++] = exp_wxEVT_END_PROCESS();
         s_values[i++] = exp_wxEVT_END_SESSION();
@@ -1811,9 +2484,17 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_FILECTRL_FOLDERCHANGED();
         s_values[i++] = exp_wxEVT_FILECTRL_SELECTIONCHANGED();
         s_values[i++] = exp_wxEVT_FILEPICKER_CHANGED();
+        s_values[i++] = exp_wxEVT_FIND();
+        s_values[i++] = exp_wxEVT_FIND_CLOSE();
+        s_values[i++] = exp_wxEVT_FIND_NEXT();
+        s_values[i++] = exp_wxEVT_FIND_REPLACE();
+        s_values[i++] = exp_wxEVT_FIND_REPLACE_ALL();
         s_values[i++] = exp_wxEVT_FIRST();
         s_values[i++] = exp_wxEVT_FONTPICKER_CHANGED();
         s_values[i++] = exp_wxEVT_FSWATCHER();
+        s_values[i++] = exp_wxEVT_GESTURE_PAN();
+        s_values[i++] = exp_wxEVT_GESTURE_ROTATE();
+        s_values[i++] = exp_wxEVT_GESTURE_ZOOM();
         s_values[i++] = exp_wxEVT_GRID_CELL_BEGIN_DRAG();
         s_values[i++] = exp_wxEVT_GRID_CELL_CHANGE();
         s_values[i++] = exp_wxEVT_GRID_CELL_CHANGED();
@@ -1822,6 +2503,8 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_GRID_CELL_LEFT_DCLICK();
         s_values[i++] = exp_wxEVT_GRID_CELL_RIGHT_CLICK();
         s_values[i++] = exp_wxEVT_GRID_CELL_RIGHT_DCLICK();
+        s_values[i++] = exp_wxEVT_GRID_COL_AUTO_SIZE();
+        s_values[i++] = exp_wxEVT_GRID_COL_LABEL_SIZE();
         s_values[i++] = exp_wxEVT_GRID_COL_MOVE();
         s_values[i++] = exp_wxEVT_GRID_COL_SIZE();
         s_values[i++] = exp_wxEVT_GRID_COL_SORT();
@@ -1833,12 +2516,21 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_GRID_LABEL_RIGHT_CLICK();
         s_values[i++] = exp_wxEVT_GRID_LABEL_RIGHT_DCLICK();
         s_values[i++] = exp_wxEVT_GRID_RANGE_SELECT();
+        s_values[i++] = exp_wxEVT_GRID_RANGE_SELECTED();
+        s_values[i++] = exp_wxEVT_GRID_RANGE_SELECTING();
+        s_values[i++] = exp_wxEVT_GRID_ROW_LABEL_SIZE();
+        s_values[i++] = exp_wxEVT_GRID_ROW_MOVE();
         s_values[i++] = exp_wxEVT_GRID_ROW_SIZE();
         s_values[i++] = exp_wxEVT_GRID_SELECT_CELL();
+        s_values[i++] = exp_wxEVT_GRID_TABBING();
+        s_values[i++] = exp_wxEVT_HEADER_BEGIN_RESIZE();
+        s_values[i++] = exp_wxEVT_HEADER_END_RESIZE();
+        s_values[i++] = exp_wxEVT_HEADER_RESIZING();
         s_values[i++] = exp_wxEVT_HELP();
         s_values[i++] = exp_wxEVT_HIBERNATE();
         s_values[i++] = exp_wxEVT_HOTKEY();
         s_values[i++] = exp_wxEVT_HTML_CELL_CLICKED();
+        s_values[i++] = exp_wxEVT_HTML_CELL_HOVER();
         s_values[i++] = exp_wxEVT_HTML_CELL_MOUSE_HOVER();
         s_values[i++] = exp_wxEVT_HTML_LINK_CLICKED();
         s_values[i++] = exp_wxEVT_HTML_SET_TITLE();
@@ -1865,19 +2557,33 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_LIST_BEGIN_DRAG();
         s_values[i++] = exp_wxEVT_LIST_BEGIN_LABEL_EDIT();
         s_values[i++] = exp_wxEVT_LIST_BEGIN_RDRAG();
+        s_values[i++] = exp_wxEVT_LIST_CACHE_HINT();
+        s_values[i++] = exp_wxEVT_LIST_COL_BEGIN_DRAG();
         s_values[i++] = exp_wxEVT_LIST_COL_CLICK();
+        s_values[i++] = exp_wxEVT_LIST_COL_DRAGGING();
+        s_values[i++] = exp_wxEVT_LIST_COL_END_DRAG();
+        s_values[i++] = exp_wxEVT_LIST_COL_RIGHT_CLICK();
         s_values[i++] = exp_wxEVT_LIST_DELETE_ALL_ITEMS();
         s_values[i++] = exp_wxEVT_LIST_DELETE_ITEM();
         s_values[i++] = exp_wxEVT_LIST_END_LABEL_EDIT();
         s_values[i++] = exp_wxEVT_LIST_INSERT_ITEM();
         s_values[i++] = exp_wxEVT_LIST_ITEM_ACTIVATED();
+        s_values[i++] = exp_wxEVT_LIST_ITEM_CHECKED();
         s_values[i++] = exp_wxEVT_LIST_ITEM_DESELECTED();
         s_values[i++] = exp_wxEVT_LIST_ITEM_FOCUSED();
         s_values[i++] = exp_wxEVT_LIST_ITEM_MIDDLE_CLICK();
         s_values[i++] = exp_wxEVT_LIST_ITEM_RIGHT_CLICK();
         s_values[i++] = exp_wxEVT_LIST_ITEM_SELECTED();
+        s_values[i++] = exp_wxEVT_LIST_ITEM_UNCHECKED();
         s_values[i++] = exp_wxEVT_LIST_KEY_DOWN();
+        s_values[i++] = exp_wxEVT_LONG_PRESS();
+        s_values[i++] = exp_wxEVT_MAGNIFY();
         s_values[i++] = exp_wxEVT_MAXIMIZE();
+        s_values[i++] = exp_wxEVT_MEDIA_FINISHED();
+        s_values[i++] = exp_wxEVT_MEDIA_LOADED();
+        s_values[i++] = exp_wxEVT_MEDIA_PAUSE();
+        s_values[i++] = exp_wxEVT_MEDIA_PLAY();
+        s_values[i++] = exp_wxEVT_MEDIA_STOP();
         s_values[i++] = exp_wxEVT_MENU();
         s_values[i++] = exp_wxEVT_MENU_CLOSE();
         s_values[i++] = exp_wxEVT_MENU_HIGHLIGHT();
@@ -1893,19 +2599,28 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_MOVE_END();
         s_values[i++] = exp_wxEVT_MOVE_START();
         s_values[i++] = exp_wxEVT_MOVING();
+        s_values[i++] = exp_wxEVT_MY_CUSTOM_COMMAND();
         s_values[i++] = exp_wxEVT_NAVIGATION_KEY();
         s_values[i++] = exp_wxEVT_NC_PAINT();
         s_values[i++] = exp_wxEVT_NOTEBOOK_PAGE_CHANGED();
         s_values[i++] = exp_wxEVT_NOTEBOOK_PAGE_CHANGING();
+        s_values[i++] = exp_wxEVT_NOTIFICATION_MESSAGE_ACTION();
+        s_values[i++] = exp_wxEVT_NOTIFICATION_MESSAGE_CLICK();
+        s_values[i++] = exp_wxEVT_NOTIFICATION_MESSAGE_DISMISSED();
         s_values[i++] = exp_wxEVT_NULL();
         s_values[i++] = exp_wxEVT_PAINT();
         s_values[i++] = exp_wxEVT_PALETTE_CHANGED();
         s_values[i++] = exp_wxEVT_PG_CHANGED();
         s_values[i++] = exp_wxEVT_PG_CHANGING();
+        s_values[i++] = exp_wxEVT_PG_COL_BEGIN_DRAG();
+        s_values[i++] = exp_wxEVT_PG_COL_DRAGGING();
+        s_values[i++] = exp_wxEVT_PG_COL_END_DRAG();
         s_values[i++] = exp_wxEVT_PG_DOUBLE_CLICK();
         s_values[i++] = exp_wxEVT_PG_HIGHLIGHTED();
         s_values[i++] = exp_wxEVT_PG_ITEM_COLLAPSED();
         s_values[i++] = exp_wxEVT_PG_ITEM_EXPANDED();
+        s_values[i++] = exp_wxEVT_PG_LABEL_EDIT_BEGIN();
+        s_values[i++] = exp_wxEVT_PG_LABEL_EDIT_ENDING();
         s_values[i++] = exp_wxEVT_PG_PAGE_CHANGED();
         s_values[i++] = exp_wxEVT_PG_RIGHT_CLICK();
         s_values[i++] = exp_wxEVT_PG_SELECTED();
@@ -1913,11 +2628,22 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_POWER_SUSPENDED();
         s_values[i++] = exp_wxEVT_POWER_SUSPENDING();
         s_values[i++] = exp_wxEVT_POWER_SUSPEND_CANCEL();
+        s_values[i++] = exp_wxEVT_PRESS_AND_TAP();
         s_values[i++] = exp_wxEVT_QUERY_END_SESSION();
         s_values[i++] = exp_wxEVT_QUERY_LAYOUT_INFO();
         s_values[i++] = exp_wxEVT_QUERY_NEW_PALETTE();
         s_values[i++] = exp_wxEVT_RADIOBOX();
         s_values[i++] = exp_wxEVT_RADIOBUTTON();
+        s_values[i++] = exp_wxEVT_RIBBONBAR_HELP_CLICK();
+        s_values[i++] = exp_wxEVT_RIBBONBAR_TOGGLED();
+        s_values[i++] = exp_wxEVT_RIBBONBUTTONBAR_CLICKED();
+        s_values[i++] = exp_wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED();
+        s_values[i++] = exp_wxEVT_RIBBONGALLERY_HOVER_CHANGED();
+        s_values[i++] = exp_wxEVT_RIBBONGALLERY_SELECTED();
+        s_values[i++] = exp_wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED();
+        s_values[i++] = exp_wxEVT_RIBBONTOOLBAR_CLICKED();
+        s_values[i++] = exp_wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED();
+        s_values[i++] = exp_wxEVT_RICHTEXT_STYLESHEET_REPLACING();
         s_values[i++] = exp_wxEVT_RIGHT_DCLICK();
         s_values[i++] = exp_wxEVT_RIGHT_DOWN();
         s_values[i++] = exp_wxEVT_RIGHT_UP();
@@ -1940,8 +2666,10 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_SCROLL_THUMBRELEASE();
         s_values[i++] = exp_wxEVT_SCROLL_THUMBTRACK();
         s_values[i++] = exp_wxEVT_SCROLL_TOP();
+        s_values[i++] = exp_wxEVT_SEARCH();
         s_values[i++] = exp_wxEVT_SEARCHCTRL_CANCEL_BTN();
         s_values[i++] = exp_wxEVT_SEARCHCTRL_SEARCH_BTN();
+        s_values[i++] = exp_wxEVT_SEARCH_CANCEL();
         s_values[i++] = exp_wxEVT_SET_CURSOR();
         s_values[i++] = exp_wxEVT_SET_FOCUS();
         s_values[i++] = exp_wxEVT_SHOW();
@@ -1958,8 +2686,14 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_SPLITTER_DOUBLECLICKED();
         s_values[i++] = exp_wxEVT_SPLITTER_SASH_POS_CHANGED();
         s_values[i++] = exp_wxEVT_SPLITTER_SASH_POS_CHANGING();
+        s_values[i++] = exp_wxEVT_SPLITTER_SASH_POS_RESIZE();
         s_values[i++] = exp_wxEVT_SPLITTER_UNSPLIT();
+        s_values[i++] = exp_wxEVT_STC_CALLTIP_CLICK();
+        s_values[i++] = exp_wxEVT_STC_CHANGE();
+        s_values[i++] = exp_wxEVT_STC_CHARADDED();
+        s_values[i++] = exp_wxEVT_STC_MARGINCLICK();
         s_values[i++] = exp_wxEVT_SYS_COLOUR_CHANGED();
+        s_values[i++] = exp_wxEVT_SYS_METRIC_CHANGED();
         s_values[i++] = exp_wxEVT_TASKBAR_BALLOON_CLICK();
         s_values[i++] = exp_wxEVT_TASKBAR_BALLOON_TIMEOUT();
         s_values[i++] = exp_wxEVT_TASKBAR_LEFT_DCLICK();
@@ -1978,6 +2712,7 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_TEXT_URL();
         s_values[i++] = exp_wxEVT_THREAD();
         s_values[i++] = exp_wxEVT_TIMER();
+        s_values[i++] = exp_wxEVT_TIME_CHANGED();
         s_values[i++] = exp_wxEVT_TOGGLEBUTTON();
         s_values[i++] = exp_wxEVT_TOOL();
         s_values[i++] = exp_wxEVT_TOOLBOOK_PAGE_CHANGED();
@@ -1985,6 +2720,10 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_TOOL_DROPDOWN();
         s_values[i++] = exp_wxEVT_TOOL_ENTER();
         s_values[i++] = exp_wxEVT_TOOL_RCLICKED();
+        s_values[i++] = exp_wxEVT_TOUCH_BEGIN();
+        s_values[i++] = exp_wxEVT_TOUCH_CANCEL();
+        s_values[i++] = exp_wxEVT_TOUCH_END();
+        s_values[i++] = exp_wxEVT_TOUCH_MOVE();
         s_values[i++] = exp_wxEVT_TREEBOOK_NODE_COLLAPSED();
         s_values[i++] = exp_wxEVT_TREEBOOK_NODE_EXPANDED();
         s_values[i++] = exp_wxEVT_TREEBOOK_PAGE_CHANGED();
@@ -2008,24 +2747,34 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_TREE_ITEM_COLLAPSING();
         s_values[i++] = exp_wxEVT_TREE_ITEM_EXPANDED();
         s_values[i++] = exp_wxEVT_TREE_ITEM_EXPANDING();
+        s_values[i++] = exp_wxEVT_TREE_ITEM_MENU();
         s_values[i++] = exp_wxEVT_TREE_ITEM_MIDDLE_CLICK();
         s_values[i++] = exp_wxEVT_TREE_ITEM_RIGHT_CLICK();
         s_values[i++] = exp_wxEVT_TREE_KEY_DOWN();
         s_values[i++] = exp_wxEVT_TREE_SEL_CHANGED();
         s_values[i++] = exp_wxEVT_TREE_SEL_CHANGING();
         s_values[i++] = exp_wxEVT_TREE_SET_INFO();
+        s_values[i++] = exp_wxEVT_TREE_STATE_IMAGE_CLICK();
+        s_values[i++] = exp_wxEVT_TWO_FINGER_TAP();
         s_values[i++] = exp_wxEVT_UPDATE_UI();
         s_values[i++] = exp_wxEVT_USER_FIRST();
         s_values[i++] = exp_wxEVT_VLBOX();
+        s_values[i++] = exp_wxEVT_WEBREQUEST_DATA();
+        s_values[i++] = exp_wxEVT_WEBREQUEST_STATE();
+        s_values[i++] = exp_wxEVT_WEBVIEW_BROWSING_DATA_CLEARED();
+        s_values[i++] = exp_wxEVT_WEBVIEW_CREATED();
         s_values[i++] = exp_wxEVT_WEBVIEW_ERROR();
         s_values[i++] = exp_wxEVT_WEBVIEW_FULLSCREEN_CHANGED();
         s_values[i++] = exp_wxEVT_WEBVIEW_LOADED();
         s_values[i++] = exp_wxEVT_WEBVIEW_NAVIGATED();
         s_values[i++] = exp_wxEVT_WEBVIEW_NAVIGATING();
         s_values[i++] = exp_wxEVT_WEBVIEW_NEWWINDOW();
+        s_values[i++] = exp_wxEVT_WEBVIEW_NEWWINDOW_FEATURES();
+        s_values[i++] = exp_wxEVT_WEBVIEW_PDF_SAVED();
         s_values[i++] = exp_wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED();
         s_values[i++] = exp_wxEVT_WEBVIEW_SCRIPT_RESULT();
         s_values[i++] = exp_wxEVT_WEBVIEW_TITLE_CHANGED();
+        s_values[i++] = exp_wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED();
         s_values[i++] = exp_wxEVT_WINDOW_MODAL_DIALOG_CLOSED();
         s_values[i++] = exp_wxEVT_WIZARD_CANCEL();
         s_values[i++] = exp_wxEVT_WIZARD_FINISHED();
@@ -2033,6 +2782,7 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = exp_wxEVT_WIZARD_PAGE_CHANGED();
         s_values[i++] = exp_wxEVT_WIZARD_PAGE_CHANGING();
         s_values[i++] = exp_wxEVT_WIZARD_PAGE_SHOWN();
+        s_values[i++] = exp_wxEVT_WORKER();
         s_values[i++] = expK_ADD();
         s_values[i++] = expK_ALT();
         s_values[i++] = expK_BACK();
@@ -2217,6 +2967,9 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxACC_STATE_SYSTEM_SELECTED();
         s_values[i++] = expwxACC_STATE_SYSTEM_SELFVOICING();
         s_values[i++] = expwxACC_STATE_SYSTEM_UNAVAILABLE();
+        s_values[i++] = expwxAC_DEFAULT_STYLE();
+        s_values[i++] = expwxAC_NO_AUTORESIZE();
+        s_values[i++] = expwxAEDIALOG_STYLE();
         s_values[i++] = expwxALIGN_BOTTOM();
         s_values[i++] = expwxALIGN_CENTER();
         s_values[i++] = expwxALIGN_CENTER_HORIZONTAL();
@@ -2224,7 +2977,9 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxALIGN_CENTRE();
         s_values[i++] = expwxALIGN_CENTRE_HORIZONTAL();
         s_values[i++] = expwxALIGN_CENTRE_VERTICAL();
+        s_values[i++] = expwxALIGN_INVALID();
         s_values[i++] = expwxALIGN_LEFT();
+        s_values[i++] = expwxALIGN_MASK();
         s_values[i++] = expwxALIGN_NOT();
         s_values[i++] = expwxALIGN_RIGHT();
         s_values[i++] = expwxALIGN_TOP();
@@ -2233,9 +2988,71 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxAND();
         s_values[i++] = expwxAND_INVERT();
         s_values[i++] = expwxAND_REVERSE();
+        s_values[i++] = expwxANTIALIAS_DEFAULT();
+        s_values[i++] = expwxANTIALIAS_NONE();
+        s_values[i++] = expwxAUI_DOCKART_ACTIVE_CAPTION_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_BACKGROUND_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_BORDER_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_CAPTION_SIZE();
+        s_values[i++] = expwxAUI_DOCKART_GRADIENT_TYPE();
+        s_values[i++] = expwxAUI_DOCKART_GRIPPER_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_INACTIVE_CAPTION_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_PANE_BORDER_SIZE();
+        s_values[i++] = expwxAUI_DOCKART_SASH_COLOUR();
+        s_values[i++] = expwxAUI_DOCKART_SASH_SIZE();
+        s_values[i++] = expwxAUI_GRADIENT_HORIZONTAL();
+        s_values[i++] = expwxAUI_GRADIENT_NONE();
+        s_values[i++] = expwxAUI_GRADIENT_VERTICAL();
+        s_values[i++] = expwxAUI_MGR_ALLOW_ACTIVE_PANE();
+        s_values[i++] = expwxAUI_MGR_ALLOW_FLOATING();
+        s_values[i++] = expwxAUI_MGR_HINT_FADE();
+        s_values[i++] = expwxAUI_MGR_LIVE_RESIZE();
+        s_values[i++] = expwxAUI_MGR_RECTANGLE_HINT();
+        s_values[i++] = expwxAUI_MGR_TRANSPARENT_DRAG();
+        s_values[i++] = expwxAUI_MGR_TRANSPARENT_HINT();
+        s_values[i++] = expwxAUI_MGR_VENETIAN_BLINDS_HINT();
+        s_values[i++] = expwxAUI_MIN_DOCK_BOTH();
+        s_values[i++] = expwxAUI_MIN_DOCK_ICONS();
+        s_values[i++] = expwxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT();
+        s_values[i++] = expwxAUI_MIN_DOCK_TEXT();
+        s_values[i++] = expwxAUI_NB_BOTTOM();
+        s_values[i++] = expwxAUI_NB_CLOSE_BUTTON();
+        s_values[i++] = expwxAUI_NB_CLOSE_ON_ACTIVE_TAB();
+        s_values[i++] = expwxAUI_NB_CLOSE_ON_ALL_TABS();
+        s_values[i++] = expwxAUI_NB_DEFAULT_STYLE();
+        s_values[i++] = expwxAUI_NB_MULTILINE();
+        s_values[i++] = expwxAUI_NB_PIN_ON_ACTIVE_TAB();
+        s_values[i++] = expwxAUI_NB_SCROLL_BUTTONS();
+        s_values[i++] = expwxAUI_NB_TAB_EXTERNAL_MOVE();
+        s_values[i++] = expwxAUI_NB_TAB_FIXED_WIDTH();
+        s_values[i++] = expwxAUI_NB_TAB_MOVE();
+        s_values[i++] = expwxAUI_NB_TAB_SPLIT();
+        s_values[i++] = expwxAUI_NB_TOP();
+        s_values[i++] = expwxAUI_NB_UNPIN_ON_ALL_PINNED();
+        s_values[i++] = expwxAUI_NB_WINDOWLIST_BUTTON();
+        s_values[i++] = expwxAUI_TB_DEFAULT_STYLE();
+        s_values[i++] = expwxAUI_TB_HORIZONTAL();
+        s_values[i++] = expwxAUI_TB_HORZ_TEXT();
+        s_values[i++] = expwxAUI_TB_OVERFLOW();
+        s_values[i++] = expwxAUI_TB_TEXT();
+        s_values[i++] = expwxAUI_TB_VERTICAL();
         s_values[i++] = expwxBACKINGSTORE();
         s_values[i++] = expwxBACKWARD();
+        s_values[i++] = expwxBATTERY_CRITICAL_STATE();
+        s_values[i++] = expwxBATTERY_LOW_STATE();
+        s_values[i++] = expwxBATTERY_NORMAL_STATE();
+        s_values[i++] = expwxBATTERY_SHUTDOWN_STATE();
+        s_values[i++] = expwxBATTERY_UNKNOWN_STATE();
+        s_values[i++] = expwxBG_STYLE_ERASE();
+        s_values[i++] = expwxBG_STYLE_PAINT();
+        s_values[i++] = expwxBG_STYLE_TRANSPARENT();
         s_values[i++] = expwxBIG_ENDIAN();
+        s_values[i++] = expwxBITMAP_SCREEN_DEPTH();
+        s_values[i++] = expwxBITMAP_TYPE_ANI();
         s_values[i++] = expwxBITMAP_TYPE_ANY();
         s_values[i++] = expwxBITMAP_TYPE_BMP();
         s_values[i++] = expwxBITMAP_TYPE_BMP_RESOURCE();
@@ -2261,13 +3078,31 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxBITMAP_TYPE_PNM();
         s_values[i++] = expwxBITMAP_TYPE_PNM_RESOURCE();
         s_values[i++] = expwxBITMAP_TYPE_RESOURCE();
+        s_values[i++] = expwxBITMAP_TYPE_TGA();
         s_values[i++] = expwxBITMAP_TYPE_TIF();
+        s_values[i++] = expwxBITMAP_TYPE_TIFF();
         s_values[i++] = expwxBITMAP_TYPE_TIF_RESOURCE();
+        s_values[i++] = expwxBITMAP_TYPE_WEBP();
         s_values[i++] = expwxBITMAP_TYPE_XBM();
         s_values[i++] = expwxBITMAP_TYPE_XBM_DATA();
         s_values[i++] = expwxBITMAP_TYPE_XPM();
         s_values[i++] = expwxBITMAP_TYPE_XPM_DATA();
+        s_values[i++] = expwxBK_HITTEST_NOWHERE();
+        s_values[i++] = expwxBK_HITTEST_ONICON();
+        s_values[i++] = expwxBK_HITTEST_ONITEM();
+        s_values[i++] = expwxBK_HITTEST_ONLABEL();
+        s_values[i++] = expwxBK_HITTEST_ONPAGE();
+        s_values[i++] = expwxBMP_1BPP();
+        s_values[i++] = expwxBMP_1BPP_BW();
+        s_values[i++] = expwxBMP_24BPP();
+        s_values[i++] = expwxBMP_4BPP();
+        s_values[i++] = expwxBMP_8BPP();
+        s_values[i++] = expwxBMP_8BPP_GREY();
+        s_values[i++] = expwxBMP_8BPP_PALETTE();
+        s_values[i++] = expwxBMP_8BPP_RED();
         s_values[i++] = expwxBORDER_DEFAULT();
+        s_values[i++] = expwxBORDER_DOUBLE();
+        s_values[i++] = expwxBORDER_MASK();
         s_values[i++] = expwxBORDER_NONE();
         s_values[i++] = expwxBORDER_RAISED();
         s_values[i++] = expwxBORDER_SIMPLE();
@@ -2297,16 +3132,24 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxBU_NOAUTODRAW();
         s_values[i++] = expwxBU_RIGHT();
         s_values[i++] = expwxBU_TOP();
+        s_values[i++] = expwxC2S_CSS_SYNTAX();
+        s_values[i++] = expwxC2S_HTML_SYNTAX();
         s_values[i++] = expwxCAL_BORDER_NONE();
         s_values[i++] = expwxCAL_BORDER_ROUND();
         s_values[i++] = expwxCAL_BORDER_SQUARE();
         s_values[i++] = expwxCAL_HITTEST_DAY();
+        s_values[i++] = expwxCAL_HITTEST_DECMONTH();
         s_values[i++] = expwxCAL_HITTEST_HEADER();
+        s_values[i++] = expwxCAL_HITTEST_INCMONTH();
         s_values[i++] = expwxCAL_HITTEST_NOWHERE();
+        s_values[i++] = expwxCAL_HITTEST_SURROUNDING_WEEK();
         s_values[i++] = expwxCAL_MONDAY_FIRST();
         s_values[i++] = expwxCAL_NO_MONTH_CHANGE();
         s_values[i++] = expwxCAL_NO_YEAR_CHANGE();
+        s_values[i++] = expwxCAL_SEQUENTIAL_MONTH_SELECTION();
         s_values[i++] = expwxCAL_SHOW_HOLIDAYS();
+        s_values[i++] = expwxCAL_SHOW_SURROUNDING_WEEKS();
+        s_values[i++] = expwxCAL_SHOW_WEEK_NUMBERS();
         s_values[i++] = expwxCAL_SUNDAY_FIRST();
         s_values[i++] = expwxCANCEL();
         s_values[i++] = expwxCAPTION();
@@ -2317,6 +3160,8 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxCB_READONLY();
         s_values[i++] = expwxCB_SIMPLE();
         s_values[i++] = expwxCB_SORT();
+        s_values[i++] = expwxCC_SPECIAL_DCLICK();
+        s_values[i++] = expwxCC_STD_BUTTON();
         s_values[i++] = expwxCENTER();
         s_values[i++] = expwxCENTER_FRAME();
         s_values[i++] = expwxCENTRE();
@@ -2331,13 +3176,46 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxCLIP_CHILDREN();
         s_values[i++] = expwxCLIP_SIBLINGS();
         s_values[i++] = expwxCLOSE_BOX();
+        s_values[i++] = expwxCLRP_USE_TEXTCTRL();
+        s_values[i++] = expwxCMD_LINE_HIDDEN();
+        s_values[i++] = expwxCMD_LINE_NONE();
+        s_values[i++] = expwxCMD_LINE_OPTION_HELP();
+        s_values[i++] = expwxCMD_LINE_PARAM_MULTIPLE();
+        s_values[i++] = expwxCMD_LINE_PARAM_OPTIONAL();
+        s_values[i++] = expwxCMD_LINE_SWITCH();
+        s_values[i++] = expwxCMD_LINE_VAL_NONE();
+        s_values[i++] = expwxCMD_LINE_VAL_NUMBER();
+        s_values[i++] = expwxCMD_LINE_VAL_STRING();
+        s_values[i++] = expwxCMD_SWITCH_ON();
         s_values[i++] = expwxCOLOURED();
+        s_values[i++] = expwxCOL_DEFAULT_FLAGS();
+        s_values[i++] = expwxCOL_HIDDEN();
+        s_values[i++] = expwxCOL_REORDERABLE();
+        s_values[i++] = expwxCOL_RESIZABLE();
+        s_values[i++] = expwxCOL_SORTABLE();
+        s_values[i++] = expwxCOL_WIDTH_AUTOSIZE();
+        s_values[i++] = expwxCOL_WIDTH_DEFAULT();
+        s_values[i++] = expwxCOMPOSITION_ADD();
+        s_values[i++] = expwxCOMPOSITION_DIFF();
+        s_values[i++] = expwxCOMPOSITION_OVER();
         s_values[i++] = expwxCONFIG_USE_GLOBAL_FILE();
         s_values[i++] = expwxCONFIG_USE_LOCAL_FILE();
         s_values[i++] = expwxCONFIG_USE_NO_ESCAPE_CHARACTERS();
         s_values[i++] = expwxCONFIG_USE_RELATIVE_PATH();
+        s_values[i++] = expwxCONTENT_PROTECTION_ENABLED();
+        s_values[i++] = expwxCONTENT_PROTECTION_NONE();
+        s_values[i++] = expwxCONTROL_CHECKED();
+        s_values[i++] = expwxCONTROL_CURRENT();
+        s_values[i++] = expwxCONTROL_DIRTY();
+        s_values[i++] = expwxCONTROL_DISABLED();
+        s_values[i++] = expwxCONTROL_FOCUSED();
+        s_values[i++] = expwxCONTROL_PRESSED();
+        s_values[i++] = expwxCONTROL_SELECTED();
+        s_values[i++] = expwxCONTROL_SPECIAL();
+        s_values[i++] = expwxCONTROL_UNDETERMINED();
         s_values[i++] = expwxCOPY();
         s_values[i++] = expwxCURSOR_ARROW();
+        s_values[i++] = expwxCURSOR_ARROWWAIT();
         s_values[i++] = expwxCURSOR_BLANK();
         s_values[i++] = expwxCURSOR_BULLSEYE();
         s_values[i++] = expwxCURSOR_CHAR();
@@ -2364,11 +3242,18 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxCURSOR_SPRAYCAN();
         s_values[i++] = expwxCURSOR_WAIT();
         s_values[i++] = expwxCURSOR_WATCH();
+        s_values[i++] = expwxDATAVIEW_CELL_ACTIVATABLE();
+        s_values[i++] = expwxDATAVIEW_CELL_EDITABLE();
+        s_values[i++] = expwxDATAVIEW_CELL_INERT();
+        s_values[i++] = expwxDATAVIEW_COL_REORDERABLE();
+        s_values[i++] = expwxDATAVIEW_COL_RESIZABLE();
+        s_values[i++] = expwxDATAVIEW_COL_SORTABLE();
         s_values[i++] = expwxDD_CHANGE_DIR();
         s_values[i++] = expwxDD_DEFAULT_STYLE();
         s_values[i++] = expwxDD_DIR_MUST_EXIST();
         s_values[i++] = expwxDD_MULTIPLE();
         s_values[i++] = expwxDD_SHOW_HIDDEN();
+        s_values[i++] = expwxDEFAULT_DIALOG_STYLE();
         s_values[i++] = expwxDEFAULT_FRAME_STYLE();
         s_values[i++] = expwxDF_BITMAP();
         s_values[i++] = expwxDF_DIB();
@@ -2389,7 +3274,17 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxDF_TIFF();
         s_values[i++] = expwxDF_UNICODETEXT();
         s_values[i++] = expwxDF_WAVE();
+        s_values[i++] = expwxDIALOG_ADAPTATION_MODE_ENABLED();
         s_values[i++] = expwxDIALOG_EX_CONTEXTHELP();
+        s_values[i++] = expwxDIRCTRL_3D_INTERNAL();
+        s_values[i++] = expwxDIRCTRL_DIR_ONLY();
+        s_values[i++] = expwxDIRCTRL_EDIT_LABELS();
+        s_values[i++] = expwxDIRCTRL_MULTIPLE();
+        s_values[i++] = expwxDIRCTRL_SELECT_FIRST();
+        s_values[i++] = expwxDIRCTRL_SHOW_FILTERS();
+        s_values[i++] = expwxDIRP_DEFAULT_STYLE();
+        s_values[i++] = expwxDIRP_SMALL();
+        s_values[i++] = expwxDIRP_USE_TEXTCTRL();
         s_values[i++] = expwxDIR_CONTINUE();
         s_values[i++] = expwxDIR_DEFAULT();
         s_values[i++] = expwxDIR_DIRS();
@@ -2399,12 +3294,28 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxDIR_IGNORE();
         s_values[i++] = expwxDIR_NO_FOLLOW();
         s_values[i++] = expwxDIR_STOP();
+        s_values[i++] = expwxDOC_SILENT();
+        s_values[i++] = expwxDOUBLE_BORDER();
         s_values[i++] = expwxDOWN();
+        s_values[i++] = expwxDP_ALLOWNONE();
+        s_values[i++] = expwxDP_DEFAULT();
+        s_values[i++] = expwxDP_DROPDOWN();
+        s_values[i++] = expwxDP_SHOWCENTURY();
+        s_values[i++] = expwxDP_SPIN();
         s_values[i++] = expwxDUPLEX_HORIZONTAL();
         s_values[i++] = expwxDUPLEX_SIMPLEX();
         s_values[i++] = expwxDUPLEX_VERTICAL();
         s_values[i++] = expwxDefaultCoord();
+        s_values[i++] = expwxDragCancel();
+        s_values[i++] = expwxDragCopy();
+        s_values[i++] = expwxDragError();
+        s_values[i++] = expwxDragLink();
+        s_values[i++] = expwxDragMove();
+        s_values[i++] = expwxDragNone();
+        s_values[i++] = expwxDrag_AllowMove();
+        s_values[i++] = expwxDrag_DefaultMove();
         s_values[i++] = expwxEAST();
+        s_values[i++] = expwxELLIPSIZE_MIDDLE();
         s_values[i++] = expwxEQUIV();
         s_values[i++] = expwxEXEC_ASYNC();
         s_values[i++] = expwxEXEC_BLOCK();
@@ -2413,8 +3324,14 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxEXEC_NODISABLE();
         s_values[i++] = expwxEXEC_NOEVENTS();
         s_values[i++] = expwxEXEC_NOHIDE();
+        s_values[i++] = expwxEXEC_SHOW_CONSOLE();
         s_values[i++] = expwxEXEC_SYNC();
         s_values[i++] = expwxEXPAND();
+        s_values[i++] = expwxFC_DEFAULT_STYLE();
+        s_values[i++] = expwxFC_MULTIPLE();
+        s_values[i++] = expwxFC_NOSHOWHIDDEN();
+        s_values[i++] = expwxFC_OPEN();
+        s_values[i++] = expwxFC_SAVE();
         s_values[i++] = expwxFD_CHANGE_DIR();
         s_values[i++] = expwxFD_DEFAULT_STYLE();
         s_values[i++] = expwxFD_FILE_MUST_EXIST();
@@ -2424,7 +3341,11 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxFD_OVERWRITE_PROMPT();
         s_values[i++] = expwxFD_PREVIEW();
         s_values[i++] = expwxFD_SAVE();
+        s_values[i++] = expwxFD_SHORTCUT_TOP();
         s_values[i++] = expwxFD_SHOW_HIDDEN();
+        s_values[i++] = expwxFH_PATH_SHOW_ALWAYS();
+        s_values[i++] = expwxFH_PATH_SHOW_IF_DIFFERENT();
+        s_values[i++] = expwxFH_PATH_SHOW_NEVER();
         s_values[i++] = expwxFILE_EXISTS_ANY();
         s_values[i++] = expwxFILE_EXISTS_DEVICE();
         s_values[i++] = expwxFILE_EXISTS_DIR();
@@ -2436,13 +3357,26 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxFILTER_ALPHA();
         s_values[i++] = expwxFILTER_ALPHANUMERIC();
         s_values[i++] = expwxFILTER_ASCII();
+        s_values[i++] = expwxFILTER_DIGITS();
+        s_values[i++] = expwxFILTER_EMPTY();
+        s_values[i++] = expwxFILTER_EXCLUDE_CHAR_LIST();
         s_values[i++] = expwxFILTER_EXCLUDE_LIST();
+        s_values[i++] = expwxFILTER_INCLUDE_CHAR_LIST();
         s_values[i++] = expwxFILTER_INCLUDE_LIST();
         s_values[i++] = expwxFILTER_NONE();
         s_values[i++] = expwxFILTER_NUMERIC();
+        s_values[i++] = expwxFILTER_SPACE();
+        s_values[i++] = expwxFILTER_XDIGITS();
         s_values[i++] = expwxFIXED_LENGTH();
+        s_values[i++] = expwxFLEX_GROWMODE_ALL();
+        s_values[i++] = expwxFLEX_GROWMODE_NONE();
         s_values[i++] = expwxFLOOD_BORDER();
         s_values[i++] = expwxFLOOD_SURFACE();
+        s_values[i++] = expwxFLP_DEFAULT_STYLE();
+        s_values[i++] = expwxFLP_SMALL();
+        s_values[i++] = expwxFLP_USE_TEXTCTRL();
+        s_values[i++] = expwxFNTP_DEFAULT_STYLE();
+        s_values[i++] = expwxFNTP_USE_TEXTCTRL();
         s_values[i++] = expwxFONTENCODING_ALTERNATIVE();
         s_values[i++] = expwxFONTENCODING_BULGARIAN();
         s_values[i++] = expwxFONTENCODING_CP1250();
@@ -2481,6 +3415,7 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxFONTENCODING_MAX();
         s_values[i++] = expwxFONTENCODING_SYSTEM();
         s_values[i++] = expwxFONTENCODING_UNICODE();
+        s_values[i++] = expwxFONTENCODING_UTF8();
         s_values[i++] = expwxFONTFAMILY_DECORATIVE();
         s_values[i++] = expwxFONTFAMILY_DEFAULT();
         s_values[i++] = expwxFONTFAMILY_MODERN();
@@ -2488,7 +3423,9 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxFONTFAMILY_SCRIPT();
         s_values[i++] = expwxFONTFAMILY_SWISS();
         s_values[i++] = expwxFONTFAMILY_TELETYPE();
+        s_values[i++] = expwxFONTFAMILY_UNKNOWN();
         s_values[i++] = expwxFONTSTYLE_ITALIC();
+        s_values[i++] = expwxFONTSTYLE_MAX();
         s_values[i++] = expwxFONTSTYLE_NORMAL();
         s_values[i++] = expwxFONTSTYLE_SLANT();
         s_values[i++] = expwxFONTWEIGHT_BOLD();
@@ -2510,6 +3447,23 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxFRAME_NO_WINDOW_MENU();
         s_values[i++] = expwxFRAME_SHAPED();
         s_values[i++] = expwxFRAME_TOOL_WINDOW();
+        s_values[i++] = expwxFR_DOWN();
+        s_values[i++] = expwxFR_MATCHCASE();
+        s_values[i++] = expwxFR_NOWHOLEWORD();
+        s_values[i++] = expwxFR_REPLACEDIALOG();
+        s_values[i++] = expwxFR_WHOLEWORD();
+        s_values[i++] = expwxFSWPath_Dir();
+        s_values[i++] = expwxFSWPath_File();
+        s_values[i++] = expwxFSWPath_None();
+        s_values[i++] = expwxFSWPath_Tree();
+        s_values[i++] = expwxFSW_EVENT_ACCESS();
+        s_values[i++] = expwxFSW_EVENT_ATTRIB();
+        s_values[i++] = expwxFSW_EVENT_CREATE();
+        s_values[i++] = expwxFSW_EVENT_DELETE();
+        s_values[i++] = expwxFSW_EVENT_ERROR();
+        s_values[i++] = expwxFSW_EVENT_MODIFY();
+        s_values[i++] = expwxFSW_EVENT_RENAME();
+        s_values[i++] = expwxFSW_EVENT_WARNING();
         s_values[i++] = expwxFULLSCREEN_ALL();
         s_values[i++] = expwxFULLSCREEN_NOBORDER();
         s_values[i++] = expwxFULLSCREEN_NOCAPTION();
@@ -2517,6 +3471,7 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxFULLSCREEN_NOSTATUSBAR();
         s_values[i++] = expwxFULLSCREEN_NOTOOLBAR();
         s_values[i++] = expwxFULL_REPAINT_ON_RESIZE();
+        s_values[i++] = expwxFromEnd();
         s_values[i++] = expwxGA_SMOOTH();
         s_values[i++] = expwxGRIDTABLE_NOTIFY_COLS_APPENDED();
         s_values[i++] = expwxGRIDTABLE_NOTIFY_COLS_DELETED();
@@ -2524,25 +3479,47 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxGRIDTABLE_NOTIFY_ROWS_APPENDED();
         s_values[i++] = expwxGRIDTABLE_NOTIFY_ROWS_DELETED();
         s_values[i++] = expwxGRIDTABLE_NOTIFY_ROWS_INSERTED();
+        s_values[i++] = expwxGRID_AUTOSIZE();
+        s_values[i++] = expwxGRID_COLUMN();
+        s_values[i++] = expwxGRID_DRAW_BOX_RECT();
+        s_values[i++] = expwxGRID_DRAW_CELL_LINES();
+        s_values[i++] = expwxGRID_DRAW_COLS_HEADER();
+        s_values[i++] = expwxGRID_DRAW_ROWS_HEADER();
+        s_values[i++] = expwxGRID_DRAW_SELECTION();
+        s_values[i++] = expwxGRID_ROW();
         s_values[i++] = expwxGROW();
+        s_values[i++] = expwxGridSelectCells();
+        s_values[i++] = expwxGridSelectColumns();
+        s_values[i++] = expwxGridSelectNone();
+        s_values[i++] = expwxGridSelectRows();
+        s_values[i++] = expwxGridSelectRowsOrColumns();
         s_values[i++] = expwxHATCHSTYLE_BDIAGONAL();
         s_values[i++] = expwxHATCHSTYLE_CROSS();
         s_values[i++] = expwxHATCHSTYLE_CROSSDIAG();
         s_values[i++] = expwxHATCHSTYLE_FDIAGONAL();
         s_values[i++] = expwxHATCHSTYLE_HORIZONTAL();
         s_values[i++] = expwxHATCHSTYLE_VERTICAL();
+        s_values[i++] = expwxHDR_SORT_ICON_NONE();
+        s_values[i++] = expwxHDR_SORT_ICON_UP();
+        s_values[i++] = expwxHD_ALLOW_HIDE();
+        s_values[i++] = expwxHD_ALLOW_REORDER();
+        s_values[i++] = expwxHD_BITMAP_ON_RIGHT();
+        s_values[i++] = expwxHD_DEFAULT_STYLE();
         s_values[i++] = expwxHELP();
         s_values[i++] = expwxHF_BOOKMARKS();
         s_values[i++] = expwxHF_CONTENTS();
         s_values[i++] = expwxHF_DEFAULTSTYLE();
+        s_values[i++] = expwxHF_DEFAULT_STYLE();
         s_values[i++] = expwxHF_FLATTOOLBAR();
         s_values[i++] = expwxHF_INDEX();
         s_values[i++] = expwxHF_OPENFILES();
         s_values[i++] = expwxHF_PRINT();
         s_values[i++] = expwxHF_SEARCH();
         s_values[i++] = expwxHF_TOOLBAR();
+        s_values[i++] = expwxHL_DEFAULT_STYLE();
         s_values[i++] = expwxHORIZONTAL();
         s_values[i++] = expwxHSCROLL();
+        s_values[i++] = expwxHTML_OPEN();
         s_values[i++] = expwxHW_SCROLLBAR_AUTO();
         s_values[i++] = expwxHW_SCROLLBAR_NEVER();
         s_values[i++] = expwxICONIZE();
@@ -2550,18 +3527,30 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxICON_INFORMATION();
         s_values[i++] = expwxICON_QUESTION();
         s_values[i++] = expwxICON_WARNING();
+        s_values[i++] = expwxID_ABORT();
         s_values[i++] = expwxID_ABOUT();
+        s_values[i++] = expwxID_ADD();
         s_values[i++] = expwxID_ANY();
         s_values[i++] = expwxID_APPLY();
         s_values[i++] = expwxID_BACKWARD();
+        s_values[i++] = expwxID_BOLD();
+        s_values[i++] = expwxID_BOTTOM();
         s_values[i++] = expwxID_CANCEL();
+        s_values[i++] = expwxID_CDROM();
         s_values[i++] = expwxID_CLEAR();
         s_values[i++] = expwxID_CLOSE();
+        s_values[i++] = expwxID_CLOSE_ALL();
+        s_values[i++] = expwxID_CONVERT();
         s_values[i++] = expwxID_COPY();
         s_values[i++] = expwxID_CUT();
         s_values[i++] = expwxID_DEFAULT();
+        s_values[i++] = expwxID_DELETE();
+        s_values[i++] = expwxID_DOWN();
         s_values[i++] = expwxID_DUPLICATE();
+        s_values[i++] = expwxID_EDIT();
+        s_values[i++] = expwxID_EXECUTE();
         s_values[i++] = expwxID_EXIT();
+        s_values[i++] = expwxID_FILE();
         s_values[i++] = expwxID_FILE1();
         s_values[i++] = expwxID_FILE2();
         s_values[i++] = expwxID_FILE3();
@@ -2573,20 +3562,41 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxID_FILE9();
         s_values[i++] = expwxID_FILEDLGG();
         s_values[i++] = expwxID_FIND();
+        s_values[i++] = expwxID_FIRST();
+        s_values[i++] = expwxID_FLOPPY();
         s_values[i++] = expwxID_FORWARD();
+        s_values[i++] = expwxID_HARDDISK();
         s_values[i++] = expwxID_HELP();
         s_values[i++] = expwxID_HELP_COMMANDS();
         s_values[i++] = expwxID_HELP_CONTENTS();
         s_values[i++] = expwxID_HELP_CONTEXT();
         s_values[i++] = expwxID_HELP_PROCEDURES();
         s_values[i++] = expwxID_HIGHEST();
+        s_values[i++] = expwxID_HOME();
+        s_values[i++] = expwxID_INDENT();
+        s_values[i++] = expwxID_INDEX();
+        s_values[i++] = expwxID_INFO();
+        s_values[i++] = expwxID_ITALIC();
+        s_values[i++] = expwxID_JUMP_TO();
+        s_values[i++] = expwxID_JUSTIFY_CENTER();
+        s_values[i++] = expwxID_JUSTIFY_FILL();
+        s_values[i++] = expwxID_JUSTIFY_LEFT();
+        s_values[i++] = expwxID_JUSTIFY_RIGHT();
+        s_values[i++] = expwxID_LAST();
         s_values[i++] = expwxID_LOWEST();
+        s_values[i++] = expwxID_MDI_WINDOW_ARRANGE_ICONS();
+        s_values[i++] = expwxID_MDI_WINDOW_CASCADE();
+        s_values[i++] = expwxID_MDI_WINDOW_TILE_HORZ();
+        s_values[i++] = expwxID_MDI_WINDOW_TILE_VERT();
         s_values[i++] = expwxID_MORE();
+        s_values[i++] = expwxID_NETWORK();
         s_values[i++] = expwxID_NEW();
         s_values[i++] = expwxID_NO();
+        s_values[i++] = expwxID_NONE();
         s_values[i++] = expwxID_OK();
         s_values[i++] = expwxID_OPEN();
         s_values[i++] = expwxID_PASTE();
+        s_values[i++] = expwxID_PREFERENCES();
         s_values[i++] = expwxID_PREVIEW();
         s_values[i++] = expwxID_PREVIEW_CLOSE();
         s_values[i++] = expwxID_PREVIEW_FIRST();
@@ -2598,21 +3608,60 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxID_PREVIEW_ZOOM();
         s_values[i++] = expwxID_PRINT();
         s_values[i++] = expwxID_PRINT_SETUP();
+        s_values[i++] = expwxID_PROPERTIES();
         s_values[i++] = expwxID_REDO();
+        s_values[i++] = expwxID_REFRESH();
+        s_values[i++] = expwxID_REMOVE();
+        s_values[i++] = expwxID_REPLACE();
         s_values[i++] = expwxID_RESET();
+        s_values[i++] = expwxID_RESIZE_FRAME();
         s_values[i++] = expwxID_REVERT();
+        s_values[i++] = expwxID_REVERT_TO_SAVED();
         s_values[i++] = expwxID_SAVE();
         s_values[i++] = expwxID_SAVEAS();
         s_values[i++] = expwxID_SELECTALL();
+        s_values[i++] = expwxID_SELECT_COLOR();
+        s_values[i++] = expwxID_SELECT_FONT();
+        s_values[i++] = expwxID_SEPARATOR();
         s_values[i++] = expwxID_SETUP();
+        s_values[i++] = expwxID_SORT_ASCENDING();
+        s_values[i++] = expwxID_SORT_DESCENDING();
+        s_values[i++] = expwxID_SPELL_CHECK();
         s_values[i++] = expwxID_STATIC();
+        s_values[i++] = expwxID_STOP();
+        s_values[i++] = expwxID_STRIKETHROUGH();
+        s_values[i++] = expwxID_TOP();
+        s_values[i++] = expwxID_UNDELETE();
+        s_values[i++] = expwxID_UNDERLINE();
         s_values[i++] = expwxID_UNDO();
+        s_values[i++] = expwxID_UNINDENT();
+        s_values[i++] = expwxID_UP();
         s_values[i++] = expwxID_YES();
+        s_values[i++] = expwxID_ZOOM_100();
+        s_values[i++] = expwxID_ZOOM_FIT();
+        s_values[i++] = expwxID_ZOOM_IN();
+        s_values[i++] = expwxID_ZOOM_OUT();
         s_values[i++] = expwxIMAGE_LIST_NORMAL();
         s_values[i++] = expwxIMAGE_LIST_SMALL();
         s_values[i++] = expwxIMAGE_LIST_STATE();
+        s_values[i++] = expwxIMAGE_QUALITY_BICUBIC();
+        s_values[i++] = expwxIMAGE_QUALITY_BILINEAR();
+        s_values[i++] = expwxIMAGE_QUALITY_BOX_AVERAGE();
+        s_values[i++] = expwxIMAGE_QUALITY_HIGH();
+        s_values[i++] = expwxIMAGE_QUALITY_NEAREST();
+        s_values[i++] = expwxIMAGE_QUALITY_NORMAL();
+        s_values[i++] = expwxIMAGE_RESOLUTION_CM();
+        s_values[i++] = expwxIMAGE_RESOLUTION_INCHES();
+        s_values[i++] = expwxIMAGE_RESOLUTION_NONE();
+        s_values[i++] = expwxINFOBAR_CHECKBOX();
         s_values[i++] = expwxINVERT();
+        s_values[i++] = expwxIPC_INVALID();
+        s_values[i++] = expwxIPC_PRIVATE();
+        s_values[i++] = expwxIPC_TEXT();
+        s_values[i++] = expwxIPC_UNICODETEXT();
+        s_values[i++] = expwxIPC_UTF8TEXT();
         s_values[i++] = expwxITEM_CHECK();
+        s_values[i++] = expwxITEM_DROPDOWN();
         s_values[i++] = expwxITEM_MAX();
         s_values[i++] = expwxITEM_NORMAL();
         s_values[i++] = expwxITEM_RADIO();
@@ -2886,6 +3935,7 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxLC_HRULES();
         s_values[i++] = expwxLC_ICON();
         s_values[i++] = expwxLC_LIST();
+        s_values[i++] = expwxLC_MASK_TYPE();
         s_values[i++] = expwxLC_NO_HEADER();
         s_values[i++] = expwxLC_NO_SORT_HEADER();
         s_values[i++] = expwxLC_REPORT();
@@ -2896,6 +3946,8 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxLC_USER_TEXT();
         s_values[i++] = expwxLC_VRULES();
         s_values[i++] = expwxLEFT();
+        s_values[i++] = expwxLIST_AUTOSIZE();
+        s_values[i++] = expwxLIST_AUTOSIZE_USEHEADER();
         s_values[i++] = expwxLIST_FORMAT_CENTER();
         s_values[i++] = expwxLIST_FORMAT_CENTRE();
         s_values[i++] = expwxLIST_FORMAT_LEFT();
@@ -2911,6 +3963,9 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxLIST_NEXT_BELOW();
         s_values[i++] = expwxLIST_NEXT_LEFT();
         s_values[i++] = expwxLIST_NEXT_RIGHT();
+        s_values[i++] = expwxLIST_RECT_BOUNDS();
+        s_values[i++] = expwxLIST_RECT_ICON();
+        s_values[i++] = expwxLIST_RECT_LABEL();
         s_values[i++] = expwxLIST_STATE_CUT();
         s_values[i++] = expwxLIST_STATE_DONTCARE();
         s_values[i++] = expwxLIST_STATE_DROPHILITED();
@@ -2918,11 +3973,21 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxLIST_STATE_SELECTED();
         s_values[i++] = expwxLITTLE_ENDIAN();
         s_values[i++] = expwxLOCALE_DECIMAL_POINT();
+        s_values[i++] = expwxLOCALE_FORM_ENGLISH();
+        s_values[i++] = expwxLOCALE_FORM_NATIVE();
         s_values[i++] = expwxLOCALE_LOAD_DEFAULT();
+        s_values[i++] = expwxLOCALE_NAME_LOCALE();
         s_values[i++] = expwxLOCALE_THOUSANDS_SEP();
+        s_values[i++] = expwxLayout_Default();
+        s_values[i++] = expwxLayout_LeftToRight();
+        s_values[i++] = expwxLayout_RightToLeft();
         s_values[i++] = expwxMAXIMIZE();
         s_values[i++] = expwxMAXIMIZE_BOX();
         s_values[i++] = expwxMB_DOCKABLE();
+        s_values[i++] = expwxMEDIACTRLPLAYERCONTROLS_DEFAULT();
+        s_values[i++] = expwxMEDIACTRLPLAYERCONTROLS_NONE();
+        s_values[i++] = expwxMEDIASTATE_PLAYING();
+        s_values[i++] = expwxMEDIASTATE_STOPPED();
         s_values[i++] = expwxMENU_TEAROFF();
         s_values[i++] = expwxMINIMIZE_BOX();
         s_values[i++] = expwxMM_LOMETRIC();
@@ -2939,6 +4004,8 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxMOD_SHIFT();
         s_values[i++] = expwxMOD_WIN();
         s_values[i++] = expwxMORE();
+        s_values[i++] = expwxMOUSE_BTN_LEFT();
+        s_values[i++] = expwxMOUSE_WHEEL_VERTICAL();
         s_values[i++] = expwxNAND();
         s_values[i++] = expwxNAVDIR_DOWN();
         s_values[i++] = expwxNAVDIR_FIRSTCHILD();
@@ -2961,6 +4028,10 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxNO_DEFAULT();
         s_values[i++] = expwxNO_FULL_REPAINT_ON_RESIZE();
         s_values[i++] = expwxNO_OP();
+        s_values[i++] = expwxNUM_VAL_NO_TRAILING_ZEROES();
+        s_values[i++] = expwxNUM_VAL_SIGN_PLUS();
+        s_values[i++] = expwxNUM_VAL_THOUSANDS_SEPARATOR();
+        s_values[i++] = expwxNUM_VAL_ZERO_AS_BLANK();
         s_values[i++] = expwxOBJID_ALERT();
         s_values[i++] = expwxOBJID_CARET();
         s_values[i++] = expwxOBJID_CLIENT();
@@ -2973,11 +4044,16 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxOBJID_TITLEBAR();
         s_values[i++] = expwxOBJID_VSCROLL();
         s_values[i++] = expwxOBJID_WINDOW();
+        s_values[i++] = expwxODCB_DCLICK_CYCLES();
+        s_values[i++] = expwxODCB_PAINTING_CONTROL();
+        s_values[i++] = expwxODCB_PAINTING_SELECTED();
         s_values[i++] = expwxODDEVEN_RULE();
         s_values[i++] = expwxOK();
         s_values[i++] = expwxOR();
         s_values[i++] = expwxOR_INVERT();
         s_values[i++] = expwxOR_REVERSE();
+        s_values[i++] = expwxOS_WINDOWS();
+        s_values[i++] = expwxPAGE_ALL();
         s_values[i++] = expwxPAPER_10X11();
         s_values[i++] = expwxPAPER_10X14();
         s_values[i++] = expwxPAPER_11X17();
@@ -3052,10 +4128,16 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxPATH_RMDIR_FULL();
         s_values[i++] = expwxPATH_RMDIR_PARENTS();
         s_values[i++] = expwxPATH_RMDIR_RECURSIVE();
+        s_values[i++] = expwxPATH_UNIX();
         s_values[i++] = expwxPDP_ENDIAN();
+        s_values[i++] = expwxPENSTYLE_BDIAGONAL_HATCH();
+        s_values[i++] = expwxPENSTYLE_CROSSDIAG_HATCH();
+        s_values[i++] = expwxPENSTYLE_CROSS_HATCH();
         s_values[i++] = expwxPENSTYLE_DOT();
         s_values[i++] = expwxPENSTYLE_DOT_DASH();
+        s_values[i++] = expwxPENSTYLE_FDIAGONAL_HATCH();
         s_values[i++] = expwxPENSTYLE_FIRST_HATCH();
+        s_values[i++] = expwxPENSTYLE_HORIZONTAL_HATCH();
         s_values[i++] = expwxPENSTYLE_INVALID();
         s_values[i++] = expwxPENSTYLE_LAST_HATCH();
         s_values[i++] = expwxPENSTYLE_LONG_DASH();
@@ -3066,12 +4148,51 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxPENSTYLE_STIPPLE_MASK_OPAQUE();
         s_values[i++] = expwxPENSTYLE_TRANSPARENT();
         s_values[i++] = expwxPENSTYLE_USER_DASH();
+        s_values[i++] = expwxPENSTYLE_VERTICAL_HATCH();
+        s_values[i++] = expwxPG_AUTO_SORT();
+        s_values[i++] = expwxPG_BOLD_MODIFIED();
+        s_values[i++] = expwxPG_DESCRIPTION();
+        s_values[i++] = expwxPG_EX_ALWAYS_ALLOW_FOCUS();
+        s_values[i++] = expwxPG_EX_AUTO_UNSPECIFIED_VALUES();
+        s_values[i++] = expwxPG_EX_ENABLE_TLP_TRACKING();
+        s_values[i++] = expwxPG_EX_HELP_AS_TOOLTIPS();
+        s_values[i++] = expwxPG_EX_HIDE_PAGE_BUTTONS();
+        s_values[i++] = expwxPG_EX_INIT_NOCAT();
+        s_values[i++] = expwxPG_EX_MODE_BUTTONS();
+        s_values[i++] = expwxPG_EX_MULTIPLE_SELECTION();
+        s_values[i++] = expwxPG_EX_NATIVE_DOUBLE_BUFFERING();
+        s_values[i++] = expwxPG_EX_NO_FLAT_TOOLBAR();
+        s_values[i++] = expwxPG_EX_NO_TOOLBAR_DIVIDER();
+        s_values[i++] = expwxPG_EX_TOOLBAR_SEPARATOR();
+        s_values[i++] = expwxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES();
+        s_values[i++] = expwxPG_HIDE_CATEGORIES();
+        s_values[i++] = expwxPG_HIDE_MARGIN();
+        s_values[i++] = expwxPG_ITERATE_ALL();
+        s_values[i++] = expwxPG_ITERATE_CATEGORIES();
+        s_values[i++] = expwxPG_ITERATE_DEFAULT();
+        s_values[i++] = expwxPG_ITERATE_VISIBLE();
+        s_values[i++] = expwxPG_LIMITED_EDITING();
+        s_values[i++] = expwxPG_NO_INTERNAL_BORDER();
+        s_values[i++] = expwxPG_SPLITTER_AUTO_CENTER();
+        s_values[i++] = expwxPG_STATIC_LAYOUT();
+        s_values[i++] = expwxPG_STATIC_SPLITTER();
+        s_values[i++] = expwxPG_TOOLBAR();
+        s_values[i++] = expwxPG_TOOLTIPS();
         s_values[i++] = expwxPLATFORM_CURRENT();
         s_values[i++] = expwxPLATFORM_MAC();
         s_values[i++] = expwxPLATFORM_UNIX();
         s_values[i++] = expwxPLATFORM_WINDOWS();
+        s_values[i++] = expwxPNG_TYPE_COLOUR();
+        s_values[i++] = expwxPNG_TYPE_GREY();
+        s_values[i++] = expwxPNG_TYPE_GREY_RED();
         s_values[i++] = expwxPOPUP_WINDOW();
         s_values[i++] = expwxPORTRAIT();
+        s_values[i++] = expwxPORT_MAC();
+        s_values[i++] = expwxPOWER_BATTERY();
+        s_values[i++] = expwxPOWER_DELAY();
+        s_values[i++] = expwxPOWER_RESOURCE_SYSTEM();
+        s_values[i++] = expwxPOWER_SOCKET();
+        s_values[i++] = expwxPOWER_UNKNOWN();
         s_values[i++] = expwxPREVIEW_DEFAULT();
         s_values[i++] = expwxPREVIEW_FIRST();
         s_values[i++] = expwxPREVIEW_GOTO();
@@ -3087,25 +4208,35 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxPRINT_MODE_NONE();
         s_values[i++] = expwxPRINT_MODE_PREVIEW();
         s_values[i++] = expwxPRINT_MODE_PRINTER();
+        s_values[i++] = expwxPRIORITY_DEFAULT();
+        s_values[i++] = expwxPRIORITY_MAX();
+        s_values[i++] = expwxPRIORITY_MIN();
         s_values[i++] = expwxPROCESS_DEFAULT();
         s_values[i++] = expwxPROCESS_REDIRECT();
+        s_values[i++] = expwxPROPSHEET_BUTTONTOOLBOOK();
+        s_values[i++] = expwxPROPSHEET_SHRINKTOFIT();
+        s_values[i++] = expwxPROPSHEET_TOOLBOOK();
         s_values[i++] = expwxRA_SPECIFY_COLS();
         s_values[i++] = expwxRA_SPECIFY_ROWS();
         s_values[i++] = expwxRB_GROUP();
+        s_values[i++] = expwxREMOVE_LEADING_SPACES();
         s_values[i++] = expwxRESET();
         s_values[i++] = expwxRESIZE_BORDER();
         s_values[i++] = expwxRETAINED();
+        s_values[i++] = expwxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR();
+        s_values[i++] = expwxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR();
+        s_values[i++] = expwxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR();
         s_values[i++] = expRIBBON_BAR_ALWAYS_SHOW_TABS();
-        s_values[i++] = expRIBBON_BAR_DEFAULT_STYLE();
-        s_values[i++] = expRIBBON_BAR_FLOW_HORIZONTAL();
-        s_values[i++] = expRIBBON_BAR_FLOW_VERTICAL();
+        s_values[i++] = expwxRIBBON_BAR_DEFAULT_STYLE();
+        s_values[i++] = expwxRIBBON_BAR_FLOW_HORIZONTAL();
+        s_values[i++] = expwxRIBBON_BAR_FLOW_VERTICAL();
         s_values[i++] = expRIBBON_BAR_FOLDBAR_STYLE();
-        s_values[i++] = expRIBBON_BAR_SHOW_HELP_BUTTON();
-        s_values[i++] = expRIBBON_BAR_SHOW_PAGE_ICONS();
-        s_values[i++] = expRIBBON_BAR_SHOW_PAGE_LABELS();
-        s_values[i++] = expRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS();
+        s_values[i++] = expwxRIBBON_BAR_SHOW_HELP_BUTTON();
+        s_values[i++] = expwxRIBBON_BAR_SHOW_PAGE_ICONS();
+        s_values[i++] = expwxRIBBON_BAR_SHOW_PAGE_LABELS();
+        s_values[i++] = expwxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS();
         s_values[i++] = expRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS();
-        s_values[i++] = expRIBBON_BAR_SHOW_TOGGLE_BUTTON();
+        s_values[i++] = expwxRIBBON_BAR_SHOW_TOGGLE_BUTTON();
         s_values[i++] = expwxRIBBON_BUTTONBAR_BUTTON_LARGE();
         s_values[i++] = expwxRIBBON_BUTTONBAR_BUTTON_MEDIUM();
         s_values[i++] = expwxRIBBON_BUTTONBAR_BUTTON_SMALL();
@@ -3117,12 +4248,22 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxRIBBON_GALLERY_BUTTON_DISABLED();
         s_values[i++] = expwxRIBBON_GALLERY_BUTTON_HOVERED();
         s_values[i++] = expwxRIBBON_GALLERY_BUTTON_NORMAL();
-        s_values[i++] = expRIBBON_PANEL_DEFAULT_STYLE();
-        s_values[i++] = expRIBBON_PANEL_EXT_BUTTON();
+        s_values[i++] = expwxRIBBON_PANEL_DEFAULT_STYLE();
+        s_values[i++] = expwxRIBBON_PANEL_EXT_BUTTON();
         s_values[i++] = expRIBBON_PANEL_FLEXIBLE();
         s_values[i++] = expRIBBON_PANEL_MINIMISE_BUTTON();
-        s_values[i++] = expRIBBON_PANEL_NO_AUTO_MINIMISE();
+        s_values[i++] = expwxRIBBON_PANEL_NO_AUTO_MINIMISE();
         s_values[i++] = expRIBBON_PANEL_STRETCH();
+        s_values[i++] = expwxRICHTEXT_FIELD_STYLE_COMPOSITE();
+        s_values[i++] = expwxRICHTEXT_FIELD_STYLE_END_TAG();
+        s_values[i++] = expwxRICHTEXT_FIELD_STYLE_NO_BORDER();
+        s_values[i++] = expwxRICHTEXT_FIELD_STYLE_RECTANGLE();
+        s_values[i++] = expwxRICHTEXT_FIELD_STYLE_START_TAG();
+        s_values[i++] = expwxRICHTEXT_ORGANISER_BROWSE_NUMBERING();
+        s_values[i++] = expwxRICHTEXT_PAGE_ALL();
+        s_values[i++] = expwxRICHTEXT_PAGE_CENTRE();
+        s_values[i++] = expwxRICHTEXT_PAGE_RIGHT();
+        s_values[i++] = expwxRICHTEXT_TYPE_TEXT();
         s_values[i++] = expwxRIGHT();
         s_values[i++] = expwxROLE_NONE();
         s_values[i++] = expwxROLE_SYSTEM_ALERT();
@@ -3199,6 +4340,20 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxSET();
         s_values[i++] = expwxSETUP();
         s_values[i++] = expwxSHAPED();
+        s_values[i++] = expwxSHOW_EFFECT_BLEND();
+        s_values[i++] = expwxSHOW_EFFECT_EXPAND();
+        s_values[i++] = expwxSHOW_EFFECT_MAX();
+        s_values[i++] = expwxSHOW_EFFECT_NONE();
+        s_values[i++] = expwxSHOW_EFFECT_ROLL_TO_BOTTOM();
+        s_values[i++] = expwxSHOW_EFFECT_ROLL_TO_LEFT();
+        s_values[i++] = expwxSHOW_EFFECT_ROLL_TO_RIGHT();
+        s_values[i++] = expwxSHOW_EFFECT_ROLL_TO_TOP();
+        s_values[i++] = expwxSHOW_EFFECT_SLIDE_TO_BOTTOM();
+        s_values[i++] = expwxSHOW_EFFECT_SLIDE_TO_LEFT();
+        s_values[i++] = expwxSHOW_EFFECT_SLIDE_TO_RIGHT();
+        s_values[i++] = expwxSHOW_EFFECT_SLIDE_TO_TOP();
+        s_values[i++] = expwxSHOW_SB_DEFAULT();
+        s_values[i++] = expwxSHOW_SB_NEVER();
         s_values[i++] = expwxSHRINK();
         s_values[i++] = expwxSHUTDOWN_FORCE();
         s_values[i++] = expwxSHUTDOWN_LOGOFF();
@@ -3234,6 +4389,27 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxSL_RIGHT();
         s_values[i++] = expwxSL_SELRANGE();
         s_values[i++] = expwxSL_TOP();
+        s_values[i++] = expwxSOCKET_BLOCK();
+        s_values[i++] = expwxSOCKET_CONNECTION();
+        s_values[i++] = expwxSOCKET_CONNECTION_FLAG();
+        s_values[i++] = expwxSOCKET_INPUT();
+        s_values[i++] = expwxSOCKET_INPUT_FLAG();
+        s_values[i++] = expwxSOCKET_INVADDR();
+        s_values[i++] = expwxSOCKET_INVOP();
+        s_values[i++] = expwxSOCKET_INVPORT();
+        s_values[i++] = expwxSOCKET_IOERR();
+        s_values[i++] = expwxSOCKET_LOST();
+        s_values[i++] = expwxSOCKET_LOST_FLAG();
+        s_values[i++] = expwxSOCKET_MEMERR();
+        s_values[i++] = expwxSOCKET_NOERROR();
+        s_values[i++] = expwxSOCKET_NOHOST();
+        s_values[i++] = expwxSOCKET_NOWAIT();
+        s_values[i++] = expwxSOCKET_OUTPUT();
+        s_values[i++] = expwxSOCKET_OUTPUT_FLAG();
+        s_values[i++] = expwxSOCKET_REUSEADDR();
+        s_values[i++] = expwxSOCKET_TIMEDOUT();
+        s_values[i++] = expwxSOCKET_WAITALL();
+        s_values[i++] = expwxSOCKET_WOULDBLOCK();
         s_values[i++] = expwxSOUND_ASYNC();
         s_values[i++] = expwxSOUND_LOOP();
         s_values[i++] = expwxSOUND_SYNC();
@@ -3252,8 +4428,11 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxSP_WRAP();
         s_values[i++] = expwxSRC_INVERT();
         s_values[i++] = expwxSTAY_ON_TOP();
+        s_values[i++] = expwxSTB_DEFAULT_STYLE();
         s_values[i++] = expwxSTREAM_EOF();
+        s_values[i++] = expwxSTREAM_FILEEXT();
         s_values[i++] = expwxSTREAM_NO_ERROR();
+        s_values[i++] = expwxSTREAM_PROTOCOL();
         s_values[i++] = expwxSTREAM_READ_ERROR();
         s_values[i++] = expwxSTREAM_WRITE_ERROR();
         s_values[i++] = expwxSTRETCH_NOT();
@@ -3287,16 +4466,26 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxSYS_COLOUR_BTNTEXT();
         s_values[i++] = expwxSYS_COLOUR_CAPTIONTEXT();
         s_values[i++] = expwxSYS_COLOUR_DESKTOP();
+        s_values[i++] = expwxSYS_COLOUR_GRADIENTACTIVECAPTION();
+        s_values[i++] = expwxSYS_COLOUR_GRADIENTINACTIVECAPTION();
         s_values[i++] = expwxSYS_COLOUR_GRAYTEXT();
+        s_values[i++] = expwxSYS_COLOUR_GRIDLINES();
         s_values[i++] = expwxSYS_COLOUR_HIGHLIGHT();
         s_values[i++] = expwxSYS_COLOUR_HIGHLIGHTTEXT();
+        s_values[i++] = expwxSYS_COLOUR_HOTLIGHT();
         s_values[i++] = expwxSYS_COLOUR_INACTIVEBORDER();
         s_values[i++] = expwxSYS_COLOUR_INACTIVECAPTION();
         s_values[i++] = expwxSYS_COLOUR_INACTIVECAPTIONTEXT();
         s_values[i++] = expwxSYS_COLOUR_INFOBK();
         s_values[i++] = expwxSYS_COLOUR_INFOTEXT();
         s_values[i++] = expwxSYS_COLOUR_LISTBOX();
+        s_values[i++] = expwxSYS_COLOUR_LISTBOXHIGHLIGHT();
+        s_values[i++] = expwxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT();
+        s_values[i++] = expwxSYS_COLOUR_LISTBOXTEXT();
+        s_values[i++] = expwxSYS_COLOUR_MAX();
         s_values[i++] = expwxSYS_COLOUR_MENU();
+        s_values[i++] = expwxSYS_COLOUR_MENUBAR();
+        s_values[i++] = expwxSYS_COLOUR_MENUHILIGHT();
         s_values[i++] = expwxSYS_COLOUR_MENUTEXT();
         s_values[i++] = expwxSYS_COLOUR_SCROLLBAR();
         s_values[i++] = expwxSYS_COLOUR_WINDOW();
@@ -3347,6 +4536,7 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxSYS_VTHUMB_Y();
         s_values[i++] = expwxSYS_WINDOWMIN_X();
         s_values[i++] = expwxSYS_WINDOWMIN_Y();
+        s_values[i++] = expwxS_DIR_DEFAULT();
         s_values[i++] = expwxStrip_Accel();
         s_values[i++] = expwxStrip_All();
         s_values[i++] = expwxStrip_CJKMnemonics();
@@ -3361,20 +4551,79 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxStyle_SignSpace();
         s_values[i++] = expwxStyle_WithThousandsSep();
         s_values[i++] = expwxTAB_TRAVERSAL();
+        s_values[i++] = expwxTASKBAR_BUTTON_ERROR();
+        s_values[i++] = expwxTASKBAR_BUTTON_INDETERMINATE();
+        s_values[i++] = expwxTASKBAR_BUTTON_NORMAL();
+        s_values[i++] = expwxTASKBAR_BUTTON_NO_PROGRESS();
+        s_values[i++] = expwxTASKBAR_BUTTON_PAUSED();
+        s_values[i++] = expwxTASKBAR_JUMP_LIST_DESTINATION();
+        s_values[i++] = expwxTASKBAR_JUMP_LIST_SEPARATOR();
+        s_values[i++] = expwxTASKBAR_JUMP_LIST_TASK();
+        s_values[i++] = expwxTB_BOTTOM();
         s_values[i++] = expwxTB_DOCKABLE();
         s_values[i++] = expwxTB_FLAT();
         s_values[i++] = expwxTB_HORIZONTAL();
+        s_values[i++] = expwxTB_HORZ_LAYOUT();
+        s_values[i++] = expwxTB_HORZ_TEXT();
+        s_values[i++] = expwxTB_LEFT();
         s_values[i++] = expwxTB_NOALIGN();
         s_values[i++] = expwxTB_NODIVIDER();
         s_values[i++] = expwxTB_NOICONS();
+        s_values[i++] = expwxTB_NO_TOOLTIPS();
+        s_values[i++] = expwxTB_RIGHT();
         s_values[i++] = expwxTB_TEXT();
+        s_values[i++] = expwxTB_TOP();
         s_values[i++] = expwxTB_VERTICAL();
         s_values[i++] = expwxTC_FIXEDWIDTH();
         s_values[i++] = expwxTC_MULTILINE();
         s_values[i++] = expwxTC_OWNERDRAW();
         s_values[i++] = expwxTC_RIGHTJUSTIFY();
+        s_values[i++] = expwxTEXT_ALIGNMENT_CENTRE();
+        s_values[i++] = expwxTEXT_ALIGNMENT_JUSTIFIED();
+        s_values[i++] = expwxTEXT_ALIGNMENT_LEFT();
+        s_values[i++] = expwxTEXT_ALIGNMENT_RIGHT();
+        s_values[i++] = expwxTEXT_ATTR_ALIGNMENT();
+        s_values[i++] = expwxTEXT_ATTR_BACKGROUND_COLOUR();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_NUMBER();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE_ARABIC();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE_OUTLINE();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE_PARENTHESES();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE_PERIOD();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER();
+        s_values[i++] = expwxTEXT_ATTR_BULLET_STYLE_STANDARD();
+        s_values[i++] = expwxTEXT_ATTR_EFFECT_STRIKETHROUGH();
+        s_values[i++] = expwxTEXT_ATTR_EFFECT_SUBSCRIPT();
+        s_values[i++] = expwxTEXT_ATTR_EFFECT_SUPERSCRIPT();
+        s_values[i++] = expwxTEXT_ATTR_FONT();
+        s_values[i++] = expwxTEXT_ATTR_FONT_FACE();
+        s_values[i++] = expwxTEXT_ATTR_FONT_ITALIC();
+        s_values[i++] = expwxTEXT_ATTR_FONT_WEIGHT();
+        s_values[i++] = expwxTEXT_ATTR_LEFT_INDENT();
+        s_values[i++] = expwxTEXT_ATTR_LINE_SPACING();
+        s_values[i++] = expwxTEXT_ATTR_LINE_SPACING_HALF();
+        s_values[i++] = expwxTEXT_ATTR_PARA_SPACING_AFTER();
+        s_values[i++] = expwxTEXT_ATTR_PARA_SPACING_BEFORE();
+        s_values[i++] = expwxTEXT_ATTR_RIGHT_INDENT();
+        s_values[i++] = expwxTEXT_ATTR_TABS();
+        s_values[i++] = expwxTEXT_ATTR_TEXT_COLOUR();
+        s_values[i++] = expwxTEXT_ATTR_UNDERLINE_DOUBLE();
+        s_values[i++] = expwxTEXT_ATTR_UNDERLINE_SPECIAL();
+        s_values[i++] = expwxTEXT_ATTR_UNITS_PIXELS();
+        s_values[i++] = expwxTEXT_BOX_ATTR_BORDER_SOLID();
+        s_values[i++] = expwxTEXT_BOX_ATTR_FLOAT_LEFT();
+        s_values[i++] = expwxTEXT_BOX_ATTR_FLOAT_RIGHT();
+        s_values[i++] = expwxTEXT_TYPE_RTF();
         s_values[i++] = expwxTE_AUTO_URL();
         s_values[i++] = expwxTE_CENTRE();
+        s_values[i++] = expwxTE_HT_BEFORE();
+        s_values[i++] = expwxTE_HT_BELOW();
+        s_values[i++] = expwxTE_HT_BEYOND();
+        s_values[i++] = expwxTE_HT_ON_TEXT();
+        s_values[i++] = expwxTE_HT_UNKNOWN();
         s_values[i++] = expwxTE_LEFT();
         s_values[i++] = expwxTE_MULTILINE();
         s_values[i++] = expwxTE_NOHIDESEL();
@@ -3387,11 +4636,28 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxTE_RICH2();
         s_values[i++] = expwxTE_RIGHT();
         s_values[i++] = expwxTE_WORDWRAP();
+        s_values[i++] = expwxTHREAD_DETACHED();
+        s_values[i++] = expwxTHREAD_JOINABLE();
+        s_values[i++] = expwxTHREAD_NO_ERROR();
+        s_values[i++] = expwxTITLEBAR_BUTTON_CLOSE();
+        s_values[i++] = expwxTITLEBAR_BUTTON_HELP();
+        s_values[i++] = expwxTITLEBAR_BUTTON_ICONIZE();
+        s_values[i++] = expwxTITLEBAR_BUTTON_MAXIMIZE();
+        s_values[i++] = expwxTITLEBAR_BUTTON_RESTORE();
+        s_values[i++] = expwxTL_3STATE();
+        s_values[i++] = expwxTL_CHECKBOX();
+        s_values[i++] = expwxTL_DEFAULT_STYLE();
+        s_values[i++] = expwxTL_MULTIPLE();
+        s_values[i++] = expwxTL_USER_3STATE();
+        s_values[i++] = expwxTOKEN_RET_EMPTY();
         s_values[i++] = expwxTOOL_BOTTOM();
         s_values[i++] = expwxTOOL_LEFT();
         s_values[i++] = expwxTOOL_RIGHT();
         s_values[i++] = expwxTOOL_TOP();
         s_values[i++] = expwxTOP();
+        s_values[i++] = expwxTOUCH_ALL_GESTURES();
+        s_values[i++] = expwxTOUCH_RAW_EVENTS();
+        s_values[i++] = expwxTRANSPARENT();
         s_values[i++] = expwxTREE_HITTEST_ABOVE();
         s_values[i++] = expwxTREE_HITTEST_BELOW();
         s_values[i++] = expwxTREE_HITTEST_NOWHERE();
@@ -3406,6 +4672,7 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxTREE_HITTEST_ONITEMUPPERPART();
         s_values[i++] = expwxTREE_HITTEST_TOLEFT();
         s_values[i++] = expwxTREE_HITTEST_TORIGHT();
+        s_values[i++] = expwxTR_DEFAULT_STYLE();
         s_values[i++] = expwxTR_EDIT_LABELS();
         s_values[i++] = expwxTR_FULL_ROW_HIGHLIGHT();
         s_values[i++] = expwxTR_HAS_BUTTONS();
@@ -3418,22 +4685,2432 @@ WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
         s_values[i++] = expwxTR_ROW_LINES();
         s_values[i++] = expwxTR_SINGLE();
         s_values[i++] = expwxTR_TWIST_BUTTONS();
+        s_values[i++] = expwxTipKind_Auto();
         s_values[i++] = expwxTreeItemIcon_Expanded();
         s_values[i++] = expwxTreeItemIcon_Normal();
         s_values[i++] = expwxTreeItemIcon_Selected();
         s_values[i++] = expwxTreeItemIcon_SelectedExpanded();
         s_values[i++] = expwxUP();
+        s_values[i++] = expwxURL_NOERR();
+        s_values[i++] = expwxUSER_ATTENTION_ERROR();
         s_values[i++] = expwxVERTICAL();
         s_values[i++] = expwxVSCROLL();
         s_values[i++] = expwxWANTS_CHARS();
+        s_values[i++] = expwxWEBVIEW_BROWSING_DATA_ALL();
+        s_values[i++] = expwxWEBVIEW_BROWSING_DATA_CACHE();
+        s_values[i++] = expwxWEBVIEW_BROWSING_DATA_COOKIES();
+        s_values[i++] = expwxWEBVIEW_BROWSING_DATA_DOM_STORAGE();
+        s_values[i++] = expwxWEBVIEW_BROWSING_DATA_OTHER();
+        s_values[i++] = expwxWEBVIEW_FIND_BACKWARDS();
+        s_values[i++] = expwxWEBVIEW_FIND_DEFAULT();
+        s_values[i++] = expwxWEBVIEW_FIND_ENTIRE_WORD();
+        s_values[i++] = expwxWEBVIEW_FIND_HIGHLIGHT_RESULT();
+        s_values[i++] = expwxWEBVIEW_FIND_MATCH_CASE();
+        s_values[i++] = expwxWEBVIEW_FIND_WRAP();
+        s_values[i++] = expwxWEBVIEW_NAV_ACTION_USER();
+        s_values[i++] = expwxWEBVIEW_NAV_ERR_AUTH();
+        s_values[i++] = expwxWEBVIEW_NAV_ERR_CERTIFICATE();
+        s_values[i++] = expwxWEBVIEW_NAV_ERR_CONNECTION();
+        s_values[i++] = expwxWEBVIEW_NAV_ERR_NOT_FOUND();
+        s_values[i++] = expwxWEBVIEW_NAV_ERR_OTHER();
+        s_values[i++] = expwxWEBVIEW_NAV_ERR_REQUEST();
+        s_values[i++] = expwxWEBVIEW_NAV_ERR_SECURITY();
+        s_values[i++] = expwxWEBVIEW_NAV_ERR_USER_CANCELLED();
+        s_values[i++] = expwxWEBVIEW_PRINT_DEFAULT();
+        s_values[i++] = expwxWEBVIEW_PRINT_HIDE_HEADER_FOOTER();
+        s_values[i++] = expwxWEBVIEW_ZOOM_LARGE();
+        s_values[i++] = expwxWEBVIEW_ZOOM_LARGEST();
+        s_values[i++] = expwxWEBVIEW_ZOOM_MEDIUM();
+        s_values[i++] = expwxWEBVIEW_ZOOM_SMALL();
+        s_values[i++] = expwxWEBVIEW_ZOOM_TINY();
+        s_values[i++] = expwxWEBVIEW_ZOOM_TYPE_LAYOUT();
+        s_values[i++] = expwxWEBVIEW_ZOOM_TYPE_TEXT();
         s_values[i++] = expwxWEST();
         s_values[i++] = expwxWINDING_RULE();
+        s_values[i++] = expwxWINDOW_VARIANT_LARGE();
+        s_values[i++] = expwxWINDOW_VARIANT_MINI();
+        s_values[i++] = expwxWINDOW_VARIANT_NORMAL();
+        s_values[i++] = expwxWINDOW_VARIANT_SMALL();
         s_values[i++] = expwxWS_EX_VALIDATE_RECURSIVELY();
+        s_values[i++] = expwxXML_ELEMENT_NODE();
+        s_values[i++] = expwxXML_TEXT_NODE();
         s_values[i++] = expwxXOR();
+        s_values[i++] = expwxXRC_USE_ENVVARS();
+        s_values[i++] = expwxXRC_USE_LOCALE();
         s_values[i++] = expwxYES();
         s_values[i++] = expwxYES_DEFAULT();
         s_values[i++] = expwxYES_NO();
+        s_values[i++] = expwxZIP_FORMAT_ZIP64();
     });
     return s_values;
+}
+
+WXFFI_EXPORT(const char* const*, kwxConstants_NameTable)()
+{
+    static const char* const s_names[2362] = {
+        "EVT_ACCELERATOR_KEY",
+        "EVT_ACTIVATE",
+        "EVT_ACTIVATE_APP",
+        "EVT_AUINOTEBOOK_ALLOW_DND",
+        "EVT_AUINOTEBOOK_BEGIN_DRAG",
+        "EVT_AUINOTEBOOK_BG_DCLICK",
+        "EVT_AUINOTEBOOK_BUTTON",
+        "EVT_AUINOTEBOOK_DRAG_DONE",
+        "EVT_AUINOTEBOOK_DRAG_MOTION",
+        "EVT_AUINOTEBOOK_END_DRAG",
+        "EVT_AUINOTEBOOK_PAGE_CHANGED",
+        "EVT_AUINOTEBOOK_PAGE_CHANGING",
+        "EVT_AUINOTEBOOK_PAGE_CLOSE",
+        "EVT_AUINOTEBOOK_PAGE_CLOSED",
+        "EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN",
+        "EVT_AUINOTEBOOK_TAB_MIDDLE_UP",
+        "EVT_AUINOTEBOOK_TAB_RIGHT_DOWN",
+        "EVT_AUINOTEBOOK_TAB_RIGHT_UP",
+        "EVT_AUITOOLBAR_BEGIN_DRAG",
+        "EVT_AUITOOLBAR_MIDDLE_CLICK",
+        "EVT_AUITOOLBAR_OVERFLOW_CLICK",
+        "EVT_AUITOOLBAR_RIGHT_CLICK",
+        "EVT_AUITOOLBAR_TOOL_DROPDOWN",
+        "EVT_AUI_FIND_MANAGER",
+        "EVT_AUI_PANE_BUTTON",
+        "EVT_AUI_PANE_CLOSE",
+        "EVT_AUI_PANE_MAXIMIZE",
+        "EVT_AUI_PANE_RESTORE",
+        "EVT_AUI_RENDER",
+        "EVT_AUX1_DCLICK",
+        "EVT_AUX1_DOWN",
+        "EVT_AUX1_UP",
+        "EVT_AUX2_DCLICK",
+        "EVT_AUX2_DOWN",
+        "EVT_AUX2_UP",
+        "EVT_BACKSTAGE_CLICKED",
+        "EVT_BACKSTAGE_ITEM_CLICKED",
+        "EVT_BUTTON",
+        "EVT_CALCULATE_LAYOUT",
+        "EVT_CALENDAR_DAY_CHANGED",
+        "EVT_CALENDAR_DOUBLECLICKED",
+        "EVT_CALENDAR_MONTH_CHANGED",
+        "EVT_CALENDAR_PAGE_CHANGED",
+        "EVT_CALENDAR_SEL_CHANGED",
+        "EVT_CALENDAR_WEEKDAY_CLICKED",
+        "EVT_CALENDAR_WEEK_CLICKED",
+        "EVT_CALENDAR_YEAR_CHANGED",
+        "EVT_CHAR",
+        "EVT_CHAR_HOOK",
+        "EVT_CHECKBOX",
+        "EVT_CHECKLISTBOX",
+        "EVT_CHILD_FOCUS",
+        "EVT_CHOICE",
+        "EVT_CHOICEBOOK_PAGE_CHANGED",
+        "EVT_CHOICEBOOK_PAGE_CHANGING",
+        "EVT_CLIPBOARD_CHANGED",
+        "EVT_CLOSE_WINDOW",
+        "EVT_COLLAPSIBLEHEADER_CHANGED",
+        "EVT_COLLAPSIBLEPANE_CHANGED",
+        "EVT_COLOURPICKER_CHANGED",
+        "EVT_COLOURPICKER_CURRENT_CHANGED",
+        "EVT_COLOURPICKER_DIALOG_CANCELLED",
+        "EVT_COLOUR_CHANGED",
+        "EVT_COMBOBOX",
+        "EVT_COMBOBOX_CLOSEUP",
+        "EVT_COMBOBOX_DROPDOWN",
+        "EVT_CONTEXT_MENU",
+        "EVT_CREATE",
+        "EVT_DATAVIEW_COLUMN_HEADER_CLICK",
+        "EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK",
+        "EVT_DATAVIEW_COLUMN_REORDERED",
+        "EVT_DATAVIEW_COLUMN_SORTED",
+        "EVT_DATAVIEW_ITEM_ACTIVATED",
+        "EVT_DATAVIEW_ITEM_BEGIN_DRAG",
+        "EVT_DATAVIEW_ITEM_COLLAPSED",
+        "EVT_DATAVIEW_ITEM_COLLAPSING",
+        "EVT_DATAVIEW_ITEM_CONTEXT_MENU",
+        "EVT_DATAVIEW_ITEM_DROP",
+        "EVT_DATAVIEW_ITEM_DROP_POSSIBLE",
+        "EVT_DATAVIEW_ITEM_EDITING_DONE",
+        "EVT_DATAVIEW_ITEM_EDITING_STARTED",
+        "EVT_DATAVIEW_ITEM_EXPANDED",
+        "EVT_DATAVIEW_ITEM_EXPANDING",
+        "EVT_DATAVIEW_ITEM_START_EDITING",
+        "EVT_DATAVIEW_ITEM_VALUE_CHANGED",
+        "EVT_DATAVIEW_SELECTION_CHANGED",
+        "EVT_DATE_CHANGED",
+        "EVT_DELETE",
+        "EVT_DESTROY",
+        "EVT_DETAILED_HELP",
+        "EVT_DIRCTRL_FILEACTIVATED",
+        "EVT_DIRCTRL_SELECTIONCHANGED",
+        "EVT_DIRPICKER_CHANGED",
+        "EVT_DISPLAY_CHANGED",
+        "EVT_DPI_CHANGED",
+        "EVT_DROP_FILES",
+        "EVT_END_PROCESS",
+        "EVT_END_SESSION",
+        "EVT_ENTER_WINDOW",
+        "EVT_ERASE_BACKGROUND",
+        "EVT_FILECTRL_FILEACTIVATED",
+        "EVT_FILECTRL_FILTERCHANGED",
+        "EVT_FILECTRL_FOLDERCHANGED",
+        "EVT_FILECTRL_SELECTIONCHANGED",
+        "EVT_FILEPICKER_CHANGED",
+        "EVT_FIND",
+        "EVT_FIND_CLOSE",
+        "EVT_FIND_NEXT",
+        "EVT_FIND_REPLACE",
+        "EVT_FIND_REPLACE_ALL",
+        "EVT_FIRST",
+        "EVT_FONTPICKER_CHANGED",
+        "EVT_FSWATCHER",
+        "EVT_GESTURE_PAN",
+        "EVT_GESTURE_ROTATE",
+        "EVT_GESTURE_ZOOM",
+        "EVT_GRID_CELL_BEGIN_DRAG",
+        "EVT_GRID_CELL_CHANGE",
+        "EVT_GRID_CELL_CHANGED",
+        "EVT_GRID_CELL_CHANGING",
+        "EVT_GRID_CELL_LEFT_CLICK",
+        "EVT_GRID_CELL_LEFT_DCLICK",
+        "EVT_GRID_CELL_RIGHT_CLICK",
+        "EVT_GRID_CELL_RIGHT_DCLICK",
+        "EVT_GRID_COL_AUTO_SIZE",
+        "EVT_GRID_COL_LABEL_SIZE",
+        "EVT_GRID_COL_MOVE",
+        "EVT_GRID_COL_SIZE",
+        "EVT_GRID_COL_SORT",
+        "EVT_GRID_EDITOR_CREATED",
+        "EVT_GRID_EDITOR_HIDDEN",
+        "EVT_GRID_EDITOR_SHOWN",
+        "EVT_GRID_LABEL_LEFT_CLICK",
+        "EVT_GRID_LABEL_LEFT_DCLICK",
+        "EVT_GRID_LABEL_RIGHT_CLICK",
+        "EVT_GRID_LABEL_RIGHT_DCLICK",
+        "EVT_GRID_RANGE_SELECT",
+        "EVT_GRID_RANGE_SELECTED",
+        "EVT_GRID_RANGE_SELECTING",
+        "EVT_GRID_ROW_LABEL_SIZE",
+        "EVT_GRID_ROW_MOVE",
+        "EVT_GRID_ROW_SIZE",
+        "EVT_GRID_SELECT_CELL",
+        "EVT_GRID_TABBING",
+        "EVT_HEADER_BEGIN_RESIZE",
+        "EVT_HEADER_END_RESIZE",
+        "EVT_HEADER_RESIZING",
+        "EVT_HELP",
+        "EVT_HIBERNATE",
+        "EVT_HOTKEY",
+        "EVT_HTML_CELL_CLICKED",
+        "EVT_HTML_CELL_HOVER",
+        "EVT_HTML_CELL_MOUSE_HOVER",
+        "EVT_HTML_LINK_CLICKED",
+        "EVT_HTML_SET_TITLE",
+        "EVT_HYPERLINK",
+        "EVT_ICONIZE",
+        "EVT_IDLE",
+        "EVT_INIT_DIALOG",
+        "EVT_INPUT_SINK",
+        "EVT_JOY_BUTTON_DOWN",
+        "EVT_JOY_BUTTON_UP",
+        "EVT_JOY_MOVE",
+        "EVT_JOY_ZMOVE",
+        "EVT_KEY_DOWN",
+        "EVT_KEY_UP",
+        "EVT_KILL_FOCUS",
+        "EVT_LEAVE_WINDOW",
+        "EVT_LEFT_DCLICK",
+        "EVT_LEFT_DOWN",
+        "EVT_LEFT_UP",
+        "EVT_LISTBOOK_PAGE_CHANGED",
+        "EVT_LISTBOOK_PAGE_CHANGING",
+        "EVT_LISTBOX",
+        "EVT_LISTBOX_DCLICK",
+        "EVT_LIST_BEGIN_DRAG",
+        "EVT_LIST_BEGIN_LABEL_EDIT",
+        "EVT_LIST_BEGIN_RDRAG",
+        "EVT_LIST_CACHE_HINT",
+        "EVT_LIST_COL_BEGIN_DRAG",
+        "EVT_LIST_COL_CLICK",
+        "EVT_LIST_COL_DRAGGING",
+        "EVT_LIST_COL_END_DRAG",
+        "EVT_LIST_COL_RIGHT_CLICK",
+        "EVT_LIST_DELETE_ALL_ITEMS",
+        "EVT_LIST_DELETE_ITEM",
+        "EVT_LIST_END_LABEL_EDIT",
+        "EVT_LIST_INSERT_ITEM",
+        "EVT_LIST_ITEM_ACTIVATED",
+        "EVT_LIST_ITEM_CHECKED",
+        "EVT_LIST_ITEM_DESELECTED",
+        "EVT_LIST_ITEM_FOCUSED",
+        "EVT_LIST_ITEM_MIDDLE_CLICK",
+        "EVT_LIST_ITEM_RIGHT_CLICK",
+        "EVT_LIST_ITEM_SELECTED",
+        "EVT_LIST_ITEM_UNCHECKED",
+        "EVT_LIST_KEY_DOWN",
+        "EVT_LONG_PRESS",
+        "EVT_MAGNIFY",
+        "EVT_MAXIMIZE",
+        "EVT_MEDIA_FINISHED",
+        "EVT_MEDIA_LOADED",
+        "EVT_MEDIA_PAUSE",
+        "EVT_MEDIA_PLAY",
+        "EVT_MEDIA_STOP",
+        "EVT_MENU",
+        "EVT_MENU_CLOSE",
+        "EVT_MENU_HIGHLIGHT",
+        "EVT_MENU_OPEN",
+        "EVT_MIDDLE_DCLICK",
+        "EVT_MIDDLE_DOWN",
+        "EVT_MIDDLE_UP",
+        "EVT_MOTION",
+        "EVT_MOUSEWHEEL",
+        "EVT_MOUSE_CAPTURE_CHANGED",
+        "EVT_MOUSE_CAPTURE_LOST",
+        "EVT_MOVE",
+        "EVT_MOVE_END",
+        "EVT_MOVE_START",
+        "EVT_MOVING",
+        "EVT_MY_CUSTOM_COMMAND",
+        "EVT_NAVIGATION_KEY",
+        "EVT_NC_PAINT",
+        "EVT_NOTEBOOK_PAGE_CHANGED",
+        "EVT_NOTEBOOK_PAGE_CHANGING",
+        "EVT_NOTIFICATION_MESSAGE_ACTION",
+        "EVT_NOTIFICATION_MESSAGE_CLICK",
+        "EVT_NOTIFICATION_MESSAGE_DISMISSED",
+        "EVT_NULL",
+        "EVT_PAINT",
+        "EVT_PALETTE_CHANGED",
+        "EVT_PG_CHANGED",
+        "EVT_PG_CHANGING",
+        "EVT_PG_COL_BEGIN_DRAG",
+        "EVT_PG_COL_DRAGGING",
+        "EVT_PG_COL_END_DRAG",
+        "EVT_PG_DOUBLE_CLICK",
+        "EVT_PG_HIGHLIGHTED",
+        "EVT_PG_ITEM_COLLAPSED",
+        "EVT_PG_ITEM_EXPANDED",
+        "EVT_PG_LABEL_EDIT_BEGIN",
+        "EVT_PG_LABEL_EDIT_ENDING",
+        "EVT_PG_PAGE_CHANGED",
+        "EVT_PG_RIGHT_CLICK",
+        "EVT_PG_SELECTED",
+        "EVT_POWER_RESUME",
+        "EVT_POWER_SUSPENDED",
+        "EVT_POWER_SUSPENDING",
+        "EVT_POWER_SUSPEND_CANCEL",
+        "EVT_PRESS_AND_TAP",
+        "EVT_QUERY_END_SESSION",
+        "EVT_QUERY_LAYOUT_INFO",
+        "EVT_QUERY_NEW_PALETTE",
+        "EVT_RADIOBOX",
+        "EVT_RADIOBUTTON",
+        "EVT_RIBBONBAR_HELP_CLICK",
+        "EVT_RIBBONBAR_TOGGLED",
+        "EVT_RIBBONBUTTONBAR_CLICKED",
+        "EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED",
+        "EVT_RIBBONGALLERY_HOVER_CHANGED",
+        "EVT_RIBBONGALLERY_SELECTED",
+        "EVT_RIBBONPANEL_EXTBUTTON_ACTIVATED",
+        "EVT_RIBBONTOOLBAR_CLICKED",
+        "EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED",
+        "EVT_RICHTEXT_STYLESHEET_REPLACING",
+        "EVT_RIGHT_DCLICK",
+        "EVT_RIGHT_DOWN",
+        "EVT_RIGHT_UP",
+        "EVT_SASH_DRAGGED",
+        "EVT_SCROLLBAR",
+        "EVT_SCROLLWIN_BOTTOM",
+        "EVT_SCROLLWIN_LINEDOWN",
+        "EVT_SCROLLWIN_LINEUP",
+        "EVT_SCROLLWIN_PAGEDOWN",
+        "EVT_SCROLLWIN_PAGEUP",
+        "EVT_SCROLLWIN_THUMBRELEASE",
+        "EVT_SCROLLWIN_THUMBTRACK",
+        "EVT_SCROLLWIN_TOP",
+        "EVT_SCROLL_BOTTOM",
+        "EVT_SCROLL_CHANGED",
+        "EVT_SCROLL_LINEDOWN",
+        "EVT_SCROLL_LINEUP",
+        "EVT_SCROLL_PAGEDOWN",
+        "EVT_SCROLL_PAGEUP",
+        "EVT_SCROLL_THUMBRELEASE",
+        "EVT_SCROLL_THUMBTRACK",
+        "EVT_SCROLL_TOP",
+        "EVT_SEARCH",
+        "EVT_SEARCHCTRL_CANCEL_BTN",
+        "EVT_SEARCHCTRL_SEARCH_BTN",
+        "EVT_SEARCH_CANCEL",
+        "EVT_SET_CURSOR",
+        "EVT_SET_FOCUS",
+        "EVT_SHOW",
+        "EVT_SIZE",
+        "EVT_SIZING",
+        "EVT_SLIDER",
+        "EVT_SOCKET",
+        "EVT_SORT",
+        "EVT_SPIN",
+        "EVT_SPINCTRL",
+        "EVT_SPINCTRLDOUBLE",
+        "EVT_SPIN_DOWN",
+        "EVT_SPIN_UP",
+        "EVT_SPLITTER_DOUBLECLICKED",
+        "EVT_SPLITTER_SASH_POS_CHANGED",
+        "EVT_SPLITTER_SASH_POS_CHANGING",
+        "EVT_SPLITTER_SASH_POS_RESIZE",
+        "EVT_SPLITTER_UNSPLIT",
+        "EVT_STC_CALLTIP_CLICK",
+        "EVT_STC_CHANGE",
+        "EVT_STC_CHARADDED",
+        "EVT_STC_MARGINCLICK",
+        "EVT_SYS_COLOUR_CHANGED",
+        "EVT_SYS_METRIC_CHANGED",
+        "EVT_TASKBAR_BALLOON_CLICK",
+        "EVT_TASKBAR_BALLOON_TIMEOUT",
+        "EVT_TASKBAR_LEFT_DCLICK",
+        "EVT_TASKBAR_LEFT_DOWN",
+        "EVT_TASKBAR_LEFT_UP",
+        "EVT_TASKBAR_MOVE",
+        "EVT_TASKBAR_RIGHT_DCLICK",
+        "EVT_TASKBAR_RIGHT_DOWN",
+        "EVT_TASKBAR_RIGHT_UP",
+        "EVT_TEXT",
+        "EVT_TEXT_COPY",
+        "EVT_TEXT_CUT",
+        "EVT_TEXT_ENTER",
+        "EVT_TEXT_MAXLEN",
+        "EVT_TEXT_PASTE",
+        "EVT_TEXT_URL",
+        "EVT_THREAD",
+        "EVT_TIMER",
+        "EVT_TIME_CHANGED",
+        "EVT_TOGGLEBUTTON",
+        "EVT_TOOL",
+        "EVT_TOOLBOOK_PAGE_CHANGED",
+        "EVT_TOOLBOOK_PAGE_CHANGING",
+        "EVT_TOOL_DROPDOWN",
+        "EVT_TOOL_ENTER",
+        "EVT_TOOL_RCLICKED",
+        "EVT_TOUCH_BEGIN",
+        "EVT_TOUCH_CANCEL",
+        "EVT_TOUCH_END",
+        "EVT_TOUCH_MOVE",
+        "EVT_TREEBOOK_NODE_COLLAPSED",
+        "EVT_TREEBOOK_NODE_EXPANDED",
+        "EVT_TREEBOOK_PAGE_CHANGED",
+        "EVT_TREEBOOK_PAGE_CHANGING",
+        "EVT_TREELIST_COLUMN_SORTED",
+        "EVT_TREELIST_ITEM_ACTIVATED",
+        "EVT_TREELIST_ITEM_CHECKED",
+        "EVT_TREELIST_ITEM_CONTEXT_MENU",
+        "EVT_TREELIST_ITEM_EXPANDED",
+        "EVT_TREELIST_ITEM_EXPANDING",
+        "EVT_TREELIST_SELECTION_CHANGED",
+        "EVT_TREE_BEGIN_DRAG",
+        "EVT_TREE_BEGIN_LABEL_EDIT",
+        "EVT_TREE_BEGIN_RDRAG",
+        "EVT_TREE_DELETE_ITEM",
+        "EVT_TREE_END_DRAG",
+        "EVT_TREE_END_LABEL_EDIT",
+        "EVT_TREE_GET_INFO",
+        "EVT_TREE_ITEM_ACTIVATED",
+        "EVT_TREE_ITEM_COLLAPSED",
+        "EVT_TREE_ITEM_COLLAPSING",
+        "EVT_TREE_ITEM_EXPANDED",
+        "EVT_TREE_ITEM_EXPANDING",
+        "EVT_TREE_ITEM_MENU",
+        "EVT_TREE_ITEM_MIDDLE_CLICK",
+        "EVT_TREE_ITEM_RIGHT_CLICK",
+        "EVT_TREE_KEY_DOWN",
+        "EVT_TREE_SEL_CHANGED",
+        "EVT_TREE_SEL_CHANGING",
+        "EVT_TREE_SET_INFO",
+        "EVT_TREE_STATE_IMAGE_CLICK",
+        "EVT_TWO_FINGER_TAP",
+        "EVT_UPDATE_UI",
+        "EVT_USER_FIRST",
+        "EVT_VLBOX",
+        "EVT_WEBREQUEST_DATA",
+        "EVT_WEBREQUEST_STATE",
+        "EVT_WEBVIEW_BROWSING_DATA_CLEARED",
+        "EVT_WEBVIEW_CREATED",
+        "EVT_WEBVIEW_ERROR",
+        "EVT_WEBVIEW_FULLSCREEN_CHANGED",
+        "EVT_WEBVIEW_LOADED",
+        "EVT_WEBVIEW_NAVIGATED",
+        "EVT_WEBVIEW_NAVIGATING",
+        "EVT_WEBVIEW_NEWWINDOW",
+        "EVT_WEBVIEW_NEWWINDOW_FEATURES",
+        "EVT_WEBVIEW_PDF_SAVED",
+        "EVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED",
+        "EVT_WEBVIEW_SCRIPT_RESULT",
+        "EVT_WEBVIEW_TITLE_CHANGED",
+        "EVT_WEBVIEW_WINDOW_CLOSE_REQUESTED",
+        "EVT_WINDOW_MODAL_DIALOG_CLOSED",
+        "EVT_WIZARD_CANCEL",
+        "EVT_WIZARD_FINISHED",
+        "EVT_WIZARD_HELP",
+        "EVT_WIZARD_PAGE_CHANGED",
+        "EVT_WIZARD_PAGE_CHANGING",
+        "EVT_WIZARD_PAGE_SHOWN",
+        "EVT_WORKER",
+        "K_ADD",
+        "K_ALT",
+        "K_BACK",
+        "K_CANCEL",
+        "K_CAPITAL",
+        "K_CLEAR",
+        "K_CONTROL",
+        "K_DECIMAL",
+        "K_DELETE",
+        "K_DIVIDE",
+        "K_DOWN",
+        "K_END",
+        "K_ESCAPE",
+        "K_EXECUTE",
+        "K_F1",
+        "K_F10",
+        "K_F11",
+        "K_F12",
+        "K_F13",
+        "K_F14",
+        "K_F15",
+        "K_F16",
+        "K_F17",
+        "K_F18",
+        "K_F19",
+        "K_F2",
+        "K_F20",
+        "K_F21",
+        "K_F22",
+        "K_F23",
+        "K_F24",
+        "K_F3",
+        "K_F4",
+        "K_F5",
+        "K_F6",
+        "K_F7",
+        "K_F8",
+        "K_F9",
+        "K_HELP",
+        "K_HOME",
+        "K_INSERT",
+        "K_LBUTTON",
+        "K_LEFT",
+        "K_MBUTTON",
+        "K_MENU",
+        "K_MULTIPLY",
+        "K_NUMLOCK",
+        "K_NUMPAD0",
+        "K_NUMPAD1",
+        "K_NUMPAD2",
+        "K_NUMPAD3",
+        "K_NUMPAD4",
+        "K_NUMPAD5",
+        "K_NUMPAD6",
+        "K_NUMPAD7",
+        "K_NUMPAD8",
+        "K_NUMPAD9",
+        "K_NUMPAD_ADD",
+        "K_NUMPAD_BEGIN",
+        "K_NUMPAD_DECIMAL",
+        "K_NUMPAD_DELETE",
+        "K_NUMPAD_DIVIDE",
+        "K_NUMPAD_DOWN",
+        "K_NUMPAD_END",
+        "K_NUMPAD_ENTER",
+        "K_NUMPAD_EQUAL",
+        "K_NUMPAD_F1",
+        "K_NUMPAD_F2",
+        "K_NUMPAD_F3",
+        "K_NUMPAD_F4",
+        "K_NUMPAD_HOME",
+        "K_NUMPAD_INSERT",
+        "K_NUMPAD_LEFT",
+        "K_NUMPAD_MULTIPLY",
+        "K_NUMPAD_PAGEDOWN",
+        "K_NUMPAD_PAGEUP",
+        "K_NUMPAD_RIGHT",
+        "K_NUMPAD_SEPARATOR",
+        "K_NUMPAD_SPACE",
+        "K_NUMPAD_SUBTRACT",
+        "K_NUMPAD_TAB",
+        "K_NUMPAD_UP",
+        "K_PAGEDOWN",
+        "K_PAGEUP",
+        "K_PAUSE",
+        "K_PRINT",
+        "K_RBUTTON",
+        "K_RETURN",
+        "K_RIGHT",
+        "K_SCROLL",
+        "K_SELECT",
+        "K_SEPARATOR",
+        "K_SHIFT",
+        "K_SNAPSHOT",
+        "K_SPACE",
+        "K_START",
+        "K_SUBTRACT",
+        "K_TAB",
+        "K_UP",
+        "ACCEL_ALT",
+        "ACCEL_CTRL",
+        "ACCEL_NORMAL",
+        "ACCEL_SHIFT",
+        "ACC_EVENT_OBJECT_ACCELERATORCHANGE",
+        "ACC_EVENT_OBJECT_CREATE",
+        "ACC_EVENT_OBJECT_DEFACTIONCHANGE",
+        "ACC_EVENT_OBJECT_DESCRIPTIONCHANGE",
+        "ACC_EVENT_OBJECT_DESTROY",
+        "ACC_EVENT_OBJECT_FOCUS",
+        "ACC_EVENT_OBJECT_HELPCHANGE",
+        "ACC_EVENT_OBJECT_HIDE",
+        "ACC_EVENT_OBJECT_LOCATIONCHANGE",
+        "ACC_EVENT_OBJECT_NAMECHANGE",
+        "ACC_EVENT_OBJECT_PARENTCHANGE",
+        "ACC_EVENT_OBJECT_REORDER",
+        "ACC_EVENT_OBJECT_SELECTION",
+        "ACC_EVENT_OBJECT_SELECTIONADD",
+        "ACC_EVENT_OBJECT_SELECTIONREMOVE",
+        "ACC_EVENT_OBJECT_SELECTIONWITHIN",
+        "ACC_EVENT_OBJECT_SHOW",
+        "ACC_EVENT_OBJECT_STATECHANGE",
+        "ACC_EVENT_OBJECT_VALUECHANGE",
+        "ACC_EVENT_SYSTEM_ALERT",
+        "ACC_EVENT_SYSTEM_CAPTUREEND",
+        "ACC_EVENT_SYSTEM_CAPTURESTART",
+        "ACC_EVENT_SYSTEM_CONTEXTHELPEND",
+        "ACC_EVENT_SYSTEM_CONTEXTHELPSTART",
+        "ACC_EVENT_SYSTEM_DIALOGEND",
+        "ACC_EVENT_SYSTEM_DIALOGSTART",
+        "ACC_EVENT_SYSTEM_DRAGDROPEND",
+        "ACC_EVENT_SYSTEM_DRAGDROPSTART",
+        "ACC_EVENT_SYSTEM_FOREGROUND",
+        "ACC_EVENT_SYSTEM_MENUEND",
+        "ACC_EVENT_SYSTEM_MENUPOPUPEND",
+        "ACC_EVENT_SYSTEM_MENUPOPUPSTART",
+        "ACC_EVENT_SYSTEM_MENUSTART",
+        "ACC_EVENT_SYSTEM_MINIMIZEEND",
+        "ACC_EVENT_SYSTEM_MINIMIZESTART",
+        "ACC_EVENT_SYSTEM_MOVESIZEEND",
+        "ACC_EVENT_SYSTEM_MOVESIZESTART",
+        "ACC_EVENT_SYSTEM_SCROLLINGEND",
+        "ACC_EVENT_SYSTEM_SCROLLINGSTART",
+        "ACC_EVENT_SYSTEM_SOUND",
+        "ACC_EVENT_SYSTEM_SWITCHEND",
+        "ACC_EVENT_SYSTEM_SWITCHSTART",
+        "ACC_FAIL",
+        "ACC_FALSE",
+        "ACC_INVALID_ARG",
+        "ACC_NOT_IMPLEMENTED",
+        "ACC_NOT_SUPPORTED",
+        "ACC_OK",
+        "ACC_SELF",
+        "ACC_SEL_ADDSELECTION",
+        "ACC_SEL_EXTENDSELECTION",
+        "ACC_SEL_NONE",
+        "ACC_SEL_REMOVESELECTION",
+        "ACC_SEL_TAKEFOCUS",
+        "ACC_SEL_TAKESELECTION",
+        "ACC_STATE_SYSTEM_ALERT_HIGH",
+        "ACC_STATE_SYSTEM_ALERT_LOW",
+        "ACC_STATE_SYSTEM_ALERT_MEDIUM",
+        "ACC_STATE_SYSTEM_ANIMATED",
+        "ACC_STATE_SYSTEM_BUSY",
+        "ACC_STATE_SYSTEM_CHECKED",
+        "ACC_STATE_SYSTEM_COLLAPSED",
+        "ACC_STATE_SYSTEM_DEFAULT",
+        "ACC_STATE_SYSTEM_EXPANDED",
+        "ACC_STATE_SYSTEM_EXTSELECTABLE",
+        "ACC_STATE_SYSTEM_FLOATING",
+        "ACC_STATE_SYSTEM_FOCUSABLE",
+        "ACC_STATE_SYSTEM_FOCUSED",
+        "ACC_STATE_SYSTEM_HOTTRACKED",
+        "ACC_STATE_SYSTEM_INVISIBLE",
+        "ACC_STATE_SYSTEM_MARQUEED",
+        "ACC_STATE_SYSTEM_MIXED",
+        "ACC_STATE_SYSTEM_MULTISELECTABLE",
+        "ACC_STATE_SYSTEM_OFFSCREEN",
+        "ACC_STATE_SYSTEM_PRESSED",
+        "ACC_STATE_SYSTEM_PROTECTED",
+        "ACC_STATE_SYSTEM_READONLY",
+        "ACC_STATE_SYSTEM_SELECTABLE",
+        "ACC_STATE_SYSTEM_SELECTED",
+        "ACC_STATE_SYSTEM_SELFVOICING",
+        "ACC_STATE_SYSTEM_UNAVAILABLE",
+        "AC_DEFAULT_STYLE",
+        "AC_NO_AUTORESIZE",
+        "AEDIALOG_STYLE",
+        "ALIGN_BOTTOM",
+        "ALIGN_CENTER",
+        "ALIGN_CENTER_HORIZONTAL",
+        "ALIGN_CENTER_VERTICAL",
+        "ALIGN_CENTRE",
+        "ALIGN_CENTRE_HORIZONTAL",
+        "ALIGN_CENTRE_VERTICAL",
+        "ALIGN_INVALID",
+        "ALIGN_LEFT",
+        "ALIGN_MASK",
+        "ALIGN_NOT",
+        "ALIGN_RIGHT",
+        "ALIGN_TOP",
+        "ALL",
+        "ALWAYS_SHOW_SB",
+        "AND",
+        "AND_INVERT",
+        "AND_REVERSE",
+        "ANTIALIAS_DEFAULT",
+        "ANTIALIAS_NONE",
+        "AUI_DOCKART_ACTIVE_CAPTION_COLOUR",
+        "AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR",
+        "AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR",
+        "AUI_DOCKART_BACKGROUND_COLOUR",
+        "AUI_DOCKART_BORDER_COLOUR",
+        "AUI_DOCKART_CAPTION_SIZE",
+        "AUI_DOCKART_GRADIENT_TYPE",
+        "AUI_DOCKART_GRIPPER_COLOUR",
+        "AUI_DOCKART_INACTIVE_CAPTION_COLOUR",
+        "AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR",
+        "AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR",
+        "AUI_DOCKART_PANE_BORDER_SIZE",
+        "AUI_DOCKART_SASH_COLOUR",
+        "AUI_DOCKART_SASH_SIZE",
+        "AUI_GRADIENT_HORIZONTAL",
+        "AUI_GRADIENT_NONE",
+        "AUI_GRADIENT_VERTICAL",
+        "AUI_MGR_ALLOW_ACTIVE_PANE",
+        "AUI_MGR_ALLOW_FLOATING",
+        "AUI_MGR_HINT_FADE",
+        "AUI_MGR_LIVE_RESIZE",
+        "AUI_MGR_RECTANGLE_HINT",
+        "AUI_MGR_TRANSPARENT_DRAG",
+        "AUI_MGR_TRANSPARENT_HINT",
+        "AUI_MGR_VENETIAN_BLINDS_HINT",
+        "AUI_MIN_DOCK_BOTH",
+        "AUI_MIN_DOCK_ICONS",
+        "AUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT",
+        "AUI_MIN_DOCK_TEXT",
+        "AUI_NB_BOTTOM",
+        "AUI_NB_CLOSE_BUTTON",
+        "AUI_NB_CLOSE_ON_ACTIVE_TAB",
+        "AUI_NB_CLOSE_ON_ALL_TABS",
+        "AUI_NB_DEFAULT_STYLE",
+        "AUI_NB_MULTILINE",
+        "AUI_NB_PIN_ON_ACTIVE_TAB",
+        "AUI_NB_SCROLL_BUTTONS",
+        "AUI_NB_TAB_EXTERNAL_MOVE",
+        "AUI_NB_TAB_FIXED_WIDTH",
+        "AUI_NB_TAB_MOVE",
+        "AUI_NB_TAB_SPLIT",
+        "AUI_NB_TOP",
+        "AUI_NB_UNPIN_ON_ALL_PINNED",
+        "AUI_NB_WINDOWLIST_BUTTON",
+        "AUI_TB_DEFAULT_STYLE",
+        "AUI_TB_HORIZONTAL",
+        "AUI_TB_HORZ_TEXT",
+        "AUI_TB_OVERFLOW",
+        "AUI_TB_TEXT",
+        "AUI_TB_VERTICAL",
+        "BACKINGSTORE",
+        "BACKWARD",
+        "BATTERY_CRITICAL_STATE",
+        "BATTERY_LOW_STATE",
+        "BATTERY_NORMAL_STATE",
+        "BATTERY_SHUTDOWN_STATE",
+        "BATTERY_UNKNOWN_STATE",
+        "BG_STYLE_ERASE",
+        "BG_STYLE_PAINT",
+        "BG_STYLE_TRANSPARENT",
+        "BIG_ENDIAN",
+        "BITMAP_SCREEN_DEPTH",
+        "BITMAP_TYPE_ANI",
+        "BITMAP_TYPE_ANY",
+        "BITMAP_TYPE_BMP",
+        "BITMAP_TYPE_BMP_RESOURCE",
+        "BITMAP_TYPE_CUR",
+        "BITMAP_TYPE_CUR_RESOURCE",
+        "BITMAP_TYPE_GIF",
+        "BITMAP_TYPE_GIF_RESOURCE",
+        "BITMAP_TYPE_ICO",
+        "BITMAP_TYPE_ICON",
+        "BITMAP_TYPE_ICON_RESOURCE",
+        "BITMAP_TYPE_ICO_RESOURCE",
+        "BITMAP_TYPE_INVALID",
+        "BITMAP_TYPE_JPEG",
+        "BITMAP_TYPE_JPEG_RESOURCE",
+        "BITMAP_TYPE_MACCURSOR",
+        "BITMAP_TYPE_MACCURSOR_RESOURCE",
+        "BITMAP_TYPE_PCX",
+        "BITMAP_TYPE_PCX_RESOURCE",
+        "BITMAP_TYPE_PICT",
+        "BITMAP_TYPE_PICT_RESOURCE",
+        "BITMAP_TYPE_PNG",
+        "BITMAP_TYPE_PNG_RESOURCE",
+        "BITMAP_TYPE_PNM",
+        "BITMAP_TYPE_PNM_RESOURCE",
+        "BITMAP_TYPE_RESOURCE",
+        "BITMAP_TYPE_TGA",
+        "BITMAP_TYPE_TIF",
+        "BITMAP_TYPE_TIFF",
+        "BITMAP_TYPE_TIF_RESOURCE",
+        "BITMAP_TYPE_WEBP",
+        "BITMAP_TYPE_XBM",
+        "BITMAP_TYPE_XBM_DATA",
+        "BITMAP_TYPE_XPM",
+        "BITMAP_TYPE_XPM_DATA",
+        "BK_HITTEST_NOWHERE",
+        "BK_HITTEST_ONICON",
+        "BK_HITTEST_ONITEM",
+        "BK_HITTEST_ONLABEL",
+        "BK_HITTEST_ONPAGE",
+        "BMP_1BPP",
+        "BMP_1BPP_BW",
+        "BMP_24BPP",
+        "BMP_4BPP",
+        "BMP_8BPP",
+        "BMP_8BPP_GREY",
+        "BMP_8BPP_PALETTE",
+        "BMP_8BPP_RED",
+        "BORDER_DEFAULT",
+        "BORDER_DOUBLE",
+        "BORDER_MASK",
+        "BORDER_NONE",
+        "BORDER_RAISED",
+        "BORDER_SIMPLE",
+        "BORDER_STATIC",
+        "BORDER_SUNKEN",
+        "BORDER_THEME",
+        "BOTH",
+        "BOTTOM",
+        "BROWSER_NEW_WINDOW",
+        "BROWSER_NOBUSYCURSOR",
+        "BRUSHSTYLE_BDIAGONAL_HATCH",
+        "BRUSHSTYLE_CROSSDIAG_HATCH",
+        "BRUSHSTYLE_CROSS_HATCH",
+        "BRUSHSTYLE_FDIAGONAL_HATCH",
+        "BRUSHSTYLE_HORIZONTAL_HATCH",
+        "BRUSHSTYLE_INVALID",
+        "BRUSHSTYLE_SOLID",
+        "BRUSHSTYLE_STIPPLE",
+        "BRUSHSTYLE_STIPPLE_MASK",
+        "BRUSHSTYLE_STIPPLE_MASK_OPAQUE",
+        "BRUSHSTYLE_TRANSPARENT",
+        "BRUSHSTYLE_VERTICAL_HATCH",
+        "BU_AUTODRAW",
+        "BU_BOTTOM",
+        "BU_EXACTFIT",
+        "BU_LEFT",
+        "BU_NOAUTODRAW",
+        "BU_RIGHT",
+        "BU_TOP",
+        "C2S_CSS_SYNTAX",
+        "C2S_HTML_SYNTAX",
+        "CAL_BORDER_NONE",
+        "CAL_BORDER_ROUND",
+        "CAL_BORDER_SQUARE",
+        "CAL_HITTEST_DAY",
+        "CAL_HITTEST_DECMONTH",
+        "CAL_HITTEST_HEADER",
+        "CAL_HITTEST_INCMONTH",
+        "CAL_HITTEST_NOWHERE",
+        "CAL_HITTEST_SURROUNDING_WEEK",
+        "CAL_MONDAY_FIRST",
+        "CAL_NO_MONTH_CHANGE",
+        "CAL_NO_YEAR_CHANGE",
+        "CAL_SEQUENTIAL_MONTH_SELECTION",
+        "CAL_SHOW_HOLIDAYS",
+        "CAL_SHOW_SURROUNDING_WEEKS",
+        "CAL_SHOW_WEEK_NUMBERS",
+        "CAL_SUNDAY_FIRST",
+        "CANCEL",
+        "CAPTION",
+        "CAP_BUTT",
+        "CAP_PROJECTING",
+        "CAP_ROUND",
+        "CB_DROPDOWN",
+        "CB_READONLY",
+        "CB_SIMPLE",
+        "CB_SORT",
+        "CC_SPECIAL_DCLICK",
+        "CC_STD_BUTTON",
+        "CENTER",
+        "CENTER_FRAME",
+        "CENTRE",
+        "CENTRE_ON_SCREEN",
+        "CHK_2STATE",
+        "CHK_3STATE",
+        "CHK_ALLOW_3RD_STATE_FOR_USER",
+        "CHK_CHECKED",
+        "CHK_UNCHECKED",
+        "CHK_UNDETERMINED",
+        "CLEAR",
+        "CLIP_CHILDREN",
+        "CLIP_SIBLINGS",
+        "CLOSE_BOX",
+        "CLRP_USE_TEXTCTRL",
+        "CMD_LINE_HIDDEN",
+        "CMD_LINE_NONE",
+        "CMD_LINE_OPTION_HELP",
+        "CMD_LINE_PARAM_MULTIPLE",
+        "CMD_LINE_PARAM_OPTIONAL",
+        "CMD_LINE_SWITCH",
+        "CMD_LINE_VAL_NONE",
+        "CMD_LINE_VAL_NUMBER",
+        "CMD_LINE_VAL_STRING",
+        "CMD_SWITCH_ON",
+        "COLOURED",
+        "COL_DEFAULT_FLAGS",
+        "COL_HIDDEN",
+        "COL_REORDERABLE",
+        "COL_RESIZABLE",
+        "COL_SORTABLE",
+        "COL_WIDTH_AUTOSIZE",
+        "COL_WIDTH_DEFAULT",
+        "COMPOSITION_ADD",
+        "COMPOSITION_DIFF",
+        "COMPOSITION_OVER",
+        "CONFIG_USE_GLOBAL_FILE",
+        "CONFIG_USE_LOCAL_FILE",
+        "CONFIG_USE_NO_ESCAPE_CHARACTERS",
+        "CONFIG_USE_RELATIVE_PATH",
+        "CONTENT_PROTECTION_ENABLED",
+        "CONTENT_PROTECTION_NONE",
+        "CONTROL_CHECKED",
+        "CONTROL_CURRENT",
+        "CONTROL_DIRTY",
+        "CONTROL_DISABLED",
+        "CONTROL_FOCUSED",
+        "CONTROL_PRESSED",
+        "CONTROL_SELECTED",
+        "CONTROL_SPECIAL",
+        "CONTROL_UNDETERMINED",
+        "COPY",
+        "CURSOR_ARROW",
+        "CURSOR_ARROWWAIT",
+        "CURSOR_BLANK",
+        "CURSOR_BULLSEYE",
+        "CURSOR_CHAR",
+        "CURSOR_CROSS",
+        "CURSOR_HAND",
+        "CURSOR_IBEAM",
+        "CURSOR_LEFT_BUTTON",
+        "CURSOR_MAGNIFIER",
+        "CURSOR_MIDDLE_BUTTON",
+        "CURSOR_NONE",
+        "CURSOR_NO_ENTRY",
+        "CURSOR_PAINT_BRUSH",
+        "CURSOR_PENCIL",
+        "CURSOR_POINT_LEFT",
+        "CURSOR_POINT_RIGHT",
+        "CURSOR_QUESTION_ARROW",
+        "CURSOR_RIGHT_ARROW",
+        "CURSOR_RIGHT_BUTTON",
+        "CURSOR_SIZENESW",
+        "CURSOR_SIZENS",
+        "CURSOR_SIZENWSE",
+        "CURSOR_SIZEWE",
+        "CURSOR_SIZING",
+        "CURSOR_SPRAYCAN",
+        "CURSOR_WAIT",
+        "CURSOR_WATCH",
+        "DATAVIEW_CELL_ACTIVATABLE",
+        "DATAVIEW_CELL_EDITABLE",
+        "DATAVIEW_CELL_INERT",
+        "DATAVIEW_COL_REORDERABLE",
+        "DATAVIEW_COL_RESIZABLE",
+        "DATAVIEW_COL_SORTABLE",
+        "DD_CHANGE_DIR",
+        "DD_DEFAULT_STYLE",
+        "DD_DIR_MUST_EXIST",
+        "DD_MULTIPLE",
+        "DD_SHOW_HIDDEN",
+        "DEFAULT_DIALOG_STYLE",
+        "DEFAULT_FRAME_STYLE",
+        "DF_BITMAP",
+        "DF_DIB",
+        "DF_DIF",
+        "DF_ENHMETAFILE",
+        "DF_FILENAME",
+        "DF_INVALID",
+        "DF_LOCALE",
+        "DF_MAX",
+        "DF_METAFILE",
+        "DF_OEMTEXT",
+        "DF_PALETTE",
+        "DF_PENDATA",
+        "DF_PRIVATE",
+        "DF_RIFF",
+        "DF_SYLK",
+        "DF_TEXT",
+        "DF_TIFF",
+        "DF_UNICODETEXT",
+        "DF_WAVE",
+        "DIALOG_ADAPTATION_MODE_ENABLED",
+        "DIALOG_EX_CONTEXTHELP",
+        "DIRCTRL_3D_INTERNAL",
+        "DIRCTRL_DIR_ONLY",
+        "DIRCTRL_EDIT_LABELS",
+        "DIRCTRL_MULTIPLE",
+        "DIRCTRL_SELECT_FIRST",
+        "DIRCTRL_SHOW_FILTERS",
+        "DIRP_DEFAULT_STYLE",
+        "DIRP_SMALL",
+        "DIRP_USE_TEXTCTRL",
+        "DIR_CONTINUE",
+        "DIR_DEFAULT",
+        "DIR_DIRS",
+        "DIR_DOTDOT",
+        "DIR_FILES",
+        "DIR_HIDDEN",
+        "DIR_IGNORE",
+        "DIR_NO_FOLLOW",
+        "DIR_STOP",
+        "DOC_SILENT",
+        "DOUBLE_BORDER",
+        "DOWN",
+        "DP_ALLOWNONE",
+        "DP_DEFAULT",
+        "DP_DROPDOWN",
+        "DP_SHOWCENTURY",
+        "DP_SPIN",
+        "DUPLEX_HORIZONTAL",
+        "DUPLEX_SIMPLEX",
+        "DUPLEX_VERTICAL",
+        "DefaultCoord",
+        "DragCancel",
+        "DragCopy",
+        "DragError",
+        "DragLink",
+        "DragMove",
+        "DragNone",
+        "Drag_AllowMove",
+        "Drag_DefaultMove",
+        "EAST",
+        "ELLIPSIZE_MIDDLE",
+        "EQUIV",
+        "EXEC_ASYNC",
+        "EXEC_BLOCK",
+        "EXEC_HIDE_CONSOLE",
+        "EXEC_MAKE_GROUP_LEADER",
+        "EXEC_NODISABLE",
+        "EXEC_NOEVENTS",
+        "EXEC_NOHIDE",
+        "EXEC_SHOW_CONSOLE",
+        "EXEC_SYNC",
+        "EXPAND",
+        "FC_DEFAULT_STYLE",
+        "FC_MULTIPLE",
+        "FC_NOSHOWHIDDEN",
+        "FC_OPEN",
+        "FC_SAVE",
+        "FD_CHANGE_DIR",
+        "FD_DEFAULT_STYLE",
+        "FD_FILE_MUST_EXIST",
+        "FD_MULTIPLE",
+        "FD_NO_FOLLOW",
+        "FD_OPEN",
+        "FD_OVERWRITE_PROMPT",
+        "FD_PREVIEW",
+        "FD_SAVE",
+        "FD_SHORTCUT_TOP",
+        "FD_SHOW_HIDDEN",
+        "FH_PATH_SHOW_ALWAYS",
+        "FH_PATH_SHOW_IF_DIFFERENT",
+        "FH_PATH_SHOW_NEVER",
+        "FILE_EXISTS_ANY",
+        "FILE_EXISTS_DEVICE",
+        "FILE_EXISTS_DIR",
+        "FILE_EXISTS_FIFO",
+        "FILE_EXISTS_NO_FOLLOW",
+        "FILE_EXISTS_REGULAR",
+        "FILE_EXISTS_SOCKET",
+        "FILE_EXISTS_SYMLINK",
+        "FILTER_ALPHA",
+        "FILTER_ALPHANUMERIC",
+        "FILTER_ASCII",
+        "FILTER_DIGITS",
+        "FILTER_EMPTY",
+        "FILTER_EXCLUDE_CHAR_LIST",
+        "FILTER_EXCLUDE_LIST",
+        "FILTER_INCLUDE_CHAR_LIST",
+        "FILTER_INCLUDE_LIST",
+        "FILTER_NONE",
+        "FILTER_NUMERIC",
+        "FILTER_SPACE",
+        "FILTER_XDIGITS",
+        "FIXED_LENGTH",
+        "FLEX_GROWMODE_ALL",
+        "FLEX_GROWMODE_NONE",
+        "FLOOD_BORDER",
+        "FLOOD_SURFACE",
+        "FLP_DEFAULT_STYLE",
+        "FLP_SMALL",
+        "FLP_USE_TEXTCTRL",
+        "FNTP_DEFAULT_STYLE",
+        "FNTP_USE_TEXTCTRL",
+        "FONTENCODING_ALTERNATIVE",
+        "FONTENCODING_BULGARIAN",
+        "FONTENCODING_CP1250",
+        "FONTENCODING_CP1251",
+        "FONTENCODING_CP1252",
+        "FONTENCODING_CP1253",
+        "FONTENCODING_CP1254",
+        "FONTENCODING_CP1255",
+        "FONTENCODING_CP1256",
+        "FONTENCODING_CP1257",
+        "FONTENCODING_CP12_MAX",
+        "FONTENCODING_CP437",
+        "FONTENCODING_CP850",
+        "FONTENCODING_CP852",
+        "FONTENCODING_CP855",
+        "FONTENCODING_CP866",
+        "FONTENCODING_CP874",
+        "FONTENCODING_DEFAULT",
+        "FONTENCODING_ISO8859_1",
+        "FONTENCODING_ISO8859_10",
+        "FONTENCODING_ISO8859_11",
+        "FONTENCODING_ISO8859_12",
+        "FONTENCODING_ISO8859_13",
+        "FONTENCODING_ISO8859_14",
+        "FONTENCODING_ISO8859_15",
+        "FONTENCODING_ISO8859_2",
+        "FONTENCODING_ISO8859_3",
+        "FONTENCODING_ISO8859_4",
+        "FONTENCODING_ISO8859_5",
+        "FONTENCODING_ISO8859_6",
+        "FONTENCODING_ISO8859_7",
+        "FONTENCODING_ISO8859_8",
+        "FONTENCODING_ISO8859_9",
+        "FONTENCODING_ISO8859_MAX",
+        "FONTENCODING_KOI8",
+        "FONTENCODING_MAX",
+        "FONTENCODING_SYSTEM",
+        "FONTENCODING_UNICODE",
+        "FONTENCODING_UTF8",
+        "FONTFAMILY_DECORATIVE",
+        "FONTFAMILY_DEFAULT",
+        "FONTFAMILY_MODERN",
+        "FONTFAMILY_ROMAN",
+        "FONTFAMILY_SCRIPT",
+        "FONTFAMILY_SWISS",
+        "FONTFAMILY_TELETYPE",
+        "FONTFAMILY_UNKNOWN",
+        "FONTSTYLE_ITALIC",
+        "FONTSTYLE_MAX",
+        "FONTSTYLE_NORMAL",
+        "FONTSTYLE_SLANT",
+        "FONTWEIGHT_BOLD",
+        "FONTWEIGHT_EXTRABOLD",
+        "FONTWEIGHT_EXTRAHEAVY",
+        "FONTWEIGHT_EXTRALIGHT",
+        "FONTWEIGHT_HEAVY",
+        "FONTWEIGHT_INVALID",
+        "FONTWEIGHT_LIGHT",
+        "FONTWEIGHT_MAX",
+        "FONTWEIGHT_MEDIUM",
+        "FONTWEIGHT_NORMAL",
+        "FONTWEIGHT_SEMIBOLD",
+        "FONTWEIGHT_THIN",
+        "FORWARD",
+        "FRAME_EX_CONTEXTHELP",
+        "FRAME_FLOAT_ON_PARENT",
+        "FRAME_NO_TASKBAR",
+        "FRAME_NO_WINDOW_MENU",
+        "FRAME_SHAPED",
+        "FRAME_TOOL_WINDOW",
+        "FR_DOWN",
+        "FR_MATCHCASE",
+        "FR_NOWHOLEWORD",
+        "FR_REPLACEDIALOG",
+        "FR_WHOLEWORD",
+        "FSWPath_Dir",
+        "FSWPath_File",
+        "FSWPath_None",
+        "FSWPath_Tree",
+        "FSW_EVENT_ACCESS",
+        "FSW_EVENT_ATTRIB",
+        "FSW_EVENT_CREATE",
+        "FSW_EVENT_DELETE",
+        "FSW_EVENT_ERROR",
+        "FSW_EVENT_MODIFY",
+        "FSW_EVENT_RENAME",
+        "FSW_EVENT_WARNING",
+        "FULLSCREEN_ALL",
+        "FULLSCREEN_NOBORDER",
+        "FULLSCREEN_NOCAPTION",
+        "FULLSCREEN_NOMENUBAR",
+        "FULLSCREEN_NOSTATUSBAR",
+        "FULLSCREEN_NOTOOLBAR",
+        "FULL_REPAINT_ON_RESIZE",
+        "FromEnd",
+        "GA_SMOOTH",
+        "GRIDTABLE_NOTIFY_COLS_APPENDED",
+        "GRIDTABLE_NOTIFY_COLS_DELETED",
+        "GRIDTABLE_NOTIFY_COLS_INSERTED",
+        "GRIDTABLE_NOTIFY_ROWS_APPENDED",
+        "GRIDTABLE_NOTIFY_ROWS_DELETED",
+        "GRIDTABLE_NOTIFY_ROWS_INSERTED",
+        "GRID_AUTOSIZE",
+        "GRID_COLUMN",
+        "GRID_DRAW_BOX_RECT",
+        "GRID_DRAW_CELL_LINES",
+        "GRID_DRAW_COLS_HEADER",
+        "GRID_DRAW_ROWS_HEADER",
+        "GRID_DRAW_SELECTION",
+        "GRID_ROW",
+        "GROW",
+        "GridSelectCells",
+        "GridSelectColumns",
+        "GridSelectNone",
+        "GridSelectRows",
+        "GridSelectRowsOrColumns",
+        "HATCHSTYLE_BDIAGONAL",
+        "HATCHSTYLE_CROSS",
+        "HATCHSTYLE_CROSSDIAG",
+        "HATCHSTYLE_FDIAGONAL",
+        "HATCHSTYLE_HORIZONTAL",
+        "HATCHSTYLE_VERTICAL",
+        "HDR_SORT_ICON_NONE",
+        "HDR_SORT_ICON_UP",
+        "HD_ALLOW_HIDE",
+        "HD_ALLOW_REORDER",
+        "HD_BITMAP_ON_RIGHT",
+        "HD_DEFAULT_STYLE",
+        "HELP",
+        "HF_BOOKMARKS",
+        "HF_CONTENTS",
+        "HF_DEFAULTSTYLE",
+        "HF_DEFAULT_STYLE",
+        "HF_FLATTOOLBAR",
+        "HF_INDEX",
+        "HF_OPENFILES",
+        "HF_PRINT",
+        "HF_SEARCH",
+        "HF_TOOLBAR",
+        "HL_DEFAULT_STYLE",
+        "HORIZONTAL",
+        "HSCROLL",
+        "HTML_OPEN",
+        "HW_SCROLLBAR_AUTO",
+        "HW_SCROLLBAR_NEVER",
+        "ICONIZE",
+        "ICON_ERROR",
+        "ICON_INFORMATION",
+        "ICON_QUESTION",
+        "ICON_WARNING",
+        "ID_ABORT",
+        "ID_ABOUT",
+        "ID_ADD",
+        "ID_ANY",
+        "ID_APPLY",
+        "ID_BACKWARD",
+        "ID_BOLD",
+        "ID_BOTTOM",
+        "ID_CANCEL",
+        "ID_CDROM",
+        "ID_CLEAR",
+        "ID_CLOSE",
+        "ID_CLOSE_ALL",
+        "ID_CONVERT",
+        "ID_COPY",
+        "ID_CUT",
+        "ID_DEFAULT",
+        "ID_DELETE",
+        "ID_DOWN",
+        "ID_DUPLICATE",
+        "ID_EDIT",
+        "ID_EXECUTE",
+        "ID_EXIT",
+        "ID_FILE",
+        "ID_FILE1",
+        "ID_FILE2",
+        "ID_FILE3",
+        "ID_FILE4",
+        "ID_FILE5",
+        "ID_FILE6",
+        "ID_FILE7",
+        "ID_FILE8",
+        "ID_FILE9",
+        "ID_FILEDLGG",
+        "ID_FIND",
+        "ID_FIRST",
+        "ID_FLOPPY",
+        "ID_FORWARD",
+        "ID_HARDDISK",
+        "ID_HELP",
+        "ID_HELP_COMMANDS",
+        "ID_HELP_CONTENTS",
+        "ID_HELP_CONTEXT",
+        "ID_HELP_PROCEDURES",
+        "ID_HIGHEST",
+        "ID_HOME",
+        "ID_INDENT",
+        "ID_INDEX",
+        "ID_INFO",
+        "ID_ITALIC",
+        "ID_JUMP_TO",
+        "ID_JUSTIFY_CENTER",
+        "ID_JUSTIFY_FILL",
+        "ID_JUSTIFY_LEFT",
+        "ID_JUSTIFY_RIGHT",
+        "ID_LAST",
+        "ID_LOWEST",
+        "ID_MDI_WINDOW_ARRANGE_ICONS",
+        "ID_MDI_WINDOW_CASCADE",
+        "ID_MDI_WINDOW_TILE_HORZ",
+        "ID_MDI_WINDOW_TILE_VERT",
+        "ID_MORE",
+        "ID_NETWORK",
+        "ID_NEW",
+        "ID_NO",
+        "ID_NONE",
+        "ID_OK",
+        "ID_OPEN",
+        "ID_PASTE",
+        "ID_PREFERENCES",
+        "ID_PREVIEW",
+        "ID_PREVIEW_CLOSE",
+        "ID_PREVIEW_FIRST",
+        "ID_PREVIEW_GOTO",
+        "ID_PREVIEW_LAST",
+        "ID_PREVIEW_NEXT",
+        "ID_PREVIEW_PREVIOUS",
+        "ID_PREVIEW_PRINT",
+        "ID_PREVIEW_ZOOM",
+        "ID_PRINT",
+        "ID_PRINT_SETUP",
+        "ID_PROPERTIES",
+        "ID_REDO",
+        "ID_REFRESH",
+        "ID_REMOVE",
+        "ID_REPLACE",
+        "ID_RESET",
+        "ID_RESIZE_FRAME",
+        "ID_REVERT",
+        "ID_REVERT_TO_SAVED",
+        "ID_SAVE",
+        "ID_SAVEAS",
+        "ID_SELECTALL",
+        "ID_SELECT_COLOR",
+        "ID_SELECT_FONT",
+        "ID_SEPARATOR",
+        "ID_SETUP",
+        "ID_SORT_ASCENDING",
+        "ID_SORT_DESCENDING",
+        "ID_SPELL_CHECK",
+        "ID_STATIC",
+        "ID_STOP",
+        "ID_STRIKETHROUGH",
+        "ID_TOP",
+        "ID_UNDELETE",
+        "ID_UNDERLINE",
+        "ID_UNDO",
+        "ID_UNINDENT",
+        "ID_UP",
+        "ID_YES",
+        "ID_ZOOM_100",
+        "ID_ZOOM_FIT",
+        "ID_ZOOM_IN",
+        "ID_ZOOM_OUT",
+        "IMAGE_LIST_NORMAL",
+        "IMAGE_LIST_SMALL",
+        "IMAGE_LIST_STATE",
+        "IMAGE_QUALITY_BICUBIC",
+        "IMAGE_QUALITY_BILINEAR",
+        "IMAGE_QUALITY_BOX_AVERAGE",
+        "IMAGE_QUALITY_HIGH",
+        "IMAGE_QUALITY_NEAREST",
+        "IMAGE_QUALITY_NORMAL",
+        "IMAGE_RESOLUTION_CM",
+        "IMAGE_RESOLUTION_INCHES",
+        "IMAGE_RESOLUTION_NONE",
+        "INFOBAR_CHECKBOX",
+        "INVERT",
+        "IPC_INVALID",
+        "IPC_PRIVATE",
+        "IPC_TEXT",
+        "IPC_UNICODETEXT",
+        "IPC_UTF8TEXT",
+        "ITEM_CHECK",
+        "ITEM_DROPDOWN",
+        "ITEM_MAX",
+        "ITEM_NORMAL",
+        "ITEM_RADIO",
+        "ITEM_SEPARATOR",
+        "JOIN_BEVEL",
+        "JOIN_MITER",
+        "JOIN_ROUND",
+        "JOYSTICK1",
+        "JOYSTICK2",
+        "JOY_BUTTON1",
+        "JOY_BUTTON2",
+        "JOY_BUTTON3",
+        "JOY_BUTTON4",
+        "KILL_ACCESS_DENIED",
+        "KILL_BAD_SIGNAL",
+        "KILL_CHILDREN",
+        "KILL_ERROR",
+        "KILL_NOCHILDREN",
+        "KILL_NO_PROCESS",
+        "KILL_OK",
+        "LANDSCAPE",
+        "LANGUAGE_ABKHAZIAN",
+        "LANGUAGE_AFAR",
+        "LANGUAGE_AFRIKAANS",
+        "LANGUAGE_ALBANIAN",
+        "LANGUAGE_AMHARIC",
+        "LANGUAGE_ARABIC",
+        "LANGUAGE_ARABIC_ALGERIA",
+        "LANGUAGE_ARABIC_BAHRAIN",
+        "LANGUAGE_ARABIC_EGYPT",
+        "LANGUAGE_ARABIC_IRAQ",
+        "LANGUAGE_ARABIC_JORDAN",
+        "LANGUAGE_ARABIC_KUWAIT",
+        "LANGUAGE_ARABIC_LEBANON",
+        "LANGUAGE_ARABIC_LIBYA",
+        "LANGUAGE_ARABIC_MOROCCO",
+        "LANGUAGE_ARABIC_OMAN",
+        "LANGUAGE_ARABIC_QATAR",
+        "LANGUAGE_ARABIC_SAUDI_ARABIA",
+        "LANGUAGE_ARABIC_SUDAN",
+        "LANGUAGE_ARABIC_SYRIA",
+        "LANGUAGE_ARABIC_TUNISIA",
+        "LANGUAGE_ARABIC_UAE",
+        "LANGUAGE_ARABIC_YEMEN",
+        "LANGUAGE_ARMENIAN",
+        "LANGUAGE_ASSAMESE",
+        "LANGUAGE_AYMARA",
+        "LANGUAGE_AZERI",
+        "LANGUAGE_AZERI_CYRILLIC",
+        "LANGUAGE_AZERI_LATIN",
+        "LANGUAGE_BASHKIR",
+        "LANGUAGE_BASQUE",
+        "LANGUAGE_BELARUSIAN",
+        "LANGUAGE_BENGALI",
+        "LANGUAGE_BHUTANI",
+        "LANGUAGE_BIHARI",
+        "LANGUAGE_BISLAMA",
+        "LANGUAGE_BRETON",
+        "LANGUAGE_BULGARIAN",
+        "LANGUAGE_BURMESE",
+        "LANGUAGE_CAMBODIAN",
+        "LANGUAGE_CATALAN",
+        "LANGUAGE_CHINESE",
+        "LANGUAGE_CHINESE_HONGKONG",
+        "LANGUAGE_CHINESE_MACAU",
+        "LANGUAGE_CHINESE_SIMPLIFIED",
+        "LANGUAGE_CHINESE_SINGAPORE",
+        "LANGUAGE_CHINESE_TAIWAN",
+        "LANGUAGE_CHINESE_TRADITIONAL",
+        "LANGUAGE_CORSICAN",
+        "LANGUAGE_CROATIAN",
+        "LANGUAGE_CZECH",
+        "LANGUAGE_DANISH",
+        "LANGUAGE_DEFAULT",
+        "LANGUAGE_DUTCH",
+        "LANGUAGE_DUTCH_BELGIAN",
+        "LANGUAGE_ENGLISH",
+        "LANGUAGE_ENGLISH_AUSTRALIA",
+        "LANGUAGE_ENGLISH_BELIZE",
+        "LANGUAGE_ENGLISH_BOTSWANA",
+        "LANGUAGE_ENGLISH_CANADA",
+        "LANGUAGE_ENGLISH_CARIBBEAN",
+        "LANGUAGE_ENGLISH_DENMARK",
+        "LANGUAGE_ENGLISH_EIRE",
+        "LANGUAGE_ENGLISH_JAMAICA",
+        "LANGUAGE_ENGLISH_NEW_ZEALAND",
+        "LANGUAGE_ENGLISH_PHILIPPINES",
+        "LANGUAGE_ENGLISH_SOUTH_AFRICA",
+        "LANGUAGE_ENGLISH_TRINIDAD",
+        "LANGUAGE_ENGLISH_UK",
+        "LANGUAGE_ENGLISH_US",
+        "LANGUAGE_ENGLISH_ZIMBABWE",
+        "LANGUAGE_ESPERANTO",
+        "LANGUAGE_ESTONIAN",
+        "LANGUAGE_FAEROESE",
+        "LANGUAGE_FARSI",
+        "LANGUAGE_FIJI",
+        "LANGUAGE_FINNISH",
+        "LANGUAGE_FRENCH",
+        "LANGUAGE_FRENCH_BELGIAN",
+        "LANGUAGE_FRENCH_CANADIAN",
+        "LANGUAGE_FRENCH_LUXEMBOURG",
+        "LANGUAGE_FRENCH_MONACO",
+        "LANGUAGE_FRENCH_SWISS",
+        "LANGUAGE_FRISIAN",
+        "LANGUAGE_GALICIAN",
+        "LANGUAGE_GEORGIAN",
+        "LANGUAGE_GERMAN",
+        "LANGUAGE_GERMAN_AUSTRIAN",
+        "LANGUAGE_GERMAN_BELGIUM",
+        "LANGUAGE_GERMAN_LIECHTENSTEIN",
+        "LANGUAGE_GERMAN_LUXEMBOURG",
+        "LANGUAGE_GERMAN_SWISS",
+        "LANGUAGE_GREEK",
+        "LANGUAGE_GREENLANDIC",
+        "LANGUAGE_GUARANI",
+        "LANGUAGE_GUJARATI",
+        "LANGUAGE_HAUSA",
+        "LANGUAGE_HEBREW",
+        "LANGUAGE_HINDI",
+        "LANGUAGE_HUNGARIAN",
+        "LANGUAGE_ICELANDIC",
+        "LANGUAGE_INDONESIAN",
+        "LANGUAGE_INTERLINGUA",
+        "LANGUAGE_INTERLINGUE",
+        "LANGUAGE_INUKTITUT",
+        "LANGUAGE_INUPIAK",
+        "LANGUAGE_IRISH",
+        "LANGUAGE_ITALIAN",
+        "LANGUAGE_ITALIAN_SWISS",
+        "LANGUAGE_JAPANESE",
+        "LANGUAGE_JAVANESE",
+        "LANGUAGE_KANNADA",
+        "LANGUAGE_KASHMIRI",
+        "LANGUAGE_KASHMIRI_INDIA",
+        "LANGUAGE_KAZAKH",
+        "LANGUAGE_KERNEWEK",
+        "LANGUAGE_KINYARWANDA",
+        "LANGUAGE_KIRGHIZ",
+        "LANGUAGE_KIRUNDI",
+        "LANGUAGE_KONKANI",
+        "LANGUAGE_KOREAN",
+        "LANGUAGE_KURDISH",
+        "LANGUAGE_LAOTHIAN",
+        "LANGUAGE_LATIN",
+        "LANGUAGE_LATVIAN",
+        "LANGUAGE_LINGALA",
+        "LANGUAGE_LITHUANIAN",
+        "LANGUAGE_MACEDONIAN",
+        "LANGUAGE_MALAGASY",
+        "LANGUAGE_MALAY",
+        "LANGUAGE_MALAYALAM",
+        "LANGUAGE_MALAY_BRUNEI_DARUSSALAM",
+        "LANGUAGE_MALAY_MALAYSIA",
+        "LANGUAGE_MALTESE",
+        "LANGUAGE_MANIPURI",
+        "LANGUAGE_MAORI",
+        "LANGUAGE_MARATHI",
+        "LANGUAGE_MOLDAVIAN",
+        "LANGUAGE_MONGOLIAN",
+        "LANGUAGE_NAURU",
+        "LANGUAGE_NEPALI",
+        "LANGUAGE_NEPALI_INDIA",
+        "LANGUAGE_NORWEGIAN_BOKMAL",
+        "LANGUAGE_NORWEGIAN_NYNORSK",
+        "LANGUAGE_OCCITAN",
+        "LANGUAGE_ORIYA",
+        "LANGUAGE_OROMO",
+        "LANGUAGE_PASHTO",
+        "LANGUAGE_POLISH",
+        "LANGUAGE_PORTUGUESE",
+        "LANGUAGE_PORTUGUESE_BRAZILIAN",
+        "LANGUAGE_PUNJABI",
+        "LANGUAGE_QUECHUA",
+        "LANGUAGE_RHAETO_ROMANCE",
+        "LANGUAGE_ROMANIAN",
+        "LANGUAGE_RUSSIAN",
+        "LANGUAGE_RUSSIAN_UKRAINE",
+        "LANGUAGE_SAMOAN",
+        "LANGUAGE_SANGHO",
+        "LANGUAGE_SANSKRIT",
+        "LANGUAGE_SCOTS_GAELIC",
+        "LANGUAGE_SERBIAN",
+        "LANGUAGE_SERBIAN_CYRILLIC",
+        "LANGUAGE_SERBIAN_LATIN",
+        "LANGUAGE_SERBO_CROATIAN",
+        "LANGUAGE_SESOTHO",
+        "LANGUAGE_SETSWANA",
+        "LANGUAGE_SHONA",
+        "LANGUAGE_SINDHI",
+        "LANGUAGE_SINHALESE",
+        "LANGUAGE_SISWATI",
+        "LANGUAGE_SLOVAK",
+        "LANGUAGE_SLOVENIAN",
+        "LANGUAGE_SOMALI",
+        "LANGUAGE_SPANISH",
+        "LANGUAGE_SPANISH_ARGENTINA",
+        "LANGUAGE_SPANISH_BOLIVIA",
+        "LANGUAGE_SPANISH_CHILE",
+        "LANGUAGE_SPANISH_COLOMBIA",
+        "LANGUAGE_SPANISH_COSTA_RICA",
+        "LANGUAGE_SPANISH_DOMINICAN_REPUBLIC",
+        "LANGUAGE_SPANISH_ECUADOR",
+        "LANGUAGE_SPANISH_EL_SALVADOR",
+        "LANGUAGE_SPANISH_GUATEMALA",
+        "LANGUAGE_SPANISH_HONDURAS",
+        "LANGUAGE_SPANISH_MEXICAN",
+        "LANGUAGE_SPANISH_MODERN",
+        "LANGUAGE_SPANISH_NICARAGUA",
+        "LANGUAGE_SPANISH_PANAMA",
+        "LANGUAGE_SPANISH_PARAGUAY",
+        "LANGUAGE_SPANISH_PERU",
+        "LANGUAGE_SPANISH_PUERTO_RICO",
+        "LANGUAGE_SPANISH_URUGUAY",
+        "LANGUAGE_SPANISH_US",
+        "LANGUAGE_SPANISH_VENEZUELA",
+        "LANGUAGE_SUNDANESE",
+        "LANGUAGE_SWAHILI",
+        "LANGUAGE_SWEDISH",
+        "LANGUAGE_SWEDISH_FINLAND",
+        "LANGUAGE_TAGALOG",
+        "LANGUAGE_TAJIK",
+        "LANGUAGE_TAMIL",
+        "LANGUAGE_TATAR",
+        "LANGUAGE_TELUGU",
+        "LANGUAGE_THAI",
+        "LANGUAGE_TIBETAN",
+        "LANGUAGE_TIGRINYA",
+        "LANGUAGE_TONGA",
+        "LANGUAGE_TSONGA",
+        "LANGUAGE_TURKISH",
+        "LANGUAGE_TURKMEN",
+        "LANGUAGE_TWI",
+        "LANGUAGE_UIGHUR",
+        "LANGUAGE_UKRAINIAN",
+        "LANGUAGE_UNKNOWN",
+        "LANGUAGE_URDU",
+        "LANGUAGE_URDU_INDIA",
+        "LANGUAGE_URDU_PAKISTAN",
+        "LANGUAGE_UZBEK",
+        "LANGUAGE_UZBEK_CYRILLIC",
+        "LANGUAGE_UZBEK_LATIN",
+        "LANGUAGE_VIETNAMESE",
+        "LANGUAGE_VOLAPUK",
+        "LANGUAGE_WELSH",
+        "LANGUAGE_WOLOF",
+        "LANGUAGE_XHOSA",
+        "LANGUAGE_YIDDISH",
+        "LANGUAGE_YORUBA",
+        "LANGUAGE_ZHUANG",
+        "LANGUAGE_ZULU",
+        "LAYOUT_BOTTOM",
+        "LAYOUT_DEFAULT_MARGIN",
+        "LAYOUT_HORIZONTAL",
+        "LAYOUT_LEFT",
+        "LAYOUT_NONE",
+        "LAYOUT_RIGHT",
+        "LAYOUT_TOP",
+        "LAYOUT_VERTICAL",
+        "LB_ALWAYS_SB",
+        "LB_EXTENDED",
+        "LB_MULTIPLE",
+        "LB_NEEDED_SB",
+        "LB_OWNERDRAW",
+        "LB_SINGLE",
+        "LB_SORT",
+        "LC_ALIGN_LEFT",
+        "LC_ALIGN_TOP",
+        "LC_AUTOARRANGE",
+        "LC_EDIT_LABELS",
+        "LC_HRULES",
+        "LC_ICON",
+        "LC_LIST",
+        "LC_MASK_TYPE",
+        "LC_NO_HEADER",
+        "LC_NO_SORT_HEADER",
+        "LC_REPORT",
+        "LC_SINGLE_SEL",
+        "LC_SMALL_ICON",
+        "LC_SORT_ASCENDING",
+        "LC_SORT_DESCENDING",
+        "LC_USER_TEXT",
+        "LC_VRULES",
+        "LEFT",
+        "LIST_AUTOSIZE",
+        "LIST_AUTOSIZE_USEHEADER",
+        "LIST_FORMAT_CENTER",
+        "LIST_FORMAT_CENTRE",
+        "LIST_FORMAT_LEFT",
+        "LIST_FORMAT_RIGHT",
+        "LIST_MASK_DATA",
+        "LIST_MASK_FORMAT",
+        "LIST_MASK_IMAGE",
+        "LIST_MASK_STATE",
+        "LIST_MASK_TEXT",
+        "LIST_MASK_WIDTH",
+        "LIST_NEXT_ABOVE",
+        "LIST_NEXT_ALL",
+        "LIST_NEXT_BELOW",
+        "LIST_NEXT_LEFT",
+        "LIST_NEXT_RIGHT",
+        "LIST_RECT_BOUNDS",
+        "LIST_RECT_ICON",
+        "LIST_RECT_LABEL",
+        "LIST_STATE_CUT",
+        "LIST_STATE_DONTCARE",
+        "LIST_STATE_DROPHILITED",
+        "LIST_STATE_FOCUSED",
+        "LIST_STATE_SELECTED",
+        "LITTLE_ENDIAN",
+        "LOCALE_DECIMAL_POINT",
+        "LOCALE_FORM_ENGLISH",
+        "LOCALE_FORM_NATIVE",
+        "LOCALE_LOAD_DEFAULT",
+        "LOCALE_NAME_LOCALE",
+        "LOCALE_THOUSANDS_SEP",
+        "Layout_Default",
+        "Layout_LeftToRight",
+        "Layout_RightToLeft",
+        "MAXIMIZE",
+        "MAXIMIZE_BOX",
+        "MB_DOCKABLE",
+        "MEDIACTRLPLAYERCONTROLS_DEFAULT",
+        "MEDIACTRLPLAYERCONTROLS_NONE",
+        "MEDIASTATE_PLAYING",
+        "MEDIASTATE_STOPPED",
+        "MENU_TEAROFF",
+        "MINIMIZE_BOX",
+        "MM_LOMETRIC",
+        "MM_METRIC",
+        "MM_POINTS",
+        "MM_TEXT",
+        "MM_TWIPS",
+        "MOD_ALL",
+        "MOD_ALT",
+        "MOD_ALTGR",
+        "MOD_CMD",
+        "MOD_CONTROL",
+        "MOD_META",
+        "MOD_SHIFT",
+        "MOD_WIN",
+        "MORE",
+        "MOUSE_BTN_LEFT",
+        "MOUSE_WHEEL_VERTICAL",
+        "NAND",
+        "NAVDIR_DOWN",
+        "NAVDIR_FIRSTCHILD",
+        "NAVDIR_LASTCHILD",
+        "NAVDIR_LEFT",
+        "NAVDIR_NEXT",
+        "NAVDIR_PREVIOUS",
+        "NAVDIR_RIGHT",
+        "NAVDIR_UP",
+        "NB_BOTTOM",
+        "NB_FIXEDWIDTH",
+        "NB_LEFT",
+        "NB_MULTILINE",
+        "NB_RIGHT",
+        "NB_TOP",
+        "NO",
+        "NOR",
+        "NORTH",
+        "NOT_FOUND",
+        "NO_DEFAULT",
+        "NO_FULL_REPAINT_ON_RESIZE",
+        "NO_OP",
+        "NUM_VAL_NO_TRAILING_ZEROES",
+        "NUM_VAL_SIGN_PLUS",
+        "NUM_VAL_THOUSANDS_SEPARATOR",
+        "NUM_VAL_ZERO_AS_BLANK",
+        "OBJID_ALERT",
+        "OBJID_CARET",
+        "OBJID_CLIENT",
+        "OBJID_CURSOR",
+        "OBJID_HSCROLL",
+        "OBJID_MENU",
+        "OBJID_SIZEGRIP",
+        "OBJID_SOUND",
+        "OBJID_SYSMENU",
+        "OBJID_TITLEBAR",
+        "OBJID_VSCROLL",
+        "OBJID_WINDOW",
+        "ODCB_DCLICK_CYCLES",
+        "ODCB_PAINTING_CONTROL",
+        "ODCB_PAINTING_SELECTED",
+        "ODDEVEN_RULE",
+        "OK",
+        "OR",
+        "OR_INVERT",
+        "OR_REVERSE",
+        "OS_WINDOWS",
+        "PAGE_ALL",
+        "PAPER_10X11",
+        "PAPER_10X14",
+        "PAPER_11X17",
+        "PAPER_15X11",
+        "PAPER_9X11",
+        "PAPER_A2",
+        "PAPER_A3",
+        "PAPER_A3_EXTRA",
+        "PAPER_A3_EXTRA_TRANSVERSE",
+        "PAPER_A3_TRANSVERSE",
+        "PAPER_A4",
+        "PAPER_A4SMALL",
+        "PAPER_A4_EXTRA",
+        "PAPER_A4_PLUS",
+        "PAPER_A4_TRANSVERSE",
+        "PAPER_A5",
+        "PAPER_A5_EXTRA",
+        "PAPER_A5_TRANSVERSE",
+        "PAPER_A_PLUS",
+        "PAPER_B4",
+        "PAPER_B5",
+        "PAPER_B5_EXTRA",
+        "PAPER_B5_TRANSVERSE",
+        "PAPER_B_PLUS",
+        "PAPER_CSHEET",
+        "PAPER_DSHEET",
+        "PAPER_ENV_10",
+        "PAPER_ENV_11",
+        "PAPER_ENV_12",
+        "PAPER_ENV_14",
+        "PAPER_ENV_9",
+        "PAPER_ENV_B4",
+        "PAPER_ENV_B5",
+        "PAPER_ENV_B6",
+        "PAPER_ENV_C3",
+        "PAPER_ENV_C4",
+        "PAPER_ENV_C5",
+        "PAPER_ENV_C6",
+        "PAPER_ENV_C65",
+        "PAPER_ENV_DL",
+        "PAPER_ENV_INVITE",
+        "PAPER_ENV_ITALY",
+        "PAPER_ENV_MONARCH",
+        "PAPER_ENV_PERSONAL",
+        "PAPER_ESHEET",
+        "PAPER_EXECUTIVE",
+        "PAPER_FANFOLD_LGL_GERMAN",
+        "PAPER_FANFOLD_STD_GERMAN",
+        "PAPER_FANFOLD_US",
+        "PAPER_FOLIO",
+        "PAPER_ISO_B4",
+        "PAPER_JAPANESE_POSTCARD",
+        "PAPER_LEDGER",
+        "PAPER_LEGAL",
+        "PAPER_LEGAL_EXTRA",
+        "PAPER_LETTER",
+        "PAPER_LETTERSMALL",
+        "PAPER_LETTER_EXTRA",
+        "PAPER_LETTER_EXTRA_TRANSVERSE",
+        "PAPER_LETTER_PLUS",
+        "PAPER_LETTER_TRANSVERSE",
+        "PAPER_NONE",
+        "PAPER_NOTE",
+        "PAPER_QUARTO",
+        "PAPER_STATEMENT",
+        "PAPER_TABLOID",
+        "PAPER_TABLOID_EXTRA",
+        "PATH_GET_SEPARATOR",
+        "PATH_GET_VOLUME",
+        "PATH_MKDIR_FULL",
+        "PATH_NO_SEPARATOR",
+        "PATH_RMDIR_FULL",
+        "PATH_RMDIR_PARENTS",
+        "PATH_RMDIR_RECURSIVE",
+        "PATH_UNIX",
+        "PDP_ENDIAN",
+        "PENSTYLE_BDIAGONAL_HATCH",
+        "PENSTYLE_CROSSDIAG_HATCH",
+        "PENSTYLE_CROSS_HATCH",
+        "PENSTYLE_DOT",
+        "PENSTYLE_DOT_DASH",
+        "PENSTYLE_FDIAGONAL_HATCH",
+        "PENSTYLE_FIRST_HATCH",
+        "PENSTYLE_HORIZONTAL_HATCH",
+        "PENSTYLE_INVALID",
+        "PENSTYLE_LAST_HATCH",
+        "PENSTYLE_LONG_DASH",
+        "PENSTYLE_SHORT_DASH",
+        "PENSTYLE_SOLID",
+        "PENSTYLE_STIPPLE",
+        "PENSTYLE_STIPPLE_MASK",
+        "PENSTYLE_STIPPLE_MASK_OPAQUE",
+        "PENSTYLE_TRANSPARENT",
+        "PENSTYLE_USER_DASH",
+        "PENSTYLE_VERTICAL_HATCH",
+        "PG_AUTO_SORT",
+        "PG_BOLD_MODIFIED",
+        "PG_DESCRIPTION",
+        "PG_EX_ALWAYS_ALLOW_FOCUS",
+        "PG_EX_AUTO_UNSPECIFIED_VALUES",
+        "PG_EX_ENABLE_TLP_TRACKING",
+        "PG_EX_HELP_AS_TOOLTIPS",
+        "PG_EX_HIDE_PAGE_BUTTONS",
+        "PG_EX_INIT_NOCAT",
+        "PG_EX_MODE_BUTTONS",
+        "PG_EX_MULTIPLE_SELECTION",
+        "PG_EX_NATIVE_DOUBLE_BUFFERING",
+        "PG_EX_NO_FLAT_TOOLBAR",
+        "PG_EX_NO_TOOLBAR_DIVIDER",
+        "PG_EX_TOOLBAR_SEPARATOR",
+        "PG_EX_WRITEONLY_BUILTIN_ATTRIBUTES",
+        "PG_HIDE_CATEGORIES",
+        "PG_HIDE_MARGIN",
+        "PG_ITERATE_ALL",
+        "PG_ITERATE_CATEGORIES",
+        "PG_ITERATE_DEFAULT",
+        "PG_ITERATE_VISIBLE",
+        "PG_LIMITED_EDITING",
+        "PG_NO_INTERNAL_BORDER",
+        "PG_SPLITTER_AUTO_CENTER",
+        "PG_STATIC_LAYOUT",
+        "PG_STATIC_SPLITTER",
+        "PG_TOOLBAR",
+        "PG_TOOLTIPS",
+        "PLATFORM_CURRENT",
+        "PLATFORM_MAC",
+        "PLATFORM_UNIX",
+        "PLATFORM_WINDOWS",
+        "PNG_TYPE_COLOUR",
+        "PNG_TYPE_GREY",
+        "PNG_TYPE_GREY_RED",
+        "POPUP_WINDOW",
+        "PORTRAIT",
+        "PORT_MAC",
+        "POWER_BATTERY",
+        "POWER_DELAY",
+        "POWER_RESOURCE_SYSTEM",
+        "POWER_SOCKET",
+        "POWER_UNKNOWN",
+        "PREVIEW_DEFAULT",
+        "PREVIEW_FIRST",
+        "PREVIEW_GOTO",
+        "PREVIEW_LAST",
+        "PREVIEW_NEXT",
+        "PREVIEW_PREVIOUS",
+        "PREVIEW_PRINT",
+        "PREVIEW_ZOOM",
+        "PRINTER_CANCELLED",
+        "PRINTER_ERROR",
+        "PRINTER_NO_ERROR",
+        "PRINT_MODE_FILE",
+        "PRINT_MODE_NONE",
+        "PRINT_MODE_PREVIEW",
+        "PRINT_MODE_PRINTER",
+        "PRIORITY_DEFAULT",
+        "PRIORITY_MAX",
+        "PRIORITY_MIN",
+        "PROCESS_DEFAULT",
+        "PROCESS_REDIRECT",
+        "PROPSHEET_BUTTONTOOLBOOK",
+        "PROPSHEET_SHRINKTOFIT",
+        "PROPSHEET_TOOLBOOK",
+        "RA_SPECIFY_COLS",
+        "RA_SPECIFY_ROWS",
+        "RB_GROUP",
+        "REMOVE_LEADING_SPACES",
+        "RESET",
+        "RESIZE_BORDER",
+        "RETAINED",
+        "RIBBON_ART_BUTTON_BAR_LABEL_COLOUR",
+        "RIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR",
+        "RIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR",
+        "RIBBON_BAR_ALWAYS_SHOW_TABS",
+        "RIBBON_BAR_DEFAULT_STYLE",
+        "RIBBON_BAR_FLOW_HORIZONTAL",
+        "RIBBON_BAR_FLOW_VERTICAL",
+        "RIBBON_BAR_FOLDBAR_STYLE",
+        "RIBBON_BAR_SHOW_HELP_BUTTON",
+        "RIBBON_BAR_SHOW_PAGE_ICONS",
+        "RIBBON_BAR_SHOW_PAGE_LABELS",
+        "RIBBON_BAR_SHOW_PANEL_EXT_BUTTONS",
+        "RIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS",
+        "RIBBON_BAR_SHOW_TOGGLE_BUTTON",
+        "RIBBON_BUTTONBAR_BUTTON_LARGE",
+        "RIBBON_BUTTONBAR_BUTTON_MEDIUM",
+        "RIBBON_BUTTONBAR_BUTTON_SMALL",
+        "RIBBON_BUTTON_DROPDOWN",
+        "RIBBON_BUTTON_HYBRID",
+        "RIBBON_BUTTON_NORMAL",
+        "RIBBON_BUTTON_TOGGLE",
+        "RIBBON_GALLERY_BUTTON_ACTIVE",
+        "RIBBON_GALLERY_BUTTON_DISABLED",
+        "RIBBON_GALLERY_BUTTON_HOVERED",
+        "RIBBON_GALLERY_BUTTON_NORMAL",
+        "RIBBON_PANEL_DEFAULT_STYLE",
+        "RIBBON_PANEL_EXT_BUTTON",
+        "RIBBON_PANEL_FLEXIBLE",
+        "RIBBON_PANEL_MINIMISE_BUTTON",
+        "RIBBON_PANEL_NO_AUTO_MINIMISE",
+        "RIBBON_PANEL_STRETCH",
+        "RICHTEXT_FIELD_STYLE_COMPOSITE",
+        "RICHTEXT_FIELD_STYLE_END_TAG",
+        "RICHTEXT_FIELD_STYLE_NO_BORDER",
+        "RICHTEXT_FIELD_STYLE_RECTANGLE",
+        "RICHTEXT_FIELD_STYLE_START_TAG",
+        "RICHTEXT_ORGANISER_BROWSE_NUMBERING",
+        "RICHTEXT_PAGE_ALL",
+        "RICHTEXT_PAGE_CENTRE",
+        "RICHTEXT_PAGE_RIGHT",
+        "RICHTEXT_TYPE_TEXT",
+        "RIGHT",
+        "ROLE_NONE",
+        "ROLE_SYSTEM_ALERT",
+        "ROLE_SYSTEM_ANIMATION",
+        "ROLE_SYSTEM_APPLICATION",
+        "ROLE_SYSTEM_BORDER",
+        "ROLE_SYSTEM_BUTTONDROPDOWN",
+        "ROLE_SYSTEM_BUTTONDROPDOWNGRID",
+        "ROLE_SYSTEM_BUTTONMENU",
+        "ROLE_SYSTEM_CARET",
+        "ROLE_SYSTEM_CELL",
+        "ROLE_SYSTEM_CHARACTER",
+        "ROLE_SYSTEM_CHART",
+        "ROLE_SYSTEM_CHECKBUTTON",
+        "ROLE_SYSTEM_CLIENT",
+        "ROLE_SYSTEM_CLOCK",
+        "ROLE_SYSTEM_COLUMN",
+        "ROLE_SYSTEM_COLUMNHEADER",
+        "ROLE_SYSTEM_COMBOBOX",
+        "ROLE_SYSTEM_CURSOR",
+        "ROLE_SYSTEM_DIAGRAM",
+        "ROLE_SYSTEM_DIAL",
+        "ROLE_SYSTEM_DIALOG",
+        "ROLE_SYSTEM_DOCUMENT",
+        "ROLE_SYSTEM_DROPLIST",
+        "ROLE_SYSTEM_EQUATION",
+        "ROLE_SYSTEM_GRAPHIC",
+        "ROLE_SYSTEM_GRIP",
+        "ROLE_SYSTEM_GROUPING",
+        "ROLE_SYSTEM_HELPBALLOON",
+        "ROLE_SYSTEM_HOTKEYFIELD",
+        "ROLE_SYSTEM_INDICATOR",
+        "ROLE_SYSTEM_LINK",
+        "ROLE_SYSTEM_LIST",
+        "ROLE_SYSTEM_LISTITEM",
+        "ROLE_SYSTEM_MENUBAR",
+        "ROLE_SYSTEM_MENUITEM",
+        "ROLE_SYSTEM_MENUPOPUP",
+        "ROLE_SYSTEM_OUTLINE",
+        "ROLE_SYSTEM_OUTLINEITEM",
+        "ROLE_SYSTEM_PAGETAB",
+        "ROLE_SYSTEM_PAGETABLIST",
+        "ROLE_SYSTEM_PANE",
+        "ROLE_SYSTEM_PROGRESSBAR",
+        "ROLE_SYSTEM_PROPERTYPAGE",
+        "ROLE_SYSTEM_PUSHBUTTON",
+        "ROLE_SYSTEM_RADIOBUTTON",
+        "ROLE_SYSTEM_ROW",
+        "ROLE_SYSTEM_ROWHEADER",
+        "ROLE_SYSTEM_SCROLLBAR",
+        "ROLE_SYSTEM_SEPARATOR",
+        "ROLE_SYSTEM_SLIDER",
+        "ROLE_SYSTEM_SOUND",
+        "ROLE_SYSTEM_SPINBUTTON",
+        "ROLE_SYSTEM_STATICTEXT",
+        "ROLE_SYSTEM_STATUSBAR",
+        "ROLE_SYSTEM_TABLE",
+        "ROLE_SYSTEM_TEXT",
+        "ROLE_SYSTEM_TITLEBAR",
+        "ROLE_SYSTEM_TOOLBAR",
+        "ROLE_SYSTEM_TOOLTIP",
+        "ROLE_SYSTEM_WHITESPACE",
+        "ROLE_SYSTEM_WINDOW",
+        "SASH_BOTTOM",
+        "SASH_DRAG_DRAGGING",
+        "SASH_DRAG_LEFT_DOWN",
+        "SASH_DRAG_NONE",
+        "SASH_LEFT",
+        "SASH_NONE",
+        "SASH_RIGHT",
+        "SASH_STATUS_OK",
+        "SASH_STATUS_OUT_OF_RANGE",
+        "SASH_TOP",
+        "SET",
+        "SETUP",
+        "SHAPED",
+        "SHOW_EFFECT_BLEND",
+        "SHOW_EFFECT_EXPAND",
+        "SHOW_EFFECT_MAX",
+        "SHOW_EFFECT_NONE",
+        "SHOW_EFFECT_ROLL_TO_BOTTOM",
+        "SHOW_EFFECT_ROLL_TO_LEFT",
+        "SHOW_EFFECT_ROLL_TO_RIGHT",
+        "SHOW_EFFECT_ROLL_TO_TOP",
+        "SHOW_EFFECT_SLIDE_TO_BOTTOM",
+        "SHOW_EFFECT_SLIDE_TO_LEFT",
+        "SHOW_EFFECT_SLIDE_TO_RIGHT",
+        "SHOW_EFFECT_SLIDE_TO_TOP",
+        "SHOW_SB_DEFAULT",
+        "SHOW_SB_NEVER",
+        "SHRINK",
+        "SHUTDOWN_FORCE",
+        "SHUTDOWN_LOGOFF",
+        "SHUTDOWN_POWEROFF",
+        "SHUTDOWN_REBOOT",
+        "SIGABRT",
+        "SIGALRM",
+        "SIGBUS",
+        "SIGEMT",
+        "SIGFPE",
+        "SIGHUP",
+        "SIGILL",
+        "SIGINT",
+        "SIGKILL",
+        "SIGNONE",
+        "SIGPIPE",
+        "SIGQUIT",
+        "SIGSEGV",
+        "SIGSYS",
+        "SIGTERM",
+        "SIGTRAP",
+        "SIZE_ALLOW_MINUS_ONE",
+        "SIZE_AUTO",
+        "SIZE_AUTO_HEIGHT",
+        "SIZE_AUTO_WIDTH",
+        "SIZE_NO_ADJUSTMENTS",
+        "SIZE_USE_EXISTING",
+        "SL_AUTOTICKS",
+        "SL_BOTH",
+        "SL_BOTTOM",
+        "SL_LABELS",
+        "SL_LEFT",
+        "SL_RIGHT",
+        "SL_SELRANGE",
+        "SL_TOP",
+        "SOCKET_BLOCK",
+        "SOCKET_CONNECTION",
+        "SOCKET_CONNECTION_FLAG",
+        "SOCKET_INPUT",
+        "SOCKET_INPUT_FLAG",
+        "SOCKET_INVADDR",
+        "SOCKET_INVOP",
+        "SOCKET_INVPORT",
+        "SOCKET_IOERR",
+        "SOCKET_LOST",
+        "SOCKET_LOST_FLAG",
+        "SOCKET_MEMERR",
+        "SOCKET_NOERROR",
+        "SOCKET_NOHOST",
+        "SOCKET_NOWAIT",
+        "SOCKET_OUTPUT",
+        "SOCKET_OUTPUT_FLAG",
+        "SOCKET_REUSEADDR",
+        "SOCKET_TIMEDOUT",
+        "SOCKET_WAITALL",
+        "SOCKET_WOULDBLOCK",
+        "SOUND_ASYNC",
+        "SOUND_LOOP",
+        "SOUND_SYNC",
+        "SOUTH",
+        "SPLIT_HORIZONTAL",
+        "SPLIT_VERTICAL",
+        "SP_3D",
+        "SP_3DBORDER",
+        "SP_3DSASH",
+        "SP_ARROW_KEYS",
+        "SP_BORDER",
+        "SP_LIVE_UPDATE",
+        "SP_NOBORDER",
+        "SP_NOSASH",
+        "SP_PERMIT_UNSPLIT",
+        "SP_WRAP",
+        "SRC_INVERT",
+        "STAY_ON_TOP",
+        "STB_DEFAULT_STYLE",
+        "STREAM_EOF",
+        "STREAM_FILEEXT",
+        "STREAM_NO_ERROR",
+        "STREAM_PROTOCOL",
+        "STREAM_READ_ERROR",
+        "STREAM_WRITE_ERROR",
+        "STRETCH_NOT",
+        "ST_NO_AUTORESIZE",
+        "ST_SIZEGRIP",
+        "SW_3D",
+        "SW_3DBORDER",
+        "SW_3DSASH",
+        "SW_BORDER",
+        "SW_NOBORDER",
+        "SYSTEM_MENU",
+        "SYS_ANSI_FIXED_FONT",
+        "SYS_ANSI_VAR_FONT",
+        "SYS_BORDER_X",
+        "SYS_BORDER_Y",
+        "SYS_CAPTION_Y",
+        "SYS_COLOUR_3DDKSHADOW",
+        "SYS_COLOUR_3DFACE",
+        "SYS_COLOUR_3DHIGHLIGHT",
+        "SYS_COLOUR_3DHILIGHT",
+        "SYS_COLOUR_3DLIGHT",
+        "SYS_COLOUR_3DSHADOW",
+        "SYS_COLOUR_ACTIVEBORDER",
+        "SYS_COLOUR_ACTIVECAPTION",
+        "SYS_COLOUR_APPWORKSPACE",
+        "SYS_COLOUR_BACKGROUND",
+        "SYS_COLOUR_BTNFACE",
+        "SYS_COLOUR_BTNHIGHLIGHT",
+        "SYS_COLOUR_BTNHILIGHT",
+        "SYS_COLOUR_BTNSHADOW",
+        "SYS_COLOUR_BTNTEXT",
+        "SYS_COLOUR_CAPTIONTEXT",
+        "SYS_COLOUR_DESKTOP",
+        "SYS_COLOUR_GRADIENTACTIVECAPTION",
+        "SYS_COLOUR_GRADIENTINACTIVECAPTION",
+        "SYS_COLOUR_GRAYTEXT",
+        "SYS_COLOUR_GRIDLINES",
+        "SYS_COLOUR_HIGHLIGHT",
+        "SYS_COLOUR_HIGHLIGHTTEXT",
+        "SYS_COLOUR_HOTLIGHT",
+        "SYS_COLOUR_INACTIVEBORDER",
+        "SYS_COLOUR_INACTIVECAPTION",
+        "SYS_COLOUR_INACTIVECAPTIONTEXT",
+        "SYS_COLOUR_INFOBK",
+        "SYS_COLOUR_INFOTEXT",
+        "SYS_COLOUR_LISTBOX",
+        "SYS_COLOUR_LISTBOXHIGHLIGHT",
+        "SYS_COLOUR_LISTBOXHIGHLIGHTTEXT",
+        "SYS_COLOUR_LISTBOXTEXT",
+        "SYS_COLOUR_MAX",
+        "SYS_COLOUR_MENU",
+        "SYS_COLOUR_MENUBAR",
+        "SYS_COLOUR_MENUHILIGHT",
+        "SYS_COLOUR_MENUTEXT",
+        "SYS_COLOUR_SCROLLBAR",
+        "SYS_COLOUR_WINDOW",
+        "SYS_COLOUR_WINDOWFRAME",
+        "SYS_COLOUR_WINDOWTEXT",
+        "SYS_CURSOR_X",
+        "SYS_CURSOR_Y",
+        "SYS_DCLICK_X",
+        "SYS_DCLICK_Y",
+        "SYS_DEFAULT_GUI_FONT",
+        "SYS_DEFAULT_PALETTE",
+        "SYS_DEVICE_DEFAULT_FONT",
+        "SYS_DRAG_X",
+        "SYS_DRAG_Y",
+        "SYS_EDGE_X",
+        "SYS_EDGE_Y",
+        "SYS_FRAMESIZE_X",
+        "SYS_FRAMESIZE_Y",
+        "SYS_HSCROLL_ARROW_X",
+        "SYS_HSCROLL_ARROW_Y",
+        "SYS_HSCROLL_Y",
+        "SYS_HTHUMB_X",
+        "SYS_ICONSPACING_X",
+        "SYS_ICONSPACING_Y",
+        "SYS_ICON_X",
+        "SYS_ICON_Y",
+        "SYS_MENU_Y",
+        "SYS_MOUSE_BUTTONS",
+        "SYS_NETWORK_PRESENT",
+        "SYS_OEM_FIXED_FONT",
+        "SYS_PENWINDOWS_PRESENT",
+        "SYS_SCREEN_DESKTOP",
+        "SYS_SCREEN_NONE",
+        "SYS_SCREEN_PDA",
+        "SYS_SCREEN_SMALL",
+        "SYS_SCREEN_TINY",
+        "SYS_SCREEN_X",
+        "SYS_SCREEN_Y",
+        "SYS_SHOW_SOUNDS",
+        "SYS_SMALLICON_X",
+        "SYS_SMALLICON_Y",
+        "SYS_SWAP_BUTTONS",
+        "SYS_SYSTEM_FIXED_FONT",
+        "SYS_SYSTEM_FONT",
+        "SYS_VSCROLL_ARROW_X",
+        "SYS_VSCROLL_ARROW_Y",
+        "SYS_VSCROLL_X",
+        "SYS_VTHUMB_Y",
+        "SYS_WINDOWMIN_X",
+        "SYS_WINDOWMIN_Y",
+        "S_DIR_DEFAULT",
+        "Strip_Accel",
+        "Strip_All",
+        "Strip_CJKMnemonics",
+        "Strip_Menu",
+        "Strip_Mnemonics",
+        "Style_Currency",
+        "Style_CurrencyCode",
+        "Style_CurrencySymbol",
+        "Style_NoTrailingZeroes",
+        "Style_None",
+        "Style_SignPlus",
+        "Style_SignSpace",
+        "Style_WithThousandsSep",
+        "TAB_TRAVERSAL",
+        "TASKBAR_BUTTON_ERROR",
+        "TASKBAR_BUTTON_INDETERMINATE",
+        "TASKBAR_BUTTON_NORMAL",
+        "TASKBAR_BUTTON_NO_PROGRESS",
+        "TASKBAR_BUTTON_PAUSED",
+        "TASKBAR_JUMP_LIST_DESTINATION",
+        "TASKBAR_JUMP_LIST_SEPARATOR",
+        "TASKBAR_JUMP_LIST_TASK",
+        "TB_BOTTOM",
+        "TB_DOCKABLE",
+        "TB_FLAT",
+        "TB_HORIZONTAL",
+        "TB_HORZ_LAYOUT",
+        "TB_HORZ_TEXT",
+        "TB_LEFT",
+        "TB_NOALIGN",
+        "TB_NODIVIDER",
+        "TB_NOICONS",
+        "TB_NO_TOOLTIPS",
+        "TB_RIGHT",
+        "TB_TEXT",
+        "TB_TOP",
+        "TB_VERTICAL",
+        "TC_FIXEDWIDTH",
+        "TC_MULTILINE",
+        "TC_OWNERDRAW",
+        "TC_RIGHTJUSTIFY",
+        "TEXT_ALIGNMENT_CENTRE",
+        "TEXT_ALIGNMENT_JUSTIFIED",
+        "TEXT_ALIGNMENT_LEFT",
+        "TEXT_ALIGNMENT_RIGHT",
+        "TEXT_ATTR_ALIGNMENT",
+        "TEXT_ATTR_BACKGROUND_COLOUR",
+        "TEXT_ATTR_BULLET_NUMBER",
+        "TEXT_ATTR_BULLET_STYLE",
+        "TEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT",
+        "TEXT_ATTR_BULLET_STYLE_ARABIC",
+        "TEXT_ATTR_BULLET_STYLE_LETTERS_LOWER",
+        "TEXT_ATTR_BULLET_STYLE_OUTLINE",
+        "TEXT_ATTR_BULLET_STYLE_PARENTHESES",
+        "TEXT_ATTR_BULLET_STYLE_PERIOD",
+        "TEXT_ATTR_BULLET_STYLE_ROMAN_LOWER",
+        "TEXT_ATTR_BULLET_STYLE_ROMAN_UPPER",
+        "TEXT_ATTR_BULLET_STYLE_STANDARD",
+        "TEXT_ATTR_EFFECT_STRIKETHROUGH",
+        "TEXT_ATTR_EFFECT_SUBSCRIPT",
+        "TEXT_ATTR_EFFECT_SUPERSCRIPT",
+        "TEXT_ATTR_FONT",
+        "TEXT_ATTR_FONT_FACE",
+        "TEXT_ATTR_FONT_ITALIC",
+        "TEXT_ATTR_FONT_WEIGHT",
+        "TEXT_ATTR_LEFT_INDENT",
+        "TEXT_ATTR_LINE_SPACING",
+        "TEXT_ATTR_LINE_SPACING_HALF",
+        "TEXT_ATTR_PARA_SPACING_AFTER",
+        "TEXT_ATTR_PARA_SPACING_BEFORE",
+        "TEXT_ATTR_RIGHT_INDENT",
+        "TEXT_ATTR_TABS",
+        "TEXT_ATTR_TEXT_COLOUR",
+        "TEXT_ATTR_UNDERLINE_DOUBLE",
+        "TEXT_ATTR_UNDERLINE_SPECIAL",
+        "TEXT_ATTR_UNITS_PIXELS",
+        "TEXT_BOX_ATTR_BORDER_SOLID",
+        "TEXT_BOX_ATTR_FLOAT_LEFT",
+        "TEXT_BOX_ATTR_FLOAT_RIGHT",
+        "TEXT_TYPE_RTF",
+        "TE_AUTO_URL",
+        "TE_CENTRE",
+        "TE_HT_BEFORE",
+        "TE_HT_BELOW",
+        "TE_HT_BEYOND",
+        "TE_HT_ON_TEXT",
+        "TE_HT_UNKNOWN",
+        "TE_LEFT",
+        "TE_MULTILINE",
+        "TE_NOHIDESEL",
+        "TE_NO_VSCROLL",
+        "TE_PASSWORD",
+        "TE_PROCESS_ENTER",
+        "TE_PROCESS_TAB",
+        "TE_READONLY",
+        "TE_RICH",
+        "TE_RICH2",
+        "TE_RIGHT",
+        "TE_WORDWRAP",
+        "THREAD_DETACHED",
+        "THREAD_JOINABLE",
+        "THREAD_NO_ERROR",
+        "TITLEBAR_BUTTON_CLOSE",
+        "TITLEBAR_BUTTON_HELP",
+        "TITLEBAR_BUTTON_ICONIZE",
+        "TITLEBAR_BUTTON_MAXIMIZE",
+        "TITLEBAR_BUTTON_RESTORE",
+        "TL_3STATE",
+        "TL_CHECKBOX",
+        "TL_DEFAULT_STYLE",
+        "TL_MULTIPLE",
+        "TL_USER_3STATE",
+        "TOKEN_RET_EMPTY",
+        "TOOL_BOTTOM",
+        "TOOL_LEFT",
+        "TOOL_RIGHT",
+        "TOOL_TOP",
+        "TOP",
+        "TOUCH_ALL_GESTURES",
+        "TOUCH_RAW_EVENTS",
+        "TRANSPARENT",
+        "TREE_HITTEST_ABOVE",
+        "TREE_HITTEST_BELOW",
+        "TREE_HITTEST_NOWHERE",
+        "TREE_HITTEST_ONITEM",
+        "TREE_HITTEST_ONITEMBUTTON",
+        "TREE_HITTEST_ONITEMICON",
+        "TREE_HITTEST_ONITEMINDENT",
+        "TREE_HITTEST_ONITEMLABEL",
+        "TREE_HITTEST_ONITEMLOWERPART",
+        "TREE_HITTEST_ONITEMRIGHT",
+        "TREE_HITTEST_ONITEMSTATEICON",
+        "TREE_HITTEST_ONITEMUPPERPART",
+        "TREE_HITTEST_TOLEFT",
+        "TREE_HITTEST_TORIGHT",
+        "TR_DEFAULT_STYLE",
+        "TR_EDIT_LABELS",
+        "TR_FULL_ROW_HIGHLIGHT",
+        "TR_HAS_BUTTONS",
+        "TR_HAS_VARIABLE_ROW_HEIGHT",
+        "TR_HIDE_ROOT",
+        "TR_LINES_AT_ROOT",
+        "TR_MULTIPLE",
+        "TR_NO_BUTTONS",
+        "TR_NO_LINES",
+        "TR_ROW_LINES",
+        "TR_SINGLE",
+        "TR_TWIST_BUTTONS",
+        "TipKind_Auto",
+        "TreeItemIcon_Expanded",
+        "TreeItemIcon_Normal",
+        "TreeItemIcon_Selected",
+        "TreeItemIcon_SelectedExpanded",
+        "UP",
+        "URL_NOERR",
+        "USER_ATTENTION_ERROR",
+        "VERTICAL",
+        "VSCROLL",
+        "WANTS_CHARS",
+        "WEBVIEW_BROWSING_DATA_ALL",
+        "WEBVIEW_BROWSING_DATA_CACHE",
+        "WEBVIEW_BROWSING_DATA_COOKIES",
+        "WEBVIEW_BROWSING_DATA_DOM_STORAGE",
+        "WEBVIEW_BROWSING_DATA_OTHER",
+        "WEBVIEW_FIND_BACKWARDS",
+        "WEBVIEW_FIND_DEFAULT",
+        "WEBVIEW_FIND_ENTIRE_WORD",
+        "WEBVIEW_FIND_HIGHLIGHT_RESULT",
+        "WEBVIEW_FIND_MATCH_CASE",
+        "WEBVIEW_FIND_WRAP",
+        "WEBVIEW_NAV_ACTION_USER",
+        "WEBVIEW_NAV_ERR_AUTH",
+        "WEBVIEW_NAV_ERR_CERTIFICATE",
+        "WEBVIEW_NAV_ERR_CONNECTION",
+        "WEBVIEW_NAV_ERR_NOT_FOUND",
+        "WEBVIEW_NAV_ERR_OTHER",
+        "WEBVIEW_NAV_ERR_REQUEST",
+        "WEBVIEW_NAV_ERR_SECURITY",
+        "WEBVIEW_NAV_ERR_USER_CANCELLED",
+        "WEBVIEW_PRINT_DEFAULT",
+        "WEBVIEW_PRINT_HIDE_HEADER_FOOTER",
+        "WEBVIEW_ZOOM_LARGE",
+        "WEBVIEW_ZOOM_LARGEST",
+        "WEBVIEW_ZOOM_MEDIUM",
+        "WEBVIEW_ZOOM_SMALL",
+        "WEBVIEW_ZOOM_TINY",
+        "WEBVIEW_ZOOM_TYPE_LAYOUT",
+        "WEBVIEW_ZOOM_TYPE_TEXT",
+        "WEST",
+        "WINDING_RULE",
+        "WINDOW_VARIANT_LARGE",
+        "WINDOW_VARIANT_MINI",
+        "WINDOW_VARIANT_NORMAL",
+        "WINDOW_VARIANT_SMALL",
+        "WS_EX_VALIDATE_RECURSIVELY",
+        "XML_ELEMENT_NODE",
+        "XML_TEXT_NODE",
+        "XOR",
+        "XRC_USE_ENVVARS",
+        "XRC_USE_LOCALE",
+        "YES",
+        "YES_DEFAULT",
+        "YES_NO",
+        "ZIP_FORMAT_ZIP64",
+    };
+    return s_names;
 }
 }

@@ -30,6 +30,10 @@ export class wxAboutDialogInfo {
     lib.symbols.wxAboutDialogInfo_AddArtist(this._ptr, artist);
   }
 
+  SetDocWriters(docwriters: Pointer): void {
+    lib.symbols.wxAboutDialogInfo_SetDocWriters(this._ptr, docwriters);
+  }
+
   AddDeveloper(developer: Pointer): void {
     lib.symbols.wxAboutDialogInfo_AddDeveloper(this._ptr, developer);
   }

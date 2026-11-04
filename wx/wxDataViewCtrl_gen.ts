@@ -20,6 +20,26 @@ export class wxDataViewCtrl {
     return (lib.symbols.wxDataViewCtrl_SetHeaderAttr(this._ptr, attr) as number) !== 0;
   }
 
+  Enable(enable: boolean): boolean {
+    return (lib.symbols.wxDataViewCtrl_Enable(this._ptr, enable ? 1 : 0) as number) !== 0;
+  }
+
+  EnableDragSource(format: Pointer): boolean {
+    return (lib.symbols.wxDataViewCtrl_EnableDragSource(this._ptr, format) as number) !== 0;
+  }
+
+  SetBackgroundColour(colour: Pointer): boolean {
+    return (lib.symbols.wxDataViewCtrl_SetBackgroundColour(this._ptr, colour) as number) !== 0;
+  }
+
+  SetFocus(): void {
+    lib.symbols.wxDataViewCtrl_SetFocus(this._ptr);
+  }
+
+  SetForegroundColour(colour: Pointer): boolean {
+    return (lib.symbols.wxDataViewCtrl_SetForegroundColour(this._ptr, colour) as number) !== 0;
+  }
+
   AssociateModel(model: Pointer): boolean {
     return (lib.symbols.wxDataViewCtrl_AssociateModel(this._ptr, model) as number) !== 0;
   }

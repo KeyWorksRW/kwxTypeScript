@@ -14,6 +14,18 @@ export class wxComboBox extends wxChoice {
     lib.symbols.wxComboBox_Append(this._ptr, item);
   }
 
+  Dismiss(): void {
+    lib.symbols.wxComboBox_Dismiss(this._ptr);
+  }
+
+  IsListEmpty(): boolean {
+    return (lib.symbols.wxComboBox_IsListEmpty(this._ptr) as number) !== 0;
+  }
+
+  Popup(): void {
+    lib.symbols.wxComboBox_Popup(this._ptr);
+  }
+
   AppendData(item: Pointer, clientData: Pointer): void {
     lib.symbols.wxComboBox_AppendData(this._ptr, item, clientData);
   }

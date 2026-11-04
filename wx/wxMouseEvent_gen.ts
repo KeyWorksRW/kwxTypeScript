@@ -26,6 +26,50 @@ export class wxMouseEvent extends wxEvent {
     return (lib.symbols.wxMouseEvent_AltDown(this._ptr) as number) !== 0;
   }
 
+  Aux1DClick(): boolean {
+    return (lib.symbols.wxMouseEvent_Aux1DClick(this._ptr) as number) !== 0;
+  }
+
+  Aux1Down(): boolean {
+    return (lib.symbols.wxMouseEvent_Aux1Down(this._ptr) as number) !== 0;
+  }
+
+  Aux1IsDown(): boolean {
+    return (lib.symbols.wxMouseEvent_Aux1IsDown(this._ptr) as number) !== 0;
+  }
+
+  Aux1Up(): boolean {
+    return (lib.symbols.wxMouseEvent_Aux1Up(this._ptr) as number) !== 0;
+  }
+
+  Aux2DClick(): boolean {
+    return (lib.symbols.wxMouseEvent_Aux2DClick(this._ptr) as number) !== 0;
+  }
+
+  Aux2Down(): boolean {
+    return (lib.symbols.wxMouseEvent_Aux2Down(this._ptr) as number) !== 0;
+  }
+
+  Aux2IsDown(): boolean {
+    return (lib.symbols.wxMouseEvent_Aux2IsDown(this._ptr) as number) !== 0;
+  }
+
+  Aux2Up(): boolean {
+    return (lib.symbols.wxMouseEvent_Aux2Up(this._ptr) as number) !== 0;
+  }
+
+  GetModifiers(): number {
+    return lib.symbols.wxMouseEvent_GetModifiers(this._ptr);
+  }
+
+  GetWheelAxis(): number {
+    return lib.symbols.wxMouseEvent_GetWheelAxis(this._ptr);
+  }
+
+  IsWheelInverted(): boolean {
+    return (lib.symbols.wxMouseEvent_IsWheelInverted(this._ptr) as number) !== 0;
+  }
+
   Button(but: number): boolean {
     return (lib.symbols.wxMouseEvent_Button(this._ptr, but) as number) !== 0;
   }

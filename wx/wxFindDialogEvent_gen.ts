@@ -14,6 +14,10 @@ export class wxFindDialogEvent extends wxCommandEvent {
     return lib.symbols.wxFindDialogEvent_GetFindString(this._ptr, ref);
   }
 
+  GetDialog(): Pointer {
+    return lib.symbols.wxFindDialogEvent_GetDialog(this._ptr);
+  }
+
   GetFlags(): number {
     return lib.symbols.wxFindDialogEvent_GetFlags(this._ptr);
   }

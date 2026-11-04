@@ -28,7 +28,7 @@ export class wxAuiToolBar extends wxControl {
     lib.symbols.wxAuiToolBar_SetWindowStyleFlag(this._ptr, style);
   }
 
-  GetWindowStyleFlag_0(): bigint {
+  override GetWindowStyleFlag(): bigint {
     return lib.symbols.wxAuiToolBar_GetWindowStyleFlag(this._ptr) as bigint;
   }
 

@@ -20,6 +20,10 @@ export class wxOutputStream extends wxStreamBase {
     this.Delete();
   }
 
+  SeekO(pos: number, mode: number): number {
+    return lib.symbols.wxOutputStream_SeekO(this._ptr, pos, mode);
+  }
+
   LastWrite(): number {
     return lib.symbols.wxOutputStream_LastWrite(this._ptr);
   }

@@ -2,9 +2,9 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxObject } from "./wxObject_gen.ts";
+import { wxConnectionBase } from "./wxConnectionBase_gen.ts";
 
-export class kwxConnection extends wxObject {
+export class kwxConnection extends wxConnectionBase {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;

@@ -20,6 +20,10 @@ export class wxRichTextBuffer extends wxRichTextParagraphLayoutBox {
     this.Delete();
   }
 
+  AddHandler(handler: Pointer): void {
+    lib.symbols.wxRichTextBuffer_AddHandler(handler);
+  }
+
   override AddParagraph(text: Pointer, paraStyle: Pointer, start: Pointer, end: Pointer): void {
     lib.symbols.wxRichTextBuffer_AddParagraph(this._ptr, text, paraStyle, start, end);
   }
@@ -122,6 +126,8 @@ export class wxRichTextBuffer extends wxRichTextParagraphLayoutBox {
 
 }
 
-export function createWxRichTextBuffer(): number {
-    return lib.symbols.wxRichTextBuffer_Create();
+export function createWxRichTextBuffer(): wxRichTextBuffer | null {
+    const rawPtr = lib.symbols.wxRichTextBuffer_Create();
+    if (rawPtr === null) return null;
+    return new wxRichTextBuffer(rawPtr);
 }

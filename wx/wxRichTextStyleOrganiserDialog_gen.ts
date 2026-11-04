@@ -74,6 +74,8 @@ export class wxRichTextStyleOrganiserDialog extends wxDialog {
 
 }
 
-export function createWxRichTextStyleOrganiserDialog(flags: number, sheet: Pointer, ctrl: Pointer, parent: Pointer, id: number, caption: Pointer, x: number, y: number, w: number, h: number, style: bigint): number {
-    return lib.symbols.wxRichTextStyleOrganiserDialog_Create(flags, sheet, ctrl, parent, id, caption, x, y, w, h, style);
+export function createWxRichTextStyleOrganiserDialog(flags: number, sheet: Pointer, ctrl: Pointer, parent: Pointer, id: number, caption: Pointer, x: number, y: number, w: number, h: number, style: bigint): wxRichTextStyleOrganiserDialog | null {
+    const rawPtr = lib.symbols.wxRichTextStyleOrganiserDialog_Create(flags, sheet, ctrl, parent, id, caption, x, y, w, h, style);
+    if (rawPtr === null) return null;
+    return new wxRichTextStyleOrganiserDialog(rawPtr);
 }

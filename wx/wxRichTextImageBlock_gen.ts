@@ -40,6 +40,8 @@ export class wxRichTextImageBlock {
 
 }
 
-export function createWxRichTextImageBlock(): number {
-    return lib.symbols.wxRichTextImageBlock_Create();
+export function createWxRichTextImageBlock(): wxRichTextImageBlock | null {
+    const rawPtr = lib.symbols.wxRichTextImageBlock_Create();
+    if (rawPtr === null) return null;
+    return new wxRichTextImageBlock(rawPtr);
 }

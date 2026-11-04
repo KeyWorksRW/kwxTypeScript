@@ -26,8 +26,8 @@ export class wxDropSource {
     this.Delete();
   }
 
-  DoDragDrop(move: number): number {
-    return lib.symbols.DropSource_DoDragDrop(this._ptr, move);
+  DoDragDrop(flags: number): number {
+    return lib.symbols.wxDropSource_DoDragDrop(this._ptr, flags);
   }
 
 }

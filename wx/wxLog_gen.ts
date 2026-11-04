@@ -20,6 +20,22 @@ export class wxLog extends wxObject {
     this.Delete();
   }
 
+  SetOnDoLogRecord(pFunction: Pointer): void {
+    lib.symbols.wxLog_SetOnDoLogRecord(this._ptr, pFunction);
+  }
+
+  SetOnDoLogTextAtLevel(pFunction: Pointer): void {
+    lib.symbols.wxLog_SetOnDoLogTextAtLevel(this._ptr, pFunction);
+  }
+
+  LogTextAtLevel(level: number, msg: Pointer): void {
+    lib.symbols.wxLog_LogTextAtLevel(this._ptr, level, msg);
+  }
+
+  SetThreadActiveTarget(logger: Pointer): Pointer {
+    return lib.symbols.wxLog_SetThreadActiveTarget(logger);
+  }
+
   OnLog(level: number, szString: Pointer, timestamp: number): void {
     lib.symbols.wxLog_OnLog(this._ptr, level, szString, timestamp);
   }

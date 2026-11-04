@@ -26,6 +26,10 @@ export class wxFileName {
     this.Delete();
   }
 
+  SplitPath(fullpath: Pointer, volume: Pointer, path: Pointer, name: Pointer, ext: Pointer, hasExt: Pointer, format: number): void {
+    lib.symbols.wxFileName_SplitPath(fullpath, volume, path, name, ext, hasExt, format);
+  }
+
   DirName(dir: Pointer, format: number): Pointer {
     return lib.symbols.wxFileName_DirName(dir, format);
   }

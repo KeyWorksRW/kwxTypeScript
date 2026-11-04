@@ -2,27 +2,21 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxGraphicsRenderer {
-  protected readonly _ptr: Pointer;
-  protected _disposed: boolean = false;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxGraphicsRenderer extends wxObject {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
     if (this._disposed) return;
     this._disposed = true;
     lib.symbols.wxGraphicsRenderer_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
   }
 
@@ -50,10 +44,20 @@ export class wxGraphicsRenderer {
     return lib.symbols.wxGraphicsRenderer_GetDefaultRenderer(this._ptr);
   }
 
-}
+  GetDirect2DRenderer(): Pointer {
+    return lib.symbols.wxGraphicsRenderer_GetDirect2DRenderer(this._ptr);
+  }
 
-export function createWxGraphicsRenderer(): wxGraphicsRenderer | null {
-    const rawPtr = lib.symbols.wxGraphicsRenderer_Create();
-    if (rawPtr === null) return null;
-    return new wxGraphicsRenderer(rawPtr);
+  GetGDIPlusRenderer(): Pointer {
+    return lib.symbols.wxGraphicsRenderer_GetGDIPlusRenderer(this._ptr);
+  }
+
+  GetName(): Pointer {
+    return lib.symbols.wxGraphicsRenderer_GetName(this._ptr);
+  }
+
+  GetVersion(major: Pointer, minor: Pointer, micro: Pointer): void {
+    lib.symbols.wxGraphicsRenderer_GetVersion(this._ptr, major, minor, micro);
+  }
+
 }

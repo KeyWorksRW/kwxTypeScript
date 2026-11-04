@@ -14,6 +14,14 @@ export class wxGridTableBase extends wxObject {
     return lib.symbols.wxGridTableBase_GetNumberRows(this._ptr);
   }
 
+  GetAttrProvider(): Pointer {
+    return lib.symbols.wxGridTableBase_GetAttrProvider(this._ptr);
+  }
+
+  SetAttrProvider(attrProvider: Pointer): void {
+    lib.symbols.wxGridTableBase_SetAttrProvider(this._ptr, attrProvider);
+  }
+
   GetNumberCols(): number {
     return lib.symbols.wxGridTableBase_GetNumberCols(this._ptr);
   }
@@ -136,6 +144,34 @@ export class wxGridTableBase extends wxObject {
 
   CanHaveAttributes(): boolean {
     return (lib.symbols.wxGridTableBase_CanHaveAttributes(this._ptr) as number) !== 0;
+  }
+
+  SetOnGetTypeName(pFunction: Pointer): void {
+    lib.symbols.wxGridTableBase_SetOnGetTypeName(this._ptr, pFunction);
+  }
+
+  SetOnCanGetValueAs(pFunction: Pointer): void {
+    lib.symbols.wxGridTableBase_SetOnCanGetValueAs(this._ptr, pFunction);
+  }
+
+  SetOnCanSetValueAs(pFunction: Pointer): void {
+    lib.symbols.wxGridTableBase_SetOnCanSetValueAs(this._ptr, pFunction);
+  }
+
+  SetOnGetValueAsLong(pFunction: Pointer): void {
+    lib.symbols.wxGridTableBase_SetOnGetValueAsLong(this._ptr, pFunction);
+  }
+
+  SetOnGetValueAsBool(pFunction: Pointer): void {
+    lib.symbols.wxGridTableBase_SetOnGetValueAsBool(this._ptr, pFunction);
+  }
+
+  SetOnSetValueAsLong(pFunction: Pointer): void {
+    lib.symbols.wxGridTableBase_SetOnSetValueAsLong(this._ptr, pFunction);
+  }
+
+  SetOnSetValueAsBool(pFunction: Pointer): void {
+    lib.symbols.wxGridTableBase_SetOnSetValueAsBool(this._ptr, pFunction);
   }
 
 }

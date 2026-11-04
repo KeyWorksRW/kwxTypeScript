@@ -10,6 +10,10 @@ export class wxRibbonPanel extends wxRibbonControl {
     return this._ptr;
   }
 
+  SetExtButtonKeyTip(keytip: Pointer): void {
+    lib.symbols.wxRibbonPanel_SetExtButtonKeyTip(this._ptr, keytip);
+  }
+
   override GetLabel(): Pointer {
     return lib.symbols.wxRibbonPanel_GetLabel(this._ptr);
   }

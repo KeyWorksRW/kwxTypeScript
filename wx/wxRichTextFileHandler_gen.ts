@@ -24,6 +24,10 @@ export class wxRichTextFileHandler extends wxObject {
     return lib.symbols.wxRichTextFileHandler_GetName(this._ptr);
   }
 
+  SaveFile(buffer: Pointer, stream: Pointer): boolean {
+    return (lib.symbols.wxRichTextFileHandler_SaveFile(this._ptr, buffer, stream) as number) !== 0;
+  }
+
   SetName(name: Pointer): void {
     lib.symbols.wxRichTextFileHandler_SetName(this._ptr, name);
   }

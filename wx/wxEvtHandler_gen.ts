@@ -28,6 +28,10 @@ export class wxEvtHandler extends wxObject {
     lib.symbols.wxEvtHandler_SetClientClosure(this._ptr, closure);
   }
 
+  SetOnProcessEvent(pFunction: Pointer): void {
+    lib.symbols.wxEvtHandler_SetOnProcessEvent(this._ptr, pFunction);
+  }
+
   AddFilter(filter: Pointer): void {
     lib.symbols.wxEvtHandler_AddFilter(filter);
   }
@@ -38,6 +42,10 @@ export class wxEvtHandler extends wxObject {
 
   AddPendingEvent(event: Pointer): void {
     lib.symbols.wxEvtHandler_AddPendingEvent(this._ptr, event);
+  }
+
+  GetClientData(): Pointer {
+    return lib.symbols.wxEvtHandler_GetClientData(this._ptr);
   }
 
   Connect(first: number, last: number, type_: number, data: Pointer): number {

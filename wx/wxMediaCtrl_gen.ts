@@ -26,6 +26,14 @@ export class wxMediaCtrl {
     this.Delete();
   }
 
+  GetDownloadProgress(): number {
+    return lib.symbols.wxMediaCtrl_GetDownloadProgress(this._ptr);
+  }
+
+  GetDownloadTotal(): number {
+    return lib.symbols.wxMediaCtrl_GetDownloadTotal(this._ptr);
+  }
+
   GetBestSize(): Pointer {
     return lib.symbols.wxMediaCtrl_GetBestSize(this._ptr);
   }

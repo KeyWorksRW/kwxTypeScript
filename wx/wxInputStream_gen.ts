@@ -24,6 +24,10 @@ export class wxInputStream extends wxStreamBase {
     return (lib.symbols.wxInputStream_CanRead(this._ptr) as number) !== 0;
   }
 
+  TellI(): number {
+    return lib.symbols.wxInputStream_TellI(this._ptr);
+  }
+
   Eof(): boolean {
     return (lib.symbols.wxInputStream_Eof(this._ptr) as number) !== 0;
   }

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "defaults": {
+    "capture": { "client": true, "settleMs": 1500, "timeoutMs": 20000 },
+    "compare": { "maxDiffRatio": 0.02, "pixelTolerance": 8, "minSsim": 0.98 }
+  },
+  "samples": {
+    "about": {
+      "mode": "reference",
+      "reference": { "exe": "@ref/about.exe", "cwd": "@ref", "args": [] },
+      "candidate": {
+        "exe": "bin/Release/kwxts.exe",
+        "cwd": ".",
+        "args": ["samples/about/about.kwxts"]
+      },
+      "capture": { "windowTitleRegex": "About" },
+      "baseline": "baselines/about.png"
+    }
+  }
+}

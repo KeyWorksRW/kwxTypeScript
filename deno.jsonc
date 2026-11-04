@@ -8,6 +8,9 @@
     "kwx/platform": "./src/kwx_platform.ts"
   },
   "tasks": {
-    "check": "deno check --no-lock src/kwx_platform.ts src/kwxApp.ts"
+    // The generated corpus is included: kwxgen verify already gates it against
+    // the kwxFFI headers, and this catches wrapper-level type errors that the
+    // generator itself cannot see (for example conflicting inherited signatures).
+    "check": "deno check --no-lock src/kwx_platform.ts src/kwxApp.ts wx/mod.ts examples/demo.ts"
   }
 }

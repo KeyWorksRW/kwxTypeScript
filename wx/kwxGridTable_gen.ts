@@ -28,6 +28,62 @@ export class kwxGridTable extends wxGridTableBase {
     return lib.symbols.kwxGridTable_SendTableMessage(this._ptr, id, val1, val2);
   }
 
+  override SetOnGetTypeName(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnGetTypeName(this._ptr, pFunction);
+  }
+
+  override SetOnCanGetValueAs(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnCanGetValueAs(this._ptr, pFunction);
+  }
+
+  override SetOnCanSetValueAs(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnCanSetValueAs(this._ptr, pFunction);
+  }
+
+  override SetOnGetValueAsLong(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnGetValueAsLong(this._ptr, pFunction);
+  }
+
+  override SetOnGetValueAsBool(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnGetValueAsBool(this._ptr, pFunction);
+  }
+
+  override SetOnSetValueAsLong(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnSetValueAsLong(this._ptr, pFunction);
+  }
+
+  override SetOnSetValueAsBool(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnSetValueAsBool(this._ptr, pFunction);
+  }
+
+  SetOnGetNumberRows(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnGetNumberRows(this._ptr, pFunction);
+  }
+
+  SetOnGetNumberCols(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnGetNumberCols(this._ptr, pFunction);
+  }
+
+  SetOnGetValue(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnGetValue(this._ptr, pFunction);
+  }
+
+  SetOnSetValue(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnSetValue(this._ptr, pFunction);
+  }
+
+  SetOnIsEmptyCell(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnIsEmptyCell(this._ptr, pFunction);
+  }
+
+  SetOnGetColLabelValue(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnGetColLabelValue(this._ptr, pFunction);
+  }
+
+  SetOnSetColLabelValue(pFunction: Pointer): void {
+    lib.symbols.kwxGridTable_SetOnSetColLabelValue(this._ptr, pFunction);
+  }
+
 }
 
 export function createKwxGridTable(pObject: Pointer, fnGetNumberRows: Pointer, fnGetNumberCols: Pointer, fnGetValue: Pointer, fnSetValue: Pointer, fnIsEmptyCell: Pointer, fnClear: Pointer, fnInsertRows: Pointer, fnAppendRows: Pointer, fnDeleteRows: Pointer, fnInsertCols: Pointer, fnAppendCols: Pointer, fnDeleteCols: Pointer, fnSetRowLabelValue: Pointer, fnSetColLabelValue: Pointer, fnGetRowLabelValue: Pointer, fnGetColLabelValue: Pointer): kwxGridTable | null {

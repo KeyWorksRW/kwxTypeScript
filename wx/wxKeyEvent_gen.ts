@@ -14,6 +14,26 @@ export class wxKeyEvent extends wxEvent {
     return (lib.symbols.wxKeyEvent_AltDown(this._ptr) as number) !== 0;
   }
 
+  GetRawKeyCode(): number {
+    return lib.symbols.wxKeyEvent_GetRawKeyCode(this._ptr);
+  }
+
+  GetRawKeyFlags(): number {
+    return lib.symbols.wxKeyEvent_GetRawKeyFlags(this._ptr);
+  }
+
+  GetUnicodeChar(): number {
+    return lib.symbols.wxKeyEvent_GetUnicodeChar(this._ptr);
+  }
+
+  IsAutoRepeat(): boolean {
+    return (lib.symbols.wxKeyEvent_IsAutoRepeat(this._ptr) as number) !== 0;
+  }
+
+  IsKeyInCategory(category: number): boolean {
+    return (lib.symbols.wxKeyEvent_IsKeyInCategory(this._ptr, category) as number) !== 0;
+  }
+
   ControlDown(): boolean {
     return (lib.symbols.wxKeyEvent_ControlDown(this._ptr) as number) !== 0;
   }

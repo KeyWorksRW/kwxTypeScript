@@ -1,0 +1,1117 @@
+// combo.kwxts — kwxTypeScript port of wxSamples/src/combo/combo.cpp
+//
+// The wxComboCtrl / wxOwnerDrawnComboBox sample: a frame that demonstrates
+// owner-drawn combo boxes, custom dropdown button bitmaps, list/tree popups and
+// a side-by-side comparison dialog against the native wxComboBox.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\combo\combo.kwxts
+//
+// Porting notes (details in the report):
+//   * wxPenStyleComboBox derived from wxOwnerDrawnComboBox and overrode
+//     OnDrawItem()/OnDrawBackground()/OnMeasureItem()/
+//     OnMeasureItemWidth() to paint a pen-style preview and alternate row
+//     heights. kwxTypeScript cannot override C++ virtuals, so the two pen-style
+//     combos are plain wxOwnerDrawnComboBox controls containing the same 12
+//     item strings (default item rendering, uniform row height).
+//   * wxComboCtrl::GetButtonSize() is not bound, so the "button on the left"
+//     combo uses the default button size (-1/-1) instead of the C++ value
+//     (butSize.x - 2, butSize.y - 6).
+//   * The ListView/TreeCtrl custom popups, the custom popup animation
+//     (wxComboCtrlWithCustomPopupAnim), the file-dialog button action
+//     (wxFileSelectorCombo) and the checkbox used as the combo's main control
+//     require wxComboPopup-derived classes, SetPopupControl(), UseAltPopupWindow(),
+//     AnimateShow(), OnButtonClick() and SetMainControl(), none of which are
+//     bound. Those controls are therefore not created; their captions are kept.
+//   * SetIcon(wxICON(sample)) uses a resource that a kwxTypeScript program does
+//     not have, so the frame keeps the default icon.
+
+import {
+    ALL,
+    ALIGN_CENTER_VERTICAL,
+    BOTH,
+    CAPTION,
+    CB_READONLY,
+    CB_SORT,
+    CLOSE_BOX,
+    DEFAULT_FRAME_STYLE,
+    EVT_CLOSE_WINDOW,
+    EVT_COMBOBOX,
+    EVT_IDLE,
+    EVT_MENU,
+    EVT_TEXT,
+    EVT_TEXT_ENTER,
+    EXPAND,
+    HORIZONTAL,
+    ICON_INFORMATION,
+    ID_ABOUT,
+    ID_ANY,
+    ID_EXIT,
+    ID_HIGHEST,
+    LEFT,
+    LogError,
+    LogMessage,
+    OK,
+    RESIZE_BORDER,
+    RIGHT,
+    SIZE_USE_EXISTING,
+    SYSTEM_MENU,
+    TE_MULTILINE,
+    TOP,
+    VERTICAL,
+    createWxBitmapBundleFromSVGBase64,
+    createWxBoxSizer,
+    createWxClosure,
+    createWxComboBox,
+    createWxDialog,
+    createWxFontDefault,
+    createWxFrame,
+    createWxLogTextCtrl,
+    createWxMenu,
+    createWxMenuBar,
+    createWxOwnerDrawnComboBox,
+    createWxPanel,
+    createWxStaticBox,
+    createWxStaticBoxSizer,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    exitMainLoop,
+    initAllImageHandlers,
+    initialize,
+    kwxMessageBox,
+    lib,
+    readAndDeleteWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wxBitmapBundle,
+    wxBoxSizer,
+    wxClosure,
+    wxCommandEvent,
+    wxComboBox,
+    wxFrame,
+    wxGetOsDescription,
+    wxIdleEvent,
+    wxLogTextCtrl,
+    wxMenu,
+    wxMenuBar,
+    wxOwnerDrawnComboBox,
+    wxPanel,
+    wxStaticBox,
+    wxStaticBoxSizer,
+    wxStaticText,
+    wxTextCtrl,
+    wxVersionString,
+} from "kwx";
+import { Callback, exit, platform, Pointer, pointerOf } from "kwx/platform";
+
+// ---------------------------------------------------------------------------
+// combo.cpp: enum { ComboCtrl_Compare = wxID_HIGHEST,
+//                   ComboCtrl_Quit = wxID_EXIT,
+//                   ComboCtrl_About = wxID_ABOUT }
+// The id of the log text control is a literal 105 in the original.
+// ---------------------------------------------------------------------------
+const COMBOCTRL_COMPARE = ID_HIGHEST;
+const COMBOCTRL_QUIT = ID_EXIT;
+const COMBOCTRL_ABOUT = ID_ABOUT;
+const LOG_CTRL_ID = 105;
+
+/** wxDEFAULT_DIALOG_STYLE = wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX */
+const DEFAULT_DIALOG_STYLE = CAPTION | SYSTEM_MENU | CLOSE_BOX;
+
+/**
+ * MyFrame::m_arrItems — the common list of items handed to every combo box.
+ * (wxArrayString is not bound; the items are appended one by one, which keeps
+ * wxCB_SORT semantics because both Append() and the constructor insert sorted.)
+ */
+const ITEMS: readonly string[] = [
+    "Solid",
+    "Transparent",
+    "Dot",
+    "Long Dash",
+    "Short Dash",
+    "Dot Dash",
+    "Backward Diagonal Hatch",
+    "Cross-diagonal Hatch",
+    "Forward Diagonal Hatch",
+    "Cross Hatch",
+    "Horizontal Hatch",
+    "Vertical Hatch",
+];
+
+// ---------------------------------------------------------------------------
+// Dropdown button bitmaps.
+//
+// The C++ code loads "dropbutn.svg" / "dropbutp.svg" / "dropbuth.svg" with
+// wxBitmapBundle::FromSVGFile(file, wxSize(16, 16)). Neither FromSVGFile nor
+// any file API exists in the runtime, so each SVG is embedded below as
+// base64(gzip(svg)): wxBitmapBundle_CreateFromSVGBase64() base64-decodes and
+// then gunzips its argument before calling
+// wxBitmapBundle::FromSVG(bytes, len, wxSize(default_w, default_h))
+// (kwxFFI src/kwx_image.cpp). The default size stays 16x16.
+// ---------------------------------------------------------------------------
+const DROPBUTN_SVG_GZIP_BASE64 =
+    "H4sIAAAAAAAEAG1RQW7DIBC85xWInsG7gAFHcSK1Ul/QnivXobZVx7ZMakd9fZe0Bx8K0uwAO7sDHE63S8+WMMduHEqOEjgLQz2eu6Ep+evLs/D8dNwd4tKw7lzyp2qq3jDlVO99EO9V/dnM49dAR0NYGdBEJ3Nl/wLf1ibd0oX1cbyV/J9McrKPU1WHkk9ziGFewn1ziCVvr9dpn2XruspVy3FuMgUAGdnixx2jcZiqa8vIxsVLgy4VVa6III0xDGSOnrCAghByXYO0uhCEhlmZGyesdEZtOUk9epFQEyprf3krFAWMQEvjkIGgixWL8ISpH6CiE+2T1NyReEs1C8SaVg4US9o8GTLWbOhCNTwylFrZSG0wzylVSzAUk9YXeNdC6iuds1vek2206QpafXP20fV9yR9AA4LhGf1heq3j7gcMO3fC8gEAAA==";
+const DROPBUTP_SVG_GZIP_BASE64 =
+    "H4sIAAAAAAAEAGVRTW+dMBC851dYrnrErD+wTQTk1lOP7bki4AIqgSfbgaa/vmueXh5tkBjvend2xnb19PtlJpvzYVqXmnIGlLilW/tpGWr6/duXzNKn5qEK20D2qY8j9hhWCE3J6KZhjPc8xLfZ1ZSep3FKcP5juLQdli7eBec3d2wuoaZjjJfHPN/3ne2SrX7IBQDkKEabyrsukqmv6XPb/Rr8+rr0aYuSbm5DSEI3QwCfT3aO7Oc0zzVd1sXdjeV4juHG7l69d0v82r45f29pqjjF2TXHNuFVfk2Rloygrx/8XT+4Ge24/ib2CRSoZ0sPlVu7+Fgl+FWXNo7vTZISjF4sU9wQvE5hygBMKUWAFdwillAiQiE7YFqWGaIimhXKZJoZJc4xUi23WUKJKLS+xmMmcOEBMFWGE8jwfcots4hJD7jAirSJqg7EeMSZJecdZgYESdwiGVJancINZ1hOOJNCB5ThRYGtkoHCNXFtyQ8uJF1mjD7HM9rmOh1Bij//39c/r5cPV7j+eHXNw1/TCwVFwQIAAA==";
+const DROPBUTH_SVG_GZIP_BASE64 =
+    "H4sIAAAAAAAEAGVRTW+dMBC851dYrnLErD+wTQTkllOP7bmi4AIqgSfbgaa/vmueXh5tkRjvend2xnb1/Ot1JpvzYVqXmnIGlLilW/tpGWr69ctLZulz81CFbSD71McRewwrhKZkdNMwxnse4vvsakrP0zglOP8pXNoOSxfvgvObOzaXUNMxxstTnu/7znbJVj/kAgByFKNN5V0XydTX9Hvb/Rz8+rb0aYuSbm5DSEI3QwCPJztH9mOa55ou6+LuxnI8x3Bjd2/euyV+bt+dv7c0VZzi7Jpjm/Aqv6ZIS0bQ1zf+oR/cjHZcfxP7pI02ztBD5dYu/q8S/KpLG8ePJkkJRq+WKW4IXqcwZQCmlCLACm4RSygRoZAdMC3LDFERzQplMs2MEucYqZbbLKFEFFpf4zETuPAAmCrDCWT4PuWWWcSkB1xgRdpEVQdiPOLMkvMOMwOCJG6RDCmtTuGGMywnnEmhA8rwosBWyUDhmri25AcXki4zRp/jGW1znY4gxe9/7+uv18uHK1x/vLrm4Q9J5AgAwQIAAA==";
+
+/** A one-shot wxString whose lifetime is limited to `fn`. */
+function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/**
+ * wxLogMessage() takes a format string, and kwxFFI's LogMessage(wxString*)
+ * forwards the whole string as that format. Doubling '%' keeps user supplied
+ * text (for instance a value typed into a combo box) from being interpreted as
+ * a conversion specification; the visible output is unchanged.
+ */
+function logMessage(text: string): void
+{
+    withString(text.replace(/%/g, "%%"), (ptr) => LogMessage(ptr));
+}
+
+/** wxStaticText(parent, wxID_ANY, text) with default position/size/style. */
+function createLabel(parent: Pointer, text: string): wxStaticText | null
+{
+    return withString(text, (ptr) =>
+        createWxStaticText(parent, ID_ANY, ptr, -1, -1, -1, -1, 0));
+}
+
+/** A sizer factory that only fails on allocation failure. */
+function newBoxSizer(orient: number): wxBoxSizer
+{
+    const sizer = createWxBoxSizer(orient);
+    if (!sizer)
+    {
+        throw new Error("combo: failed to allocate a wxBoxSizer");
+    }
+    return sizer;
+}
+
+/** wxMenu(style = 0) with an empty title. */
+function newMenu(): wxMenu | null
+{
+    return withString("", (ptr) => createWxMenu(ptr, 0n));
+}
+
+/**
+ * Mirrors wxSizerFlags::GetDefaultBorderFractional(): 6px on wxGTK, 5px on
+ * wxOSX, and 5px scaled by the top-level window's DPI on wxMSW. wxSizerFlags
+ * itself is not bound, so the distance is computed here and passed to
+ * wxSizer::AddWindow()/AddSizer().
+ */
+function defaultBorderFractional(frame: wxFrame): number
+{
+    if (platform === "linux")
+    {
+        return 6;
+    }
+    if (platform === "darwin")
+    {
+        return 5;
+    }
+    return 5 * frame.GetDPIScaleFactor();
+}
+
+/** wxBitmapBundle::FromSVGFile(file, wxSize(w, h)) from embedded data. */
+function createSvgBundle(
+    gzipBase64: string,
+    width: number,
+    height: number,
+): wxBitmapBundle | null
+{
+    const bytes = new TextEncoder().encode(gzipBase64);
+    return createWxBitmapBundleFromSVGBase64(
+        pointerOf(bytes), BigInt(bytes.length), width, height,
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Combo-box construction
+//
+// wxOwnerDrawnComboBox and wxComboBox do not derive from wxWindow in the
+// generated wrappers, so the inherited wxWindow / wxComboCtrl methods used by
+// the sample are called through the raw FFI symbols.
+// ---------------------------------------------------------------------------
+
+/**
+ * wxOwnerDrawnComboBox with the common item list.
+ *
+ * C++: new wxOwnerDrawnComboBox(parent, wxID_ANY, wxEmptyString,
+ *                               wxDefaultPosition, wxDefaultSize,
+ *                               m_arrItems, style)
+ * The items are appended after creation instead of being marshalled as a
+ * wxString** array; wxCB_SORT makes Append() insert in sorted order, so the
+ * resulting content is identical.
+ */
+function createOwnerDrawnComboBox(
+    parent: Pointer,
+    style: number,
+): wxOwnerDrawnComboBox | null
+{
+    const rawPtr = withString("", (value) => createWxOwnerDrawnComboBox(
+        parent, ID_ANY, value, -1, -1, -1, -1, BigInt(style),
+    ));
+    if (!rawPtr)
+    {
+        return null;
+    }
+
+    const combo = new wxOwnerDrawnComboBox(rawPtr);
+    for (const item of ITEMS)
+    {
+        withString(item, (ptr) => { combo.Append(ptr); });
+    }
+    return combo;
+}
+
+/** wxComboBox with the common item list (same construction scheme). */
+function createPlainComboBox(parent: Pointer, style: number): wxComboBox | null
+{
+    const combo = withString("", (text) => createWxComboBox(
+        parent, ID_ANY, text, -1, -1, -1, -1, 0, null, style,
+    ));
+    if (!combo)
+    {
+        return null;
+    }
+
+    for (const item of ITEMS)
+    {
+        withString(item, (ptr) => { combo.Append(ptr); });
+    }
+    return combo;
+}
+
+/** wxComboCtrl::SetValue() */
+function setComboValue(combo: Pointer, value: string): void
+{
+    withString(value, (ptr) => { lib.symbols.wxComboCtrl_SetValue(combo, ptr); });
+}
+
+/** wxComboCtrl::SetText() */
+function setComboText(combo: Pointer, value: string): void
+{
+    withString(value, (ptr) => { lib.symbols.wxComboCtrl_SetText(combo, ptr); });
+}
+
+/** odc->SetFont(odc->GetFont().Scale(1.5)) */
+function scaleFont(window: Pointer, factor: number): void
+{
+    const font = createWxFontDefault();
+    if (!font)
+    {
+        return;
+    }
+    lib.symbols.wxWindow_GetFont(window, font.ptr);
+    font.Scale(factor);
+    lib.symbols.wxWindow_SetFont(window, font.ptr);
+    font.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// Frame state — the MyFrame members
+// ---------------------------------------------------------------------------
+interface ComboFrameState
+{
+    frame: wxFrame;
+    panel: wxPanel;
+    logWin: wxTextCtrl;
+    logger: wxLogTextCtrl | null;
+    /** Value wxLogTextCtrl::SetActiveTarget() returned (MyFrame::m_logOld). */
+    oldLogTarget: Pointer;
+    menuBar: wxMenuBar;
+    /** wxSizerFlags' default border, computed once from the frame's DPI. */
+    border: number;
+}
+
+interface EventBinding
+{
+    callback: Callback;
+    closure: wxClosure;
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame::OnAbout
+// ---------------------------------------------------------------------------
+function onAbout(state: ComboFrameState): void
+{
+    // wxVERSION_STRING and wxGetOsDescription() — both return an owned wxString.
+    const version = readAndDeleteWxString(wxVersionString());
+    const os = readAndDeleteWxString(wxGetOsDescription());
+
+    const message =
+        `Welcome to ${version}!\n`
+        + "\n"
+        + "This is the wxWidgets wxComboCtrl and wxOwnerDrawnComboBox sample\n"
+        + `running under ${os}.`;
+
+    withString(message, (text) =>
+        withString("About wxComboCtrl sample", (caption) =>
+            kwxMessageBox(
+                text, caption, OK | ICON_INFORMATION, state.frame.ptr, -1, -1,
+            )));
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame::OnShowComparison — the modal comparison dialog
+// ---------------------------------------------------------------------------
+interface GroupBox
+{
+    box: wxStaticBox;
+    sizer: wxStaticBoxSizer;
+}
+
+/** wxStaticBoxSizer(new wxStaticBox(parent, wxID_ANY, label), wxVERTICAL) */
+function createGroupBox(parent: Pointer, label: string): GroupBox | null
+{
+    const box = withString(label, (text) =>
+        createWxStaticBox(parent, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (!box)
+    {
+        return null;
+    }
+
+    const sizer = createWxStaticBoxSizer(box.ptr, VERTICAL);
+    if (!sizer)
+    {
+        box.Destroy();
+        return null;
+    }
+    return { box, sizer };
+}
+
+/**
+ * Adds a caption to a group box:
+ *   wxSizerFlags().Expand().Border(wxRIGHT)   (first caption of a group)
+ *   wxSizerFlags().Border(wxRIGHT)            (the other captions)
+ */
+function addGroupCaption(
+    group: GroupBox,
+    text: string,
+    expand: boolean,
+    border: number,
+): void
+{
+    const label = createLabel(group.box.ptr, text);
+    if (!label)
+    {
+        return;
+    }
+    const flags = (expand ? EXPAND : 0) | RIGHT;
+    group.sizer.AddWindow(label.ptr, 0, flags, border, null);
+}
+
+/** The wxOwnerDrawnComboBox column of the comparison dialog. */
+function fillOwnerDrawnGroup(group: GroupBox, border: number): void
+{
+    const box = group.box.ptr;
+    const sizer = group.sizer;
+
+    // Writable, with margins, sorted
+    addGroupCaption(group, "Writable, with margins, sorted:", true, border);
+    const writable = createOwnerDrawnComboBox(box, CB_SORT);
+    if (writable)
+    {
+        // odc->Append("H - Appended Item"); // test sorting in append
+        withString("H - Appended Item", (ptr) => { writable.Append(ptr); });
+        setComboValue(writable.ptr, "Dot Dash");
+        lib.symbols.wxComboCtrl_SetMargins(writable.ptr, 15, 10);
+        sizer.AddWindow(writable.ptr, 0, ALL, border, null);
+    }
+    sizer.AddStretchSpacer(1);
+
+    // Read-only, big font
+    addGroupCaption(group, "Read-only, big font:", false, border);
+    const bigFont = createOwnerDrawnComboBox(box, CB_SORT | CB_READONLY);
+    if (bigFont)
+    {
+        scaleFont(bigFont.ptr, 1.5);
+        setComboValue(bigFont.ptr, "Dot Dash");
+        setComboText(bigFont.ptr, "Dot Dash (Testing SetText)");
+        sizer.AddWindow(bigFont.ptr, 0, ALL, border, null);
+    }
+    sizer.AddStretchSpacer(1);
+
+    // Read-only disabled
+    addGroupCaption(group, "Read-only disabled:", false, border);
+    const readOnlyDisabled = createOwnerDrawnComboBox(box, CB_READONLY);
+    if (readOnlyDisabled)
+    {
+        setComboValue(readOnlyDisabled.ptr, "Dot Dash");
+        lib.symbols.wxWindow_Enable(readOnlyDisabled.ptr, 0);
+        sizer.AddWindow(readOnlyDisabled.ptr, 3, EXPAND | ALL, border, null);
+    }
+
+    // Disabled
+    addGroupCaption(group, "Disabled:", false, border);
+    const disabled = createOwnerDrawnComboBox(box, 0);
+    if (disabled)
+    {
+        setComboValue(disabled.ptr, "Dot Dash");
+        lib.symbols.wxWindow_Enable(disabled.ptr, 0);
+        sizer.AddWindow(disabled.ptr, 3, EXPAND | ALL, border, null);
+    }
+}
+
+/** The native wxComboBox column of the comparison dialog. */
+function fillNativeGroup(group: GroupBox, border: number): void
+{
+    const box = group.box.ptr;
+    const sizer = group.sizer;
+
+    // Writable, with margins, sorted
+    addGroupCaption(group, "Writable, with margins, sorted:", true, border);
+    const writable = createPlainComboBox(box, CB_SORT);
+    if (writable)
+    {
+        withString("H - Appended Item", (ptr) => { writable.Append(ptr); });
+        withString("Dot Dash", (ptr) => { writable.SetValue(ptr); });
+        writable.SetMargins(15, 10);
+        sizer.AddWindow(writable.ptr, 0, ALL, border, null);
+    }
+    sizer.AddStretchSpacer(1);
+
+    // Read-only, big font
+    addGroupCaption(group, "Read-only, big font:", false, border);
+    const bigFont = createPlainComboBox(box, CB_SORT | CB_READONLY);
+    if (bigFont)
+    {
+        scaleFont(bigFont.ptr, 1.5);
+        withString("Dot Dash", (ptr) => { bigFont.SetValue(ptr); });
+        sizer.AddWindow(bigFont.ptr, 0, ALL, border, null);
+    }
+    sizer.AddStretchSpacer(1);
+
+    // Read-only disabled
+    addGroupCaption(group, "Read-only disabled:", false, border);
+    const readOnlyDisabled = createPlainComboBox(box, CB_READONLY);
+    if (readOnlyDisabled)
+    {
+        withString("Dot Dash", (ptr) => { readOnlyDisabled.SetValue(ptr); });
+        readOnlyDisabled.Enable(false);
+        sizer.AddWindow(readOnlyDisabled.ptr, 3, EXPAND | ALL, border, null);
+    }
+
+    // Disabled
+    addGroupCaption(group, "Disabled:", false, border);
+    const disabled = createPlainComboBox(box, 0);
+    if (disabled)
+    {
+        withString("Dot Dash", (ptr) => { disabled.SetValue(ptr); });
+        disabled.Enable(false);
+        sizer.AddWindow(disabled.ptr, 3, EXPAND | ALL, border, null);
+    }
+}
+
+/** MyFrame::OnShowComparison */
+function showComparisonDialog(state: ComboFrameState): void
+{
+    const dialog = withString("Compare against wxComboBox", (title) =>
+        createWxDialog(
+            state.frame.ptr, ID_ANY, title, -1, -1, -1, -1,
+            DEFAULT_DIALOG_STYLE | RESIZE_BORDER,
+        ));
+    if (!dialog)
+    {
+        console.error("combo: failed to create the comparison dialog");
+        return;
+    }
+
+    const border = Math.round(defaultBorderFractional(state.frame));
+
+    const colSizer = newBoxSizer(VERTICAL);
+    const rowSizer = newBoxSizer(HORIZONTAL);
+
+    const ownerDrawnGroup = createGroupBox(dialog.ptr, " wxOwnerDrawnComboBox ");
+    if (!ownerDrawnGroup)
+    {
+        dialog.Destroy();
+        return;
+    }
+    fillOwnerDrawnGroup(ownerDrawnGroup, border);
+    rowSizer.AddSizer(ownerDrawnGroup.sizer.ptr, 1, EXPAND | ALL, border, null);
+
+    const nativeGroup = createGroupBox(dialog.ptr, " wxComboBox ");
+    if (!nativeGroup)
+    {
+        dialog.Destroy();
+        return;
+    }
+    fillNativeGroup(nativeGroup, border);
+    rowSizer.AddSizer(nativeGroup.sizer.ptr, 1, EXPAND | ALL, border, null);
+
+    colSizer.AddSizer(rowSizer.ptr, 1, EXPAND | ALL, border, null);
+
+    dialog.SetSizer(colSizer.ptr, true);
+    colSizer.SetSizeHints(dialog.ptr);
+
+    // dlg->SetSize(60, 240) resolves to SetSize(int width, int height), i.e.
+    // DoSetSize(wxDefaultCoord, wxDefaultCoord, 60, 240, wxSIZE_USE_EXISTING).
+    dialog.SetSize(-1, -1, 60, 240, SIZE_USE_EXISTING);
+    dialog.Centre(BOTH);
+    dialog.ShowModal();
+
+    // The C++ sample leaks the dialog; destroying it keeps the port tidy.
+    dialog.Destroy();
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame::MyFrame()
+// ---------------------------------------------------------------------------
+function createComboFrame(): ComboFrameState | null
+{
+    const frame = withString(
+        "wxComboCtrl and wxOwnerDrawnComboBox Sample",
+        (title) => createWxFrame(
+            null, ID_ANY, title, -1, -1, -1, -1, DEFAULT_FRAME_STYLE,
+        ),
+    );
+    if (!frame)
+    {
+        console.error("combo: failed to create the main frame");
+        return null;
+    }
+
+    // SetIcon(wxICON(sample)) — the icon lives in the C++ sample's resources,
+    // which a kwxTypeScript program does not have.
+
+    // --- menu bar ---
+    const fileMenu = newMenu();
+    const helpMenu = newMenu();
+    if (!fileMenu || !helpMenu)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    withString("&About\tF1", (text) =>
+        withString("Show about dialog", (help) =>
+            helpMenu.Append(COMBOCTRL_ABOUT, text, help, false)));
+
+    withString("&Compare against wxComboBox...", (text) =>
+        withString(
+            "Show some wxOwnerDrawnComboBoxes side-by-side with native wxComboBoxes.",
+            (help) => fileMenu.Append(COMBOCTRL_COMPARE, text, help, false)));
+
+    fileMenu.AppendSeparator();
+
+    withString("E&xit\tAlt-X", (text) =>
+        withString("Quit this program", (help) =>
+            fileMenu.Append(COMBOCTRL_QUIT, text, help, false)));
+
+    const menuBar = createWxMenuBar(0);
+    if (!menuBar)
+    {
+        frame.Destroy();
+        return null;
+    }
+    withString("&File", (text) => { menuBar.Append(fileMenu.ptr, text); });
+    withString("&Help", (text) => { menuBar.Append(helpMenu.ptr, text); });
+    frame.SetMenuBar(menuBar.ptr);
+
+    // --- panel and log window ---
+    const panel = createWxPanel(frame.ptr, ID_ANY, -1, -1, -1, -1, 0);
+    if (!panel)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // m_logWin = new wxTextCtrl(panel, 105, wxEmptyString, wxDefaultPosition,
+    //                           wxSize(-1, 125), wxTE_MULTILINE);
+    const logWin = withString("", (text) => createWxTextCtrl(
+        panel.ptr, LOG_CTRL_ID, text, -1, -1, -1, 125, BigInt(TE_MULTILINE),
+    ));
+    if (!logWin)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // wxLogTextCtrl logger; m_logOld = logger->SetActiveTarget(logger);
+    const logger = createWxLogTextCtrl(logWin.ptr);
+    let oldLogTarget: Pointer = null;
+    if (logger)
+    {
+        oldLogTarget = logger.SetActiveTarget();
+        // logger->DisableTimestamp() — wxLog::SetTimestamp(wxEmptyString).
+        // kwxFFI's wxLog_SetTimestamp() takes a C string and constructs the
+        // wxString itself, so an empty C string disables the time stamp.
+        logger.SetTimestamp(pointerOf(new TextEncoder().encode("\0")));
+    }
+
+    const border = Math.round(defaultBorderFractional(frame));
+    const topSizer = newBoxSizer(VERTICAL);
+    const topRowSizer = newBoxSizer(HORIZONTAL);
+    const colSizer = newBoxSizer(VERTICAL);
+
+    let rowSizer: wxBoxSizer;
+    let label: wxStaticText | null;
+
+    // -----------------------------------------------------------------------
+    // OwnerDrawnComboBox with owner-drawn items.
+    //
+    // The original used wxPenStyleComboBox, which overrides OnDrawItem() to
+    // draw a pen-style preview line next to each item and OnMeasureItem() to
+    // give odd rows a taller height. Those virtual overrides are unavailable,
+    // so a plain wxOwnerDrawnComboBox with the same items is used.
+    // -----------------------------------------------------------------------
+    rowSizer = newBoxSizer(HORIZONTAL);
+    label = createLabel(
+        panel.ptr, "OwnerDrawnComboBox with owner-drawn items:",
+    );
+    if (label)
+    {
+        rowSizer.AddWindow(
+            label.ptr, 1, ALIGN_CENTER_VERTICAL | RIGHT, border, null,
+        );
+    }
+    colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+
+    rowSizer = newBoxSizer(HORIZONTAL);
+    const penCombo = createOwnerDrawnComboBox(panel.ptr, CB_READONLY);
+    if (penCombo)
+    {
+        // C++: odc->SetSelection(0)
+        penCombo.SetSelection(0);
+        rowSizer.AddWindow(
+            penCombo.ptr, 1, ALIGN_CENTER_VERTICAL | ALL, border, null,
+        );
+    }
+    rowSizer.AddStretchSpacer(1);
+    colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+
+    // -----------------------------------------------------------------------
+    // Same, with the button on the left.
+    // -----------------------------------------------------------------------
+    rowSizer = newBoxSizer(HORIZONTAL);
+    label = createLabel(
+        panel.ptr,
+        "OwnerDrawnComboBox with owner-drawn items and button on the left:",
+    );
+    if (label)
+    {
+        rowSizer.AddWindow(
+            label.ptr, 1, ALIGN_CENTER_VERTICAL | RIGHT, border, null,
+        );
+    }
+    colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+
+    rowSizer = newBoxSizer(HORIZONTAL);
+    const leftButtonCombo = createOwnerDrawnComboBox(panel.ptr, CB_READONLY);
+    if (leftButtonCombo)
+    {
+        leftButtonCombo.SetSelection(0);
+        // C++: wxSize butSize = odc->GetButtonSize();
+        //      odc->SetButtonPosition(butSize.x - 2, butSize.y - 6, wxLEFT, 2);
+        // wxComboCtrl::GetButtonSize() is not bound, so the default size (-1,
+        // -1) is requested; only the side and the spacing are reproduced.
+        lib.symbols.wxComboCtrl_SetButtonPosition(
+            leftButtonCombo.ptr, -1, -1, LEFT, 2,
+        );
+        rowSizer.AddWindow(
+            leftButtonCombo.ptr, 1, ALIGN_CENTER_VERTICAL | ALL, border, null,
+        );
+    }
+    rowSizer.AddStretchSpacer(1);
+    colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+
+    // -----------------------------------------------------------------------
+    // List View / Tree Ctrl wxComboCtrl.
+    //
+    // Both controls need a wxComboPopup implementation and
+    // wxComboCtrl::SetPopupControl(); the list view variant additionally uses
+    // wxGenericComboCtrl, wxComboCtrl::UseAltPopupWindow() and a custom
+    // AnimateShow(). None of these are bound, so the controls cannot be
+    // created. Their captions are kept so the missing row stays visible.
+    // -----------------------------------------------------------------------
+    rowSizer = newBoxSizer(HORIZONTAL);
+    label = createLabel(
+        panel.ptr, "List View wxComboCtrl (custom animation):",
+    );
+    if (label)
+    {
+        rowSizer.AddWindow(
+            label.ptr, 1, ALIGN_CENTER_VERTICAL | RIGHT, border, null,
+        );
+    }
+    label = createLabel(panel.ptr, "Tree Ctrl wxComboCtrl:");
+    if (label)
+    {
+        rowSizer.AddWindow(
+            label.ptr, 1, ALIGN_CENTER_VERTICAL | RIGHT, border, null,
+        );
+    }
+    colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+
+    // cc = new wxComboCtrlWithCustomPopupAnim(); ListViewComboPopup + 100 items
+    // gcc = new wxGenericComboCtrl(...);   TreeCtrlComboPopup + 4 branches
+    // -- not portable (see above).
+    rowSizer = newBoxSizer(HORIZONTAL);
+    colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+
+    // -----------------------------------------------------------------------
+    // Custom drop button bitmaps (wxUSE_IMAGE / wxHAS_SVG section).
+    // -----------------------------------------------------------------------
+    const bmpNormal = createSvgBundle(DROPBUTN_SVG_GZIP_BASE64, 16, 16);
+    const bmpPressed = createSvgBundle(DROPBUTP_SVG_GZIP_BASE64, 16, 16);
+    const bmpHover = createSvgBundle(DROPBUTH_SVG_GZIP_BASE64, 16, 16);
+    try
+    {
+        rowSizer = newBoxSizer(HORIZONTAL);
+        label = createLabel(
+            panel.ptr, "OwnerDrawnComboBox with simple dropbutton graphics:",
+        );
+        if (label)
+        {
+            rowSizer.AddWindow(
+                label.ptr, 1, ALIGN_CENTER_VERTICAL | RIGHT, border, null,
+            );
+        }
+        colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+
+        rowSizer = newBoxSizer(HORIZONTAL);
+        const dropButtonCombo = createOwnerDrawnComboBox(panel.ptr, 0);
+        const dropButtonCombo2 = createOwnerDrawnComboBox(panel.ptr, 0);
+
+        if (bmpNormal && bmpPressed && bmpHover)
+        {
+            if (dropButtonCombo)
+            {
+                lib.symbols.wxComboCtrl_SetButtonBitmaps(
+                    dropButtonCombo.ptr, bmpNormal.ptr, 0,
+                    bmpPressed.ptr, bmpHover.ptr, null,
+                );
+            }
+            if (dropButtonCombo2)
+            {
+                lib.symbols.wxComboCtrl_SetButtonBitmaps(
+                    dropButtonCombo2.ptr, bmpNormal.ptr, 1,
+                    bmpPressed.ptr, bmpHover.ptr, null,
+                );
+            }
+        }
+        else
+        {
+            withString("Dropbutton images not found", (ptr) => LogError(ptr));
+        }
+
+        if (dropButtonCombo)
+        {
+            rowSizer.AddWindow(
+                dropButtonCombo.ptr, 1, ALIGN_CENTER_VERTICAL | ALL,
+                border, null,
+            );
+        }
+        if (dropButtonCombo2)
+        {
+            rowSizer.AddWindow(
+                dropButtonCombo2.ptr, 1, ALIGN_CENTER_VERTICAL | ALL,
+                border, null,
+            );
+        }
+        colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+    }
+    finally
+    {
+        bmpNormal?.Delete();
+        bmpPressed?.Delete();
+        bmpHover?.Delete();
+    }
+
+    // -----------------------------------------------------------------------
+    // wxComboCtrl with a custom button action (open file dialog) and a
+    // wxCheckBox as the main control.
+    //
+    // wxFileSelectorCombo overrides OnButtonClick() (not available) and
+    // wxComboCtrl::SetMainControl() is not bound, so neither control is
+    // created; the caption is preserved.
+    // -----------------------------------------------------------------------
+    rowSizer = newBoxSizer(HORIZONTAL);
+    label = createLabel(
+        panel.ptr, "wxComboCtrl with custom button and custom main control:",
+    );
+    if (label)
+    {
+        rowSizer.AddWindow(
+            label.ptr, 1, ALIGN_CENTER_VERTICAL | RIGHT, border, null,
+        );
+    }
+    colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+
+    rowSizer = newBoxSizer(HORIZONTAL);
+    colSizer.AddSizer(rowSizer.ptr, 0, EXPAND | ALL, border, null);
+
+    // wxComboCtrl::GetFeatures() is a static with no observable effect and is
+    // not bound.
+
+    // --- right column: log messages ---
+    topRowSizer.AddSizer(
+        colSizer.ptr, 1, ALL, frame.FromDIP(2), null,
+    );
+
+    const logSizer = newBoxSizer(VERTICAL);
+    logSizer.AddSpacer(8);
+    label = createLabel(panel.ptr, "Log Messages:");
+    if (label)
+    {
+        logSizer.AddWindow(
+            label.ptr, 0, TOP | LEFT, frame.FromDIP(3), null,
+        );
+    }
+    logSizer.AddWindow(
+        logWin.ptr, 1, EXPAND | ALL, frame.FromDIP(3), null,
+    );
+
+    topRowSizer.AddSizer(
+        logSizer.ptr, 1, EXPAND | ALL, frame.FromDIP(2), null,
+    );
+    topSizer.AddSizer(topRowSizer.ptr, 1, EXPAND, 0, null);
+
+    panel.SetSizer(topSizer.ptr, true);
+    topSizer.SetSizeHints(panel.ptr);
+
+    frame.Fit();
+    frame.Centre(BOTH);
+
+    return {
+        frame,
+        panel,
+        logWin,
+        logger,
+        oldLogTarget,
+        menuBar,
+        border,
+    };
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame event table
+// ---------------------------------------------------------------------------
+let comboCtrlClassInfo: Pointer = null;
+let comboCtrlClassInfoResolved = false;
+
+/** wxObject::IsKindOf(CLASSINFO(wxComboCtrl)) */
+function isComboCtrl(objectPtr: Pointer): boolean
+{
+    if (!objectPtr)
+    {
+        return false;
+    }
+    if (!comboCtrlClassInfoResolved)
+    {
+        comboCtrlClassInfoResolved = true;
+        comboCtrlClassInfo = withString(
+            "wxComboCtrl",
+            (name) => lib.symbols.wxClassInfo_FindClass(name),
+        );
+    }
+    if (!comboCtrlClassInfo)
+    {
+        return false;
+    }
+    return (lib.symbols.wxObject_IsKindOf(
+        objectPtr, comboCtrlClassInfo,
+    ) as number) !== 0;
+}
+
+/** MyFrame::OnComboBoxUpdate */
+function onComboBoxUpdate(event: wxCommandEvent): void
+{
+    // Don't show messages for the log output window (it would crash).
+    if (!isComboCtrl(event.GetEventObject()))
+    {
+        return;
+    }
+
+    const eventType = event.GetEventType();
+    if (eventType === EVT_COMBOBOX)
+    {
+        logMessage(
+            `EVT_COMBOBOX(id=${event.GetId()},selection=${event.GetSelection()})`,
+        );
+    }
+    else if (eventType === EVT_TEXT)
+    {
+        const value = readAndDeleteWxString(event.GetString());
+        logMessage(`EVT_TEXT(id=${event.GetId()},string="${value}")`);
+    }
+    else if (eventType === EVT_TEXT_ENTER)
+    {
+        const value = readAndDeleteWxString(event.GetString());
+        logMessage(`EVT_TEXT_ENTER(id=${event.GetId()},string="${value}")`);
+    }
+}
+
+/** Connects a command event whose handler only needs the event object. */
+function bindCommand(
+    bindings: EventBinding[],
+    target: Pointer,
+    id: number,
+    eventType: number,
+    handler: (event: wxCommandEvent) => void,
+): void
+{
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return; // teardown sweep: wxClosure calls handlers with null
+            }
+            handler(new wxCommandEvent(eventPtr));
+        },
+    );
+    const closure = createWxClosure(callback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(target, id, id, eventType, closure.ptr);
+    bindings.push({ callback, closure });
+}
+
+function connectComboEvents(state: ComboFrameState): EventBinding[]
+{
+    const bindings: EventBinding[] = [];
+    const frame = state.frame.ptr;
+
+    // EVT_TEXT(wxID_ANY, MyFrame::OnComboBoxUpdate)
+    bindCommand(bindings, frame, ID_ANY, EVT_TEXT, onComboBoxUpdate);
+    // EVT_TEXT_ENTER(wxID_ANY, MyFrame::OnComboBoxUpdate)
+    bindCommand(bindings, frame, ID_ANY, EVT_TEXT_ENTER, onComboBoxUpdate);
+    // EVT_COMBOBOX(wxID_ANY, MyFrame::OnComboBoxUpdate)
+    bindCommand(bindings, frame, ID_ANY, EVT_COMBOBOX, onComboBoxUpdate);
+
+    // EVT_MENU(ComboCtrl_Compare, MyFrame::OnShowComparison)
+    bindCommand(
+        bindings, frame, COMBOCTRL_COMPARE, EVT_MENU,
+        () => { showComparisonDialog(state); },
+    );
+
+    // EVT_MENU(ComboCtrl_Quit, MyFrame::OnQuit) — Close(true)
+    bindCommand(
+        bindings, frame, COMBOCTRL_QUIT, EVT_MENU,
+        () => { state.frame.Close(true); },
+    );
+
+    // EVT_MENU(ComboCtrl_About, MyFrame::OnAbout)
+    bindCommand(
+        bindings, frame, COMBOCTRL_ABOUT, EVT_MENU,
+        () => { onAbout(state); },
+    );
+
+    // EVT_IDLE(MyFrame::OnIdle) — the handler only calls event.Skip()
+    const idleCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            new wxIdleEvent(eventPtr).Skip(true);
+        },
+    );
+    const idleClosure = createWxClosure(idleCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(
+        frame, ID_ANY, ID_ANY, EVT_IDLE, idleClosure.ptr,
+    );
+    bindings.push({ callback: idleCallback, closure: idleClosure });
+
+    // Closing the frame ends the program.
+    const closeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            exitMainLoop();
+        },
+    );
+    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(
+        frame, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr,
+    );
+    bindings.push({ callback: closeCallback, closure: closeClosure });
+
+    return bindings;
+}
+
+/** MyFrame::~MyFrame: delete wxLog::SetActiveTarget(m_logOld) */
+function restoreLogTarget(state: ComboFrameState): void
+{
+    if (!state.logger)
+    {
+        return;
+    }
+    const previous = lib.symbols.wxLog_SetActiveTarget(state.oldLogTarget);
+    if (previous)
+    {
+        // The previously active target is this frame's wxLogTextCtrl; the C++
+        // destructor deletes it after restoring m_logOld.
+        lib.symbols.wxLog_Delete(previous);
+    }
+    state.logger = null;
+}
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("combo");
+
+    // wxInitAllImageHandlers() — the C++ sample calls it before loading the
+    // drop button artwork.
+    initAllImageHandlers();
+
+    const state = createComboFrame();
+    if (!state)
+    {
+        shutdown();
+        return 1;
+    }
+
+    console.error(
+        "combo: the custom popup combos (wxComboPopup, SetPopupControl, "
+        + "UseAltPopupWindow, wxGenericComboCtrl, AnimateShow), the "
+        + "file-dialog button combo (OnButtonClick) and the checkbox main "
+        + "control (SetMainControl) are not available in kwxTypeScript; "
+        + "those controls are omitted.",
+    );
+
+    const bindings = connectComboEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    for (const binding of bindings)
+    {
+        binding.callback.close();
+    }
+    restoreLogTarget(state);
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

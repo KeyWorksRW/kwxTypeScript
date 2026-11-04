@@ -86,6 +86,8 @@ export class wxRichTextFormattingDialog extends wxPropertySheetDialog {
 
 }
 
-export function createWxRichTextFormattingDialog(flags: bigint, parent: Pointer, title: Pointer, id: number, x: number, y: number, w: number, h: number, style: bigint): number {
-    return lib.symbols.wxRichTextFormattingDialog_Create(flags, parent, title, id, x, y, w, h, style);
+export function createWxRichTextFormattingDialog(flags: bigint, parent: Pointer, title: Pointer, id: number, x: number, y: number, w: number, h: number, style: bigint): wxRichTextFormattingDialog | null {
+    const rawPtr = lib.symbols.wxRichTextFormattingDialog_Create(flags, parent, title, id, x, y, w, h, style);
+    if (rawPtr === null) return null;
+    return new wxRichTextFormattingDialog(rawPtr);
 }

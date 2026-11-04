@@ -20,6 +20,22 @@ export class wxAuiManager extends wxEvtHandler {
     this.Delete();
   }
 
+  AllowDocksForMinPanes(directions: number): void {
+    lib.symbols.wxAuiManager_AllowDocksForMinPanes(this._ptr, directions);
+  }
+
+  AlwaysUsesLiveResize(window: Pointer): boolean {
+    return (lib.symbols.wxAuiManager_AlwaysUsesLiveResize(window) as number) !== 0;
+  }
+
+  GetPane(window: Pointer): Pointer {
+    return lib.symbols.wxAuiManager_GetPane(this._ptr, window);
+  }
+
+  SetDocksForMinPanesStyle(style: number): void {
+    lib.symbols.wxAuiManager_SetDocksForMinPanesStyle(this._ptr, style);
+  }
+
   DetachPane(window: Pointer): boolean {
     return (lib.symbols.wxAuiManager_DetachPane(this._ptr, window) as number) !== 0;
   }

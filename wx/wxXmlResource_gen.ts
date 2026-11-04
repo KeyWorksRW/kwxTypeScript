@@ -28,6 +28,14 @@ export class wxXmlResource extends wxObject {
     lib.symbols.wxXmlResource_AddHandler(this._ptr, handler);
   }
 
+  LoadAllFiles(dirname: Pointer): boolean {
+    return (lib.symbols.wxXmlResource_LoadAllFiles(this._ptr, dirname) as number) !== 0;
+  }
+
+  LoadObjectRecursively(parent: Pointer, name: Pointer, classname: Pointer): Pointer {
+    return lib.symbols.wxXmlResource_LoadObjectRecursively(this._ptr, parent, name, classname);
+  }
+
   AddSubclassFactory(factory: Pointer): void {
     lib.symbols.wxXmlResource_AddSubclassFactory(this._ptr, factory);
   }

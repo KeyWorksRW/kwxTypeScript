@@ -14,6 +14,14 @@ export class wxListBox extends wxControl {
     lib.symbols.wxListBox_Append(this._ptr, item);
   }
 
+  GetItem(n: bigint): Pointer {
+    return lib.symbols.wxListBox_GetItem(this._ptr, n);
+  }
+
+  override SetFont(font: Pointer): boolean {
+    return (lib.symbols.wxListBox_SetFont(this._ptr, font) as number) !== 0;
+  }
+
   AppendData(item: Pointer, data: Pointer): void {
     lib.symbols.wxListBox_AppendData(this._ptr, item, data);
   }

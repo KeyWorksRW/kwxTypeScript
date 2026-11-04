@@ -74,6 +74,14 @@ export class wxTreeCtrl extends wxControl {
     lib.symbols.wxTreeCtrl_AddRoot(this._ptr, text, image, selectedImage, data, item);
   }
 
+  AssignButtonsImageList(imageList: Pointer): void {
+    lib.symbols.wxTreeCtrl_AssignButtonsImageList(this._ptr, imageList);
+  }
+
+  SetButtonsImageList(imageList: Pointer): void {
+    lib.symbols.wxTreeCtrl_SetButtonsImageList(this._ptr, imageList);
+  }
+
   AppendItem(parent: Pointer, text: Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
     lib.symbols.wxTreeCtrl_AppendItem(this._ptr, parent, text, image, selectedImage, data, item);
   }
@@ -255,6 +263,10 @@ export class wxTreeCtrl extends wxControl {
     lib.symbols.wxTreeCtrl_SelectItem(this._ptr, item);
   }
 
+  SelectItem2(item: Pointer, select: boolean): void {
+    lib.symbols.wxTreeCtrl_SelectItem2(this._ptr, item, select ? 1 : 0);
+  }
+
   SetImageList(imageList: Pointer): void {
     lib.symbols.wxTreeCtrl_SetImageList(this._ptr, imageList);
   }
@@ -373,6 +385,74 @@ export class wxTreeCtrl extends wxControl {
 
   GetItemFont(item: Pointer): Pointer {
     return lib.symbols.wxTreeCtrl_GetItemFont(this._ptr, item);
+  }
+
+  Init(): void {
+    lib.symbols.wxComboPopup_Init(this._ptr);
+  }
+
+  DestroyPopup(): void {
+    lib.symbols.wxComboPopup_DestroyPopup(this._ptr);
+  }
+
+  GetControl(): Pointer {
+    return lib.symbols.wxComboPopup_GetControl(this._ptr);
+  }
+
+  OnPopup(): void {
+    lib.symbols.wxComboPopup_OnPopup(this._ptr);
+  }
+
+  OnDismiss(): void {
+    lib.symbols.wxComboPopup_OnDismiss(this._ptr);
+  }
+
+  SetStringValue(value: Pointer): void {
+    lib.symbols.wxComboPopup_SetStringValue(this._ptr, value);
+  }
+
+  GetStringValue(): Pointer {
+    return lib.symbols.wxComboPopup_GetStringValue(this._ptr);
+  }
+
+  FindItem(item: Pointer, trueItem: Pointer): boolean {
+    return (lib.symbols.wxComboPopup_FindItem(this._ptr, item, trueItem) as number) !== 0;
+  }
+
+  PaintComboControl(dc: Pointer, x: number, y: number, width: number, height: number): void {
+    lib.symbols.wxComboPopup_PaintComboControl(this._ptr, dc, x, y, width, height);
+  }
+
+  OnComboKeyEvent(event: Pointer): void {
+    lib.symbols.wxComboPopup_OnComboKeyEvent(this._ptr, event);
+  }
+
+  OnComboCharEvent(event: Pointer): void {
+    lib.symbols.wxComboPopup_OnComboCharEvent(this._ptr, event);
+  }
+
+  OnComboDoubleClick(): void {
+    lib.symbols.wxComboPopup_OnComboDoubleClick(this._ptr);
+  }
+
+  GetAdjustedSize(minWidth: number, prefHeight: number, maxHeight: number, width: Pointer, height: Pointer): void {
+    lib.symbols.wxComboPopup_GetAdjustedSize(this._ptr, minWidth, prefHeight, maxHeight, width, height);
+  }
+
+  LazyCreate(): boolean {
+    return (lib.symbols.wxComboPopup_LazyCreate(this._ptr) as number) !== 0;
+  }
+
+  Dismiss(): void {
+    lib.symbols.wxComboPopup_Dismiss(this._ptr);
+  }
+
+  IsCreated(): boolean {
+    return (lib.symbols.wxComboPopup_IsCreated(this._ptr) as number) !== 0;
+  }
+
+  GetComboCtrl(): Pointer {
+    return lib.symbols.wxComboPopup_GetComboCtrl(this._ptr);
   }
 
 }

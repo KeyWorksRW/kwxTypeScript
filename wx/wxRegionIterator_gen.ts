@@ -20,6 +20,10 @@ export class wxRegionIterator extends wxObject {
     this.Delete();
   }
 
+  GetRect(): Pointer {
+    return lib.symbols.wxRegionIterator_GetRect(this._ptr);
+  }
+
   GetHeight(): number {
     return lib.symbols.wxRegionIterator_GetHeight(this._ptr);
   }

@@ -94,4 +94,16 @@ export class wxVListBox extends wxVScrolledWindow {
     lib.symbols.wxVListBox_Toggle(this._ptr, item);
   }
 
+  SetOnOnDrawItem(pFunction: Pointer): void {
+    lib.symbols.wxVListBox_SetOnOnDrawItem(this._ptr, pFunction);
+  }
+
+  SetOnOnDrawSeparator(pFunction: Pointer): void {
+    lib.symbols.wxVListBox_SetOnOnDrawSeparator(this._ptr, pFunction);
+  }
+
+  SetOnOnMeasureItem(pFunction: Pointer): void {
+    lib.symbols.wxVListBox_SetOnOnMeasureItem(this._ptr, pFunction);
+  }
+
 }

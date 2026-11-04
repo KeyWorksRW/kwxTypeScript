@@ -20,6 +20,14 @@ export class wxSVGFileDC extends wxDC {
     this.Delete();
   }
 
+  EndAccessibleGroup(): void {
+    lib.symbols.wxSVGFileDC_EndAccessibleGroup(this._ptr);
+  }
+
+  SetBitmapHandler(handler: Pointer): void {
+    lib.symbols.wxSVGFileDC_SetBitmapHandler(this._ptr, handler);
+  }
+
 }
 
 export function createWxSVGFileDC(fileName: Pointer): wxSVGFileDC | null {

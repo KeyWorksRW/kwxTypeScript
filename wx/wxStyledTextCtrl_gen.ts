@@ -20,6 +20,86 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_AddRefDocument(pObject, docPointer);
   }
 
+  AnnotationClearAll(): void {
+    lib.symbols.wxStyledTextCtrl_AnnotationClearAll(this._ptr);
+  }
+
+  AnnotationGetText(line: number): Pointer {
+    return lib.symbols.wxStyledTextCtrl_AnnotationGetText(this._ptr, line);
+  }
+
+  AnnotationSetStyle(line: number, style: number): void {
+    lib.symbols.wxStyledTextCtrl_AnnotationSetStyle(this._ptr, line, style);
+  }
+
+  AnnotationSetText(line: number, text: Pointer): void {
+    lib.symbols.wxStyledTextCtrl_AnnotationSetText(this._ptr, line, text);
+  }
+
+  AnnotationSetVisible(visible: number): void {
+    lib.symbols.wxStyledTextCtrl_AnnotationSetVisible(this._ptr, visible);
+  }
+
+  GetAdditionalSelectionTyping(): boolean {
+    return (lib.symbols.wxStyledTextCtrl_GetAdditionalSelectionTyping(this._ptr) as number) !== 0;
+  }
+
+  GetIndicatorCurrent(): number {
+    return lib.symbols.wxStyledTextCtrl_GetIndicatorCurrent(this._ptr);
+  }
+
+  GetMultiPaste(): number {
+    return lib.symbols.wxStyledTextCtrl_GetMultiPaste(this._ptr);
+  }
+
+  GetMultipleSelection(): boolean {
+    return (lib.symbols.wxStyledTextCtrl_GetMultipleSelection(this._ptr) as number) !== 0;
+  }
+
+  IndicatorClearRange(start: number, lengthClear: number): void {
+    lib.symbols.wxStyledTextCtrl_IndicatorClearRange(this._ptr, start, lengthClear);
+  }
+
+  IndicatorFillRange(start: number, lengthFill: number): void {
+    lib.symbols.wxStyledTextCtrl_IndicatorFillRange(this._ptr, start, lengthFill);
+  }
+
+  SetAdditionalSelectionTyping(additionalSelectionTyping: boolean): void {
+    lib.symbols.wxStyledTextCtrl_SetAdditionalSelectionTyping(this._ptr, additionalSelectionTyping ? 1 : 0);
+  }
+
+  SetMultiPaste(multiPaste: number): void {
+    lib.symbols.wxStyledTextCtrl_SetMultiPaste(this._ptr, multiPaste);
+  }
+
+  SetMultipleSelection(multipleSelection: boolean): void {
+    lib.symbols.wxStyledTextCtrl_SetMultipleSelection(this._ptr, multipleSelection ? 1 : 0);
+  }
+
+  SetTechnology(technology: number): void {
+    lib.symbols.wxStyledTextCtrl_SetTechnology(this._ptr, technology);
+  }
+
+  SetWrapVisualFlags(wrapVisualFlags: number): void {
+    lib.symbols.wxStyledTextCtrl_SetWrapVisualFlags(this._ptr, wrapVisualFlags);
+  }
+
+  StyleGetBackground(style: number): Pointer {
+    return lib.symbols.wxStyledTextCtrl_StyleGetBackground(this._ptr, style);
+  }
+
+  StyleGetForeground(style: number): Pointer {
+    return lib.symbols.wxStyledTextCtrl_StyleGetForeground(this._ptr, style);
+  }
+
+  StyleGetSizeFractional(style: number): number {
+    return lib.symbols.wxStyledTextCtrl_StyleGetSizeFractional(this._ptr, style);
+  }
+
+  StyleSetSizeFractional(style: number, sizeHundredthPoints: number): void {
+    lib.symbols.wxStyledTextCtrl_StyleSetSizeFractional(this._ptr, style, sizeHundredthPoints);
+  }
+
   AddStyledText(pObject: Pointer, data: Pointer): void {
     lib.symbols.wxStyledTextCtrl_AddStyledText(pObject, data);
   }

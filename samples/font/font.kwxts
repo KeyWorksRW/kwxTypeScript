@@ -1,0 +1,1703 @@
+// font.kwxts — kwxTypeScript port of wxSamples/src/font/font.cpp
+//
+// The wxFont demo: a frame split horizontally into a font-attribute panel
+// (FontPanel + FontCanvas, in fontpanel.kwxts) and a multi-line text control
+// that previews the chosen font. Menus change the weight/style/size and load
+// stock, system and private fonts.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\font\font.kwxts
+//
+// Porting notes (details in the report):
+//   * wxFontInfo is not bound. FontPanel::GetFontInfo() is expressed through
+//     the legacy wxFont constructor, which wxWidgets implements through the
+//     same wxFontInfo (see fontpanel.kwxts).
+//   * wxFontEnumerator cannot be used: the binding's createWxFontEnumerator()
+//     expects a native int (*)(void*, void*) callback, while kwxTypeScript's
+//     Callback only produces void (*)(void*, void*, void*) thunks, so the
+//     facename/encoding collections cannot be retrieved. The "Enumerate ..."
+//     menu items and "View..." (which also needs wxTextFile and
+//     wxFontMapper::CharsetToEncoding) are kept and report the limitation.
+//   * wxGetSingleChoiceIndex, wxArrayString and the wxFontMapper static
+//     enumeration helpers are not bound, so "Set font family" and "Set font
+//     encoding" report the limitation instead of showing a choice dialog.
+//   * Everything else, including the font dialog, private font, native font
+//     descriptions, stock/system fonts and the character-table painting, is
+//     implemented.
+
+declare const __dirname: string;
+
+import {
+    ALL,
+    BITMAP_TYPE_XPM,
+    BLUE,
+    DEFAULT_FRAME_STYLE,
+    EVT_BUTTON,
+    EVT_CHOICE,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    EVT_PAINT,
+    EVT_SPINCTRL,
+    EVT_TEXT,
+    EXPAND,
+    FONTFAMILY_DEFAULT,
+    FONTENCODING_DEFAULT,
+    FONTSTYLE_ITALIC,
+    FONTSTYLE_NORMAL,
+    FONTSTYLE_SLANT,
+    FONTWEIGHT_BOLD,
+    FONTWEIGHT_LIGHT,
+    FONTWEIGHT_NORMAL,
+    FULL_REPAINT_ON_RESIZE,
+    ICON_ERROR,
+    ICON_INFORMATION,
+    ID_ABOUT,
+    ID_ANY,
+    ID_APPLY,
+    ID_EXIT,
+    ID_HIGHEST,
+    ID_OK,
+    ITALIC_FONT,
+    NORMAL_FONT,
+    OK,
+    PENSTYLE_SOLID,
+    RED,
+    SMALL_FONT,
+    SP_3D,
+    ST_SIZEGRIP,
+    SWISS_FONT,
+    SYS_ANSI_FIXED_FONT,
+    SYS_ANSI_VAR_FONT,
+    SYS_DEFAULT_GUI_FONT,
+    SYS_DEVICE_DEFAULT_FONT,
+    SYS_OEM_FIXED_FONT,
+    SYS_SYSTEM_FONT,
+    TE_MULTILINE,
+    VERTICAL,
+    createWxBoxSizer,
+    createWxClosure,
+    createWxColourEmpty,
+    createWxFont,
+    createWxFontData,
+    createWxFontDefault,
+    createWxFontDialog,
+    createWxFrame,
+    createWxIconLoad,
+    createWxMenu,
+    createWxMenuBar,
+    createWxPenFromColour,
+    createWxSplitterWindow,
+    createWxStaticLine,
+    createWxString,
+    createWxTextCtrl,
+    createWxWindow,
+    exitMainLoop,
+    initAllImageHandlers,
+    initialize,
+    kwxMessageBox,
+    lib,
+    LogError,
+    LogWarning,
+    readAndDeleteWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wxClosure,
+    wxColour,
+    wxCommandEvent,
+    wxFont,
+    wxFrame,
+    wxGetTextFromUser,
+    wxMenu,
+    wxMenuBar,
+    wxPen,
+    wxSize,
+    wxStandardPaths,
+    wxTextCtrl,
+    wxWindow,
+} from "kwx";
+import { Callback, exit, Pointer, platform, pointerOf, readCString } from "kwx/platform";
+
+import {
+    FontPanelState,
+    cloneColour,
+    cloneFont,
+    createFontPanel,
+    fontIsOk,
+    fontStrikethrough,
+    fontUnderlined,
+    makeFont,
+    paintFontCanvas,
+    showFont,
+    withString,
+} from "./fontpanel.kwxts";
+
+// ---------------------------------------------------------------------------
+// IDs — the C++ enum, preserved value for value.
+// ---------------------------------------------------------------------------
+
+const FONT_QUIT = ID_EXIT;
+const FONT_ABOUT = ID_ABOUT;
+
+const FONT_VIEW_MSG = ID_HIGHEST;
+const FONT_TEST_TEXT_VALUE = FONT_VIEW_MSG + 1;
+
+const FONT_INC_SIZE = FONT_VIEW_MSG + 2;
+const FONT_DEC_SIZE = FONT_VIEW_MSG + 3;
+
+const FONT_GET_BASE_FONT = FONT_VIEW_MSG + 4;
+
+const FONT_BOLD = FONT_VIEW_MSG + 5;
+const FONT_LIGHT = FONT_VIEW_MSG + 6;
+
+const FONT_ITALIC = FONT_VIEW_MSG + 7;
+const FONT_SLANT = FONT_VIEW_MSG + 8;
+
+const FONT_UNDERLINED = FONT_VIEW_MSG + 9;
+const FONT_STRIKETHROUGH = FONT_VIEW_MSG + 10;
+
+const FONT_WX_NORMAL_FONT = FONT_VIEW_MSG + 11;
+const FONT_WX_SMALL_FONT = FONT_VIEW_MSG + 12;
+const FONT_WX_ITALIC_FONT = FONT_VIEW_MSG + 13;
+const FONT_WX_SWISS_FONT = FONT_VIEW_MSG + 14;
+const FONT_WX_FONT_DEFAULT = FONT_VIEW_MSG + 15;
+const FONT_STANDARD = FONT_VIEW_MSG + 16;
+
+const FONT_WX_SYS_OEM_FIXED_FONT = FONT_VIEW_MSG + 17;
+const FONT_WX_SYS_ANSI_FIXED_FONT = FONT_VIEW_MSG + 18;
+const FONT_WX_SYS_ANSI_VAR_FONT = FONT_VIEW_MSG + 19;
+const FONT_WX_SYS_SYSTEM_FONT = FONT_VIEW_MSG + 20;
+const FONT_WX_SYS_DEVICE_DEFAULT_FONT = FONT_VIEW_MSG + 21;
+const FONT_WX_SYS_DEFAULT_GUI_FONT = FONT_VIEW_MSG + 22;
+const FONT_SYSTEM_SETTINGS = FONT_VIEW_MSG + 23;
+
+const FONT_CHOOSE = 100;
+const FONT_ENUM_FAMILIES_FOR_ENCODING = 101;
+const FONT_ENUM_FAMILIES = 102;
+const FONT_ENUM_FIXED_FAMILIES = 103;
+const FONT_ENUM_ENCODINGS = 104;
+const FONT_SET_NATIVE_DESC = 105;
+const FONT_SET_NATIVE_USER_DESC = 106;
+const FONT_SET_FAMILY = 107;
+const FONT_SET_FACE_NAME = 108;
+const FONT_SET_ENCODING = 109;
+const FONT_PRIVATE = 110;
+
+/**
+ * wxSTB_DEFAULT_STYLE = wxSTB_SIZEGRIP | wxSTB_ELLIPSIZE_END |
+ *                      wxSTB_SHOW_TIPS | wxFULL_REPAINT_ON_RESIZE.
+ * Only wxST_SIZEGRIP and wxFULL_REPAINT_ON_RESIZE are exported by name in the
+ * constant table, so the two remaining bits are spelled out here.
+ */
+const STB_SHOW_TIPS = 0x0020;
+const STB_ELLIPSIZE_END = 0x0100;
+const STATUS_BAR_STYLE =
+    ST_SIZEGRIP | STB_SHOW_TIPS | STB_ELLIPSIZE_END | FULL_REPAINT_ON_RESIZE;
+
+const SAMPLE_TITLE = "wxWidgets Font Sample";
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+
+interface FontState
+{
+    readonly frame: wxFrame;
+    readonly menuBar: wxMenuBar;
+    readonly fontWindow: wxWindow;
+    readonly panel: FontPanelState;
+    readonly canvas: wxWindow;
+    readonly textCtrl: wxTextCtrl;
+
+    /** Owned copy of the font currently shown. */
+    font: wxFont;
+    /** Owned canvas text font (FontCanvas::m_font). */
+    canvasFont: wxFont;
+    /** Owned canvas colour (FontCanvas::m_colour). */
+    canvasColour: wxColour;
+    /** Owned 1px solid blue pen (wxBLUE_PEN is not exported). */
+    readonly pen: wxPen;
+
+    readonly callbacks: Callback[];
+    readonly closures: wxClosure[];
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** Mirror of wxSizerFlags::GetDefaultBorderFractional(). */
+function defaultBorderFractional(frame: wxFrame): number
+{
+    if (platform === "linux")
+    {
+        return 6;
+    }
+    if (platform === "darwin")
+    {
+        return 5;
+    }
+    return 5 * frame.GetDPIScaleFactor();
+}
+
+function bestSize(window: wxWindow): { width: number; height: number }
+{
+    const ptr = window.GetBestSize();
+    if (!ptr)
+    {
+        return { width: 0, height: 0 };
+    }
+
+    const size = new wxSize(ptr);
+    const result = { width: size.GetWidth(), height: size.GetHeight() };
+    size.Delete();
+    return result;
+}
+
+/** wxString overload of wxGetTextFromUser(...) returning "" on cancel. */
+function getTextFromUser(
+    message: string,
+    caption: string,
+    defaultValue: string,
+    parent: Pointer,
+): string
+{
+    const messageBuffer = new TextEncoder().encode(message + "\0");
+    const captionBuffer = new TextEncoder().encode(caption + "\0");
+    const defaultBuffer = new TextEncoder().encode(defaultValue + "\0");
+
+    // The first call (null buffer) shows the dialog and caches the UTF-8
+    // result; the second one copies it into our buffer without showing it.
+    const length = wxGetTextFromUser(
+        pointerOf(messageBuffer),
+        pointerOf(captionBuffer),
+        pointerOf(defaultBuffer),
+        parent,
+        -1,
+        -1,
+        1,
+        null,
+    );
+    if (length <= 0)
+    {
+        return "";
+    }
+
+    const output = new Uint8Array(length + 1);
+    wxGetTextFromUser(
+        pointerOf(messageBuffer),
+        pointerOf(captionBuffer),
+        pointerOf(defaultBuffer),
+        parent,
+        -1,
+        -1,
+        1,
+        pointerOf(output),
+    );
+
+    // The KWXFFI helper stores NUL-terminated UTF-8 bytes.
+    return readCString(pointerOf(output));
+}
+
+function showMessage(
+    parent: Pointer,
+    message: string,
+    caption: string,
+    style: number,
+): void
+{
+    withString(message, (m) =>
+    {
+        withString(caption, (c) =>
+        {
+            kwxMessageBox(m, c, style, parent, -1, -1);
+        });
+    });
+}
+
+function logError(message: string): void
+{
+    withString(message, (ptr) => LogError(ptr));
+}
+
+function logWarning(message: string): void
+{
+    withString(message, (ptr) => LogWarning(ptr));
+}
+
+function showUnavailable(state: FontState, message: string): void
+{
+    showMessage(state.frame.ptr, message, "Not available", OK);
+}
+
+// ---------------------------------------------------------------------------
+// Menu construction
+// ---------------------------------------------------------------------------
+
+function appendItem(
+    menu: wxMenu,
+    id: number,
+    text: string,
+    help: string,
+): void
+{
+    withString(text, (t) =>
+    {
+        withString(help, (h) =>
+        {
+            menu.Append(id, t, h, false);
+        });
+    });
+}
+
+function appendCheckItem(
+    menu: wxMenu,
+    id: number,
+    text: string,
+    help: string,
+): void
+{
+    withString(text, (t) =>
+    {
+        withString(help, (h) =>
+        {
+            menu.AppendCheckItem(id, t, h);
+        });
+    });
+}
+
+function appendSubMenu(
+    menu: wxMenu,
+    id: number,
+    text: string,
+    submenu: wxMenu,
+    help: string,
+): void
+{
+    withString(text, (t) =>
+    {
+        withString(help, (h) =>
+        {
+            menu.AppendSub(id, t, submenu.ptr, h);
+        });
+    });
+}
+
+function createMenu(): wxMenu | null
+{
+    return withString("", (ptr) => createWxMenu(ptr, 0n));
+}
+
+/**
+ * wxFont::AddPrivateFont("..."). Returns whether the item must be added to the
+ * menu, logging exactly like the original when it fails.
+ */
+function addPrivateFont(): boolean
+{
+    let path: string;
+    if (platform === "darwin")
+    {
+        // __WXOSX__: wxStandardPaths::Get().GetResourcesDir() + "/Fonts/";
+        const singleton = new wxStandardPaths(lib.symbols.wxStandardPaths_Get());
+        path = readAndDeleteWxString(singleton.GetResourcesDir()) +
+            "/Fonts/wxprivate.ttf";
+    }
+    else
+    {
+        path = samplePath("wxprivate.ttf");
+    }
+
+    // wxFont::AddPrivateFont() is static; the generated wrapper exposes it as
+    // an instance method, so call the FFI entry directly. The bool return is
+    // masked for the same ABI reason as the wxFont accessors.
+    const raw = withString(path, (ptr) =>
+        lib.symbols.wxFont_AddPrivateFont(ptr) as number);
+    const added = (raw & 0xff) !== 0;
+
+    if (!added)
+    {
+        logWarning(`Failed to add private font from "${path}"`);
+    }
+
+    return added;
+}
+
+function buildMenuBar(frame: wxFrame): wxMenuBar | null
+{
+    const fileMenu = createMenu();
+    const fontMenu = createMenu();
+    const selectMenu = createMenu();
+    if (!fileMenu || !fontMenu || !selectMenu)
+    {
+        return null;
+    }
+
+    // File
+    appendItem(
+        fileMenu,
+        FONT_TEST_TEXT_VALUE,
+        "&Test text value",
+        "Verify that getting and setting text value doesn't change it",
+    );
+    appendItem(
+        fileMenu,
+        FONT_VIEW_MSG,
+        "&View...\tCtrl-V",
+        "View an email message file",
+    );
+    fileMenu.AppendSeparator();
+    appendItem(fileMenu, FONT_ABOUT, "&About\tCtrl-A", "Show about dialog");
+    fileMenu.AppendSeparator();
+    appendItem(fileMenu, FONT_QUIT, "E&xit\tAlt-X", "Quit this program");
+
+    // Font
+    appendItem(
+        fontMenu,
+        FONT_INC_SIZE,
+        "&Increase font size by 2 points\tCtrl-I",
+        "",
+    );
+    appendItem(
+        fontMenu,
+        FONT_DEC_SIZE,
+        "&Decrease font size by 2 points\tCtrl-D",
+        "",
+    );
+    appendItem(
+        fontMenu,
+        FONT_GET_BASE_FONT,
+        "Use &base version of the font\tCtrl-0",
+        "",
+    );
+    fontMenu.AppendSeparator();
+    appendCheckItem(fontMenu, FONT_BOLD, "&Bold\tCtrl-B", "Toggle bold state");
+    appendCheckItem(fontMenu, FONT_LIGHT, "&Light\tCtrl-L", "Toggle light state");
+    fontMenu.AppendSeparator();
+    appendCheckItem(fontMenu, FONT_ITALIC, "&Oblique\tCtrl-O", "Toggle italic state");
+    if (platform !== "windows")
+    {
+        // On wxMSW slant == italic, so the original omits this item there.
+        appendCheckItem(fontMenu, FONT_SLANT, "&Slant\tCtrl-S", "Toggle slant state");
+    }
+    fontMenu.AppendSeparator();
+    appendCheckItem(
+        fontMenu,
+        FONT_UNDERLINED,
+        "&Underlined\tCtrl-U",
+        "Toggle underlined state",
+    );
+    appendCheckItem(
+        fontMenu,
+        FONT_STRIKETHROUGH,
+        "&Strikethrough",
+        "Toggle strikethrough state",
+    );
+
+    fontMenu.AppendSeparator();
+    appendItem(
+        fontMenu,
+        FONT_SET_NATIVE_DESC,
+        "Set native font &description\tShift-Ctrl-D",
+        "",
+    );
+    appendItem(
+        fontMenu,
+        FONT_SET_NATIVE_USER_DESC,
+        "Set &user font description\tShift-Ctrl-U",
+        "",
+    );
+    fontMenu.AppendSeparator();
+    appendItem(fontMenu, FONT_SET_FAMILY, "Set font family", "");
+    appendItem(fontMenu, FONT_SET_FACE_NAME, "Set font face name", "");
+    appendItem(
+        fontMenu,
+        FONT_SET_ENCODING,
+        "Set font &encoding\tShift-Ctrl-E",
+        "",
+    );
+
+    // Select
+    appendItem(
+        selectMenu,
+        FONT_CHOOSE,
+        "&Select font...\tCtrl-S",
+        "Select a standard font",
+    );
+
+    const standardFonts = createMenu();
+    if (!standardFonts)
+    {
+        return null;
+    }
+    appendItem(
+        standardFonts,
+        FONT_WX_NORMAL_FONT,
+        "wxNORMAL_FONT",
+        "Normal font used by wxWidgets",
+    );
+    appendItem(
+        standardFonts,
+        FONT_WX_SMALL_FONT,
+        "wxSMALL_FONT",
+        "Small font used by wxWidgets",
+    );
+    appendItem(
+        standardFonts,
+        FONT_WX_ITALIC_FONT,
+        "wxITALIC_FONT",
+        "Italic font used by wxWidgets",
+    );
+    appendItem(
+        standardFonts,
+        FONT_WX_SWISS_FONT,
+        "wxSWISS_FONT",
+        "Swiss font used by wxWidgets",
+    );
+    appendItem(
+        standardFonts,
+        FONT_WX_FONT_DEFAULT,
+        "wxFont()",
+        "wxFont constructed from default wxFontInfo",
+    );
+    appendSubMenu(
+        selectMenu,
+        FONT_STANDARD,
+        "Standar&d fonts",
+        standardFonts,
+        "",
+    );
+
+    const systemFonts = createMenu();
+    if (!systemFonts)
+    {
+        return null;
+    }
+    appendItem(
+        systemFonts,
+        FONT_WX_SYS_OEM_FIXED_FONT,
+        "wxSYS_OEM_FIXED_FONT",
+        "Original equipment manufacturer dependent fixed-pitch font.",
+    );
+    appendItem(
+        systemFonts,
+        FONT_WX_SYS_ANSI_FIXED_FONT,
+        "wxSYS_ANSI_FIXED_FONT",
+        "Windows fixed-pitch (monospaced) font. ",
+    );
+    appendItem(
+        systemFonts,
+        FONT_WX_SYS_ANSI_VAR_FONT,
+        "wxSYS_ANSI_VAR_FONT",
+        "Windows variable-pitch (proportional) font.",
+    );
+    appendItem(
+        systemFonts,
+        FONT_WX_SYS_SYSTEM_FONT,
+        "wxSYS_SYSTEM_FONT",
+        "System font.",
+    );
+    appendItem(
+        systemFonts,
+        FONT_WX_SYS_DEVICE_DEFAULT_FONT,
+        "wxSYS_DEVICE_DEFAULT_FONT",
+        "Device-dependent font.",
+    );
+    appendItem(
+        systemFonts,
+        FONT_WX_SYS_DEFAULT_GUI_FONT,
+        "wxSYS_DEFAULT_GUI_FONT",
+        "Default font for user interface objects such as menus and dialog boxes. ",
+    );
+    appendSubMenu(selectMenu, FONT_SYSTEM_SETTINGS, "System fonts", systemFonts, "");
+
+    selectMenu.AppendSeparator();
+    appendItem(
+        selectMenu,
+        FONT_ENUM_FAMILIES,
+        "Enumerate font &families\tCtrl-F",
+        "",
+    );
+    appendItem(
+        selectMenu,
+        FONT_ENUM_FIXED_FAMILIES,
+        "Enumerate fi&xed font families\tCtrl-X",
+        "",
+    );
+    appendItem(
+        selectMenu,
+        FONT_ENUM_ENCODINGS,
+        "Enumerate &encodings\tCtrl-E",
+        "",
+    );
+    appendItem(
+        selectMenu,
+        FONT_ENUM_FAMILIES_FOR_ENCODING,
+        "Find font for en&coding...\tCtrl-C",
+        "Find font families for given encoding",
+    );
+
+    // wxUSE_PRIVATE_FONTS block: the item only appears when the font loaded.
+    if (addPrivateFont())
+    {
+        selectMenu.AppendSeparator();
+        appendItem(
+            selectMenu,
+            FONT_PRIVATE,
+            "Select private font",
+            "Select a font available only in this application",
+        );
+    }
+
+    const menuBar = createWxMenuBar(0);
+    if (!menuBar)
+    {
+        return null;
+    }
+
+    withString("&File", (ptr) => menuBar.Append(fileMenu.ptr, ptr));
+    withString("F&ont", (ptr) => menuBar.Append(fontMenu.ptr, ptr));
+    withString("&Select", (ptr) => menuBar.Append(selectMenu.ptr, ptr));
+
+    frame.SetMenuBar(menuBar.ptr);
+    return menuBar;
+}
+
+// ---------------------------------------------------------------------------
+// Window construction
+// ---------------------------------------------------------------------------
+
+function createFontWindow(
+    splitter: wxWindow,
+    border: number,
+    doubleBorder: number,
+): { fontWindow: wxWindow; panel: FontPanelState; canvas: wxWindow } | null
+{
+    const fontWindow = createWxWindow(splitter.ptr, ID_ANY, -1, -1, -1, -1, 0);
+    if (!fontWindow)
+    {
+        return null;
+    }
+
+    // m_panel(new FontPanel(this)) — the panel is created before the canvas.
+    const panel = createFontPanel(fontWindow.ptr, border, doubleBorder);
+    if (!panel)
+    {
+        return null;
+    }
+
+    // m_canvas(new FontCanvas(this))
+    const canvas = createWxWindow(fontWindow.ptr, ID_ANY, -1, -1, -1, -1, 0);
+    if (!canvas)
+    {
+        return null;
+    }
+
+    // FontCanvas::DoGetBestClientSize() = wxSize(80*GetCharWidth(),
+    //                                             15*GetCharHeight()).
+    // The virtual cannot be overridden, so the same value is cached as the
+    // window's best size.
+    canvas.CacheBestSize(
+        80 * canvas.GetCharWidth(),
+        15 * canvas.GetCharHeight(),
+    );
+
+    // wxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
+    //   Add(m_panel, wxSizerFlags().Expand().Border());
+    //   Add(new wxStaticLine(this), wxSizerFlags().Expand());
+    //   Add(m_canvas, wxSizerFlags(1).Expand());
+    const staticLine = createWxStaticLine(
+        fontWindow.ptr, ID_ANY, -1, -1, -1, -1, 0,
+    );
+    const sizer = createWxBoxSizer(VERTICAL);
+    if (!staticLine || !sizer)
+    {
+        return null;
+    }
+
+    sizer.AddWindow(panel.panel.ptr, 0, EXPAND | ALL, border, null);
+    sizer.AddWindow(staticLine.ptr, 0, EXPAND, 0, null);
+    sizer.AddWindow(canvas.ptr, 1, EXPAND, 0, null);
+    fontWindow.SetSizer(sizer.ptr, true);
+
+    return { fontWindow, panel, canvas };
+}
+
+function createFontFrame(): FontState | null
+{
+    const title = createWxString("wxWidgets font sample");
+    const frame = createWxFrame(
+        null,
+        ID_ANY,
+        title.ptr,
+        -1,
+        -1,
+        -1,
+        -1,
+        DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+    if (!frame)
+    {
+        return null;
+    }
+
+    // SetIcon(wxICON(sample)) — the XPM is loaded at run time instead of being
+    // compiled in as a resource.
+    const iconPath = createWxString(samplePath("sample.xpm"));
+    const icon = createWxIconLoad(
+        iconPath.ptr,
+        BigInt(BITMAP_TYPE_XPM),
+        -1,
+        -1,
+    );
+    iconPath.Delete();
+    if (icon)
+    {
+        if (icon.IsOk())
+        {
+            frame.SetIcon(icon.ptr);
+        }
+        icon.Delete();
+    }
+
+    const menuBar = buildMenuBar(frame);
+    if (!menuBar)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    const borderFraction = defaultBorderFractional(frame);
+    const border = Math.round(borderFraction);
+    const doubleBorder = Math.round(2 * borderFraction);
+
+    const splitter = createWxSplitterWindow(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, SP_3D,
+    );
+    if (!splitter)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    const fontWindowParts = createFontWindow(splitter, border, doubleBorder);
+    if (!fontWindowParts)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // m_textctrl = new wxTextCtrl(splitter, wxID_ANY, "...",
+    //                             wxDefaultPosition,
+    //                             wxSize(-1, 6*GetCharHeight()),
+    //                             wxTE_MULTILINE);
+    const textValue = createWxString(
+        "Paste text here to see how it looks\nlike in the given font",
+    );
+    const textCtrl = createWxTextCtrl(
+        splitter.ptr,
+        ID_ANY,
+        textValue.ptr,
+        -1,
+        -1,
+        -1,
+        6 * frame.GetCharHeight(),
+        BigInt(TE_MULTILINE),
+    );
+    textValue.Delete();
+    if (!textCtrl)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    splitter.SplitHorizontally(
+        fontWindowParts.fontWindow.ptr,
+        textCtrl.ptr,
+        0,
+    );
+
+    // CreateStatusBar(); SetStatusText("Welcome to wxWidgets font demo!");
+    frame.CreateStatusBar(1, STATUS_BAR_STYLE, ID_ANY);
+    withString("Welcome to wxWidgets font demo!", (ptr) =>
+    {
+        frame.SetStatusText(ptr, 0);
+    });
+
+    // SetClientSize(splitter->GetBestSize());
+    const splitterSize = bestSize(splitter);
+    frame.SetClientSize(splitterSize.width, splitterSize.height);
+
+    // splitter->SetSashPosition(m_fontWindow->GetBestSize().y);
+    splitter.SetSashPosition(bestSize(fontWindowParts.fontWindow).height, true);
+
+    // Initial font state: FontCanvas defaults to *wxNORMAL_FONT / *wxRED.
+    const normalFont = new wxFont(NORMAL_FONT);
+    const font = cloneFont(normalFont);
+    if (!font)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    const red = new wxColour(RED);
+    const canvasFont = cloneFont(font);
+    const canvasColour = cloneColour(red);
+    if (!canvasFont || !canvasColour)
+    {
+        font.Delete();
+        frame.Destroy();
+        return null;
+    }
+
+    const pen = createWxPenFromColour(BLUE, 1, PENSTYLE_SOLID);
+    if (!pen)
+    {
+        font.Delete();
+        canvasFont.Delete();
+        canvasColour.Delete();
+        frame.Destroy();
+        return null;
+    }
+
+    return {
+        frame,
+        menuBar,
+        fontWindow: fontWindowParts.fontWindow,
+        panel: fontWindowParts.panel,
+        canvas: fontWindowParts.canvas,
+        textCtrl,
+        font,
+        canvasFont,
+        canvasColour,
+        pen,
+        callbacks: [],
+        closures: [],
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Font operations
+// ---------------------------------------------------------------------------
+
+/** MyFrame::DoChangeFont(const wxFont& font, const wxColour& col = wxNullColour) */
+function doChangeFont(
+    state: FontState,
+    font: wxFont,
+    colour: wxColour | null,
+): void
+{
+    // m_fontWindow->UpdateFont(font, col);
+    showFont(state.panel, font);
+
+    const canvasFont = cloneFont(font);
+    if (canvasFont)
+    {
+        state.canvasFont.Delete();
+        state.canvasFont = canvasFont;
+    }
+
+    if (colour && colour.IsOk())
+    {
+        const canvasColour = cloneColour(colour);
+        if (canvasColour)
+        {
+            state.canvasColour.Delete();
+            state.canvasColour = canvasColour;
+        }
+    }
+    state.canvas.Refresh(true);
+
+    // m_textctrl->SetFont(font); if (col.IsOk()) SetForegroundColour(col);
+    state.textCtrl.SetFont(font.ptr);
+    if (colour && colour.IsOk())
+    {
+        state.textCtrl.SetForegroundColour(colour.ptr);
+    }
+    state.textCtrl.Refresh(true);
+
+    // update the state of the bold/italic/underlined menu items
+    state.menuBar.Check(FONT_LIGHT, font.GetWeight() === FONTWEIGHT_LIGHT);
+    state.menuBar.Check(FONT_BOLD, font.GetWeight() === FONTWEIGHT_BOLD);
+
+    state.menuBar.Check(FONT_ITALIC, font.GetStyle() === FONTSTYLE_ITALIC);
+    if (platform !== "windows")
+    {
+        state.menuBar.Check(FONT_SLANT, font.GetStyle() === FONTSTYLE_SLANT);
+    }
+
+    state.menuBar.Check(FONT_UNDERLINED, fontUnderlined(font));
+    state.menuBar.Check(FONT_STRIKETHROUGH, fontStrikethrough(font));
+
+    const next = cloneFont(font);
+    if (next)
+    {
+        state.font.Delete();
+        state.font = next;
+    }
+}
+
+/** MyFrame::DoChangeFont(m_fontWindow->GetTextFont().GetBaseFont()) */
+function applyBaseFont(state: FontState): void
+{
+    const basePtr = state.font.GetBaseFont();
+    if (!basePtr)
+    {
+        return;
+    }
+
+    const base = new wxFont(basePtr);
+    doChangeFont(state, base, null);
+    base.Delete();
+}
+
+/** MyFrame::DoResizeFont(int diff) */
+function resizeFont(state: FontState, diff: number): void
+{
+    const font = cloneFont(state.font);
+    if (!font)
+    {
+        return;
+    }
+
+    font.SetPointSize(font.GetPointSize() + diff);
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+function changeWeight(state: FontState, weight: number): void
+{
+    const font = cloneFont(state.font);
+    if (!font)
+    {
+        return;
+    }
+
+    font.SetWeight(weight);
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+function changeStyle(state: FontState, style: number): void
+{
+    const font = cloneFont(state.font);
+    if (!font)
+    {
+        return;
+    }
+
+    font.SetStyle(style);
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+function changeUnderlined(state: FontState, underlined: boolean): void
+{
+    const font = cloneFont(state.font);
+    if (!font)
+    {
+        return;
+    }
+
+    font.SetUnderlined(underlined ? 1 : 0);
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+function changeStrikethrough(state: FontState, strikethrough: boolean): void
+{
+    const font = cloneFont(state.font);
+    if (!font)
+    {
+        return;
+    }
+
+    font.SetStrikethrough(strikethrough);
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+/** MyFrame::OnwxPointerFont() — apply one of the stock wxFont objects. */
+function applyStockFont(state: FontState, stock: Pointer): void
+{
+    const borrowed = new wxFont(stock);
+    const font = cloneFont(borrowed);
+    if (!font)
+    {
+        return;
+    }
+
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+/** MyFrame::OnFontDefault() — DoChangeFont(wxFont(wxFontInfo())). */
+function applyDefaultInfoFont(state: FontState): void
+{
+    // wxFontInfo() means point size -1 (platform default), family DEFAULT,
+    // normal style/weight, no face name, wxFONTENCODING_DEFAULT.
+    const font = withString("", (facePtr) =>
+        createWxFont(
+            -1,
+            FONTFAMILY_DEFAULT,
+            FONTSTYLE_NORMAL,
+            FONTWEIGHT_NORMAL,
+            false,
+            facePtr,
+            FONTENCODING_DEFAULT,
+        ));
+    if (!font)
+    {
+        return;
+    }
+
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+/** MyFrame::OnwxSystemSettingsFont() — wxSystemSettings::GetFont(index). */
+function applySystemFont(state: FontState, index: number): void
+{
+    const font = createWxFontDefault();
+    if (!font)
+    {
+        return;
+    }
+
+    // wxSystemSettings has no factory: its generated methods are static-like
+    // and ignore the instance pointer, so call the FFI entry directly here.
+    lib.symbols.wxSystemSettings_GetFont(index, font.ptr);
+
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+/** MyFrame::OnSetNativeDesc() */
+function setNativeDesc(state: FontState): void
+{
+    const current = readAndDeleteWxString(state.font.GetNativeFontInfoDesc());
+    const input = getTextFromUser(
+        "Enter native font string",
+        "Input font description",
+        current,
+        state.frame.ptr,
+    );
+    if (input === "")
+    {
+        return; // user clicked "Cancel" - do nothing
+    }
+
+    const font = createWxFontDefault();
+    if (!font)
+    {
+        return;
+    }
+
+    withString(input, (ptr) => font.SetNativeFontInfo(ptr));
+    if (!fontIsOk(font))
+    {
+        logError(`Font info string "${input}" is invalid.`);
+        font.Delete();
+        return;
+    }
+
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+/** MyFrame::OnSetNativeUserDesc() */
+function setNativeUserDesc(state: FontState): void
+{
+    const current = readAndDeleteWxString(state.font.GetNativeFontInfoUserDesc());
+    const input = getTextFromUser(
+        "Here you can edit current font description",
+        "Input font description",
+        current,
+        state.frame.ptr,
+    );
+    if (input === "")
+    {
+        return; // user clicked "Cancel" - do nothing
+    }
+
+    const font = createWxFontDefault();
+    if (!font)
+    {
+        return;
+    }
+
+    const okRaw = withString(input, (ptr) =>
+        lib.symbols.wxFont_SetNativeFontInfoUserDesc(font.ptr, ptr) as number);
+    const ok = (okRaw & 0xff) !== 0;
+    if (ok)
+    {
+        doChangeFont(state, font, null);
+    }
+    else
+    {
+        showMessage(
+            null,
+            "Error trying to create a font with such description...",
+            "Message",
+            OK,
+        );
+    }
+
+    font.Delete();
+}
+
+/** MyFrame::OnSetFaceName() */
+function setFaceName(state: FontState): void
+{
+    const current = readAndDeleteWxString(state.font.GetFaceName());
+    const input = getTextFromUser(
+        "Here you can edit current font face name.",
+        "Input font facename",
+        current,
+        state.frame.ptr,
+    );
+    if (input === "")
+    {
+        return; // user clicked "Cancel" - do nothing
+    }
+
+    const font = cloneFont(state.font);
+    if (!font)
+    {
+        return;
+    }
+
+    // wxFont::SetFaceName() returns bool in C++, but the binding drops the
+    // return value. wxWidgets invalidates the font when the name is unknown,
+    // so IsOk() is the same test.
+    withString(input, (ptr) => font.SetFaceName(ptr));
+    if (fontIsOk(font))
+    {
+        doChangeFont(state, font, null);
+    }
+    else
+    {
+        showMessage(
+            state.frame.ptr,
+            "There is no font with such face name...",
+            "Invalid face name",
+            OK | ICON_ERROR,
+        );
+    }
+
+    font.Delete();
+}
+
+/** MyFrame::OnPrivateFont() */
+function usePrivateFont(state: FontState): void
+{
+    const font = cloneFont(state.font);
+    if (!font)
+    {
+        return;
+    }
+
+    withString("wxprivate", (ptr) => font.SetFaceName(ptr));
+    if (fontIsOk(font))
+    {
+        doChangeFont(state, font, null);
+    }
+    else
+    {
+        logError("Failed to use private font.");
+    }
+
+    font.Delete();
+}
+
+/** MyFrame::OnSelectFont() */
+function selectFont(state: FontState): void
+{
+    const data = createWxFontData();
+    if (!data)
+    {
+        return;
+    }
+
+    data.SetInitialFont(state.font.ptr);
+    data.SetColour(state.canvasColour.ptr);
+
+    const dialog = createWxFontDialog(state.frame.ptr, data.ptr);
+    if (dialog)
+    {
+        if (dialog.ShowModal() === ID_OK)
+        {
+            const returned = createWxFontData();
+            const font = createWxFontDefault();
+            const colour = createWxColourEmpty();
+            if (returned && font && colour)
+            {
+                dialog.GetFontData(returned.ptr);
+                returned.GetChosenFont(font.ptr);
+                returned.GetColour(colour.ptr);
+
+                doChangeFont(state, font, colour.IsOk() ? colour : null);
+            }
+
+            font?.Delete();
+            colour?.Delete();
+            returned?.Delete();
+        }
+
+        dialog.Destroy();
+    }
+
+    data.Delete();
+}
+
+/** MyFrame::OnTestTextValue() */
+function testTextValue(state: FontState): void
+{
+    const value = readAndDeleteWxString(state.textCtrl.GetValue());
+    withString(value, (ptr) => state.textCtrl.SetValue(ptr));
+
+    const after = readAndDeleteWxString(state.textCtrl.GetValue());
+    if (after !== value)
+    {
+        logError("Text value changed after getting and setting it");
+    }
+}
+
+/** MyFrame::OnAbout() */
+function showAbout(state: FontState): void
+{
+    showMessage(
+        state.frame.ptr,
+        "wxWidgets font sample\n(c) 1999-2006 Vadim Zeitlin",
+        "About " + SAMPLE_TITLE,
+        OK | ICON_INFORMATION,
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Menu dispatch
+// ---------------------------------------------------------------------------
+
+function handleMenu(state: FontState, id: number, checked: boolean): void
+{
+    switch (id)
+    {
+        case FONT_QUIT: state.frame.Close(true); break;
+
+        case FONT_TEST_TEXT_VALUE: testTextValue(state); break;
+        case FONT_VIEW_MSG:
+            showUnavailable(
+                state,
+                "This command reads an email message with wxTextFile and maps " +
+                    "its charset with wxFontMapper::CharsetToEncoding. Neither " +
+                    "is bound in kwxTypeScript.",
+            );
+            break;
+        case FONT_ABOUT: showAbout(state); break;
+
+        case FONT_GET_BASE_FONT: applyBaseFont(state); break;
+        case FONT_INC_SIZE: resizeFont(state, +2); break;
+        case FONT_DEC_SIZE: resizeFont(state, -2); break;
+
+        case FONT_BOLD:
+            changeWeight(state, checked ? FONTWEIGHT_BOLD : FONTWEIGHT_NORMAL);
+            break;
+        case FONT_LIGHT:
+            changeWeight(state, checked ? FONTWEIGHT_LIGHT : FONTWEIGHT_NORMAL);
+            break;
+
+        case FONT_ITALIC:
+            changeStyle(state, checked ? FONTSTYLE_ITALIC : FONTSTYLE_NORMAL);
+            break;
+        case FONT_SLANT:
+            changeStyle(state, checked ? FONTSTYLE_SLANT : FONTSTYLE_NORMAL);
+            break;
+
+        case FONT_UNDERLINED: changeUnderlined(state, checked); break;
+        case FONT_STRIKETHROUGH: changeStrikethrough(state, checked); break;
+
+        case FONT_WX_NORMAL_FONT: applyStockFont(state, NORMAL_FONT); break;
+        case FONT_WX_SMALL_FONT: applyStockFont(state, SMALL_FONT); break;
+        case FONT_WX_ITALIC_FONT: applyStockFont(state, ITALIC_FONT); break;
+        case FONT_WX_SWISS_FONT: applyStockFont(state, SWISS_FONT); break;
+        case FONT_WX_FONT_DEFAULT: applyDefaultInfoFont(state); break;
+
+        case FONT_WX_SYS_OEM_FIXED_FONT:
+            applySystemFont(state, SYS_OEM_FIXED_FONT);
+            break;
+        case FONT_WX_SYS_ANSI_FIXED_FONT:
+            applySystemFont(state, SYS_ANSI_FIXED_FONT);
+            break;
+        case FONT_WX_SYS_ANSI_VAR_FONT:
+            applySystemFont(state, SYS_ANSI_VAR_FONT);
+            break;
+        case FONT_WX_SYS_SYSTEM_FONT:
+            applySystemFont(state, SYS_SYSTEM_FONT);
+            break;
+        case FONT_WX_SYS_DEVICE_DEFAULT_FONT:
+            applySystemFont(state, SYS_DEVICE_DEFAULT_FONT);
+            break;
+        case FONT_WX_SYS_DEFAULT_GUI_FONT:
+            applySystemFont(state, SYS_DEFAULT_GUI_FONT);
+            break;
+
+        case FONT_SET_NATIVE_DESC: setNativeDesc(state); break;
+        case FONT_SET_NATIVE_USER_DESC: setNativeUserDesc(state); break;
+
+        case FONT_SET_FAMILY:
+            showUnavailable(
+                state,
+                "Choosing a font family uses wxGetSingleChoiceIndex() and " +
+                    "wxArrayString, neither of which is bound in kwxTypeScript.",
+            );
+            break;
+        case FONT_SET_FACE_NAME: setFaceName(state); break;
+        case FONT_SET_ENCODING:
+            showUnavailable(
+                state,
+                "Choosing an encoding uses wxGetSingleChoiceIndex() and " +
+                    "wxFontMapper::GetSupportedEncodingsCount()/GetEncoding()/" +
+                    "GetEncodingName(), none of which is bound in kwxTypeScript.",
+            );
+            break;
+
+        case FONT_CHOOSE: selectFont(state); break;
+
+        case FONT_ENUM_FAMILIES:
+        case FONT_ENUM_FIXED_FAMILIES:
+            showUnavailable(
+                state,
+                "Enumerating facenames needs wxFontEnumerator's OnFacename() " +
+                    "callback. The binding expects a native int (*)(void*, void*) " +
+                    "function, but kwxTypeScript callbacks are void " +
+                    "(*)(void*, void*, void*) thunks, so the results cannot be read.",
+            );
+            break;
+        case FONT_ENUM_ENCODINGS:
+            showUnavailable(
+                state,
+                "Enumerating encodings needs wxFontEnumerator's " +
+                    "OnFontEncoding() callback. The binding expects a native " +
+                    "int (*)(void*, void*) function, but kwxTypeScript callbacks " +
+                    "are void (*)(void*, void*, void*) thunks.",
+            );
+            break;
+        case FONT_ENUM_FAMILIES_FOR_ENCODING:
+            showUnavailable(
+                state,
+                "This command needs an encoding choice " +
+                    "(wxGetSingleChoiceIndex, wxFontMapper enumeration) and then " +
+                    "wxFontEnumerator facename enumeration. None of these can be " +
+                    "used from kwxTypeScript.",
+            );
+            break;
+
+        case FONT_PRIVATE: usePrivateFont(state); break;
+
+        default:
+            break;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Events
+// ---------------------------------------------------------------------------
+
+function connectEvent(
+    state: FontState,
+    handler: Pointer,
+    id: number,
+    lastId: number,
+    eventType: number,
+    callback: Callback,
+): void
+{
+    const closure = createWxClosure(callback.pointer, null);
+    if (!closure)
+    {
+        return;
+    }
+
+    state.closures.push(closure);
+    lib.symbols.wxEvtHandler_Connect(
+        handler,
+        id,
+        lastId,
+        eventType,
+        closure.ptr,
+    );
+}
+
+function connectEvents(state: FontState): void
+{
+    // wxBEGIN_EVENT_TABLE(MyFrame, wxFrame) — one dispatch callback connected
+    // for every ID that has an EVT_MENU entry in the original.
+    const menuCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+
+            const event = new wxCommandEvent(eventPtr);
+            handleMenu(state, event.GetId(), event.IsChecked());
+        },
+    );
+    state.callbacks.push(menuCallback);
+
+    const menuIds: readonly number[] = [
+        FONT_QUIT, FONT_TEST_TEXT_VALUE, FONT_VIEW_MSG, FONT_ABOUT,
+        FONT_GET_BASE_FONT, FONT_INC_SIZE, FONT_DEC_SIZE,
+        FONT_BOLD, FONT_LIGHT,
+        FONT_ITALIC,
+        ...(platform !== "windows" ? [FONT_SLANT] : []),
+        FONT_UNDERLINED, FONT_STRIKETHROUGH,
+        FONT_WX_NORMAL_FONT, FONT_WX_SMALL_FONT, FONT_WX_ITALIC_FONT,
+        FONT_WX_SWISS_FONT, FONT_WX_FONT_DEFAULT,
+        FONT_WX_SYS_OEM_FIXED_FONT, FONT_WX_SYS_ANSI_FIXED_FONT,
+        FONT_WX_SYS_ANSI_VAR_FONT, FONT_WX_SYS_SYSTEM_FONT,
+        FONT_WX_SYS_DEVICE_DEFAULT_FONT, FONT_WX_SYS_DEFAULT_GUI_FONT,
+        FONT_SET_NATIVE_DESC, FONT_SET_NATIVE_USER_DESC,
+        FONT_SET_FAMILY, FONT_SET_FACE_NAME, FONT_SET_ENCODING,
+        FONT_CHOOSE,
+        FONT_ENUM_FAMILIES_FOR_ENCODING, FONT_ENUM_FAMILIES,
+        FONT_ENUM_FIXED_FAMILIES, FONT_ENUM_ENCODINGS,
+        FONT_PRIVATE,
+    ];
+
+    for (const id of menuIds)
+    {
+        connectEvent(state, state.frame.ptr, id, id, EVT_MENU, menuCallback);
+    }
+
+    // m_fontWindow->Bind(wxEVT_BUTTON, &MyFrame::OnFontPanelApply, this);
+    const applyCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+
+            const font = makeFont(state.panel);
+            if (font)
+            {
+                doChangeFont(state, font, null);
+                font.Delete();
+            }
+        },
+    );
+    state.callbacks.push(applyCallback);
+    connectEvent(
+        state,
+        state.fontWindow.ptr,
+        ID_APPLY,
+        ID_APPLY,
+        EVT_BUTTON,
+        applyCallback,
+    );
+
+    // m_textFaceName->Bind(wxEVT_TEXT, &FontPanel::OnFacename, this);
+    const faceNameCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+
+            state.panel.useFamily = false;
+            new wxCommandEvent(eventPtr).Skip(true);
+        },
+    );
+    state.callbacks.push(faceNameCallback);
+    connectEvent(
+        state,
+        state.panel.faceName.ptr,
+        ID_ANY,
+        ID_ANY,
+        EVT_TEXT,
+        faceNameCallback,
+    );
+
+    // m_choiceFamily->Bind(wxEVT_CHOICE, &FontPanel::OnFamily, this);
+    const familyCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+
+            state.panel.useFamily = true;
+            new wxCommandEvent(eventPtr).Skip(true);
+        },
+    );
+    state.callbacks.push(familyCallback);
+    connectEvent(
+        state,
+        state.panel.choiceFamily.ptr,
+        ID_ANY,
+        ID_ANY,
+        EVT_CHOICE,
+        familyCallback,
+    );
+
+    // m_choiceWeight->Bind(wxEVT_CHOICE, &FontPanel::OnWeightChoice, this);
+    const weightChoiceCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+
+            state.panel.useNumericWeight = false;
+            new wxCommandEvent(eventPtr).Skip(true);
+        },
+    );
+    state.callbacks.push(weightChoiceCallback);
+    connectEvent(
+        state,
+        state.panel.choiceWeight.ptr,
+        ID_ANY,
+        ID_ANY,
+        EVT_CHOICE,
+        weightChoiceCallback,
+    );
+
+    // m_spinWeight->Bind(wxEVT_SPINCTRL, &FontPanel::OnWeightSpin, this);
+    const weightSpinCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+
+            state.panel.useNumericWeight = true;
+            new wxCommandEvent(eventPtr).Skip(true);
+        },
+    );
+    state.callbacks.push(weightSpinCallback);
+    connectEvent(
+        state,
+        state.panel.spinWeight.ptr,
+        ID_ANY,
+        ID_ANY,
+        EVT_SPINCTRL,
+        weightSpinCallback,
+    );
+
+    // wxBEGIN_EVENT_TABLE(FontCanvas, wxWindow) EVT_PAINT(FontCanvas::OnPaint)
+    const paintCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+
+            paintFontCanvas(
+                state.canvas,
+                state.canvasFont,
+                state.canvasColour,
+                state.pen,
+            );
+        },
+    );
+    state.callbacks.push(paintCallback);
+    connectEvent(
+        state,
+        state.canvas.ptr,
+        ID_ANY,
+        ID_ANY,
+        EVT_PAINT,
+        paintCallback,
+    );
+
+    // Let the window manager close the frame through the normal loop exit.
+    const closeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+
+            exitMainLoop();
+        },
+    );
+    state.callbacks.push(closeCallback);
+    connectEvent(
+        state,
+        state.frame.ptr,
+        ID_ANY,
+        ID_ANY,
+        EVT_CLOSE_WINDOW,
+        closeCallback,
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Entry point
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName(SAMPLE_TITLE);
+
+    // The frame icon and the private font are loaded from files.
+    initAllImageHandlers();
+
+    const state = createFontFrame();
+    if (!state)
+    {
+        console.error("font: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    connectEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+
+    state.font.Delete();
+    state.canvasFont.Delete();
+    state.canvasColour.Delete();
+    state.pen.Delete();
+
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

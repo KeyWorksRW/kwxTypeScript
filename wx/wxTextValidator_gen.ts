@@ -10,6 +10,26 @@ export class wxTextValidator extends wxValidator {
     return this._ptr;
   }
 
+  AddCharIncludes(chars: Pointer): void {
+    lib.symbols.wxTextValidator_AddCharIncludes(this._ptr, chars);
+  }
+
+  GetCharExcludes(): Pointer {
+    return lib.symbols.wxTextValidator_GetCharExcludes(this._ptr);
+  }
+
+  GetCharIncludes(): Pointer {
+    return lib.symbols.wxTextValidator_GetCharIncludes(this._ptr);
+  }
+
+  SetCharExcludes(chars: Pointer): void {
+    lib.symbols.wxTextValidator_SetCharExcludes(this._ptr, chars);
+  }
+
+  SetCharIncludes(chars: Pointer): void {
+    lib.symbols.wxTextValidator_SetCharIncludes(this._ptr, chars);
+  }
+
   GetExcludes(ref: Pointer): number {
     return lib.symbols.wxTextValidator_GetExcludes(this._ptr, ref);
   }

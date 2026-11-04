@@ -20,8 +20,8 @@ export class wxSocketBase extends wxObject {
     this.Delete();
   }
 
-  Close(): void {
-    lib.symbols.wxSocketBase_Close(this._ptr);
+  Close(): boolean {
+    return (lib.symbols.wxSocketBase_Close(this._ptr) as number) !== 0;
   }
 
   Destroy(): boolean {
@@ -154,6 +154,62 @@ export class wxSocketBase extends wxObject {
 
   WriteMsg(buffer: Pointer, nbytes: number): Pointer {
     return lib.symbols.wxSocketBase_WriteMsg(this._ptr, buffer, nbytes);
+  }
+
+  GetTimeout(): number {
+    return lib.symbols.wxSocketBase_GetTimeout(this._ptr);
+  }
+
+  IsClosed(): boolean {
+    return (lib.symbols.wxSocketBase_IsClosed(this._ptr) as number) !== 0;
+  }
+
+  LastReadCount(): number {
+    return lib.symbols.wxSocketBase_LastReadCount(this._ptr);
+  }
+
+  LastWriteCount(): number {
+    return lib.symbols.wxSocketBase_LastWriteCount(this._ptr);
+  }
+
+  GetLastIOSize(): number {
+    return lib.symbols.wxSocketBase_GetLastIOSize(this._ptr);
+  }
+
+  GetLastIOReadSize(): number {
+    return lib.symbols.wxSocketBase_GetLastIOReadSize(this._ptr);
+  }
+
+  GetLastIOWriteSize(): number {
+    return lib.symbols.wxSocketBase_GetLastIOWriteSize(this._ptr);
+  }
+
+  ShutdownOutput(): void {
+    lib.symbols.wxSocketBase_ShutdownOutput(this._ptr);
+  }
+
+  GetOption(level: number, option_name: number, option_value: Pointer, option_length: Pointer): boolean {
+    return (lib.symbols.wxSocketBase_GetOption(this._ptr, level, option_name, option_value, option_length) as number) !== 0;
+  }
+
+  SetOption(level: number, option_name: number, option_value: Pointer, option_length: number): boolean {
+    return (lib.symbols.wxSocketBase_SetOption(this._ptr, level, option_name, option_value, option_length) as number) !== 0;
+  }
+
+  GetEventHandler(): Pointer {
+    return lib.symbols.wxSocketBase_GetEventHandler(this._ptr);
+  }
+
+  Initialize(): boolean {
+    return (lib.symbols.wxSocketBase_Initialize() as number) !== 0;
+  }
+
+  Shutdown(): void {
+    lib.symbols.wxSocketBase_Shutdown();
+  }
+
+  IsInitialized(): boolean {
+    return (lib.symbols.wxSocketBase_IsInitialized() as number) !== 0;
   }
 
 }

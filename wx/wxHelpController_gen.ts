@@ -2,9 +2,9 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxObject } from "./wxObject_gen.ts";
+import { wxHelpControllerBase } from "./wxHelpControllerBase_gen.ts";
 
-export class wxHelpController extends wxObject {
+export class wxHelpController extends wxHelpControllerBase {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;
@@ -18,11 +18,11 @@ export class wxHelpController extends wxObject {
     return (lib.symbols.wxHelpController_LoadFile(this._ptr, file) as number) !== 0;
   }
 
-  DisplayContents(): boolean {
+  override DisplayContents(): boolean {
     return (lib.symbols.wxHelpController_DisplayContents(this._ptr) as number) !== 0;
   }
 
-  DisplaySection(section: number): boolean {
+  override DisplaySection(section: number): boolean {
     return (lib.symbols.wxHelpController_DisplaySection(this._ptr, section) as number) !== 0;
   }
 
@@ -34,7 +34,7 @@ export class wxHelpController extends wxObject {
     return (lib.symbols.wxHelpController_DisplayBlock(this._ptr, block) as number) !== 0;
   }
 
-  KeywordSearch(keyword: Pointer, mode: number): boolean {
+  override KeywordSearch(keyword: Pointer, mode: number): boolean {
     return (lib.symbols.wxHelpController_KeywordSearch(this._ptr, keyword, mode) as number) !== 0;
   }
 

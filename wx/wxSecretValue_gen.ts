@@ -26,6 +26,14 @@ export class wxSecretValue {
     this.Delete();
   }
 
+  GetSize(): bigint {
+    return lib.symbols.wxSecretValue_GetSize(this._ptr) as bigint;
+  }
+
+  WipeString(str: Pointer): void {
+    lib.symbols.wxSecretValue_WipeString(str);
+  }
+
   IsOk(): boolean {
     return (lib.symbols.wxSecretValue_IsOk(this._ptr) as number) !== 0;
   }

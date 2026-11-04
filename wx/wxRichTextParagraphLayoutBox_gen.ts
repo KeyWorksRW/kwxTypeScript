@@ -20,6 +20,10 @@ export class wxRichTextParagraphLayoutBox extends wxRichTextCompositeObject {
     this.Delete();
   }
 
+  GetLeafObjectAtPosition(position: bigint): Pointer {
+    return lib.symbols.wxRichTextParagraphLayoutBox_GetLeafObjectAtPosition(this._ptr, position);
+  }
+
   Clear(): void {
     lib.symbols.wxRichTextParagraphLayoutBox_Clear(this._ptr);
   }
@@ -122,6 +126,8 @@ export class wxRichTextParagraphLayoutBox extends wxRichTextCompositeObject {
 
 }
 
-export function createWxRichTextParagraphLayoutBox(parent: Pointer): number {
-    return lib.symbols.wxRichTextParagraphLayoutBox_Create(parent);
+export function createWxRichTextParagraphLayoutBox(parent: Pointer): wxRichTextParagraphLayoutBox | null {
+    const rawPtr = lib.symbols.wxRichTextParagraphLayoutBox_Create(parent);
+    if (rawPtr === null) return null;
+    return new wxRichTextParagraphLayoutBox(rawPtr);
 }

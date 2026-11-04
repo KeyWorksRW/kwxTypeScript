@@ -10,6 +10,18 @@ export class wxRibbonPage extends wxRibbonControl {
     return this._ptr;
   }
 
+  GetPanel(n: number): Pointer {
+    return lib.symbols.wxRibbonPage_GetPanel(this._ptr, n);
+  }
+
+  GetPanelCount(): bigint {
+    return lib.symbols.wxRibbonPage_GetPanelCount(this._ptr) as bigint;
+  }
+
+  SetSizeWithScrollButtonAdjustment(x: number, y: number, width: number, height: number): void {
+    lib.symbols.wxRibbonPage_SetSizeWithScrollButtonAdjustment(this._ptr, x, y, width, height);
+  }
+
   DismissExpandedPanel(): void {
     lib.symbols.wxRibbonPage_DismissExpandedPanel(this._ptr);
   }

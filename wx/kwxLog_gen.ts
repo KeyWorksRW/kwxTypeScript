@@ -24,6 +24,14 @@ export class kwxLog extends wxLog {
     lib.symbols.kwxLog_AddTraceMask(this._ptr, str);
   }
 
+  override SetOnDoLogRecord(pFunction: Pointer): void {
+    lib.symbols.kwxLog_SetOnDoLogRecord(this._ptr, pFunction);
+  }
+
+  override SetOnDoLogTextAtLevel(pFunction: Pointer): void {
+    lib.symbols.kwxLog_SetOnDoLogTextAtLevel(this._ptr, pFunction);
+  }
+
   override DontCreateOnDemand(): void {
     lib.symbols.kwxLog_DontCreateOnDemand(this._ptr);
   }

@@ -14,6 +14,14 @@ export class wxArtProvider extends wxObject {
     return lib.symbols.wxArtProvider_GetBitmap(id, client, width, height);
   }
 
+  Pop(): boolean {
+    return (lib.symbols.wxArtProvider_Pop() as number) !== 0;
+  }
+
+  Push(provider: Pointer): void {
+    lib.symbols.wxArtProvider_Push(provider);
+  }
+
   GetBitmapBundle(id: Pointer, client: Pointer, width: number, height: number): Pointer {
     return lib.symbols.wxArtProvider_GetBitmapBundle(id, client, width, height);
   }

@@ -10,6 +10,38 @@ export class wxAuiNotebook extends wxBookCtrlBase {
     return this._ptr;
   }
 
+  GetActiveTabCtrl(): Pointer {
+    return lib.symbols.wxAuiNotebook_GetActiveTabCtrl(this._ptr);
+  }
+
+  GetMainTabCtrl(): Pointer {
+    return lib.symbols.wxAuiNotebook_GetMainTabCtrl(this._ptr);
+  }
+
+  GetPageKind(pageIdx: bigint): number {
+    return lib.symbols.wxAuiNotebook_GetPageKind(this._ptr, pageIdx);
+  }
+
+  GetPagePosition(page: bigint): number {
+    return lib.symbols.wxAuiNotebook_GetPagePosition(this._ptr, page);
+  }
+
+  SetManagerFlags(flags: number): void {
+    lib.symbols.wxAuiNotebook_SetManagerFlags(this._ptr, flags);
+  }
+
+  SetPageKind(pageIdx: bigint, kind: number): boolean {
+    return (lib.symbols.wxAuiNotebook_SetPageKind(this._ptr, pageIdx, kind) as number) !== 0;
+  }
+
+  override SetWindowStyleFlag(style: bigint): void {
+    lib.symbols.wxAuiNotebook_SetWindowStyleFlag(this._ptr, style);
+  }
+
+  UnsplitAll(): void {
+    lib.symbols.wxAuiNotebook_UnsplitAll(this._ptr);
+  }
+
   override CreateFromDefault(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint): boolean {
     return (lib.symbols.wxAuiNotebook_CreateFromDefault(this._ptr, parent, id, x, y, width, height, style) as number) !== 0;
   }

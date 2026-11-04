@@ -54,8 +54,15 @@ export class wxAuiMDIParentFrame extends wxFrame {
     return lib.symbols.wxAuiMDIParentFrame_GetToolBar(this._ptr);
   }
 
-  CreateToolBar_2(style: number, id: number): Pointer {
-    return lib.symbols.wxAuiMDIParentFrame_CreateToolBar(this._ptr, style, id);
+  override CreateToolBar(style: number, id: number): Pointer;
+  override CreateToolBar(style: bigint, id: number): Pointer;
+  override CreateToolBar(style: number | bigint, id: number): Pointer {
+    if (arguments.length === 2 && typeof style === "number") {
+      return lib.symbols.wxAuiMDIParentFrame_CreateToolBar(this._ptr, style as number, id);
+    }
+    else {
+      return super.CreateToolBar(style as bigint, id);
+    }
   }
 
   GetNotebook(): Pointer {

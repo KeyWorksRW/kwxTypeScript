@@ -2,9 +2,9 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxPanel } from "./wxPanel_gen.ts";
+import { wxPreviewControlBar } from "./wxPreviewControlBar_gen.ts";
 
-export class kwxPreviewControlBar extends wxPanel {
+export class kwxPreviewControlBar extends wxPreviewControlBar {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;

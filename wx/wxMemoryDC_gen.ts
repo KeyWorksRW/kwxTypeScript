@@ -20,6 +20,10 @@ export class wxMemoryDC extends wxDC {
     this.Delete();
   }
 
+  SelectObjectAsSource(bmp: Pointer): void {
+    lib.symbols.wxMemoryDC_SelectObjectAsSource(this._ptr, bmp);
+  }
+
   SelectObject(bitmap: Pointer): void {
     lib.symbols.wxMemoryDC_SelectObject(this._ptr, bitmap);
   }

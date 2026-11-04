@@ -20,6 +20,10 @@ export class wxPreviewFrame extends wxFrame {
     this.Delete();
   }
 
+  InitializeWithModality(kind: number): void {
+    lib.symbols.wxPreviewFrame_InitializeWithModality(this._ptr, kind);
+  }
+
   Initialize(): void {
     lib.symbols.wxPreviewFrame_Initialize(this._ptr);
   }

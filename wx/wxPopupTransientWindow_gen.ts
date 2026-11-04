@@ -18,6 +18,22 @@ export class wxPopupTransientWindow extends wxPopupWindow {
     lib.symbols.wxPopupTransientWindow_Popup(this._ptr, focus);
   }
 
+  SetOnPopup(pFunction: Pointer): void {
+    lib.symbols.wxPopupTransientWindow_SetOnPopup(this._ptr, pFunction);
+  }
+
+  SetOnShow(pFunction: Pointer): void {
+    lib.symbols.wxPopupTransientWindow_SetOnShow(this._ptr, pFunction);
+  }
+
+  SetOnProcessLeftDown(pFunction: Pointer): void {
+    lib.symbols.wxPopupTransientWindow_SetOnProcessLeftDown(this._ptr, pFunction);
+  }
+
+  SetOnOnDismiss(pFunction: Pointer): void {
+    lib.symbols.wxPopupTransientWindow_SetOnOnDismiss(this._ptr, pFunction);
+  }
+
 }
 
 export function createWxPopupTransientWindow(parent: Pointer, flags: number): Pointer {

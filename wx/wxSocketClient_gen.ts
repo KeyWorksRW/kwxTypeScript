@@ -32,6 +32,10 @@ export class wxSocketClient extends wxSocketBase {
     return (lib.symbols.wxSocketClient_WaitOnConnect(this._ptr, seconds, millisecond) as number) !== 0;
   }
 
+  SetInitialSocketBuffers(receive_size: number, send_size: number): void {
+    lib.symbols.wxSocketClient_SetInitialSocketBuffers(this._ptr, receive_size, send_size);
+  }
+
 }
 
 export function createWxSocketClient(flags: number): wxSocketClient | null {

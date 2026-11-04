@@ -24,6 +24,14 @@ export class wxMenuItem extends wxObject {
     lib.symbols.wxMenuItem_Check(this._ptr, check ? 1 : 0);
   }
 
+  SetBitmaps(bmpChecked: Pointer, bmpUnchecked: Pointer): void {
+    lib.symbols.wxMenuItem_SetBitmaps(this._ptr, bmpChecked, bmpUnchecked);
+  }
+
+  SetDisabledBitmap(bmpDisabled: Pointer): void {
+    lib.symbols.wxMenuItem_SetDisabledBitmap(this._ptr, bmpDisabled);
+  }
+
   Enable(enable: boolean): void {
     lib.symbols.wxMenuItem_Enable(this._ptr, enable ? 1 : 0);
   }

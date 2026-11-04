@@ -26,6 +26,8 @@ export class wxRichTextBox extends wxRichTextParagraphLayoutBox {
 
 }
 
-export function createWxRichTextBox(parent: Pointer): number {
-    return lib.symbols.wxRichTextBox_Create(parent);
+export function createWxRichTextBox(parent: Pointer): wxRichTextBox | null {
+    const rawPtr = lib.symbols.wxRichTextBox_Create(parent);
+    if (rawPtr === null) return null;
+    return new wxRichTextBox(rawPtr);
 }

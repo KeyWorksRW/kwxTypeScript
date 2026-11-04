@@ -20,6 +20,118 @@ export class wxVariant extends wxObject {
     this.Delete();
   }
 
+  GetReal(): number {
+    return lib.symbols.wxVariant_GetReal(this._ptr);
+  }
+
+  SetName(name: Pointer): void {
+    lib.symbols.wxVariant_SetName(this._ptr, name);
+  }
+
+  GetName(): Pointer {
+    return lib.symbols.wxVariant_GetName(this._ptr);
+  }
+
+  IsNull(): boolean {
+    return (lib.symbols.wxVariant_IsNull(this._ptr) as number) !== 0;
+  }
+
+  IsType(type_: Pointer): boolean {
+    return (lib.symbols.wxVariant_IsType(this._ptr, type_) as number) !== 0;
+  }
+
+  MakeNull(): void {
+    lib.symbols.wxVariant_MakeNull(this._ptr);
+  }
+
+  Clear(): void {
+    lib.symbols.wxVariant_Clear(this._ptr);
+  }
+
+  SetBool(value: boolean): void {
+    lib.symbols.wxVariant_SetBool(this._ptr, value ? 1 : 0);
+  }
+
+  SetLong(value: bigint): void {
+    lib.symbols.wxVariant_SetLong(this._ptr, value);
+  }
+
+  SetDouble(value: number): void {
+    lib.symbols.wxVariant_SetDouble(this._ptr, value);
+  }
+
+  SetString(value: Pointer): void {
+    lib.symbols.wxVariant_SetString(this._ptr, value);
+  }
+
+  SetDateTime(value: Pointer): void {
+    lib.symbols.wxVariant_SetDateTime(this._ptr, value);
+  }
+
+  SetVoidPtr(value: Pointer): void {
+    lib.symbols.wxVariant_SetVoidPtr(this._ptr, value);
+  }
+
+  SetObject(value: Pointer): void {
+    lib.symbols.wxVariant_SetObject(this._ptr, value);
+  }
+
+  SetArrayString(value: Pointer): void {
+    lib.symbols.wxVariant_SetArrayString(this._ptr, value);
+  }
+
+  GetChar(): number {
+    return lib.symbols.wxVariant_GetChar(this._ptr);
+  }
+
+  GetVoidPtr(): Pointer {
+    return lib.symbols.wxVariant_GetVoidPtr(this._ptr);
+  }
+
+  GetWxObjectPtr(): Pointer {
+    return lib.symbols.wxVariant_GetWxObjectPtr(this._ptr);
+  }
+
+  GetArrayString(): Pointer {
+    return lib.symbols.wxVariant_GetArrayString(this._ptr);
+  }
+
+  GetCount(): number {
+    return lib.symbols.wxVariant_GetCount(this._ptr);
+  }
+
+  NullList(): void {
+    lib.symbols.wxVariant_NullList(this._ptr);
+  }
+
+  Append(value: Pointer): void {
+    lib.symbols.wxVariant_Append(this._ptr, value);
+  }
+
+  Insert(value: Pointer): void {
+    lib.symbols.wxVariant_Insert(this._ptr, value);
+  }
+
+  Member(value: Pointer): boolean {
+    return (lib.symbols.wxVariant_Member(this._ptr, value) as number) !== 0;
+  }
+
+  ClearList(): void {
+    lib.symbols.wxVariant_ClearList(this._ptr);
+  }
+
+  ConvertToLong(value: Pointer): boolean {
+    return (lib.symbols.wxVariant_ConvertToLong(this._ptr, value) as number) !== 0;
+  }
+
+  ConvertToDouble(value: Pointer): boolean {
+    return (lib.symbols.wxVariant_ConvertToDouble(this._ptr, value) as number) !== 0;
+  }
+
+  ConvertToBool(value: Pointer): boolean {
+    return (lib.symbols.wxVariant_ConvertToBool(this._ptr, value) as number) !== 0;
+  }
+
   GetType(): Pointer {
     return lib.symbols.wxVariant_GetType(this._ptr);
   }
@@ -44,6 +156,60 @@ export class wxVariant extends wxObject {
     return lib.symbols.wxVariant_GetDouble(this._ptr);
   }
 
+}
+
+export function createWxVariantFromBool(value: boolean, name: Pointer): wxVariant | null {
+    const rawPtr = lib.symbols.wxVariant_CreateFromBool(value ? 1 : 0, name);
+    if (rawPtr === null) return null;
+    return new wxVariant(rawPtr);
+}
+
+export function createWxVariantFromLong(value: bigint, name: Pointer): wxVariant | null {
+    const rawPtr = lib.symbols.wxVariant_CreateFromLong(value, name);
+    if (rawPtr === null) return null;
+    return new wxVariant(rawPtr);
+}
+
+export function createWxVariantFromDouble(value: number, name: Pointer): wxVariant | null {
+    const rawPtr = lib.symbols.wxVariant_CreateFromDouble(value, name);
+    if (rawPtr === null) return null;
+    return new wxVariant(rawPtr);
+}
+
+export function createWxVariantFromString(value: Pointer, name: Pointer): wxVariant | null {
+    const rawPtr = lib.symbols.wxVariant_CreateFromString(value, name);
+    if (rawPtr === null) return null;
+    return new wxVariant(rawPtr);
+}
+
+export function createWxVariantFromDateTime(value: Pointer, name: Pointer): wxVariant | null {
+    const rawPtr = lib.symbols.wxVariant_CreateFromDateTime(value, name);
+    if (rawPtr === null) return null;
+    return new wxVariant(rawPtr);
+}
+
+export function createWxVariantFromChar(value: number, name: Pointer): wxVariant | null {
+    const rawPtr = lib.symbols.wxVariant_CreateFromChar(value, name);
+    if (rawPtr === null) return null;
+    return new wxVariant(rawPtr);
+}
+
+export function createWxVariantFromVoidPtr(value: Pointer, name: Pointer): wxVariant | null {
+    const rawPtr = lib.symbols.wxVariant_CreateFromVoidPtr(value, name);
+    if (rawPtr === null) return null;
+    return new wxVariant(rawPtr);
+}
+
+export function createWxVariantFromObject(value: Pointer, name: Pointer): wxVariant | null {
+    const rawPtr = lib.symbols.wxVariant_CreateFromObject(value, name);
+    if (rawPtr === null) return null;
+    return new wxVariant(rawPtr);
+}
+
+export function createWxVariantFromArrayString(value: Pointer, name: Pointer): wxVariant | null {
+    const rawPtr = lib.symbols.wxVariant_CreateFromArrayString(value, name);
+    if (rawPtr === null) return null;
+    return new wxVariant(rawPtr);
 }
 
 export function createWxVariant(): wxVariant | null {

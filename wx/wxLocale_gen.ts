@@ -26,6 +26,66 @@ export class wxLocale {
     this.Delete();
   }
 
+  Init(language: number, flags: number): boolean {
+    return (lib.symbols.wxLocale_Init(this._ptr, language, flags) as number) !== 0;
+  }
+
+  InitFromName(name: Pointer, short_name: Pointer, locale: Pointer, load_default: boolean): boolean {
+    return (lib.symbols.wxLocale_InitFromName(this._ptr, name, short_name, locale, load_default ? 1 : 0) as number) !== 0;
+  }
+
+  GetLanguage(): number {
+    return lib.symbols.wxLocale_GetLanguage(this._ptr);
+  }
+
+  GetSysName(): Pointer {
+    return lib.symbols.wxLocale_GetSysName(this._ptr);
+  }
+
+  GetCanonicalName(): Pointer {
+    return lib.symbols.wxLocale_GetCanonicalName(this._ptr);
+  }
+
+  GetHeaderValue(header: Pointer, domain: Pointer): Pointer {
+    return lib.symbols.wxLocale_GetHeaderValue(this._ptr, header, domain);
+  }
+
+  GetPluralString(orig_string: Pointer, plural_string: Pointer, count: number, domain: Pointer): Pointer {
+    return lib.symbols.wxLocale_GetPluralString(this._ptr, orig_string, plural_string, count, domain);
+  }
+
+  GetSystemLanguage(): number {
+    return lib.symbols.wxLocale_GetSystemLanguage();
+  }
+
+  GetSystemEncoding(): number {
+    return lib.symbols.wxLocale_GetSystemEncoding();
+  }
+
+  GetSystemEncodingName(): Pointer {
+    return lib.symbols.wxLocale_GetSystemEncodingName();
+  }
+
+  GetInfo(index: number, category: number): Pointer {
+    return lib.symbols.wxLocale_GetInfo(index, category);
+  }
+
+  GetOSInfo(index: number, category: number): Pointer {
+    return lib.symbols.wxLocale_GetOSInfo(index, category);
+  }
+
+  IsAvailable(language: number): boolean {
+    return (lib.symbols.wxLocale_IsAvailable(language) as number) !== 0;
+  }
+
+  GetLanguageName(language: number): Pointer {
+    return lib.symbols.wxLocale_GetLanguageName(language);
+  }
+
+  GetLanguageCanonicalName(language: number): Pointer {
+    return lib.symbols.wxLocale_GetLanguageCanonicalName(language);
+  }
+
   AddCatalog(szDomain: Pointer, msgIdLanguage: number): number {
     return lib.symbols.wxLocale_AddCatalog(this._ptr, szDomain, msgIdLanguage);
   }

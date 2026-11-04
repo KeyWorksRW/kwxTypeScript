@@ -86,6 +86,8 @@ export class wxRichTextHeaderFooterData extends wxObject {
 
 }
 
-export function createWxRichTextHeaderFooterData(): number {
-    return lib.symbols.wxRichTextHeaderFooterData_Create();
+export function createWxRichTextHeaderFooterData(): wxRichTextHeaderFooterData | null {
+    const rawPtr = lib.symbols.wxRichTextHeaderFooterData_Create();
+    if (rawPtr === null) return null;
+    return new wxRichTextHeaderFooterData(rawPtr);
 }

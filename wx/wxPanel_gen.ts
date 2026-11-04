@@ -30,6 +30,14 @@ export class wxPanel extends wxWindow {
     lib.symbols.wxPanel_SetFocusIgnoringChildren(this._ptr);
   }
 
+  SetOnTransferDataFromWindow(pFunction: Pointer): void {
+    lib.symbols.wxPanel_SetOnTransferDataFromWindow(this._ptr, pFunction);
+  }
+
+  SetOnTransferDataToWindow(pFunction: Pointer): void {
+    lib.symbols.wxPanel_SetOnTransferDataToWindow(this._ptr, pFunction);
+  }
+
 }
 
 export function createWxPanel(parent: Pointer, id: number, left: number, top: number, width: number, height: number, style: number): wxPanel | null {

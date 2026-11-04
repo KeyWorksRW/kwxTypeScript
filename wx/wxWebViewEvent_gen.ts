@@ -14,6 +14,22 @@ export class wxWebViewEvent extends wxNotifyEvent {
     return lib.symbols.wxWebViewEvent_GetURL(this._ptr);
   }
 
+  GetMessageHandler(): Pointer {
+    return lib.symbols.wxWebViewEvent_GetMessageHandler(this._ptr);
+  }
+
+  GetTargetWindowFeatures(): Pointer {
+    return lib.symbols.wxWebViewEvent_GetTargetWindowFeatures(this._ptr);
+  }
+
+  IsError(): boolean {
+    return (lib.symbols.wxWebViewEvent_IsError(this._ptr) as number) !== 0;
+  }
+
+  IsTargetMainFrame(): boolean {
+    return (lib.symbols.wxWebViewEvent_IsTargetMainFrame(this._ptr) as number) !== 0;
+  }
+
   GetTarget(): Pointer {
     return lib.symbols.wxWebViewEvent_GetTarget(this._ptr);
   }
@@ -22,7 +38,7 @@ export class wxWebViewEvent extends wxNotifyEvent {
     return lib.symbols.wxWebViewEvent_GetNavigationAction(this._ptr);
   }
 
-  GetInt_0(): number {
+  override GetInt(): number {
     return lib.symbols.wxWebViewEvent_GetInt(this._ptr);
   }
 

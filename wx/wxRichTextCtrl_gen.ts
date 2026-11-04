@@ -14,6 +14,30 @@ export class wxRichTextCtrl extends wxControl {
     return lib.symbols.wxRichTextCtrl_GetBuffer(this._ptr);
   }
 
+  BeginSuppressUndo(): boolean {
+    return (lib.symbols.wxRichTextCtrl_BeginSuppressUndo(this._ptr) as number) !== 0;
+  }
+
+  EndSuppressUndo(): boolean {
+    return (lib.symbols.wxRichTextCtrl_EndSuppressUndo(this._ptr) as number) !== 0;
+  }
+
+  GetCommandProcessor(): Pointer {
+    return lib.symbols.wxRichTextCtrl_GetCommandProcessor(this._ptr);
+  }
+
+  WriteField(fieldType: Pointer, properties: Pointer, textAttr: Pointer): Pointer {
+    return lib.symbols.wxRichTextCtrl_WriteField(this._ptr, fieldType, properties, textAttr);
+  }
+
+  WriteTable(rows: number, cols: number, tableAttr: Pointer, cellAttr: Pointer): Pointer {
+    return lib.symbols.wxRichTextCtrl_WriteTable(this._ptr, rows, cols, tableAttr, cellAttr);
+  }
+
+  WriteTextBox(textAttr: Pointer): Pointer {
+    return lib.symbols.wxRichTextCtrl_WriteTextBox(this._ptr, textAttr);
+  }
+
   GetFocusObject(): Pointer {
     return lib.symbols.wxRichTextCtrl_GetFocusObject(this._ptr);
   }

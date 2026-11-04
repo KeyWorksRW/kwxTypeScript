@@ -20,6 +20,14 @@ export class wxIPV4address extends wxSockAddress {
     this.Delete();
   }
 
+  HostnameAddr(address: number): boolean {
+    return (lib.symbols.wxIPV4address_HostnameAddr(this._ptr, address) as number) !== 0;
+  }
+
+  BroadcastAddress(): boolean {
+    return (lib.symbols.wxIPV4address_BroadcastAddress(this._ptr) as number) !== 0;
+  }
+
 }
 
 export function createWxIPV4address(): wxIPV4address | null {

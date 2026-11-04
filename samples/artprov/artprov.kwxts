@@ -1,0 +1,446 @@
+// artprov.kwxts — kwxTypeScript port of wxSamples/src/artprov/arttest.cpp
+//
+// wxArtProvider sample: a frame with File/Help menus. "Resources browser"
+// opens wxArtBrowserDialog, which lists every wxArtID and previews it for the
+// selected wxArtClient.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\artprov\artprov.kwxts
+//
+// Known gap: the C++ "Plug-in art provider" item installs MyArtProvider, a
+// wxArtProvider subclass overriding CreateBitmap(). kwxTypeScript cannot
+// override a C++ virtual, and kwxArtProv's callback has a void return type, so
+// no bitmap can be returned to the art provider. The menu item is kept (and
+// reports the limitation instead of silently doing nothing); every other part
+// of the sample is implemented.
+
+declare const __dirname: string;
+
+import {
+    BITMAP_TYPE_XPM,
+    createWxClosure,
+    createWxFrame,
+    createWxIconLoad,
+    createWxMenu,
+    createWxMenuBar,
+    createWxString,
+    DEFAULT_FRAME_STYLE,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    exitMainLoop,
+    ICON_INFORMATION,
+    ID_ABOUT,
+    ID_ANY,
+    ID_EXIT,
+    ID_HIGHEST,
+    initAllImageHandlers,
+    initialize,
+    kwxMessageBox,
+    lib,
+    LogError,
+    LogMessage,
+    LogWarning,
+    OK,
+    readAndDeleteWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wxClosure,
+    wxCommandEvent,
+    wxFrame,
+    wxMenuBar,
+    wxNewId,
+    wxVersionString,
+} from "kwx";
+import { Callback, exit, Pointer } from "kwx/platform";
+
+import {
+    initArtBrowser,
+    showArtBrowserDialog,
+    shutdownArtBrowser,
+} from "./artbrowser.kwxts";
+
+// enum { ID_Quit = wxID_EXIT, ID_Logs = wxID_HIGHEST, ID_Browser, ID_PlugProvider }
+const ID_QUIT = ID_EXIT;
+const ID_LOGS = ID_HIGHEST;
+const ID_BROWSER = ID_HIGHEST + 1;
+const ID_PLUG_PROVIDER = ID_HIGHEST + 2;
+
+interface ArtProvFrameState
+{
+    readonly frame: wxFrame;
+    readonly menuBar: wxMenuBar;
+    readonly callbacks: Callback[];
+    readonly closures: wxClosure[];
+}
+
+function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** Call fn with a temporary wxString and release it on every path. */
+function withString(text: string, fn: (ptr: Pointer) => void): void
+{
+    const value = createWxString(text);
+    try
+    {
+        fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** MyFrame::OnLogs() */
+function showLoggingOutput(): void
+{
+    withString("Some information.", (message) => LogMessage(message));
+    withString("This is an error.", (message) => LogError(message));
+    withString("A warning.", (message) => LogWarning(message));
+    withString("Yet another error.", (message) => LogError(message));
+
+    // wxLog::GetActiveTarget()->Flush()
+    const target = lib.symbols.wxLog_GetActiveTarget();
+    if (target)
+    {
+        lib.symbols.wxLog_Flush(target);
+    }
+
+    withString(
+        "Check/uncheck 'File/Plug-in art provider' and try again.",
+        (message) => LogMessage(message),
+    );
+}
+
+/** MyFrame::OnAbout() */
+function showAbout(frame: wxFrame): void
+{
+    const version = readAndDeleteWxString(wxVersionString());
+    const message =
+        "This is the about dialog of wxArtProvider sample.\nWelcome to " + version;
+
+    withString(message, (text) =>
+    {
+        withString("About wxArtProvider sample", (caption) =>
+        {
+            kwxMessageBox(
+                text,
+                caption,
+                OK | ICON_INFORMATION,
+                frame.ptr,
+                -1,
+                -1,
+            );
+        });
+    });
+}
+
+/**
+ * MyFrame::OnPlugProvider() — wxArtProvider::Push(new MyArtProvider) / Pop().
+ *
+ * MyArtProvider overrides CreateBitmap() to return the sample's info/error/
+ * warning/question XPMs for the wxART_MESSAGE_BOX client. The binding exposes
+ * wxArtProvider as a non-subclassable generated wrapper, and the kwxArtProv
+ * bridge discards the callback result, so this feature cannot be reproduced.
+ * Keep the check item for UI fidelity, reset it, and explain the gap.
+ */
+function installPluginProvider(
+    state: ArtProvFrameState,
+    event: wxCommandEvent,
+): void
+{
+    if (!event.IsChecked())
+    {
+        return;
+    }
+
+    state.menuBar.Check(ID_PLUG_PROVIDER, false);
+    withString(
+        "The custom art provider cannot be installed: this binding cannot " +
+            "subclass wxArtProvider::CreateBitmap().",
+        (message) =>
+        {
+            withString("wxArtProvider sample", (caption) =>
+            {
+                kwxMessageBox(message, caption, OK, state.frame.ptr, -1, -1);
+            });
+        },
+    );
+}
+
+/** MyFrame constructor: frame, icon and menu bar. */
+function createArtProviderFrame(): ArtProvFrameState | null
+{
+    const title = createWxString("wxArtProvider sample");
+    const frame = createWxFrame(
+        null,
+        ID_ANY,
+        title.ptr,
+        50,
+        50,
+        450,
+        340,
+        DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+
+    if (!frame)
+    {
+        return null;
+    }
+
+    // SetIcon(wxICON(sample)) — the C++ sample compiles ../../sample.xpm in as
+    // a resource. kwxTypeScript has no XPM resources, so the same XPM file is
+    // loaded at run time through wxIcon::Load(..., wxBITMAP_TYPE_XPM).
+    const iconPath = createWxString(samplePath("sample.xpm"));
+    const icon = createWxIconLoad(
+        iconPath.ptr,
+        BigInt(BITMAP_TYPE_XPM),
+        -1,
+        -1,
+    );
+    iconPath.Delete();
+    if (icon)
+    {
+        if (icon.IsOk())
+        {
+            frame.SetIcon(icon.ptr);
+        }
+        icon.Delete();
+    }
+
+    const emptyTitle = createWxString("");
+    const fileMenu = createWxMenu(emptyTitle.ptr, 0n);
+    const helpMenu = createWxMenu(emptyTitle.ptr, 0n);
+    emptyTitle.Delete();
+
+    if (!fileMenu || !helpMenu)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
+    withString("&About\tF1", (text) =>
+    {
+        withString("Show about dialog", (help) =>
+        {
+            helpMenu.Append(ID_ABOUT, text, help, false);
+        });
+    });
+
+    // menuFile->AppendCheckItem(ID_PlugProvider, "&Plug-in art provider\tCtrl-P",
+    //                           "Enable custom art provider");
+    withString("&Plug-in art provider\tCtrl-P", (text) =>
+    {
+        withString("Enable custom art provider", (help) =>
+        {
+            fileMenu.AppendCheckItem(ID_PLUG_PROVIDER, text, help);
+        });
+    });
+    fileMenu.AppendSeparator();
+
+    // menuFile->Append(ID_Logs, "&Logging test\tCtrl-L", ...);
+    withString("&Logging test\tCtrl-L", (text) =>
+    {
+        withString("Show some logging output", (help) =>
+        {
+            fileMenu.Append(ID_LOGS, text, help, false);
+        });
+    });
+
+    // menuFile->Append(ID_Browser, "&Resources browser\tCtrl-R", ...);
+    withString("&Resources browser\tCtrl-R", (text) =>
+    {
+        withString("Browse all available icons", (help) =>
+        {
+            fileMenu.Append(ID_BROWSER, text, help, false);
+        });
+    });
+    fileMenu.AppendSeparator();
+
+    // menuFile->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");
+    withString("E&xit\tAlt-X", (text) =>
+    {
+        withString("Quit this program", (help) =>
+        {
+            fileMenu.Append(ID_QUIT, text, help, false);
+        });
+    });
+
+    const menuBar = createWxMenuBar(0);
+    if (!menuBar)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    withString("&File", (text) => menuBar.Append(fileMenu.ptr, text));
+    withString("&Help", (text) => menuBar.Append(helpMenu.ptr, text));
+    frame.SetMenuBar(menuBar.ptr);
+
+    return { frame, menuBar, callbacks: [], closures: [] };
+}
+
+function connectMenu(
+    state: ArtProvFrameState,
+    id: number,
+    callback: Callback,
+): void
+{
+    const closure = createWxClosure(callback.pointer, null)!;
+    state.closures.push(closure);
+    lib.symbols.wxEvtHandler_Connect(
+        state.frame.ptr,
+        id,
+        id,
+        EVT_MENU,
+        closure.ptr,
+    );
+}
+
+/** MyFrame's event table. */
+function connectFrameEvents(state: ArtProvFrameState): void
+{
+    const quitCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            // MyFrame::OnQuit(): Close(true)
+            state.frame.Close(true);
+        },
+    );
+    state.callbacks.push(quitCallback);
+    connectMenu(state, ID_QUIT, quitCallback);
+
+    const logsCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            showLoggingOutput();
+        },
+    );
+    state.callbacks.push(logsCallback);
+    connectMenu(state, ID_LOGS, logsCallback);
+
+    const aboutCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            showAbout(state.frame);
+        },
+    );
+    state.callbacks.push(aboutCallback);
+    connectMenu(state, ID_ABOUT, aboutCallback);
+
+    const browserCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            showArtBrowserDialog(state.frame);
+        },
+    );
+    state.callbacks.push(browserCallback);
+    connectMenu(state, ID_BROWSER, browserCallback);
+
+    const pluginCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            installPluginProvider(state, new wxCommandEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(pluginCallback);
+    connectMenu(state, ID_PLUG_PROVIDER, pluginCallback);
+
+    // No EVT_CLOSE_WINDOW in the C++ event table; the canonical bootstrap uses
+    // exitMainLoop() instead of letting the last frame tear the loop down.
+    const closeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            exitMainLoop();
+        },
+    );
+    state.callbacks.push(closeCallback);
+    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
+    state.closures.push(closeClosure);
+    lib.symbols.wxEvtHandler_Connect(
+        state.frame.ptr,
+        ID_ANY,
+        ID_ANY,
+        EVT_CLOSE_WINDOW,
+        closeClosure.ptr,
+    );
+}
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("artprov");
+
+    // The C++ sample compiles its XPM data in. Loading the two XPM files at run
+    // time needs the XPM image handler.
+    initAllImageHandlers();
+
+    // const int SIZE_CHOICE_ID = ::wxNewId();
+    initArtBrowser(wxNewId());
+
+    const state = createArtProviderFrame();
+    if (!state)
+    {
+        console.error("artprov: failed to create the main frame");
+        shutdownArtBrowser();
+        shutdown();
+        return 1;
+    }
+
+    connectFrameEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+    shutdownArtBrowser();
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

@@ -26,6 +26,14 @@ export class wxMutex {
     this.Delete();
   }
 
+  IsOk(): boolean {
+    return (lib.symbols.wxMutex_IsOk(this._ptr) as number) !== 0;
+  }
+
+  LockTimeout(milliseconds: number): number {
+    return lib.symbols.wxMutex_LockTimeout(this._ptr, milliseconds);
+  }
+
   Lock(): number {
     return lib.symbols.wxMutex_Lock(this._ptr);
   }

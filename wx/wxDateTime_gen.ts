@@ -26,6 +26,110 @@ export class wxDateTime {
     this.Delete();
   }
 
+  SetFromTimeT(ticks: bigint): void {
+    lib.symbols.wxDateTime_SetFromTimeT(this._ptr, ticks);
+  }
+
+  SetFromJDN(julian_day: number): void {
+    lib.symbols.wxDateTime_SetFromJDN(this._ptr, julian_day);
+  }
+
+  GetFirstWeekDay(first_week_day: Pointer): boolean {
+    return (lib.symbols.wxDateTime_GetFirstWeekDay(first_week_day) as number) !== 0;
+  }
+
+  GetEnglishMonthName(month: number, flags: number): Pointer {
+    return lib.symbols.wxDateTime_GetEnglishMonthName(month, flags);
+  }
+
+  GetEnglishWeekDayName(weekday: number, flags: number): Pointer {
+    return lib.symbols.wxDateTime_GetEnglishWeekDayName(weekday, flags);
+  }
+
+  GetDateOnly(ref: Pointer): void {
+    lib.symbols.wxDateTime_GetDateOnly(this._ptr, ref);
+  }
+
+  SetToYearDay(year_day: number): void {
+    lib.symbols.wxDateTime_SetToYearDay(this._ptr, year_day);
+  }
+
+  GetYearDay(year_day: number, ref: Pointer): void {
+    lib.symbols.wxDateTime_GetYearDay(this._ptr, year_day, ref);
+  }
+
+  GetJulianDayNumber(): number {
+    return lib.symbols.wxDateTime_GetJulianDayNumber(this._ptr);
+  }
+
+  GetModifiedJulianDayNumber(): number {
+    return lib.symbols.wxDateTime_GetModifiedJulianDayNumber(this._ptr);
+  }
+
+  GetRataDie(): number {
+    return lib.symbols.wxDateTime_GetRataDie(this._ptr);
+  }
+
+  FromTimezone(time_zone: number, no_dst: number, ref: Pointer): void {
+    lib.symbols.wxDateTime_FromTimezone(this._ptr, time_zone, no_dst, ref);
+  }
+
+  MakeFromTimezone(time_zone: number, no_dst: number): void {
+    lib.symbols.wxDateTime_MakeFromTimezone(this._ptr, time_zone, no_dst);
+  }
+
+  ToUTC(no_dst: number, ref: Pointer): void {
+    lib.symbols.wxDateTime_ToUTC(this._ptr, no_dst, ref);
+  }
+
+  MakeUTC(no_dst: number): void {
+    lib.symbols.wxDateTime_MakeUTC(this._ptr, no_dst);
+  }
+
+  FromUTC(no_dst: number, ref: Pointer): void {
+    lib.symbols.wxDateTime_FromUTC(this._ptr, no_dst, ref);
+  }
+
+  MakeFromUTC(no_dst: number): void {
+    lib.symbols.wxDateTime_MakeFromUTC(this._ptr, no_dst);
+  }
+
+  GetCenturyTZ(time_zone: number): number {
+    return lib.symbols.wxDateTime_GetCenturyTZ(this._ptr, time_zone);
+  }
+
+  GetWeekBasedYear(time_zone: number): number {
+    return lib.symbols.wxDateTime_GetWeekBasedYear(this._ptr, time_zone);
+  }
+
+  FormatISOCombined(separator: number): Pointer {
+    return lib.symbols.wxDateTime_FormatISOCombined(this._ptr, separator);
+  }
+
+  ParseISODate(text: Pointer): boolean {
+    return (lib.symbols.wxDateTime_ParseISODate(this._ptr, text) as number) !== 0;
+  }
+
+  ParseISOTime(text: Pointer): boolean {
+    return (lib.symbols.wxDateTime_ParseISOTime(this._ptr, text) as number) !== 0;
+  }
+
+  ParseISOCombined(text: Pointer, separator: number): boolean {
+    return (lib.symbols.wxDateTime_ParseISOCombined(this._ptr, text, separator) as number) !== 0;
+  }
+
+  DiffAsDateSpan(datetime: Pointer, ref: Pointer): void {
+    lib.symbols.wxDateTime_DiffAsDateSpan(this._ptr, datetime, ref);
+  }
+
+  SetFromDOS(dos_date_time: number): void {
+    lib.symbols.wxDateTime_SetFromDOS(this._ptr, dos_date_time);
+  }
+
+  GetAsDOS(): number {
+    return lib.symbols.wxDateTime_GetAsDOS(this._ptr);
+  }
+
   AddDate(diff: Pointer, ref: Pointer): void {
     lib.symbols.wxDateTime_AddDate(this._ptr, diff, ref);
   }
@@ -382,6 +486,18 @@ export class wxDateTime {
     return lib.symbols.wxDateTime_wxDateTime(hi_long, lo_long);
   }
 
+}
+
+export function createWxDateTimeFromTimeT(ticks: bigint): wxDateTime | null {
+    const rawPtr = lib.symbols.wxDateTime_CreateFromTimeT(ticks);
+    if (rawPtr === null) return null;
+    return new wxDateTime(rawPtr);
+}
+
+export function createWxDateTimeFromJDN(julian_day: number): wxDateTime | null {
+    const rawPtr = lib.symbols.wxDateTime_CreateFromJDN(julian_day);
+    if (rawPtr === null) return null;
+    return new wxDateTime(rawPtr);
 }
 
 export function createWxDateTime(): wxDateTime | null {

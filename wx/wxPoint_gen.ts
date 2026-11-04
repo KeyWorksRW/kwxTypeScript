@@ -26,6 +26,10 @@ export class wxPoint {
     this.Delete();
   }
 
+  IsFullySpecified(): boolean {
+    return (lib.symbols.wxPoint_IsFullySpecified(this._ptr) as number) !== 0;
+  }
+
   GetX(): number {
     return lib.symbols.wxPoint_GetX(this._ptr);
   }

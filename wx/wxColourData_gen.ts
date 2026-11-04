@@ -20,6 +20,10 @@ export class wxColourData extends wxObject {
     this.Delete();
   }
 
+  SetChooseAlpha(flag: boolean): void {
+    lib.symbols.wxColourData_SetChooseAlpha(this._ptr, flag ? 1 : 0);
+  }
+
   GetChooseFull(): boolean {
     return (lib.symbols.wxColourData_GetChooseFull(this._ptr) as number) !== 0;
   }

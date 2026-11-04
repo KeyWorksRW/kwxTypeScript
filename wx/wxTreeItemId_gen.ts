@@ -34,6 +34,10 @@ export class wxTreeItemId {
     return lib.symbols.wxTreeItemId_GetValue(this._ptr);
   }
 
+  Unset(): void {
+    lib.symbols.wxTreeItemId_Unset(this._ptr);
+  }
+
   IsOk(): boolean {
     return (lib.symbols.wxTreeItemId_IsOk(this._ptr) as number) !== 0;
   }

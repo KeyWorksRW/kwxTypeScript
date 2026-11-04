@@ -2,21 +2,21 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxDataObject } from "./wxDataObject_gen.ts";
+import { wxDataObjectSimple } from "./wxDataObjectSimple_gen.ts";
 
-export class wxFileDataObject extends wxDataObject {
+export class wxFileDataObject extends wxDataObjectSimple {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
     if (this._disposed) return;
     this._disposed = true;
     lib.symbols.FileDataObject_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
   }
 

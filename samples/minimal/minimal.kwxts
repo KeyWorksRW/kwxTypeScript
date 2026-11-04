@@ -1,0 +1,237 @@
+// minimal.kwxts — kwxTypeScript port of wxSamples/src/minimal/minimal.cpp
+//
+// The minimal wxWidgets sample: a frame titled "Minimal wxWidgets App" with a
+// File menu (Exit) and a Help menu (About), a two-pane status bar, and an
+// About message box reporting the wxWidgets version and the OS description.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\minimal\minimal.kwxts
+//
+// Substitution: the C++ sample sets the frame icon from a compiled-in XPM
+// resource (SetIcon(wxICON(sample))). No icon asset ships next to this port and
+// the TypeScript runtime has no resource loader, so the icon is not set. This
+// is the only difference from the original.
+
+import {
+    createWxClosure,
+    createWxFrame,
+    createWxMenu,
+    createWxMenuBar,
+    createWxString,
+    DEFAULT_FRAME_STYLE,
+    EVT_MENU,
+    ICON_INFORMATION,
+    ID_ABOUT,
+    ID_ANY,
+    ID_EXIT,
+    initialize,
+    kwxMessageBox,
+    lib,
+    OK,
+    readAndDeleteWxString,
+    readWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wxVersionString,
+    wxFrame,
+    wxClosure,
+} from "kwx";
+import { Callback, exit, Pointer } from "kwx/platform";
+
+/** enum { Minimal_Quit = wxID_EXIT, Minimal_About = wxID_ABOUT } */
+const MINIMAL_QUIT = ID_EXIT;
+const MINIMAL_ABOUT = ID_ABOUT;
+
+/** Call fn with a temporary wxString and release it on every path. */
+function withString(text: string, fn: (ptr: Pointer) => void): void
+{
+    const value = createWxString(text);
+    try
+    {
+        fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** MyFrame::OnQuit — Close(true) */
+function quitFrame(frame: wxFrame): void
+{
+    frame.Close(true);
+}
+
+/** MyFrame::OnAbout — wxMessageBox(wxString::Format(...), ...) */
+function showAbout(frame: wxFrame): void
+{
+    // wxVERSION_STRING — wxVersionString() hands ownership to the caller.
+    const version = readAndDeleteWxString(wxVersionString());
+
+    // wxGetOsDescription() is not exported as a string helper here; the
+    // generated free function returns a borrowed pointer that the binding
+    // converts with readWxString (it must not be deleted).
+    const osPointer = lib.symbols.wxGetOsDescription();
+    const osDescription = osPointer ? readWxString(osPointer) : "";
+
+    const message =
+        "Welcome to " + version + "!\n" +
+        "\n" +
+        "This is the minimal wxWidgets sample\n" +
+        "running under " + osDescription + ".";
+
+    withString(message, (text) =>
+    {
+        withString("About wxWidgets minimal sample", (caption) =>
+        {
+            kwxMessageBox(text, caption, OK | ICON_INFORMATION, frame.ptr, -1, -1);
+        });
+    });
+}
+
+interface MinimalFrameState
+{
+    readonly frame: wxFrame;
+    readonly callbacks: Callback[];
+    readonly closures: wxClosure[];
+}
+
+/** MyFrame constructor — frame, File/Help menus and a two-pane status bar. */
+function createMinimalFrame(): MinimalFrameState | null
+{
+    const title = createWxString("Minimal wxWidgets App");
+    const frame = createWxFrame(null, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE);
+    title.Delete();
+
+    if (!frame)
+    {
+        return null;
+    }
+
+    // wxMenu *fileMenu = new wxMenu; wxMenu *helpMenu = new wxMenu;
+    const noTitle = createWxString("");
+    const fileMenu = createWxMenu(noTitle.ptr, 0n);
+    const helpMenu = createWxMenu(noTitle.ptr, 0n);
+    noTitle.Delete();
+
+    if (fileMenu && helpMenu)
+    {
+        // fileMenu->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+        withString("E&xit\tAlt-X", (label) =>
+        {
+            withString("Quit this program", (help) =>
+            {
+                fileMenu.Append(MINIMAL_QUIT, label, help, false);
+            });
+        });
+
+        // helpMenu->Append(Minimal_About, "&About\tF1", "Show about dialog");
+        withString("&About\tF1", (label) =>
+        {
+            withString("Show about dialog", (help) =>
+            {
+                helpMenu.Append(MINIMAL_ABOUT, label, help, false);
+            });
+        });
+
+        // menuBar->Append(fileMenu, "&File"); menuBar->Append(helpMenu, "&Help");
+        // SetMenuBar(menuBar);
+        const menuBar = createWxMenuBar(0);
+        if (menuBar)
+        {
+            withString("&File", (menuLabel) => menuBar.Append(fileMenu.ptr, menuLabel));
+            withString("&Help", (menuLabel) => menuBar.Append(helpMenu.ptr, menuLabel));
+            frame.SetMenuBar(menuBar.ptr);
+        }
+    }
+
+    // CreateStatusBar(2); SetStatusText("Welcome to wxWidgets!");
+    frame.CreateStatusBar(2, 0, -1);
+    withString("Welcome to wxWidgets!", (statusText) => frame.SetStatusText(statusText, 0));
+
+    return { frame, callbacks: [], closures: [] };
+}
+
+/** The event table: EVT_MENU(Minimal_Quit), EVT_MENU(Minimal_About). */
+function connectMinimalEvents(state: MinimalFrameState): void
+{
+    const quitCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            quitFrame(state.frame);
+        },
+    );
+    const quitClosure = createWxClosure(quitCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(
+        state.frame.ptr,
+        MINIMAL_QUIT,
+        MINIMAL_QUIT,
+        EVT_MENU,
+        quitClosure.ptr,
+    );
+
+    const aboutCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            showAbout(state.frame);
+        },
+    );
+    const aboutClosure = createWxClosure(aboutCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(
+        state.frame.ptr,
+        MINIMAL_ABOUT,
+        MINIMAL_ABOUT,
+        EVT_MENU,
+        aboutClosure.ptr,
+    );
+
+    state.callbacks.push(quitCallback, aboutCallback);
+    state.closures.push(quitClosure, aboutClosure);
+}
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("minimal");
+
+    const state = createMinimalFrame();
+    if (!state)
+    {
+        console.error("minimal: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    connectMinimalEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

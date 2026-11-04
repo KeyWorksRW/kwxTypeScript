@@ -14,6 +14,10 @@ export class wxSystemSettings extends wxObject {
     lib.symbols.wxSystemSettings_GetColour(index, ref);
   }
 
+  GetAppearance(): Pointer {
+    return lib.symbols.wxSystemSettings_GetAppearance();
+  }
+
   GetFont(index: number, ref: Pointer): void {
     lib.symbols.wxSystemSettings_GetFont(index, ref);
   }
@@ -24,6 +28,10 @@ export class wxSystemSettings extends wxObject {
 
   GetScreenType(): number {
     return lib.symbols.wxSystemSettings_GetScreenType();
+  }
+
+  SelectLightDark(colForLight: Pointer, colForDark: Pointer): Pointer {
+    return lib.symbols.wxSystemSettings_SelectLightDark(colForLight, colForDark);
   }
 
 }

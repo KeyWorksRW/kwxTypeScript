@@ -20,6 +20,10 @@ export class wxLogWindow extends wxLogInterposer {
     this.Delete();
   }
 
+  Show(bShow: boolean): void {
+    lib.symbols.wxLogWindow_Show(this._ptr, bShow ? 1 : 0);
+  }
+
   GetFrame(): Pointer {
     return lib.symbols.wxLogWindow_GetFrame(this._ptr);
   }

@@ -22,6 +22,10 @@ export class wxBoxSizer extends wxSizer {
     return lib.symbols.wxBoxSizer_CalcMin(this._ptr);
   }
 
+  override AddSpacer(size: number): Pointer {
+    return lib.symbols.wxBoxSizer_AddSpacer(this._ptr, size);
+  }
+
   GetOrientation(): number {
     return lib.symbols.wxBoxSizer_GetOrientation(this._ptr);
   }

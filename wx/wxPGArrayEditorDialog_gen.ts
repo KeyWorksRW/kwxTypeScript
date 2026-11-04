@@ -14,6 +14,10 @@ export class wxPGArrayEditorDialog extends wxDialog {
     lib.symbols.wxPGArrayEditorDialog_SetDialogValue(this._ptr, value);
   }
 
+  Init(): void {
+    lib.symbols.wxPGArrayEditorDialog_Init(this._ptr);
+  }
+
   GetDialogValue(): Pointer {
     return lib.symbols.wxPGArrayEditorDialog_GetDialogValue(this._ptr);
   }

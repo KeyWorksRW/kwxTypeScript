@@ -14,4 +14,12 @@ export class wxMenuEvent extends wxEvent {
     return lib.symbols.wxMenuEvent_GetMenuId(this._ptr);
   }
 
+  GetMenu(): Pointer {
+    return lib.symbols.wxMenuEvent_GetMenu(this._ptr);
+  }
+
+  IsPopup(): boolean {
+    return (lib.symbols.wxMenuEvent_IsPopup(this._ptr) as number) !== 0;
+  }
+
 }

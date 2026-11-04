@@ -42,6 +42,34 @@ export class wxWindow extends wxEvtHandler {
     return lib.symbols.wxWindow_NewControlId(count);
   }
 
+  CentreOnParent(dir: number): void {
+    lib.symbols.wxWindow_CentreOnParent(this._ptr, dir);
+  }
+
+  FindWindowById(winid: bigint, parent: Pointer): Pointer {
+    return lib.symbols.wxWindow_FindWindowById(winid, parent);
+  }
+
+  FindWindowByName(name: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxWindow_FindWindowByName(name, parent);
+  }
+
+  GetContainingSizer(): Pointer {
+    return lib.symbols.wxWindow_GetContainingSizer(this._ptr);
+  }
+
+  GetMinSizeFromKnownDirection(direction: number, size: number, availableOtherDir: number): Pointer {
+    return lib.symbols.wxWindow_GetMinSizeFromKnownDirection(this._ptr, direction, size, availableOtherDir);
+  }
+
+  IsTransparentBackgroundSupported(reason: Pointer): boolean {
+    return (lib.symbols.wxWindow_IsTransparentBackgroundSupported(this._ptr, reason) as number) !== 0;
+  }
+
+  PostSizeEvent(): void {
+    lib.symbols.wxWindow_PostSizeEvent(this._ptr);
+  }
+
   UnreserveControlId(id: number, count: number): void {
     lib.symbols.wxWindow_UnreserveControlId(id, count);
   }
@@ -674,7 +702,7 @@ export class wxWindow extends wxEvtHandler {
     return lib.symbols.wxWindow_GetChildren(this._ptr, result, count);
   }
 
-  GetClientData(): Pointer {
+  override GetClientData(): Pointer {
     return lib.symbols.wxWindow_GetClientData(this._ptr);
   }
 
@@ -790,8 +818,8 @@ export class wxWindow extends wxEvtHandler {
     return lib.symbols.wxWindow_GetVirtualSize(this._ptr);
   }
 
-  GetWindowStyleFlag(): number {
-    return lib.symbols.wxWindow_GetWindowStyleFlag(this._ptr);
+  GetWindowStyleFlag(): bigint {
+    return lib.symbols.wxWindow_GetWindowStyleFlag(this._ptr) as bigint;
   }
 
   HasFlag(flag: number): boolean {

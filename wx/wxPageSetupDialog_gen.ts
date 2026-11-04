@@ -10,6 +10,10 @@ export class wxPageSetupDialog extends wxObject {
     return this._ptr;
   }
 
+  GetPageSetupDialogData(): Pointer {
+    return lib.symbols.wxPageSetupDialog_GetPageSetupDialogData(this._ptr);
+  }
+
   GetPageSetupData(ref: Pointer): void {
     lib.symbols.wxPageSetupDialog_GetPageSetupData(this._ptr, ref);
   }

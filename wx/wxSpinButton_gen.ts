@@ -10,6 +10,10 @@ export class wxSpinButton extends wxControl {
     return this._ptr;
   }
 
+  SetIncrement(value: number): void {
+    lib.symbols.wxSpinButton_SetIncrement(this._ptr, value);
+  }
+
   GetMax(): number {
     return lib.symbols.wxSpinButton_GetMax(this._ptr);
   }

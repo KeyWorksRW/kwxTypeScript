@@ -10,6 +10,28 @@ export class wxRadioBox extends wxControl {
     return this._ptr;
   }
 
+  override Enable(n: number, enable: boolean): boolean;
+  override Enable(enable: boolean): boolean;
+  override Enable(n: number | boolean, enable?: boolean): boolean {
+    if (arguments.length === 2) {
+      return (lib.symbols.wxRadioBox_Enable(this._ptr, n as number, enable ? 1 : 0) as number) !== 0;
+    }
+    else {
+      return super.Enable(n as boolean);
+    }
+  }
+
+  override Show(n: number, show: boolean): boolean;
+  override Show(): boolean;
+  override Show(n?: number, show?: boolean): boolean {
+    if (arguments.length === 2) {
+      return (lib.symbols.wxRadioBox_Show(this._ptr, n as number, show ? 1 : 0) as number) !== 0;
+    }
+    else {
+      return super.Show();
+    }
+  }
+
   EnableItem(item: number, enable: boolean): void {
     lib.symbols.wxRadioBox_EnableItem(this._ptr, item, enable ? 1 : 0);
   }

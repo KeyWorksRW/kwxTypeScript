@@ -24,6 +24,10 @@ export class wxImage extends wxObject {
     return (lib.symbols.wxImage_CreateFromXPMData(this._ptr, data) as number) !== 0;
   }
 
+  GetAlpha(x: number, y: number): number {
+    return lib.symbols.wxImage_GetAlpha(this._ptr, x, y);
+  }
+
   Clear(value: number): void {
     lib.symbols.wxImage_Clear(this._ptr, value);
   }

@@ -10,6 +10,18 @@ export class wxRibbonGallery extends wxRibbonControl {
     return this._ptr;
   }
 
+  GetItemClientObject(item: Pointer): Pointer {
+    return lib.symbols.wxRibbonGallery_GetItemClientObject(this._ptr, item);
+  }
+
+  SetItemClientObject(item: Pointer, data: Pointer): void {
+    lib.symbols.wxRibbonGallery_SetItemClientObject(this._ptr, item, data);
+  }
+
+  SetKeyTip(keytip: Pointer): void {
+    lib.symbols.wxRibbonGallery_SetKeyTip(this._ptr, keytip);
+  }
+
   Append(bitmap: Pointer, id: number): Pointer {
     return lib.symbols.wxRibbonGallery_Append(this._ptr, bitmap, id);
   }

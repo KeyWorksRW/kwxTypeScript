@@ -20,6 +20,18 @@ export class wxPropertyGridInterface {
     return lib.symbols.wxPropertyGridInterface_GetPropertyByName(this._ptr, name);
   }
 
+  GetProperty(name: Pointer): Pointer {
+    return lib.symbols.wxPropertyGridInterface_GetProperty(this._ptr, name);
+  }
+
+  RegisterAdditionalEditors(): void {
+    lib.symbols.wxPropertyGridInterface_RegisterAdditionalEditors();
+  }
+
+  SetPropertyAttributeAll(attrName: Pointer, value: Pointer): void {
+    lib.symbols.wxPropertyGridInterface_SetPropertyAttributeAll(this._ptr, attrName, value);
+  }
+
   GetPropertyByName2(name: Pointer, subname: Pointer): Pointer {
     return lib.symbols.wxPropertyGridInterface_GetPropertyByName2(this._ptr, name, subname);
   }

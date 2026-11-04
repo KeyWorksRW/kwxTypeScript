@@ -26,6 +26,22 @@ export class wxDisplay {
     this.Delete();
   }
 
+  ChangeMode(mode: Pointer): boolean {
+    return (lib.symbols.wxDisplay_ChangeMode(this._ptr, mode) as number) !== 0;
+  }
+
+  GetDepth(): number {
+    return lib.symbols.wxDisplay_GetDepth(this._ptr);
+  }
+
+  GetRawPPI(): Pointer {
+    return lib.symbols.wxDisplay_GetRawPPI(this._ptr);
+  }
+
+  ResetMode(): void {
+    lib.symbols.wxDisplay_ResetMode(this._ptr);
+  }
+
   GetClientArea(x: Pointer, y: Pointer, width: Pointer, height: Pointer): void {
     lib.symbols.wxDisplay_GetClientArea(this._ptr, x, y, width, height);
   }

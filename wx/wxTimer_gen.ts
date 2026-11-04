@@ -20,6 +20,14 @@ export class wxTimer extends wxEvtHandler {
     this.Delete();
   }
 
+  SetOwner(owner: Pointer, timerid: number): void {
+    lib.symbols.wxTimer_SetOwner(this._ptr, owner, timerid);
+  }
+
+  StartOnce(milliseconds: number): boolean {
+    return (lib.symbols.wxTimer_StartOnce(this._ptr, milliseconds) as number) !== 0;
+  }
+
   GetInterval(): number {
     return lib.symbols.wxTimer_GetInterval(this._ptr);
   }
@@ -38,6 +46,10 @@ export class wxTimer extends wxEvtHandler {
 
   Stop(): void {
     lib.symbols.wxTimer_Stop(this._ptr);
+  }
+
+  SetOnNotify(pFunction: Pointer): void {
+    lib.symbols.wxTimer_SetOnNotify(this._ptr, pFunction);
   }
 
 }

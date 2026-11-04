@@ -16,6 +16,74 @@ export class wxRect {
     return this._ptr;
   }
 
+  CentreIn(r: Pointer, dir: number): Pointer {
+    return lib.symbols.wxRect_CentreIn(this._ptr, r, dir);
+  }
+
+  Contains(x: number, y: number): boolean {
+    return (lib.symbols.wxRect_Contains(this._ptr, x, y) as number) !== 0;
+  }
+
+  Deflate(dx: number, dy: number): Pointer {
+    return lib.symbols.wxRect_Deflate(this._ptr, dx, dy);
+  }
+
+  GetBottom(): number {
+    return lib.symbols.wxRect_GetBottom(this._ptr);
+  }
+
+  GetBottomLeft(): Pointer {
+    return lib.symbols.wxRect_GetBottomLeft(this._ptr);
+  }
+
+  GetLeft(): number {
+    return lib.symbols.wxRect_GetLeft(this._ptr);
+  }
+
+  GetLeftTop(): Pointer {
+    return lib.symbols.wxRect_GetLeftTop(this._ptr);
+  }
+
+  GetPosition(): Pointer {
+    return lib.symbols.wxRect_GetPosition(this._ptr);
+  }
+
+  GetRight(): number {
+    return lib.symbols.wxRect_GetRight(this._ptr);
+  }
+
+  GetSize(): Pointer {
+    return lib.symbols.wxRect_GetSize(this._ptr);
+  }
+
+  GetTop(): number {
+    return lib.symbols.wxRect_GetTop(this._ptr);
+  }
+
+  GetTopLeft(): Pointer {
+    return lib.symbols.wxRect_GetTopLeft(this._ptr);
+  }
+
+  GetTopRight(): Pointer {
+    return lib.symbols.wxRect_GetTopRight(this._ptr);
+  }
+
+  Inflate(dx: number, dy: number): Pointer {
+    return lib.symbols.wxRect_Inflate(this._ptr, dx, dy);
+  }
+
+  Offset(dx: number, dy: number): void {
+    lib.symbols.wxRect_Offset(this._ptr, dx, dy);
+  }
+
+  SetLeft(left: number): void {
+    lib.symbols.wxRect_SetLeft(this._ptr, left);
+  }
+
+  SetPosition(p: Pointer): void {
+    lib.symbols.wxRect_SetPosition(this._ptr, p);
+  }
+
   DeleteItem(pObject: Pointer): void {
     if (this._disposed) return;
     lib.symbols.wxRect_Delete(pObject);

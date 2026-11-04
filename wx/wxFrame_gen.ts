@@ -54,8 +54,15 @@ export class wxFrame extends wxTopLevelWindow {
     lib.symbols.wxFrame_SetTitle(this._ptr, text);
   }
 
-  ShowFullScreen_2(show: boolean, style: number): boolean {
-    return (lib.symbols.wxFrame_ShowFullScreen(this._ptr, show ? 1 : 0, style) as number) !== 0;
+  override ShowFullScreen(show: boolean, style: number): boolean;
+  override ShowFullScreen(show: boolean, style: bigint): boolean;
+  override ShowFullScreen(show: boolean, style: number | bigint): boolean {
+    if (arguments.length === 2 && typeof style === "number") {
+      return (lib.symbols.wxFrame_ShowFullScreen(this._ptr, show ? 1 : 0, style as number) as number) !== 0;
+    }
+    else {
+      return super.ShowFullScreen(show, style as bigint);
+    }
   }
 
   GetClientAreaOriginPoint(): Pointer {
@@ -76,6 +83,10 @@ export class wxFrame extends wxTopLevelWindow {
 
   override IsClientAreaChild(child: Pointer): boolean {
     return (lib.symbols.wxFrame_IsClientAreaChild(this._ptr, child) as number) !== 0;
+  }
+
+  MSWGetTaskBarButton(): Pointer {
+    return lib.symbols.wxFrame_MSWGetTaskBarButton(this._ptr);
   }
 
   CreateStatusBar(number: number, style: number, id: number): Pointer {

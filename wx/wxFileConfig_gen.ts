@@ -2,24 +2,48 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxConfigBase } from "./wxConfigBase_gen.ts";
 
-export class wxFileConfig {
-  protected readonly _ptr: Pointer;
-  protected _disposed: boolean = false;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
+export class wxFileConfig extends wxConfigBase {
+  /** Returns the underlying native pointer. */
+  override get ptr(): Pointer {
+    return this._ptr;
   }
 
-  /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
-    return this._ptr;
+  GetGlobalFileName(file_name: Pointer): Pointer {
+    return lib.symbols.wxFileConfig_GetGlobalFileName(file_name);
+  }
+
+  GetLocalFileName(file_name: Pointer, style: number): Pointer {
+    return lib.symbols.wxFileConfig_GetLocalFileName(file_name, style);
+  }
+
+  SetUmask(mode: number): void {
+    lib.symbols.wxFileConfig_SetUmask(this._ptr, mode);
+  }
+
+  Save(stream: Pointer): boolean {
+    return (lib.symbols.wxFileConfig_Save(this._ptr, stream) as number) !== 0;
+  }
+
+  EnableAutoSave(): void {
+    lib.symbols.wxFileConfig_EnableAutoSave(this._ptr);
+  }
+
+  DisableAutoSave(): void {
+    lib.symbols.wxFileConfig_DisableAutoSave(this._ptr);
   }
 
 }
 
 export function createWxFileConfig(inp: Pointer): wxFileConfig | null {
     const rawPtr = lib.symbols.wxFileConfig_Create(inp);
+    if (rawPtr === null) return null;
+    return new wxFileConfig(rawPtr);
+}
+
+export function createWxFileConfigFor(app_name: Pointer, vendor_name: Pointer, local_filename: Pointer, global_filename: Pointer, style: bigint): wxFileConfig | null {
+    const rawPtr = lib.symbols.wxFileConfig_CreateFor(app_name, vendor_name, local_filename, global_filename, style);
     if (rawPtr === null) return null;
     return new wxFileConfig(rawPtr);
 }

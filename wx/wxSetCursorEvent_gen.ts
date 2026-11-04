@@ -14,6 +14,10 @@ export class wxSetCursorEvent extends wxEvent {
     return lib.symbols.wxSetCursorEvent_GetCursor(this._ptr);
   }
 
+  GetPosition(): Pointer {
+    return lib.symbols.wxSetCursorEvent_GetPosition(this._ptr);
+  }
+
   GetX(): number {
     return lib.symbols.wxSetCursorEvent_GetX(this._ptr);
   }

@@ -10,6 +10,18 @@ export class wxPropertyGridManager extends wxPanel {
     return this._ptr;
   }
 
+  GetColumnCount(page: number): number {
+    return lib.symbols.wxPropertyGridManager_GetColumnCount(this._ptr, page);
+  }
+
+  SetColumnCount(colCount: number, page: number): void {
+    lib.symbols.wxPropertyGridManager_SetColumnCount(this._ptr, colCount, page);
+  }
+
+  SetColumnTitle(idx: number, title: Pointer): void {
+    lib.symbols.wxPropertyGridManager_SetColumnTitle(this._ptr, idx, title);
+  }
+
   AddPage(label: Pointer, bmp: Pointer): Pointer {
     return lib.symbols.wxPropertyGridManager_AddPage(this._ptr, label, bmp);
   }

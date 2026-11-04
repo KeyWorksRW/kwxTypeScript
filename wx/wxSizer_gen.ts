@@ -154,8 +154,8 @@ export class wxSizer extends wxObject {
     lib.symbols.wxSizer_SetSizeHints(this._ptr, window);
   }
 
-  AddSpacer(size: number): void {
-    lib.symbols.wxSizer_AddSpacer(this._ptr, size);
+  AddSpacer(size: number): Pointer {
+    return lib.symbols.wxSizer_AddSpacer(this._ptr, size);
   }
 
   AddStretchSpacer(size: number): void {

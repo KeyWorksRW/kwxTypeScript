@@ -26,6 +26,14 @@ export class wxCondition {
     this.Delete();
   }
 
+  IsOk(): boolean {
+    return (lib.symbols.wxCondition_IsOk(this._ptr) as number) !== 0;
+  }
+
+  WaitTimeout(milliseconds: number): number {
+    return lib.symbols.wxCondition_WaitTimeout(this._ptr, milliseconds);
+  }
+
   Broadcast(): void {
     lib.symbols.wxCondition_Broadcast(this._ptr);
   }

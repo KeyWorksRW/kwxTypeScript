@@ -26,6 +26,26 @@ export class wxBitmapBundle {
     this.Delete();
   }
 
+  FromResources(name: Pointer): Pointer {
+    return lib.symbols.wxBitmapBundle_FromResources(name);
+  }
+
+  GetBitmap(size: Pointer): Pointer {
+    return lib.symbols.wxBitmapBundle_GetBitmap(this._ptr, size);
+  }
+
+  GetDefaultSize(): Pointer {
+    return lib.symbols.wxBitmapBundle_GetDefaultSize(this._ptr);
+  }
+
+  IsOk(): boolean {
+    return (lib.symbols.wxBitmapBundle_IsOk(this._ptr) as number) !== 0;
+  }
+
+  FromSVGFile(file: Pointer, width: number, height: number): Pointer {
+    return lib.symbols.wxBitmapBundle_FromSVGFile(file, width, height);
+  }
+
 }
 
 export function createWxBitmapBundleFromData(data: Pointer, size: bigint, bitmap_type: number): wxBitmapBundle | null {

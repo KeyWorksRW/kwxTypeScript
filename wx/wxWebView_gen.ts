@@ -10,12 +10,84 @@ export class wxWebView extends wxControl {
     return this._ptr;
   }
 
-  RegisterHandler(handler: Pointer): number {
-    return lib.symbols.wxWebView_RegisterHandler(this._ptr, handler);
+  RegisterHandler(handler: Pointer): void {
+    lib.symbols.wxWebView_RegisterHandler(this._ptr, handler);
   }
 
   New(parent: Pointer, id: number, url: Pointer, x: number, y: number, width: number, height: number, backend: Pointer, style: number): Pointer {
     return lib.symbols.wxWebView_New(parent, id, url, x, y, width, height, backend, style);
+  }
+
+  AddScriptMessageHandler(name: Pointer): boolean {
+    return (lib.symbols.wxWebView_AddScriptMessageHandler(this._ptr, name) as number) !== 0;
+  }
+
+  AddUserScript(javascript: Pointer, injectionTime: number): boolean {
+    return (lib.symbols.wxWebView_AddUserScript(this._ptr, javascript, injectionTime) as number) !== 0;
+  }
+
+  AreBrowserAcceleratorKeysEnabled(): boolean {
+    return (lib.symbols.wxWebView_AreBrowserAcceleratorKeysEnabled(this._ptr) as number) !== 0;
+  }
+
+  CanRedo(): boolean {
+    return (lib.symbols.wxWebView_CanRedo(this._ptr) as number) !== 0;
+  }
+
+  CanSetZoomType(type_: number): boolean {
+    return (lib.symbols.wxWebView_CanSetZoomType(this._ptr, type_) as number) !== 0;
+  }
+
+  CanUndo(): boolean {
+    return (lib.symbols.wxWebView_CanUndo(this._ptr) as number) !== 0;
+  }
+
+  ClearBrowsingData(): void {
+    lib.symbols.wxWebView_ClearBrowsingData(this._ptr);
+  }
+
+  ClearHistory(): void {
+    lib.symbols.wxWebView_ClearHistory(this._ptr);
+  }
+
+  DeleteSelection(): void {
+    lib.symbols.wxWebView_DeleteSelection(this._ptr);
+  }
+
+  EnableHistory(enable: boolean): void {
+    lib.symbols.wxWebView_EnableHistory(this._ptr, enable ? 1 : 0);
+  }
+
+  GetUserAgent(): Pointer {
+    return lib.symbols.wxWebView_GetUserAgent(this._ptr);
+  }
+
+  NewConfiguration(backend: Pointer): Pointer {
+    return lib.symbols.wxWebView_NewConfiguration(backend);
+  }
+
+  Redo(): void {
+    lib.symbols.wxWebView_Redo(this._ptr);
+  }
+
+  SelectAll(): void {
+    lib.symbols.wxWebView_SelectAll(this._ptr);
+  }
+
+  SetProxy(proxy: Pointer): boolean {
+    return (lib.symbols.wxWebView_SetProxy(this._ptr, proxy) as number) !== 0;
+  }
+
+  SetUserAgent(userAgent: Pointer): boolean {
+    return (lib.symbols.wxWebView_SetUserAgent(this._ptr, userAgent) as number) !== 0;
+  }
+
+  ShowDevTools(): boolean {
+    return (lib.symbols.wxWebView_ShowDevTools(this._ptr) as number) !== 0;
+  }
+
+  Undo(): void {
+    lib.symbols.wxWebView_Undo(this._ptr);
   }
 
   LoadURL(url: Pointer): void {

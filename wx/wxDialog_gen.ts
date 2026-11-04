@@ -14,6 +14,17 @@ export class wxDialog extends wxTopLevelWindow {
     lib.symbols.wxDialog_ShowWindowModal(this._ptr);
   }
 
+  override Show(show: boolean): boolean;
+  override Show(): boolean;
+  override Show(show?: boolean): boolean {
+    if (arguments.length === 1) {
+      return (lib.symbols.wxDialog_Show(this._ptr, show ? 1 : 0) as number) !== 0;
+    }
+    else {
+      return super.Show();
+    }
+  }
+
   GetModality(): number {
     return lib.symbols.wxDialog_GetModality(this._ptr);
   }

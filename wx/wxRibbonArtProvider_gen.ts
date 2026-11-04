@@ -30,6 +30,22 @@ export class wxRibbonArtProvider {
     return lib.symbols.wxRibbonArtProvider_Clone(this._ptr);
   }
 
+  GetColor(id: number): Pointer {
+    return lib.symbols.wxRibbonArtProvider_GetColor(this._ptr, id);
+  }
+
+  GetColourScheme(primary: Pointer, secondary: Pointer, tertiary: Pointer): void {
+    lib.symbols.wxRibbonArtProvider_GetColourScheme(this._ptr, primary, secondary, tertiary);
+  }
+
+  SetColor(id: number, color: Pointer): void {
+    lib.symbols.wxRibbonArtProvider_SetColor(this._ptr, id, color);
+  }
+
+  SetColourScheme(primary: Pointer, secondary: Pointer, tertiary: Pointer): void {
+    lib.symbols.wxRibbonArtProvider_SetColourScheme(this._ptr, primary, secondary, tertiary);
+  }
+
   GetColour(id: number): Pointer {
     return lib.symbols.wxRibbonArtProvider_GetColour(this._ptr, id);
   }

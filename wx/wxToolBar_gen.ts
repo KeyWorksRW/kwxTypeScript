@@ -2,9 +2,9 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxControl } from "./wxControl_gen.ts";
+import { wxToolBarBase } from "./wxToolBarBase_gen.ts";
 
-export class wxToolBar extends wxControl {
+export class wxToolBar extends wxToolBarBase {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;
@@ -48,23 +48,30 @@ export class wxToolBar extends wxControl {
     return lib.symbols.wxToolBar_GetToolByPos(this._ptr, pos);
   }
 
-  SetRows(nRows: number): void {
+  override SetRows(nRows: number): void {
     lib.symbols.wxToolBar_SetRows(this._ptr, nRows);
   }
 
-  AddControl(ctrl: Pointer): boolean {
-    return (lib.symbols.wxToolBar_AddControl(this._ptr, ctrl) as number) !== 0;
+  override AddControl(ctrl: Pointer): boolean;
+  override AddControl(control: Pointer, label: Pointer): Pointer;
+  override AddControl(ctrl: Pointer, label?: Pointer): boolean | Pointer {
+    if (arguments.length === 1) {
+      return (lib.symbols.wxToolBar_AddControl(this._ptr, ctrl) as number) !== 0;
+    }
+    else {
+      return super.AddControl(ctrl, label as Pointer);
+    }
   }
 
-  AddSeparator(): void {
-    lib.symbols.wxToolBar_AddSeparator(this._ptr);
+  override AddSeparator(): Pointer {
+    return lib.symbols.wxToolBar_AddSeparator(this._ptr);
   }
 
-  AddTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer, data: Pointer): void {
-    lib.symbols.wxToolBar_AddTool(this._ptr, toolid, label, bitmap, bmpDisabled, kind, shortHelp, longHelp, data);
+  override AddTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer, data: Pointer): Pointer {
+    return lib.symbols.wxToolBar_AddTool(this._ptr, toolid, label, bitmap, bmpDisabled, kind, shortHelp, longHelp, data);
   }
 
-  DeleteTool(id: number): boolean {
+  override DeleteTool(id: number): boolean {
     return (lib.symbols.wxToolBar_DeleteTool(this._ptr, id) as number) !== 0;
   }
 
@@ -72,7 +79,7 @@ export class wxToolBar extends wxControl {
     return (lib.symbols.wxToolBar_DeleteToolByPos(this._ptr, pos) as number) !== 0;
   }
 
-  EnableTool(id: number, enable: boolean): void {
+  override EnableTool(id: number, enable: boolean): void {
     lib.symbols.wxToolBar_EnableTool(this._ptr, id, enable ? 1 : 0);
   }
 
@@ -88,7 +95,7 @@ export class wxToolBar extends wxControl {
     return lib.symbols.wxToolBar_GetToolClientData(this._ptr, id);
   }
 
-  GetToolEnabled(id: number): boolean {
+  override GetToolEnabled(id: number): boolean {
     return (lib.symbols.wxToolBar_GetToolEnabled(this._ptr, id) as number) !== 0;
   }
 
@@ -96,7 +103,7 @@ export class wxToolBar extends wxControl {
     return lib.symbols.wxToolBar_GetToolLongHelp(this._ptr, id);
   }
 
-  GetToolPacking(): number {
+  override GetToolPacking(): number {
     return lib.symbols.wxToolBar_GetToolPacking(this._ptr);
   }
 
@@ -108,7 +115,7 @@ export class wxToolBar extends wxControl {
     return lib.symbols.wxToolBar_GetToolSize(this._ptr);
   }
 
-  GetToolState(id: number): boolean {
+  override GetToolState(id: number): boolean {
     return (lib.symbols.wxToolBar_GetToolState(this._ptr, id) as number) !== 0;
   }
 
@@ -120,20 +127,27 @@ export class wxToolBar extends wxControl {
     lib.symbols.wxToolBar_InsertSeparator(this._ptr, pos);
   }
 
-  Realize(): boolean {
+  override Realize(): boolean {
     return (lib.symbols.wxToolBar_Realize(this._ptr) as number) !== 0;
   }
 
-  RemoveTool(id: number): void {
-    lib.symbols.wxToolBar_RemoveTool(this._ptr, id);
+  override RemoveTool(id: number): Pointer {
+    return lib.symbols.wxToolBar_RemoveTool(this._ptr, id);
   }
 
-  SetMargins(x: number, y: number): void {
+  override SetMargins(x: number, y: number): void {
     lib.symbols.wxToolBar_SetMargins(this._ptr, x, y);
   }
 
-  SetToolBitmapSize(x: number, y: number): void {
-    lib.symbols.wxToolBar_SetToolBitmapSize(this._ptr, x, y);
+  override SetToolBitmapSize(x: number, y: number): void;
+  override SetToolBitmapSize(size: Pointer): void;
+  override SetToolBitmapSize(x: number | Pointer, y?: number): void {
+    if (arguments.length === 2) {
+      lib.symbols.wxToolBar_SetToolBitmapSize(this._ptr, x as number, y as number);
+    }
+    else {
+      super.SetToolBitmapSize(x as Pointer);
+    }
   }
 
   SetToolClientData(id: number, data: Pointer): void {
@@ -148,27 +162,41 @@ export class wxToolBar extends wxControl {
     lib.symbols.wxToolBar_SetToolPacking(this._ptr, packing);
   }
 
-  SetToolSeparation(separation: number): void {
+  override SetToolSeparation(separation: number): void {
     lib.symbols.wxToolBar_SetToolSeparation(this._ptr, separation);
   }
 
-  SetToolShortHelp(id: number, str: Pointer): void {
+  override SetToolShortHelp(id: number, str: Pointer): void {
     lib.symbols.wxToolBar_SetToolShortHelp(this._ptr, id, str);
   }
 
-  ToggleTool(id: number, toggle: boolean): void {
+  override ToggleTool(id: number, toggle: boolean): void {
     lib.symbols.wxToolBar_ToggleTool(this._ptr, id, toggle ? 1 : 0);
   }
 
-  AddCheckTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer): void {
-    lib.symbols.wxToolBar_AddCheckTool(this._ptr, toolid, label, bitmap, bmpDisabled, shortHelp, longHelp);
+  override AddCheckTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer): void;
+  override AddCheckTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer, clientData: Pointer): Pointer;
+  override AddCheckTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer, clientData?: Pointer): void | Pointer {
+    if (arguments.length === 6) {
+      lib.symbols.wxToolBar_AddCheckTool(this._ptr, toolid, label, bitmap, bmpDisabled, shortHelp, longHelp);
+    }
+    else {
+      return super.AddCheckTool(toolid, label, bitmap, bmpDisabled, shortHelp, longHelp, clientData as Pointer);
+    }
   }
 
-  AddRadioTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer): void {
-    lib.symbols.wxToolBar_AddRadioTool(this._ptr, toolid, label, bitmap, bmpDisabled, shortHelp, longHelp);
+  override AddRadioTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer): void;
+  override AddRadioTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer, clientData: Pointer): Pointer;
+  override AddRadioTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer, clientData?: Pointer): void | Pointer {
+    if (arguments.length === 6) {
+      lib.symbols.wxToolBar_AddRadioTool(this._ptr, toolid, label, bitmap, bmpDisabled, shortHelp, longHelp);
+    }
+    else {
+      return super.AddRadioTool(toolid, label, bitmap, bmpDisabled, shortHelp, longHelp, clientData as Pointer);
+    }
   }
 
-  AddStretchableSpace(): Pointer {
+  override AddStretchableSpace(): Pointer {
     return lib.symbols.wxToolBar_AddStretchableSpace(this._ptr);
   }
 
@@ -176,8 +204,15 @@ export class wxToolBar extends wxControl {
     return lib.symbols.wxToolBar_InsertStretchableSpace(this._ptr, pos);
   }
 
-  InsertTool(pos: bigint, toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer): void {
-    lib.symbols.wxToolBar_InsertTool(this._ptr, pos, toolid, label, bitmap, bmpDisabled, kind, shortHelp, longHelp);
+  override InsertTool(pos: bigint, toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer): void;
+  override InsertTool(pos: bigint, toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer, clientData: Pointer): Pointer;
+  override InsertTool(pos: bigint, toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer, clientData?: Pointer): void | Pointer {
+    if (arguments.length === 8) {
+      lib.symbols.wxToolBar_InsertTool(this._ptr, pos, toolid, label, bitmap, bmpDisabled, kind, shortHelp, longHelp);
+    }
+    else {
+      return super.InsertTool(pos, toolid, label, bitmap, bmpDisabled, kind, shortHelp, longHelp, clientData as Pointer);
+    }
   }
 
   ClearTools(): void {
@@ -204,11 +239,11 @@ export class wxToolBar extends wxControl {
     return lib.symbols.wxToolBar_GetToolSeparation(this._ptr);
   }
 
-  GetToolsCount(): number {
-    return lib.symbols.wxToolBar_GetToolsCount(this._ptr);
+  override GetToolsCount(): bigint {
+    return lib.symbols.wxToolBar_GetToolsCount(this._ptr) as bigint;
   }
 
-  IsVertical(): boolean {
+  override IsVertical(): boolean {
     return (lib.symbols.wxToolBar_IsVertical(this._ptr) as number) !== 0;
   }
 
@@ -220,8 +255,8 @@ export class wxToolBar extends wxControl {
     lib.symbols.wxToolBar_SetToolDisabledBitmap(this._ptr, id, bitmap);
   }
 
-  SetDropdownMenu(id: number, menu: Pointer): void {
-    lib.symbols.wxToolBar_SetDropdownMenu(this._ptr, id, menu);
+  override SetDropdownMenu(id: number, menu: Pointer): boolean {
+    return (lib.symbols.wxToolBar_SetDropdownMenu(this._ptr, id, menu) as number) !== 0;
   }
 
   SetToggle(id: number, toggle: boolean): void {

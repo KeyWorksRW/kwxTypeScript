@@ -42,6 +42,70 @@ export class wxListView extends wxListCtrl {
     lib.symbols.wxListView_SetColumnImage(this._ptr, col, image);
   }
 
+  Init(): void {
+    lib.symbols.wxComboPopup_Init(this._ptr);
+  }
+
+  DestroyPopup(): void {
+    lib.symbols.wxComboPopup_DestroyPopup(this._ptr);
+  }
+
+  GetControl(): Pointer {
+    return lib.symbols.wxComboPopup_GetControl(this._ptr);
+  }
+
+  OnPopup(): void {
+    lib.symbols.wxComboPopup_OnPopup(this._ptr);
+  }
+
+  OnDismiss(): void {
+    lib.symbols.wxComboPopup_OnDismiss(this._ptr);
+  }
+
+  SetStringValue(value: Pointer): void {
+    lib.symbols.wxComboPopup_SetStringValue(this._ptr, value);
+  }
+
+  GetStringValue(): Pointer {
+    return lib.symbols.wxComboPopup_GetStringValue(this._ptr);
+  }
+
+  PaintComboControl(dc: Pointer, x: number, y: number, width: number, height: number): void {
+    lib.symbols.wxComboPopup_PaintComboControl(this._ptr, dc, x, y, width, height);
+  }
+
+  OnComboKeyEvent(event: Pointer): void {
+    lib.symbols.wxComboPopup_OnComboKeyEvent(this._ptr, event);
+  }
+
+  OnComboCharEvent(event: Pointer): void {
+    lib.symbols.wxComboPopup_OnComboCharEvent(this._ptr, event);
+  }
+
+  OnComboDoubleClick(): void {
+    lib.symbols.wxComboPopup_OnComboDoubleClick(this._ptr);
+  }
+
+  GetAdjustedSize(minWidth: number, prefHeight: number, maxHeight: number, width: Pointer, height: Pointer): void {
+    lib.symbols.wxComboPopup_GetAdjustedSize(this._ptr, minWidth, prefHeight, maxHeight, width, height);
+  }
+
+  LazyCreate(): boolean {
+    return (lib.symbols.wxComboPopup_LazyCreate(this._ptr) as number) !== 0;
+  }
+
+  Dismiss(): void {
+    lib.symbols.wxComboPopup_Dismiss(this._ptr);
+  }
+
+  IsCreated(): boolean {
+    return (lib.symbols.wxComboPopup_IsCreated(this._ptr) as number) !== 0;
+  }
+
+  GetComboCtrl(): Pointer {
+    return lib.symbols.wxComboPopup_GetComboCtrl(this._ptr);
+  }
+
 }
 
 export function createWxListView(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): wxListView | null {

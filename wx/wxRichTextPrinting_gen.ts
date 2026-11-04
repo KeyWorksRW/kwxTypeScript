@@ -20,6 +20,14 @@ export class wxRichTextPrinting extends wxObject {
     this.Delete();
   }
 
+  PreviewBuffer(buffer: Pointer): boolean {
+    return (lib.symbols.wxRichTextPrinting_PreviewBuffer(this._ptr, buffer) as number) !== 0;
+  }
+
+  PrintBuffer(buffer: Pointer, showPrintDialog: boolean): boolean {
+    return (lib.symbols.wxRichTextPrinting_PrintBuffer(this._ptr, buffer, showPrintDialog ? 1 : 0) as number) !== 0;
+  }
+
   PreviewFile(richTextFile: Pointer): boolean {
     return (lib.symbols.wxRichTextPrinting_PreviewFile(this._ptr, richTextFile) as number) !== 0;
   }
@@ -126,6 +134,8 @@ export class wxRichTextPrinting extends wxObject {
 
 }
 
-export function createWxRichTextPrinting(name: Pointer, parentWindow: Pointer): number {
-    return lib.symbols.wxRichTextPrinting_Create(name, parentWindow);
+export function createWxRichTextPrinting(name: Pointer, parentWindow: Pointer): wxRichTextPrinting | null {
+    const rawPtr = lib.symbols.wxRichTextPrinting_Create(name, parentWindow);
+    if (rawPtr === null) return null;
+    return new wxRichTextPrinting(rawPtr);
 }

@@ -10,6 +10,10 @@ export class wxTextEntryDialog extends wxDialog {
     return this._ptr;
   }
 
+  SetHint(hint: Pointer): void {
+    lib.symbols.wxTextEntryDialog_SetHint(this._ptr, hint);
+  }
+
   GetValue(): Pointer {
     return lib.symbols.wxTextEntryDialog_GetValue(this._ptr);
   }

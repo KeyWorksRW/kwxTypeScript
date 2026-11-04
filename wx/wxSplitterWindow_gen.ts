@@ -10,6 +10,14 @@ export class wxSplitterWindow extends wxWindow {
     return this._ptr;
   }
 
+  SashHitTest(x: number, y: number): boolean {
+    return (lib.symbols.wxSplitterWindow_SashHitTest(this._ptr, x, y) as number) !== 0;
+  }
+
+  SizeWindows(): void {
+    lib.symbols.wxSplitterWindow_SizeWindows(this._ptr);
+  }
+
   GetBorderSize(): number {
     return lib.symbols.wxSplitterWindow_GetBorderSize(this._ptr);
   }

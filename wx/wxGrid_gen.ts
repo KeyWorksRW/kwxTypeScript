@@ -14,6 +14,14 @@ export class wxGrid extends wxScrolledWindow {
     return (lib.symbols.wxGrid_AppendCols(this._ptr, numCols, updateLabels ? 1 : 0) as number) !== 0;
   }
 
+  HideRowLabels(): void {
+    lib.symbols.wxGrid_HideRowLabels(this._ptr);
+  }
+
+  SetColFormatDate(col: number, format: Pointer): void {
+    lib.symbols.wxGrid_SetColFormatDate(this._ptr, col, format);
+  }
+
   AppendRows(numRows: number, updateLabels: boolean): boolean {
     return (lib.symbols.wxGrid_AppendRows(this._ptr, numRows, updateLabels ? 1 : 0) as number) !== 0;
   }

@@ -10,6 +10,42 @@ export class wxRibbonBar extends wxRibbonControl {
     return this._ptr;
   }
 
+  AddPageHighlight(page: bigint, highlight: boolean): void {
+    lib.symbols.wxRibbonBar_AddPageHighlight(this._ptr, page, highlight ? 1 : 0);
+  }
+
+  ArePanelsShown(): boolean {
+    return (lib.symbols.wxRibbonBar_ArePanelsShown(this._ptr) as number) !== 0;
+  }
+
+  HidePage(page: bigint): void {
+    lib.symbols.wxRibbonBar_HidePage(this._ptr, page);
+  }
+
+  SetHelpButtonKeyTip(keytip: Pointer): void {
+    lib.symbols.wxRibbonBar_SetHelpButtonKeyTip(this._ptr, keytip);
+  }
+
+  SetPageKeyTip(page: bigint, keytip: Pointer): void {
+    lib.symbols.wxRibbonBar_SetPageKeyTip(this._ptr, page, keytip);
+  }
+
+  SetTabCtrlMargins(left: number, right: number): void {
+    lib.symbols.wxRibbonBar_SetTabCtrlMargins(this._ptr, left, right);
+  }
+
+  SetToggleButtonKeyTip(keytip: Pointer): void {
+    lib.symbols.wxRibbonBar_SetToggleButtonKeyTip(this._ptr, keytip);
+  }
+
+  ShowPage(page: bigint, show: boolean): void {
+    lib.symbols.wxRibbonBar_ShowPage(this._ptr, page, show ? 1 : 0);
+  }
+
+  ShowPanels(mode: number): void {
+    lib.symbols.wxRibbonBar_ShowPanels(this._ptr, mode);
+  }
+
   DismissExpandedPanel(): void {
     lib.symbols.wxRibbonBar_DismissExpandedPanel(this._ptr);
   }

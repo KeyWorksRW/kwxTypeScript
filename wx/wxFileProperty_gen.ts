@@ -20,6 +20,10 @@ export class wxFileProperty extends wxPGProperty {
     this.Delete();
   }
 
+  GetClassValidator(): Pointer {
+    return lib.symbols.wxFileProperty_GetClassValidator();
+  }
+
 }
 
 export function createWxFileProperty(label: Pointer, name: Pointer, value: Pointer): wxFileProperty | null {

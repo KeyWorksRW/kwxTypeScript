@@ -26,6 +26,22 @@ export class wxSize {
     this.Delete();
   }
 
+  IncBy(dx: number, dy: number): void {
+    lib.symbols.wxSize_IncBy(this._ptr, dx, dy);
+  }
+
+  IncTo(sz: Pointer): void {
+    lib.symbols.wxSize_IncTo(this._ptr, sz);
+  }
+
+  IsFullySpecified(): boolean {
+    return (lib.symbols.wxSize_IsFullySpecified(this._ptr) as number) !== 0;
+  }
+
+  Scale(xscale: number, yscale: number): Pointer {
+    return lib.symbols.wxSize_Scale(this._ptr, xscale, yscale);
+  }
+
   GetHeight(): number {
     return lib.symbols.wxSize_GetHeight(this._ptr);
   }

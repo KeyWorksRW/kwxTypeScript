@@ -26,6 +26,10 @@ export class wxObject {
     this.Delete();
   }
 
+  IsSameAs(o: Pointer): boolean {
+    return (lib.symbols.wxObject_IsSameAs(this._ptr, o) as number) !== 0;
+  }
+
   GetClassInfo(): Pointer {
     return lib.symbols.wxObject_GetClassInfo(this._ptr);
   }
@@ -44,6 +48,10 @@ export class wxObject {
 
   SetClientClosure(closure: Pointer): void {
     lib.symbols.wxObject_SetClientClosure(this._ptr, closure);
+  }
+
+  SetOnGetClassInfo(pFunction: Pointer): void {
+    lib.symbols.wxObject_SetOnGetClassInfo(this._ptr, pFunction);
   }
 
 }

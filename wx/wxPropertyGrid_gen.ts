@@ -14,6 +14,14 @@ export class wxPropertyGrid extends wxControl {
     return lib.symbols.wxPropertyGrid_GetColumnCount(this._ptr);
   }
 
+  GetGoodEditorDialogPosition(p: Pointer, sz: Pointer): Pointer {
+    return lib.symbols.wxPropertyGrid_GetGoodEditorDialogPosition(this._ptr, p, sz);
+  }
+
+  RegisterEditorClass(editor: Pointer, noDefCheck: boolean): Pointer {
+    return lib.symbols.wxPropertyGrid_RegisterEditorClass(editor, noDefCheck ? 1 : 0);
+  }
+
   GetRowHeight(): number {
     return lib.symbols.wxPropertyGrid_GetRowHeight(this._ptr);
   }

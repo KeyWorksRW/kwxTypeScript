@@ -20,6 +20,10 @@ export class wxValidator extends wxEvtHandler {
     this.Delete();
   }
 
+  IsSilent(): boolean {
+    return (lib.symbols.wxValidator_IsSilent() as number) !== 0;
+  }
+
   GetWindow(): Pointer {
     return lib.symbols.wxValidator_GetWindow(this._ptr);
   }
@@ -42,6 +46,22 @@ export class wxValidator extends wxEvtHandler {
 
   Validate(parent: Pointer): boolean {
     return (lib.symbols.wxValidator_Validate(this._ptr, parent) as number) !== 0;
+  }
+
+  SetOnClone(pFunction: Pointer): void {
+    lib.symbols.wxValidator_SetOnClone(this._ptr, pFunction);
+  }
+
+  SetOnValidate(pFunction: Pointer): void {
+    lib.symbols.wxValidator_SetOnValidate(this._ptr, pFunction);
+  }
+
+  SetOnTransferFromWindow(pFunction: Pointer): void {
+    lib.symbols.wxValidator_SetOnTransferFromWindow(this._ptr, pFunction);
+  }
+
+  SetOnTransferToWindow(pFunction: Pointer): void {
+    lib.symbols.wxValidator_SetOnTransferToWindow(this._ptr, pFunction);
   }
 
 }

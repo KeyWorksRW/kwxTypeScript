@@ -14,6 +14,14 @@ export class wxGridEvent extends wxNotifyEvent {
     return (lib.symbols.wxGridEvent_AltDown(this._ptr) as number) !== 0;
   }
 
+  GetNewCol(): number {
+    return lib.symbols.wxGridEvent_GetNewCol(this._ptr);
+  }
+
+  GetNewRow(): number {
+    return lib.symbols.wxGridEvent_GetNewRow(this._ptr);
+  }
+
   ControlDown(): boolean {
     return (lib.symbols.wxGridEvent_ControlDown(this._ptr) as number) !== 0;
   }

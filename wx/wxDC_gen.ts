@@ -172,6 +172,14 @@ export class wxDC extends wxObject {
     return (lib.symbols.wxDC_Blit(this._ptr, xdest, ydest, width, height, source, xsrc, ysrc, rop, useMask ? 1 : 0, xsrcMask, ysrcMask) as number) !== 0;
   }
 
+  CanUseTransformMatrix(): boolean {
+    return (lib.symbols.wxDC_CanUseTransformMatrix(this._ptr) as number) !== 0;
+  }
+
+  SetTransformMatrix(matrix: Pointer): boolean {
+    return (lib.symbols.wxDC_SetTransformMatrix(this._ptr, matrix) as number) !== 0;
+  }
+
   CalcBoundingBox(x: number, y: number): void {
     lib.symbols.wxDC_CalcBoundingBox(this._ptr, x, y);
   }

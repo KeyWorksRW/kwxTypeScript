@@ -14,6 +14,22 @@ export class wxPrintout extends wxObject {
     return lib.symbols.wxPrintout_GetDC(pObject);
   }
 
+  FitThisSizeToPageMargins(imageSize: Pointer, pageSetupData: Pointer): void {
+    lib.symbols.wxPrintout_FitThisSizeToPageMargins(this._ptr, imageSize, pageSetupData);
+  }
+
+  GetLogicalPageMarginsRect(pageSetupData: Pointer): Pointer {
+    return lib.symbols.wxPrintout_GetLogicalPageMarginsRect(this._ptr, pageSetupData);
+  }
+
+  MapScreenSizeToPage(): void {
+    lib.symbols.wxPrintout_MapScreenSizeToPage(this._ptr);
+  }
+
+  OffsetLogicalOrigin(xoff: number, yoff: number): void {
+    lib.symbols.wxPrintout_OffsetLogicalOrigin(this._ptr, xoff, yoff);
+  }
+
   GetPageSizeMM(pObject: Pointer, width: Pointer, height: Pointer): void {
     lib.symbols.wxPrintout_GetPageSizeMM(pObject, width, height);
   }

@@ -30,6 +30,14 @@ export class wxTaskBarButton {
     return lib.symbols.wxTaskBarButton_New(parent);
   }
 
+  AppendThumbBarButton(button: Pointer): boolean {
+    return (lib.symbols.wxTaskBarButton_AppendThumbBarButton(this._ptr, button) as number) !== 0;
+  }
+
+  RemoveThumbBarButton(button: Pointer): Pointer {
+    return lib.symbols.wxTaskBarButton_RemoveThumbBarButton(this._ptr, button);
+  }
+
   Hide(): void {
     lib.symbols.wxTaskBarButton_Hide(this._ptr);
   }

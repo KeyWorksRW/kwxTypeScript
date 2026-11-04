@@ -24,4 +24,12 @@ export class wxSockAddress extends wxObject {
     lib.symbols.wxSockAddress_Clear(this._ptr);
   }
 
+  GetType(): number {
+    return lib.symbols.wxSockAddress_GetType(this._ptr);
+  }
+
+  GetAddressDataLen(): number {
+    return lib.symbols.wxSockAddress_GetAddressDataLen(this._ptr);
+  }
+
 }

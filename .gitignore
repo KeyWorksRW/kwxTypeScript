@@ -9,6 +9,9 @@ src/version.h
 src/version.rc
 
 tests/quick
+tests/gui/artifacts/
+
+sample_test.cmd
 
 # cmake
 build/

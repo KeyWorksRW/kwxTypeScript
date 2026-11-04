@@ -42,6 +42,10 @@ export class wxMenu extends wxEvtHandler {
     lib.symbols.wxMenu_Append(this._ptr, id, text, help, isCheckable ? 1 : 0);
   }
 
+  Destroy(itemid: number): boolean {
+    return (lib.symbols.wxMenu_Destroy(this._ptr, itemid) as number) !== 0;
+  }
+
   AppendItem(item: Pointer): void {
     lib.symbols.wxMenu_AppendItem(this._ptr, item);
   }
@@ -94,7 +98,7 @@ export class wxMenu extends wxEvtHandler {
     return lib.symbols.wxMenu_FindItemByLabel(this._ptr, itemString);
   }
 
-  GetClientData(): Pointer {
+  override GetClientData(): Pointer {
     return lib.symbols.wxMenu_GetClientData(this._ptr);
   }
 

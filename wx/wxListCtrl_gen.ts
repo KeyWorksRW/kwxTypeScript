@@ -331,8 +331,15 @@ export class wxListCtrl extends wxControl {
     lib.symbols.wxListCtrl_SetTextColour(this._ptr, col);
   }
 
-  SetWindowStyleFlag_1(style: number): void {
-    lib.symbols.wxListCtrl_SetWindowStyleFlag(this._ptr, style);
+  override SetWindowStyleFlag(style: number): void;
+  override SetWindowStyleFlag(style: bigint): void;
+  override SetWindowStyleFlag(style: number | bigint): void {
+    if (arguments.length === 1 && typeof style === "number") {
+      lib.symbols.wxListCtrl_SetWindowStyleFlag(this._ptr, style as number);
+    }
+    else {
+      super.SetWindowStyleFlag(style as bigint);
+    }
   }
 
   SortItems(compareFunc: Pointer, obj: Pointer): boolean {

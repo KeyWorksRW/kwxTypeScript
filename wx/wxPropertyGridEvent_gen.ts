@@ -14,6 +14,29 @@ export class wxPropertyGridEvent extends wxNotifyEvent {
     return (lib.symbols.wxPropertyGridEvent_HasProperty(this._ptr) as number) !== 0;
   }
 
+  CanVeto(): boolean {
+    return (lib.symbols.wxPropertyGridEvent_CanVeto(this._ptr) as number) !== 0;
+  }
+
+  GetColumn(): number {
+    return lib.symbols.wxPropertyGridEvent_GetColumn(this._ptr);
+  }
+
+  GetValue(): Pointer {
+    return lib.symbols.wxPropertyGridEvent_GetValue(this._ptr);
+  }
+
+  override Veto(veto: boolean): void;
+  override Veto(): void;
+  override Veto(veto?: boolean): void {
+    if (arguments.length === 1) {
+      lib.symbols.wxPropertyGridEvent_Veto(this._ptr, veto ? 1 : 0);
+    }
+    else {
+      super.Veto();
+    }
+  }
+
   GetProperty(): Pointer {
     return lib.symbols.wxPropertyGridEvent_GetProperty(this._ptr);
   }

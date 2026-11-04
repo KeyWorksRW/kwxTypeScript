@@ -10,6 +10,17 @@ export class wxFindReplaceDialog extends wxDialog {
     return this._ptr;
   }
 
+  override Show(show: boolean): boolean;
+  override Show(): boolean;
+  override Show(show?: boolean): boolean {
+    if (arguments.length === 1) {
+      return (lib.symbols.wxFindReplaceDialog_Show(this._ptr, show ? 1 : 0) as number) !== 0;
+    }
+    else {
+      return super.Show();
+    }
+  }
+
   GetData(): Pointer {
     return lib.symbols.wxFindReplaceDialog_GetData(this._ptr);
   }

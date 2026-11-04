@@ -80,7 +80,7 @@ export function main(): number
     titleStr.Delete();
 
     // 3. Build menu bar
-    const fileMenu = createWxMenu(createWxString("&File").ptr, 0)!;
+    const fileMenu = createWxMenu(createWxString("&File").ptr, 0n)!;
     fileMenu.ptr; // keep reference
 
     const menuNew = createWxString("&New\tCtrl+N");
@@ -102,7 +102,7 @@ export function main(): number
     fileMenu.Append(ID_EXIT, menuExit.ptr, createWxString("Exit application").ptr, false);
 
     // Edit menu
-    const editMenu = createWxMenu(createWxString("&Edit").ptr, 0)!;
+    const editMenu = createWxMenu(createWxString("&Edit").ptr, 0n)!;
     editMenu.Append(ID_ANY, menuUndo.ptr, createWxString("").ptr, false);
     editMenu.Append(ID_ANY, menuRedo.ptr, createWxString("").ptr, false);
     editMenu.AppendSeparator();
@@ -111,7 +111,7 @@ export function main(): number
     editMenu.Append(ID_ANY, menuPaste.ptr, createWxString("").ptr, false);
 
     // Help menu
-    const helpMenu = createWxMenu(createWxString("&Help").ptr, 0)!;
+    const helpMenu = createWxMenu(createWxString("&Help").ptr, 0n)!;
     helpMenu.Append(ID_ABOUT, menuAbout.ptr, createWxString("About this demo").ptr, false);
 
     // Menu bar
@@ -161,7 +161,7 @@ export function main(): number
         -1,
         -1,
         -1,
-        0,
+        0n,
     )!;
     // SetHint is on wxTextEntry, which wxTextCtrl inherits from in C++
     lib.symbols.wxTextEntry_SetHint(textCtrl.ptr, hintStr.ptr);

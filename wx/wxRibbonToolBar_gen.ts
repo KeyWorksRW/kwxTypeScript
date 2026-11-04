@@ -10,6 +10,14 @@ export class wxRibbonToolBar extends wxRibbonControl {
     return this._ptr;
   }
 
+  SetDropdownKeyTip(tool_id: number, keytip: Pointer): void {
+    lib.symbols.wxRibbonToolBar_SetDropdownKeyTip(this._ptr, tool_id, keytip);
+  }
+
+  SetKeyTip(tool_id: number, keytip: Pointer): void {
+    lib.symbols.wxRibbonToolBar_SetKeyTip(this._ptr, tool_id, keytip);
+  }
+
   AddTool(tool_id: number, bitmap: Pointer, help_string: Pointer, kind: number, bitmap_disabled: Pointer, client_data: Pointer): Pointer {
     return lib.symbols.wxRibbonToolBar_AddTool(this._ptr, tool_id, bitmap, help_string, kind, bitmap_disabled, client_data);
   }

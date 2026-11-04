@@ -10,6 +10,22 @@ export class wxRibbonButtonBar extends wxRibbonControl {
     return this._ptr;
   }
 
+  SetButtonTextMinWidth(button_id: number, min_width_medium: number, min_width_large: number): void {
+    lib.symbols.wxRibbonButtonBar_SetButtonTextMinWidth(this._ptr, button_id, min_width_medium, min_width_large);
+  }
+
+  SetDropdownKeyTip(button_id: number, keytip: Pointer): void {
+    lib.symbols.wxRibbonButtonBar_SetDropdownKeyTip(this._ptr, button_id, keytip);
+  }
+
+  SetKeyTip(button_id: number, keytip: Pointer): void {
+    lib.symbols.wxRibbonButtonBar_SetKeyTip(this._ptr, button_id, keytip);
+  }
+
+  ToggleButton(button_id: number, checked: boolean): void {
+    lib.symbols.wxRibbonButtonBar_ToggleButton(this._ptr, button_id, checked ? 1 : 0);
+  }
+
   AddButton(button_id: number, label: Pointer, bitmap: Pointer, help_string: Pointer, kind: number, bitmap_small: Pointer, bitmap_disabled: Pointer, bitmap_small_disabled: Pointer): Pointer {
     return lib.symbols.wxRibbonButtonBar_AddButton(this._ptr, button_id, label, bitmap, help_string, kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
   }

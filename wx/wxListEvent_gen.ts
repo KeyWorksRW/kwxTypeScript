@@ -22,6 +22,14 @@ export class wxListEvent extends wxNotifyEvent {
     return (lib.symbols.wxListEvent_Cancelled(this._ptr) as number) !== 0;
   }
 
+  GetKeyCode(): number {
+    return lib.symbols.wxListEvent_GetKeyCode(this._ptr);
+  }
+
+  IsEditCancelled(): boolean {
+    return (lib.symbols.wxListEvent_IsEditCancelled(this._ptr) as number) !== 0;
+  }
+
   GetCode(): number {
     return lib.symbols.wxListEvent_GetCode(this._ptr);
   }

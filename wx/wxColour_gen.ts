@@ -32,6 +32,14 @@ export class wxColour extends wxObject {
     return lib.symbols.wxColour_Alpha(this._ptr);
   }
 
+  GetAsString(flags: bigint): Pointer {
+    return lib.symbols.wxColour_GetAsString(this._ptr, flags);
+  }
+
+  MakeDisabled(r: Pointer, g: Pointer, b: Pointer, brightness: number): void {
+    lib.symbols.wxColour_MakeDisabled(r, g, b, brightness);
+  }
+
   Assign(other: Pointer): void {
     lib.symbols.wxColour_Assign(this._ptr, other);
   }

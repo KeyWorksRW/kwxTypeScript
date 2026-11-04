@@ -2,30 +2,30 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxDataObject } from "./wxDataObject_gen.ts";
+import { wxDataObjectSimple } from "./wxDataObjectSimple_gen.ts";
 
-export class wxTextDataObject extends wxDataObject {
+export class wxTextDataObject extends wxDataObjectSimple {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
     if (this._disposed) return;
     this._disposed = true;
     lib.symbols.TextDataObject_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
   }
 
   GetText(): Pointer {
-    return lib.symbols.TextDataObject_GetText(this._ptr);
+    return lib.symbols.wxTextDataObject_GetText(this._ptr);
   }
 
   SetText(text: Pointer): void {
-    lib.symbols.TextDataObject_SetText(this._ptr, text);
+    lib.symbols.wxTextDataObject_SetText(this._ptr, text);
   }
 
 }

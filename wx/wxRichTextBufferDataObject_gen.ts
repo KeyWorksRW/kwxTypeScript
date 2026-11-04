@@ -2,21 +2,21 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxDataObject } from "./wxDataObject_gen.ts";
+import { wxDataObjectSimple } from "./wxDataObjectSimple_gen.ts";
 
-export class wxRichTextBufferDataObject extends wxDataObject {
+export class wxRichTextBufferDataObject extends wxDataObjectSimple {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
     if (this._disposed) return;
     this._disposed = true;
     lib.symbols.wxRichTextBufferDataObject_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
   }
 
@@ -34,6 +34,8 @@ export class wxRichTextBufferDataObject extends wxDataObject {
 
 }
 
-export function createWxRichTextBufferDataObject(richTextBuffer: Pointer): number {
-    return lib.symbols.wxRichTextBufferDataObject_Create(richTextBuffer);
+export function createWxRichTextBufferDataObject(richTextBuffer: Pointer): wxRichTextBufferDataObject | null {
+    const rawPtr = lib.symbols.wxRichTextBufferDataObject_Create(richTextBuffer);
+    if (rawPtr === null) return null;
+    return new wxRichTextBufferDataObject(rawPtr);
 }

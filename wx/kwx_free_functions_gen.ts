@@ -427,6 +427,246 @@ export function LogTrace(mask: Pointer, message: Pointer): void {
     lib.symbols.LogTrace(mask, message);
 }
 
+export function wxCheckDynamicCast(obj: Pointer, class_info: Pointer): Pointer {
+    return lib.symbols.wxCheckDynamicCast(obj, class_info);
+}
+
+export function wxCheckCast(obj: Pointer, class_info: Pointer): Pointer {
+    return lib.symbols.wxCheckCast(obj, class_info);
+}
+
+export function wxGetApp(): Pointer {
+    return lib.symbols.wxGetApp();
+}
+
+export function wxInitAllImageHandlers(): void {
+    lib.symbols.wxInitAllImageHandlers();
+}
+
+export function wxUnusedVar(value: Pointer): void {
+    lib.symbols.wxUnusedVar(value);
+}
+
+export function wxGetSingleChoiceIndex(message: Pointer, caption: Pointer, choices: Pointer, count: number, parent: Pointer): number {
+    return lib.symbols.wxGetSingleChoiceIndex(message, caption, choices, count, parent);
+}
+
+export function wxBeginBusyCursor(): void {
+    lib.symbols.wxBeginBusyCursor();
+}
+
+export function wxEndBusyCursor(): void {
+    lib.symbols.wxEndBusyCursor();
+}
+
+export function wxJoin(array: Pointer, separator: number): Pointer {
+    return lib.symbols.wxJoin(array, separator);
+}
+
+export function wxAtoi(str: Pointer): number {
+    return lib.symbols.wxAtoi(str);
+}
+
+export function wxGetDisplaySize(): Pointer {
+    return lib.symbols.wxGetDisplaySize();
+}
+
+export function wxGetTopLevelParent(window: Pointer): Pointer {
+    return lib.symbols.wxGetTopLevelParent(window);
+}
+
+export function wxIsprint(character: number): boolean {
+    return (lib.symbols.wxIsprint(character) as number) !== 0;
+}
+
+export function wxRound(value: number): number {
+    return lib.symbols.wxRound(value);
+}
+
+export function wxWakeUpIdle(): void {
+    lib.symbols.wxWakeUpIdle();
+}
+
+export function wxBell(): void {
+    lib.symbols.wxBell();
+}
+
+export function wxDegToRad(degrees: number): number {
+    return lib.symbols.wxDegToRad(degrees);
+}
+
+export function wxFgets(buffer: Pointer, size: number, stream: Pointer): Pointer {
+    return lib.symbols.wxFgets(buffer, size, stream);
+}
+
+export function wxGetCwd(): Pointer {
+    return lib.symbols.wxGetCwd();
+}
+
+export function wxIsMainThread(): boolean {
+    return (lib.symbols.wxIsMainThread() as number) !== 0;
+}
+
+export function wxNewEventType(): number {
+    return lib.symbols.wxNewEventType();
+}
+
+export function wxQueueEvent(dest: Pointer, event: Pointer): void {
+    lib.symbols.wxQueueEvent(dest, event);
+}
+
+export function wxSetCursor(cursors: Pointer): void {
+    lib.symbols.wxSetCursor(cursors);
+}
+
+export function wxSplit(str: Pointer, separator: number): Pointer {
+    return lib.symbols.wxSplit(str, separator);
+}
+
+export function wxStrcmp(first: Pointer, second: Pointer): number {
+    return lib.symbols.wxStrcmp(first, second);
+}
+
+export function wxSwap(first: Pointer, second: Pointer, size: bigint): void {
+    lib.symbols.wxSwap(first, second, size);
+}
+
+export function wxUIntToPtr(value: bigint): Pointer {
+    return lib.symbols.wxUIntToPtr(value);
+}
+
+export function wxCreateFileTipProvider(filename: Pointer, current_tip: number): Pointer {
+    return lib.symbols.wxCreateFileTipProvider(filename, current_tip);
+}
+
+export function wxDirSelector(message: Pointer, default_path: Pointer, style: bigint, x: number, y: number, parent: Pointer): Pointer {
+    return lib.symbols.wxDirSelector(message, default_path, style, x, y, parent);
+}
+
+export function wxFileExists(filename: Pointer): boolean {
+    return (lib.symbols.wxFileExists(filename) as number) !== 0;
+}
+
+export function wxFindFocusDescendant(ancestor: Pointer): Pointer {
+    return lib.symbols.wxFindFocusDescendant(ancestor);
+}
+
+export function wxGetBatteryState(): number {
+    return lib.symbols.wxGetBatteryState();
+}
+
+export function wxGetClientDisplayRect(): Pointer {
+    return lib.symbols.wxGetClientDisplayRect();
+}
+
+export function wxGetLocalTime(): bigint {
+    return lib.symbols.wxGetLocalTime() as bigint;
+}
+
+export function wxGetPowerType(): number {
+    return lib.symbols.wxGetPowerType();
+}
+
+export function wxGetSelectedChoices(selections: Pointer, choices: Pointer, count: number, message: Pointer, caption: Pointer, parent: Pointer): number {
+    return lib.symbols.wxGetSelectedChoices(selections, choices, count, message, caption, parent);
+}
+
+export function wxGetSingleChoice(message: Pointer, caption: Pointer, choices: Pointer, count: number, parent: Pointer): Pointer {
+    return lib.symbols.wxGetSingleChoice(message, caption, choices, count, parent);
+}
+
+export function wxGetSingleChoiceData(message: Pointer, caption: Pointer, choices: Pointer, count: number, client_data: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxGetSingleChoiceData(message, caption, choices, count, client_data, parent);
+}
+
+export function wxGetTranslation(str: Pointer): Pointer {
+    return lib.symbols.wxGetTranslation(str);
+}
+
+export function wxGetZlibVersionInfo(): Pointer {
+    return lib.symbols.wxGetZlibVersionInfo();
+}
+
+export function wxGet_wxConvLibc(): Pointer {
+    return lib.symbols.wxGet_wxConvLibc();
+}
+
+export function wxGet_wxConvLocal(): Pointer {
+    return lib.symbols.wxGet_wxConvLocal();
+}
+
+export function wxGet_wxConvUTF8(): Pointer {
+    return lib.symbols.wxGet_wxConvUTF8();
+}
+
+export function wxIsalnum(character: number): boolean {
+    return (lib.symbols.wxIsalnum(character) as number) !== 0;
+}
+
+export function wxIsdigit(character: number): boolean {
+    return (lib.symbols.wxIsdigit(character) as number) !== 0;
+}
+
+export function wxIslower(character: number): boolean {
+    return (lib.symbols.wxIslower(character) as number) !== 0;
+}
+
+export function wxMakeFloatingPointValidator(value: Pointer, style: number): Pointer {
+    return lib.symbols.wxMakeFloatingPointValidator(value, style);
+}
+
+export function wxMutexGuiEnter(): void {
+    lib.symbols.wxMutexGuiEnter();
+}
+
+export function wxMutexGuiLeave(): void {
+    lib.symbols.wxMutexGuiLeave();
+}
+
+export function wxPlatformIs(platform: number): boolean {
+    return (lib.symbols.wxPlatformIs(platform) as number) !== 0;
+}
+
+export function wxPointRefFromVariant(variant: Pointer): Pointer {
+    return lib.symbols.wxPointRefFromVariant(variant);
+}
+
+export function wxPostEvent(dest: Pointer, event: Pointer): void {
+    lib.symbols.wxPostEvent(dest, event);
+}
+
+export function wxPtrToUInt(pointer: Pointer): bigint {
+    return lib.symbols.wxPtrToUInt(pointer) as bigint;
+}
+
+export function wxPuts(str: Pointer): number {
+    return lib.symbols.wxPuts(str);
+}
+
+export function wxRenameFile(old_path: Pointer, new_path: Pointer, overwrite: boolean): boolean {
+    return (lib.symbols.wxRenameFile(old_path, new_path, overwrite ? 1 : 0) as number) !== 0;
+}
+
+export function wxShowTip(parent: Pointer, tip_provider: Pointer): boolean {
+    return (lib.symbols.wxShowTip(parent, tip_provider) as number) !== 0;
+}
+
+export function wxSizeRefFromVariant(variant: Pointer): Pointer {
+    return lib.symbols.wxSizeRefFromVariant(variant);
+}
+
+export function wxStrdup(str: Pointer): Pointer {
+    return lib.symbols.wxStrdup(str);
+}
+
+export function wxStrtod(nptr: Pointer): number {
+    return lib.symbols.wxStrtod(nptr);
+}
+
+export function wxStrtol(nptr: Pointer, base: number): bigint {
+    return lib.symbols.wxStrtol(nptr, base) as bigint;
+}
+
 export function kwxBeginBusyCursor(): void {
     lib.symbols.kwxBeginBusyCursor();
 }
@@ -569,6 +809,22 @@ export function wxVersionNumber(): number {
 
 export function wxVersionString(): Pointer {
     return lib.symbols.wxVersionString();
+}
+
+export function wxBase64EncodeBuffer(source: Pointer, src_length: bigint): Pointer {
+    return lib.symbols.wxBase64EncodeBuffer(source, src_length);
+}
+
+export function wxBase64DecodeBuffer(text: Pointer, mode: number, decoded_length: Pointer): Pointer {
+    return lib.symbols.wxBase64DecodeBuffer(text, mode, decoded_length);
+}
+
+export function wxBase64EncodedSizeOf(src_length: bigint): bigint {
+    return lib.symbols.wxBase64EncodedSizeOf(src_length) as bigint;
+}
+
+export function wxBase64DecodedSizeOf(encoded_length: bigint): bigint {
+    return lib.symbols.wxBase64DecodedSizeOf(encoded_length) as bigint;
 }
 
 export function PushProvider(provider: Pointer): void {

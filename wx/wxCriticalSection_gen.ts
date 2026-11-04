@@ -26,6 +26,10 @@ export class wxCriticalSection {
     this.Delete();
   }
 
+  TryEnter(): boolean {
+    return (lib.symbols.wxCriticalSection_TryEnter(this._ptr) as number) !== 0;
+  }
+
   Enter(): void {
     lib.symbols.wxCriticalSection_Enter(this._ptr);
   }

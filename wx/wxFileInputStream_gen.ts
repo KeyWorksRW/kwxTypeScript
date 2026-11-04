@@ -20,6 +20,10 @@ export class wxFileInputStream extends wxInputStream {
     this.Delete();
   }
 
+  GetLength(): number {
+    return lib.symbols.wxFileInputStream_GetLength(this._ptr);
+  }
+
   override IsOk(): boolean {
     return (lib.symbols.wxFileInputStream_IsOk(this._ptr) as number) !== 0;
   }

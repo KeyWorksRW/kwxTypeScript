@@ -10,6 +10,10 @@ export class wxSplashScreen extends wxFrame {
     return this._ptr;
   }
 
+  GetSplashWindow(): Pointer {
+    return lib.symbols.wxSplashScreen_GetSplashWindow(this._ptr);
+  }
+
   GetSplashStyle(): bigint {
     return lib.symbols.wxSplashScreen_GetSplashStyle(this._ptr) as bigint;
   }

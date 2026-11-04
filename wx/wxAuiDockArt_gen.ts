@@ -20,6 +20,18 @@ export class wxAuiDockArt {
     lib.symbols.wxAuiDockArt_DrawBackground(this._ptr, dc, window, orientation, rect);
   }
 
+  GetColor(id: number): Pointer {
+    return lib.symbols.wxAuiDockArt_GetColor(this._ptr, id);
+  }
+
+  GetMetricForWindow(id: number, window: Pointer): number {
+    return lib.symbols.wxAuiDockArt_GetMetricForWindow(this._ptr, id, window);
+  }
+
+  SetColor(id: number, color: Pointer): void {
+    lib.symbols.wxAuiDockArt_SetColor(this._ptr, id, color);
+  }
+
   DrawBorder(dc: Pointer, window: Pointer, rect: Pointer, pane: Pointer): void {
     lib.symbols.wxAuiDockArt_DrawBorder(this._ptr, dc, window, rect, pane);
   }

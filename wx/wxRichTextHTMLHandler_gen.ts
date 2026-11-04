@@ -42,6 +42,8 @@ export class wxRichTextHTMLHandler extends wxRichTextFileHandler {
 
 }
 
-export function createWxRichTextHTMLHandler(name: Pointer, ext: Pointer, type_: number): number {
-    return lib.symbols.wxRichTextHTMLHandler_Create(name, ext, type_);
+export function createWxRichTextHTMLHandler(name: Pointer, ext: Pointer, type_: number): wxRichTextHTMLHandler | null {
+    const rawPtr = lib.symbols.wxRichTextHTMLHandler_Create(name, ext, type_);
+    if (rawPtr === null) return null;
+    return new wxRichTextHTMLHandler(rawPtr);
 }

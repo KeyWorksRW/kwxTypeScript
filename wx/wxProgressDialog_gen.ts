@@ -10,6 +10,10 @@ export class wxProgressDialog extends wxFrame {
     return this._ptr;
   }
 
+  override Fit(): void {
+    lib.symbols.wxProgressDialog_Fit(this._ptr);
+  }
+
   Resume(): void {
     lib.symbols.wxProgressDialog_Resume(this._ptr);
   }

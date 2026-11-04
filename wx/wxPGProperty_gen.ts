@@ -14,6 +14,78 @@ export class wxPGProperty extends wxObject {
     return lib.symbols.wxPGProperty_GetBaseName(this._ptr);
   }
 
+  AddChoice(label: Pointer, value: number): number {
+    return lib.symbols.wxPGProperty_AddChoice(this._ptr, label, value);
+  }
+
+  AddPrivateChild(prop: Pointer): void {
+    lib.symbols.wxPGProperty_AddPrivateChild(this._ptr, prop);
+  }
+
+  AppendChild(prop: Pointer): Pointer {
+    return lib.symbols.wxPGProperty_AppendChild(this._ptr, prop);
+  }
+
+  DeleteChoice(index: number): void {
+    lib.symbols.wxPGProperty_DeleteChoice(this._ptr, index);
+  }
+
+  EnableCommonValue(enable: boolean): void {
+    lib.symbols.wxPGProperty_EnableCommonValue(this._ptr, enable ? 1 : 0);
+  }
+
+  GetCell(column: number): Pointer {
+    return lib.symbols.wxPGProperty_GetCell(this._ptr, column);
+  }
+
+  GetDisplayedString(): Pointer {
+    return lib.symbols.wxPGProperty_GetDisplayedString(this._ptr);
+  }
+
+  GetIndexInParent(): number {
+    return lib.symbols.wxPGProperty_GetIndexInParent(this._ptr);
+  }
+
+  HasAnyChild(): boolean {
+    return (lib.symbols.wxPGProperty_HasAnyChild(this._ptr) as number) !== 0;
+  }
+
+  InsertChoice(label: Pointer, index: number, value: number): number {
+    return lib.symbols.wxPGProperty_InsertChoice(this._ptr, label, index, value);
+  }
+
+  IsCategory(): boolean {
+    return (lib.symbols.wxPGProperty_IsCategory(this._ptr) as number) !== 0;
+  }
+
+  IsEnabled(): boolean {
+    return (lib.symbols.wxPGProperty_IsEnabled(this._ptr) as number) !== 0;
+  }
+
+  IsExpanded(): boolean {
+    return (lib.symbols.wxPGProperty_IsExpanded(this._ptr) as number) !== 0;
+  }
+
+  IsValueUnspecified(): boolean {
+    return (lib.symbols.wxPGProperty_IsValueUnspecified(this._ptr) as number) !== 0;
+  }
+
+  RefreshEditor(): void {
+    lib.symbols.wxPGProperty_RefreshEditor(this._ptr);
+  }
+
+  SetAttribute(name: Pointer, value: Pointer): void {
+    lib.symbols.wxPGProperty_SetAttribute(this._ptr, name, value);
+  }
+
+  SetAutoUnspecified(enable: boolean): void {
+    lib.symbols.wxPGProperty_SetAutoUnspecified(this._ptr, enable ? 1 : 0);
+  }
+
+  SetExpanded(expanded: boolean): void {
+    lib.symbols.wxPGProperty_SetExpanded(this._ptr, expanded ? 1 : 0);
+  }
+
   GetY(): number {
     return lib.symbols.wxPGProperty_GetY(this._ptr);
   }

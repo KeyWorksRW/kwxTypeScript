@@ -16,6 +16,104 @@ export class wxUILocale {
     return this._ptr;
   }
 
+  Delete(): void {
+    if (this._disposed) return;
+    this._disposed = true;
+    lib.symbols.wxUILocale_Delete(this._ptr);
+  }
+
+  [Symbol.dispose](): void {
+    this.Delete();
+  }
+
+  FromTag(tag: Pointer): Pointer {
+    return lib.symbols.wxUILocale_FromTag(tag);
+  }
+
+  GetLanguageInfo(lang: number): Pointer {
+    return lib.symbols.wxUILocale_GetLanguageInfo(lang);
+  }
+
+  GetCurrent(): Pointer {
+    return lib.symbols.wxUILocale_GetCurrent();
+  }
+
+  UseLocaleName(locale_name: Pointer): boolean {
+    return (lib.symbols.wxUILocale_UseLocaleName(locale_name) as number) !== 0;
+  }
+
+  IsSupported(): boolean {
+    return (lib.symbols.wxUILocale_IsSupported(this._ptr) as number) !== 0;
+  }
+
+  IsDefault(): boolean {
+    return (lib.symbols.wxUILocale_IsDefault(this._ptr) as number) !== 0;
+  }
+
+  GetName(): Pointer {
+    return lib.symbols.wxUILocale_GetName(this._ptr);
+  }
+
+  GetLocaleTag(): Pointer {
+    return lib.symbols.wxUILocale_GetLocaleTag(this._ptr);
+  }
+
+  GetLocalizedName(name: number, form: number): Pointer {
+    return lib.symbols.wxUILocale_GetLocalizedName(this._ptr, name, form);
+  }
+
+  GetMonthName(month: number, form: number): Pointer {
+    return lib.symbols.wxUILocale_GetMonthName(this._ptr, month, form);
+  }
+
+  GetWeekDayName(weekday: number, form: number): Pointer {
+    return lib.symbols.wxUILocale_GetWeekDayName(this._ptr, weekday, form);
+  }
+
+  GetLayoutDirection(): number {
+    return lib.symbols.wxUILocale_GetLayoutDirection(this._ptr);
+  }
+
+  GetCurrencySymbol(): Pointer {
+    return lib.symbols.wxUILocale_GetCurrencySymbol(this._ptr);
+  }
+
+  GetCurrencyCode(): Pointer {
+    return lib.symbols.wxUILocale_GetCurrencyCode(this._ptr);
+  }
+
+  GetCurrencySymbolPosition(): number {
+    return lib.symbols.wxUILocale_GetCurrencySymbolPosition(this._ptr);
+  }
+
+  UsesMetricSystem(): number {
+    return lib.symbols.wxUILocale_UsesMetricSystem(this._ptr);
+  }
+
+  CompareStrings(lhs: Pointer, rhs: Pointer, flags: number): number {
+    return lib.symbols.wxUILocale_CompareStrings(this._ptr, lhs, rhs, flags);
+  }
+
+  GetSystemLocaleTag(): Pointer {
+    return lib.symbols.wxUILocale_GetSystemLocaleTag();
+  }
+
+  GetSystemLanguage(): number {
+    return lib.symbols.wxUILocale_GetSystemLanguage();
+  }
+
+  GetSystemLocale(): number {
+    return lib.symbols.wxUILocale_GetSystemLocale();
+  }
+
+  GetLanguageName(language: number): Pointer {
+    return lib.symbols.wxUILocale_GetLanguageName(language);
+  }
+
+  GetLanguageCanonicalName(language: number): Pointer {
+    return lib.symbols.wxUILocale_GetLanguageCanonicalName(language);
+  }
+
   GetInfo(index: number, category: number): Pointer {
     return lib.symbols.wxUILocale_GetInfo(index, category);
   }
@@ -28,4 +126,10 @@ export class wxUILocale {
     return (lib.symbols.wxUILocale_UseDefault() as number) !== 0;
   }
 
+}
+
+export function createWxUILocaleFromTag(tag: Pointer): wxUILocale | null {
+    const rawPtr = lib.symbols.wxUILocale_CreateFromTag(tag);
+    if (rawPtr === null) return null;
+    return new wxUILocale(rawPtr);
 }

@@ -14,6 +14,14 @@ export class wxWizard extends wxDialog {
     lib.symbols.wxWizard_Chain(first, second);
   }
 
+  SetBitmapPlacement(placement: number): void {
+    lib.symbols.wxWizard_SetBitmapPlacement(this._ptr, placement);
+  }
+
+  ShowPage(page: Pointer, goingForward: boolean): boolean {
+    return (lib.symbols.wxWizard_ShowPage(this._ptr, page, goingForward ? 1 : 0) as number) !== 0;
+  }
+
   GetCurrentPage(): Pointer {
     return lib.symbols.wxWizard_GetCurrentPage(this._ptr);
   }

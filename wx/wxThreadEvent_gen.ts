@@ -20,6 +20,10 @@ export class wxThreadEvent extends wxEvent {
     this.Delete();
   }
 
+  Clone(): Pointer {
+    return lib.symbols.wxThreadEvent_Clone(this._ptr);
+  }
+
   GetString(): Pointer {
     return lib.symbols.wxThreadEvent_GetString(this._ptr);
   }

@@ -22,4 +22,12 @@ export class wxWizardPage extends wxPanel {
     return lib.symbols.wxWizardPage_GetBitmap(this._ptr);
   }
 
+  SetOnGetNext(pFunction: Pointer): void {
+    lib.symbols.wxWizardPage_SetOnGetNext(this._ptr, pFunction);
+  }
+
+  SetOnGetPrev(pFunction: Pointer): void {
+    lib.symbols.wxWizardPage_SetOnGetPrev(this._ptr, pFunction);
+  }
+
 }

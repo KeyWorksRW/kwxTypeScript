@@ -24,6 +24,14 @@ export class wxPrintDialogData extends wxObject {
     lib.symbols.wxPrintDialogData_Assign(this._ptr, data);
   }
 
+  EnableCurrentPage(flag: boolean): void {
+    lib.symbols.wxPrintDialogData_EnableCurrentPage(this._ptr, flag ? 1 : 0);
+  }
+
+  GetCurrentPage(): boolean {
+    return (lib.symbols.wxPrintDialogData_GetCurrentPage(this._ptr) as number) !== 0;
+  }
+
   AssignData(data: Pointer): void {
     lib.symbols.wxPrintDialogData_AssignData(this._ptr, data);
   }

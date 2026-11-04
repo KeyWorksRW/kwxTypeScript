@@ -16,6 +16,34 @@ export class wxNumberFormatter {
     return this._ptr;
   }
 
+  ToStringLong(value: bigint, style: number): Pointer {
+    return lib.symbols.wxNumberFormatter_ToStringLong(value, style);
+  }
+
+  ToString(val: bigint, style: number): Pointer {
+    return lib.symbols.wxNumberFormatter_ToString(val, style);
+  }
+
+  Format(format: Pointer, value: number): Pointer {
+    return lib.symbols.wxNumberFormatter_Format(format, value);
+  }
+
+  FromStringLong(text: Pointer, value: Pointer): boolean {
+    return (lib.symbols.wxNumberFormatter_FromStringLong(text, value) as number) !== 0;
+  }
+
+  FromStringDouble(text: Pointer, value: Pointer): boolean {
+    return (lib.symbols.wxNumberFormatter_FromStringDouble(text, value) as number) !== 0;
+  }
+
+  RemoveTrailingZeroes(text: Pointer): void {
+    lib.symbols.wxNumberFormatter_RemoveTrailingZeroes(text);
+  }
+
+  RemoveCurrencySymbolOrCode(text: Pointer, style: number): Pointer {
+    return lib.symbols.wxNumberFormatter_RemoveCurrencySymbolOrCode(text, style);
+  }
+
   GetDecimalSeparator(): Pointer {
     return lib.symbols.wxNumberFormatter_GetDecimalSeparator();
   }

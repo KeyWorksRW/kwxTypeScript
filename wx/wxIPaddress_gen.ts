@@ -52,4 +52,8 @@ export class wxIPaddress {
     return (lib.symbols.wxIPaddress_ServiceSetPort(this._ptr, service) as number) !== 0;
   }
 
+  OrigHostname(): Pointer {
+    return lib.symbols.wxIPaddress_OrigHostname(this._ptr);
+  }
+
 }

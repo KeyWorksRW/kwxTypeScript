@@ -30,4 +30,12 @@ export class wxHtmlListBox extends wxVListBox {
     return lib.symbols.wxHtmlListBox_GetFileSystem(this._ptr);
   }
 
+  SetOnOnGetItem(pFunction: Pointer): void {
+    lib.symbols.wxHtmlListBox_SetOnOnGetItem(this._ptr, pFunction);
+  }
+
+  SetOnGetSelectedTextColour(pFunction: Pointer): void {
+    lib.symbols.wxHtmlListBox_SetOnGetSelectedTextColour(this._ptr, pFunction);
+  }
+
 }

@@ -30,6 +30,54 @@ export class wxGraphicsContext {
     lib.symbols.wxGraphicsContext_Clip(this._ptr, region);
   }
 
+  BeginLayer(opacity: number): void {
+    lib.symbols.wxGraphicsContext_BeginLayer(this._ptr, opacity);
+  }
+
+  CreateBitmap(bitmap: Pointer): Pointer {
+    return lib.symbols.wxGraphicsContext_CreateBitmap(this._ptr, bitmap);
+  }
+
+  CreateBitmapFromImage(image: Pointer): Pointer {
+    return lib.symbols.wxGraphicsContext_CreateBitmapFromImage(this._ptr, image);
+  }
+
+  CreateFont(font: Pointer, col: Pointer): Pointer {
+    return lib.symbols.wxGraphicsContext_CreateFont(this._ptr, font, col);
+  }
+
+  CreateLinearGradientBrush(x1: number, y1: number, x2: number, y2: number, c1: Pointer, c2: Pointer, matrix: Pointer): Pointer {
+    return lib.symbols.wxGraphicsContext_CreateLinearGradientBrush(this._ptr, x1, y1, x2, y2, c1, c2, matrix);
+  }
+
+  CreatePen(pen: Pointer): Pointer {
+    return lib.symbols.wxGraphicsContext_CreatePen(this._ptr, pen);
+  }
+
+  CreateRadialGradientBrush(startX: number, startY: number, endX: number, endY: number, radius: number, oColor: Pointer, cColor: Pointer, matrix: Pointer): Pointer {
+    return lib.symbols.wxGraphicsContext_CreateRadialGradientBrush(this._ptr, startX, startY, endX, endY, radius, oColor, cColor, matrix);
+  }
+
+  CreateSubBitmap(bitmap: Pointer, x: number, y: number, w: number, h: number): Pointer {
+    return lib.symbols.wxGraphicsContext_CreateSubBitmap(this._ptr, bitmap, x, y, w, h);
+  }
+
+  EndLayer(): void {
+    lib.symbols.wxGraphicsContext_EndLayer(this._ptr);
+  }
+
+  FromDIP(sz: Pointer): Pointer {
+    return lib.symbols.wxGraphicsContext_FromDIP(this._ptr, sz);
+  }
+
+  SetAntialiasMode(antialias: number): boolean {
+    return (lib.symbols.wxGraphicsContext_SetAntialiasMode(this._ptr, antialias) as number) !== 0;
+  }
+
+  SetCompositionMode(op: number): boolean {
+    return (lib.symbols.wxGraphicsContext_SetCompositionMode(this._ptr, op) as number) !== 0;
+  }
+
   ClipByRectangle(x: number, y: number, width: number, height: number): void {
     lib.symbols.wxGraphicsContext_ClipByRectangle(this._ptr, x, y, width, height);
   }
@@ -170,6 +218,10 @@ export class wxGraphicsContext {
     lib.symbols.wxGraphicsContext_Translate(this._ptr, dx, dy);
   }
 
+}
+
+export function createWxGraphicsContextFromUnknownDC(dc: Pointer): Pointer {
+    return lib.symbols.wxGraphicsContext_CreateFromUnknownDC(dc);
 }
 
 export function createWxGraphicsContext(dc: Pointer): wxGraphicsContext | null {

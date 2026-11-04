@@ -96,6 +96,10 @@ export class wxBitmap extends wxObject {
     lib.symbols.wxBitmap_AddHandler(handler);
   }
 
+  CreateWithDIPSize(sz: Pointer, scale: number, depth: number): boolean {
+    return (lib.symbols.wxBitmap_CreateWithDIPSize(this._ptr, sz, scale, depth) as number) !== 0;
+  }
+
   CleanUpHandlers(): void {
     lib.symbols.wxBitmap_CleanUpHandlers();
   }

@@ -24,6 +24,10 @@ export class wxRichTextObject extends wxObject {
     return lib.symbols.wxRichTextObject_GetParent(this._ptr);
   }
 
+  GetProperties(): Pointer {
+    return lib.symbols.wxRichTextObject_GetProperties(this._ptr);
+  }
+
   GetFirstChild(): Pointer {
     return lib.symbols.wxRichTextObject_GetFirstChild(this._ptr);
   }

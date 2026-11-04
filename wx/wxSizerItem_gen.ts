@@ -24,6 +24,10 @@ export class wxSizerItem extends wxObject {
     return lib.symbols.wxSizerItem_CalcMin(this._ptr);
   }
 
+  SetMinSize(size: Pointer): void {
+    lib.symbols.wxSizerItem_SetMinSize(this._ptr, size);
+  }
+
   GetBorder(): number {
     return lib.symbols.wxSizerItem_GetBorder(this._ptr);
   }

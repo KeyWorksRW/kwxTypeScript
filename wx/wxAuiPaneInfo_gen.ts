@@ -16,6 +16,14 @@ export class wxAuiPaneInfo {
     return this._ptr;
   }
 
+  FloatingClientSize(size: Pointer): Pointer {
+    return lib.symbols.wxAuiPaneInfo_FloatingClientSize(this._ptr, size);
+  }
+
+  IconMin(b: Pointer): Pointer {
+    return lib.symbols.wxAuiPaneInfo_IconMin(this._ptr, b);
+  }
+
   Bottom(): Pointer {
     return lib.symbols.wxAuiPaneInfo_Bottom(this._ptr);
   }

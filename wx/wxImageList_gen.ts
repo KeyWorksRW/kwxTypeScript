@@ -24,6 +24,10 @@ export class wxImageList extends wxObject {
     return lib.symbols.wxImageList_AddBitmap(this._ptr, bitmap, mask);
   }
 
+  Add(bitmap: Pointer, mask: Pointer): number {
+    return lib.symbols.wxImageList_Add(this._ptr, bitmap, mask);
+  }
+
   AddIcon(icon: Pointer): number {
     return lib.symbols.wxImageList_AddIcon(this._ptr, icon);
   }

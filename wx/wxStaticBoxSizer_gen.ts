@@ -14,6 +14,17 @@ export class wxStaticBoxSizer extends wxBoxSizer {
     return lib.symbols.wxStaticBoxSizer_CalcMin(this._ptr);
   }
 
+  override Detach(window: Pointer): boolean;
+  override Detach(index: number): boolean;
+  override Detach(window: Pointer | number): boolean {
+    if (arguments.length === 1 && typeof window === "number") {
+      return super.Detach(window as number);
+    }
+    else {
+      return (lib.symbols.wxStaticBoxSizer_Detach(this._ptr, window as Pointer) as number) !== 0;
+    }
+  }
+
   GetStaticBox(): Pointer {
     return lib.symbols.wxStaticBoxSizer_GetStaticBox(this._ptr);
   }

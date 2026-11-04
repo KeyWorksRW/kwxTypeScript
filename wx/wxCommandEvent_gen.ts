@@ -32,8 +32,8 @@ export class wxCommandEvent extends wxEvent {
     return lib.symbols.wxCommandEvent_GetExtraLong(this._ptr) as bigint;
   }
 
-  GetInt(): bigint {
-    return lib.symbols.wxCommandEvent_GetInt(this._ptr) as bigint;
+  GetInt(): number {
+    return lib.symbols.wxCommandEvent_GetInt(this._ptr);
   }
 
   GetSelection(): number {

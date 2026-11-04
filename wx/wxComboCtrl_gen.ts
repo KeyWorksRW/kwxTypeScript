@@ -2,17 +2,11 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxControl } from "./wxControl_gen.ts";
 
-export class wxComboCtrl {
-  protected readonly _ptr: Pointer;
-  protected _disposed: boolean = false;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxComboCtrl extends wxControl {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
@@ -32,8 +26,36 @@ export class wxComboCtrl {
     lib.symbols.wxComboCtrl_EnablePopupAnimation(this._ptr, enable ? 1 : 0);
   }
 
+  GetBitmapDisabled(): Pointer {
+    return lib.symbols.wxComboCtrl_GetBitmapDisabled(this._ptr);
+  }
+
+  GetBitmapHover(): Pointer {
+    return lib.symbols.wxComboCtrl_GetBitmapHover(this._ptr);
+  }
+
+  GetBitmapNormal(): Pointer {
+    return lib.symbols.wxComboCtrl_GetBitmapNormal(this._ptr);
+  }
+
+  GetBitmapPressed(): Pointer {
+    return lib.symbols.wxComboCtrl_GetBitmapPressed(this._ptr);
+  }
+
+  GetButtonSize(): Pointer {
+    return lib.symbols.wxComboCtrl_GetButtonSize(this._ptr);
+  }
+
   GetCustomPaintWidth(): number {
     return lib.symbols.wxComboCtrl_GetCustomPaintWidth(this._ptr);
+  }
+
+  GetFeatures(): number {
+    return lib.symbols.wxComboCtrl_GetFeatures();
+  }
+
+  GetHint(): Pointer {
+    return lib.symbols.wxComboCtrl_GetHint(this._ptr);
   }
 
   GetInsertionPoint(): bigint {
@@ -42,6 +64,14 @@ export class wxComboCtrl {
 
   GetLastPosition(): bigint {
     return lib.symbols.wxComboCtrl_GetLastPosition(this._ptr) as bigint;
+  }
+
+  GetMargins(left: Pointer, top: Pointer): void {
+    lib.symbols.wxComboCtrl_GetMargins(this._ptr, left, top);
+  }
+
+  GetPopupControl(): Pointer {
+    return lib.symbols.wxComboCtrl_GetPopupControl(this._ptr);
   }
 
   GetPopupWindow(): Pointer {
@@ -56,6 +86,10 @@ export class wxComboCtrl {
     return lib.symbols.wxComboCtrl_GetTextCtrl(this._ptr);
   }
 
+  GetTextRect(): Pointer {
+    return lib.symbols.wxComboCtrl_GetTextRect(this._ptr);
+  }
+
   GetValue(): Pointer {
     return lib.symbols.wxComboCtrl_GetValue(this._ptr);
   }
@@ -66,6 +100,10 @@ export class wxComboCtrl {
 
   IsEditable(): boolean {
     return (lib.symbols.wxComboCtrl_IsEditable(this._ptr) as number) !== 0;
+  }
+
+  IsKeyPopupToggle(event: Pointer): boolean {
+    return (lib.symbols.wxComboCtrl_IsKeyPopupToggle(this._ptr, event) as number) !== 0;
   }
 
   IsPopupShown(): boolean {
@@ -82,6 +120,10 @@ export class wxComboCtrl {
 
   Popup(): void {
     lib.symbols.wxComboCtrl_Popup(this._ptr);
+  }
+
+  PrepareBackground(dc: Pointer, x: number, y: number, width: number, height: number, flags: number): void {
+    lib.symbols.wxComboCtrl_PrepareBackground(this._ptr, dc, x, y, width, height, flags);
   }
 
   Remove(from_: bigint, toPos: bigint): void {
@@ -108,6 +150,10 @@ export class wxComboCtrl {
     lib.symbols.wxComboCtrl_SetCustomPaintWidth(this._ptr, width);
   }
 
+  SetHint(hint: Pointer): boolean {
+    return (lib.symbols.wxComboCtrl_SetHint(this._ptr, hint) as number) !== 0;
+  }
+
   SetInsertionPoint(pos: bigint): void {
     lib.symbols.wxComboCtrl_SetInsertionPoint(this._ptr, pos);
   }
@@ -116,12 +162,20 @@ export class wxComboCtrl {
     lib.symbols.wxComboCtrl_SetInsertionPointEnd(this._ptr);
   }
 
+  SetMainControl(win: Pointer): void {
+    lib.symbols.wxComboCtrl_SetMainControl(this._ptr, win);
+  }
+
   SetMargins(left: number, top: number): void {
     lib.symbols.wxComboCtrl_SetMargins(this._ptr, left, top);
   }
 
   SetPopupAnchor(anchorSide: number): void {
     lib.symbols.wxComboCtrl_SetPopupAnchor(this._ptr, anchorSide);
+  }
+
+  SetPopupControl(popup: Pointer): void {
+    lib.symbols.wxComboCtrl_SetPopupControl(this._ptr, popup);
   }
 
   SetPopupExtents(extLeft: number, extRight: number): void {
@@ -152,12 +206,124 @@ export class wxComboCtrl {
     lib.symbols.wxComboCtrl_SetValue(this._ptr, value);
   }
 
+  SetValueByUser(value: Pointer): void {
+    lib.symbols.wxComboCtrl_SetValueByUser(this._ptr, value);
+  }
+
+  ShouldDrawFocus(): boolean {
+    return (lib.symbols.wxComboCtrl_ShouldDrawFocus(this._ptr) as number) !== 0;
+  }
+
   ShowPopup(): void {
     lib.symbols.wxComboCtrl_ShowPopup(this._ptr);
   }
 
   Undo(): void {
     lib.symbols.wxComboCtrl_Undo(this._ptr);
+  }
+
+  UseAltPopupWindow(enable: boolean): void {
+    lib.symbols.wxComboCtrl_UseAltPopupWindow(this._ptr, enable ? 1 : 0);
+  }
+
+  ConvertToUpperCase(): void {
+    lib.symbols.wxTextEntry_ConvertToUpperCase(this._ptr);
+  }
+
+  ForwardEnableTextChangedEvents(enable: boolean): void {
+    lib.symbols.wxTextEntry_ForwardEnableTextChangedEvents(this._ptr, enable ? 1 : 0);
+  }
+
+  ChangeValue(value: Pointer): void {
+    lib.symbols.wxTextEntry_ChangeValue(this._ptr, value);
+  }
+
+  GetRange(from_: bigint, to: bigint): Pointer {
+    return lib.symbols.wxTextEntry_GetRange(this._ptr, from_, to);
+  }
+
+  IsEmpty(): boolean {
+    return (lib.symbols.wxTextEntry_IsEmpty(this._ptr) as number) !== 0;
+  }
+
+  WriteText(text: Pointer): void {
+    lib.symbols.wxTextEntry_WriteText(this._ptr, text);
+  }
+
+  AppendText(text: Pointer): void {
+    lib.symbols.wxTextEntry_AppendText(this._ptr, text);
+  }
+
+  Clear(): void {
+    lib.symbols.wxTextEntry_Clear(this._ptr);
+  }
+
+  RemoveSelection(): void {
+    lib.symbols.wxTextEntry_RemoveSelection(this._ptr);
+  }
+
+  CanCopy(): boolean {
+    return (lib.symbols.wxTextEntry_CanCopy(this._ptr) as number) !== 0;
+  }
+
+  CanCut(): boolean {
+    return (lib.symbols.wxTextEntry_CanCut(this._ptr) as number) !== 0;
+  }
+
+  CanPaste(): boolean {
+    return (lib.symbols.wxTextEntry_CanPaste(this._ptr) as number) !== 0;
+  }
+
+  Redo(): void {
+    lib.symbols.wxTextEntry_Redo(this._ptr);
+  }
+
+  CanUndo(): boolean {
+    return (lib.symbols.wxTextEntry_CanUndo(this._ptr) as number) !== 0;
+  }
+
+  CanRedo(): boolean {
+    return (lib.symbols.wxTextEntry_CanRedo(this._ptr) as number) !== 0;
+  }
+
+  SelectNone(): void {
+    lib.symbols.wxTextEntry_SelectNone(this._ptr);
+  }
+
+  GetSelection(from_: Pointer, to: Pointer): void {
+    lib.symbols.wxTextEntry_GetSelection(this._ptr, from_, to);
+  }
+
+  HasSelection(): boolean {
+    return (lib.symbols.wxTextEntry_HasSelection(this._ptr) as number) !== 0;
+  }
+
+  GetStringSelection(): Pointer {
+    return lib.symbols.wxTextEntry_GetStringSelection(this._ptr);
+  }
+
+  SetEditable(editable: boolean): void {
+    lib.symbols.wxTextEntry_SetEditable(this._ptr, editable ? 1 : 0);
+  }
+
+  SetMaxLength(len: bigint): void {
+    lib.symbols.wxTextEntry_SetMaxLength(this._ptr, len);
+  }
+
+  ForceUpper(): void {
+    lib.symbols.wxTextEntry_ForceUpper(this._ptr);
+  }
+
+  AutoComplete(count: number, items: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_AutoComplete(this._ptr, count, items) as number) !== 0;
+  }
+
+  AutoCompleteFileNames(): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteFileNames(this._ptr) as number) !== 0;
+  }
+
+  AutoCompleteDirectories(): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteDirectories(this._ptr) as number) !== 0;
   }
 
 }

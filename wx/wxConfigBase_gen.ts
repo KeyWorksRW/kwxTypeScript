@@ -2,27 +2,21 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxObject } from "./wxObject_gen.ts";
 
-export class wxConfigBase {
-  protected readonly _ptr: Pointer;
-  protected _disposed: boolean = false;
-
-  constructor(ptr: Pointer) {
-    this._ptr = ptr;
-  }
-
+export class wxConfigBase extends wxObject {
   /** Returns the underlying native pointer. */
-  get ptr(): Pointer {
+  override get ptr(): Pointer {
     return this._ptr;
   }
 
-  Delete(): void {
+  override Delete(): void {
     if (this._disposed) return;
     this._disposed = true;
     lib.symbols.wxConfigBase_Delete(this._ptr);
   }
 
-  [Symbol.dispose](): void {
+  override [Symbol.dispose](): void {
     this.Delete();
   }
 
@@ -32,6 +26,22 @@ export class wxConfigBase {
 
   Set(): void {
     lib.symbols.wxConfigBase_Set(this._ptr);
+  }
+
+  DontCreateOnDemand(): void {
+    lib.symbols.wxConfigBase_DontCreateOnDemand();
+  }
+
+  ReadLong(key: Pointer, def_val: bigint): bigint {
+    return lib.symbols.wxConfigBase_ReadLong(this._ptr, key, def_val) as bigint;
+  }
+
+  Read(key: Pointer, pStr: Pointer): boolean {
+    return (lib.symbols.wxConfigBase_Read(this._ptr, key, pStr) as number) !== 0;
+  }
+
+  Write(key: Pointer, value: Pointer): boolean {
+    return (lib.symbols.wxConfigBase_Write(this._ptr, key, value) as number) !== 0;
   }
 
   DeleteAll(): boolean {

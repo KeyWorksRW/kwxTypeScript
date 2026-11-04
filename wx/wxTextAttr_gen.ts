@@ -26,6 +26,74 @@ export class wxTextAttr {
     this.Delete();
   }
 
+  GetAlignment(): number {
+    return lib.symbols.wxTextAttr_GetAlignment(this._ptr);
+  }
+
+  GetLeftIndent(): bigint {
+    return lib.symbols.wxTextAttr_GetLeftIndent(this._ptr) as bigint;
+  }
+
+  GetParagraphSpacingAfter(): number {
+    return lib.symbols.wxTextAttr_GetParagraphSpacingAfter(this._ptr);
+  }
+
+  HasAlignment(): boolean {
+    return (lib.symbols.wxTextAttr_HasAlignment(this._ptr) as number) !== 0;
+  }
+
+  HasFontPixelSize(): boolean {
+    return (lib.symbols.wxTextAttr_HasFontPixelSize(this._ptr) as number) !== 0;
+  }
+
+  HasLeftIndent(): boolean {
+    return (lib.symbols.wxTextAttr_HasLeftIndent(this._ptr) as number) !== 0;
+  }
+
+  SetAlignment(alignment: number): void {
+    lib.symbols.wxTextAttr_SetAlignment(this._ptr, alignment);
+  }
+
+  SetFlags(flags: bigint): void {
+    lib.symbols.wxTextAttr_SetFlags(this._ptr, flags);
+  }
+
+  SetFontFaceName(faceName: Pointer): void {
+    lib.symbols.wxTextAttr_SetFontFaceName(this._ptr, faceName);
+  }
+
+  SetFontSize(pointSize: number): void {
+    lib.symbols.wxTextAttr_SetFontSize(this._ptr, pointSize);
+  }
+
+  SetFontStyle(fontStyle: number): void {
+    lib.symbols.wxTextAttr_SetFontStyle(this._ptr, fontStyle);
+  }
+
+  SetFontUnderlined(underlined: boolean): void {
+    lib.symbols.wxTextAttr_SetFontUnderlined(this._ptr, underlined ? 1 : 0);
+  }
+
+  SetFontWeight(fontWeight: number): void {
+    lib.symbols.wxTextAttr_SetFontWeight(this._ptr, fontWeight);
+  }
+
+  SetLeftIndent(indent: number, subIndent: number): void {
+    lib.symbols.wxTextAttr_SetLeftIndent(this._ptr, indent, subIndent);
+  }
+
+  SetLineSpacing(spacing: number): void {
+    lib.symbols.wxTextAttr_SetLineSpacing(this._ptr, spacing);
+  }
+
+  SetParagraphSpacingAfter(spacing: number): void {
+    lib.symbols.wxTextAttr_SetParagraphSpacingAfter(this._ptr, spacing);
+  }
+
+  SetRightIndent(indent: number): void {
+    lib.symbols.wxTextAttr_SetRightIndent(this._ptr, indent);
+  }
+
   GetBackgroundColour(colour: Pointer): void {
     lib.symbols.wxTextAttr_GetBackgroundColour(this._ptr, colour);
   }

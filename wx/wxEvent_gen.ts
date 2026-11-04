@@ -66,4 +66,8 @@ export class wxEvent extends wxObject {
     lib.symbols.wxEvent_Skip(this._ptr, skip ? 1 : 0);
   }
 
+  SetOnClone(pFunction: Pointer): void {
+    lib.symbols.wxEvent_SetOnClone(this._ptr, pFunction);
+  }
+
 }

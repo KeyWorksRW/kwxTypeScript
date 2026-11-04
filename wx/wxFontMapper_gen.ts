@@ -16,6 +16,30 @@ export class wxFontMapper {
     return this._ptr;
   }
 
+  CharsetToEncoding(charset: Pointer, interactive: boolean): number {
+    return lib.symbols.wxFontMapper_CharsetToEncoding(this._ptr, charset, interactive ? 1 : 0);
+  }
+
+  Get(): Pointer {
+    return lib.symbols.wxFontMapper_Get();
+  }
+
+  GetEncoding(n: bigint): number {
+    return lib.symbols.wxFontMapper_GetEncoding(n);
+  }
+
+  GetEncodingDescription(encoding: number): Pointer {
+    return lib.symbols.wxFontMapper_GetEncodingDescription(encoding);
+  }
+
+  GetEncodingName(encoding: number): Pointer {
+    return lib.symbols.wxFontMapper_GetEncodingName(encoding);
+  }
+
+  GetSupportedEncodingsCount(): bigint {
+    return lib.symbols.wxFontMapper_GetSupportedEncodingsCount() as bigint;
+  }
+
   GetAltForEncoding(encoding: number, alt_encoding: Pointer, buffer: Pointer): boolean {
     return (lib.symbols.wxFontMapper_GetAltForEncoding(this._ptr, encoding, alt_encoding, buffer) as number) !== 0;
   }

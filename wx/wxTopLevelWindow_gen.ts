@@ -34,6 +34,10 @@ export class wxTopLevelWindow extends wxWindow {
     return (lib.symbols.wxTopLevelWindow_EnableCloseButton(this._ptr, enable ? 1 : 0) as number) !== 0;
   }
 
+  CentreOnScreen(dir: number): void {
+    lib.symbols.wxTopLevelWindow_CentreOnScreen(this._ptr, dir);
+  }
+
   GetDefaultButton(): Pointer {
     return lib.symbols.wxTopLevelWindow_GetDefaultButton(this._ptr);
   }
