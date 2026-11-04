@@ -10,17 +10,27 @@
 //
 // Porting notes (details in the report):
 //   * wxFontInfo is not bound. FontPanel::GetFontInfo() is expressed through
-//     the legacy wxFont constructor, which wxWidgets implements through the
-//     same wxFontInfo (see fontpanel.kwxts).
-//   * wxFontEnumerator cannot be used: the binding's createWxFontEnumerator()
-//     expects a native int (*)(void*, void*) callback, while kwxTypeScript's
-//     Callback only produces void (*)(void*, void*, void*) thunks, so the
-//     facename/encoding collections cannot be retrieved. The "Enumerate ..."
-//     menu items and "View..." (which also needs wxTextFile and
-//     wxFontMapper::CharsetToEncoding) are kept and report the limitation.
-//   * wxGetSingleChoiceIndex, wxArrayString and the wxFontMapper static
-//     enumeration helpers are not bound, so "Set font family" and "Set font
-//     encoding" report the limitation instead of showing a choice dialog.
+//     the legacy wxFont constructor plus the numeric setters, which produce
+//     the same native font (see fontpanel.kwxts).
+//   * wxFontEnumerator cannot be used: the native shim calls its virtual
+//     callbacks through `int (*)(void*, void*)`, while kwxTypeScript's Callback
+//     is a three-pointer `void` thunk. The return value that tells wxWidgets
+//     whether to continue enumerating is therefore undefined, and no generated
+//     accessor exposes the collected facenames. The "Enumerate ..." menu items
+//     keep reporting the limitation.
+//   * wxGetSingleChoiceIndex is bound, but its `const wxString*` argument must
+//     point at a contiguous native wxString array. The binding only offers
+//     wxArrayString::Item(), which returns a copy; there is no way to obtain
+//     the array's element storage. The family and encoding choices therefore
+//     use wxSingleChoiceDialog directly -- the same dialog wxGetSingleChoiceIndex
+//     creates internally, with identical message, caption and choices.
+//   * "View..." reads the message with wxTextFile and maps the charset with
+//     wxFontMapper. The final step (wxFontEnumerator facename lookup) is
+//     unavailable, so the encoding fallback font that the C++ code creates when
+//     no facename is found is used there; wxEncodingConverter cannot copy bytes
+//     for an arbitrary source encoding from JavaScript, so the text is left as
+//     loaded (wxWidgets is Unicode internally and the old byte round-trip is a
+//     no-op for printable text).
 //   * Everything else, including the font dialog, private font, native font
 //     descriptions, stock/system fonts and the character-table painting, is
 //     implemented.
@@ -31,6 +41,9 @@ import {
     ALL,
     BITMAP_TYPE_XPM,
     BLUE,
+    CANCEL,
+    CENTRE,
+    DEFAULT_DIALOG_STYLE,
     DEFAULT_FRAME_STYLE,
     EVT_BUTTON,
     EVT_CHOICE,
@@ -40,15 +53,23 @@ import {
     EVT_SPINCTRL,
     EVT_TEXT,
     EXPAND,
+    FD_OPEN,
     FONTFAMILY_DEFAULT,
+    FONTFAMILY_DECORATIVE,
+    FONTFAMILY_MODERN,
+    FONTFAMILY_ROMAN,
+    FONTFAMILY_SCRIPT,
+    FONTFAMILY_SWISS,
+    FONTFAMILY_TELETYPE,
     FONTENCODING_DEFAULT,
+    FONTENCODING_SYSTEM,
+    FONTENCODING_UTF8,
     FONTSTYLE_ITALIC,
     FONTSTYLE_NORMAL,
     FONTSTYLE_SLANT,
     FONTWEIGHT_BOLD,
     FONTWEIGHT_LIGHT,
     FONTWEIGHT_NORMAL,
-    FULL_REPAINT_ON_RESIZE,
     ICON_ERROR,
     ICON_INFORMATION,
     ID_ABOUT,
@@ -62,9 +83,10 @@ import {
     OK,
     PENSTYLE_SOLID,
     RED,
+    RESIZE_BORDER,
     SMALL_FONT,
     SP_3D,
-    ST_SIZEGRIP,
+    STB_DEFAULT_STYLE,
     SWISS_FONT,
     SYS_ANSI_FIXED_FONT,
     SYS_ANSI_VAR_FONT,
@@ -74,22 +96,28 @@ import {
     SYS_SYSTEM_FONT,
     TE_MULTILINE,
     VERTICAL,
+    createWxArrayString,
     createWxBoxSizer,
     createWxClosure,
     createWxColourEmpty,
+    createWxEncodingConverter,
+    createWxFileDialog,
     createWxFont,
     createWxFontData,
     createWxFontDefault,
     createWxFontDialog,
+    createWxFontMapper,
     createWxFrame,
     createWxIconLoad,
     createWxMenu,
     createWxMenuBar,
     createWxPenFromColour,
+    createWxSingleChoiceDialog,
     createWxSplitterWindow,
     createWxStaticLine,
     createWxString,
     createWxTextCtrl,
+    createWxTextFileFromFile,
     createWxWindow,
     exitMainLoop,
     initAllImageHandlers,
@@ -103,6 +131,7 @@ import {
     setAppName,
     setTopWindow,
     shutdown,
+    wxArrayString,
     wxClosure,
     wxColour,
     wxCommandEvent,
@@ -185,17 +214,14 @@ const FONT_SET_ENCODING = 109;
 const FONT_PRIVATE = 110;
 
 /**
- * wxSTB_DEFAULT_STYLE = wxSTB_SIZEGRIP | wxSTB_ELLIPSIZE_END |
- *                      wxSTB_SHOW_TIPS | wxFULL_REPAINT_ON_RESIZE.
- * Only wxST_SIZEGRIP and wxFULL_REPAINT_ON_RESIZE are exported by name in the
- * constant table, so the two remaining bits are spelled out here.
+ * CreateStatusBar() defaults to wxSTB_DEFAULT_STYLE, which the constant table
+ * exports directly.
  */
-const STB_SHOW_TIPS = 0x0020;
-const STB_ELLIPSIZE_END = 0x0100;
-const STATUS_BAR_STYLE =
-    ST_SIZEGRIP | STB_SHOW_TIPS | STB_ELLIPSIZE_END | FULL_REPAINT_ON_RESIZE;
-
 const SAMPLE_TITLE = "wxWidgets Font Sample";
+
+/** MyFrame::OnViewMsg() static wxString s_dir, s_file. */
+let viewDir = "";
+let viewFile = "";
 
 // ---------------------------------------------------------------------------
 // State
@@ -216,7 +242,7 @@ interface FontState
     canvasFont: wxFont;
     /** Owned canvas colour (FontCanvas::m_colour). */
     canvasColour: wxColour;
-    /** Owned 1px solid blue pen (wxBLUE_PEN is not exported). */
+    /** Owned copy of wxBLUE_PEN (a 1px solid blue pen). */
     readonly pen: wxPen;
 
     readonly callbacks: Callback[];
@@ -334,6 +360,162 @@ function logWarning(message: string): void
 function showUnavailable(state: FontState, message: string): void
 {
     showMessage(state.frame.ptr, message, "Not available", OK);
+}
+
+/**
+ * Equivalent of wxGetSingleChoiceIndex(message, caption, choices, parent):
+ * it creates a wxSingleChoiceDialog with the same message, caption and choices
+ * and returns the selected index, or -1 when the dialog was cancelled.
+ *
+ * The wxArrayString is supplied by the caller and cached there: the binding
+ * exposes wxArrayString_Create() but no corresponding deleter, so creating a
+ * fresh array for every invocation would leak one native array each time.
+ */
+function chooseFromList(
+    parent: Pointer,
+    message: string,
+    caption: string,
+    choices: wxArrayString,
+): number
+{
+    const messageText = createWxString(message);
+    const captionText = createWxString(caption);
+    const dialog = createWxSingleChoiceDialog(
+        parent,
+        messageText.ptr,
+        captionText.ptr,
+        choices.ptr,
+        // wxCHOICEDLG_STYLE.
+        DEFAULT_DIALOG_STYLE | RESIZE_BORDER | OK | CANCEL | CENTRE,
+    );
+    messageText.Delete();
+    captionText.Delete();
+
+    let selection = -1;
+    if (dialog)
+    {
+        // wxGetSingleChoiceIndex(..., initialSelection = 0).
+        dialog.SetSelection(0);
+        if (dialog.ShowModal() === ID_OK)
+        {
+            selection = dialog.GetSelection();
+        }
+        dialog.Destroy();
+    }
+
+    return selection;
+}
+
+let familyChoices: wxArrayString | null = null;
+
+/** Build the family name list once (it is constant). */
+function getFamilyChoices(): wxArrayString | null
+{
+    if (familyChoices)
+    {
+        return familyChoices;
+    }
+
+    const names: readonly string[] = [
+        "DECORATIVE",
+        "ROMAN",
+        "SCRIPT",
+        "SWISS",
+        "MODERN",
+        "TELETYPE",
+    ];
+
+    const array = createWxArrayString();
+    if (!array)
+    {
+        return null;
+    }
+    for (const name of names)
+    {
+        withString(name, (ptr) => array.Add(ptr));
+    }
+    familyChoices = array;
+    return array;
+}
+
+/** MyFrame::GetFamilyFromUser() */
+function getFamilyFromUser(state: FontState): number
+{
+    // The C++ enum order in MyFrame::GetFamilyFromUser().
+    const families: readonly number[] = [
+        FONTFAMILY_DECORATIVE,
+        FONTFAMILY_ROMAN,
+        FONTFAMILY_SCRIPT,
+        FONTFAMILY_SWISS,
+        FONTFAMILY_MODERN,
+        FONTFAMILY_TELETYPE,
+    ];
+
+    const choices = getFamilyChoices();
+    if (!choices)
+    {
+        return FONTFAMILY_DEFAULT;
+    }
+
+    const index = chooseFromList(
+        state.frame.ptr,
+        "Choose the family",
+        SAMPLE_TITLE,
+        choices,
+    );
+
+    return index === -1 ? FONTFAMILY_DEFAULT : families[index];
+}
+
+let encodingChoices: { names: wxArrayString; encodings: number[] } | null = null;
+
+/** Build the encoding name list once (wxFontMapper's list is constant). */
+function getEncodingChoices(): { names: wxArrayString; encodings: number[] } | null
+{
+    if (encodingChoices)
+    {
+        return encodingChoices;
+    }
+
+    const count = Number(lib.symbols.wxFontMapper_GetSupportedEncodingsCount());
+    const encodings: number[] = [];
+    const array = createWxArrayString();
+    if (!array)
+    {
+        return null;
+    }
+
+    for (let n = 0; n < count; n++)
+    {
+        const encoding = lib.symbols.wxFontMapper_GetEncoding(BigInt(n));
+        encodings.push(encoding);
+        const name = readAndDeleteWxString(
+            lib.symbols.wxFontMapper_GetEncodingName(encoding),
+        );
+        withString(name, (ptr) => array.Add(ptr));
+    }
+
+    encodingChoices = { names: array, encodings };
+    return encodingChoices;
+}
+
+/** MyFrame::GetEncodingFromUser() */
+function getEncodingFromUser(state: FontState): number
+{
+    const choices = getEncodingChoices();
+    if (!choices)
+    {
+        return FONTENCODING_SYSTEM;
+    }
+
+    const index = chooseFromList(
+        state.frame.ptr,
+        "Choose the encoding",
+        SAMPLE_TITLE,
+        choices.names,
+    );
+
+    return index === -1 ? FONTENCODING_SYSTEM : choices.encodings[index];
 }
 
 // ---------------------------------------------------------------------------
@@ -824,7 +1006,7 @@ function createFontFrame(): FontState | null
     );
 
     // CreateStatusBar(); SetStatusText("Welcome to wxWidgets font demo!");
-    frame.CreateStatusBar(1, STATUS_BAR_STYLE, ID_ANY);
+    frame.CreateStatusBar(1, STB_DEFAULT_STYLE, ID_ANY);
     withString("Welcome to wxWidgets font demo!", (ptr) =>
     {
         frame.SetStatusText(ptr, 0);
@@ -1194,6 +1376,42 @@ function setFaceName(state: FontState): void
     font.Delete();
 }
 
+/** MyFrame::OnSetFamily() */
+function setFamily(state: FontState): void
+{
+    const family = getFamilyFromUser(state);
+
+    const font = cloneFont(state.font);
+    if (!font)
+    {
+        return;
+    }
+
+    font.SetFamily(family);
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
+/** MyFrame::OnSetEncoding() */
+function setEncoding(state: FontState): void
+{
+    const encoding = getEncodingFromUser(state);
+    if (encoding === FONTENCODING_SYSTEM)
+    {
+        return;
+    }
+
+    const font = cloneFont(state.font);
+    if (!font)
+    {
+        return;
+    }
+
+    font.SetEncoding(encoding);
+    doChangeFont(state, font, null);
+    font.Delete();
+}
+
 /** MyFrame::OnPrivateFont() */
 function usePrivateFont(state: FontState): void
 {
@@ -1269,6 +1487,201 @@ function testTextValue(state: FontState): void
     }
 }
 
+/** MyFrame::OnViewMsg() */
+function viewMessage(state: FontState): void
+{
+    const message = createWxString("Open an email message file");
+    const directory = createWxString(viewDir);
+    const defaultFile = createWxString(viewFile);
+    // wxFileSelectorDefaultWildcardStr: "*.*" on MSW, "*" elsewhere.
+    const wildcard = createWxString(platform === "windows" ? "*.*" : "*");
+
+    const dialog = createWxFileDialog(
+        state.frame.ptr,
+        message.ptr,
+        directory.ptr,
+        defaultFile.ptr,
+        wildcard.ptr,
+        -1,
+        -1,
+        FD_OPEN,
+        -1,
+        -1,
+    );
+    message.Delete();
+    directory.Delete();
+    defaultFile.Delete();
+    wildcard.Delete();
+
+    if (!dialog)
+    {
+        return;
+    }
+
+    if (dialog.ShowModal() !== ID_OK)
+    {
+        dialog.Destroy();
+        return;
+    }
+
+    // save for the next time
+    viewDir = readAndDeleteWxString(dialog.GetDirectory());
+    viewFile = readAndDeleteWxString(dialog.GetFilename());
+    const filename = readAndDeleteWxString(dialog.GetPath());
+    dialog.Destroy();
+
+    // load it and search for Content-Type header
+    const textFile = withString(filename, (ptr) =>
+        createWxTextFileFromFile(ptr));
+    if (!textFile)
+    {
+        return;
+    }
+    if (!textFile.Open())
+    {
+        textFile.Delete();
+        return;
+    }
+
+    let charset = "";
+    const prefix = "Content-Type: text/plain; charset=";
+    const count = textFile.GetLineCount();
+    for (let n = 0; n < count; n++)
+    {
+        const line = readAndDeleteWxString(textFile.GetLine(n));
+
+        if (line.length === 0)
+        {
+            // if it is an email message, headers are over
+            break;
+        }
+
+        if (!line.startsWith(prefix))
+        {
+            continue;
+        }
+
+        // found! strip the optional quotes around the charset name
+        let rest = line.substring(prefix.length);
+        if (rest.startsWith("\""))
+        {
+            rest = rest.substring(1);
+        }
+        const quote = rest.indexOf("\"");
+        charset = quote === -1 ? rest : rest.substring(0, quote);
+        break;
+    }
+    textFile.Delete();
+
+    if (charset === "")
+    {
+        logError(`The file '${filename}' doesn't contain charset information.`);
+        return;
+    }
+
+    const mapper = createWxFontMapper();
+    if (!mapper)
+    {
+        return;
+    }
+
+    // wxFontMapper::Get()->CharsetToEncoding(charset) -- interactive by default.
+    let fontenc = withString(charset, (ptr) => mapper.CharsetToEncoding(ptr, true));
+    if (fontenc === FONTENCODING_SYSTEM)
+    {
+        logError(`Charset '${charset}' is unsupported.`);
+        return;
+    }
+
+    // m_textctrl->LoadFile(filename); wxTEXT_TYPE_ANY == 0.
+    withString(filename, (ptr) => state.textCtrl.LoadFile(ptr, 0));
+
+    if (
+        fontenc === FONTENCODING_UTF8 ||
+        !withString("", (ptr) => mapper.IsEncodingAvailable(fontenc, ptr))
+    )
+    {
+        // try to find some similar encoding
+        const altEncoding = new Int32Array(1);
+        const hasAlt = withString("", (ptr) =>
+            mapper.GetAltForEncoding(fontenc, pointerOf(altEncoding), ptr));
+
+        if (hasAlt)
+        {
+            const converter = createWxEncodingConverter();
+            // wxEncodingConverter::Init() defaults to wxCONVERT_STRICT (0).
+            const converted = converter !== null &&
+                ((converter.Init(fontenc, altEncoding[0], 0) & 0xff) !== 0);
+
+            if (converted)
+            {
+                fontenc = altEncoding[0];
+
+                // The C++ code re-reads the text control and runs it through
+                // wxEncodingConverter. The binding exposes only raw char*
+                // buffers, and there is no way to obtain the text bytes in the
+                // source encoding from a wxString, so the Unicode value is left
+                // untouched (for the encodings that matter here the round-trip
+                // is a no-op).
+            }
+            else
+            {
+                logWarning(
+                    `Cannot convert from '${
+                        readAndDeleteWxString(mapper.GetEncodingDescription(fontenc))
+                    }' to '${
+                        readAndDeleteWxString(
+                            mapper.GetEncodingDescription(altEncoding[0]),
+                        )
+                    }'.`,
+                );
+            }
+
+            converter?.Delete();
+        }
+        else
+        {
+            logWarning(
+                `No fonts for encoding '${
+                    readAndDeleteWxString(mapper.GetEncodingDescription(fontenc))
+                }' on this system.`,
+            );
+        }
+    }
+
+    // The C++ code first calls DoEnumerateFamilies(false, fontenc, true).
+    // wxFontEnumerator is unavailable (see the file header), so use the same
+    // fallback it uses when no facename is found:
+    //   wxFont(wxFontInfo(wxNORMAL_FONT->GetPointSize()).Encoding(fontenc))
+    const normalPointSize = new wxFont(NORMAL_FONT).GetPointSize();
+    const font = withString("", (facePtr) =>
+        createWxFont(
+            normalPointSize,
+            FONTFAMILY_DEFAULT,
+            FONTSTYLE_NORMAL,
+            FONTWEIGHT_NORMAL,
+            false,
+            facePtr,
+            fontenc,
+        ));
+
+    if (font && fontIsOk(font))
+    {
+        doChangeFont(state, font, null);
+    }
+    else
+    {
+        logWarning(
+            `No fonts for encoding '${
+                readAndDeleteWxString(mapper.GetEncodingDescription(fontenc))
+            }' on this system.`,
+        );
+    }
+
+    font?.Delete();
+    // mapper wraps wxTheFontMapper; it must not be deleted.
+}
+
 /** MyFrame::OnAbout() */
 function showAbout(state: FontState): void
 {
@@ -1291,14 +1704,7 @@ function handleMenu(state: FontState, id: number, checked: boolean): void
         case FONT_QUIT: state.frame.Close(true); break;
 
         case FONT_TEST_TEXT_VALUE: testTextValue(state); break;
-        case FONT_VIEW_MSG:
-            showUnavailable(
-                state,
-                "This command reads an email message with wxTextFile and maps " +
-                    "its charset with wxFontMapper::CharsetToEncoding. Neither " +
-                    "is bound in kwxTypeScript.",
-            );
-            break;
+        case FONT_VIEW_MSG: viewMessage(state); break;
         case FONT_ABOUT: showAbout(state); break;
 
         case FONT_GET_BASE_FONT: applyBaseFont(state); break;
@@ -1350,22 +1756,9 @@ function handleMenu(state: FontState, id: number, checked: boolean): void
         case FONT_SET_NATIVE_DESC: setNativeDesc(state); break;
         case FONT_SET_NATIVE_USER_DESC: setNativeUserDesc(state); break;
 
-        case FONT_SET_FAMILY:
-            showUnavailable(
-                state,
-                "Choosing a font family uses wxGetSingleChoiceIndex() and " +
-                    "wxArrayString, neither of which is bound in kwxTypeScript.",
-            );
-            break;
+        case FONT_SET_FAMILY: setFamily(state); break;
         case FONT_SET_FACE_NAME: setFaceName(state); break;
-        case FONT_SET_ENCODING:
-            showUnavailable(
-                state,
-                "Choosing an encoding uses wxGetSingleChoiceIndex() and " +
-                    "wxFontMapper::GetSupportedEncodingsCount()/GetEncoding()/" +
-                    "GetEncodingName(), none of which is bound in kwxTypeScript.",
-            );
-            break;
+        case FONT_SET_ENCODING: setEncoding(state); break;
 
         case FONT_CHOOSE: selectFont(state); break;
 
@@ -1391,10 +1784,12 @@ function handleMenu(state: FontState, id: number, checked: boolean): void
         case FONT_ENUM_FAMILIES_FOR_ENCODING:
             showUnavailable(
                 state,
-                "This command needs an encoding choice " +
-                    "(wxGetSingleChoiceIndex, wxFontMapper enumeration) and then " +
-                    "wxFontEnumerator facename enumeration. None of these can be " +
-                    "used from kwxTypeScript.",
+                "This command chooses an encoding and then enumerates the " +
+                    "facenames available for it. Encoding selection works, but " +
+                    "wxFontEnumerator's facename callback cannot be used from " +
+                    "kwxTypeScript: the native shim calls it as " +
+                    "int (*)(void*, void*), while Callback is a three-pointer " +
+                    "void thunk, so enumeration cannot continue reliably.",
             );
             break;
 

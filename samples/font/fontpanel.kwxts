@@ -6,9 +6,10 @@
 //
 // wxFontInfo is not bound, so FontPanel::GetFontInfo() is reproduced with the
 // legacy wxFont(int, family, style, weight, underlined, face, encoding)
-// constructor, which wxWidgets implements through the very same wxFontInfo:
-// the numeric weight is passed through unchanged and the fractional point size
-// is applied with SetFractionalPointSize() afterwards.
+// constructor followed by SetFractionalPointSize() and SetNumericWeight().
+// The legacy constructor converts its weight through GetNumericWeightOf(),
+// which asserts on non-multiples of 100, so a normal weight is passed there
+// and the exact numeric weight is applied through the setter.
 
 import {
     ALIGN_CENTER_HORIZONTAL,
@@ -598,7 +599,9 @@ export function showFont(state: FontPanelState, font: wxFont): void
  *
  * wxFontInfo(m_spinPointSize->GetValue()) with the same Family/FaceName,
  * Style, Weight and Underlined/Strikethrough settings is expressed with the
- * legacy wxFont constructor, which wxWidgets routes through wxFontInfo anyway.
+ * legacy wxFont constructor plus SetFractionalPointSize() and
+ * SetNumericWeight(), which gives the same native font without the debug-only
+ * multiple-of-100 assertion in wxFontBase::GetNumericWeightOf().
  *
  * Returns an owned font; the caller must call Delete().
  */
@@ -643,7 +646,11 @@ export function makeFont(state: FontPanelState): wxFont | null
             Math.round(pointSize),
             family,
             style,
-            weight,
+            // 100 is wxFONTWEIGHT_NORMAL. The exact numeric weight is applied
+            // below: the legacy constructor converts its wxFontWeight argument
+            // through GetNumericWeightOf(), which asserts on values that are not
+            // multiples of 100 in debug builds.
+            100,
             underlined,
             facePtr,
             FONTENCODING_DEFAULT,
@@ -653,9 +660,11 @@ export function makeFont(state: FontPanelState): wxFont | null
         return null;
     }
 
-    // wxFontInfo keeps the fractional size; the legacy constructor only takes
-    // an int, so restore the exact value.
+    // wxFontInfo keeps the fractional size and the numeric weight; the legacy
+    // constructor only takes an int size and a legacy weight enum, so restore
+    // the exact values.
     font.SetFractionalPointSize(pointSize);
+    font.SetNumericWeight(weight);
 
     if (state.checkStrikethrough.GetValue())
     {
