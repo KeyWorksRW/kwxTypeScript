@@ -1,0 +1,156 @@
+// support.kwxts — shared helpers for the kwxTypeScript richtext sample.
+//
+// Everything here mirrors small C++ helpers used by wxSamples/src/richtext:
+// wxString lifetime handling, XPM-derived SVG asset loading, message boxes,
+// wxGetTextFromUser and selection-range extraction.
+
+declare const __dirname: string;
+
+import {
+    ICON_INFORMATION,
+    OK,
+    createWxString,
+    kwxMessageBox,
+    readAndDeleteWxString,
+    wxBitmap,
+    wxBitmapBundle,
+    wxBitmapBundle_FromSVGFile,
+    wxGetTextFromUserEx,
+    wxRichTextCtrl,
+    wxRichTextObject,
+} from "kwx";
+import { Pointer, pointerOf } from "kwx/platform";
+
+/** Absolute path of an asset shipped next to this module. */
+export function assetPath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** A one-shot wxString whose lifetime is limited to `fn`. */
+export function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** wxBitmapBundle::FromSVGFile(path, width, height) — result is owned. */
+export function loadSvgBundle(name: string, width: number, height: number): wxBitmapBundle | null
+{
+    let raw: Pointer = null;
+    withString(assetPath(name), (path) =>
+    {
+        raw = wxBitmapBundle_FromSVGFile(path, width, height);
+    });
+    if (!raw)
+    {
+        return null;
+    }
+    return new wxBitmapBundle(raw);
+}
+
+/** wxBitmap bitmap = bundle.GetBitmap(w, h); the returned wrapper owns the bitmap. */
+export function bitmapOf(bundle: wxBitmapBundle, width: number, height: number): wxBitmap | null
+{
+    return bundle.GetBitmap(width, height);
+}
+
+/** wxMessageBox(text, caption, wxOK | wxICON_INFORMATION, parent). */
+export function message(text: string, caption: string, parent: Pointer): void
+{
+    withString(text, (msg) =>
+    {
+        withString(caption, (cap) =>
+        {
+            kwxMessageBox(msg, cap, OK | ICON_INFORMATION, parent, -1, -1);
+        });
+    });
+}
+
+/**
+ * wxGetTextFromUser(message, caption, defaultText, parent).
+ *
+ * The binding exposes the wxString-returning wxGetTextFromUserEx; the UTF-8
+ * argument buffers stay referenced until the native call returns.
+ */
+export function getTextFromUser(
+    messageText: string,
+    caption: string,
+    defaultValue: string,
+    parent: Pointer,
+): string
+{
+    const messageBuffer = new TextEncoder().encode(messageText + "\0");
+    const captionBuffer = new TextEncoder().encode(caption + "\0");
+    const defaultBuffer = new TextEncoder().encode(defaultValue + "\0");
+
+    const result = wxGetTextFromUserEx(
+        pointerOf(messageBuffer),
+        pointerOf(captionBuffer),
+        pointerOf(defaultBuffer),
+        parent,
+        -1,
+        -1,
+        1,
+    );
+    if (!result)
+    {
+        return "";
+    }
+    return readAndDeleteWxString(result);
+}
+
+/** wxString::Format("%g", value). */
+export function formatG(value: number): string
+{
+    return String(value);
+}
+
+/**
+ * wxRichTextCtrl::GetSelectionRange() — the binding exposes long* out-params.
+ * A zero-initialised BigInt64Array holds both the 8-byte long of 64-bit
+ * platforms and the 4-byte long of Windows (the upper half stays zero).
+ */
+export function selectionRange(ctrl: wxRichTextCtrl): { start: number; end: number }
+{
+    const startBuffer = new BigInt64Array(1);
+    const endBuffer = new BigInt64Array(1);
+    ctrl.GetSelectionRange(pointerOf(startBuffer), pointerOf(endBuffer));
+    return { start: Number(startBuffer[0]), end: Number(endBuffer[0]) };
+}
+
+/** wxObject::GetClassInfo()->GetClassName() as a plain string. */
+export function richTextObjectClassName(obj: wxRichTextObject): string
+{
+    const info = obj.GetClassInfo();
+    if (!info)
+    {
+        return "";
+    }
+    const name = info.GetClassNameEx();
+    if (!name)
+    {
+        return "";
+    }
+    return readAndDeleteWxString(name.ptr);
+}
+
+/**
+ * Replaces wxDynamicCast(obj, Name) for the classes this sample distinguishes.
+ * Class names are unique, so an exact comparison is enough.
+ */
+export function isRichTextObjectKind(obj: wxRichTextObject | null, className: string): boolean
+{
+    if (!obj)
+    {
+        return false;
+    }
+    return richTextObjectClassName(obj) === className;
+}

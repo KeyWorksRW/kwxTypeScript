@@ -1,0 +1,244 @@
+// itemcontainer.kwxts — shared "Run tests" logic for the item-container pages.
+//
+// Port of ItemContainerWidgetsPage::OnButtonTestItemContainer() and its
+// helpers.  The C++ version tracks the lifetime of a custom wxClientData
+// subclass; wxClientData cannot be subclassed through the bindings, so this
+// port uses the built-in wxStringClientData for object data and verifies the
+// strings and the stored data values, without the destruction counter (see the
+// final report).
+
+import {
+    createWxStringClientData,
+    readAndDeleteWxString,
+    wxItemContainer,
+    wxStringClientData,
+    wxWindow,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import { logMessage, windowClassName, withString } from "./common.kwxts";
+
+export const ITEM_CONTAINER_ITEMS: string[] = [
+    "This", "is", "a", "List", "of", "strings",
+];
+
+function dictionaryCompare(a: string, b: string): number
+{
+    const la = a.toLowerCase();
+    const lb = b.toLowerCase();
+    return la < lb ? -1 : la > lb ? 1 : a < b ? -1 : a > b ? 1 : 0;
+}
+
+function sortedItems(): string[]
+{
+    return ITEM_CONTAINER_ITEMS.slice().sort(dictionaryCompare);
+}
+
+function describe(container: wxItemContainer): string
+{
+    return container.IsSorted() ? "Sorted" : "Unsorted";
+}
+
+function startTest(container: wxItemContainer, label: string): void
+{
+    container.Clear();
+    logMessage(`Test - ${label}:`);
+}
+
+function valueAt(container: wxItemContainer, index: number): string
+{
+    const value = container.GetString(index);
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+function objectValue(container: wxItemContainer, index: number): string
+{
+    const object = container.GetClientObject(index);
+    if (!object)
+    {
+        return "";
+    }
+    const data = new wxStringClientData(object.ptr, true).GetData();
+    return data ? readAndDeleteWxString(data.ptr) : "";
+}
+
+function untypedValue(container: wxItemContainer, index: number): number
+{
+    const pointer = container.GetClientData(index) as unknown as bigint | null;
+    return pointer ? Number(pointer) : 0;
+}
+
+function endTest(
+    container: wxItemContainer,
+    expected: string[],
+    checkObjectData: boolean,
+    checkUntypedData: boolean,
+): void
+{
+    let ok = container.GetCount() === expected.length;
+
+    if (ok)
+    {
+        for (let i = 0; i < expected.length; ++i)
+        {
+            const value = valueAt(container, i);
+            if (value !== expected[i])
+            {
+                logMessage(`Wrong string "${value}" at position ${i} `
+                    + `(expected "${expected[i]}")`);
+                ok = false;
+                break;
+            }
+
+            if (checkObjectData)
+            {
+                const data = objectValue(container, i);
+                const expectedData = String(ITEM_CONTAINER_ITEMS.indexOf(value));
+                if (data !== "" && data !== expectedData)
+                {
+                    logMessage(`Client data for '${value}' does not match.`);
+                    ok = false;
+                    break;
+                }
+            }
+            else if (checkUntypedData)
+            {
+                const index = ITEM_CONTAINER_ITEMS.indexOf(value);
+                if (container.GetClientData(i) && untypedValue(container, i) !== index)
+                {
+                    logMessage(`Client data for '${value}' does not match.`);
+                    ok = false;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!ok)
+    {
+        let dump = "Current content:\n";
+        for (let i = 0; i < container.GetCount(); ++i)
+        {
+            dump += ` - ${valueAt(container, i)} [`;
+            if (container.HasClientObjectData())
+            {
+                dump += objectValue(container, i);
+            }
+            else if (container.HasClientUntypedData())
+            {
+                dump += String(untypedValue(container, i));
+            }
+            dump += "]\n";
+        }
+        dump += "Expected content:\n";
+        for (const item of expected)
+        {
+            dump += ` - ${item}[${ITEM_CONTAINER_ITEMS.indexOf(item)}]\n`;
+        }
+        logMessage(dump);
+    }
+
+    container.Clear();
+    logMessage(`...${ok ? "passed" : "failed"}`);
+}
+
+function appendWithObject(
+    container: wxItemContainer,
+    item: string,
+    value: number,
+): void
+{
+    withString(item, (ptr) => container.Append(ptr));
+    const index = container.GetCount() - 1;
+    const object = createWxStringClientData();
+    if (object)
+    {
+        withString(String(value), (ptr) => object.SetData(ptr));
+        container.SetClientObject(index, object.ptr);
+    }
+}
+
+function appendWithData(
+    container: wxItemContainer,
+    item: string,
+    value: number,
+): void
+{
+    withString(item, (ptr) => container.Append(ptr));
+    const index = container.GetCount() - 1;
+    // wxUIntToPtr(value): index 0 becomes a null pointer, as in the original.
+    container.SetClientData(index, value === 0 ? null : BigInt(value));
+}
+
+/** ItemContainerWidgetsPage::OnButtonTestItemContainer() */
+export function runItemContainerTest(
+    container: wxItemContainer | null,
+    widget: wxWindow | null,
+): void
+{
+    if (!container)
+    {
+        return;
+    }
+
+    logMessage(`wxItemContainer test for ${
+        widget ? windowClassName(widget) : "wxItemContainer"}, ${
+        describe(container)}:`);
+
+    const expected = container.IsSorted()
+        ? sortedItems()
+        : ITEM_CONTAINER_ITEMS;
+
+    startTest(container, "Append one item");
+    withString(ITEM_CONTAINER_ITEMS[0], (ptr) => container.Append(ptr));
+    endTest(container, container.IsSorted()
+        ? [ITEM_CONTAINER_ITEMS[0]]
+        : [ITEM_CONTAINER_ITEMS[0]], false, false);
+
+    startTest(container, "Append some items");
+    for (const item of ITEM_CONTAINER_ITEMS)
+    {
+        withString(item, (ptr) => container.Append(ptr));
+    }
+    endTest(container, expected, false, false);
+
+    startTest(container, "Append some items with data objects");
+    for (let i = 0; i < ITEM_CONTAINER_ITEMS.length; ++i)
+    {
+        appendWithObject(container, ITEM_CONTAINER_ITEMS[i], i);
+    }
+    endTest(container, expected, true, false);
+
+    startTest(container, "Append some items with data");
+    for (let i = 0; i < ITEM_CONTAINER_ITEMS.length; ++i)
+    {
+        appendWithData(container, ITEM_CONTAINER_ITEMS[i], i);
+    }
+    endTest(container, expected, false, true);
+
+    startTest(container, "Append some items with data, one by one");
+    for (let i = 0; i < ITEM_CONTAINER_ITEMS.length; ++i)
+    {
+        appendWithData(container, ITEM_CONTAINER_ITEMS[i], i);
+    }
+    endTest(container, expected, false, true);
+
+    startTest(container, "Append some items with data objects, one by one");
+    for (let i = 0; i < ITEM_CONTAINER_ITEMS.length; ++i)
+    {
+        appendWithObject(container, ITEM_CONTAINER_ITEMS[i], i);
+    }
+    endTest(container, expected, true, false);
+
+    if (!container.IsSorted())
+    {
+        startTest(container, "Insert in reverse order with data, one by one");
+        for (let i = ITEM_CONTAINER_ITEMS.length; i > 0; --i)
+        {
+            withString(ITEM_CONTAINER_ITEMS[i - 1], (ptr) =>
+                container.Insert(ptr, 0));
+            container.SetClientData(0, i - 1 === 0 ? null : BigInt(i - 1));
+        }
+        endTest(container, expected, false, true);
+    }
+}

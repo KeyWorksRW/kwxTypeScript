@@ -1,0 +1,1580 @@
+// handlers.kwxts — GridFrame menu and grid event handlers.
+//
+// The event-table entries of griddemo.cpp are dispatched here. Handlers whose
+// C++ implementation needs an unbound wxGrid API report the gap instead of
+// silently doing nothing (the menu item stays, like the artprov sample does for
+// wxArtProvider::CreateBitmap).
+
+import {
+    ALIGN_BOTTOM,
+    ALIGN_CENTRE,
+    ALIGN_LEFT,
+    ALIGN_RIGHT,
+    ALIGN_TOP,
+    CANCEL,
+    EVT_CONTEXT_MENU,
+    EVT_GRID_CELL_BEGIN_DRAG,
+    EVT_GRID_CELL_CHANGED,
+    EVT_GRID_CELL_CHANGING,
+    EVT_GRID_CELL_LEFT_CLICK,
+    EVT_GRID_COL_AUTO_SIZE,
+    EVT_GRID_COL_LABEL_SIZE,
+    EVT_GRID_COL_MOVE,
+    EVT_GRID_COL_SIZE,
+    EVT_GRID_EDITOR_HIDDEN,
+    EVT_GRID_EDITOR_SHOWN,
+    EVT_GRID_LABEL_LEFT_CLICK,
+    EVT_GRID_RANGE_SELECTED,
+    EVT_GRID_RANGE_SELECTING,
+    EVT_GRID_ROW_LABEL_SIZE,
+    EVT_GRID_ROW_MOVE,
+    EVT_GRID_ROW_SIZE,
+    EVT_GRID_SELECT_CELL,
+    EVT_GRID_TABBING,
+    GRID_AUTOSIZE,
+    GridSelectCells,
+    GridSelectColumns,
+    GridSelectNone,
+    GridSelectRows,
+    GridSelectRowsOrColumns,
+    ID_ABOUT,
+    ID_CLEAR,
+    ID_EXIT,
+    ID_PRINT,
+    ID_OK,
+    LIGHT_GREY,
+    NO,
+    OK,
+    YES_NO,
+    createWxAboutDialogInfo,
+    createWxColourEmpty,
+    createWxColourFromUnsignedInt,
+    createWxFontDefault,
+    createWxGridCellCoordsArray,
+    createWxTextEntryDialog,
+    kwxMessageBox,
+    lib,
+    wxAboutBox,
+    wxAboutDialogInfo,
+    wxCommandEvent,
+    wxEvent,
+    wxGetColourFromUser,
+    wxGetFontFromUser,
+    wxGridEvent,
+    wxGridRangeSelectEvent,
+    wxGridSizeEvent,
+    wxGridTableBase,
+} from "kwx";
+import { Pointer, pointerOf } from "kwx/platform";
+import type { wxColour } from "kwx";
+
+import {
+    GridBlock,
+    GridFrameState,
+    ID_AUTOSIZECOLS,
+    ID_CELLOVERFLOW,
+    ID_CLEARGRID,
+    ID_COLLABELHORIZALIGN,
+    ID_COLLABELVERTALIGN,
+    ID_COLDEFAULTHEADER,
+    ID_COLCUSTOMHEADER,
+    ID_CORNERLABELHORIZALIGN,
+    ID_CORNERLABELORIENTATION,
+    ID_CORNERLABELVERTALIGN,
+    ID_COLNATIVEHEADER,
+    ID_COLNATIVELABELS,
+    ID_DELETECOL,
+    ID_DELETEROW,
+    ID_DESELECT_ALL,
+    ID_DESELECT_CELL,
+    ID_DESELECT_COL,
+    ID_DESELECT_ROW,
+    ID_EDITCELL,
+    ID_FREEZE_OR_THAW,
+    ID_GRIDLINECOLOUR,
+    ID_HIDECOL,
+    ID_HIDEROW,
+    ID_INSERTCOL,
+    ID_INSERTROW,
+    ID_RESIZECELL,
+    ID_ROWLABELHORIZALIGN,
+    ID_ROWLABELVERTALIGN,
+    ID_SELECT_ALL,
+    ID_SELECT_CELL,
+    ID_SELECT_COL,
+    ID_SELECT_OVERLAY,
+    ID_SELECT_ROW,
+    ID_SELECT_UNSELECT,
+    ID_SELCELLS,
+    ID_SELCOLS,
+    ID_SELNONE,
+    ID_SELROWS,
+    ID_SELROWSORCOLS,
+    ID_SETCORNERLABEL,
+    ID_SET_CELL_BG_COLOUR,
+    ID_SET_CELL_FG_COLOUR,
+    ID_SET_CELL_HL_COLOUR,
+    ID_SET_FROZEN_BORDER,
+    ID_SET_HIGHLIGHT_WIDTH,
+    ID_SET_RO_HIGHLIGHT_WIDTH,
+    ID_SET_SELECTION_BG_COLOUR,
+    ID_SET_SELECTION_FG_COLOUR,
+    ID_SETLABELCOLOUR,
+    ID_SETLABELTEXTCOLOUR,
+    ID_SETLABEL_FONT,
+    ID_SHOWSEL,
+    ID_SHOWCOL,
+    ID_SHOWROW,
+    ID_SIZE_COL,
+    ID_SIZE_COL_LABEL,
+    ID_SIZE_GRID,
+    ID_SIZE_LABELS_COL,
+    ID_SIZE_LABELS_ROW,
+    ID_SIZE_ROW,
+    ID_SIZE_ROW_LABEL,
+    ID_TAB_CUSTOM,
+    ID_TAB_LEAVE,
+    ID_TAB_STOP,
+    ID_TAB_WRAP,
+    ID_TOGGLE_CHECKERED_CELLS,
+    ID_TOGGLE_COLOURED_CELLS,
+    ID_TOGGLECOLLABELS,
+    ID_TOGGLECOLLABELSIZING,
+    ID_TOGGLECOLHIDING,
+    ID_TOGGLECOLMOVING,
+    ID_TOGGLECOLSIZING,
+    ID_TOGGLEEDIT,
+    ID_TOGGLEGRIDDRAGCELL,
+    ID_TOGGLEGRIDLINES,
+    ID_TOGGLEGRIDSIZING,
+    ID_TOGGLEROWLABELS,
+    ID_TOGGLEROWLABELSIZING,
+    ID_TOGGLEROWMOVING,
+    ID_TOGGLEROWSIZING,
+    ID_VTABLE,
+    ID_BUGS_TABLE,
+    ID_TABULAR_TABLE,
+    ID_RENDER_COORDS,
+    logMessage,
+    takeString,
+    unavailable,
+    withString,
+} from "./shared.kwxts";
+
+// ---------------------------------------------------------------------------
+// Grid helper utilities
+// ---------------------------------------------------------------------------
+
+function getBlocks(state: GridFrameState): GridBlock[]
+{
+    const grid = state.grid;
+    const tops = createWxGridCellCoordsArray();
+    const bottoms = createWxGridCellCoordsArray();
+    const result: GridBlock[] = [];
+
+    if (!tops || !bottoms)
+    {
+        return result;
+    }
+
+    grid.GetSelectionBlockTopLeft(tops.ptr);
+    grid.GetSelectionBlockBottomRight(bottoms.ptr);
+
+    const count = Math.min(tops.GetCount(), bottoms.GetCount());
+    const row = new Int32Array(1);
+    const col = new Int32Array(1);
+
+    for (let i = 0; i < count; i++)
+    {
+        tops.Item(i, pointerOf(col), pointerOf(row));
+        const top = row[0];
+        const left = col[0];
+        bottoms.Item(i, pointerOf(col), pointerOf(row));
+        result.push({ top, left, bottom: row[0], right: col[0] });
+    }
+
+    tops.Delete();
+    bottoms.Delete();
+    return result;
+}
+
+function uniqueSorted(values: number[]): number[]
+{
+    const sorted = values.slice().sort((a, b) => a - b);
+    const result: number[] = [];
+    for (const value of sorted)
+    {
+        if (result.length === 0 || result[result.length - 1] !== value)
+        {
+            result.push(value);
+        }
+    }
+    return result;
+}
+
+/** wxGridUpdateLocker: batch a series of grid changes. */
+function withBatch(state: GridFrameState, action: () => void): void
+{
+    state.grid.BeginBatch();
+    try
+    {
+        action();
+    }
+    finally
+    {
+        state.grid.EndBatch();
+    }
+}
+
+/**
+ * GridFrame's anonymous-namespace HandleEdits(): insert or delete rows/columns
+ * for the current selection blocks.
+ */
+function handleEdits(
+    state: GridFrameState,
+    isRow: boolean,
+    isInsertion: boolean,
+): void
+{
+    const grid = state.grid;
+    const blocks = getBlocks(state);
+
+    if (isInsertion)
+    {
+        let pos: number;
+        let count: number;
+        if (blocks.length === 1)
+        {
+            const block = blocks[0];
+            pos = isRow ? block.top : block.left;
+            count = (isRow ? block.bottom : block.right) - pos + 1;
+        }
+        else
+        {
+            pos = isRow ? grid.GetGridCursorRow() : grid.GetGridCursorCol();
+            count = 1;
+        }
+
+        if (isRow)
+        {
+            grid.InsertRows(pos, count, true);
+        }
+        else
+        {
+            grid.InsertCols(pos, count, true);
+        }
+        return;
+    }
+
+    const deletions: number[] = [];
+    for (const block of blocks)
+    {
+        const begin = isRow ? block.top : block.left;
+        const end = isRow ? block.bottom : block.right;
+        for (let n = begin; n <= end; n++)
+        {
+            deletions.push(n);
+        }
+    }
+
+    const indices = uniqueSorted(deletions);
+    if (indices.length === 0)
+    {
+        return;
+    }
+
+    withBatch(state, () =>
+    {
+        let i = indices.length - 1;
+        while (i >= 0)
+        {
+            const end = indices[i];
+            let count = 1;
+            while (i - 1 >= 0 && indices[i - 1] === end - count)
+            {
+                count++;
+                i--;
+            }
+            const start = end - count + 1;
+            if (isRow)
+            {
+                grid.DeleteRows(start, count, true);
+            }
+            else
+            {
+                grid.DeleteCols(start, count, true);
+            }
+            i--;
+        }
+    });
+}
+
+// wxGrid::GetSelectedRows() reports rows that are fully selected, i.e. blocks
+// that span every column. Derive the same set from the selection blocks.
+function selectedRows(state: GridFrameState): number[]
+{
+    const grid = state.grid;
+    const lastCol = grid.GetNumberCols() - 1;
+    const rows: number[] = [];
+    for (const block of getBlocks(state))
+    {
+        if (block.left !== 0 || block.right !== lastCol)
+        {
+            continue;
+        }
+        for (let row = block.top; row <= block.bottom; row++)
+        {
+            rows.push(row);
+        }
+    }
+    return uniqueSorted(rows);
+}
+
+function selectedCols(state: GridFrameState): number[]
+{
+    const grid = state.grid;
+    const lastRow = grid.GetNumberRows() - 1;
+    const cols: number[] = [];
+    for (const block of getBlocks(state))
+    {
+        if (block.top !== 0 || block.bottom !== lastRow)
+        {
+            continue;
+        }
+        for (let col = block.left; col <= block.right; col++)
+        {
+            cols.push(col);
+        }
+    }
+    return uniqueSorted(cols);
+}
+
+/** GridFrame::ShowSelection() */
+function showSelection(state: GridFrameState): void
+{
+    const grid = state.grid;
+    const blocks = getBlocks(state);
+    const descriptions: string[] = [];
+
+    for (const block of blocks)
+    {
+        let description: string;
+        if (block.left === 0 && block.right === grid.GetNumberCols() - 1)
+        {
+            if (block.top === block.bottom)
+            {
+                description = "row " + (block.top + 1);
+            }
+            else
+            {
+                description = "rows " + (block.top + 1) + ".." + (block.bottom + 1);
+            }
+        }
+        else if (block.top === 0 && block.bottom === grid.GetNumberRows() - 1)
+        {
+            if (block.left === block.right)
+            {
+                description = "column " + (block.left + 1);
+            }
+            else
+            {
+                description =
+                    "columns " + (block.left + 1) + ".." + (block.right + 1);
+            }
+        }
+        else if (block.top === block.bottom && block.left === block.right)
+        {
+            description = "cell R" + (block.top + 1) + "C" + (block.left + 1);
+        }
+        else
+        {
+            description =
+                "block R" + (block.top + 1) + "C" + (block.left + 1) +
+                " - R" + (block.bottom + 1) + "C" + (block.right + 1);
+        }
+        descriptions.push(description);
+    }
+
+    switch (blocks.length)
+    {
+        case 0:
+            logMessage("No selection");
+            break;
+        case 1:
+            logMessage("Selection: " + descriptions[0]);
+            break;
+        default:
+            logMessage(
+                blocks.length + " selected blocks:\n\t" +
+                    descriptions.join("\n\t"),
+            );
+    }
+}
+
+/** ToggleGridCells() from griddemo.cpp. */
+function toggleGridCells(state: GridFrameState, useCheckered: boolean): void
+{
+    const grid = state.grid;
+
+    if (useCheckered)
+    {
+        state.checkeredOn = !state.checkeredOn;
+    }
+    else
+    {
+        state.colouredOn = !state.colouredOn;
+    }
+
+    const rows = grid.GetNumberRows();
+    const cols = grid.GetNumberCols();
+
+    const defaultColour = createWxColourEmpty();
+    if (!defaultColour)
+    {
+        return;
+    }
+    grid.GetDefaultCellBackgroundColour(defaultColour.ptr);
+    const defaultPacked = defaultColour.GetUnsignedInt();
+    defaultColour.Delete();
+
+    // Capture the effective background of every cell before applying the
+    // checkered attribute so that it can be restored: wxGrid::SetAttr(row,
+    // col, null) is not available from the binding.
+    if (useCheckered && state.checkeredOn)
+    {
+        const saved = new Uint32Array(rows * cols);
+        const probe = createWxColourEmpty();
+        if (probe)
+        {
+            for (let row = 0; row < rows; row++)
+            {
+                for (let col = 0; col < cols; col++)
+                {
+                    grid.GetCellBackgroundColour(row, col, probe.ptr);
+                    saved[row * cols + col] = probe.GetUnsignedInt();
+                }
+            }
+            probe.Delete();
+        }
+        state.checkeredSaved = saved;
+    }
+
+    const spansRows = new Int32Array(1);
+    const spansCols = new Int32Array(1);
+    const colourCache = new Map<number, wxColour>();
+
+    const colourFor = (packed: number): Pointer =>
+    {
+        const cached = colourCache.get(packed);
+        if (cached)
+        {
+            return cached.ptr;
+        }
+        const colour = createWxColourFromUnsignedInt(packed);
+        if (!colour)
+        {
+            return null;
+        }
+        colourCache.set(packed, colour);
+        state.keepAlive.push(colour);
+        return colour.ptr;
+    };
+
+    const mutable = createWxColourEmpty();
+
+    for (let row = 0; row < rows; row++)
+    {
+        for (let col = 0; col < cols; col++)
+        {
+            if (useCheckered && ((row ^ col) & 1) !== 0)
+            {
+                continue;
+            }
+
+            if (useCheckered)
+            {
+                // Skip overwriting attributes of merged cells.
+                grid.GetCellSize(
+                    row, col, pointerOf(spansRows), pointerOf(spansCols),
+                );
+                if (spansRows[0] > 1 || spansCols[0] > 1)
+                {
+                    continue;
+                }
+
+                if (state.checkeredOn)
+                {
+                    grid.SetCellBackgroundColour(row, col, LIGHT_GREY);
+                }
+                else if (state.checkeredSaved)
+                {
+                    grid.SetCellBackgroundColour(
+                        row,
+                        col,
+                        colourFor(state.checkeredSaved[row * cols + col]),
+                    );
+                }
+            }
+            else
+            {
+                if (state.colouredOn)
+                {
+                    const factor = 256 / 64;
+                    const r = (127 + row * factor + Math.floor(col / factor)) & 0xff;
+                    const g =
+                        (col * factor + Math.floor(row / (factor * 2))) & 0xff;
+                    const b = ((row ^ col) * factor) & 0xff;
+
+                    if (mutable)
+                    {
+                        mutable.Set(
+                            r < 128 ? r * 2 : 255 - r * 2,
+                            g < 128 ? g * 2 : 255 - g * 2,
+                            b < 128 ? b * 2 : 255 - b * 2,
+                            255,
+                        );
+                    }
+                    grid.SetCellBackgroundColour(
+                        row, col, mutable ? mutable.ptr : colourFor(defaultPacked),
+                    );
+                }
+                else
+                {
+                    grid.SetCellBackgroundColour(
+                        row, col, colourFor(defaultPacked),
+                    );
+                }
+            }
+        }
+    }
+
+    if (mutable)
+    {
+        mutable.Delete();
+    }
+
+    grid.Refresh(true);
+}
+
+/** Hides a column, remembering its width (wxGrid::HideCol() is not bound). */
+function hideCol(state: GridFrameState, col: number): void
+{
+    const size = state.grid.GetColSize(col);
+    if (size !== 0)
+    {
+        state.hiddenColSizes.set(col, size);
+        state.grid.SetColSize(col, 0);
+    }
+}
+
+function showCol(state: GridFrameState, col: number): void
+{
+    const saved = state.hiddenColSizes.get(col);
+    state.grid.SetColSize(
+        col,
+        saved === undefined ? state.grid.GetDefaultColSize() : saved,
+    );
+    state.hiddenColSizes.delete(col);
+}
+
+function hideRow(state: GridFrameState, row: number): void
+{
+    const size = state.grid.GetRowSize(row);
+    if (size !== 0)
+    {
+        state.hiddenRowSizes.set(row, size);
+        state.grid.SetRowSize(row, 0);
+    }
+}
+
+function showRow(state: GridFrameState, row: number): void
+{
+    const saved = state.hiddenRowSizes.get(row);
+    state.grid.SetRowSize(
+        row,
+        saved === undefined ? state.grid.GetDefaultRowSize() : saved,
+    );
+    state.hiddenRowSizes.delete(row);
+}
+
+/** Runs fn with a colour chosen by wxGetColourFromUser, when the user accepts. */
+function withUserColour(
+    state: GridFrameState,
+    apply: (colour: Pointer) => void,
+): void
+{
+    // wxGetColourFromUser() dereferences both colour pointers in kwxFFI, so an
+    // empty wxColour is used as the initial value instead of null.
+    const initial = createWxColourEmpty();
+    const colour = createWxColourEmpty();
+    if (!initial || !colour)
+    {
+        initial?.Delete();
+        colour?.Delete();
+        return;
+    }
+
+    wxGetColourFromUser(state.frame.ptr, initial.ptr, colour.ptr);
+    if (((lib.symbols.wxColour_IsOk(colour.ptr) as number) & 0xff) !== 0)
+    {
+        apply(colour.ptr);
+    }
+    colour.Delete();
+    initial.Delete();
+}
+
+/** Runs fn with a font chosen by wxGetFontFromUser, when the user accepts. */
+function withUserFont(
+    state: GridFrameState,
+    apply: (font: Pointer) => void,
+): void
+{
+    const initial = createWxFontDefault();
+    const font = createWxFontDefault();
+    if (!initial || !font)
+    {
+        initial?.Delete();
+        font?.Delete();
+        return;
+    }
+
+    wxGetFontFromUser(state.frame.ptr, initial.ptr, font.ptr);
+    if (((lib.symbols.wxFont_IsOk(font.ptr) as number) & 0xff) !== 0)
+    {
+        apply(font.ptr);
+    }
+    font.Delete();
+    initial.Delete();
+}
+
+/** GridFrame::OnAbout() */
+function showAbout(state: GridFrameState): void
+{
+    const infoPtr = createWxAboutDialogInfo();
+    if (!infoPtr)
+    {
+        return;
+    }
+    const info = new wxAboutDialogInfo(infoPtr);
+
+    withString("wxGrid demo", (ptr) => info.SetName(ptr));
+    withString("wxGrid sample program", (ptr) => info.SetDescription(ptr));
+
+    withString("Michael Bedward", (ptr) => info.AddDeveloper(ptr));
+    withString("Julian Smart", (ptr) => info.AddDeveloper(ptr));
+    withString("Vadim Zeitlin", (ptr) => info.AddDeveloper(ptr));
+
+    // This only forces the generic version of the about dialog under wxMSW.
+    withString("http://www.wxwidgets.org", (url) =>
+    {
+        withString("", (description) => info.SetWebSite(url, description));
+    });
+
+    wxAboutBox(info.ptr, state.frame.ptr);
+    info.Delete();
+}
+
+/** GridFrame::SetCornerLabelValue() — the table owns the corner label. */
+function setCornerLabelValue(state: GridFrameState): void
+{
+    const tablePtr = state.grid.GetTable();
+    if (!tablePtr)
+    {
+        return;
+    }
+    const table = new wxGridTableBase(tablePtr);
+    const current = takeString(table.GetCornerLabelValue());
+
+    const dialog = withString("Please enter corner label:", (message) =>
+        withString("Please enter a string", (caption) =>
+            withString(current, (value) =>
+                createWxTextEntryDialog(
+                    state.frame.ptr,
+                    message,
+                    caption,
+                    value,
+                    BigInt(OK | CANCEL),
+                    -1,
+                    -1,
+                    -1,
+                    -1,
+                ),
+            ),
+        ),
+    );
+
+    if (!dialog)
+    {
+        return;
+    }
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const value = takeString(dialog.GetValue());
+        withString(value, (ptr) => table.SetCornerLabelValue(ptr));
+    }
+    dialog.Destroy();
+}
+
+function revertCheck(
+    state: GridFrameState,
+    id: number,
+    event: wxCommandEvent,
+): void
+{
+    state.menuBar.Check(id, !event.IsChecked());
+}
+
+function unavailableCheck(
+    state: GridFrameState,
+    id: number,
+    event: wxCommandEvent,
+    feature: string,
+    api: string,
+): void
+{
+    unavailable(state, feature, api);
+    revertCheck(state, id, event);
+}
+
+// ---------------------------------------------------------------------------
+// Menu dispatch
+// ---------------------------------------------------------------------------
+
+export function handleMenuEvent(
+    state: GridFrameState,
+    eventPtr: Pointer,
+): void
+{
+    const event = new wxCommandEvent(eventPtr);
+    const grid = state.grid;
+
+    switch (event.GetId())
+    {
+        case ID_TOGGLEROWLABELS:
+            grid.SetRowLabelSize(
+                state.menuBar.IsChecked(ID_TOGGLEROWLABELS)
+                    ? grid.GetDefaultRowLabelSize()
+                    : 0,
+            );
+            break;
+
+        case ID_TOGGLECOLLABELS:
+            grid.SetColLabelSize(
+                state.menuBar.IsChecked(ID_TOGGLECOLLABELS)
+                    ? grid.GetDefaultColLabelSize()
+                    : 0,
+            );
+            break;
+
+        case ID_TOGGLEEDIT:
+            grid.EnableEditing(state.menuBar.IsChecked(ID_TOGGLEEDIT));
+            break;
+
+        case ID_TOGGLEROWSIZING:
+            grid.EnableDragRowSize(state.menuBar.IsChecked(ID_TOGGLEROWSIZING));
+            break;
+
+        case ID_TOGGLECOLSIZING:
+            grid.EnableDragColSize(state.menuBar.IsChecked(ID_TOGGLECOLSIZING));
+            break;
+
+        case ID_TOGGLEROWLABELSIZING:
+            unavailableCheck(
+                state, ID_TOGGLEROWLABELSIZING, event,
+                "Row label drag-resize", "wxGrid::EnableDragRowLabelSize()",
+            );
+            break;
+
+        case ID_TOGGLECOLLABELSIZING:
+            unavailableCheck(
+                state, ID_TOGGLECOLLABELSIZING, event,
+                "Col label drag-resize", "wxGrid::EnableDragColLabelSize()",
+            );
+            break;
+
+        case ID_TOGGLEROWMOVING:
+            unavailableCheck(
+                state, ID_TOGGLEROWMOVING, event,
+                "Row drag-move", "wxGrid::EnableDragRowMove()",
+            );
+            break;
+
+        case ID_TOGGLECOLMOVING:
+            unavailableCheck(
+                state, ID_TOGGLECOLMOVING, event,
+                "Col drag-move", "wxGrid::EnableDragColMove()",
+            );
+            break;
+
+        case ID_TOGGLECOLHIDING:
+            unavailableCheck(
+                state, ID_TOGGLECOLHIDING, event,
+                "Col hiding popup menu", "wxGrid::EnableHidingColumns()",
+            );
+            break;
+
+        case ID_TOGGLEGRIDSIZING:
+            grid.EnableDragGridSize(state.menuBar.IsChecked(ID_TOGGLEGRIDSIZING));
+            break;
+
+        case ID_TOGGLEGRIDDRAGCELL:
+            unavailableCheck(
+                state, ID_TOGGLEGRIDDRAGCELL, event,
+                "Grid drag-cell", "wxGrid::EnableDragCell()",
+            );
+            break;
+
+        case ID_COLDEFAULTHEADER:
+        case ID_COLNATIVEHEADER:
+        case ID_COLNATIVELABELS:
+        case ID_COLCUSTOMHEADER:
+            unavailable(
+                state, "Col header style",
+                "wxGrid::UseNativeColHeader(), wxGrid::SetUseNativeColLabels() " +
+                    "and wxGridCellAttrProvider subclassing",
+            );
+            // The grid stays on the default header style.
+            state.menuBar.Check(ID_COLDEFAULTHEADER, true);
+            break;
+
+        case ID_TAB_STOP:
+            state.customTab = false;
+            break;
+
+        case ID_TAB_WRAP:
+        case ID_TAB_LEAVE:
+            state.customTab = false;
+            unavailable(
+                state, "Tab behaviour",
+                "wxGrid::SetTabBehaviour()",
+            );
+            // The grid keeps its default (stop at the boundary) behaviour.
+            state.menuBar.Check(ID_TAB_STOP, true);
+            break;
+
+        case ID_TAB_CUSTOM:
+            state.customTab = true;
+            break;
+
+        case ID_TOGGLEGRIDLINES:
+            grid.EnableGridLines(state.menuBar.IsChecked(ID_TOGGLEGRIDLINES));
+            break;
+
+        case ID_AUTOSIZECOLS:
+            withBatch(state, () => grid.AutoSizeColumns(true));
+            grid.Refresh(true);
+            break;
+
+        case ID_CELLOVERFLOW:
+            unavailableCheck(
+                state, ID_CELLOVERFLOW, event,
+                "Overflow cells", "wxGrid::SetDefaultCellOverflow()",
+            );
+            break;
+
+        case ID_RESIZECELL:
+            grid.SetCellSize(7, 1, event.IsChecked() ? 5 : 1, 5);
+            grid.Refresh(true);
+            break;
+
+        case ID_TOGGLE_CHECKERED_CELLS:
+            toggleGridCells(state, true);
+            break;
+
+        case ID_TOGGLE_COLOURED_CELLS:
+            toggleGridCells(state, false);
+            break;
+
+        case ID_SETLABELCOLOUR:
+            withUserColour(state, (colour) =>
+            {
+                grid.SetLabelBackgroundColour(colour);
+            });
+            break;
+
+        case ID_SETLABELTEXTCOLOUR:
+            withUserColour(state, (colour) =>
+            {
+                grid.SetLabelTextColour(colour);
+            });
+            break;
+
+        case ID_SETLABEL_FONT:
+            withUserFont(state, (font) => grid.SetLabelFont(font));
+            break;
+
+        case ID_ROWLABELHORIZALIGN:
+        {
+            const horiz = new Int32Array(1);
+            const vert = new Int32Array(1);
+            grid.GetRowLabelAlignment(pointerOf(horiz), pointerOf(vert));
+            let value = horiz[0];
+            switch (value)
+            {
+                case ALIGN_LEFT: value = ALIGN_CENTRE; break;
+                case ALIGN_CENTRE: value = ALIGN_RIGHT; break;
+                case ALIGN_RIGHT: value = ALIGN_LEFT; break;
+            }
+            grid.SetRowLabelAlignment(value, vert[0]);
+            break;
+        }
+
+        case ID_ROWLABELVERTALIGN:
+        {
+            const horiz = new Int32Array(1);
+            const vert = new Int32Array(1);
+            grid.GetRowLabelAlignment(pointerOf(horiz), pointerOf(vert));
+            let value = vert[0];
+            switch (value)
+            {
+                case ALIGN_TOP: value = ALIGN_CENTRE; break;
+                case ALIGN_CENTRE: value = ALIGN_BOTTOM; break;
+                case ALIGN_BOTTOM: value = ALIGN_TOP; break;
+            }
+            grid.SetRowLabelAlignment(horiz[0], value);
+            break;
+        }
+
+        case ID_COLLABELHORIZALIGN:
+        {
+            const horiz = new Int32Array(1);
+            const vert = new Int32Array(1);
+            grid.GetColLabelAlignment(pointerOf(horiz), pointerOf(vert));
+            let value = horiz[0];
+            switch (value)
+            {
+                case ALIGN_LEFT: value = ALIGN_CENTRE; break;
+                case ALIGN_CENTRE: value = ALIGN_RIGHT; break;
+                case ALIGN_RIGHT: value = ALIGN_LEFT; break;
+            }
+            grid.SetColLabelAlignment(value, vert[0]);
+            break;
+        }
+
+        case ID_COLLABELVERTALIGN:
+        {
+            const horiz = new Int32Array(1);
+            const vert = new Int32Array(1);
+            grid.GetColLabelAlignment(pointerOf(horiz), pointerOf(vert));
+            let value = vert[0];
+            switch (value)
+            {
+                case ALIGN_TOP: value = ALIGN_CENTRE; break;
+                case ALIGN_CENTRE: value = ALIGN_BOTTOM; break;
+                case ALIGN_BOTTOM: value = ALIGN_TOP; break;
+            }
+            grid.SetColLabelAlignment(horiz[0], value);
+            break;
+        }
+
+        case ID_CORNERLABELHORIZALIGN:
+        case ID_CORNERLABELVERTALIGN:
+            unavailable(
+                state, "Corner label alignment",
+                "wxGrid::GetCornerLabelAlignment()/SetCornerLabelAlignment()",
+            );
+            break;
+
+        case ID_CORNERLABELORIENTATION:
+            unavailable(
+                state, "Corner label orientation",
+                "wxGrid::GetCornerLabelTextOrientation()/" +
+                    "SetCornerLabelTextOrientation()",
+            );
+            break;
+
+        case ID_GRIDLINECOLOUR:
+            withUserColour(state, (colour) =>
+            {
+                grid.SetGridLineColour(colour);
+            });
+            break;
+
+        case ID_INSERTROW:
+            handleEdits(state, true, true);
+            break;
+
+        case ID_INSERTCOL:
+            handleEdits(state, false, true);
+            break;
+
+        case ID_DELETEROW:
+            handleEdits(state, true, false);
+            break;
+
+        case ID_DELETECOL:
+            handleEdits(state, false, false);
+            break;
+
+        case ID_CLEARGRID:
+            grid.ClearGrid();
+            break;
+
+        case ID_EDITCELL:
+            grid.EnableCellEditControl(true);
+            break;
+
+        case ID_SETCORNERLABEL:
+            setCornerLabelValue(state);
+            break;
+
+        case ID_SHOWSEL:
+            showSelection(state);
+            break;
+
+        case ID_SELCELLS:
+            grid.SetSelectionMode(GridSelectCells);
+            break;
+
+        case ID_SELROWS:
+            grid.SetSelectionMode(GridSelectRows);
+            break;
+
+        case ID_SELCOLS:
+            grid.SetSelectionMode(GridSelectColumns);
+            break;
+
+        case ID_SELROWSORCOLS:
+            grid.SetSelectionMode(GridSelectRowsOrColumns);
+            break;
+
+        case ID_SELNONE:
+            grid.SetSelectionMode(GridSelectNone);
+            break;
+
+        case ID_FREEZE_OR_THAW:
+            unavailableCheck(
+                state, ID_FREEZE_OR_THAW, event,
+                "Freeze up to cursor", "wxGrid::FreezeTo()/IsFrozen()",
+            );
+            break;
+
+        case ID_SET_CELL_FG_COLOUR:
+            withUserColour(state, (colour) =>
+            {
+                grid.SetDefaultCellTextColour(colour);
+                grid.Refresh(true);
+            });
+            break;
+
+        case ID_SET_CELL_BG_COLOUR:
+            withUserColour(state, (colour) =>
+            {
+                grid.SetDefaultCellBackgroundColour(colour);
+                grid.Refresh(true);
+            });
+            break;
+
+        case ID_SET_CELL_HL_COLOUR:
+            withUserColour(state, (colour) =>
+            {
+                grid.SetCellHighlightColour(colour);
+                grid.Refresh(true);
+            });
+            break;
+
+        case ID_SET_SELECTION_BG_COLOUR:
+            withUserColour(state, (colour) =>
+            {
+                grid.SetSelectionBackground(colour);
+                grid.Refresh(true);
+            });
+            break;
+
+        case ID_SET_SELECTION_FG_COLOUR:
+            withUserColour(state, (colour) =>
+            {
+                grid.SetSelectionForeground(colour);
+                grid.Refresh(true);
+            });
+            break;
+
+        case ID_SET_FROZEN_BORDER:
+            unavailable(
+                state, "Frozen border colour",
+                "wxGrid::SetGridFrozenBorderColour()",
+            );
+            break;
+
+        case ID_DESELECT_CELL:
+        case ID_DESELECT_COL:
+        case ID_DESELECT_ROW:
+            unavailable(
+                state, "Deselect cell/row/column",
+                "wxGrid::DeselectCell(), DeselectCol() and DeselectRow()",
+            );
+            break;
+
+        case ID_DESELECT_ALL:
+            grid.ClearSelection();
+            break;
+
+        case ID_SELECT_CELL:
+            grid.SelectBlock(3, 1, 3, 1, state.addToSel);
+            break;
+
+        case ID_SELECT_COL:
+            grid.SelectCol(2, state.addToSel);
+            break;
+
+        case ID_SELECT_ROW:
+            grid.SelectRow(2, state.addToSel);
+            break;
+
+        case ID_SELECT_ALL:
+            grid.SelectAll();
+            break;
+
+        case ID_SELECT_UNSELECT:
+            state.addToSel = event.IsChecked();
+            break;
+
+        case ID_SELECT_OVERLAY:
+            unavailable(
+                state, "Disable overlay selection",
+                "wxGrid::DisableOverlaySelection()/ForceRefresh()",
+            );
+            break;
+
+        case ID_SIZE_ROW:
+            withBatch(state, () =>
+            {
+                for (const row of selectedRows(state))
+                {
+                    grid.AutoSizeRow(row, false);
+                }
+            });
+            break;
+
+        case ID_SIZE_COL:
+            withBatch(state, () =>
+            {
+                for (const col of selectedCols(state))
+                {
+                    grid.AutoSizeColumn(col, false);
+                }
+            });
+            break;
+
+        case ID_SIZE_ROW_LABEL:
+        case ID_SIZE_COL_LABEL:
+            unavailable(
+                state, "Auto-size selected label",
+                "wxGrid::AutoSizeRowLabelSize()/AutoSizeColLabelSize()",
+            );
+            break;
+
+        case ID_SIZE_LABELS_COL:
+            grid.SetColLabelSize(GRID_AUTOSIZE);
+            break;
+
+        case ID_SIZE_LABELS_ROW:
+            grid.SetRowLabelSize(GRID_AUTOSIZE);
+            break;
+
+        case ID_SIZE_GRID:
+            grid.AutoSize();
+            state.frame.Layout();
+            break;
+
+        case ID_HIDECOL:
+            hideCol(state, 0);
+            break;
+
+        case ID_SHOWCOL:
+            showCol(state, 0);
+            break;
+
+        case ID_HIDEROW:
+            hideRow(state, 1);
+            break;
+
+        case ID_SHOWROW:
+            showRow(state, 1);
+            break;
+
+        case ID_SET_HIGHLIGHT_WIDTH:
+        case ID_SET_RO_HIGHLIGHT_WIDTH:
+            unavailable(
+                state, "Cell highlight pen width",
+                "wxGrid::Get/SetCellHighlightPenWidth() and " +
+                    "Get/SetCellHighlightROPenWidth()",
+            );
+            break;
+
+        case ID_VTABLE:
+        case ID_BUGS_TABLE:
+        case ID_TABULAR_TABLE:
+            unavailable(
+                state, "Custom grid table frames",
+                "a functional wxGridTableBase subclass (kwxGridTable callbacks " +
+                    "discard their return values)",
+            );
+            break;
+
+        case ID_PRINT:
+        case ID_RENDER_COORDS:
+            unavailable(
+                state, "Grid rendering to a bitmap",
+                "wxGrid::Render(), wxGridSizesInfo and wxGridRenderStyle",
+            );
+            break;
+
+        case ID_CLEAR:
+            state.logWin.Clear();
+            break;
+
+        case ID_ABOUT:
+            showAbout(state);
+            break;
+
+        case ID_EXIT:
+            state.frame.Close(true);
+            break;
+
+        default:
+            break;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Grid event dispatch
+// ---------------------------------------------------------------------------
+
+function logRangeSelect(
+    event: wxGridRangeSelectEvent,
+    suffix: string,
+): void
+{
+    const action = event.Selecting() ? "Select" : "Deselect";
+    const flags =
+        " ( ControlDown: " + (event.ControlDown() ? "T" : "F") +
+        ", ShiftDown: " + (event.ShiftDown() ? "T" : "F") +
+        ", AltDown: " + (event.AltDown() ? "T" : "F") +
+        ", MetaDown: " + (event.MetaDown() ? "T" : "F") + " )";
+
+    logMessage(
+        action + suffix + " cells from row " + event.GetTopRow() +
+            " col " + event.GetLeftCol() +
+            " to row " + event.GetBottomRow() +
+            " col " + event.GetRightCol() + flags,
+    );
+    event.Skip(true);
+}
+
+function logCellValueChange(
+    state: GridFrameState,
+    event: wxGridEvent,
+    changed: boolean,
+): void
+{
+    const row = event.GetRow();
+    const col = event.GetCol();
+    const value = takeString(event.GetString());
+    const current = takeString(state.grid.GetCellValue(row, col));
+
+    if (changed)
+    {
+        logMessage(
+            "Value of cell at (" + row + ", " + col + ") changed and is now \"" +
+                current + "\" (was \"" + value + "\")",
+        );
+    }
+    else
+    {
+        logMessage(
+            "Value of cell at (" + row + ", " + col + "): about to change from \"" +
+                current + "\" to \"" + value + "\"",
+        );
+    }
+}
+
+export function handleGridEvent(
+    state: GridFrameState,
+    eventPtr: Pointer,
+): void
+{
+    const type = lib.symbols.wxEvent_GetEventType(eventPtr);
+    const grid = state.grid;
+
+    switch (type)
+    {
+        case EVT_GRID_LABEL_LEFT_CLICK:
+        {
+            const event = new wxGridEvent(eventPtr);
+            let text: string;
+            if (event.GetRow() !== -1)
+            {
+                text = "Left click on row label " + event.GetRow();
+            }
+            else if (event.GetCol() !== -1)
+            {
+                text = "Left click on col label " + event.GetCol();
+            }
+            else
+            {
+                text = "Left click on corner label";
+            }
+            if (event.ShiftDown())
+            {
+                text += " (shift down)";
+            }
+            if (event.ControlDown())
+            {
+                text += " (control down)";
+            }
+            logMessage(text);
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_CELL_LEFT_CLICK:
+        {
+            const event = new wxGridEvent(eventPtr);
+            logMessage(
+                "Left click at row " + event.GetRow() +
+                    ", col " + event.GetCol(),
+            );
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_ROW_SIZE:
+        {
+            const event = new wxGridSizeEvent(eventPtr);
+            const row = event.GetRowOrCol();
+            logMessage(
+                "Resized row " + row + ", new height = " + grid.GetRowSize(row),
+            );
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_COL_SIZE:
+        {
+            const event = new wxGridSizeEvent(eventPtr);
+            const col = event.GetRowOrCol();
+            logMessage(
+                "Resized column " + col + ", new width = " + grid.GetColSize(col),
+            );
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_COL_AUTO_SIZE:
+        {
+            const event = new wxGridSizeEvent(eventPtr);
+            const col = event.GetRowOrCol();
+            if (col % 2)
+            {
+                logMessage("Auto-sizing column " + col + " to fit its contents");
+                grid.AutoSizeColumn(col, true);
+            }
+            else
+            {
+                event.Skip(true);
+            }
+            break;
+        }
+
+        case EVT_GRID_ROW_LABEL_SIZE:
+        {
+            const event = new wxGridSizeEvent(eventPtr);
+            logMessage(
+                "Resized row label, new width = " + grid.GetRowLabelSize(),
+            );
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_COL_LABEL_SIZE:
+        {
+            const event = new wxGridSizeEvent(eventPtr);
+            logMessage(
+                "Resized column label, new height = " + grid.GetColLabelSize(),
+            );
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_ROW_MOVE:
+        {
+            const event = new wxGridEvent(eventPtr);
+            logMessage(
+                "Moving row " + event.GetRow() + " to " + event.GetNewRow(),
+            );
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_COL_MOVE:
+        {
+            const event = new wxGridEvent(eventPtr);
+            logMessage(
+                "Moving column " + event.GetCol() + " to " + event.GetNewCol(),
+            );
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_SELECT_CELL:
+        {
+            const event = new wxGridEvent(eventPtr);
+            const action = event.Selecting() ? "Selected " : "Deselected ";
+            logMessage(
+                action + "cell at row " + event.GetRow() +
+                    " col " + event.GetCol() +
+                    " ( ControlDown: " + (event.ControlDown() ? "T" : "F") +
+                    ", ShiftDown: " + (event.ShiftDown() ? "T" : "F") +
+                    ", AltDown: " + (event.AltDown() ? "T" : "F") +
+                    ", MetaDown: " + (event.MetaDown() ? "T" : "F") + " )",
+            );
+            // wxGrid::GetRowPos()/GetColPos() are not bound, so the "Row moved"
+            // and "Column moved" suffixes of the original log are omitted.
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_RANGE_SELECTED:
+            logRangeSelect(new wxGridRangeSelectEvent(eventPtr), "ed");
+            break;
+
+        case EVT_GRID_RANGE_SELECTING:
+            logRangeSelect(new wxGridRangeSelectEvent(eventPtr), "ing");
+            break;
+
+        case EVT_GRID_CELL_CHANGING:
+        {
+            const event = new wxGridEvent(eventPtr);
+            const value = takeString(event.GetString());
+            logCellValueChange(state, event, false);
+            if (value === "42")
+            {
+                event.Veto();
+                break;
+            }
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_CELL_CHANGED:
+        {
+            const event = new wxGridEvent(eventPtr);
+            logCellValueChange(state, event, true);
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_CELL_BEGIN_DRAG:
+        {
+            const event = new wxGridEvent(eventPtr);
+            logMessage(
+                "Got request to drag cell at row " + event.GetRow() +
+                    ", col " + event.GetCol(),
+            );
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_EDITOR_SHOWN:
+        {
+            const event = new wxGridEvent(eventPtr);
+            if (
+                event.GetCol() === 4 && event.GetRow() === 0 &&
+                withString("Are you sure you wish to edit this cell", (message) =>
+                    withString("Checking", (caption) =>
+                        kwxMessageBox(
+                            message,
+                            caption,
+                            YES_NO,
+                            state.frame.ptr,
+                            -1,
+                            -1,
+                        ),
+                    ),
+                ) === NO
+            )
+            {
+                event.Veto();
+                break;
+            }
+            logMessage("Cell editor shown.");
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_EDITOR_HIDDEN:
+        {
+            const event = new wxGridEvent(eventPtr);
+            if (
+                event.GetCol() === 4 && event.GetRow() === 0 &&
+                withString(
+                    "Are you sure you wish to finish editing this cell",
+                    (message) => withString("Checking", (caption) =>
+                        kwxMessageBox(
+                            message,
+                            caption,
+                            YES_NO,
+                            state.frame.ptr,
+                            -1,
+                            -1,
+                        ),
+                    ),
+                ) === NO
+            )
+            {
+                event.Veto();
+                break;
+            }
+            logMessage("Cell editor hidden.");
+            event.Skip(true);
+            break;
+        }
+
+        case EVT_GRID_TABBING:
+        {
+            const event = new wxGridEvent(eventPtr);
+            if (!state.customTab)
+            {
+                event.Skip(true);
+                break;
+            }
+
+            if (event.ShiftDown())
+            {
+                if (grid.GetGridCursorRow() > 0)
+                {
+                    grid.MoveCursorUp(false);
+                }
+            }
+            else
+            {
+                if (grid.GetGridCursorRow() < grid.GetNumberRows() - 1)
+                {
+                    grid.MoveCursorDown(false);
+                }
+            }
+            break;
+        }
+
+        case EVT_CONTEXT_MENU:
+        {
+            const event = new wxEvent(eventPtr);
+            const source = event.GetEventObject();
+            if (source !== grid.ptr)
+            {
+                logMessage("Context menu unexpectedly sent from non-grid window.");
+            }
+            else
+            {
+                logMessage("wxEVT_CONTEXT_MENU in the grid");
+            }
+            event.Skip(true);
+            break;
+        }
+
+        default:
+            break;
+    }
+}

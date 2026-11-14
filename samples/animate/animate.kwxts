@@ -1,32 +1,63 @@
-// animate.kwxts — kwxTypeScript port of wxSamples/src/animate/anitest.cpp
+// ===========================================================================
+// animate.kwxts — kwxTypeScript port of wxSamples/src/animate (anitest.cpp)
 //
-// wxAnimationCtrl and wxAnimation sample: plays a throbber animation, lets the
-// user pick an animation file, and inspects the individual animation frames.
+// wxAnimationCtrl sample: a frame showing a throbber animation (a 1x/2x
+// wxAnimationBundle), an "Animation frames" static box that inspects the
+// individual frames (spin control, frame count, frame delay, frame bitmap),
+// and a menu bar to play/stop the animation, replace it with wxNullAnimation,
+// set an inactive bitmap, toggle wxAC_NO_AUTORESIZE, pick a background colour,
+// open another animation file, and show an about box.
 //
 // Run from the repository root:
 //   bin\Release\kwxts.exe samples\animate\animate.kwxts
 //
-// Notes on the platform branches of the original:
-//   * wxHAS_NATIVE_ANIMATIONCTRL is only defined for wxGTK in this wxWidgets
-//     version (wx/animate.h); on wxMSW wxAnimationCtrl derives from
-//     wxGenericAnimationCtrl, so anitest.cpp's "Use &generic animation" menu
-//     item and its OnUseGeneric() handler are compiled out. They are not
-//     created here either. wxGenericAnimationCtrl itself is not bound in
-//     kwxTypeScript, so the wxGTK-only switch cannot be offered.
-//   * wxUSE_FILEDLG and wxUSE_STATUSBAR are enabled, as in the reference build.
+// Porting notes (details in the report):
+//   * wxHAS_NATIVE_ANIMATIONCTRL is set on the MSW build of the original, which
+//     adds the "Use generic animation" check item and the wxGenericAnimationCtrl
+//     branch of RecreateAnimation(). kwxFFI exposes no wxGenericAnimationCtrl,
+//     so that menu item and its handler are the only dropped feature; the
+//     native control is always used.
+//   * `delete m_animationCtrl` becomes Destroy(): the control is parent-owned.
+//   * wxICON(sample) uses the same artwork converted from ../sample.xpm to
+//     sample.svg, loaded at run time (a kwxTypeScript program has no resources).
+//   * EVT_SIZE(MyFrame::OnSize) is registered in the C++ event table but has no
+//     declaration and no definition, so there is nothing to port for it.
+// ===========================================================================
 
 declare const __dirname: string;
 
 import {
-    ALIGN_CENTER,
-    ALIGN_CENTER_VERTICAL,
+    AC_DEFAULT_STYLE,
+    AC_NO_AUTORESIZE,
     ALL,
+    ANIMATION_TYPE_ANY,
     ART_MISSING_IMAGE,
-    ART_OTHER,
-    BITMAP_TYPE_XPM,
+    BITMAP_SCREEN_DEPTH,
+    DEFAULT_FRAME_STYLE,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    EVT_SPINCTRL,
+    EVT_UPDATE_UI,
+    FD_OPEN,
+    HORIZONTAL,
+    ID_ABOUT,
+    ID_ANY,
+    ID_EXIT,
+    ID_OK,
+    ID_OPEN,
+    ID_STOP,
+    LEFT,
+    LogError,
+    RIGHT,
+    SP_ARROW_KEYS,
+    STB_DEFAULT_STYLE,
+    VERTICAL,
     createWxAboutDialogInfo,
     createWxAnimation,
+    createWxAnimationBundle,
     createWxAnimationCtrl,
+    createWxAnimationCtrlWithAnimation,
+    createWxAnimationFromFile,
     createWxBitmapDefault,
     createWxBitmapFromImage,
     createWxBoxSizer,
@@ -34,157 +65,61 @@ import {
     createWxColourEmpty,
     createWxFileDialog,
     createWxFrame,
-    createWxIconLoad,
+    createWxIconDefault,
     createWxImageDefault,
     createWxMenu,
     createWxMenuBar,
+    createWxSizerFlags,
     createWxSpinCtrl,
     createWxStaticBitmap,
     createWxStaticBox,
     createWxStaticBoxSizer,
     createWxStaticText,
     createWxString,
-    DEFAULT_FRAME_STYLE,
-    EVT_CLOSE_WINDOW,
-    EVT_MENU,
-    EVT_SIZE,
-    EVT_SPINCTRL,
-    EVT_UPDATE_UI,
     exitMainLoop,
-    EXPAND,
-    FD_OPEN,
-    FULL_REPAINT_ON_RESIZE,
-    HORIZONTAL,
-    ID_ABOUT,
-    ID_ANY,
-    ID_EXIT,
-    ID_OK,
-    ID_OPEN,
-    initAllImageHandlers,
     initialize,
-    LEFT,
-    lib,
-    LogError,
     readAndDeleteWxString,
-    RIGHT,
     run,
     setAppName,
     setTopWindow,
     shutdown,
-    SIZE_USE_EXISTING,
-    SP_ARROW_KEYS,
-    VERTICAL,
     wxAboutBox,
     wxAboutDialogInfo,
     wxAnimation,
+    wxAnimationBundle,
     wxAnimationCtrl,
-    wxBitmap,
-    wxBoxSizer,
+    wxArtProvider_GetBitmap,
+    wxBitmapBundle,
+    wxBitmapBundle_FromSVGFile,
     wxClosure,
     wxCommandEvent,
     wxFrame,
-    wxGetColourFromUser,
+    wxGetColourFromUserEx,
+    wxImage,
     wxMenu,
     wxMenuBar,
-    wxSizeEvent,
+    wxSizer,
+    wxSizerFlags,
     wxSpinCtrl,
     wxStaticBitmap,
     wxStaticBox,
     wxStaticText,
 } from "kwx";
-import { Callback, exit, platform, Pointer, pointerOf } from "kwx/platform";
+import { Callback, exit, Pointer } from "kwx/platform";
 
 // ---------------------------------------------------------------------------
-// anitest.cpp: enum { ID_PLAY = 1, ID_SET_NULL_ANIMATION, ... }
+// anitest.cpp:58-66 — the sample's private command ids. ID_PLAY is 1 and the
+// rest follow it in declaration order.
 // ---------------------------------------------------------------------------
 const ID_PLAY = 1;
 const ID_SET_NULL_ANIMATION = 2;
 const ID_SET_INACTIVE_BITMAP = 3;
 const ID_SET_NO_AUTO_RESIZE = 4;
 const ID_SET_BGCOLOR = 5;
-// The enum also defines ID_USE_GENERIC = 6. That menu item and its handler are
-// compiled only when wxHAS_NATIVE_ANIMATIONCTRL is defined (see above), which
-// is not the case for the platform this port targets.
 
-// wxID_STOP is a stock wxWidgets id (include/wx/defs.h: counting from
-// wxID_OK = 5100 it is entry 25). kwxTypeScript exports the other stock ids
-// used here (ID_OPEN, ID_EXIT, ID_ABOUT) but not this one.
-const WX_ID_STOP = 5124;
-
-// wx/animate.h: #define wxAC_NO_AUTORESIZE (0x0010)
-//               #define wxAC_DEFAULT_STYLE   (wxBORDER_NONE)
-const AC_NO_AUTORESIZE = 0x0010;
-const AC_DEFAULT_STYLE = 0; // wxBORDER_NONE
-
-// wx/animdecod.h: enum wxAnimationType { INVALID, GIF, ANI, WEBP, ANY }
-const ANIMATION_TYPE_ANY = 4;
-
-// wx/statusbr.h: wxSTB_DEFAULT_STYLE =
-//   wxSTB_SIZEGRIP | wxSTB_ELLIPSIZE_END | wxSTB_SHOW_TIPS |
-//   wxFULL_REPAINT_ON_RESIZE
-// Only wxFULL_REPAINT_ON_RESIZE is exported by the bindings, so the remaining
-// flags are spelled out from the header.
-const STB_SIZEGRIP = 0x0010;
-const STB_SHOW_TIPS = 0x0020;
-const STB_ELLIPSIZE_END = 0x0100;
-const STB_DEFAULT_STYLE =
-    STB_SIZEGRIP | STB_ELLIPSIZE_END | STB_SHOW_TIPS | FULL_REPAINT_ON_RESIZE;
-
-/** Absolute path of an asset shipped next to this module. */
-function samplePath(name: string): string
-{
-    return __dirname.replace(/\\/g, "/") + "/" + name;
-}
-
-/** Creates a wxString for the duration of `fn` and releases it afterwards. */
-function withString(text: string, fn: (ptr: Pointer) => void): void
-{
-    const value = createWxString(text);
-    fn(value.ptr);
-    value.Delete();
-}
-
-/** wxLogError() with a single pre-formatted message. */
-function logError(message: string): void
-{
-    withString(message, (ptr) => LogError(ptr));
-}
-
-/** wxStaticText(parent, wxID_ANY, text) with default position/size/style. */
-function createStaticLabel(parent: Pointer, text: string): wxStaticText | null
-{
-    const label = createWxString(text);
-    const control = createWxStaticText(parent, ID_ANY, label.ptr, -1, -1, -1, -1, 0);
-    label.Delete();
-    return control;
-}
-
-/** wxMenu(style = 0) with an empty title. */
-function createPlainMenu(): wxMenu | null
-{
-    const title = createWxString("");
-    const menu = createWxMenu(title.ptr, 0n);
-    title.Delete();
-    return menu;
-}
-
-/** The frame's controls, mirroring the MyFrame member fields. */
-interface AnimationFrameState
-{
-    frame: wxFrame;
-    sizer: wxBoxSizer;
-    animationCtrl: wxAnimationCtrl;
-    frameBox: wxStaticBox;
-    frameSpin: wxSpinCtrl;
-    frameCount: wxStaticText;
-    frameDelay: wxStaticText;
-    frameBitmap: wxStaticBitmap;
-    menuBar: wxMenuBar;
-    /** Empty wxBitmap used wherever the C++ code passes wxNullBitmap. */
-    emptyBitmap: wxBitmap;
-    /** Default sizer border, from wxSizerFlags::GetDefaultBorderFractional(). */
-    border: number;
-}
+// ---------------------------------------------------------------------------
+// Small helpers
+// ---------------------------------------------------------------------------
 
 interface EventBinding
 {
@@ -192,229 +127,354 @@ interface EventBinding
     closure: wxClosure;
 }
 
-/**
- * Mirrors wxSizerFlags::GetDefaultBorderFractional(): 6px on wxGTK, 5px on
- * wxOSX, and 5px scaled by the main top-level window's DPI elsewhere.
- * wxSizerFlags itself is not bound, so the border is computed here and passed
- * to wxSizer::AddWindow()/AddSizer().
- */
-function defaultBorderFractional(frame: wxFrame): number
+/** Creates a wxString for the duration of `fn` and releases it afterwards. */
+function withString<T>(text: string, fn: (ptr: Pointer) => T): T
 {
-    if (platform === "linux")
+    const value = createWxString(text);
+    try
     {
-        return 6;
+        return fn(value.ptr);
     }
-    if (platform === "darwin")
+    finally
     {
-        return 5;
+        value.Delete();
     }
-    return 5 * frame.GetDPIScaleFactor();
 }
 
-/** wxAnimation::GetSize() through the two int out-parameters of the binding. */
-function animationSize(animation: wxAnimation): { width: number; height: number }
+/** Absolute path of an asset shipped next to this module. */
+function assetPath(name: string): string
 {
-    const width = new Int32Array(1);
-    const height = new Int32Array(1);
-    animation.GetSize(pointerOf(width), pointerOf(height));
-    return { width: width[0], height: height[0] };
+    return __dirname.replace(/\\/g, "/") + "/" + name;
 }
 
 /**
- * Reimplementation of the wxAnimationBundle the constructor builds from
- * "throbber.gif" and "throbber_2x.gif". wxAnimationBundle is not bound, so the
- * selection rule wxGenericAnimationCtrl::SetAnimation() uses is applied here:
- * wanted = first.GetSize() * DPI, then the first animation at least that large
- * wins (src/generic/animateg.cpp).
- *
- * Returns the chosen animation; the caller owns it and must call Delete().
+ * wxLogError(). The messages below never contain printf escapes, so the text
+ * reaches the log window unchanged.
  */
-function loadAnimationBundle(frame: wxFrame, files: string[]): wxAnimation | null
+function logError(text: string): void
 {
-    const loaded: wxAnimation[] = [];
-    for (const file of files)
-    {
-        const animation = createWxAnimation();
-        if (!animation)
-        {
-            continue;
-        }
-        let ok = false;
-        withString(file, (ptr) => { ok = animation.LoadFile(ptr, ANIMATION_TYPE_ANY); });
-        if (ok)
-        {
-            loaded.push(animation);
-        }
-        else
-        {
-            animation.Delete();
-        }
-    }
-
-    if (loaded.length === 0)
-    {
-        return null;
-    }
-
-    const firstSize = animationSize(loaded[0]);
-    const dpi = frame.GetDPIScaleFactor();
-    const wantedWidth = Math.round(firstSize.width * dpi);
-    const wantedHeight = Math.round(firstSize.height * dpi);
-
-    let chosenIndex = 0;
-    for (let index = 0; index < loaded.length; index++)
-    {
-        chosenIndex = index;
-        const size = animationSize(loaded[index]);
-        if (size.width >= wantedWidth && size.height >= wantedHeight)
-        {
-            break;
-        }
-    }
-
-    for (let index = 0; index < loaded.length; index++)
-    {
-        if (index !== chosenIndex)
-        {
-            loaded[index].Delete();
-        }
-    }
-
-    return loaded[chosenIndex];
+    withString(text, (ptr) => LogError(ptr));
 }
 
-/** MyFrame::UpdateFrameInfo() */
-function updateFrameInfo(state: AnimationFrameState): void
+/** sizer->Add(window, wxSizerFlags(proportion).<setup>()) */
+function addWindowWithFlags(
+    sizer: wxSizer,
+    window: Pointer,
+    proportion: number,
+    setup: (flags: wxSizerFlags) => void,
+): void
+{
+    const flags = createWxSizerFlags(proportion);
+    if (!flags)
+    {
+        sizer.AddWindow(window, proportion, 0, 0, null);
+        return;
+    }
+    setup(flags);
+    sizer.AddWindowFlags(window, flags.ptr);
+    flags.Delete();
+}
+
+/** sizer->Add(child, wxSizerFlags(proportion).<setup>()) */
+function addSizerWithFlags(
+    sizer: wxSizer,
+    child: Pointer,
+    proportion: number,
+    setup: (flags: wxSizerFlags) => void,
+): void
+{
+    const flags = createWxSizerFlags(proportion);
+    if (!flags)
+    {
+        sizer.AddSizer(child, proportion, 0, 0, null);
+        return;
+    }
+    setup(flags);
+    sizer.AddSizerFlags(child, flags.ptr);
+    flags.Delete();
+}
+
+/** wxStaticText(parent, wxID_ANY, text) with default position/size/style. */
+function createLabel(parent: Pointer, text: string): wxStaticText | null
+{
+    return withString(text, (ptr) =>
+        createWxStaticText(parent, ID_ANY, ptr, -1, -1, -1, -1, 0));
+}
+
+/** wxMenu with an empty title and default style (as in the C++ sample). */
+function createPlainMenu(): wxMenu | null
+{
+    return withString("", (ptr) => createWxMenu(ptr, 0n));
+}
+
+/** wxStaticText::SetLabel(). */
+function setLabel(label: wxStaticText, text: string): void
+{
+    withString(text, (ptr) => { label.SetLabel(ptr); });
+}
+
+/**
+ * SetIcon(wxICON(sample)) from the converted 32x32 sample.svg artwork.
+ * wxTopLevelWindow::SetIcon() copies the icon, so the temporaries are freed.
+ */
+function applyFrameIcon(frame: wxFrame): void
+{
+    const path = createWxString(assetPath("sample.svg"));
+    let bundle: wxBitmapBundle | null = null;
+    try
+    {
+        bundle = wxBitmapBundle_FromSVGFile(path.ptr, 32, 32);
+    }
+    finally
+    {
+        path.Delete();
+    }
+    if (!bundle)
+    {
+        return;
+    }
+
+    const bitmap = bundle.GetBitmap(32, 32);
+    if (bitmap)
+    {
+        const icon = createWxIconDefault();
+        if (icon)
+        {
+            icon.CopyFromBitmap(bitmap.ptr);
+            frame.SetIcon(icon.ptr);
+            icon.Delete();
+        }
+        bitmap.Delete();
+    }
+    bundle.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame's control members (anitest.h:57-64)
+// ---------------------------------------------------------------------------
+
+interface AnimateFrameState
+{
+    frame: wxFrame;
+    menuBar: wxMenuBar;
+    animationCtrl: wxAnimationCtrl;
+    frameBox: wxStaticBox;
+    frameSpin: wxSpinCtrl;
+    frameCount: wxStaticText;
+    frameDelay: wxStaticText;
+    frameBitmap: wxStaticBitmap;
+    /** Native animations/bundle of the initial throbber; kept alive. */
+    animations: wxAnimation[];
+    bundles: wxAnimationBundle[];
+    bindings: EventBinding[];
+}
+
+// ---------------------------------------------------------------------------
+// Frame bitmap helpers (UpdateFrameInfo)
+// ---------------------------------------------------------------------------
+
+/** m_frameBitmap->SetBitmap(wxBitmapBundle()) — clears the shown frame. */
+function clearFrameBitmap(state: AnimateFrameState): void
+{
+    const empty = createWxBitmapDefault();
+    if (!empty)
+    {
+        return;
+    }
+    state.frameBitmap.SetBitmap(empty.ptr);
+    empty.Delete();
+}
+
+/** m_frameBitmap->SetBitmap(wxBitmap(image)); wxStaticBitmap copies the bitmap. */
+function setFrameBitmap(state: AnimateFrameState, image: wxImage): void
+{
+    const bitmap = createWxBitmapFromImage(image.ptr, BITMAP_SCREEN_DEPTH);
+    if (!bitmap)
+    {
+        return;
+    }
+    state.frameBitmap.SetBitmap(bitmap.ptr);
+    bitmap.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame::UpdateFrameControls() / UpdateFrameInfo() (anitest.cpp:320-373)
+// ---------------------------------------------------------------------------
+
+function updateFrameControls(state: AnimateFrameState): void
 {
     const animation = createWxAnimation();
     if (!animation)
     {
         return;
     }
+
+    // const wxAnimation animation = m_animationCtrl->GetAnimation();
     state.animationCtrl.GetAnimation(animation.ptr);
 
-    if (animation.IsOk() && animation.GetFrameCount() !== 0)
-    {
-        const frameIndex = state.frameSpin.GetValue();
-
-        const delay = animation.GetDelay(frameIndex);
-        withString(
-            delay === -1 ? "Delay: forever" : `Delay: ${delay} ms`,
-            (ptr) => state.frameDelay.SetLabel(ptr),
-        );
-
-        const image = createWxImageDefault();
-        if (image)
-        {
-            animation.GetFrame(frameIndex, image.ptr);
-            if (image.IsOk())
-            {
-                const bitmap = createWxBitmapFromImage(image.ptr, -1);
-                if (bitmap)
-                {
-                    state.frameBitmap.SetBitmap(bitmap.ptr);
-                    bitmap.Delete();
-                }
-            }
-            else
-            {
-                logError(`Failed to get animation frame ${frameIndex}.`);
-                state.frameBitmap.SetBitmap(state.emptyBitmap.ptr);
-            }
-            image.Delete();
-        }
-    }
-    else
-    {
-        withString("Delay: N/A", (ptr) => state.frameDelay.SetLabel(ptr));
-        state.frameBitmap.SetBitmap(state.emptyBitmap.ptr);
-    }
-
-    animation.Delete();
-    state.frame.Layout();
-}
-
-/** MyFrame::UpdateFrameControls() */
-function updateFrameControls(state: AnimationFrameState): void
-{
-    const animation = createWxAnimation();
-    if (!animation)
-    {
-        return;
-    }
-    state.animationCtrl.GetAnimation(animation.ptr);
     const count = animation.IsOk() ? animation.GetFrameCount() : 0;
-    animation.Delete();
 
     state.frameBox.Enable(count !== 0);
 
-    if (count !== 0)
+    if (count)
     {
         state.frameSpin.SetRange(0, count - 1);
-        withString(`(of ${count})`, (ptr) => state.frameCount.SetLabel(ptr));
+        setLabel(state.frameCount, `(of ${count})`);
     }
     else
     {
         state.frameSpin.SetRange(0, 0);
-        withString("(no frames)", (ptr) => state.frameCount.SetLabel(ptr));
+        setLabel(state.frameCount, "(no frames)");
     }
 
     state.frameSpin.SetValue(0);
 
+    animation.Delete();
+
     updateFrameInfo(state);
 }
 
-/**
- * MyFrame::RecreateAnimation(). On this platform the native-animation branch of
- * the original is compiled out, so `curr` stays wxNullAnimation and the new
- * control starts without an animation — exactly like anitest.cpp here.
- *
- * wxAnimationCtrl does not derive from wxWindow in the generated wrappers, so
- * the inherited wxWindow methods are called through the raw FFI symbols.
- */
-function recreateAnimation(state: AnimationFrameState, style: number): void
+function updateFrameInfo(state: AnimateFrameState): void
 {
-    const inactive = createWxBitmapDefault();
-    const background = createWxColourEmpty();
-    if (!inactive || !background)
+    const animation = createWxAnimation();
+    if (!animation)
     {
+        return;
+    }
+
+    // const wxAnimation animation = m_animationCtrl->GetAnimation();
+    state.animationCtrl.GetAnimation(animation.ptr);
+
+    if (animation.IsOk() && animation.GetFrameCount() !== 0)
+    {
+        const frame = state.frameSpin.GetValue();
+
+        const delay = animation.GetDelay(frame);
+        setLabel(state.frameDelay,
+            delay === -1 ? "Delay: forever" : `Delay: ${delay} ms`);
+
+        const image = createWxImageDefault();
+        if (image)
+        {
+            animation.GetFrame(frame, image.ptr);
+            if (image.IsOk())
+            {
+                setFrameBitmap(state, image);
+            }
+            else
+            {
+                // wxLogError("Failed to get animation frame %u.", frame)
+                logError(`Failed to get animation frame ${frame}.`);
+                clearFrameBitmap(state);
+            }
+            image.Delete();
+        }
+        else
+        {
+            clearFrameBitmap(state);
+        }
+    }
+    else
+    {
+        setLabel(state.frameDelay, "Delay: N/A");
+        clearFrameBitmap(state);
+    }
+
+    animation.Delete();
+
+    // Layout() — the frame's sizer re-lays the box after the bitmap changed.
+    state.frame.GetSizer()?.Layout();
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame::RecreateAnimation() (anitest.cpp:275-318)
+// ---------------------------------------------------------------------------
+
+function recreateAnimation(state: AnimateFrameState, style: number): void
+{
+    const currentStyle = Number(state.animationCtrl.GetWindowStyle());
+
+    const curr = createWxAnimation();
+    if (!curr)
+    {
+        return;
+    }
+
+    // The animation is only carried over when the style changed, which is the
+    // only reason to recreate the control here (switching between the native
+    // and the generic control deliberately starts without an animation).
+    if (style !== currentStyle)
+    {
+        state.animationCtrl.GetAnimation(curr.ptr);
+    }
+
+    const inactive = createWxBitmapDefault();
+    if (inactive)
+    {
+        state.animationCtrl.GetInactiveBitmap(inactive.ptr);
+    }
+
+    const background = createWxColourEmpty();
+    if (background)
+    {
+        state.animationCtrl.GetBackgroundColour(background.ptr);
+    }
+
+    const old = state.animationCtrl;
+
+    // The original picks wxGenericAnimationCtrl when the "Use generic
+    // animation" item is checked; that class is not bound, so the native
+    // control is always recreated.
+    const next = createWxAnimationCtrlWithAnimation(
+        state.frame.ptr, ID_ANY, curr.ptr, -1, -1, -1, -1, style,
+    );
+    if (!next)
+    {
+        curr.Delete();
         inactive?.Delete();
         background?.Delete();
         return;
     }
 
-    state.animationCtrl.GetInactiveBitmap(inactive.ptr);
-    lib.symbols.wxWindow_GetBackgroundColour(state.animationCtrl.ptr, background.ptr);
-
-    const oldControl = state.animationCtrl;
-    const newControl = createWxAnimationCtrl(
-        state.frame.ptr, ID_ANY, -1, -1, -1, -1, style,
-    );
-    if (!newControl)
+    const sizer = state.frame.GetSizer();
+    if (sizer)
     {
-        inactive.Delete();
-        background.Delete();
-        return;
+        // GetSizer()->Replace(old, m_animationCtrl)
+        sizer.ReplaceWindow(old.ptr, next.ptr, false);
     }
 
-    state.sizer.ReplaceWindow(oldControl.ptr, newControl.ptr, false);
-    // `delete old` in the C++ code; Destroy() is the wxWindow equivalent.
-    lib.symbols.wxWindow_Destroy(oldControl.ptr);
+    // delete old — a parent-owned window must be released with Destroy().
+    old.Destroy();
 
-    state.animationCtrl = newControl;
-    newControl.SetInactiveBitmap(inactive.ptr);
-    lib.symbols.wxWindow_SetBackgroundColour(newControl.ptr, background.ptr);
+    if (inactive)
+    {
+        next.SetInactiveBitmap(inactive.ptr);
+    }
+    if (background)
+    {
+        next.SetBackgroundColour(background.ptr);
+    }
 
-    state.sizer.Layout();
+    state.animationCtrl = next;
+
+    if (sizer)
+    {
+        sizer.Layout();
+    }
+
+    curr.Delete();
+    inactive?.Delete();
+    background?.Delete();
 
     updateFrameControls(state);
-
-    inactive.Delete();
-    background.Delete();
 }
 
+// ---------------------------------------------------------------------------
+// MyFrame event handlers
+// ---------------------------------------------------------------------------
+
 /** MyFrame::OnPlay */
-function onPlay(state: AnimationFrameState): void
+function onPlay(state: AnimateFrameState): void
 {
     if (!state.animationCtrl.Play())
     {
@@ -423,103 +483,153 @@ function onPlay(state: AnimationFrameState): void
 }
 
 /** MyFrame::OnStop */
-function onStop(state: AnimationFrameState): void
+function onStop(state: AnimateFrameState): void
 {
     state.animationCtrl.Stop();
 }
 
 /** MyFrame::OnSetNullAnimation */
-function onSetNullAnimation(state: AnimationFrameState): void
+function onSetNullAnimation(state: AnimateFrameState): void
 {
+    // wxNullAnimation is an empty (but valid) wxAnimation object.
     const nullAnimation = createWxAnimation();
-    if (!nullAnimation)
+    if (nullAnimation)
     {
-        return;
+        state.animationCtrl.SetAnimation(nullAnimation.ptr);
+        nullAnimation.Delete();
     }
-    state.animationCtrl.SetAnimation(nullAnimation.ptr);
-    nullAnimation.Delete();
 
     updateFrameControls(state);
 }
 
 /** MyFrame::OnSetInactiveBitmap */
-function onSetInactiveBitmap(state: AnimationFrameState, event: wxCommandEvent): void
+function onSetInactiveBitmap(state: AnimateFrameState, checked: boolean): void
 {
-    if (event.IsChecked())
+    if (checked)
     {
-        // wxArtProvider::GetBitmap(wxART_MISSING_IMAGE) — the binding exposes
-        // the static C++ method as an instance method, so the FFI is used
-        // directly. The returned wxBitmap* is owned by the caller.
-        const bitmapPtr = lib.symbols.wxArtProvider_GetBitmap(
-            ART_MISSING_IMAGE, ART_OTHER, -1, -1,
-        );
-        if (bitmapPtr)
+        // set a dummy bitmap as the inactive bitmap
+        const bitmap = wxArtProvider_GetBitmap(ART_MISSING_IMAGE, null, -1, -1);
+        if (bitmap)
         {
-            const bitmap = new wxBitmap(bitmapPtr);
             state.animationCtrl.SetInactiveBitmap(bitmap.ptr);
             bitmap.Delete();
         }
     }
     else
     {
-        state.animationCtrl.SetInactiveBitmap(state.emptyBitmap.ptr);
+        // wxNullBitmap
+        const empty = createWxBitmapDefault();
+        if (empty)
+        {
+            state.animationCtrl.SetInactiveBitmap(empty.ptr);
+            empty.Delete();
+        }
     }
 }
 
 /** MyFrame::OnSetNoAutoResize */
-function onSetNoAutoResize(state: AnimationFrameState, event: wxCommandEvent): void
+function onSetNoAutoResize(state: AnimateFrameState, checked: boolean): void
 {
-    const style = AC_DEFAULT_STYLE | (event.IsChecked() ? AC_NO_AUTORESIZE : 0);
+    // recreate the control with the new flag if necessary
+    const style = AC_DEFAULT_STYLE | (checked ? AC_NO_AUTORESIZE : 0);
 
-    // wxWindow::GetWindowStyle() is a wxWindow method; wxAnimationCtrl does not
-    // inherit from wxWindow in the generated wrappers.
-    if (style !== Number(lib.symbols.wxWindow_GetWindowStyle(state.animationCtrl.ptr)))
+    if (style !== Number(state.animationCtrl.GetWindowStyle()))
     {
         recreateAnimation(state, style);
     }
 }
 
 /** MyFrame::OnSetBgColor */
-function onSetBgColor(state: AnimationFrameState): void
+function onSetBgColor(state: AnimateFrameState): void
 {
     const initial = createWxColourEmpty();
-    const chosen = createWxColourEmpty();
-    if (!initial || !chosen)
+    const colour = createWxColourEmpty();
+    if (!initial || !colour)
     {
         initial?.Delete();
-        chosen?.Delete();
+        colour?.Delete();
         return;
     }
 
-    lib.symbols.wxWindow_GetBackgroundColour(state.animationCtrl.ptr, initial.ptr);
+    state.animationCtrl.GetBackgroundColour(initial.ptr);
 
-    // wxGetColourFromUser(parent, colInit, caption). The binding drops the
-    // caption parameter, so the dialog uses wxWidgets' own caption.
-    wxGetColourFromUser(state.frame.ptr, initial.ptr, chosen.ptr);
+    // wxGetColourFromUser(this, ctrl bg, "Choose the background colour")
+    withString("Choose the background colour", (caption) =>
+        wxGetColourFromUserEx(
+            state.frame.ptr, initial.ptr, caption, colour.ptr,
+        ));
 
-    if (chosen.IsOk())
+    if (colour.IsOk())
     {
-        lib.symbols.wxWindow_SetBackgroundColour(state.animationCtrl.ptr, chosen.ptr);
+        state.animationCtrl.SetBackgroundColour(colour.ptr);
     }
 
-    chosen.Delete();
+    colour.Delete();
     initial.Delete();
 }
 
-/** MyFrame::OnFrameSpin */
-function onFrameSpin(state: AnimationFrameState): void
+/** MyFrame::OnOpen */
+function onOpen(state: AnimateFrameState): void
 {
-    updateFrameInfo(state);
+    const dialog = withString("Please choose an animation", (message) =>
+        withString("", (directory) =>
+            withString("", (defaultFile) =>
+                withString("*.gif;*.ani;*.webp", (wildcard) =>
+                    createWxFileDialog(
+                        state.frame.ptr, message, directory, defaultFile,
+                        wildcard, -1, -1, FD_OPEN, -1, -1,
+                    )))));
+
+    if (!dialog)
+    {
+        return;
+    }
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const path = dialog.GetPath();
+        const filename = path ? readAndDeleteWxString(path.ptr) : "";
+
+        // wxAnimation temp(m_animationCtrl->CreateAnimation());
+        const temp = createWxAnimation();
+        if (temp)
+        {
+            state.animationCtrl.CreateAnimation(temp.ptr);
+
+            const loaded = withString(filename, (ptr) =>
+                temp.LoadFile(ptr, ANIMATION_TYPE_ANY));
+
+            if (!loaded)
+            {
+                logError(
+                    "Sorry, this animation is not a valid format for wxAnimation.",
+                );
+            }
+            else
+            {
+                state.animationCtrl.SetAnimation(temp.ptr);
+                state.animationCtrl.Play();
+
+                state.frame.GetSizer()?.Layout();
+
+                updateFrameControls(state);
+            }
+            temp.Delete();
+        }
+    }
+
+    dialog.Destroy();
 }
 
 /** MyFrame::OnQuit */
-function onQuit(state: AnimationFrameState): void
+function onQuit(state: AnimateFrameState): void
 {
+    // Close() — EVT_CLOSE_WINDOW stops the main loop.
     state.frame.Close(false);
 }
 
 /** MyFrame::OnAbout */
-function onAbout(state: AnimationFrameState): void
+function onAbout(state: AnimateFrameState): void
 {
     const infoPtr = createWxAboutDialogInfo();
     if (!infoPtr)
@@ -543,467 +653,375 @@ function onAbout(state: AnimationFrameState): void
     info.Delete();
 }
 
-/** MyFrame::OnOpen */
-function onOpen(state: AnimationFrameState): void
+/** MyFrame::OnFrameSpin */
+function onFrameSpin(state: AnimateFrameState): void
 {
-    const message = createWxString("Please choose an animation");
-    const directory = createWxString("");
-    const fileName = createWxString("");
-    const wildcard = createWxString("*.gif;*.ani;*.webp");
-    const dialog = createWxFileDialog(
-        state.frame.ptr,
-        message.ptr,
-        directory.ptr,
-        fileName.ptr,
-        wildcard.ptr,
-        -1,
-        -1,
-        FD_OPEN,
-        -1,
-        -1,
-    );
-    message.Delete();
-    directory.Delete();
-    fileName.Delete();
-    wildcard.Delete();
-
-    if (!dialog)
-    {
-        return;
-    }
-
-    if (dialog.ShowModal() === ID_OK)
-    {
-        // wxFileDialog::GetPath() returns a caller-owned wxString*.
-        const path = readAndDeleteWxString(dialog.GetPath());
-
-        // wxAnimation temp(m_animationCtrl->CreateAnimation());
-        // CreateAnimation() is not bound; a default wxAnimation loads the same
-        // formats, and SetAnimation() copies the data into the control.
-        const animation = createWxAnimation();
-        let loaded = false;
-        if (animation)
-        {
-            withString(path, (ptr) => { loaded = animation.LoadFile(ptr, ANIMATION_TYPE_ANY); });
-        }
-
-        if (!loaded)
-        {
-            logError("Sorry, this animation is not a valid format for wxAnimation.");
-        }
-        else
-        {
-            state.animationCtrl.SetAnimation(animation!.ptr);
-            state.animationCtrl.Play();
-
-            state.sizer.Layout();
-
-            updateFrameControls(state);
-        }
-
-        animation?.Delete();
-    }
-
-    dialog.Destroy();
+    updateFrameInfo(state);
 }
 
-/** MyFrame::OnUpdateUI */
-function onUpdateUI(state: AnimationFrameState): void
+/** MyFrame::OnUpdateUI — enables the play/stop/no-autoresize items. */
+function onUpdateUI(state: AnimateFrameState): void
 {
     const playing = state.animationCtrl.IsPlaying();
 
-    state.menuBar.EnableItem(WX_ID_STOP, playing);
-    state.menuBar.EnableItem(ID_PLAY, !playing);
-    state.menuBar.EnableItem(ID_SET_NO_AUTO_RESIZE, !playing);
+    state.menuBar.FindItem(ID_STOP)?.Enable(playing);
+    state.menuBar.FindItem(ID_PLAY)?.Enable(!playing);
+    state.menuBar.FindItem(ID_SET_NO_AUTO_RESIZE)?.Enable(!playing);
 }
 
-/** Builds the menu bar exactly as the MyFrame constructor does. */
-function createMenuBar(): wxMenuBar | null
+// ---------------------------------------------------------------------------
+// MyFrame event table (anitest.cpp:68-87)
+// ---------------------------------------------------------------------------
+
+function bindEvent(
+    target: wxFrame | wxSpinCtrl,
+    state: AnimateFrameState,
+    first: number,
+    last: number,
+    eventType: number,
+    handler: (eventPtr: Pointer) => void,
+): void
 {
-    const fileMenu = createPlainMenu();
-    const animationMenu = createPlainMenu();
-    const helpMenu = createPlainMenu();
-    if (!fileMenu || !animationMenu || !helpMenu)
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            // wxClosure invokes every handler with a null event at teardown.
+            if (!eventPtr)
+            {
+                return;
+            }
+            handler(eventPtr);
+        },
+    );
+    const closure = createWxClosure(callback.pointer, null)!;
+    target.Bind(first, last, eventType, closure.ptr);
+    state.bindings.push({ callback, closure });
+}
+
+function bindFrameEvents(state: AnimateFrameState): void
+{
+    const frame = state.frame;
+
+    const commandChecked = (id: number, handler: (checked: boolean) => void): void =>
     {
-        console.error("animate: failed to create a menu");
+        bindEvent(frame, state, id, id, EVT_MENU, (eventPtr) =>
+            handler(new wxCommandEvent(eventPtr).IsChecked()));
+    };
+    const command = (id: number, handler: () => void): void =>
+    {
+        bindEvent(frame, state, id, id, EVT_MENU, () => handler());
+    };
+
+    // EVT_MENU(ID_PLAY, MyFrame::OnPlay)
+    command(ID_PLAY, () => onPlay(state));
+    // EVT_MENU(ID_SET_NULL_ANIMATION, MyFrame::OnSetNullAnimation)
+    command(ID_SET_NULL_ANIMATION, () => onSetNullAnimation(state));
+    // EVT_MENU(ID_SET_INACTIVE_BITMAP, MyFrame::OnSetInactiveBitmap)
+    commandChecked(ID_SET_INACTIVE_BITMAP,
+        (checked) => onSetInactiveBitmap(state, checked));
+    // EVT_MENU(ID_SET_NO_AUTO_RESIZE, MyFrame::OnSetNoAutoResize)
+    commandChecked(ID_SET_NO_AUTO_RESIZE,
+        (checked) => onSetNoAutoResize(state, checked));
+    // EVT_MENU(ID_SET_BGCOLOR, MyFrame::OnSetBgColor)
+    command(ID_SET_BGCOLOR, () => onSetBgColor(state));
+
+    // EVT_MENU(wxID_STOP, MyFrame::OnStop)
+    command(ID_STOP, () => onStop(state));
+    // EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+    command(ID_ABOUT, () => onAbout(state));
+    // EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+    command(ID_EXIT, () => onQuit(state));
+    // EVT_MENU(wxID_OPEN, MyFrame::OnOpen)
+    command(ID_OPEN, () => onOpen(state));
+
+    // EVT_UPDATE_UI(wxID_ANY, MyFrame::OnUpdateUI)
+    bindEvent(frame, state, ID_ANY, ID_ANY, EVT_UPDATE_UI, () =>
+        onUpdateUI(state));
+
+    // EVT_SPINCTRL(wxID_ANY, MyFrame::OnFrameSpin) — bound on the control,
+    // exactly as the C++ constructor does.
+    bindEvent(state.frameSpin, state, ID_ANY, ID_ANY, EVT_SPINCTRL, () =>
+        onFrameSpin(state));
+
+    // The C++ frame has no close handler; ending the loop here is the
+    // kwxTypeScript equivalent of the frame being destroyed.
+    bindEvent(frame, state, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, () =>
+        exitMainLoop());
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame constructor (anitest.cpp:116-220)
+// ---------------------------------------------------------------------------
+
+function createAnimateFrame(): AnimateFrameState | null
+{
+    const title = createWxString("Animation Demo");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+    if (!frame)
+    {
         return null;
     }
 
-    // Stock items (wxID_EXIT, wxID_ABOUT) are appended with empty labels, which
-    // wxMenuItem resolves through wxGetStockLabel().
-    const emptyLabel = createWxString("");
-    const emptyHelp = createWxString("");
+    applyFrameIcon(frame);
 
-    // File menu
-    withString("&Open Animation...\tCtrl+O", (ptr) =>
+    // -----------------------------------------------------------------
+    // Make a menubar
+    // -----------------------------------------------------------------
+    const fileMenu = createPlainMenu();
+    const playMenu = createPlainMenu();
+    const helpMenu = createPlainMenu();
+    if (!fileMenu || !playMenu || !helpMenu)
+    {
+        return null;
+    }
+
+    // file_menu->Append(wxID_OPEN, "&Open Animation...\tCtrl+O", ...)
+    withString("&Open Animation...\tCtrl+O", (text) =>
         withString("Loads an animation", (help) =>
-            fileMenu.Append(ID_OPEN, ptr, help, false)));
-    fileMenu.Append(ID_EXIT, emptyLabel.ptr, emptyHelp.ptr, false);
+            fileMenu.Append(ID_OPEN, text, help, false)));
 
-    // Animation menu
-    withString("Play\tCtrl+P", (ptr) =>
+    // file_menu->Append(wxID_EXIT) — the empty label selects the stock "E&xit".
+    withString("", (text) => fileMenu.Append(ID_EXIT, text, null, false));
+
+    // play_menu->Append(ID_PLAY, "Play\tCtrl+P", ...)
+    withString("Play\tCtrl+P", (text) =>
         withString("Play the animation", (help) =>
-            animationMenu.Append(ID_PLAY, ptr, help, false)));
-    withString("Stop\tCtrl+S", (ptr) =>
+            playMenu.Append(ID_PLAY, text, help, false)));
+    // play_menu->Append(wxID_STOP, "Stop\tCtrl+S", ...)
+    withString("Stop\tCtrl+S", (text) =>
         withString("Stop the animation", (help) =>
-            animationMenu.Append(WX_ID_STOP, ptr, help, false)));
-    animationMenu.AppendSeparator();
-    withString("Set null animation", (ptr) =>
+            playMenu.Append(ID_STOP, text, help, false)));
+    playMenu.AppendSeparator();
+    // play_menu->Append(ID_SET_NULL_ANIMATION, ...)
+    withString("Set null animation", (text) =>
         withString("Sets the empty animation in the control", (help) =>
-            animationMenu.Append(ID_SET_NULL_ANIMATION, ptr, help, false)));
-    withString("Set inactive bitmap", (ptr) =>
+            playMenu.Append(ID_SET_NULL_ANIMATION, text, help, false)));
+    // play_menu->AppendCheckItem(ID_SET_INACTIVE_BITMAP, ...)
+    withString("Set inactive bitmap", (text) =>
         withString("Sets an inactive bitmap for the control", (help) =>
-            animationMenu.AppendCheckItem(ID_SET_INACTIVE_BITMAP, ptr, help)));
-    withString("Set no autoresize", (ptr) =>
+            playMenu.AppendCheckItem(ID_SET_INACTIVE_BITMAP, text, help)));
+    // play_menu->AppendCheckItem(ID_SET_NO_AUTO_RESIZE, ...)
+    withString("Set no autoresize", (text) =>
         withString("Tells the control not to resize automatically", (help) =>
-            animationMenu.AppendCheckItem(ID_SET_NO_AUTO_RESIZE, ptr, help)));
-    withString("Set background colour...", (ptr) =>
+            playMenu.AppendCheckItem(ID_SET_NO_AUTO_RESIZE, text, help)));
+    // play_menu->Append(ID_SET_BGCOLOR, ...)
+    withString("Set background colour...", (text) =>
         withString("Sets the background colour of the control", (help) =>
-            animationMenu.Append(ID_SET_BGCOLOR, ptr, help, false)));
+            playMenu.Append(ID_SET_BGCOLOR, text, help, false)));
 
-    // Help menu
-    helpMenu.Append(ID_ABOUT, emptyLabel.ptr, emptyHelp.ptr, false);
+    // The "Use generic animation" separator + check item of the
+    // wxHAS_NATIVE_ANIMATIONCTRL branch cannot be ported: no
+    // wxGenericAnimationCtrl binding exists.
 
-    emptyLabel.Delete();
-    emptyHelp.Delete();
+    // help_menu->Append(wxID_ABOUT) — stock "&About".
+    withString("", (text) => helpMenu.Append(ID_ABOUT, text, null, false));
 
     const menuBar = createWxMenuBar(0);
     if (!menuBar)
     {
-        console.error("animate: failed to create the menu bar");
         return null;
     }
 
-    withString("&File", (ptr) => menuBar.Append(fileMenu.ptr, ptr));
-    withString("&Animation", (ptr) => menuBar.Append(animationMenu.ptr, ptr));
-    withString("&Help", (ptr) => menuBar.Append(helpMenu.ptr, ptr));
+    withString("&File", (ptr) => { menuBar.Append(fileMenu.ptr, ptr); });
+    withString("&Animation", (ptr) => { menuBar.Append(playMenu.ptr, ptr); });
+    withString("&Help", (ptr) => { menuBar.Append(helpMenu.ptr, ptr); });
 
-    return menuBar;
-}
-
-/** MyFrame::MyFrame() */
-function createAnimationFrame(): AnimationFrameState | null
-{
-    const frameTitle = createWxString("Animation Demo");
-    const frame = createWxFrame(
-        null,
-        ID_ANY,
-        frameTitle.ptr,
-        -1,
-        -1,
-        -1,
-        -1,
-        DEFAULT_FRAME_STYLE,
-    );
-    frameTitle.Delete();
-
-    if (!frame)
-    {
-        console.error("animate: failed to create the main frame");
-        return null;
-    }
-
-    // SetIcon(wxICON(sample)) — resources are not available to kwxTypeScript
-    // programs, so the same XPM image is loaded at run time.
-    const iconPath = createWxString(samplePath("sample.xpm"));
-    const icon = createWxIconLoad(iconPath.ptr, BigInt(BITMAP_TYPE_XPM), -1, -1);
-    iconPath.Delete();
-    if (icon)
-    {
-        if (icon.IsOk())
-        {
-            frame.SetIcon(icon.ptr);
-        }
-        icon.Delete();
-    }
-
-    const menuBar = createMenuBar();
-    if (!menuBar)
-    {
-        frame.Destroy();
-        return null;
-    }
+    // Associate the menu bar with this frame
     frame.SetMenuBar(menuBar.ptr);
 
-    // CreateStatusBar()
-    frame.CreateStatusBar(1, STB_DEFAULT_STYLE, 0);
+    frame.CreateStatusBar(1, STB_DEFAULT_STYLE, ID_ANY);
 
-    const emptyBitmap = createWxBitmapDefault();
-    if (!emptyBitmap)
+    // use a wxBoxSizer otherwise wxFrame will automatically resize the
+    // animation control to fill its client area on user resizes
+    const sz = createWxBoxSizer(VERTICAL);
+    if (!sz)
     {
-        frame.Destroy();
         return null;
     }
 
-    const sizer = createWxBoxSizer(VERTICAL);
+    const caption = createLabel(frame.ptr, "wxAnimationCtrl:");
+    if (caption)
+    {
+        addWindowWithFlags(sz, caption.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    }
+
     const animationCtrl = createWxAnimationCtrl(
         frame.ptr, ID_ANY, -1, -1, -1, -1, AC_DEFAULT_STYLE,
     );
-    if (!sizer || !animationCtrl)
+    if (!animationCtrl)
     {
-        console.error("animate: failed to create the sizer or the animation control");
-        emptyBitmap.Delete();
-        frame.Destroy();
         return null;
     }
 
-    const border = Math.round(defaultBorderFractional(frame));
-
-    // sz->Add(new wxStaticText(this, wxID_ANY, "wxAnimationCtrl:"),
-    //         wxSizerFlags().Centre().Border());
-    const caption = createStaticLabel(frame.ptr, "wxAnimationCtrl:");
-    if (caption)
+    // wxAnimationBundle with the 1x and 2x throbber, added only when valid.
+    const animations: wxAnimation[] = [];
+    const bundles: wxAnimationBundle[] = [];
+    const bundle = createWxAnimationBundle();
+    if (bundle)
     {
-        sizer.AddWindow(caption.ptr, 0, ALIGN_CENTER | ALL, border, null);
+        const throbber = withString(assetPath("throbber.gif"), (ptr) =>
+            createWxAnimationFromFile(ptr, ANIMATION_TYPE_ANY));
+        if (throbber)
+        {
+            if (throbber.IsOk())
+            {
+                bundle.Add(throbber.ptr);
+                animations.push(throbber);
+            }
+            else
+            {
+                throbber.Delete();
+            }
+        }
+
+        const throbber2x = withString(assetPath("throbber_2x.gif"), (ptr) =>
+            createWxAnimationFromFile(ptr, ANIMATION_TYPE_ANY));
+        if (throbber2x)
+        {
+            if (throbber2x.IsOk())
+            {
+                bundle.Add(throbber2x.ptr);
+                animations.push(throbber2x);
+            }
+            else
+            {
+                throbber2x.Delete();
+            }
+        }
+
+        if (bundle.IsOk())
+        {
+            animationCtrl.SetAnimationBundle(bundle.ptr);
+            animationCtrl.Play();
+            bundles.push(bundle);
+        }
+        else
+        {
+            bundle.Delete();
+        }
     }
 
-    // Load the animation bundle and add the control to the sizer.
-    const animation = loadAnimationBundle(frame, [
-        samplePath("throbber.gif"),
-        samplePath("throbber_2x.gif"),
-    ]);
-    if (animation)
-    {
-        animationCtrl.SetAnimation(animation.ptr);
-        animationCtrl.Play();
-        animation.Delete();
-    }
+    // sz->Add(m_animationCtrl, wxSizerFlags().Centre().Border())
+    addWindowWithFlags(sz, animationCtrl.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
 
-    sizer.AddWindow(animationCtrl.ptr, 0, ALIGN_CENTER | ALL, border, null);
-
-    // wxStaticBoxSizer(wxVERTICAL, this, "Animation frames")
-    const boxLabel = createWxString("Animation frames");
+    // add controls allowing to examine the individual animation frames
+    const boxText = createWxString("Animation frames");
     const frameBox = createWxStaticBox(
-        frame.ptr, ID_ANY, boxLabel.ptr, -1, -1, -1, -1, 0,
+        frame.ptr, ID_ANY, boxText.ptr, -1, -1, -1, -1, 0,
     );
-    boxLabel.Delete();
-    const frameSizer = frameBox ? createWxStaticBoxSizer(frameBox.ptr, VERTICAL) : null;
-    if (!frameBox || !frameSizer)
+    boxText.Delete();
+    if (!frameBox)
     {
-        console.error("animate: failed to create the animation-frames group");
-        emptyBitmap.Delete();
-        frame.Destroy();
         return null;
     }
 
-    // Spin sizer: "&Frame:" [spin] "(of N)"
+    const frameSizer = createWxStaticBoxSizer(frameBox.ptr, VERTICAL);
+    if (!frameSizer)
+    {
+        return null;
+    }
+
     const spinSizer = createWxBoxSizer(HORIZONTAL);
     if (!spinSizer)
     {
-        console.error("animate: failed to create the spin sizer");
-        emptyBitmap.Delete();
-        frame.Destroy();
         return null;
     }
 
-    const frameLabel = createStaticLabel(frameBox.ptr, "&Frame:");
+    const frameLabel = createLabel(frameBox.ptr, "&Frame:");
     if (frameLabel)
     {
-        spinSizer.AddWindow(frameLabel.ptr, 0, ALIGN_CENTER_VERTICAL | RIGHT, border, null);
+        addWindowWithFlags(spinSizer, frameLabel.ptr, 0,
+            (f) => { f.CenterVertical(); f.Border(RIGHT); });
     }
 
-    const spinText = createWxString("");
-    const frameSpin = createWxSpinCtrl(
-        frameBox.ptr,
-        ID_ANY,
-        spinText.ptr,
-        -1,
-        -1,
-        -1,
-        -1,
-        BigInt(SP_ARROW_KEYS),
-        0,
-        100,
-        0,
-    );
-    spinText.Delete();
+    const frameSpin = withString("", (ptr) => createWxSpinCtrl(
+        frameBox.ptr, ID_ANY, ptr, -1, -1, -1, -1,
+        BigInt(SP_ARROW_KEYS), 0, 100, 0,
+    ));
     if (!frameSpin)
     {
-        console.error("animate: failed to create the frame spin control");
-        emptyBitmap.Delete();
-        frame.Destroy();
         return null;
     }
-    spinSizer.AddWindow(frameSpin.ptr, 0, ALIGN_CENTER_VERTICAL, 0, null);
+    addWindowWithFlags(spinSizer, frameSpin.ptr, 0, (f) => { f.CenterVertical(); });
 
-    const frameCount = createStaticLabel(frameBox.ptr, "");
+    const frameCount = createLabel(frameBox.ptr, "");
     if (!frameCount)
     {
-        console.error("animate: failed to create the frame count label");
-        emptyBitmap.Delete();
-        frame.Destroy();
         return null;
     }
-    spinSizer.AddWindow(frameCount.ptr, 0, ALIGN_CENTER_VERTICAL | LEFT, border, null);
+    addWindowWithFlags(spinSizer, frameCount.ptr, 0,
+        (f) => { f.CenterVertical(); f.Border(LEFT); });
 
-    frameSizer.AddSizer(spinSizer.ptr, 0, ALIGN_CENTER | ALL, border, null);
+    addSizerWithFlags(frameSizer, spinSizer.ptr, 0,
+        (f) => { f.Center(); f.Border(ALL); });
 
-    const frameDelay = createStaticLabel(frameBox.ptr, "");
+    const frameDelay = createLabel(frameBox.ptr, "");
     if (!frameDelay)
     {
-        console.error("animate: failed to create the frame delay label");
-        emptyBitmap.Delete();
-        frame.Destroy();
         return null;
     }
-    frameSizer.AddWindow(frameDelay.ptr, 0, ALIGN_CENTER | ALL, border, null);
+    addWindowWithFlags(frameSizer, frameDelay.ptr, 0,
+        (f) => { f.Center(); f.Border(ALL); });
 
-    // wxStaticBitmap(m_frameBox, wxID_ANY, wxBitmapBundle())
+    // wxStaticBitmap(m_frameBox, wxID_ANY, wxBitmapBundle()) — the binding
+    // takes a wxBitmap, and wxStaticBitmap copies it.
+    const emptyBitmap = createWxBitmapDefault();
+    if (!emptyBitmap)
+    {
+        return null;
+    }
     const frameBitmap = createWxStaticBitmap(
         frameBox.ptr, ID_ANY, emptyBitmap.ptr, -1, -1, -1, -1, 0,
     );
+    emptyBitmap.Delete();
     if (!frameBitmap)
     {
-        console.error("animate: failed to create the frame bitmap");
-        emptyBitmap.Delete();
-        frame.Destroy();
         return null;
     }
-    frameSizer.AddWindow(frameBitmap.ptr, 0, ALIGN_CENTER | ALL, border, null);
+    addWindowWithFlags(frameSizer, frameBitmap.ptr, 0,
+        (f) => { f.Center(); f.Border(ALL); });
 
-    sizer.AddSizer(frameSizer.ptr, 0, EXPAND | ALL, border, null);
-    frame.SetSizer(sizer.ptr, false);
+    // sz->Add(frameSizer, wxSizerFlags().Expand().Border())
+    addSizerWithFlags(sz, frameSizer.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
 
-    const state: AnimationFrameState = {
+    frame.SetSizer(sz.ptr, true);
+
+    const state: AnimateFrameState = {
         frame,
-        sizer,
+        menuBar,
         animationCtrl,
         frameBox,
         frameSpin,
         frameCount,
         frameDelay,
         frameBitmap,
-        menuBar,
-        emptyBitmap,
-        border,
+        animations,
+        bundles,
+        bindings: [],
     };
 
     updateFrameControls(state);
 
-    // SetSize(FromDIP(wxSize(500, 400)))
+    // SetSize(FromDIP(wxSize(500, 400))) — keep the current position.
+    const pos = frame.GetPosition();
     frame.SetSize(
-        -1,
-        -1,
+        pos ? pos.GetX() : -1,
+        pos ? pos.GetY() : -1,
         frame.FromDIP(500),
         frame.FromDIP(400),
-        SIZE_USE_EXISTING,
+        0,
     );
 
     return state;
 }
 
-/** MyFrame's event table plus wxSpinCtrl::Bind(wxEVT_SPINCTRL). */
-function connectAnimationEvents(state: AnimationFrameState): EventBinding[]
-{
-    const bindings: EventBinding[] = [];
-
-    const menu = (id: number, handler: (event: wxCommandEvent) => void): void =>
-    {
-        const callback = new Callback(
-            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-            (_closureFun, _data, eventPtr) =>
-            {
-                if (!eventPtr)
-                {
-                    return;
-                }
-                handler(new wxCommandEvent(eventPtr));
-            },
-        );
-        const closure = createWxClosure(callback.pointer, null)!;
-        lib.symbols.wxEvtHandler_Connect(
-            state.frame.ptr, id, id, EVT_MENU, closure.ptr,
-        );
-        bindings.push({ callback, closure });
-    };
-
-    menu(ID_PLAY, () => onPlay(state));
-    menu(ID_SET_NULL_ANIMATION, () => onSetNullAnimation(state));
-    menu(ID_SET_INACTIVE_BITMAP, (event) => onSetInactiveBitmap(state, event));
-    menu(ID_SET_NO_AUTO_RESIZE, (event) => onSetNoAutoResize(state, event));
-    menu(ID_SET_BGCOLOR, () => onSetBgColor(state));
-    menu(WX_ID_STOP, () => onStop(state));
-    menu(ID_ABOUT, () => onAbout(state));
-    menu(ID_EXIT, () => onQuit(state));
-    menu(ID_OPEN, () => onOpen(state));
-
-    // EVT_SIZE(MyFrame::OnSize) — anitest.h declares no OnSize, so the entry
-    // resolves to the framework's own size handling. Reproduce that by letting
-    // the event propagate to the default handler.
-    const sizeCallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            new wxSizeEvent(eventPtr).Skip(true);
-        },
-    );
-    const sizeClosure = createWxClosure(sizeCallback.pointer, null)!;
-    lib.symbols.wxEvtHandler_Connect(
-        state.frame.ptr, ID_ANY, ID_ANY, EVT_SIZE, sizeClosure.ptr,
-    );
-    bindings.push({ callback: sizeCallback, closure: sizeClosure });
-
-    // EVT_UPDATE_UI(wxID_ANY, MyFrame::OnUpdateUI)
-    const updateUICallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            onUpdateUI(state);
-        },
-    );
-    const updateUIClosure = createWxClosure(updateUICallback.pointer, null)!;
-    lib.symbols.wxEvtHandler_Connect(
-        state.frame.ptr, ID_ANY, ID_ANY, EVT_UPDATE_UI, updateUIClosure.ptr,
-    );
-    bindings.push({ callback: updateUICallback, closure: updateUIClosure });
-
-    // m_frameSpin->Bind(wxEVT_SPINCTRL, &MyFrame::OnFrameSpin, this)
-    const spinCallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            onFrameSpin(state);
-        },
-    );
-    const spinClosure = createWxClosure(spinCallback.pointer, null)!;
-    lib.symbols.wxEvtHandler_Connect(
-        state.frameSpin.ptr, ID_ANY, ID_ANY, EVT_SPINCTRL, spinClosure.ptr,
-    );
-    bindings.push({ callback: spinCallback, closure: spinClosure });
-
-    // Closing the last top-level window ends the program; exitMainLoop() is the
-    // kwxTypeScript equivalent of wxWidgets' automatic event-loop exit.
-    const closeCallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            exitMainLoop();
-        },
-    );
-    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
-    lib.symbols.wxEvtHandler_Connect(
-        state.frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr,
-    );
-    bindings.push({ callback: closeCallback, closure: closeClosure });
-
-    return bindings;
-}
+// ---------------------------------------------------------------------------
+// MyApp::OnInit (anitest.cpp:98-109)
+// ---------------------------------------------------------------------------
 
 export function main(): number
 {
@@ -1015,28 +1033,27 @@ export function main(): number
 
     setAppName("animate");
 
-    // The frame icon is loaded from sample.xpm at run time.
-    initAllImageHandlers();
-
-    const state = createAnimationFrame();
+    const state = createAnimateFrame();
     if (!state)
     {
         shutdown();
         return 1;
     }
 
-    const bindings = connectAnimationEvents(state);
+    bindFrameEvents(state);
 
     state.frame.Show();
     setTopWindow(state.frame.ptr);
 
     const exitCode = run();
 
-    for (const binding of bindings)
+    // Events can only fire while the loop runs, so the closures are released
+    // now that it has returned.
+    for (const binding of state.bindings)
     {
         binding.callback.close();
     }
-    state.emptyBitmap.Delete();
+
     shutdown();
     return exitCode;
 }

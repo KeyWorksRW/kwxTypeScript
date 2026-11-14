@@ -1,0 +1,112 @@
+// assets.kwxts — the sample's images, converted from XPM to SVG.
+//
+// stctest.cpp loads `wxICON(sample)` (../sample.xpm on platforms without
+// resource images) for the frame icon and the About box, and edit.cpp
+// registers hashtag_xpm as the autocompletion image. Both XPM sources are
+// shipped here as SVG and loaded through wxBitmapBundle_FromSVGFile at the
+// original pixel dimensions.
+//
+// The bundles and bitmaps are kept referenced for the whole event loop: the
+// size-specific wxBitmap returned by GetBitmap() is owned by this module and
+// must outlive every use.
+
+import {
+    createWxIconDefault,
+    wxBitmapBundle_FromSVGFile,
+    wxBitmap,
+    wxBitmapBundle,
+    wxIcon,
+} from "kwx";
+import { withString } from "./runtime.kwxts";
+
+declare const __dirname: string;
+
+/** ../sample.xpm — 32x32 */
+const SAMPLE_SIZE = 32;
+
+/** edit.cpp hashtag_xpm — 10x10 */
+const HASHTAG_SIZE = 10;
+
+let sampleBundle: wxBitmapBundle | null = null;
+let sampleBitmap: wxBitmap | null = null;
+let sampleIconRef: wxIcon | null = null;
+let hashtagBundle: wxBitmapBundle | null = null;
+let hashtagBitmapRef: wxBitmap | null = null;
+
+/** Loads samples/stc/sample.svg at the source XPM's 32x32 size. */
+function loadSampleBundle(): wxBitmapBundle | null
+{
+    if (!sampleBundle)
+    {
+        const path = __dirname + "/sample.svg";
+        sampleBundle = withString(path, (file) =>
+            wxBitmapBundle_FromSVGFile(file, SAMPLE_SIZE, SAMPLE_SIZE));
+    }
+    return sampleBundle;
+}
+
+/** Loads samples/stc/hashtag.svg at the source XPM's 10x10 size. */
+function loadHashtagBundle(): wxBitmapBundle | null
+{
+    if (!hashtagBundle)
+    {
+        const path = __dirname + "/hashtag.svg";
+        hashtagBundle = withString(path, (file) =>
+            wxBitmapBundle_FromSVGFile(file, HASHTAG_SIZE, HASHTAG_SIZE));
+    }
+    return hashtagBundle;
+}
+
+/** The 32x32 application bitmap used by the About box. */
+export function sampleBitmap32(): wxBitmap | null
+{
+    if (!sampleBitmap)
+    {
+        const bundle = loadSampleBundle();
+        sampleBitmap = bundle ? bundle.GetBitmap(SAMPLE_SIZE, SAMPLE_SIZE) : null;
+    }
+    return sampleBitmap;
+}
+
+/** The application icon (wxICON(sample)). */
+export function sampleIcon(): wxIcon | null
+{
+    if (!sampleIconRef)
+    {
+        const bitmap = sampleBitmap32();
+        if (bitmap)
+        {
+            const icon = createWxIconDefault();
+            if (icon)
+            {
+                icon.CopyFromBitmap(bitmap.ptr);
+                sampleIconRef = icon;
+            }
+        }
+    }
+    return sampleIconRef;
+}
+
+/** The 10x10 hashtag image registered as autocompletion image 0. */
+export function hashtagBitmap(): wxBitmap | null
+{
+    if (!hashtagBitmapRef)
+    {
+        const bundle = loadHashtagBundle();
+        hashtagBitmapRef = bundle ? bundle.GetBitmap(HASHTAG_SIZE, HASHTAG_SIZE) : null;
+    }
+    return hashtagBitmapRef;
+}
+
+/**
+ * stctest.cpp — the document the sample opens at start-up.
+ *
+ * The C++ sample calls FileOpen("stctest.cpp"), i.e. the sample's own source
+ * file resolved against the working directory. Resolving it against this
+ * module's directory keeps that behaviour independent of the CWD, and the file
+ * itself is an unmodified copy of the sample's source.
+ */
+export function sampleSourcePath(): string
+{
+    return __dirname.replace(/\\/g, "/") + "/stctest.cpp";
+}

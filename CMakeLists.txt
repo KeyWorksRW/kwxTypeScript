@@ -13,7 +13,7 @@ set(PROJECT_VERSION_BUILD ${BUILD_NUM})
 set(PROJECT_VERSION_YEAR ${PROJECT_YEAR})
 
 # ###################### One MSVC runtime for every target #######################
-# Must be set before project(). QuickJS-ng, kwxFFI, wxWidgets and kwx_ts must all
+# Must be set before project(). QuickJS-ng, kwxFFI, wxWidgets and kwxts must all
 # use the same dynamically linked CRT (/MD). Mixing /MD and /MDd across static
 # libraries causes link errors and heap corruption.
 if(WIN32)
@@ -79,7 +79,7 @@ else()
 endif()
 
 # ###################### Static-only build #######################
-# kwx_ts is a single self-contained executable, so QuickJS-ng, kwxFFI and
+# kwxts is a single self-contained executable, so QuickJS-ng, kwxFFI and
 # wxWidgets must all be static libraries. Every option below has to be set
 # before FetchContent_MakeAvailable so that no dependency can default to SHARED.
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries" FORCE)
@@ -95,7 +95,7 @@ set(FETCHCONTENT_QUIET ON)
 
 # QuickJS-ng exposes the static library target `qjs`. Its examples/tests
 # (qjs_exe, qjsc, api-test, lre-test) have no opt-out option and belong only to
-# the default `all` target, so every build command must pass `--target kwx_ts`.
+# the default `all` target, so every build command must pass `--target kwxts`.
 set(QJS_ENABLE_INSTALL OFF CACHE BOOL "Disable QuickJS-ng install rules" FORCE)
 set(QJS_BUILD_EXAMPLES OFF CACHE BOOL "Disable QuickJS-ng example programs" FORCE)
 
@@ -119,7 +119,10 @@ message(STATUS "Fetching kwxFFI and wxWidgets (this may take awhile) ...")
 
 FetchContent_Declare(
     kwxFFI
-    GIT_REPOSITORY https://github.com/KeyWorksRW/kwxFFI.git
+    # TEMPORARY: use the local sibling checkout so source changes show up immediately.
+    # Restore the GIT_REPOSITORY line below to fetch from GitHub again.
+    # GIT_REPOSITORY https://github.com/KeyWorksRW/kwxFFI.git
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../kwxFFI
     GIT_TAG origin/main
     GIT_SHALLOW TRUE
     UPDATE_DISCONNECTED FALSE
@@ -133,7 +136,7 @@ message(NOTICE "kwxFFI has been fetched and configured.")
 message(STATUS "kwxFFI sources: ${kwxFFI_SOURCE_DIR}")
 
 # ###################### Source layout #######################
-# The kwx_ts C++ sources, CMake helpers and build-time assets live in kwxts/.
+# The kwxts C++ sources, CMake helpers and build-time assets live in kwxts/.
 # The TypeScript corpus consumed by the binding generator stays in the
 # repository root (src/ and wx/).
 set(KWX_TS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kwxts)
@@ -144,7 +147,7 @@ if(WIN32)
     enable_language(RC)
 elseif(APPLE)
     # wxWidgets' own build already sets this for its targets; repeat it so the
-    # kwx_ts translation units see the same standard-library extension surface.
+    # kwxts translation units see the same standard-library extension surface.
     add_compile_definitions(__STDC_WANT_LIB_EXT1__=1)
 elseif(UNIX)
     # GTK-based wxWidgets build. pkg-config, gtk+-3.0 and x11 development
@@ -156,7 +159,7 @@ endif()
 
 # ###################### Executable output directory #######################
 # Set after the FetchContent targets so it only affects this project's own
-# executables: kwx_binding_gen and kwx_ts are placed in the repository-level
+# executables: kwx_binding_gen and kwxts are placed in the repository-level
 # bin/<Config> alongside kwxgen -- never in kwxts/bin/<Config>. $<CONFIG>
 # keeps multi-config generators from appending a second configuration directory.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin/$<CONFIG>")
@@ -221,7 +224,7 @@ find_program(CARGO_EXECUTABLE cargo
 )
 if(NOT CARGO_EXECUTABLE)
     message(FATAL_ERROR
-        "cargo was not found, but kwx_ts needs it to build the Rust SWC "
+        "cargo was not found, but kwxts needs it to build the Rust SWC "
         "transformer in kwxts/third_party/swc_transformer. Install a Rust "
         "toolchain from https://rustup.rs and re-run CMake.")
 endif()
@@ -475,11 +478,11 @@ add_custom_command(
     VERBATIM
 )
 
-# ###################### kwx_ts executable #######################
+# ###################### kwxts executable #######################
 # wx/kwx_constants_table_gen.cpp must be compiled here: kwxFFI ships its own
 # older copy, and the indices in wx/kwx_constants_gen.ts are generated against
 # this table. Overriding it keeps the constant values in sync.
-add_executable(kwx_ts
+add_executable(kwxts
     ${KWX_TS_DIR}/src/main.cpp
     ${KWX_TS_DIR}/src/quickjs_host.cpp
     ${KWX_TS_DIR}/src/kwx_host_app.cpp
@@ -494,29 +497,29 @@ add_executable(kwx_ts
 
 # The generated header is included both by the generated source and by
 # runtime_bindings.cpp, so its directory must be on the include path.
-target_include_directories(kwx_ts PRIVATE
+target_include_directories(kwxts PRIVATE
     ${KWX_GENERATED_DIR}
     ${KWX_TS_DIR}/src
 )
 
 # kwxFFI PUBLIC-links every wxWidgets component, so linking it transitively
 # supplies the wxWidgets libraries, headers and platform frameworks.
-target_link_libraries(kwx_ts PRIVATE qjs kwxFFI kwx_swc_transformer)
+target_link_libraries(kwxts PRIVATE qjs kwxFFI kwx_swc_transformer)
 
 # A Rust `staticlib` carries its own copy of std, and that copy references the
 # platform libraries rustc would normally link for a Rust executable. MSVC does
 # not read those linker directives out of a static library, so they are listed
 # explicitly here. Over-linking these system libraries is harmless.
 if(WIN32)
-    target_link_libraries(kwx_ts PRIVATE
+    target_link_libraries(kwxts PRIVATE
         advapi32 userenv ws2_32 ntdll bcrypt ole32 shell32
     )
 elseif(APPLE)
-    target_link_libraries(kwx_ts PRIVATE
+    target_link_libraries(kwxts PRIVATE
         "-framework Security" "-framework CoreFoundation"
     )
 else()
-    target_link_libraries(kwx_ts PRIVATE dl pthread m)
+    target_link_libraries(kwxts PRIVATE dl pthread m)
 endif()
 
 # Debug info produced by the static dependencies ends up in the Release
@@ -524,32 +527,32 @@ endif()
 # -g. It is dead weight for a shipped binary, so strip it from Release only;
 # RelWithDebInfo and Debug keep their symbols.
 if(MSVC)
-    target_link_options(kwx_ts PRIVATE $<$<CONFIG:Release>:/DEBUG:NONE>)
+    target_link_options(kwxts PRIVATE $<$<CONFIG:Release>:/DEBUG:NONE>)
 else()
-    target_link_options(kwx_ts PRIVATE $<$<CONFIG:Release>:-Wl,--strip-debug>)
+    target_link_options(kwxts PRIVATE $<$<CONFIG:Release>:-Wl,--strip-debug>)
 endif()
 
 # C declarations for the kwxFFI wrappers (wxFrame_Create, wxString_CreateUTF8, ...).
-target_include_directories(kwx_ts PRIVATE ${kwxFFI_SOURCE_DIR}/include)
+target_include_directories(kwxts PRIVATE ${kwxFFI_SOURCE_DIR}/include)
 
 # The wxWidgets include roots, mirroring build/_deps/kwxffi-src/CMakeLists.txt.
-target_include_directories(kwx_ts PRIVATE ${wxWidgets_SOURCE_DIR}/include)
+target_include_directories(kwxts PRIVATE ${wxWidgets_SOURCE_DIR}/include)
 if(WIN32)
-    target_include_directories(kwx_ts PRIVATE
+    target_include_directories(kwxts PRIVATE
         ${wxWidgets_BINARY_DIR}/lib/vc_x64_lib/mswu
     )
 elseif(APPLE)
-    target_include_directories(kwx_ts PRIVATE
+    target_include_directories(kwxts PRIVATE
         ${wxWidgets_BINARY_DIR}/lib/osx_cocoa-unicode-static
     )
 elseif(UNIX)
-    target_include_directories(kwx_ts PRIVATE
+    target_include_directories(kwxts PRIVATE
         ${wxWidgets_BINARY_DIR}/lib/gtk3_unixu-3.3/include
     )
 endif()
 
 # ###################### Windows resources (manifest, icon, version) #######################
-# res/kwx_ts.rc embeds the Common Controls v6 manifest with resource ID 1 (so
+# res/kwxts.rc embeds the Common Controls v6 manifest with resource ID 1 (so
 # Windows applies visual styles without a runtime activation context), the
 # application icon, and the VERSIONINFO block. res/version.rc is generated from
 # the project version so the file properties track every build.
@@ -560,13 +563,13 @@ if(WIN32)
         @ONLY
     )
 
-    target_sources(kwx_ts PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/res/kwxts.rc)
-    target_include_directories(kwx_ts PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+    target_sources(kwxts PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/res/kwxts.rc)
+    target_include_directories(kwxts PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
     # Only MSVC / clang-cl accept /MANIFEST:NO. GNU/Clang frontends on MSYS2
     # use a different linker and reject this flag.
     if(MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
-        target_link_options(kwx_ts PRIVATE "/MANIFEST:NO")
+        target_link_options(kwxts PRIVATE "/MANIFEST:NO")
     endif()
 endif()
 
@@ -578,21 +581,21 @@ endif()
 # The MSVC default is 1 MiB, which is far too small.
 if(WIN32)
     if(MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
-        target_link_options(kwx_ts PRIVATE "/STACK:33554432")
+        target_link_options(kwxts PRIVATE "/STACK:33554432")
     else()
         # GNU-style frontend (MinGW / clang with the GNU driver), as used by
         # quickjs-ng itself for its own executables.
-        target_link_options(kwx_ts PRIVATE "-Wl,--stack,33554432")
+        target_link_options(kwxts PRIVATE "-Wl,--stack,33554432")
     endif()
 endif()
 
 # Windows produces kwxts.exe; macOS/Linux produce kwxts. The executable lands
 # in the repository-level bin/<Config> (see CMAKE_RUNTIME_OUTPUT_DIRECTORY
 # above), alongside kwxgen and kwx_binding_gen.
-set_target_properties(kwx_ts PROPERTIES OUTPUT_NAME kwxts)
+set_target_properties(kwxts PROPERTIES OUTPUT_NAME kwxts)
 
 # Platform-specific compile definitions collected above (empty where unused).
-target_compile_definitions(kwx_ts PRIVATE ${KWX_TS_PLATFORM_DEFINITIONS})
+target_compile_definitions(kwxts PRIVATE ${KWX_TS_PLATFORM_DEFINITIONS})
 
 # ###################### Packaging Instructions #######################
 # install(TARGETS) places kwxts in bin/, so the NSIS registry entries and the
@@ -600,8 +603,8 @@ target_compile_definitions(kwx_ts PRIVATE ${KWX_TS_PLATFORM_DEFINITIONS})
 set(CPACK_PACKAGE_VENDOR "KeyWorks Software")
 set(CPACK_VERBATIM_VARIABLES YES)
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_LIST_DIR}/LICENSE)
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "kwx_ts")
-set(CPACK_PACKAGE_EXECUTABLES "kwxts" "kwx_ts")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "kwxts")
+set(CPACK_PACKAGE_EXECUTABLES "kwxts" "kwxts")
 set(CPACK_CREATE_DESKTOP_LINKS kwxts)
 
 set(CPACK_NSIS_MUI_ICON ${CMAKE_CURRENT_LIST_DIR}/res/kwx_ts_logo.ico)
@@ -619,7 +622,7 @@ set(CPACK_RPM_PACKAGE_GROUP "Development/Tools")
 set(CPACK_RPM_PACKAGE_REQUIRES "libgtk-3.so.0, glibc >= 2.38")
 set(CPACK_RPM_PACKAGE_URL "https://github.com/Randalphwa/kwxTypeScript-dev")
 set(CPACK_RPM_PACKAGE_DESCRIPTION "TypeScript runtime for wxWidgets")
-set(CPACK_RPM_PACKAGE_SUMMARY "kwx_ts TypeScript runtime for wxWidgets")
+set(CPACK_RPM_PACKAGE_SUMMARY "kwxts TypeScript runtime for wxWidgets")
 
 # Use the build number to determine if the package is newer than the previous build.
 set(CPACK_RPM_PACKAGE_RELEASE ${PROJECT_VERSION_BUILD})
@@ -629,7 +632,7 @@ set(CPACK_DEBIAN_PACKAGE_DEPENDS "libgtk-3-0, libc6 (>= 2.31)")
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/Randalphwa/kwxTypeScript-dev")
 set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "TypeScript runtime for wxWidgets")
 set(CPACK_DEBIAN_PACKAGE_ICON ${CMAKE_CURRENT_LIST_DIR}/kwx_ts_logo.svg)
-set(CPACK_DEBIAN_PACKAGE_SUMMARY "kwx_ts TypeScript runtime for wxWidgets")
+set(CPACK_DEBIAN_PACKAGE_SUMMARY "kwxts TypeScript runtime for wxWidgets")
 
 # Use the build number to determine if the package is newer than the previous build.
 set(CPACK_DEBIAN_PACKAGE_RELEASE ${PROJECT_VERSION_BUILD})
@@ -644,7 +647,7 @@ if(WIN32)
     set(CPACK_GENERATOR ZIP NSIS)
 elseif(APPLE)
     set(CPACK_GENERATOR DragNDrop)
-    set(CPACK_DMG_VOLUME_NAME "kwx_ts")
+    set(CPACK_DMG_VOLUME_NAME "kwxts")
     set(CPACK_DMG_FORMAT "UDBZ") # Compressed DMG
 elseif(UNIX)
     set(CPACK_GENERATOR "DEB RPM")
@@ -652,6 +655,6 @@ endif()
 
 include(CPack)
 
-install(TARGETS kwx_ts CONFIGURATIONS Release)
+install(TARGETS kwxts CONFIGURATIONS Release)
 
-set_property(INSTALL "bin/$<TARGET_FILE_NAME:kwx_ts>" PROPERTY CPACK_START_MENU_SHORTCUTS "kwx_ts")
+set_property(INSTALL "bin/$<TARGET_FILE_NAME:kwxts>" PROPERTY CPACK_START_MENU_SHORTCUTS "kwxts")

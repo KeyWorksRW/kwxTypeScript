@@ -1,0 +1,551 @@
+// prefs.kwxts — language, style and id tables for the STC sample.
+//
+// Direct port of prefs.cpp / prefs.h / defsext.h. The C++ tables are plain
+// data, so they are reproduced as data; nothing here calls wxWidgets.
+
+import { ID_HIGHEST } from "kwx";
+import { wxSTC_LEX_CPP, wxSTC_LEX_PROPERTIES, wxSTC_LEX_PYTHON } from "./stc_consts.kwxts";
+
+/** defsext.h: DEFAULT_LANGUAGE */
+export const DEFAULT_LANGUAGE = "<default>";
+
+/** defsext.h: STYLE_TYPES_COUNT */
+export const STYLE_TYPES_COUNT = 32;
+
+// ---------------------------------------------------------------------------
+// defsext.h — custom menu ids, in declaration order
+// ---------------------------------------------------------------------------
+
+/** One entry per defsext.h enumerator, values identical to the C++ enum. */
+export interface StcIds
+{
+    readonly PROPERTIES: number;
+    readonly EDIT_FIRST: number;
+    readonly INDENTINC: number;
+    readonly INDENTRED: number;
+    readonly FINDNEXT: number;
+    readonly REPLACE: number;
+    readonly REPLACENEXT: number;
+    readonly BRACEMATCH: number;
+    readonly GOTO: number;
+    readonly DISPLAYEOL: number;
+    readonly INDENTGUIDE: number;
+    readonly LINENUMBER: number;
+    readonly LONGLINEON: number;
+    readonly WHITESPACE: number;
+    readonly FOLDTOGGLE: number;
+    readonly OVERTYPE: number;
+    readonly READONLY: number;
+    readonly WRAPMODEON: number;
+    readonly ANNOTATION_ADD: number;
+    readonly ANNOTATION_REMOVE: number;
+    readonly ANNOTATION_CLEAR: number;
+    readonly ANNOTATION_STYLE_HIDDEN: number;
+    readonly ANNOTATION_STYLE_STANDARD: number;
+    readonly ANNOTATION_STYLE_BOXED: number;
+    readonly INDICATOR_FILL: number;
+    readonly INDICATOR_CLEAR: number;
+    readonly INDICATOR_STYLE_FIRST: number;
+    readonly INDICATOR_STYLE_PLAIN: number;
+    readonly INDICATOR_STYLE_SQUIGGLE: number;
+    readonly INDICATOR_STYLE_TT: number;
+    readonly INDICATOR_STYLE_DIAGONAL: number;
+    readonly INDICATOR_STYLE_STRIKE: number;
+    readonly INDICATOR_STYLE_HIDDEN: number;
+    readonly INDICATOR_STYLE_BOX: number;
+    readonly INDICATOR_STYLE_ROUNDBOX: number;
+    readonly INDICATOR_STYLE_STRAIGHTBOX: number;
+    readonly INDICATOR_STYLE_DASH: number;
+    readonly INDICATOR_STYLE_DOTS: number;
+    readonly INDICATOR_STYLE_SQUIGGLELOW: number;
+    readonly INDICATOR_STYLE_DOTBOX: number;
+    readonly INDICATOR_STYLE_SQUIGGLEPIXMAP: number;
+    readonly INDICATOR_STYLE_COMPOSITIONTHICK: number;
+    readonly INDICATOR_STYLE_COMPOSITIONTHIN: number;
+    readonly INDICATOR_STYLE_FULLBOX: number;
+    readonly INDICATOR_STYLE_TEXTFORE: number;
+    readonly INDICATOR_STYLE_POINT: number;
+    readonly INDICATOR_STYLE_POINTCHARACTER: number;
+    readonly INDICATOR_STYLE_LAST: number;
+    readonly CHANGECASE: number;
+    readonly CHANGELOWER: number;
+    readonly CHANGEUPPER: number;
+    readonly HIGHLIGHTLANG: number;
+    readonly HIGHLIGHTFIRST: number;
+    readonly HIGHLIGHTLAST: number;
+    readonly CONVERTEOL: number;
+    readonly CONVERTCR: number;
+    readonly CONVERTCRLF: number;
+    readonly CONVERTLF: number;
+    readonly MULTIPLE_SELECTIONS: number;
+    readonly MULTI_PASTE: number;
+    readonly MULTIPLE_SELECTIONS_TYPING: number;
+    readonly TECHNOLOGY_DEFAULT: number;
+    readonly TECHNOLOGY_DIRECTWRITE: number;
+    readonly CUSTOM_POPUP: number;
+    readonly USECHARSET: number;
+    readonly CHARSETANSI: number;
+    readonly CHARSETMAC: number;
+    readonly SELECTLINE: number;
+    readonly EDIT_LAST: number;
+    readonly WINDOW_MINIMAL: number;
+    readonly WINDOW_DOCMAP: number;
+    readonly ABOUTTIMER: number;
+}
+
+/**
+ * defsext.h enum { myID_PROPERTIES = wxID_HIGHEST, ... }.
+ * A local counter reproduces the C++ implicit continuation, including the
+ * explicit assignments (INDENTINC = EDIT_FIRST, INDICATOR_STYLE_PLAIN =
+ * INDICATOR_STYLE_FIRST, HIGHLIGHTLAST = HIGHLIGHTFIRST + 99,
+ * EDIT_LAST = SELECTLINE).
+ */
+export const myID: StcIds = (() =>
+{
+    let next = ID_HIGHEST;
+    const take = (): number => next++;
+
+    const PROPERTIES = take();
+    const EDIT_FIRST = take();
+    const INDENTINC = EDIT_FIRST;
+    const INDENTRED = take();
+    const FINDNEXT = take();
+    const REPLACE = take();
+    const REPLACENEXT = take();
+    const BRACEMATCH = take();
+    const GOTO = take();
+    const DISPLAYEOL = take();
+    const INDENTGUIDE = take();
+    const LINENUMBER = take();
+    const LONGLINEON = take();
+    const WHITESPACE = take();
+    const FOLDTOGGLE = take();
+    const OVERTYPE = take();
+    const READONLY = take();
+    const WRAPMODEON = take();
+    const ANNOTATION_ADD = take();
+    const ANNOTATION_REMOVE = take();
+    const ANNOTATION_CLEAR = take();
+    const ANNOTATION_STYLE_HIDDEN = take();
+    const ANNOTATION_STYLE_STANDARD = take();
+    const ANNOTATION_STYLE_BOXED = take();
+    const INDICATOR_FILL = take();
+    const INDICATOR_CLEAR = take();
+    const INDICATOR_STYLE_FIRST = take();
+    const INDICATOR_STYLE_PLAIN = INDICATOR_STYLE_FIRST;
+    const INDICATOR_STYLE_SQUIGGLE = take();
+    const INDICATOR_STYLE_TT = take();
+    const INDICATOR_STYLE_DIAGONAL = take();
+    const INDICATOR_STYLE_STRIKE = take();
+    const INDICATOR_STYLE_HIDDEN = take();
+    const INDICATOR_STYLE_BOX = take();
+    const INDICATOR_STYLE_ROUNDBOX = take();
+    const INDICATOR_STYLE_STRAIGHTBOX = take();
+    const INDICATOR_STYLE_DASH = take();
+    const INDICATOR_STYLE_DOTS = take();
+    const INDICATOR_STYLE_SQUIGGLELOW = take();
+    const INDICATOR_STYLE_DOTBOX = take();
+    const INDICATOR_STYLE_SQUIGGLEPIXMAP = take();
+    const INDICATOR_STYLE_COMPOSITIONTHICK = take();
+    const INDICATOR_STYLE_COMPOSITIONTHIN = take();
+    const INDICATOR_STYLE_FULLBOX = take();
+    const INDICATOR_STYLE_TEXTFORE = take();
+    const INDICATOR_STYLE_POINT = take();
+    const INDICATOR_STYLE_POINTCHARACTER = take();
+    const INDICATOR_STYLE_LAST = INDICATOR_STYLE_POINTCHARACTER;
+
+    const CHANGECASE = take();
+    const CHANGELOWER = take();
+    const CHANGEUPPER = take();
+    const HIGHLIGHTLANG = take();
+    const HIGHLIGHTFIRST = take();
+    const HIGHLIGHTLAST = HIGHLIGHTFIRST + 99;
+    next = HIGHLIGHTFIRST + 100;
+    const CONVERTEOL = take();
+    const CONVERTCR = take();
+    const CONVERTCRLF = take();
+    const CONVERTLF = take();
+    const MULTIPLE_SELECTIONS = take();
+    const MULTI_PASTE = take();
+    const MULTIPLE_SELECTIONS_TYPING = take();
+    const TECHNOLOGY_DEFAULT = take();
+    const TECHNOLOGY_DIRECTWRITE = take();
+    const CUSTOM_POPUP = take();
+    const USECHARSET = take();
+    const CHARSETANSI = take();
+    const CHARSETMAC = take();
+    const SELECTLINE = take();
+    const EDIT_LAST = SELECTLINE;
+    const WINDOW_MINIMAL = take();
+    const WINDOW_DOCMAP = take();
+    const ABOUTTIMER = take();
+
+    return {
+        PROPERTIES, EDIT_FIRST, INDENTINC, INDENTRED, FINDNEXT, REPLACE, REPLACENEXT,
+        BRACEMATCH, GOTO, DISPLAYEOL, INDENTGUIDE, LINENUMBER, LONGLINEON, WHITESPACE,
+        FOLDTOGGLE, OVERTYPE, READONLY, WRAPMODEON, ANNOTATION_ADD, ANNOTATION_REMOVE,
+        ANNOTATION_CLEAR, ANNOTATION_STYLE_HIDDEN, ANNOTATION_STYLE_STANDARD,
+        ANNOTATION_STYLE_BOXED, INDICATOR_FILL, INDICATOR_CLEAR, INDICATOR_STYLE_FIRST,
+        INDICATOR_STYLE_PLAIN, INDICATOR_STYLE_SQUIGGLE, INDICATOR_STYLE_TT,
+        INDICATOR_STYLE_DIAGONAL, INDICATOR_STYLE_STRIKE, INDICATOR_STYLE_HIDDEN,
+        INDICATOR_STYLE_BOX, INDICATOR_STYLE_ROUNDBOX, INDICATOR_STYLE_STRAIGHTBOX,
+        INDICATOR_STYLE_DASH, INDICATOR_STYLE_DOTS, INDICATOR_STYLE_SQUIGGLELOW,
+        INDICATOR_STYLE_DOTBOX, INDICATOR_STYLE_SQUIGGLEPIXMAP,
+        INDICATOR_STYLE_COMPOSITIONTHICK, INDICATOR_STYLE_COMPOSITIONTHIN,
+        INDICATOR_STYLE_FULLBOX, INDICATOR_STYLE_TEXTFORE, INDICATOR_STYLE_POINT,
+        INDICATOR_STYLE_POINTCHARACTER, INDICATOR_STYLE_LAST, CHANGECASE, CHANGELOWER,
+        CHANGEUPPER, HIGHLIGHTLANG, HIGHLIGHTFIRST, HIGHLIGHTLAST, CONVERTEOL,
+        CONVERTCR, CONVERTCRLF, CONVERTLF, MULTIPLE_SELECTIONS, MULTI_PASTE,
+        MULTIPLE_SELECTIONS_TYPING, TECHNOLOGY_DEFAULT, TECHNOLOGY_DIRECTWRITE,
+        CUSTOM_POPUP, USECHARSET, CHARSETANSI, CHARSETMAC, SELECTLINE, EDIT_LAST,
+        WINDOW_MINIMAL, WINDOW_DOCMAP, ABOUTTIMER,
+    };
+})();
+
+// ---------------------------------------------------------------------------
+// prefs.h — style type / flag enums
+// ---------------------------------------------------------------------------
+
+export const mySTC_TYPE_DEFAULT = 0;
+export const mySTC_TYPE_WORD1 = 1;
+export const mySTC_TYPE_WORD2 = 2;
+export const mySTC_TYPE_WORD3 = 3;
+export const mySTC_TYPE_WORD4 = 4;
+export const mySTC_TYPE_WORD5 = 5;
+export const mySTC_TYPE_WORD6 = 6;
+export const mySTC_TYPE_COMMENT = 7;
+export const mySTC_TYPE_COMMENT_DOC = 8;
+export const mySTC_TYPE_COMMENT_LINE = 9;
+export const mySTC_TYPE_COMMENT_SPECIAL = 10;
+export const mySTC_TYPE_CHARACTER = 11;
+export const mySTC_TYPE_CHARACTER_EOL = 12;
+export const mySTC_TYPE_STRING = 13;
+export const mySTC_TYPE_STRING_EOL = 14;
+export const mySTC_TYPE_DELIMITER = 15;
+export const mySTC_TYPE_PUNCTUATION = 16;
+export const mySTC_TYPE_OPERATOR = 17;
+export const mySTC_TYPE_BRACE = 18;
+export const mySTC_TYPE_COMMAND = 19;
+export const mySTC_TYPE_IDENTIFIER = 20;
+export const mySTC_TYPE_LABEL = 21;
+export const mySTC_TYPE_NUMBER = 22;
+export const mySTC_TYPE_PARAMETER = 23;
+export const mySTC_TYPE_REGEX = 24;
+export const mySTC_TYPE_UUID = 25;
+export const mySTC_TYPE_VALUE = 26;
+export const mySTC_TYPE_PREPROCESSOR = 27;
+export const mySTC_TYPE_SCRIPT = 28;
+export const mySTC_TYPE_ERROR = 29;
+
+export const mySTC_STYLE_BOLD = 1;
+export const mySTC_STYLE_ITALIC = 2;
+export const mySTC_STYLE_UNDERL = 4;
+export const mySTC_STYLE_HIDDEN = 8;
+
+export const mySTC_FOLD_COMMENT = 1;
+export const mySTC_FOLD_COMPACT = 2;
+export const mySTC_FOLD_PREPROC = 4;
+export const mySTC_FOLD_HTML = 16;
+export const mySTC_FOLD_HTMLPREP = 32;
+export const mySTC_FOLD_COMMENTPY = 64;
+export const mySTC_FOLD_QUOTESPY = 128;
+
+// ---------------------------------------------------------------------------
+// prefs.cpp — CommonInfo g_CommonPrefs
+// ---------------------------------------------------------------------------
+
+export interface CommonInfo
+{
+    syntaxEnable: boolean;
+    foldEnable: boolean;
+    indentEnable: boolean;
+    overTypeInitial: boolean;
+    readOnlyInitial: boolean;
+    wrapModeInitial: boolean;
+    displayEOLEnable: boolean;
+    indentGuideEnable: boolean;
+    lineNumberEnable: boolean;
+    longLineOnEnable: boolean;
+    whiteSpaceEnable: boolean;
+}
+
+export const g_CommonPrefs: CommonInfo = {
+    syntaxEnable: true,
+    foldEnable: true,
+    indentEnable: true,
+    overTypeInitial: false,
+    readOnlyInitial: false,
+    wrapModeInitial: false,
+    displayEOLEnable: false,
+    indentGuideEnable: false,
+    lineNumberEnable: true,
+    longLineOnEnable: false,
+    whiteSpaceEnable: false,
+};
+
+// ---------------------------------------------------------------------------
+// prefs.cpp — keyword lists
+// ---------------------------------------------------------------------------
+
+const CppWordlist1 =
+    "asm auto bool break case catch char class const const_cast " +
+    "continue default delete do double dynamic_cast else enum explicit " +
+    "export extern false float for friend goto if inline int long " +
+    "mutable namespace new operator private protected public register " +
+    "reinterpret_cast return short signed sizeof static static_cast " +
+    "struct switch template this throw true try typedef typeid " +
+    "typename union unsigned using virtual void volatile wchar_t " +
+    "while";
+
+const CppWordlist2 = "file";
+
+const CppWordlist3 =
+    "a addindex addtogroup anchor arg attention author b brief bug c " +
+    "class code date def defgroup deprecated dontinclude e em endcode " +
+    "endhtmlonly endif endlatexonly endlink endverbatim enum example " +
+    "exception f$ f[ f] file fn hideinitializer htmlinclude " +
+    "htmlonly if image include ingroup internal invariant interface " +
+    "latexonly li line link mainpage name namespace nosubgrouping note " +
+    "overload p page par param post pre ref relates remarks return " +
+    "retval sa section see showinitializer since skip skipline struct " +
+    "subsection test throw todo typedef union until var verbatim " +
+    "verbinclude version warning weakgroup $ @ \"\" & < > # { }";
+
+const PythonWordlist1 =
+    "and assert break class continue def del elif else except exec " +
+    "finally for from global if import in is lambda None not or pass " +
+    "print raise return try while yield";
+
+const PythonWordlist2 =
+    "ACCELERATORS ALT AUTO3STATE AUTOCHECKBOX AUTORADIOBUTTON BEGIN " +
+    "BITMAP BLOCK BUTTON CAPTION CHARACTERISTICS CHECKBOX CLASS " +
+    "COMBOBOX CONTROL CTEXT CURSOR DEFPUSHBUTTON DIALOG DIALOGEX " +
+    "DISCARDABLE EDITTEXT END EXSTYLE FONT GROUPBOX ICON LANGUAGE " +
+    "LISTBOX LTEXT MENU MENUEX MENUITEM MESSAGETABLE POPUP PUSHBUTTON " +
+    "RADIOBUTTON RCDATA RTEXT SCROLLBAR SEPARATOR SHIFT STATE3 " +
+    "STRINGTABLE STYLE TEXTINCLUDE VALUE VERSION VERSIONINFO VIRTKEY";
+
+// ---------------------------------------------------------------------------
+// prefs.cpp — LanguageInfo g_LanguagePrefs
+// ---------------------------------------------------------------------------
+
+export interface StyleType
+{
+    type: number;
+    words: string | null;
+}
+
+export interface LanguageInfo
+{
+    name: string;
+    filepattern: string;
+    lexer: number;
+    styles: StyleType[];
+    folds: number;
+}
+
+const styleType = (type: number, words: string | null = null): StyleType => ({ type, words });
+
+/** Pads a style list to STYLE_TYPES_COUNT with the C++ {-1, nullptr} filler. */
+const padStyles = (styles: StyleType[]): StyleType[] =>
+{
+    const result = styles.slice();
+    while (result.length < STYLE_TYPES_COUNT)
+    {
+        result.push({ type: -1, words: null });
+    }
+    return result;
+};
+
+export const g_LanguagePrefs: LanguageInfo[] = [
+    {
+        name: "C++",
+        filepattern: "*.c;*.cc;*.cpp;*.cxx;*.cs;*.h;*.hh;*.hpp;*.hxx;*.sma",
+        lexer: wxSTC_LEX_CPP,
+        styles: padStyles([
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_COMMENT),
+            styleType(mySTC_TYPE_COMMENT_LINE),
+            styleType(mySTC_TYPE_COMMENT_DOC),
+            styleType(mySTC_TYPE_NUMBER),
+            styleType(mySTC_TYPE_WORD1, CppWordlist1),
+            styleType(mySTC_TYPE_STRING),
+            styleType(mySTC_TYPE_CHARACTER),
+            styleType(mySTC_TYPE_UUID),
+            styleType(mySTC_TYPE_PREPROCESSOR),
+            styleType(mySTC_TYPE_OPERATOR),
+            styleType(mySTC_TYPE_IDENTIFIER),
+            styleType(mySTC_TYPE_STRING_EOL),
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_REGEX),
+            styleType(mySTC_TYPE_COMMENT_SPECIAL),
+            styleType(mySTC_TYPE_WORD2, CppWordlist2),
+            styleType(mySTC_TYPE_WORD3, CppWordlist3),
+            styleType(mySTC_TYPE_ERROR),
+        ]),
+        folds: mySTC_FOLD_COMMENT | mySTC_FOLD_COMPACT | mySTC_FOLD_PREPROC,
+    },
+    {
+        name: "Python",
+        filepattern: "*.py;*.pyw",
+        lexer: wxSTC_LEX_PYTHON,
+        styles: padStyles([
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_COMMENT_LINE),
+            styleType(mySTC_TYPE_NUMBER),
+            styleType(mySTC_TYPE_STRING),
+            styleType(mySTC_TYPE_CHARACTER),
+            styleType(mySTC_TYPE_WORD1, PythonWordlist1),
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_DEFAULT, PythonWordlist2),
+            styleType(mySTC_TYPE_OPERATOR),
+            styleType(mySTC_TYPE_IDENTIFIER),
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_STRING_EOL),
+        ]),
+        folds: mySTC_FOLD_COMMENTPY | mySTC_FOLD_QUOTESPY,
+    },
+    {
+        name: DEFAULT_LANGUAGE,
+        filepattern: "*.*",
+        lexer: wxSTC_LEX_PROPERTIES,
+        styles: padStyles([
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_DEFAULT),
+            styleType(mySTC_TYPE_DEFAULT),
+        ]),
+        folds: 0,
+    },
+];
+
+export const g_LanguagePrefsSize = g_LanguagePrefs.length;
+
+// ---------------------------------------------------------------------------
+// prefs.cpp — StyleInfo g_StylePrefs
+// ---------------------------------------------------------------------------
+
+export interface StyleInfo
+{
+    name: string;
+    foreground: string;
+    foregroundDark: string;
+    fontname: string;
+    fontsize: number;
+    fontstyle: number;
+    lettercase: number;
+}
+
+const styleInfo = (
+    name: string, foreground: string, foregroundDark: string, fontstyle = 0,
+): StyleInfo => ({
+    name,
+    foreground,
+    foregroundDark,
+    fontname: "",
+    fontsize: 10,
+    fontstyle,
+    lettercase: 0,
+});
+
+export const g_StylePrefs: StyleInfo[] = [
+    styleInfo("Default", "BLACK", "WHITE"),
+    styleInfo("Keyword1", "BLUE", "CYAN", mySTC_STYLE_BOLD),
+    styleInfo("Keyword2", "MIDNIGHT BLUE", "LIGHT BLUE"),
+    styleInfo("Keyword3", "CORNFLOWER BLUE", "LIGHT STEEL BLUE"),
+    styleInfo("Keyword4", "CYAN", "MAGENTA"),
+    styleInfo("Keyword5", "DARK GREY", "LIGHT GREY"),
+    styleInfo("Keyword6", "GREY", "KHAKI"),
+    styleInfo("Comment", "FOREST GREEN", "LIME GREEN"),
+    styleInfo("Comment (Doc)", "FOREST GREEN", "LIME GREEN"),
+    styleInfo("Comment line", "FOREST GREEN", "LIME GREEN"),
+    styleInfo("Special comment", "FOREST GREEN", "LIME GREEN", mySTC_STYLE_ITALIC),
+    styleInfo("Character", "KHAKI", "LIGHT MAGENTA"),
+    styleInfo("Character (EOL)", "KHAKI", "LIGHT MAGENTA"),
+    styleInfo("String", "BROWN", "YELLOW"),
+    styleInfo("String (EOL)", "BROWN", "YELLOW"),
+    styleInfo("Delimiter", "ORANGE", "YELLOW GREEN"),
+    styleInfo("Punctuation", "ORANGE", "YELLOW GREEN"),
+    styleInfo("Operator", "BLACK", "WHITE", mySTC_STYLE_BOLD),
+    styleInfo("Label", "VIOLET", "PINK"),
+    styleInfo("Command", "BLUE", "CYAN"),
+    styleInfo("Identifier", "BLACK", "WHITE"),
+    styleInfo("Label", "VIOLET", "PINK"),
+    styleInfo("Number", "SIENNA", "SALMON"),
+    styleInfo("Parameter", "VIOLET", "THISTLE", mySTC_STYLE_ITALIC),
+    styleInfo("Regular expression", "ORCHID", "ORANGE"),
+    styleInfo("UUID", "ORCHID", "ORANGE"),
+    styleInfo("Value", "ORCHID", "ORANGE", mySTC_STYLE_ITALIC),
+    styleInfo("Preprocessor", "GREY", "LIGHT GREY"),
+    styleInfo("Script", "DARK GREY", "LIGHT GREY"),
+    styleInfo("Error", "RED", "PURPLE"),
+    styleInfo("Undefined", "ORANGE", "ORCHID"),
+];
+
+export const g_StylePrefsSize = g_StylePrefs.length;
+
+// ---------------------------------------------------------------------------
+// edit.cpp — DeterminePrefs()
+// ---------------------------------------------------------------------------
+
+/** wxString::BeforeFirst(ch) */
+function beforeFirst(value: string, ch: string): string
+{
+    const index = value.indexOf(ch);
+    return index < 0 ? value : value.slice(0, index);
+}
+
+/** wxString::AfterFirst(ch) */
+function afterFirst(value: string, ch: string): string
+{
+    const index = value.indexOf(ch);
+    return index < 0 ? "" : value.slice(index + 1);
+}
+
+/**
+ * Determines the language from the file patterns.
+ * Returns "" when nothing matches, like the C++ (wxEmptyString).
+ */
+export function determinePrefs(filename: string): string
+{
+    for (const language of g_LanguagePrefs)
+    {
+        let filepattern = language.filepattern.toLowerCase();
+        while (filepattern !== "")
+        {
+            const current = beforeFirst(filepattern, ";");
+            if (current === filename ||
+                current === beforeLast(filename, ".") + ".*" ||
+                current === "*." + afterLast(filename, "."))
+            {
+                return language.name;
+            }
+            filepattern = afterFirst(filepattern, ";");
+        }
+    }
+    return "";
+}
+
+/** wxString::BeforeLast(ch) */
+function beforeLast(value: string, ch: string): string
+{
+    const index = value.lastIndexOf(ch);
+    return index < 0 ? "" : value.slice(0, index);
+}
+
+/** wxString::AfterLast(ch) */
+function afterLast(value: string, ch: string): string
+{
+    const index = value.lastIndexOf(ch);
+    return index < 0 ? value : value.slice(index + 1);
+}
+
+/** wxFileName::GetFullName() — the last path component. */
+export function fileNameOf(path: string): string
+{
+    const index = Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\"));
+    return index < 0 ? path : path.slice(index + 1);
+}

@@ -1,0 +1,992 @@
+// demos.kwxts — the seven secondary windows of the wxWidgets "layout" sample.
+//
+// Each exported factory mirrors one C++ class from layout.h/layout.cpp:
+//   createProportionsFrame     <- MyProportionsFrame
+//   createFlexSizerFrame       <- MyFlexSizerFrame
+//   showNotebookSizerDialog    <- MyNotebookWithSizerDialog
+//   createGridBagSizerFrame    <- MyGridBagSizerFrame
+//   createSimpleSizerFrame     <- MySimpleSizerFrame
+//   createNestedSizerFrame     <- MyNestedSizerFrame
+//   createWrapSizerFrame       <- MyWrapSizerFrame
+//
+// Event handlers are installed with Bind() through support.bindEvent(); all
+// Callback/wxClosure pairs are stored in the EventResources owned by
+// layout.kwxts and released after run() returns.
+
+import { Pointer, pointerOf } from "kwx/platform";
+import {
+    ALL,
+    ALIGN_CENTER,
+    BORDER_SUNKEN,
+    BOTTOM,
+    DEFAULT_DIALOG_STYLE,
+    DEFAULT_FRAME_STYLE,
+    EVT_BUTTON,
+    EVT_MENU,
+    EVT_SPINCTRL,
+    EVT_TEXT,
+    EXPAND,
+    FLEX_GROWMODE_ALL,
+    FLEX_GROWMODE_NONE,
+    HORIZONTAL,
+    ICON_INFORMATION,
+    ID_ADD,
+    ID_ABOUT,
+    ID_ANY,
+    ID_OK,
+    ID_REMOVE,
+    LEFT,
+    LIGHT_GREY,
+    LogStatusWindow,
+    OK,
+    REMOVE_LEADING_SPACES,
+    RESIZE_BORDER,
+    RIGHT,
+    SP_ARROW_KEYS,
+    TAB_TRAVERSAL,
+    TE_MULTILINE,
+    TOP,
+    VERTICAL,
+    createWxBoxSizer,
+    createWxButton,
+    createWxCheckBox,
+    createWxDialog,
+    createWxFlexGridSizer,
+    createWxFrame,
+    createWxGridBagSizer,
+    createWxGridSizer,
+    createWxListBox,
+    createWxMenuBar,
+    createWxNotebook,
+    createWxPanel,
+    createWxSpinCtrl,
+    createWxStaticBox,
+    createWxStaticBoxSizer,
+    createWxTextCtrl,
+    createWxWrapSizer,
+    kwxMessageBox,
+    wrapWxFlexGridSizer,
+    wxButton,
+    wxCommandEvent,
+    wxFlexGridSizer,
+    wxFrame,
+    wxGridBagSizer,
+    wxSizer,
+    wxSpinCtrl,
+    wxTextCtrl,
+} from "kwx";
+import {
+    EventResources,
+    addSizerWithFlags,
+    addWindowWithFlags,
+    appendMenuItem,
+    bindEvent,
+    createPlainMenu,
+    makeGenericStaticText,
+    makeStaticText,
+    withString,
+} from "./support.kwxts";
+
+// ---------------------------------------------------------------------------
+// MyProportionsFrame — Box Sizer Proportions Demo
+// ---------------------------------------------------------------------------
+
+export function createProportionsFrame(
+    parent: wxFrame,
+    resources: EventResources,
+): wxFrame | null
+{
+    const frame = withString("Box Sizer Proportions Demo", (ptr) =>
+        createWxFrame(parent.ptr, ID_ANY, ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    // create the controls
+    const panel = createWxPanel(frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (!panel)
+    {
+        return frame;
+    }
+
+    const spins: wxSpinCtrl[] = [];
+    for (let n = 0; n < 3; n++)
+    {
+        // wxSpinCtrl(panel) — default value wxEmptyString, style wxSP_ARROW_KEYS,
+        // range 0..100, initial value 0.
+        const spin = withString("", (ptr) => createWxSpinCtrl(
+            panel.ptr, ID_ANY, ptr, -1, -1, -1, -1,
+            BigInt(SP_ARROW_KEYS), 0, 100, 0));
+        if (!spin)
+        {
+            return frame;
+        }
+        spin.SetValue(n);
+        spins.push(spin);
+    }
+
+    // lay them out
+    const box = withString(
+        "Try changing elements proportions and resizing the window",
+        (ptr) => createWxStaticBox(panel.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+    const sizer = box ? createWxStaticBoxSizer(box.ptr, HORIZONTAL) : null;
+    if (!sizer)
+    {
+        return frame;
+    }
+
+    for (const spin of spins)
+    {
+        addWindowWithFlags(sizer, spin.ptr, 0, (flags) => { flags.Border(ALL); });
+    }
+
+    // put everything together
+    panel.SetSizer(sizer.ptr, true);
+
+    const sizerTop = createWxBoxSizer(VERTICAL);
+    if (!sizerTop)
+    {
+        return frame;
+    }
+    addWindowWithFlags(sizerTop, panel.ptr, 1, (flags) =>
+    {
+        flags.Expand();
+        flags.Border(ALL);
+    });
+
+    const updateProportions = (): void =>
+    {
+        for (let n = 0; n < spins.length; n++)
+        {
+            const item = sizer.GetItem(n);
+            if (item)
+            {
+                item.SetProportion(spins[n].GetValue());
+            }
+        }
+
+        sizer.Layout();
+    };
+
+    updateProportions();
+    frame.SetSizerAndFit(sizerTop.ptr, true);
+
+    // and connect the events (C++ binds both without an id)
+    bindEvent(resources, frame, ID_ANY, ID_ANY, EVT_TEXT, () => { updateProportions(); });
+    bindEvent(resources, frame, ID_ANY, ID_ANY, EVT_SPINCTRL, () => { updateProportions(); });
+
+    return frame;
+}
+
+// ---------------------------------------------------------------------------
+// MyFlexSizerFrame — Flex Sizer Test Frame
+// ---------------------------------------------------------------------------
+
+function initFlexSizer(
+    sizer: wxFlexGridSizer,
+    parent: Pointer,
+    frame: wxFrame,
+): void
+{
+    for (let i = 0; i < 3; i++)
+    {
+        for (let j = 0; j < 3; j++)
+        {
+            const cell = makeGenericStaticText(parent, `(${i + 1}, ${j + 1})`);
+            if (!cell)
+            {
+                continue;
+            }
+
+            if ((i + j) % 2)
+            {
+                cell.SetBackgroundColour(LIGHT_GREY);
+            }
+
+            addWindowWithFlags(sizer, cell.ptr, 0, (flags) =>
+            {
+                flags.Expand();
+                flags.CenterVertical();
+                flags.BorderSize(ALL, frame.FromDIP(3));
+            });
+        }
+    }
+}
+
+/** Adds the centred caption and the 3x3 flex grid that follows it. */
+function addFlexSection(
+    column: wxSizer,
+    parent: Pointer,
+    frame: wxFrame,
+    caption: string,
+): wxFlexGridSizer | null
+{
+    const label = makeStaticText(parent, caption);
+    if (label)
+    {
+        addWindowWithFlags(column, label.ptr, 0, (flags) =>
+        {
+            flags.Center();
+            flags.BorderSize(TOP, frame.FromDIP(20));
+        });
+    }
+
+    const sizerFlex = createWxFlexGridSizer(3, 3, 5, 5);
+    if (!sizerFlex)
+    {
+        return null;
+    }
+
+    initFlexSizer(sizerFlex, parent, frame);
+    addSizerWithFlags(column, sizerFlex.ptr, 1, (flags) =>
+    {
+        flags.Expand();
+        flags.DoubleBorder(ALL);
+    });
+
+    return sizerFlex;
+}
+
+export function createFlexSizerFrame(parent: wxFrame): wxFrame | null
+{
+    const frame = withString("Flex Sizer Test Frame", (ptr) =>
+        createWxFrame(parent.ptr, ID_ANY, ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    const p = createWxPanel(frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (!p)
+    {
+        return frame;
+    }
+
+    // construct the first column
+    const sizerCol1 = createWxBoxSizer(VERTICAL);
+    if (sizerCol1)
+    {
+        addFlexSection(sizerCol1, p.ptr, frame, "Ungrowable:");
+
+        let flex = addFlexSection(sizerCol1, p.ptr, frame, "Growable middle column:");
+        if (flex)
+        {
+            flex.AddGrowableCol(1, 0);
+        }
+
+        flex = addFlexSection(sizerCol1, p.ptr, frame, "Growable middle row:");
+        if (flex)
+        {
+            flex.AddGrowableRow(1, 0);
+        }
+
+        flex = addFlexSection(sizerCol1, p.ptr, frame, "All growable columns:");
+        if (flex)
+        {
+            flex.AddGrowableCol(0, 1);
+            flex.AddGrowableCol(1, 2);
+            flex.AddGrowableCol(2, 3);
+        }
+    }
+
+    // the second one
+    const sizerCol2 = createWxBoxSizer(VERTICAL);
+    if (sizerCol2)
+    {
+        let flex = addFlexSection(sizerCol2, p.ptr, frame, "Growable middle row and column:");
+        if (flex)
+        {
+            flex.AddGrowableCol(1, 0);
+            flex.AddGrowableRow(1, 0);
+        }
+
+        flex = addFlexSection(sizerCol2, p.ptr, frame, "Same with horz flex direction");
+        if (flex)
+        {
+            flex.AddGrowableCol(1, 0);
+            flex.AddGrowableRow(1, 0);
+            flex.SetFlexibleDirection(HORIZONTAL);
+        }
+
+        flex = addFlexSection(sizerCol2, p.ptr, frame, "Same with grow mode == \"none\"");
+        if (flex)
+        {
+            flex.AddGrowableCol(1, 0);
+            flex.AddGrowableRow(1, 0);
+            flex.SetFlexibleDirection(HORIZONTAL);
+            flex.SetNonFlexibleGrowMode(FLEX_GROWMODE_NONE);
+        }
+
+        flex = addFlexSection(sizerCol2, p.ptr, frame, "Same with grow mode == \"all\"");
+        if (flex)
+        {
+            flex.AddGrowableCol(1, 0);
+            flex.AddGrowableRow(1, 0);
+            flex.SetFlexibleDirection(HORIZONTAL);
+            flex.SetNonFlexibleGrowMode(FLEX_GROWMODE_ALL);
+        }
+    }
+
+    // add both columns to grid sizer: wxGridSizer(2, 0, 20)
+    const sizerTop = createWxGridSizer(0, 2, 0, 20);
+    if (sizerTop && sizerCol1 && sizerCol2)
+    {
+        addSizerWithFlags(sizerTop, sizerCol1.ptr, 1, (flags) => { flags.Expand(); });
+        addSizerWithFlags(sizerTop, sizerCol2.ptr, 1, (flags) => { flags.Expand(); });
+
+        p.SetSizer(sizerTop.ptr, true);
+        sizerTop.SetSizeHints(frame.ptr);
+    }
+
+    return frame;
+}
+
+// ---------------------------------------------------------------------------
+// MyNotebookWithSizerDialog
+// ---------------------------------------------------------------------------
+
+export function showNotebookSizerDialog(parent: wxFrame): number
+{
+    const dialog = withString("Notebook Sizer Test Dialog", (ptr) =>
+        createWxDialog(
+            parent.ptr, ID_ANY, ptr, -1, -1, -1, -1,
+            DEFAULT_DIALOG_STYLE | RESIZE_BORDER));
+    if (!dialog)
+    {
+        return 0;
+    }
+
+    // Begin with first hierarchy: a notebook at the top and OK button at the
+    // bottom.
+    const topsizer = createWxBoxSizer(VERTICAL);
+    if (!topsizer)
+    {
+        dialog.Destroy();
+        return 0;
+    }
+
+    const notebook = createWxNotebook(dialog.ptr, ID_ANY, -1, -1, -1, -1, 0);
+    if (!notebook)
+    {
+        dialog.Destroy();
+        return 0;
+    }
+
+    addWindowWithFlags(topsizer, notebook.ptr, 1, (flags) => { flags.Expand(); });
+
+    const button = withString("OK", (ptr) =>
+        createWxButton(dialog.ptr, ID_OK, ptr, -1, -1, -1, -1, 0));
+    if (button)
+    {
+        addWindowWithFlags(topsizer, button.ptr, 0, (flags) =>
+        {
+            flags.Right();
+            flags.DoubleBorder(ALL);
+        });
+    }
+
+    // First page: one big text ctrl
+    const multi = withString("TextCtrl.", (ptr) =>
+        createWxTextCtrl(
+            notebook.ptr, ID_ANY, ptr, -1, -1, -1, -1, BigInt(TE_MULTILINE)));
+    if (multi)
+    {
+        withString("Page One", (ptr) => { notebook.AddPage(multi.ptr, ptr, false, -1); });
+    }
+
+    // Second page: a text ctrl and a button
+    const panel = createWxPanel(notebook.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (panel)
+    {
+        withString("Page Two", (ptr) => { notebook.AddPage(panel.ptr, ptr, false, -1); });
+
+        const panelsizer = createWxBoxSizer(VERTICAL);
+        if (panelsizer)
+        {
+            const text1 = withString("TextLine 1.", (ptr) =>
+                createWxTextCtrl(panel.ptr, ID_ANY, ptr, -1, -1, 250, -1, 0n));
+            if (text1)
+            {
+                addWindowWithFlags(panelsizer, text1.ptr, 0, (flags) =>
+                {
+                    flags.Expand();
+                    flags.BorderSize(ALL, dialog.FromDIP(30));
+                });
+            }
+
+            const text2 = withString("TextLine 2.", (ptr) =>
+                createWxTextCtrl(panel.ptr, ID_ANY, ptr, -1, -1, 250, -1, 0n));
+            if (text2)
+            {
+                addWindowWithFlags(panelsizer, text2.ptr, 0, (flags) =>
+                {
+                    flags.Expand();
+                    flags.BorderSize(ALL, dialog.FromDIP(30));
+                });
+            }
+
+            const button2 = withString("Hallo", (ptr) =>
+                createWxButton(panel.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+            if (button2)
+            {
+                addWindowWithFlags(panelsizer, button2.ptr, 0, (flags) =>
+                {
+                    flags.Right();
+                    flags.BorderSize(LEFT | RIGHT | BOTTOM, dialog.FromDIP(30));
+                });
+            }
+
+            panel.SetSizer(panelsizer.ptr, true);
+        }
+    }
+
+    // Tell dialog to use sizer
+    dialog.SetSizerAndFit(topsizer.ptr, true);
+
+    const result = dialog.ShowModal();
+    dialog.Destroy();
+    return result;
+}
+
+// ---------------------------------------------------------------------------
+// MyGridBagSizerFrame — wxGridBagSizer Test Frame
+// ---------------------------------------------------------------------------
+
+const GBS_HIDE_BTN = 1212;
+const GBS_SHOW_BTN = 1213;
+const GBS_MOVE_BTN1 = 1214;
+const GBS_MOVE_BTN2 = 1215;
+
+function gbsDescription(): string
+{
+    return "    The wxGridBagSizer is similar to the wxFlexGridSizer except the items are explicitly positioned\n"
+        + "    in a virtual cell of the layout grid, and column or row spanning is allowed.  For example, this\n"
+        + "    static text is positioned at (0,0) and it spans 7 columns.";
+}
+
+/** new wxTextCtrl(p, wxID_ANY, text) / the wxTE_MULTILINE variant */
+function makeGbsText(
+    parent: Pointer,
+    text: string,
+    multiline: boolean,
+): wxTextCtrl | null
+{
+    return withString(text, (ptr) => createWxTextCtrl(
+        parent, ID_ANY, ptr, -1, -1, -1, -1,
+        multiline ? BigInt(TE_MULTILINE) : 0n));
+}
+
+function addGbsWindow(
+    gbs: wxGridBagSizer,
+    window: Pointer,
+    row: number,
+    col: number,
+    rowspan: number,
+    colspan: number,
+    flag: number,
+    border: number,
+): void
+{
+    gbs.AddWindowAt(window, row, col, rowspan, colspan, flag, border, null);
+}
+
+export function createGridBagSizerFrame(
+    parent: wxFrame,
+    resources: EventResources,
+): wxFrame | null
+{
+    const frame = withString("wxGridBagSizer Test Frame", (ptr) =>
+        createWxFrame(parent.ptr, ID_ANY, ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    const p = createWxPanel(frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (!p)
+    {
+        return frame;
+    }
+
+    const gbs = createWxGridBagSizer(0, 0);
+    if (!gbs)
+    {
+        return frame;
+    }
+
+    const description = makeStaticText(p.ptr, gbsDescription());
+    if (description)
+    {
+        addGbsWindow(gbs, description.ptr, 0, 0, 1, 7, ALIGN_CENTER | ALL, 5);
+    }
+
+    const edit11 = makeGbsText(p.ptr, "pos(1,0)", false);
+    if (edit11) addGbsWindow(gbs, edit11.ptr, 1, 0, 1, 1, 0, 0);
+    const edit12 = makeGbsText(p.ptr, "pos(1,1)", false);
+    if (edit12) addGbsWindow(gbs, edit12.ptr, 1, 1, 1, 1, 0, 0);
+    const edit21 = makeGbsText(p.ptr, "pos(2,0)", false);
+    if (edit21) addGbsWindow(gbs, edit21.ptr, 2, 0, 1, 1, 0, 0);
+    const edit22 = makeGbsText(p.ptr, "pos(2,1)", false);
+    if (edit22) addGbsWindow(gbs, edit22.ptr, 2, 1, 1, 1, 0, 0);
+
+    const edit32 = makeGbsText(
+        p.ptr, "pos(3,2), span(1,2)\nthis row and col are growable", true);
+    if (edit32) addGbsWindow(gbs, edit32.ptr, 3, 2, 1, 2, EXPAND, 0);
+
+    const edit43 = makeGbsText(p.ptr, "pos(4,3)\nspan(3,1)", true);
+    if (edit43) addGbsWindow(gbs, edit43.ptr, 4, 3, 3, 1, EXPAND, 0);
+
+    const edit54 = makeGbsText(p.ptr, "pos(5,4)", false);
+    if (edit54) addGbsWindow(gbs, edit54.ptr, 5, 4, 1, 1, EXPAND, 0);
+    const edit65 = makeGbsText(p.ptr, "pos(6,5)", false);
+    if (edit65) addGbsWindow(gbs, edit65.ptr, 6, 5, 1, 1, EXPAND, 0);
+    const edit76 = makeGbsText(p.ptr, "pos(7,6)", false);
+    if (edit76) addGbsWindow(gbs, edit76.ptr, 7, 6, 1, 1, 0, 0);
+
+    const moveBtn1 = withString("Move this to (3,6)", (ptr) =>
+        createWxButton(p.ptr, GBS_MOVE_BTN1, ptr, -1, -1, -1, -1, 0));
+    const moveBtn2 = withString("Move this to (3,6)", (ptr) =>
+        createWxButton(p.ptr, GBS_MOVE_BTN2, ptr, -1, -1, -1, -1, 0));
+    if (moveBtn1) addGbsWindow(gbs, moveBtn1.ptr, 10, 2, 1, 1, 0, 0);
+    if (moveBtn2) addGbsWindow(gbs, moveBtn2.ptr, 10, 3, 1, 1, 0, 0);
+
+    const hideBtn = withString("Hide this item -->", (ptr) =>
+        createWxButton(p.ptr, GBS_HIDE_BTN, ptr, -1, -1, -1, -1, 0));
+    if (hideBtn) addGbsWindow(gbs, hideBtn.ptr, 12, 3, 1, 1, 0, 0);
+
+    const hideTxt = withString("pos(12,4), size(150, wxDefaultCoord)", (ptr) =>
+        createWxTextCtrl(p.ptr, ID_ANY, ptr, -1, -1, 150, -1, 0n));
+    if (hideTxt) addGbsWindow(gbs, hideTxt.ptr, 12, 4, 1, 1, 0, 0);
+
+    const showBtn = withString("<-- Show it again", (ptr) =>
+        createWxButton(p.ptr, GBS_SHOW_BTN, ptr, -1, -1, -1, -1, 0));
+    if (showBtn)
+    {
+        addGbsWindow(gbs, showBtn.ptr, 12, 5, 1, 1, 0, 0);
+        showBtn.Disable();
+    }
+
+    // m_gbs->Add(10, 10, POS(14,0));
+    gbs.AddSpacerAt(10, 10, 14, 0, 1, 1, 0, 0, null);
+
+    // C++: wxGridBagSizer derives from wxFlexGridSizer, but the generated
+    // binding flattens it onto wxGridSizer, so the growable row/column methods
+    // are reached through a non-owning wxFlexGridSizer view of the same object.
+    const flexView = wrapWxFlexGridSizer(gbs.ptr);
+    flexView.AddGrowableRow(3, 0);
+    flexView.AddGrowableCol(2, 0);
+
+    p.SetSizerAndFit(gbs.ptr, true);
+    const panelSize = p.GetSize();
+    if (panelSize)
+    {
+        frame.SetClientSize(panelSize.GetWidth(), panelSize.GetHeight());
+    }
+
+    // wxGBPosition m_lastPos; — default (0, 0)
+    const lastPos = { row: 0, col: 0 };
+
+    const onHideBtn = (): void =>
+    {
+        if (!hideTxt || !hideBtn || !showBtn)
+        {
+            return;
+        }
+        gbs.HideWindow(hideTxt.ptr);
+        hideBtn.Disable();
+        showBtn.Enable(true);
+        gbs.Layout();
+    };
+
+    const onShowBtn = (): void =>
+    {
+        if (!hideTxt || !hideBtn || !showBtn)
+        {
+            return;
+        }
+        gbs.ShowWindow(hideTxt.ptr, true, false);
+        hideBtn.Enable(true);
+        showBtn.Disable();
+        gbs.Layout();
+    };
+
+    const onMoveBtn = (eventPtr: Pointer): void =>
+    {
+        const event = new wxCommandEvent(eventPtr);
+        const object = event.GetEventObject();
+
+        let btn: wxButton | null = null;
+        if (object && moveBtn1 && object.ptr === moveBtn1.ptr)
+        {
+            btn = moveBtn1;
+        }
+        else if (object && moveBtn2 && object.ptr === moveBtn2.ptr)
+        {
+            btn = moveBtn2;
+        }
+
+        if (btn)
+        {
+            const row = new Int32Array(1);
+            const col = new Int32Array(1);
+            gbs.GetItemPosition(btn.ptr, pointerOf(row), pointerOf(col));
+            const curPos = { row: row[0]!, col: col[0]! };
+
+            // if it's already at the "other" spot then move it back
+            if (curPos.row === 3 && curPos.col === 6)
+            {
+                gbs.SetItemPosition(btn.ptr, lastPos.row, lastPos.col);
+                withString("Move this to (3,6)", (ptr) => { btn!.SetLabel(ptr); });
+            }
+            else
+            {
+                if (gbs.CheckForIntersectionPos(3, 6, 1, 1, null))
+                {
+                    withString(
+                        "wxGridBagSizer will not allow items to be in the same cell as\n"
+                        + "another item, so this operation will fail.  You will also get an assert\n"
+                        + "when compiled in debug mode.",
+                        (messagePtr) => withString("Warning", (captionPtr) =>
+                            kwxMessageBox(
+                                messagePtr, captionPtr, OK | ICON_INFORMATION,
+                                null, -1, -1)));
+                }
+
+                if (gbs.SetItemPosition(btn.ptr, 3, 6))
+                {
+                    lastPos.row = curPos.row;
+                    lastPos.col = curPos.col;
+                    withString("Move it back", (ptr) => { btn!.SetLabel(ptr); });
+                }
+            }
+        }
+
+        gbs.Layout();
+    };
+
+    bindEvent(resources, frame, GBS_HIDE_BTN, GBS_HIDE_BTN, EVT_BUTTON, () => { onHideBtn(); });
+    bindEvent(resources, frame, GBS_SHOW_BTN, GBS_SHOW_BTN, EVT_BUTTON, () => { onShowBtn(); });
+    bindEvent(resources, frame, GBS_MOVE_BTN1, GBS_MOVE_BTN1, EVT_BUTTON, onMoveBtn);
+    bindEvent(resources, frame, GBS_MOVE_BTN2, GBS_MOVE_BTN2, EVT_BUTTON, onMoveBtn);
+
+    return frame;
+}
+
+// ---------------------------------------------------------------------------
+// MySimpleSizerFrame — Simple Sizer Test Frame
+// ---------------------------------------------------------------------------
+
+const ID_SET_SMALL = 1300;
+const ID_SET_BIG = 1301;
+
+export function createSimpleSizerFrame(
+    parent: wxFrame,
+    resources: EventResources,
+): wxFrame | null
+{
+    const frame = withString("Simple Sizer Test Frame", (ptr) =>
+        createWxFrame(parent.ptr, ID_ANY, ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    const menu = createPlainMenu();
+    if (menu)
+    {
+        appendMenuItem(menu, ID_SET_SMALL, "Make text control small\tF4");
+        appendMenuItem(menu, ID_SET_BIG, "Make text control big\tF5");
+
+        const menuBar = createWxMenuBar(0);
+        if (menuBar)
+        {
+            withString("&File", (ptr) => { menuBar.Append(menu.ptr, ptr); });
+            frame.SetMenuBar(menuBar.ptr);
+        }
+    }
+
+    const mainSizer = createWxBoxSizer(HORIZONTAL);
+    if (!mainSizer)
+    {
+        return frame;
+    }
+
+    const target = withString("", (ptr) =>
+        createWxTextCtrl(frame.ptr, ID_ANY, ptr, -1, -1, 80, -1, 0n));
+    if (target)
+    {
+        addWindowWithFlags(mainSizer, target.ptr, 1, (flags) => { flags.Border(ALL); });
+    }
+
+    const label = makeStaticText(frame.ptr, "Set alternating sizes using F4 and F5");
+    if (label)
+    {
+        addWindowWithFlags(mainSizer, label.ptr, 0, (flags) => { flags.Border(ALL); });
+    }
+
+    frame.SetSizer(mainSizer.ptr, true);
+
+    frame.Layout();
+    mainSizer.Fit(frame.ptr);
+
+    const setMinSize = (width: number): void =>
+    {
+        if (target)
+        {
+            mainSizer.SetItemMinSizeWindow(target.ptr, width, -1);
+        }
+        frame.Layout();
+        mainSizer.Fit(frame.ptr);
+    };
+
+    bindEvent(resources, frame, ID_SET_SMALL, ID_SET_SMALL, EVT_MENU, () => { setMinSize(40); });
+    bindEvent(resources, frame, ID_SET_BIG, ID_SET_BIG, EVT_MENU, () => { setMinSize(140); });
+
+    return frame;
+}
+
+// ---------------------------------------------------------------------------
+// MyNestedSizerFrame — Nested Sizer Test Frame
+// ---------------------------------------------------------------------------
+
+export function createNestedSizerFrame(parent: wxFrame): wxFrame | null
+{
+    const frame = withString("Nested Sizer Test Frame", (ptr) =>
+        createWxFrame(parent.ptr, ID_ANY, ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    const menu = createPlainMenu();
+    if (menu)
+    {
+        appendMenuItem(menu, ID_ABOUT, "Do nothing");
+
+        const menuBar = createWxMenuBar(0);
+        if (menuBar)
+        {
+            withString("&File", (ptr) => { menuBar.Append(menu.ptr, ptr); });
+            frame.SetMenuBar(menuBar.ptr);
+        }
+    }
+
+    const mainSizer = createWxBoxSizer(VERTICAL);
+    if (!mainSizer)
+    {
+        return frame;
+    }
+
+    for (let i = 0; i < 4; i++)
+    {
+        const label = makeStaticText(frame.ptr, "Hello outside");
+        if (label)
+        {
+            addWindowWithFlags(mainSizer, label.ptr, 0, (flags) => { flags.Center(); });
+        }
+    }
+
+    const panel = createWxPanel(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL | BORDER_SUNKEN);
+    if (panel)
+    {
+        addWindowWithFlags(mainSizer, panel.ptr, 0, (flags) => { flags.Center(); });
+
+        const panelSizer = createWxBoxSizer(VERTICAL);
+        if (panelSizer)
+        {
+            panel.SetSizer(panelSizer.ptr, true);
+
+            for (let i = 0; i < 3; i++)
+            {
+                const inner = makeStaticText(panel.ptr, "Hello inside");
+                if (inner)
+                {
+                    panelSizer.AddWindow(inner.ptr, 0, 0, 0, null);
+                }
+            }
+        }
+    }
+
+    const outside = makeStaticText(frame.ptr, "Hello outside");
+    if (outside)
+    {
+        addWindowWithFlags(mainSizer, outside.ptr, 0, (flags) => { flags.Center(); });
+    }
+
+    const target = withString("", (ptr) =>
+        createWxTextCtrl(frame.ptr, ID_ANY, ptr, -1, -1, 80, -1, 0n));
+    if (target)
+    {
+        addWindowWithFlags(mainSizer, target.ptr, 1, (flags) =>
+        {
+            flags.Expand();
+            flags.Border(ALL);
+        });
+    }
+
+    frame.SetSizerAndFit(mainSizer.ptr, true);
+
+    return frame;
+}
+
+// ---------------------------------------------------------------------------
+// MyWrapSizerFrame — Wrap Sizer Test Frame
+// ---------------------------------------------------------------------------
+
+export function createWrapSizerFrame(
+    parent: wxFrame,
+    resources: EventResources,
+): wxFrame | null
+{
+    const frame = withString("Wrap Sizer Test Frame", (ptr) =>
+        createWxFrame(
+            parent.ptr, ID_ANY, ptr, -1, -1, 200, -1, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    const menu = createPlainMenu();
+    if (menu)
+    {
+        appendMenuItem(menu, ID_ADD, "&Add a checkbox\tCtrl-+");
+        appendMenuItem(menu, ID_REMOVE, "&Remove a checkbox\tCtrl--");
+
+        const menuBar = createWxMenuBar(0);
+        if (menuBar)
+        {
+            withString("&Wrap sizer", (ptr) => { menuBar.Append(menu.ptr, ptr); });
+            frame.SetMenuBar(menuBar.ptr);
+        }
+    }
+
+    const root = createWxBoxSizer(VERTICAL);
+    if (!root)
+    {
+        return frame;
+    }
+
+    const topBox = withString("Wrapping check-boxes", (ptr) =>
+        createWxStaticBox(frame.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+    const topSizer = topBox ? createWxStaticBoxSizer(topBox.ptr, VERTICAL) : null;
+
+    const wrapSizer = createWxWrapSizer(
+        HORIZONTAL,
+        // wxWRAPSIZER_DEFAULT_FLAGS = wxEXTEND_LAST_ON_EACH_LINE (1) |
+        // wxREMOVE_LEADING_SPACES; only the latter is exported as a constant.
+        REMOVE_LEADING_SPACES | 1,
+    );
+
+    if (topSizer && wrapSizer)
+    {
+        const staticBox = topSizer.GetStaticBox();
+        const checkboxParent = staticBox ? staticBox.ptr : frame.ptr;
+
+        const doAddCheckbox = (): void =>
+        {
+            const caption = `Option ${wrapSizer.GetItemCount() + 1}`;
+            const checkBox = withString(caption, (ptr) =>
+                createWxCheckBox(checkboxParent, ID_ANY, ptr, -1, -1, -1, -1, 0));
+            if (checkBox)
+            {
+                addWindowWithFlags(wrapSizer, checkBox.ptr, 0, (flags) =>
+                {
+                    flags.Center();
+                    flags.Border(ALL);
+                });
+            }
+        };
+
+        // A number of checkboxes inside a wrap sizer
+        for (let i = 0; i < 6; i++)
+        {
+            doAddCheckbox();
+        }
+
+        addSizerWithFlags(topSizer, wrapSizer.ptr, 1, (flags) => { flags.Expand(); });
+        addSizerWithFlags(root, topSizer.ptr, 0, (flags) =>
+        {
+            flags.Expand();
+            flags.Border(ALL);
+        });
+
+        // A shaped item inside a box sizer
+        const bottomBox = withString("With wxSHAPED item", (ptr) =>
+            createWxStaticBox(frame.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+        const bottomSizer = bottomBox
+            ? createWxStaticBoxSizer(bottomBox.ptr, VERTICAL)
+            : null;
+
+        if (bottomSizer)
+        {
+            const horzBoxSizer = createWxBoxSizer(HORIZONTAL);
+            if (horzBoxSizer)
+            {
+                addSizerWithFlags(bottomSizer, horzBoxSizer.ptr, 100, (flags) =>
+                {
+                    flags.Expand();
+                });
+
+                const listBox = createWxListBox(
+                    frame.ptr, ID_ANY, 0, 0, 70, 70, 0, null, 0);
+                if (listBox)
+                {
+                    addWindowWithFlags(horzBoxSizer, listBox.ptr, 0, (flags) =>
+                    {
+                        flags.Expand();
+                        flags.Shaped();
+                    });
+                }
+
+                horzBoxSizer.Add(10, 10, 0, 0, 0, null);
+
+                const longOption = withString("A much longer option...", (ptr) =>
+                    createWxCheckBox(frame.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+                if (longOption)
+                {
+                    addWindowWithFlags(horzBoxSizer, longOption.ptr, 100, () => {});
+                }
+            }
+
+            addSizerWithFlags(root, bottomSizer.ptr, 1, (flags) =>
+            {
+                flags.Expand();
+                flags.Border(ALL);
+            });
+        }
+
+        bindEvent(resources, frame, ID_ADD, ID_ADD, EVT_MENU, () =>
+        {
+            doAddCheckbox();
+            frame.Layout();
+        });
+
+        bindEvent(resources, frame, ID_REMOVE, ID_REMOVE, EVT_MENU, () =>
+        {
+            if (wrapSizer.IsEmpty())
+            {
+                withString("No more checkboxes to remove.", (ptr) =>
+                {
+                    LogStatusWindow(frame.ptr, ptr);
+                });
+                return;
+            }
+
+            const item = wrapSizer.GetItem(wrapSizer.GetItemCount() - 1);
+            const window = item ? item.GetWindow() : null;
+            if (window)
+            {
+                window.Destroy();
+            }
+
+            frame.Layout();
+        });
+    }
+
+    // Set sizer for window
+    frame.SetSizerAndFit(root.ptr, true);
+
+    return frame;
+}

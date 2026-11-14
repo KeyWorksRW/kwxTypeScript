@@ -65,17 +65,17 @@ import {
     createWxString,
     createWxTextCtrl,
     lib,
-    readAndDeleteWxString,
+    readWxString,
     wxChoice,
     wxCheckBox,
     wxColour,
     wxFont,
     wxPanel,
     wxPen,
-    wxSize,
     wxSpinCtrl,
     wxSpinCtrlDouble,
     wxStaticText,
+    wxString,
     wxTextCtrl,
     wxWindow,
 } from "kwx";
@@ -185,6 +185,20 @@ export function withString<T>(text: string, fn: (ptr: Pointer) => T): T
 }
 
 /**
+ * Read a wxString returned by a generated getter.
+ *
+ * The generated bindings wrap getter results in *borrowed* wxString objects
+ * (`new wxString(rawPtr, true)`), so `Delete()` on them is a no-op and the
+ * buffer is owned by wxWidgets. Handing such a wrapper to
+ * readAndDeleteWxString() would delete an unowned pointer, so read through the
+ * pointer instead and leave ownership alone.
+ */
+export function readString(value: wxString | null): string
+{
+    return value ? readWxString(value.ptr) : "";
+}
+
+/**
  * Copy a wxFont. The binding has no copy constructor, but
  * SetNativeFontInfo(GetNativeFontInfoDesc()) is the documented round-trip and
  * reproduces every attribute wxWidgets serializes.
@@ -199,7 +213,7 @@ export function cloneFont(font: wxFont): wxFont | null
         return null;
     }
 
-    const desc = readAndDeleteWxString(font.GetNativeFontInfoDesc());
+    const desc = readString(font.GetNativeFontInfoDesc());
     const ok = withString(desc, (ptr) => copy.SetNativeFontInfo(ptr));
     if (!ok || !fontIsOk(copy))
     {
@@ -497,7 +511,7 @@ export function createFontPanel(
     panel.SetSizer(sizerTop.ptr, true);
 
     // ShowFont(*wxNORMAL_FONT);
-    showFont(state, new wxFont(NORMAL_FONT));
+    showFont(state, new wxFont(NORMAL_FONT, true));
 
     return state;
 }
@@ -506,7 +520,7 @@ export function createFontPanel(
 export function showFont(state: FontPanelState, font: wxFont): void
 {
     // m_textFaceName->ChangeValue(m_font.GetFaceName());
-    const faceName = readAndDeleteWxString(font.GetFaceName());
+    const faceName = readString(font.GetFaceName());
     withString(faceName, (ptr) => state.faceName.ChangeValue(ptr));
 
     let family = FAMILY_DEFAULT;
@@ -564,15 +578,15 @@ export function showFont(state: FontPanelState, font: wxFont): void
     state.checkFixedWidth.SetValue(fontFixedWidth(font));
 
     // const wxSize pixelSize = m_font.GetPixelSize();
+    // GetPixelSize() already returns a borrowed wxSize wrapper; read it
+    // directly instead of wrapping the pointer a second time.
     let pixelWidth = 0;
     let pixelHeight = 0;
-    const pixelSizePtr = font.GetPixelSize();
-    if (pixelSizePtr)
+    const pixelSize = font.GetPixelSize();
+    if (pixelSize)
     {
-        const pixelSize = new wxSize(pixelSizePtr);
         pixelWidth = pixelSize.GetWidth();
         pixelHeight = pixelSize.GetHeight();
-        pixelSize.Delete();
     }
 
     // wxClientDC dc(this); dc.SetFont(m_font);
@@ -588,7 +602,7 @@ export function showFont(state: FontPanelState, font: wxFont): void
     }
 
     const info =
-        `Font info string: ${readAndDeleteWxString(font.GetNativeFontInfoDesc())}\n` +
+        `Font info string: ${readString(font.GetNativeFontInfoDesc())}\n` +
         `Size in pixels: ${pixelWidth}*${pixelHeight}, ` +
         `average char size: ${charWidth}*${charHeight}`;
     withString(info, (ptr) => state.labelInfo.SetLabelText(ptr));
@@ -621,7 +635,7 @@ export function makeFont(state: FontPanelState): wxFont | null
     }
     else
     {
-        faceName = readAndDeleteWxString(state.faceName.GetValue());
+        faceName = readString(state.faceName.GetValue());
     }
 
     let style = FONTSTYLE_NORMAL;

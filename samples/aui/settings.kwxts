@@ -1,0 +1,638 @@
+// settings.kwxts — SettingsPanel from wxSamples/src/aui/auidemo.cpp
+//
+// Ported from:
+//   class SettingsPanel : public wxPanel              (auidemo.cpp:313-619)
+//   SettingsPanel::CreateColorBitmap()                (auidemo.cpp:481-501)
+//   SettingsPanel::UpdateColors()                     (auidemo.cpp:503-534)
+//   SettingsPanel::OnPaneBorderSize/OnSashSize/
+//   OnCaptionSize/OnSetColor()                        (auidemo.cpp:536-583)
+//
+// The panel is the dock manager's "Dock Manager Settings" floating pane: three
+// metric spinners and ten colour-picker buttons laid out in a two-column grid.
+
+import {
+    ALL,
+    AUI_DOCKART_ACTIVE_CAPTION_COLOUR,
+    AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR,
+    AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,
+    AUI_DOCKART_BACKGROUND_COLOUR,
+    AUI_DOCKART_BORDER_COLOUR,
+    AUI_DOCKART_CAPTION_SIZE,
+    AUI_DOCKART_GRIPPER_COLOUR,
+    AUI_DOCKART_INACTIVE_CAPTION_COLOUR,
+    AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR,
+    AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
+    AUI_DOCKART_PANE_BORDER_SIZE,
+    AUI_DOCKART_SASH_COLOUR,
+    AUI_DOCKART_SASH_SIZE,
+    createWxBitmapButton,
+    createWxBitmapFromImage,
+    createWxBoxSizer,
+    createWxClosure,
+    createWxColourData,
+    createWxColourDialog,
+    createWxColourEmpty,
+    createWxGridSizer,
+    createWxImageSized,
+    createWxPanel,
+    createWxSpinCtrl,
+    createWxStaticText,
+    createWxString,
+    EVT_BUTTON,
+    EVT_SPINCTRL,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    ID_OK,
+    lib,
+    SP_ARROW_KEYS,
+    TAB_TRAVERSAL,
+    VERTICAL,
+    wrapWxAuiDockArt,
+    wxAuiDockArt,
+    wxBitmap,
+    wxBitmapButton,
+    wxBoxSizer,
+    wxColour,
+    wxColourData,
+    wxCommandEvent,
+    wxPanel,
+    wxSpinCtrl,
+    wxSpinEvent,
+    wxStaticText,
+} from "kwx";
+import { Callback, Pointer } from "kwx/platform";
+
+// SettingsPanel's private id enum starts at wxID_HIGHEST.
+const ID_PANE_BORDER_SIZE = ID_HIGHEST;
+const ID_SASH_SIZE = ID_HIGHEST + 1;
+const ID_CAPTION_SIZE = ID_HIGHEST + 2;
+const ID_BACKGROUND_COLOR = ID_HIGHEST + 3;
+const ID_SASH_COLOR = ID_HIGHEST + 4;
+const ID_INACTIVE_CAPTION_COLOR = ID_HIGHEST + 5;
+const ID_INACTIVE_CAPTION_GRADIENT_COLOR = ID_HIGHEST + 6;
+const ID_INACTIVE_CAPTION_TEXT_COLOR = ID_HIGHEST + 7;
+const ID_ACTIVE_CAPTION_COLOR = ID_HIGHEST + 8;
+const ID_ACTIVE_CAPTION_GRADIENT_COLOR = ID_HIGHEST + 9;
+const ID_ACTIVE_CAPTION_TEXT_COLOR = ID_HIGHEST + 10;
+const ID_BORDER_COLOR = ID_HIGHEST + 11;
+const ID_GRIPPER_COLOR = ID_HIGHEST + 12;
+
+/** Everything SettingsPanel needs from MyFrame. */
+export interface SettingsDeps
+{
+    /** MyFrame* — the colour dialog's parent. */
+    readonly framePtr: Pointer;
+    /** wxWindow::FromDIP() evaluated on the frame. */
+    dip(value: number): number;
+    /** MyFrame::GetDockArt() */
+    getDockArt(): wxAuiDockArt;
+    /** MyFrame::DoUpdate() */
+    doUpdate(): void;
+}
+
+export interface SettingsPanelState
+{
+    readonly panel: wxPanel;
+    readonly borderSize: wxSpinCtrl;
+    readonly sashSize: wxSpinCtrl;
+    readonly captionSize: wxSpinCtrl;
+
+    readonly backgroundColour: wxBitmapButton;
+    readonly sashColour: wxBitmapButton;
+    readonly inactiveCaptionColour: wxBitmapButton;
+    readonly inactiveCaptionGradientColour: wxBitmapButton;
+    readonly inactiveCaptionTextColour: wxBitmapButton;
+    readonly activeCaptionColour: wxBitmapButton;
+    readonly activeCaptionGradientColour: wxBitmapButton;
+    readonly activeCaptionTextColour: wxBitmapButton;
+    readonly borderColour: wxBitmapButton;
+    readonly gripperColour: wxBitmapButton;
+
+    /** Bitmaps currently installed on the buttons (released on regeneration). */
+    bitmaps: wxBitmap[];
+
+    readonly callbacks: Callback[];
+    readonly closures: wxClosure[];
+
+    /** Kept alive for the lifetime of the panel. */
+    readonly rows: wxBoxSizer[];
+}
+
+/** Call fn with a temporary wxString and release it on every path. */
+function withString(text: string, fn: (ptr: Pointer) => void): void
+{
+    const value = createWxString(text);
+    try
+    {
+        fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+
+/**
+ * SettingsPanel::CreateColorBitmap(): a 1px black left/top edge (the C++
+ * sample also tests x == size.x / y == size.y, which are out of range and
+ * therefore have no visible effect).
+ */
+function createColorBitmap(
+    red: number,
+    green: number,
+    blue: number,
+    width: number,
+    height: number,
+): wxBitmap | null
+{
+    const image = createWxImageSized(width, height);
+    if (!image)
+    {
+        return null;
+    }
+
+    for (let x = 0; x < width; ++x)
+    {
+        for (let y = 0; y < height; ++y)
+        {
+            if (x === 0 || y === 0)
+            {
+                image.SetRGB(x, y, 0, 0, 0);
+            }
+            else
+            {
+                image.SetRGB(x, y, red, green, blue);
+            }
+        }
+    }
+
+    const bitmap = createWxBitmapFromImage(image.ptr, -1);
+    image.Delete();
+    return bitmap;
+}
+
+function setButtonColour(
+    state: SettingsPanelState,
+    button: wxBitmapButton,
+    colourId: number,
+    deps: SettingsDeps,
+): void
+{
+    const art = deps.getDockArt();
+    const colourPtr = art.GetColor(colourId);
+    if (!colourPtr)
+    {
+        return;
+    }
+
+    const colour = new wxColour(colourPtr);
+    const bitmap = createColorBitmap(
+        colour.Red(), colour.Green(), colour.Blue(),
+        deps.dip(50), deps.dip(25),
+    );
+    colour.Delete();
+
+    if (bitmap)
+    {
+        button.SetBitmapLabel(bitmap.ptr);
+        state.bitmaps.push(bitmap);
+    }
+}
+
+/** SettingsPanel::UpdateColors() */
+function updateColors(state: SettingsPanelState, deps: SettingsDeps): void
+{
+    for (const bitmap of state.bitmaps)
+    {
+        bitmap.Delete();
+    }
+    state.bitmaps.length = 0;
+
+    setButtonColour(state, state.backgroundColour,
+        AUI_DOCKART_BACKGROUND_COLOUR, deps);
+    setButtonColour(state, state.inactiveCaptionColour,
+        AUI_DOCKART_INACTIVE_CAPTION_COLOUR, deps);
+    setButtonColour(state, state.inactiveCaptionGradientColour,
+        AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR, deps);
+    setButtonColour(state, state.inactiveCaptionTextColour,
+        AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR, deps);
+    setButtonColour(state, state.activeCaptionColour,
+        AUI_DOCKART_ACTIVE_CAPTION_COLOUR, deps);
+    setButtonColour(state, state.activeCaptionGradientColour,
+        AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR, deps);
+    setButtonColour(state, state.activeCaptionTextColour,
+        AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR, deps);
+    setButtonColour(state, state.sashColour,
+        AUI_DOCKART_SASH_COLOUR, deps);
+    setButtonColour(state, state.borderColour,
+        AUI_DOCKART_BORDER_COLOUR, deps);
+    setButtonColour(state, state.gripperColour,
+        AUI_DOCKART_GRIPPER_COLOUR, deps);
+}
+
+/**
+ * Builds one "StretchSpacer / label / control / StretchSpacer" row and sets the
+ * label's minimum size, exactly like the s1..s13 sizers in the C++ ctor.
+ */
+function addRow(
+    panel: wxPanel,
+    deps: SettingsDeps,
+    label: string,
+    control: Pointer,
+    rows: wxBoxSizer[],
+): wxBoxSizer | null
+{
+    const sizer = createWxBoxSizer(HORIZONTAL);
+    if (!sizer)
+    {
+        return null;
+    }
+
+    sizer.AddStretchSpacer(1);
+
+    const elementSize = deps.dip(180);
+    const elementHeight = deps.dip(20);
+
+    let text: wxStaticText | null = null;
+    withString(label, (ptr) =>
+    {
+        text = createWxStaticText(panel.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0);
+    });
+    if (text)
+    {
+        sizer.AddWindow((text as wxStaticText).ptr, 0, 0, 0, null);
+    }
+
+    sizer.AddWindow(control, 0, 0, 0, null);
+    sizer.AddStretchSpacer(1);
+    sizer.SetItemMinSize(1, elementSize, elementHeight);
+
+    rows.push(sizer);
+    return sizer;
+}
+
+function createSpin(
+    panel: wxPanel,
+    id: number,
+    value: number,
+    deps: SettingsDeps,
+): wxSpinCtrl | null
+{
+    let control: wxSpinCtrl | null = null;
+    withString(String(value), (ptr) =>
+    {
+        control = createWxSpinCtrl(
+            panel.ptr, id, ptr, -1, -1, -1, -1,
+            BigInt(SP_ARROW_KEYS), 0, deps.dip(100), value,
+        );
+    });
+    return control;
+}
+
+/** SettingsPanel::SettingsPanel() */
+export function createSettingsPanel(
+    parent: Pointer,
+    deps: SettingsDeps,
+): SettingsPanelState | null
+{
+    const panel = createWxPanel(
+        parent, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL,
+    );
+    if (!panel)
+    {
+        return null;
+    }
+
+    const art = deps.getDockArt();
+    const borderMetric = art.GetMetric(AUI_DOCKART_PANE_BORDER_SIZE);
+    const sashMetric = art.GetMetric(AUI_DOCKART_SASH_SIZE);
+    const captionMetric = art.GetMetric(AUI_DOCKART_CAPTION_SIZE);
+
+    const rows: wxBoxSizer[] = [];
+
+    const borderSize = createSpin(panel, ID_PANE_BORDER_SIZE, borderMetric, deps);
+    const sashSize = createSpin(panel, ID_SASH_SIZE, sashMetric, deps);
+    const captionSize = createSpin(panel, ID_CAPTION_SIZE, captionMetric, deps);
+    if (!borderSize || !sashSize || !captionSize)
+    {
+        return null;
+    }
+
+    // wxBitmapBundle const b = CreateColorBitmap(*wxBLACK);
+    const blackBitmap = createColorBitmap(0, 0, 0, deps.dip(50), deps.dip(25));
+    if (!blackBitmap)
+    {
+        return null;
+    }
+
+    const bitmapWidth = deps.dip(50);
+    const bitmapHeight = deps.dip(25);
+
+    const makeColourButton = (id: number): wxBitmapButton | null =>
+        createWxBitmapButton(
+            panel.ptr, id, blackBitmap.ptr, -1, -1, bitmapWidth, bitmapHeight, 0,
+        );
+
+    const backgroundColour = makeColourButton(ID_BACKGROUND_COLOR);
+    const sashColour = makeColourButton(ID_SASH_COLOR);
+    const inactiveCaptionColour = makeColourButton(ID_INACTIVE_CAPTION_COLOR);
+    const inactiveCaptionGradientColour =
+        makeColourButton(ID_INACTIVE_CAPTION_GRADIENT_COLOR);
+    const inactiveCaptionTextColour =
+        makeColourButton(ID_INACTIVE_CAPTION_TEXT_COLOR);
+    const activeCaptionColour = makeColourButton(ID_ACTIVE_CAPTION_COLOR);
+    const activeCaptionGradientColour =
+        makeColourButton(ID_ACTIVE_CAPTION_GRADIENT_COLOR);
+    const activeCaptionTextColour = makeColourButton(ID_ACTIVE_CAPTION_TEXT_COLOR);
+    const borderColour = makeColourButton(ID_BORDER_COLOR);
+    const gripperColour = makeColourButton(ID_GRIPPER_COLOR);
+
+    blackBitmap.Delete();
+
+    if (!backgroundColour || !sashColour || !inactiveCaptionColour ||
+        !inactiveCaptionGradientColour || !inactiveCaptionTextColour ||
+        !activeCaptionColour || !activeCaptionGradientColour ||
+        !activeCaptionTextColour || !borderColour || !gripperColour)
+    {
+        return null;
+    }
+
+    const s1 = addRow(panel, deps, "Pane Border Size:", borderSize.ptr, rows);
+    const s2 = addRow(panel, deps, "Sash Size:", sashSize.ptr, rows);
+    const s3 = addRow(panel, deps, "Caption Size:", captionSize.ptr, rows);
+    const s4 = addRow(panel, deps, "Background Color:", backgroundColour.ptr, rows);
+    const s5 = addRow(panel, deps, "Sash Color:", sashColour.ptr, rows);
+    const s6 = addRow(panel, deps, "Normal Caption:", inactiveCaptionColour.ptr, rows);
+    const s7 = addRow(panel, deps, "Normal Caption Gradient:",
+        inactiveCaptionGradientColour.ptr, rows);
+    const s8 = addRow(panel, deps, "Normal Caption Text:",
+        inactiveCaptionTextColour.ptr, rows);
+    const s9 = addRow(panel, deps, "Active Caption:", activeCaptionColour.ptr, rows);
+    const s10 = addRow(panel, deps, "Active Caption Gradient:",
+        activeCaptionGradientColour.ptr, rows);
+    const s11 = addRow(panel, deps, "Active Caption Text:",
+        activeCaptionTextColour.ptr, rows);
+    const s12 = addRow(panel, deps, "Border Color:", borderColour.ptr, rows);
+    const s13 = addRow(panel, deps, "Gripper Color:", gripperColour.ptr, rows);
+
+    if (!s1 || !s2 || !s3 || !s4 || !s5 || !s6 || !s7 || !s8 || !s9 ||
+        !s10 || !s11 || !s12 || !s13)
+    {
+        return null;
+    }
+
+    // wxGridSizer* gridSizer = new wxGridSizer(2);
+    const gridSizer = createWxGridSizer(0, 2, 0, 0);
+    if (!gridSizer)
+    {
+        return null;
+    }
+
+    gridSizer.SetHGap(deps.dip(5));
+    gridSizer.AddSizer(s1.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s4.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s2.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s5.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s3.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s13.ptr, 0, 0, 0, null);
+    gridSizer.Add(deps.dip(1), deps.dip(1), 0, 0, 0, null);
+    gridSizer.AddSizer(s12.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s6.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s9.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s7.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s10.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s8.ptr, 0, 0, 0, null);
+    gridSizer.AddSizer(s11.ptr, 0, 0, 0, null);
+
+    // contSizer->Add(gridSizer, wxSizerFlags(1).Expand().Border());
+    const contSizer = createWxBoxSizer(VERTICAL);
+    if (!contSizer)
+    {
+        return null;
+    }
+
+    contSizer.AddSizer(gridSizer.ptr, 1, EXPAND | ALL, deps.dip(5), null);
+    panel.SetSizer(contSizer.ptr, true);
+    contSizer.SetSizeHints(panel.ptr);
+
+    borderSize.SetValue(borderMetric);
+    sashSize.SetValue(sashMetric);
+    captionSize.SetValue(captionMetric);
+
+    const state: SettingsPanelState = {
+        panel,
+        borderSize,
+        sashSize,
+        captionSize,
+        backgroundColour,
+        sashColour,
+        inactiveCaptionColour,
+        inactiveCaptionGradientColour,
+        inactiveCaptionTextColour,
+        activeCaptionColour,
+        activeCaptionGradientColour,
+        activeCaptionTextColour,
+        borderColour,
+        gripperColour,
+        bitmaps: [],
+        callbacks: [],
+        closures: [],
+        rows,
+    };
+
+    updateColors(state, deps);
+    return state;
+}
+
+/** SettingsPanel::OnPaneBorderSize() / OnSashSize() / OnCaptionSize() */
+function onMetricChange(
+    state: SettingsPanelState,
+    id: number,
+    position: number,
+    deps: SettingsDeps,
+): void
+{
+    const art = deps.getDockArt();
+
+    switch (id)
+    {
+        case ID_PANE_BORDER_SIZE:
+            art.SetMetric(AUI_DOCKART_PANE_BORDER_SIZE, position);
+            break;
+
+        case ID_SASH_SIZE:
+            art.SetMetric(AUI_DOCKART_SASH_SIZE, position);
+            break;
+
+        case ID_CAPTION_SIZE:
+            art.SetMetric(AUI_DOCKART_CAPTION_SIZE, position);
+            break;
+
+        default:
+            return;
+    }
+
+    deps.doUpdate();
+}
+
+/** SettingsPanel::OnSetColor() */
+function onSetColor(
+    state: SettingsPanelState,
+    id: number,
+    deps: SettingsDeps,
+): void
+{
+    const dialog = createWxColourDialog(deps.framePtr, null);
+    if (!dialog)
+    {
+        return;
+    }
+
+    withString("Color Picker", (title) => dialog.SetTitle(title));
+    const result = dialog.ShowModal();
+
+    let variable = 0;
+    switch (id)
+    {
+        case ID_BACKGROUND_COLOR:
+            variable = AUI_DOCKART_BACKGROUND_COLOUR;
+            break;
+        case ID_SASH_COLOR:
+            variable = AUI_DOCKART_SASH_COLOUR;
+            break;
+        case ID_INACTIVE_CAPTION_COLOR:
+            variable = AUI_DOCKART_INACTIVE_CAPTION_COLOUR;
+            break;
+        case ID_INACTIVE_CAPTION_GRADIENT_COLOR:
+            variable = AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR;
+            break;
+        case ID_INACTIVE_CAPTION_TEXT_COLOR:
+            variable = AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR;
+            break;
+        case ID_ACTIVE_CAPTION_COLOR:
+            variable = AUI_DOCKART_ACTIVE_CAPTION_COLOUR;
+            break;
+        case ID_ACTIVE_CAPTION_GRADIENT_COLOR:
+            variable = AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR;
+            break;
+        case ID_ACTIVE_CAPTION_TEXT_COLOR:
+            variable = AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR;
+            break;
+        case ID_BORDER_COLOR:
+            variable = AUI_DOCKART_BORDER_COLOUR;
+            break;
+        case ID_GRIPPER_COLOR:
+            variable = AUI_DOCKART_GRIPPER_COLOUR;
+            break;
+        default:
+            dialog.Delete();
+            return;
+    }
+
+    if (result === ID_OK)
+    {
+        // dlg.GetColourData().GetColour()
+        const data = createWxColourData();
+        const colour = createWxColourEmpty();
+
+        if (data && colour)
+        {
+            dialog.GetColourData(data.ptr);
+            data.GetColour(colour.ptr);
+
+            deps.getDockArt().SetColor(variable, colour.ptr);
+            deps.doUpdate();
+            updateColors(state, deps);
+        }
+
+        if (colour)
+        {
+            colour.Delete();
+        }
+        if (data)
+        {
+            data.Delete();
+        }
+    }
+
+    dialog.Delete();
+}
+
+/** Appends the EVT_SPINCTRL / EVT_BUTTON connections of the C++ event table. */
+export function connectSettingsEvents(
+    state: SettingsPanelState,
+    deps: SettingsDeps,
+    callbacks: Callback[],
+    closures: wxClosure[],
+): void
+{
+    const spinCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const event = new wxSpinEvent(eventPtr);
+            onMetricChange(state, event.GetId(), event.GetPosition(), deps);
+        },
+    );
+    callbacks.push(spinCallback);
+    state.callbacks.push(spinCallback);
+
+    const spinClosure = createWxClosure(spinCallback.pointer, null);
+    if (spinClosure)
+    {
+        closures.push(spinClosure);
+        state.closures.push(spinClosure);
+        for (const id of [ID_PANE_BORDER_SIZE, ID_SASH_SIZE, ID_CAPTION_SIZE])
+        {
+            lib.symbols.wxEvtHandler_Connect(
+                state.panel.ptr, id, id, EVT_SPINCTRL, spinClosure.ptr,
+            );
+        }
+    }
+
+    const colourCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const event = new wxCommandEvent(eventPtr);
+            onSetColor(state, event.GetId(), deps);
+        },
+    );
+    callbacks.push(colourCallback);
+    state.callbacks.push(colourCallback);
+
+    const colourClosure = createWxClosure(colourCallback.pointer, null);
+    if (colourClosure)
+    {
+        closures.push(colourClosure);
+        state.closures.push(colourClosure);
+        for (const id of [
+            ID_BACKGROUND_COLOR,
+            ID_SASH_COLOR,
+            ID_INACTIVE_CAPTION_COLOR,
+            ID_INACTIVE_CAPTION_GRADIENT_COLOR,
+            ID_INACTIVE_CAPTION_TEXT_COLOR,
+            ID_ACTIVE_CAPTION_COLOR,
+            ID_ACTIVE_CAPTION_GRADIENT_COLOR,
+            ID_ACTIVE_CAPTION_TEXT_COLOR,
+            ID_BORDER_COLOR,
+            ID_GRIPPER_COLOR,
+        ])
+        {
+            lib.symbols.wxEvtHandler_Connect(
+                state.panel.ptr, id, id, EVT_BUTTON, colourClosure.ptr,
+            );
+        }
+    }
+}

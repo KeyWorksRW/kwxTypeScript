@@ -1,0 +1,1374 @@
+// miscdlgs.kwxts — the remaining sample-defined dialogs.
+//
+//   RichTipDialog                   (dialogs.cpp:2993)
+//   TestNotificationMessageWindow   (dialogs.cpp:2548)
+//   MyModalDialog / MyModelessDialog (dialogs.cpp:3888 / 3851)
+//   rearrange dialog wrapper        (dialogs.cpp:1395)
+//   wxAddRemoveCtrl test dialog     (dialogs.cpp:1621)
+
+import {
+    ALL,
+    ALIGN_CENTRE_HORIZONTAL,
+    BLACK,
+    BOTH,
+    CANCEL,
+    CENTRE,
+    CLOSE,
+    DEFAULT_DIALOG_STYLE,
+    DEFAULT_FRAME_STYLE,
+    EVT_BUTTON,
+    EVT_CLOSE_WINDOW,
+    EVT_LISTBOX,
+    EVT_NOTIFICATION_MESSAGE_ACTION,
+    EVT_NOTIFICATION_MESSAGE_CLICK,
+    EVT_NOTIFICATION_MESSAGE_DISMISSED,
+    EVT_SYS_COLOUR_CHANGED,
+    EVT_TEXT_ENTER,
+    EVT_UPDATE_UI,
+    HAS_NATIVE_NOTIFICATION_MESSAGE,
+    HORIZONTAL,
+    LEFT,
+    ICON_ERROR,
+    ICON_INFORMATION,
+    ICON_NONE,
+    ICON_WARNING,
+    ID_ADD,
+    ID_ANY,
+    ID_APPLY,
+    ID_CANCEL,
+    ID_CLOSE,
+    ID_DELETE,
+    ID_NEW,
+    ID_OK,
+    ID_REMOVE,
+    ID_RESET,
+    LIGHT_GREY,
+    NOT_FOUND,
+    NotificationMessage_Timeout_Auto,
+    NotificationMessage_Timeout_Never,
+    OK,
+    RA_SPECIFY_COLS,
+    RA_SPECIFY_ROWS,
+    RESIZE_BORDER,
+    RIGHT,
+    ST_NO_AUTORESIZE,
+    SYS_COLOUR_BTNFACE,
+    TAB_TRAVERSAL,
+    TE_MULTILINE,
+    TE_PROCESS_ENTER,
+    TipKind_Auto,
+    VERTICAL,
+    WHITE,
+    BITMAP_TYPE_XPM,
+    LogError,
+    LogMessage,
+    LogWarning,
+    createKwxAddRemoveAdaptor,
+    createWxAddRemoveCtrl,
+    createWxArrayInt,
+    createWxBitmapLoad,
+    createWxBoxSizer,
+    createWxButton,
+    createWxCheckBox,
+    createWxChoice,
+    createWxColourEmpty,
+    createWxColourRGB,
+    createWxDialog,
+    createWxFrame,
+    createWxGenericNotificationMessage,
+    createWxListBox,
+    createWxMessageDialog,
+    createWxNotificationMessage,
+    createWxPanel,
+    createWxRadioBox,
+    createWxRearrangeDialog,
+    createWxRichToolTip,
+    createWxStaticBox,
+    createWxStaticBoxSizer,
+    createWxStaticText,
+    createWxString,
+    createWxTaskBarIcon,
+    createWxTextCtrl,
+    wrapWxChoice,
+    wrapWxFrame,
+    wrapWxRadioBox,
+    wrapWxSizer,
+    wrapWxSystemAppearance,
+    wrapWxWindow,
+    wxArrayInt,
+    wxButton,
+    wxCheckBox,
+    wxChoice,
+    wxCloseEvent,
+    wxCommandEvent,
+    wxDialog,
+    wxListBox,
+    wxNotificationMessage,
+    wxRadioBox,
+    wxRearrangeList,
+    wxStaticText,
+    wxSystemSettings_GetAppearance,
+    wxSystemSettings_GetColour,
+    wxTaskBarIcon,
+    wxTextCtrl,
+    wxUpdateUIEvent,
+    wxWindow,
+    wxGetTextFromUser,
+    wxNotificationMessage_MSWUseToasts,
+    wxNotificationMessage_UseTaskBarIcon,
+    wxSleep,
+    wxYield,
+} from "kwx";
+import { Callback, Pointer, platform, pointerOf, readCString } from "kwx/platform";
+import {
+    DIALOGS_MODELESS_BTN,
+    addChild,
+    addWin,
+    charPtrArray,
+    createArrayString,
+    EventRouter,
+    EventSink,
+    findChildById,
+    setLabelText,
+    stockLabel,
+    takeText,
+    withString,
+    withStrings,
+} from "./support.kwxts";
+
+//-----------------------------------------------------------------------------
+// Router registry
+//-----------------------------------------------------------------------------
+
+const routerMap = new Map<string, EventRouter>();
+
+function routerFor(key: string, sink: EventSink): EventRouter
+{
+    let router = routerMap.get(key);
+    if (!router)
+    {
+        router = new EventRouter(sink);
+        routerMap.set(key, router);
+    }
+    return router;
+}
+
+export function closeMiscDialogRouters(): void
+{
+    routerMap.forEach((router) => { router.close(); });
+    routerMap.clear();
+}
+
+declare const __dirname: string;
+
+function assetPath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** tip.xpm artwork, loaded from disk instead of being compiled in. */
+let tipBitmapPtrValue: Pointer = null;
+
+function tipBitmap(): Pointer
+{
+    if (!tipBitmapPtrValue)
+    {
+        const name = createWxString(assetPath("tip.xpm"));
+        const bitmap = createWxBitmapLoad(name.ptr, BITMAP_TYPE_XPM);
+        name.Delete();
+        if (bitmap) tipBitmapPtrValue = bitmap.ptr;
+    }
+    return tipBitmapPtrValue;
+}
+
+//-----------------------------------------------------------------------------
+// Helpers
+//-----------------------------------------------------------------------------
+
+function staticText(parent: Pointer, label: string, style = 0): Pointer
+{
+    const text = withString(label, (ptr) =>
+        createWxStaticText(parent, ID_ANY, ptr, -1, -1, -1, -1, style));
+    return text ? text.ptr : null;
+}
+
+function makeButton(parent: Pointer, id: number, label: string): wxButton
+{
+    return withString(label, (ptr) =>
+        createWxButton(parent, id, ptr, -1, -1, -1, -1, 0))!;
+}
+
+function makeCheck(parent: Pointer, id: number, label: string): wxCheckBox
+{
+    return withString(label, (ptr) =>
+        createWxCheckBox(parent, id, ptr, -1, -1, -1, -1, 0))!;
+}
+
+function makeText(parent: Pointer, value: string, style: bigint = 0n): wxTextCtrl
+{
+    return withString(value, (ptr) =>
+        createWxTextCtrl(parent, ID_ANY, ptr, -1, -1, -1, -1, style))!;
+}
+
+function makeRadioBox(
+    parent: Pointer, caption: string, items: string[],
+    dimension: number, style: number): wxRadioBox
+{
+    const built = charPtrArray(items);
+    const box = withString(caption, (text) =>
+        createWxRadioBox(
+            parent, ID_ANY, text, -1, -1, -1, -1,
+            items.length, built.ptr, dimension, style));
+    void built.keep;
+    return box!;
+}
+
+function makeChoice(parent: Pointer, id: number, items: string[]): Pointer
+{
+    const built = charPtrArray(items);
+    const box = createWxChoice(
+        parent, id, -1, -1, -1, -1, items.length, built.ptr, 0);
+    void built.keep;
+    return box ? box.ptr : null;
+}
+
+function makeListBox(parent: Pointer, id: number, items: string[]): wxListBox
+{
+    const built = charPtrArray(items);
+    const box = createWxListBox(
+        parent, id, -1, -1, -1, -1, items.length,
+        items.length === 0 ? null : built.ptr, 0);
+    void built.keep;
+    return box!;
+}
+
+function staticBoxSizer(
+    parent: Pointer, label: string, orient: number,
+): { sizer: Pointer; box: Pointer }
+{
+    const box = withString(label, (text) =>
+        createWxStaticBox(parent, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (!box) return { sizer: null, box: null };
+    const sizer = createWxStaticBoxSizer(box.ptr, orient);
+    return { sizer: sizer ? sizer.ptr : null, box: box.ptr };
+}
+
+function valueOf(control: wxTextCtrl): string
+{
+    return takeText(control.GetValue());
+}
+
+function topLevelOf(windowPtr: Pointer): Pointer
+{
+    let current = windowPtr;
+    while (current)
+    {
+        const parent = wrapWxWindow(current).GetParent();
+        if (!parent) return current;
+        current = parent.ptr;
+    }
+    return null;
+}
+
+/** wxGetTextFromUser() returning "" when cancelled. */
+function getTextFromUser(
+    message: string, caption: string, defaultValue: string, parent: Pointer): string
+{
+    const messageBuffer = new TextEncoder().encode(message + "\0");
+    const captionBuffer = new TextEncoder().encode(caption + "\0");
+    const defaultBuffer = new TextEncoder().encode(defaultValue + "\0");
+
+    const messagePtr = pointerOf(messageBuffer);
+    const captionPtr = pointerOf(captionBuffer);
+    const defaultPtr = pointerOf(defaultBuffer);
+
+    const length = wxGetTextFromUser(
+        messagePtr, captionPtr, defaultPtr, parent, -1, -1, 1, null);
+    if (length <= 0) return "";
+
+    const output = new Uint8Array(length + 1);
+    const outputPtr = pointerOf(output);
+    wxGetTextFromUser(
+        messagePtr, captionPtr, defaultPtr, parent, -1, -1, 1, outputPtr);
+    return readCString(outputPtr);
+}
+
+function modalMessageBox(
+    parent: Pointer, message: string, caption: string, style: number): number
+{
+    const dialog = withStrings([message, caption], (ptrs) =>
+        createWxMessageDialog(parent, ptrs[0], ptrs[1], style));
+    if (!dialog) return ID_CANCEL;
+    const result = dialog.ShowModal();
+    dialog.Destroy();
+    return result;
+}
+
+//-----------------------------------------------------------------------------
+// RichTipDialog
+//-----------------------------------------------------------------------------
+
+interface RichTipState
+{
+    dialog: wxDialog;
+    textTitle: wxTextCtrl;
+    textBody: wxTextCtrl;
+    icons: wxRadioBox;
+    tipKinds: wxRadioBox;
+    bgStyles: wxRadioBox;
+    timeouts: wxRadioBox;
+    timeDelay: wxCheckBox;
+}
+
+let richTipState: RichTipState | null = null;
+
+function richTipFor(state: RichTipState, window: Pointer): void
+{
+    const title = valueOf(state.textTitle);
+    const body = valueOf(state.textBody);
+
+    const tip = withStrings([title, body], (ptrs) =>
+        createWxRichToolTip(ptrs[0], ptrs[1]));
+    if (!tip) return;
+
+    const iconSel = state.icons.GetSelection();
+    if (iconSel === 4)
+    {
+        tip.SetIconBitmap(tipBitmap());
+    }
+    else
+    {
+        const stdIcons = [ICON_NONE, ICON_INFORMATION, ICON_WARNING, ICON_ERROR];
+        tip.SetIcon(stdIcons[iconSel]);
+    }
+
+    switch (state.bgStyles.GetSelection())
+    {
+        case 1:
+            tip.SetBackgroundColourSingle(LIGHT_GREY);
+            break;
+
+        case 2:
+        {
+            const appearance = wrapWxSystemAppearance(wxSystemSettings_GetAppearance());
+            if (appearance.IsDark())
+            {
+                const end = createWxColourRGB(0x30, 0x30, 0x30, 255)!;
+                tip.SetBackgroundColour(BLACK, end.ptr);
+                end.Delete();
+            }
+            else
+            {
+                const end = createWxColourRGB(0xe4, 0xe5, 0xf0, 255)!;
+                tip.SetBackgroundColour(WHITE, end.ptr);
+                end.Delete();
+            }
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    const delay = state.timeDelay.GetValue() ? 500 : 0;
+    switch (state.timeouts.GetSelection())
+    {
+        case 0:
+            if (delay) tip.SetTimeout(0, delay);
+            break;
+        case 2:
+            tip.SetTimeout(3000, delay);
+            break;
+        default:
+            break;
+    }
+
+    tip.SetTipKind(state.tipKinds.GetSelection());
+    tip.ShowFor(window, null);
+    tip.Delete();
+}
+
+export function showRichTipDialog(parent: Pointer): void
+{
+    const dialog = withString("wxRichToolTip Test", (text) =>
+        createWxDialog(
+            parent, ID_ANY, text, -1, -1, -1, -1,
+            DEFAULT_DIALOG_STYLE | RESIZE_BORDER));
+    if (!dialog) return;
+
+    const textTitle = makeText(dialog.ptr, "Tooltip title");
+    const textBody = makeText(dialog.ptr,
+        "Main tooltip text\npossibly on several\nlines.", BigInt(TE_MULTILINE));
+    const btnShowText = makeButton(dialog.ptr, ID_ANY, "Show for &text");
+    const btnShowBtn = makeButton(dialog.ptr, ID_ANY, "Show for &button");
+
+    const icons = makeRadioBox(dialog.ptr, "&Icon choice:",
+        ["&None", "&Information", "&Warning", "&Error", "&Custom"],
+        1, RA_SPECIFY_ROWS);
+    icons.SetSelection(1);
+
+    const tipKinds = makeRadioBox(dialog.ptr, "Tip &kind:",
+        ["&None", "Top left", "Top", "Top right",
+            "Bottom left", "Bottom", "Bottom right", "&Auto"],
+        4, RA_SPECIFY_COLS);
+    tipKinds.SetSelection(TipKind_Auto);
+
+    const bgStyles = makeRadioBox(dialog.ptr, "Background style:",
+        ["&Default", "&Solid", "&Gradient"], 1, RA_SPECIFY_ROWS);
+
+    const timeouts = makeRadioBox(dialog.ptr, "Timeout:",
+        ["&None", "&Default (no delay)", "&3 seconds"], 1, RA_SPECIFY_ROWS);
+    timeouts.SetSelection(1);
+
+    const timeDelay = makeCheck(dialog.ptr, ID_ANY, "Delay show");
+
+    textBody.SetMinSize(300, 200);
+
+    const sizer = createWxBoxSizer(VERTICAL)!;
+    addWin(sizer, textTitle.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+    addWin(sizer, textBody.ptr, 1, (f) => { f.Expand(); f.Border(ALL); });
+    addWin(sizer, icons.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+    addWin(sizer, tipKinds.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    addWin(sizer, bgStyles.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    addWin(sizer, timeouts.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    addWin(sizer, timeDelay.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+
+    const sizerBtns = createWxBoxSizer(HORIZONTAL)!;
+    addWin(sizerBtns, btnShowText.ptr, 0, (f) => { f.Border(RIGHT); });
+    addWin(sizerBtns, btnShowBtn.ptr, 0, (f) => { f.Border(LEFT); });
+    addChild(sizer, sizerBtns.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+
+    const buttons = dialog.CreateStdDialogButtonSizer(BigInt(OK));
+    if (buttons)
+    {
+        addChild(sizer, buttons.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+    }
+
+    dialog.SetSizerAndFit(sizer.ptr, true);
+
+    const state: RichTipState = {
+        dialog, textTitle, textBody, icons, tipKinds, bgStyles, timeouts, timeDelay,
+    };
+    richTipState = state;
+
+    const router = routerFor("richTip", (tag) =>
+    {
+        const current = richTipState;
+        if (!current) return;
+        if (tag === 1)
+        {
+            richTipFor(current, current.textTitle.ptr);
+        }
+        else
+        {
+            richTipFor(current, findChildById(current.dialog.ptr, ID_OK));
+        }
+    });
+    router.connect(btnShowText.ptr, ID_ANY, ID_ANY, EVT_BUTTON, 1);
+    router.connect(btnShowBtn.ptr, ID_ANY, ID_ANY, EVT_BUTTON, 2);
+
+    dialog.ShowModal();
+    richTipState = null;
+    dialog.Destroy();
+}
+
+//-----------------------------------------------------------------------------
+// MyModelessDialog / MyModalDialog
+//-----------------------------------------------------------------------------
+
+let modelessDialog: wxDialog | null = null;
+let modalState: ModalState | null = null;
+
+interface ModalState
+{
+    dialog: wxDialog;
+    btnModal: wxButton;
+    btnModeless: wxButton;
+    btnDelete: wxButton;
+}
+
+function createModelessDialog(parent: Pointer): wxDialog | null
+{
+    const dialog = withString("Modeless dialog", (text) =>
+        createWxDialog(parent, ID_ANY, text, -1, -1, -1, -1, DEFAULT_DIALOG_STYLE));
+    if (!dialog) return null;
+
+    const sizerTop = createWxBoxSizer(VERTICAL)!;
+    const pressMe = makeButton(dialog.ptr, DIALOGS_MODELESS_BTN, "Press me");
+    const check = makeCheck(dialog.ptr, ID_ANY, "Should be disabled");
+    check.Disable();
+
+    addWin(sizerTop, pressMe.ptr, 1, (f) => { f.Expand(); f.Border(ALL); });
+    addWin(sizerTop, check.ptr, 1, (f) => { f.Expand(); f.Border(ALL); });
+    dialog.SetSizerAndFit(sizerTop.ptr, true);
+
+    const router = routerFor("modeless", (tag, eventPtr) =>
+    {
+        if (tag === 1)
+        {
+            const event = new wxCommandEvent(eventPtr);
+            const eventObject = event.GetEventObject();
+            const owner = topLevelOf(eventObject ? eventObject.ptr : null);
+            modalMessageBox(owner,
+                "Button pressed in modeless dialog", "Info",
+                OK | ICON_INFORMATION);
+        }
+        else
+        {
+            const event = new wxCloseEvent(eventPtr);
+            if (event.CanVeto())
+            {
+                const eventObject = event.GetEventObject();
+                modalMessageBox(topLevelOf(eventObject ? eventObject.ptr : null),
+                    "Use the menu item to close this dialog", "Modeless dialog",
+                    OK | ICON_INFORMATION);
+                event.Veto(true);
+            }
+        }
+    });
+
+    router.connect(pressMe.ptr, DIALOGS_MODELESS_BTN, DIALOGS_MODELESS_BTN, EVT_BUTTON, 1);
+    router.connect(dialog.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, 2);
+
+    return dialog;
+}
+
+export function toggleModelessDialog(parent: Pointer, show: boolean): void
+{
+    if (show)
+    {
+        if (!modelessDialog) modelessDialog = createModelessDialog(parent);
+        if (modelessDialog) modelessDialog.Show();
+    }
+    else if (modelessDialog)
+    {
+        modelessDialog.Hide();
+    }
+}
+
+export function showModalDialog(parent: Pointer): void
+{
+    const dialog = withString("Modal dialog", (text) =>
+        createWxDialog(parent, ID_ANY, text, -1, -1, -1, -1, DEFAULT_DIALOG_STYLE));
+    if (!dialog) return;
+
+    const sizerTop = createWxBoxSizer(HORIZONTAL)!;
+    const btnModal = makeButton(dialog.ptr, ID_ANY, "&Modal dialog...");
+    const btnModeless = makeButton(dialog.ptr, ID_ANY, "Mode&less dialog");
+    const btnDelete = makeButton(dialog.ptr, ID_ANY, "&Delete button");
+    const btnClose = makeButton(dialog.ptr, ID_CLOSE, "Close");
+
+    addWin(sizerTop, btnModal.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    addWin(sizerTop, btnModeless.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    addWin(sizerTop, btnDelete.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    addWin(sizerTop, btnClose.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+
+    dialog.SetSizerAndFit(sizerTop.ptr, true);
+    dialog.SetEscapeId(ID_CLOSE);
+
+    btnModal.SetFocus();
+    btnModal.SetDefault();
+
+    const state: ModalState = { dialog, btnModal, btnModeless, btnDelete };
+    modalState = state;
+
+    const router = routerFor("modal", (_tag, eventPtr) =>
+    {
+        const current = modalState;
+        if (!current) return;
+
+        const event = new wxCommandEvent(eventPtr);
+        const eventObject = event.GetEventObject();
+        const object = eventObject ? eventObject.ptr : null;
+
+        if (object === current.btnDelete.ptr)
+        {
+            current.btnModal.Destroy();
+            current.btnDelete.Disable();
+        }
+        else if (object === current.btnModal.ptr)
+        {
+            getTextFromUser("Dummy prompt", "Modal dialog called from dialog",
+                "", current.dialog.ptr);
+        }
+        else if (object === current.btnModeless.ptr)
+        {
+            const extra = createModelessDialog(current.dialog.ptr);
+            if (extra) extra.Show();
+        }
+        else
+        {
+            event.Skip(true);
+        }
+    });
+
+    router.connect(dialog.ptr, ID_ANY, ID_ANY, EVT_BUTTON);
+
+    dialog.ShowModal();
+    modalState = null;
+    dialog.Destroy();
+}
+
+//-----------------------------------------------------------------------------
+// Rearrange dialog
+//-----------------------------------------------------------------------------
+
+interface RearrangeData
+{
+    order: number[];
+    labels: string[];
+    labelsOrig: string[];
+    initialized: boolean;
+}
+
+const rearrangeData: RearrangeData = {
+    order: [], labels: [], labelsOrig: [], initialized: false,
+};
+
+interface RearrangeState
+{
+    dialog: wxDialog;
+    list: wxRearrangeList;
+    labelOrig: wxStaticText;
+    text: wxTextCtrl;
+    sel: number;
+    data: RearrangeData;
+}
+
+let rearrangeState: RearrangeState | null = null;
+
+function updateRearrangeControls(state: RearrangeState, selection: number): void
+{
+    state.sel = selection;
+
+    if (selection === NOT_FOUND)
+    {
+        setLabelText(state.labelOrig, "<no selection>");
+        state.text.Clear();
+        state.text.Disable();
+    }
+    else
+    {
+        setLabelText(state.labelOrig, state.data.labelsOrig[selection]);
+        state.text.Enable(true);
+        withString(state.data.labels[selection], (ptr) => state.text.SetValue(ptr));
+    }
+}
+
+function canRename(state: RearrangeState): boolean
+{
+    return state.sel !== NOT_FOUND
+        && valueOf(state.text) !== state.data.labels[state.sel];
+}
+
+export function showRearrangeDialog(parent: Pointer): void
+{
+    const data = rearrangeData;
+    if (!data.initialized)
+    {
+        const items = [
+            { label: "File name", labelOrig: "Name", order: 0 },
+            { label: "File type", labelOrig: "Ext", order: 1 },
+            { label: "Size", labelOrig: "Size", order: 2 },
+            { label: "Creation time", labelOrig: "Ctime", order: ~3 },
+            { label: "Last accessed", labelOrig: "Atime", order: ~4 },
+            { label: "Last modified", labelOrig: "Mtime", order: 5 },
+        ];
+        for (const item of items)
+        {
+            data.order.push(item.order);
+            data.labels.push(item.label);
+            data.labelsOrig.push(item.labelOrig);
+        }
+        data.initialized = true;
+    }
+
+    const orderArray = createWxArrayInt();
+    if (!orderArray) return;
+    for (const value of data.order) orderArray.Add(value);
+
+    const labelsArray = createArrayString(data.labels);
+    if (!labelsArray)
+    {
+        orderArray.Delete();
+        return;
+    }
+
+    const dialog = withStrings(
+        ["Configure the columns shown:", "wxRearrangeDialog example"], (ptrs) =>
+            createWxRearrangeDialog(
+                parent, ptrs[0], ptrs[1], orderArray.ptr, labelsArray.ptr, -1, -1));
+    orderArray.Delete();
+    labelsArray.Delete();
+    if (!dialog) return;
+
+    const list = dialog.GetList();
+    if (!list)
+    {
+        dialog.Destroy();
+        return;
+    }
+    const listPtr = list.ptr;
+
+    const panel = createWxPanel(
+        dialog.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL)!;
+    const sizer = createWxBoxSizer(HORIZONTAL)!;
+
+    const labelOrig = withString("", (text) =>
+        createWxStaticText(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0))!;
+    addWin(sizer, labelOrig.ptr, 0, (f) => { f.Center(); f.Border(RIGHT); });
+
+    const text = makeText(panel.ptr, "", BigInt(TE_PROCESS_ENTER));
+    addWin(sizer, text.ptr, 0, (f) => { f.Center(); f.Border(RIGHT); });
+
+    const rename = makeButton(panel.ptr, ID_APPLY, "&Rename");
+    addWin(sizer, rename.ptr, 0, (f) => { f.Center(); });
+
+    panel.SetSizer(sizer.ptr, true);
+
+    const state: RearrangeState = {
+        dialog, list, labelOrig, text, sel: NOT_FOUND, data,
+    };
+    rearrangeState = state;
+
+    updateRearrangeControls(state, list.GetSelection());
+    dialog.AddExtraControls(panel.ptr);
+
+    // MyRearrangeDialog appends "&Reset all" to the OK button's sizer.
+    const okButton = findChildById(dialog.ptr, ID_OK);
+    const okWindow = okButton ? wrapWxWindow(okButton) : null;
+    const buttonsSizer = okWindow ? okWindow.GetContainingSizer() : null;
+    const reset = withString("&Reset all", (text) =>
+        createWxButton(dialog.ptr, ID_RESET, text, -1, -1, -1, -1, 0));
+    if (reset && buttonsSizer)
+    {
+        addWin(buttonsSizer, reset.ptr, 0, (f) => { f.Border(LEFT); });
+    }
+
+    const router = routerFor("rearrange", (tag, eventPtr) =>
+    {
+        const current = rearrangeState;
+        if (!current) return;
+
+        if (tag === 1)
+        {
+            const event = new wxCommandEvent(eventPtr);
+            updateRearrangeControls(current, event.GetInt());
+        }
+        else if (tag === 2)
+        {
+            // OnReset(): reset order and labels, then close with wxID_RESET.
+            for (let n = 0; n < current.data.order.length; n++)
+            {
+                current.data.order[n] = n;
+                current.data.labels[n] = current.data.labelsOrig[n];
+            }
+            current.dialog.EndModal(ID_RESET);
+        }
+        else if (tag === 3)
+        {
+            if (!canRename(current)) return;
+            const value = valueOf(current.text);
+            current.data.labels[current.sel] = value;
+            withString(value, (ptr) => current.list.SetString(current.sel, ptr));
+        }
+        else if (tag === 4)
+        {
+            const event = new wxUpdateUIEvent(eventPtr);
+            event.Enable(canRename(current));
+        }
+    });
+
+    router.connect(listPtr, ID_ANY, ID_ANY, EVT_LISTBOX, 1);
+    router.connect(rename.ptr, ID_APPLY, ID_APPLY, EVT_BUTTON, 3);
+    router.connect(text.ptr, ID_ANY, ID_ANY, EVT_TEXT_ENTER, 3);
+    if (reset) router.connect(reset.ptr, ID_RESET, ID_RESET, EVT_BUTTON, 2);
+    router.connect(rename.ptr, ID_APPLY, ID_APPLY, EVT_UPDATE_UI, 4);
+
+    const result = dialog.ShowModal();
+    rearrangeState = null;
+
+    if (result === ID_CANCEL)
+    {
+        dialog.Destroy();
+        return;
+    }
+
+    if (result === ID_OK)
+    {
+        const borrowed = dialog.GetOrder();
+        if (borrowed)
+        {
+            // The getter allocates a wxArrayInt but the generated wrapper is
+            // borrowed; take ownership so it can be released.
+            const order = new wxArrayInt(borrowed.ptr);
+            const count = order.GetCount();
+            data.order = [];
+            for (let i = 0; i < count; i++) data.order.push(order.Item(i));
+            order.Delete();
+        }
+    }
+
+    dialog.Destroy();
+
+    let columns = "";
+    for (let n = 0; n < data.order.length; n++)
+    {
+        columns += `\n    ${n}: `;
+        let idx = data.order[n];
+        if (idx < 0)
+        {
+            columns += "[hidden] ";
+            idx = ~idx;
+        }
+        columns += data.labels[idx];
+        if (data.labels[idx] !== data.labelsOrig[idx])
+        {
+            columns += ` (original label: "${data.labelsOrig[idx]}")`;
+        }
+    }
+    withString(`The columns order now is:${columns}`, (ptr) => LogMessage(ptr));
+}
+
+//-----------------------------------------------------------------------------
+// Add/remove items control
+//-----------------------------------------------------------------------------
+
+/** static int s_item in ListBoxAdaptor::OnAdd(). */
+let addRemoveItemCount = 0;
+
+export function showAddRemoveDialog(parent: Pointer): void
+{
+    const dialog = withString("wxAddRemoveCtrl test", (text) =>
+        createWxDialog(
+            parent, ID_ANY, text, -1, -1, -1, -1,
+            DEFAULT_DIALOG_STYLE | RESIZE_BORDER));
+    if (!dialog) return;
+
+    const ctrl = createWxAddRemoveCtrl(dialog.ptr, ID_ANY, -1, -1, -1, -1, 0)!;
+    ctrl.SetInitialSize(-1, 12 * dialog.GetCharHeight());
+
+    const listbox = makeListBox(ctrl.ptr, ID_ANY,
+        ["some", "items", "for", "testing", "wxAddRemoveCtrl"]);
+
+    // The void-only callback thunk cannot return GetItemsCtrl()/CanAdd()/
+    // CanRemove(), so the adaptor is driven by the data setters instead and the
+    // flags are refreshed whenever the list changes or its selection moves.
+    // C++ uses a function-local static, so numbering continues across dialogs.
+    let addCallback: Callback | null = null;
+    let removeCallback: Callback | null = null;
+    let selectionRouter: EventRouter | null = null;
+    const adaptor = createKwxAddRemoveAdaptor(null);
+    if (adaptor)
+    {
+        const refresh = () =>
+        {
+            adaptor.SetCanAdd(listbox.GetCount() <= 10);
+            adaptor.SetCanRemove(listbox.GetSelection() !== NOT_FOUND);
+        };
+
+        addCallback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            () =>
+            {
+                addRemoveItemCount += 1;
+                withString(`new item #${addRemoveItemCount}`,
+                    (ptr) => listbox.Append(ptr));
+                refresh();
+            });
+        removeCallback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            () =>
+            {
+                const pos = listbox.GetSelection();
+                if (pos === NOT_FOUND) return;
+                listbox.DeleteItem(pos);
+                const count = listbox.GetCount();
+                listbox.SetSelection(pos === count ? pos - 1 : pos, true);
+                refresh();
+            });
+
+        adaptor.SetItemsCtrl(listbox.ptr);
+        adaptor.SetOnAdd(addCallback.pointer);
+        adaptor.SetOnRemove(removeCallback.pointer);
+        ctrl.SetAdaptor(adaptor.ptr);
+        refresh();
+
+        // A private router: it must not outlive this dialog's list box.
+        selectionRouter = new EventRouter((_tag, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            refresh();
+        });
+        selectionRouter.connect(listbox.ptr, ID_ANY, ID_ANY, EVT_LISTBOX);
+    }
+
+    withStrings(["Add up to 10 items", "Remove current item"],
+        (ptrs) => ctrl.SetButtonsToolTips(ptrs[0], ptrs[1]));
+
+    const sizerTop = createWxBoxSizer(VERTICAL)!;
+    addWin(sizerTop, ctrl.ptr, 1, (f) => { f.Expand(); f.Border(ALL); });
+    const buttons = dialog.CreateStdDialogButtonSizer(BigInt(OK | CANCEL));
+    if (buttons)
+    {
+        addChild(sizerTop, buttons.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+    }
+    dialog.SetSizerAndFit(sizerTop.ptr, true);
+
+    dialog.ShowModal();
+    dialog.Destroy();
+
+    if (selectionRouter) selectionRouter.close();
+    if (addCallback) addCallback.close();
+    if (removeCallback) removeCallback.close();
+}
+
+//-----------------------------------------------------------------------------
+// TestNotificationMessageWindow
+//-----------------------------------------------------------------------------
+
+interface NotificationState
+{
+    frame: Pointer;
+    parentFrame: Pointer;
+    textTitle: wxTextCtrl;
+    textMessage: wxTextCtrl;
+    icons: wxRadioBox;
+    showTimeout: wxRadioBox;
+    actionList: wxListBox;
+    actionChoice: Pointer;
+    actionCaption: wxTextCtrl;
+    useGeneric: wxCheckBox | null;
+    delayShow: wxCheckBox;
+    handleEvents: wxCheckBox;
+    useTaskbar: wxCheckBox | null;
+    taskbarIcon: wxTaskBarIcon | null;
+    textStatus: wxStaticText;
+    closeButton: wxButton;
+    notif: wxNotificationMessage | null;
+    actionIds: number[];
+    actionCaptions: string[];
+}
+
+const notificationStates = new Map<string, NotificationState>();
+/** Notification events have the wxNotificationMessage (not a window) as object. */
+const notificationByObject = new Map<string, NotificationState>();
+
+function stateOf(windowPtr: Pointer): NotificationState | null
+{
+    const top = topLevelOf(windowPtr);
+    if (!top) return null;
+    return notificationStates.get(top.toString()) ?? null;
+}
+
+function showNotificationStatus(state: NotificationState, text: string): void
+{
+    setLabelText(state.textStatus, text);
+}
+
+function doShowNotification(state: NotificationState): void
+{
+    if (state.delayShow.GetValue())
+    {
+        showNotificationStatus(state,
+            "Sleeping for 3 seconds to allow you to switch to another window");
+        wxYield();
+        wxSleep(3);
+    }
+
+    state.closeButton.Enable(true);
+    showNotificationStatus(state, "Showing notification...");
+
+    const title = valueOf(state.textTitle);
+    const message = valueOf(state.textMessage);
+
+    let notif: wxNotificationMessage | null;
+    if (state.useGeneric && state.useGeneric.GetValue())
+    {
+        notif = withStrings([title, message], (ptrs) =>
+            createWxGenericNotificationMessage(ptrs[0], ptrs[1], state.frame));
+    }
+    else
+    {
+        // wxNotificationMessage's default flags are wxICON_INFORMATION.
+        notif = withStrings([title, message], (ptrs) =>
+            createWxNotificationMessage(
+                ptrs[0], ptrs[1], state.frame, ICON_INFORMATION));
+    }
+    if (!notif) return;
+
+    switch (state.icons.GetSelection())
+    {
+        case 1: notif.SetFlags(0); break;
+        case 2: notif.SetFlags(ICON_INFORMATION); break;
+        case 3: notif.SetFlags(ICON_WARNING); break;
+        case 4: notif.SetFlags(ICON_ERROR); break;
+        case 5: notif.SetIconBitmap(tipBitmap()); break;
+        default: break;
+    }
+
+    let timeout = NotificationMessage_Timeout_Auto;
+    switch (state.showTimeout.GetSelection())
+    {
+        case 1: timeout = NotificationMessage_Timeout_Never; break;
+        case 2: timeout = 5; break;
+        case 3: timeout = 10; break;
+        default: break;
+    }
+
+    if (state.useTaskbar && state.useTaskbar.GetValue())
+    {
+        if (!state.taskbarIcon)
+        {
+            state.taskbarIcon = createWxTaskBarIcon();
+            if (state.taskbarIcon)
+            {
+                const icon = wrapWxFrame(state.parentFrame).GetIcon();
+                withString("Dialogs Sample (Persistent)", (text) =>
+                    state.taskbarIcon!.SetIcon(icon ? icon.ptr : null, text));
+            }
+        }
+        wxNotificationMessage_UseTaskBarIcon(
+            state.taskbarIcon ? state.taskbarIcon.ptr : null);
+    }
+    else if (state.taskbarIcon)
+    {
+        wxNotificationMessage_UseTaskBarIcon(null);
+        state.taskbarIcon.Delete();
+        state.taskbarIcon = null;
+    }
+
+    for (let i = 0; i < state.actionIds.length; i++)
+    {
+        const id = state.actionIds[i];
+        const caption = state.actionCaptions[i];
+        const ok = withString(caption, (ptr) => notif!.AddAction(id, ptr));
+        if (!ok)
+        {
+            const label = takeText(state.actionList.GetString(i));
+            withString(`Could not add action: ${label}`, (ptr) => LogWarning(ptr));
+        }
+    }
+
+    // wxSharedPtr assignment destroys the previous notification object.
+    if (state.notif)
+    {
+        notificationByObject.delete(String(state.notif.ptr));
+        state.notif.Delete();
+        state.notif = null;
+    }
+    state.notif = notif;
+    notificationByObject.set(String(notif.ptr), state);
+
+    if (state.handleEvents.GetValue())
+    {
+        const router = routerFor("notification", notificationEventSink);
+        router.connect(notif.ptr, ID_ANY, ID_ANY, EVT_NOTIFICATION_MESSAGE_ACTION, 1);
+        router.connect(notif.ptr, ID_ANY, ID_ANY, EVT_NOTIFICATION_MESSAGE_CLICK, 2);
+        router.connect(notif.ptr, ID_ANY, ID_ANY, EVT_NOTIFICATION_MESSAGE_DISMISSED, 3);
+    }
+
+    notif.Show(timeout);
+
+    if (!state.handleEvents.GetValue())
+    {
+        notificationByObject.delete(String(notif.ptr));
+        notif.Delete();
+        state.notif = null;
+        showNotificationStatus(state, "Showing notification, deleted object");
+    }
+}
+
+function notificationEventSink(tag: number, eventPtr: Pointer): void
+{
+    const event = new wxCommandEvent(eventPtr);
+    const object = event.GetEventObject();
+    const state = object
+        ? notificationByObject.get(String(object.ptr)) : undefined;
+    if (!state) return;
+
+    if (tag === 2)
+    {
+        showNotificationStatus(state, "Notification was clicked");
+        wrapWxWindow(state.frame).Raise();
+        event.Skip(true);
+    }
+    else if (tag === 3)
+    {
+        showNotificationStatus(state,
+            `Notification was dismissed (reason: ${event.GetInt()})`);
+        wrapWxWindow(state.frame).Raise();
+        event.Skip(true);
+    }
+    else
+    {
+        showNotificationStatus(state,
+            `Selected ${stockLabel(event.GetId())} action in notification`);
+        event.Skip(true);
+    }
+}
+
+function addNotificationAction(state: NotificationState): void
+{
+    let actionId = ID_DELETE;
+    switch (wrapWxChoice(state.actionChoice).GetSelection())
+    {
+        case 1: actionId = ID_CLOSE; break;
+        case 2: actionId = ID_OK; break;
+        case 3: actionId = ID_CANCEL; break;
+        default: break;
+    }
+
+    const caption = valueOf(state.actionCaption);
+    const desc = takeText(wrapWxChoice(state.actionChoice).GetStringSelection());
+    const text = caption === "" ? desc : `${desc} (${caption})`;
+
+    state.actionIds.push(actionId);
+    state.actionCaptions.push(caption);
+
+    withString(text, (ptr) => state.actionList.Append(ptr));
+    state.actionList.SetSelection(state.actionList.GetCount() - 1, true);
+}
+
+function removeNotificationAction(state: NotificationState): void
+{
+    const pos = state.actionList.GetSelection();
+    if (pos === NOT_FOUND)
+    {
+        withString("No action selected", (ptr) => LogError(ptr));
+        return;
+    }
+    state.actionList.DeleteItem(pos);
+    state.actionIds.splice(pos, 1);
+    state.actionCaptions.splice(pos, 1);
+    if (pos > 0 && state.actionList.GetCount() > 0)
+    {
+        state.actionList.SetSelection(pos - 1, true);
+    }
+}
+
+function notificationButtonSink(tag: number, eventPtr: Pointer): void
+{
+    if (tag === 6)
+    {
+        // ~TestNotificationMessageWindow(): release the taskbar icon and the
+        // notification object so the application can still exit.
+        const closeEvent = new wxCloseEvent(eventPtr);
+        const object = closeEvent.GetEventObject();
+        const state = object ? stateOf(object.ptr) : null;
+        if (state)
+        {
+            if (state.taskbarIcon)
+            {
+                wxNotificationMessage_UseTaskBarIcon(null);
+                state.taskbarIcon.Delete();
+                state.taskbarIcon = null;
+            }
+            if (state.notif)
+            {
+                notificationByObject.delete(String(state.notif.ptr));
+                state.notif.Delete();
+                state.notif = null;
+            }
+            notificationStates.delete(String(state.frame));
+        }
+        closeEvent.Skip(true);
+        return;
+    }
+
+    const event = new wxCommandEvent(eventPtr);
+    const object = event.GetEventObject();
+    const state = object ? stateOf(object.ptr) : null;
+    if (!state) return;
+
+    switch (tag)
+    {
+        case 1:
+            doShowNotification(state);
+            break;
+        case 2:
+            if (state.notif) state.notif.Close();
+            break;
+        case 3:
+            addNotificationAction(state);
+            break;
+        case 4:
+            removeNotificationAction(state);
+            break;
+        default:
+        {
+            const colour = createWxColourEmpty();
+            if (colour)
+            {
+                wxSystemSettings_GetColour(SYS_COLOUR_BTNFACE, colour.ptr);
+                wrapWxWindow(state.frame).SetBackgroundColour(colour.ptr);
+                colour.Delete();
+            }
+            event.Skip(true);
+            break;
+        }
+    }
+}
+
+export function showNotificationWindow(parent: Pointer): void
+{
+    if (platform === "windows")
+    {
+        wxNotificationMessage_MSWUseToasts(null, null);
+    }
+
+    const frame = withString("User Notification Test Dialog", (text) =>
+        createWxFrame(parent, ID_ANY, text, -1, -1, -1, -1, DEFAULT_FRAME_STYLE))!;
+
+    if (platform === "windows")
+    {
+        const colour = createWxColourEmpty();
+        if (colour)
+        {
+            wxSystemSettings_GetColour(SYS_COLOUR_BTNFACE, colour.ptr);
+            frame.SetBackgroundColour(colour.ptr);
+            colour.Delete();
+        }
+    }
+
+    const sizerTop = createWxBoxSizer(VERTICAL)!;
+
+    // --- notification texts
+    const sizerText = staticBoxSizer(frame.ptr, "Notification Texts", VERTICAL);
+    const texts = wrapWxSizer(sizerText.sizer);
+
+    addWin(texts, staticText(sizerText.box, "&Title:"));
+    const textTitle = makeText(sizerText.box, "Notification Title");
+    addWin(texts, textTitle.ptr, 0, (f) => { f.Expand(); });
+
+    addWin(texts, staticText(sizerText.box, "&Message:"));
+    const textMessage = makeText(sizerText.box, "A message within the notification",
+        BigInt(TE_MULTILINE));
+    textMessage.SetMinSize(300, -1);
+    addWin(texts, textMessage.ptr, 0, (f) => { f.Expand(); });
+
+    addChild(sizerTop, sizerText.sizer, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    // --- icons and timeout
+    const icons = makeRadioBox(frame.ptr, "Ic&on in notification",
+        ["De&fault", "None", "&Information", "&Warning", "&Error", "&Custom"],
+        1, RA_SPECIFY_ROWS);
+    icons.SetSelection(0);
+    addWin(sizerTop, icons.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    const timeouts = makeRadioBox(frame.ptr, "&Timeout for notification",
+        ["&Automatic", "&Never", "&5 sec", "&15 sec"], 1, RA_SPECIFY_ROWS);
+    timeouts.SetSelection(0);
+    addWin(sizerTop, timeouts.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    // --- additional actions
+    const sizerActions = staticBoxSizer(frame.ptr, "Additional Actions", VERTICAL);
+    const actions = wrapWxSizer(sizerActions.sizer);
+
+    const actionList = makeListBox(sizerActions.box, ID_ANY, []);
+    addWin(actions, actionList.ptr, 0, (f) => { f.Expand(); });
+
+    const sizerActionMod = createWxBoxSizer(HORIZONTAL)!;
+    addWin(sizerActionMod, staticText(sizerActions.box, "ID:"), 0,
+        (f) => { f.Center(); });
+
+    const actionChoice = makeChoice(sizerActions.box, ID_ANY,
+        ["wxID_DELETE", "wxID_CLOSE", "wxID_OK", "wxID_CANCEL"]);
+    wrapWxChoice(actionChoice).SetSelection(0);
+    addWin(sizerActionMod, actionChoice, 0);
+
+    addWin(sizerActionMod, staticText(sizerActions.box, "Custom label:"), 0,
+        (f) => { f.Center(); });
+    const actionCaption = makeText(sizerActions.box, "");
+    addWin(sizerActionMod, actionCaption.ptr, 0);
+
+    const actionAddBtn = makeButton(sizerActions.box, ID_ADD, "Add");
+    addWin(sizerActionMod, actionAddBtn.ptr, 0);
+
+    const actionRemoveBtn = makeButton(sizerActions.box, ID_REMOVE, "Remove");
+    addWin(sizerActionMod, actionRemoveBtn.ptr, 0);
+
+    addChild(actions, sizerActionMod.ptr, 0, (f) => { f.Border(ALL); });
+    addChild(sizerTop, sizerActions.sizer, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    // --- settings
+    const sizerSettings = staticBoxSizer(frame.ptr, "Notification Settings", VERTICAL);
+    const settingsSizer = wrapWxSizer(sizerSettings.sizer);
+
+    let useGeneric: wxCheckBox | null = null;
+    if (HAS_NATIVE_NOTIFICATION_MESSAGE !== 0)
+    {
+        useGeneric = makeCheck(sizerSettings.box, ID_ANY, "Use &generic notifications");
+        addWin(settingsSizer, useGeneric.ptr, 0);
+    }
+
+    const delayShow = makeCheck(sizerSettings.box, ID_ANY, "&Delay show");
+    if (platform === "darwin") delayShow.SetValue(true);
+    addWin(settingsSizer, delayShow.ptr, 0);
+
+    const handleEvents = makeCheck(sizerSettings.box, ID_ANY, "&Handle events");
+    handleEvents.SetValue(true);
+    addWin(settingsSizer, handleEvents.ptr, 0);
+
+    let useTaskbar: wxCheckBox | null = null;
+    if (platform === "windows")
+    {
+        useTaskbar = makeCheck(sizerSettings.box, ID_ANY, "Use persistent &taskbar icon");
+        useTaskbar.SetValue(false);
+        addWin(settingsSizer, useTaskbar.ptr, 0);
+    }
+
+    addChild(sizerTop, sizerSettings.sizer, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    // --- status line and buttons
+    const textStatus = withString("", (text) => createWxStaticText(
+        frame.ptr, ID_ANY, text, -1, -1, -1, -1,
+        ST_NO_AUTORESIZE | ALIGN_CENTRE_HORIZONTAL))!;
+    addWin(sizerTop, textStatus.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    const sizerButtons = createWxBoxSizer(HORIZONTAL)!;
+    addWin(sizerButtons, makeButton(frame.ptr, ID_NEW, "&Show").ptr, 0);
+    const closeButton = makeButton(frame.ptr, ID_CLOSE, "&Close");
+    closeButton.Disable();
+    addWin(sizerButtons, closeButton.ptr, 0);
+    addChild(sizerTop, sizerButtons.ptr, 0, (f) => { f.Center(); });
+
+    frame.SetSizerAndFit(sizerTop.ptr, true);
+    frame.Centre(BOTH);
+
+    const state: NotificationState = {
+        frame: frame.ptr,
+        parentFrame: parent,
+        textTitle,
+        textMessage,
+        icons,
+        showTimeout: timeouts,
+        actionList,
+        actionChoice,
+        actionCaption,
+        useGeneric,
+        delayShow,
+        handleEvents,
+        useTaskbar,
+        taskbarIcon: null,
+        textStatus,
+        closeButton,
+        notif: null,
+        actionIds: [],
+        actionCaptions: [],
+    };
+    notificationStates.set(String(frame.ptr), state);
+
+    const router = routerFor("notificationWindow", notificationButtonSink);
+    router.connect(frame.ptr, ID_NEW, ID_NEW, EVT_BUTTON, 1);
+    router.connect(frame.ptr, ID_CLOSE, ID_CLOSE, EVT_BUTTON, 2);
+    router.connect(frame.ptr, ID_ADD, ID_ADD, EVT_BUTTON, 3);
+    router.connect(frame.ptr, ID_REMOVE, ID_REMOVE, EVT_BUTTON, 4);
+    if (platform === "windows")
+    {
+        router.connect(frame.ptr, ID_ANY, ID_ANY, EVT_SYS_COLOUR_CHANGED, 5);
+    }
+    router.connect(frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, 6);
+
+    frame.Show();
+}

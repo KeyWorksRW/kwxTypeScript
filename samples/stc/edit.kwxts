@@ -1,0 +1,1315 @@
+// edit.kwxts — the Edit module (edit.cpp / edit.h).
+//
+// Edit derives from wxStyledTextCtrl in C++; here the control is created with
+// createWxStyledTextCtrl() and wrapped, and the "member fields" live in an
+// EditState object. Every event handler is a plain function over that state.
+//
+// The wxStyledTextCtrl wrapper does not extend wxEvtHandler, so its events are
+// installed through wxEvtHandler_Bind() (bindPointer in runtime.kwxts).
+
+import {
+    createWxColourByName,
+    createWxColourRGB,
+    createWxFileDialog,
+    createWxFont,
+    createWxStyledTextCtrl,
+    EVT_KEY_DOWN,
+    EVT_MENU,
+    EVT_SIZE,
+    EVT_STC_CALLTIP_CLICK,
+    EVT_STC_CHARADDED,
+    EVT_STC_MARGINCLICK,
+    FD_CHANGE_DIR,
+    FD_FILE_MUST_EXIST,
+    FD_OPEN,
+    FD_OVERWRITE_PROMPT,
+    FD_SAVE,
+    FONTFAMILY_MODERN,
+    FONTENCODING_DEFAULT,
+    FONTSTYLE_NORMAL,
+    FONTWEIGHT_BOLD,
+    FONTWEIGHT_NORMAL,
+    ID_ANY,
+    ID_CLEAR,
+    ID_COPY,
+    ID_CUT,
+    ID_FIND,
+    ID_HIGHEST,
+    ID_LOWEST,
+    ID_OK,
+    ID_PASTE,
+    ID_REDO,
+    ID_SELECTALL,
+    ID_UNDO,
+    wxColour,
+    wxCommandEvent,
+    wxFileDialog,
+    wxFont,
+    wxKeyEvent,
+    wxSizeEvent,
+    wxStyledTextCtrl,
+    wxStyledTextEvent,
+    wxGetTextFromUser,
+    wxSystemSettings_SelectLightDark,
+    wxWindow,
+    wrapWxStyledTextCtrl,
+    wrapWxWindow,
+} from "kwx";
+import { Callback, Pointer, pointerOf, readCString } from "kwx/platform";
+import { bindPointer, newCallback, takeString, withString } from "./runtime.kwxts";
+import {
+    DEFAULT_LANGUAGE,
+    g_CommonPrefs,
+    g_LanguagePrefs,
+    g_LanguagePrefsSize,
+    g_StylePrefs,
+    LanguageInfo,
+    myID,
+    mySTC_STYLE_BOLD,
+    mySTC_STYLE_HIDDEN,
+    mySTC_STYLE_ITALIC,
+    mySTC_STYLE_UNDERL,
+    determinePrefs,
+    fileNameOf,
+} from "./prefs.kwxts";
+import {
+    wxSTC_ANNOTATION_BOXED,
+    wxSTC_ANNOTATION_HIDDEN,
+    wxSTC_ANNOTATION_STANDARD,
+    wxSTC_CACHE_PAGE,
+    wxSTC_CARET_EVEN,
+    wxSTC_CARET_SLOP,
+    wxSTC_CHARSET_ANSI,
+    wxSTC_CMD_DELETEBACK,
+    wxSTC_CMD_LOWERCASE,
+    wxSTC_CMD_TAB,
+    wxSTC_CMD_UPPERCASE,
+    wxSTC_EDGE_LINE,
+    wxSTC_EDGE_NONE,
+    wxSTC_EOL_CR,
+    wxSTC_EOL_CRLF,
+    wxSTC_EOL_LF,
+    wxSTC_FOLDLEVELHEADERFLAG,
+    wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED,
+    wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED,
+    wxSTC_KEY_TAB,
+    wxSTC_MARK_ARROWDOWN,
+    wxSTC_MARK_DOTDOTDOT,
+    wxSTC_MARK_EMPTY,
+    wxSTC_MARKNUM_FOLDER,
+    wxSTC_MARKNUM_FOLDEREND,
+    wxSTC_MARKNUM_FOLDERMIDTAIL,
+    wxSTC_MARKNUM_FOLDEROPEN,
+    wxSTC_MARKNUM_FOLDEROPENMID,
+    wxSTC_MARKNUM_FOLDERSUB,
+    wxSTC_MARKNUM_FOLDERTAIL,
+    wxSTC_MASK_FOLDERS,
+    wxSTC_MARGIN_NUMBER,
+    wxSTC_MARGIN_SYMBOL,
+    wxSTC_MULTIPASTE_EACH,
+    wxSTC_MULTIPASTE_ONCE,
+    wxSTC_POPUP_ALL,
+    wxSTC_POPUP_NEVER,
+    wxSTC_STYLE_DEFAULT,
+    wxSTC_STYLE_INDENTGUIDE,
+    wxSTC_STYLE_LASTPREDEFINED,
+    wxSTC_STYLE_LINENUMBER,
+    wxSTC_TECHNOLOGY_DEFAULT,
+    wxSTC_TECHNOLOGY_DIRECTWRITE,
+    wxSTC_VISIBLE_SLOP,
+    wxSTC_VISIBLE_STRICT,
+    wxSTC_WS_INVISIBLE,
+    wxSTC_WS_VISIBLEALWAYS,
+    wxSTC_WRAP_NONE,
+    wxSTC_WRAP_WORD,
+    WXK_SPACE,
+} from "./stc_consts.kwxts";
+import { hashtagBitmap } from "./assets.kwxts";
+
+/** edit.cpp: the (uniform) style used for the annotations. */
+const ANNOTATION_STYLE = wxSTC_STYLE_LASTPREDEFINED + 1;
+
+/** The live Edit instances, keyed by their control pointer. */
+const editStates = new Map<string, EditState>();
+
+export interface EditState
+{
+    readonly ctrl: wxStyledTextCtrl;
+    readonly win: wxWindow;
+    filename: string;
+    language: LanguageInfo | null;
+    readonly lineNrId: number;
+    readonly dividerId: number;
+    readonly foldingId: number;
+    lineNrMargin: number;
+    foldingMargin: number;
+    calltipNo: number;
+}
+
+/** The values EditProperties displays. */
+export interface EditInfo
+{
+    filename: string;
+    languageName: string;
+    lexer: number;
+    eolMode: number;
+    lineCount: number;
+    textLength: number;
+    currentLine: number;
+    currentPos: number;
+}
+
+// ---------------------------------------------------------------------------
+// colour helpers
+// ---------------------------------------------------------------------------
+
+function rgbOf(colour: wxColour | null): number[]
+{
+    if (!colour)
+    {
+        return [0, 0, 0];
+    }
+    return [colour.Red(), colour.Green(), colour.Blue()];
+}
+
+/** wxSystemSettings::SelectLightDark(light, dark) as RGB components. */
+function lightDarkRGB(lightName: string, darkName: string): number[]
+{
+    const light = withString(lightName, (ptr) => createWxColourByName(ptr));
+    const dark = withString(darkName, (ptr) => createWxColourByName(ptr));
+    if (!light || !dark)
+    {
+        if (light) light.Delete();
+        if (dark) dark.Delete();
+        return [0, 0, 0];
+    }
+    const rgb = lightDarkFromColours(light, dark);
+    light.Delete();
+    dark.Delete();
+    return rgb;
+}
+
+function lightDarkFromColours(light: wxColour, dark: wxColour): number[]
+{
+    const raw = wxSystemSettings_SelectLightDark(light.ptr, dark.ptr);
+    const selected = raw ? new wxColour(raw) : null;
+    const rgb = rgbOf(selected);
+    if (selected) selected.Delete();
+    return rgb;
+}
+
+function lightDarkFromRGB(
+    lightRed: number, lightGreen: number, lightBlue: number,
+    darkRed: number, darkGreen: number, darkBlue: number,
+): number[]
+{
+    const light = createWxColourRGB(lightRed, lightGreen, lightBlue, 255);
+    const dark = createWxColourRGB(darkRed, darkGreen, darkBlue, 255);
+    if (!light || !dark)
+    {
+        if (light) light.Delete();
+        if (dark) dark.Delete();
+        return [0, 0, 0];
+    }
+    const rgb = lightDarkFromColours(light, dark);
+    light.Delete();
+    dark.Delete();
+    return rgb;
+}
+
+/** wxFont(wxFontInfo(size).Family(wxFONTFAMILY_MODERN)) */
+function createModernFont(size: number): wxFont | null
+{
+    return withString("", (face) =>
+        createWxFont(
+            size, FONTFAMILY_MODERN, FONTSTYLE_NORMAL, FONTWEIGHT_NORMAL,
+            false, face, FONTENCODING_DEFAULT));
+}
+
+// ---------------------------------------------------------------------------
+// Edit construction
+// ---------------------------------------------------------------------------
+
+/** Edit::Edit(parent, id, pos, size, style) */
+export function createEdit(
+    parent: Pointer,
+    id: number = ID_ANY,
+    style: number = 0,
+): EditState | null
+{
+    const name = "";
+
+    // wxStyledTextCtrl(parent, id, wxDefaultPosition, wxDefaultSize, style)
+    const raw = withString(name, (text) =>
+        createWxStyledTextCtrl(parent, id, text, -1, -1, -1, -1, style));
+    if (!raw)
+    {
+        return null;
+    }
+
+    const ctrl = wrapWxStyledTextCtrl(raw);
+    const win = wrapWxWindow(raw);
+
+    const state: EditState = {
+        ctrl,
+        win,
+        filename: "",
+        language: null,
+        lineNrId: 0,
+        dividerId: 1,
+        foldingId: 2,
+        lineNrMargin: 0,
+        foldingMargin: 0,
+        calltipNo: 1,
+    };
+    editStates.set(String(raw), state);
+
+    // default font for all styles
+    ctrl.SetViewEOL(ctrl.ptr, g_CommonPrefs.displayEOLEnable);
+    ctrl.SetIndentationGuides(ctrl.ptr, g_CommonPrefs.indentGuideEnable);
+    ctrl.SetEdgeMode(ctrl.ptr, g_CommonPrefs.longLineOnEnable ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE);
+    ctrl.SetViewWhiteSpace(ctrl.ptr,
+        g_CommonPrefs.whiteSpaceEnable ? wxSTC_WS_VISIBLEALWAYS : wxSTC_WS_INVISIBLE);
+    ctrl.SetOvertype(ctrl.ptr, g_CommonPrefs.overTypeInitial);
+    ctrl.SetReadOnly(ctrl.ptr, g_CommonPrefs.readOnlyInitial);
+    ctrl.SetWrapMode(ctrl.ptr, g_CommonPrefs.wrapModeInitial ? wxSTC_WRAP_WORD : wxSTC_WRAP_NONE);
+
+    const font = createModernFont(10);
+    if (font)
+    {
+        ctrl.StyleSetFont(ctrl.ptr, wxSTC_STYLE_DEFAULT, font.ptr);
+        font.Delete();
+    }
+    initializePrefs(state, DEFAULT_LANGUAGE);
+
+    // set visibility
+    ctrl.SetVisiblePolicy(ctrl.ptr, wxSTC_VISIBLE_STRICT | wxSTC_VISIBLE_SLOP, 1);
+    ctrl.SetXCaretPolicy(ctrl.ptr, wxSTC_CARET_EVEN | wxSTC_VISIBLE_STRICT | wxSTC_CARET_SLOP, 1);
+    ctrl.SetYCaretPolicy(ctrl.ptr, wxSTC_CARET_EVEN | wxSTC_VISIBLE_STRICT | wxSTC_CARET_SLOP, 1);
+
+    // markers: some are made invisible by using the same colour for both sides
+    const colFg = rgbOf(ctrl.StyleGetForeground(wxSTC_STYLE_DEFAULT));
+    const colBg = rgbOf(ctrl.StyleGetBackground(wxSTC_STYLE_DEFAULT));
+    markerDefine(state, wxSTC_MARKNUM_FOLDER, wxSTC_MARK_DOTDOTDOT, colFg, colFg);
+    markerDefine(state, wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_ARROWDOWN, colFg, colFg);
+    markerDefine(state, wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_EMPTY, colFg, colFg);
+    markerDefine(state, wxSTC_MARKNUM_FOLDEREND, wxSTC_MARK_DOTDOTDOT, colFg, colBg);
+    markerDefine(state, wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_ARROWDOWN, colFg, colBg);
+    markerDefine(state, wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY, colFg, colFg);
+    markerDefine(state, wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY, colFg, colFg);
+
+    // annotations
+    ctrl.AnnotationSetVisible(wxSTC_ANNOTATION_BOXED);
+
+    // autocompletion image
+    const bmp = hashtagBitmap();
+    if (bmp)
+    {
+        ctrl.RegisterImage(ctrl.ptr, 0, bmp.ptr);
+    }
+
+    // call tips
+    ctrl.CallTipSetBackground(ctrl.ptr, 255, 255, 0);
+    state.calltipNo = 1;
+
+    // miscellaneous
+    state.lineNrMargin = withString("_999999", (text) =>
+        ctrl.TextWidth(ctrl.ptr, wxSTC_STYLE_LINENUMBER, text));
+    state.foldingMargin = win.FromDIP(16);
+    ctrl.CmdKeyClear(ctrl.ptr, wxSTC_KEY_TAB, 0);
+    ctrl.SetLayoutCache(ctrl.ptr, wxSTC_CACHE_PAGE);
+    ctrl.UsePopUp(ctrl.ptr, true);
+
+    bindEditEvents(state);
+    return state;
+}
+
+/** MarkerDefine(number, symbol, foreground, background) with RGB components. */
+function markerDefine(
+    state: EditState, number: number, symbol: number, foreground: number[], background: number[],
+): void
+{
+    state.ctrl.MarkerDefine(
+        state.ctrl.ptr, number, symbol,
+        foreground[0], foreground[1], foreground[2],
+        background[0], background[1], background[2]);
+}
+
+/** Records the control pointer on the state so handlers can find it again. */
+export function editPtr(state: EditState): Pointer
+{
+    return state.ctrl.ptr;
+}
+
+// ---------------------------------------------------------------------------
+// Edit::InitializePrefs()
+// ---------------------------------------------------------------------------
+
+function initializePrefs(state: EditState, name: string): boolean
+{
+    const ctrl = state.ctrl;
+
+    // initialize styles
+    ctrl.StyleClearAll(ctrl.ptr);
+
+    const colAux = lightDarkRGB("DARK GREY", "LIGHT GREY");
+
+    // set common styles
+    ctrl.StyleSetForeground(ctrl.ptr, wxSTC_STYLE_INDENTGUIDE, colAux[0], colAux[1], colAux[2]);
+
+    // set margin for line numbers
+    ctrl.SetMarginType(ctrl.ptr, state.lineNrId, wxSTC_MARGIN_NUMBER);
+    ctrl.StyleSetForeground(ctrl.ptr, wxSTC_STYLE_LINENUMBER, colAux[0], colAux[1], colAux[2]);
+    ctrl.SetMarginWidth(ctrl.ptr, state.lineNrId, 0); // start out not visible
+
+    // annotations style
+    const annotationBg = lightDarkFromRGB(244, 220, 220, 100, 100, 100);
+    ctrl.StyleSetBackground(ctrl.ptr, ANNOTATION_STYLE, annotationBg[0], annotationBg[1], annotationBg[2]);
+    ctrl.StyleSetSizeFractional(ANNOTATION_STYLE,
+        Math.trunc((ctrl.StyleGetSizeFractional(wxSTC_STYLE_DEFAULT) * 4) / 5));
+
+    let current: LanguageInfo | null = null;
+    let found = false;
+    for (let languageNr = 0; languageNr < g_LanguagePrefsSize; languageNr++)
+    {
+        const candidate = g_LanguagePrefs[languageNr];
+        if (candidate.name === name)
+        {
+            current = candidate;
+            found = true;
+            break;
+        }
+        current = candidate;
+    }
+    if (!found || !current)
+    {
+        return false;
+    }
+
+    // set lexer and language
+    ctrl.SetLexer(ctrl.ptr, current.lexer);
+    state.language = current;
+
+    // default fonts for all styles
+    for (let nr = 0; nr < wxSTC_STYLE_LASTPREDEFINED; nr++)
+    {
+        const font = createModernFont(10);
+        if (font)
+        {
+            ctrl.StyleSetFont(ctrl.ptr, nr, font.ptr);
+            font.Delete();
+        }
+    }
+
+    // initialize settings
+    if (g_CommonPrefs.syntaxEnable)
+    {
+        let keywordnr = 0;
+        for (let nr = 0; nr < current.styles.length; nr++)
+        {
+            const entry = current.styles[nr];
+            if (entry.type === -1)
+            {
+                continue;
+            }
+            const curType = g_StylePrefs[entry.type];
+            if (!curType)
+            {
+                continue;
+            }
+            const font = withString(curType.fontname, (face) =>
+                createWxFont(
+                    curType.fontsize, FONTFAMILY_MODERN, FONTSTYLE_NORMAL, FONTWEIGHT_NORMAL,
+                    false, face, FONTENCODING_DEFAULT));
+            if (font)
+            {
+                ctrl.StyleSetFont(ctrl.ptr, nr, font.ptr);
+                font.Delete();
+            }
+            const foreground = lightDarkRGB(curType.foreground, curType.foregroundDark);
+            ctrl.StyleSetForeground(ctrl.ptr, nr, foreground[0], foreground[1], foreground[2]);
+            ctrl.StyleSetBold(ctrl.ptr, nr, (curType.fontstyle & mySTC_STYLE_BOLD) > 0);
+            ctrl.StyleSetItalic(ctrl.ptr, nr, (curType.fontstyle & mySTC_STYLE_ITALIC) > 0);
+            ctrl.StyleSetUnderline(ctrl.ptr, nr, (curType.fontstyle & mySTC_STYLE_UNDERL) > 0);
+            ctrl.StyleSetVisible(ctrl.ptr, nr, (curType.fontstyle & mySTC_STYLE_HIDDEN) === 0);
+            ctrl.StyleSetCase(ctrl.ptr, nr, curType.lettercase);
+            if (entry.words !== null)
+            {
+                withString(entry.words, (words) => ctrl.SetKeyWords(ctrl.ptr, keywordnr, words));
+                keywordnr += 1;
+            }
+        }
+    }
+
+    // set margin as unused
+    ctrl.SetMarginType(ctrl.ptr, state.dividerId, wxSTC_MARGIN_SYMBOL);
+    ctrl.SetMarginWidth(ctrl.ptr, state.dividerId, 0);
+    ctrl.SetMarginSensitive(ctrl.ptr, state.dividerId, false);
+
+    // folding
+    ctrl.SetMarginType(ctrl.ptr, state.foldingId, wxSTC_MARGIN_SYMBOL);
+    ctrl.SetMarginMask(ctrl.ptr, state.foldingId, wxSTC_MASK_FOLDERS);
+    const foldingBg = rgbOf(ctrl.StyleGetBackground(wxSTC_STYLE_DEFAULT));
+    ctrl.StyleSetBackground(ctrl.ptr, state.foldingId, foldingBg[0], foldingBg[1], foldingBg[2]);
+    ctrl.SetMarginWidth(ctrl.ptr, state.foldingId, 0);
+    ctrl.SetMarginSensitive(ctrl.ptr, state.foldingId, false);
+    if (g_CommonPrefs.foldEnable)
+    {
+        ctrl.SetMarginWidth(ctrl.ptr, state.foldingId, current.folds !== 0 ? state.foldingMargin : 0);
+        ctrl.SetMarginSensitive(ctrl.ptr, state.foldingId, current.folds !== 0);
+        setProperty(state, "fold", current.folds !== 0 ? "1" : "0");
+        setProperty(state, "fold.comment", (current.folds & 1) > 0 ? "1" : "0");
+        setProperty(state, "fold.compact", (current.folds & 2) > 0 ? "1" : "0");
+        setProperty(state, "fold.preprocessor", (current.folds & 4) > 0 ? "1" : "0");
+        setProperty(state, "fold.html", (current.folds & 16) > 0 ? "1" : "0");
+        setProperty(state, "fold.html.preprocessor", (current.folds & 32) > 0 ? "1" : "0");
+        setProperty(state, "fold.comment.python", (current.folds & 64) > 0 ? "1" : "0");
+        setProperty(state, "fold.quotes.python", (current.folds & 128) > 0 ? "1" : "0");
+    }
+    ctrl.SetFoldFlags(ctrl.ptr,
+        wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED | wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED);
+
+    // set spaces and indentation
+    ctrl.SetTabWidth(ctrl.ptr, 4);
+    ctrl.SetUseTabs(ctrl.ptr, false);
+    ctrl.SetTabIndents(ctrl.ptr, true);
+    ctrl.SetBackSpaceUnIndents(ctrl.ptr, true);
+    ctrl.SetIndent(ctrl.ptr, g_CommonPrefs.indentEnable ? 4 : 0);
+
+    // others
+    ctrl.SetViewEOL(ctrl.ptr, g_CommonPrefs.displayEOLEnable);
+    ctrl.SetIndentationGuides(ctrl.ptr, g_CommonPrefs.indentGuideEnable);
+    ctrl.SetEdgeColumn(ctrl.ptr, 80);
+    ctrl.SetEdgeMode(ctrl.ptr, g_CommonPrefs.longLineOnEnable ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE);
+    ctrl.SetViewWhiteSpace(ctrl.ptr,
+        g_CommonPrefs.whiteSpaceEnable ? wxSTC_WS_VISIBLEALWAYS : wxSTC_WS_INVISIBLE);
+    ctrl.SetOvertype(ctrl.ptr, g_CommonPrefs.overTypeInitial);
+    ctrl.SetReadOnly(ctrl.ptr, g_CommonPrefs.readOnlyInitial);
+    ctrl.SetWrapMode(ctrl.ptr, g_CommonPrefs.wrapModeInitial ? wxSTC_WRAP_WORD : wxSTC_WRAP_NONE);
+
+    return true;
+}
+
+function setProperty(state: EditState, key: string, value: string): void
+{
+    withString(key, (property) =>
+        withString(value, (setting) =>
+            state.ctrl.SetProperty(state.ctrl.ptr, property, setting)));
+}
+
+// ---------------------------------------------------------------------------
+// file handling
+// ---------------------------------------------------------------------------
+
+/** Edit::LoadFile(filename) */
+export function editLoadFile(state: EditState, filename: string): boolean
+{
+    if (filename !== "")
+    {
+        state.filename = filename;
+    }
+
+    if (state.filename === "")
+    {
+        return false;
+    }
+
+    withString(state.filename, (path) => state.ctrl.LoadFile(state.ctrl.ptr, path));
+    state.ctrl.EmptyUndoBuffer(state.ctrl.ptr);
+
+    // determine lexer language
+    initializePrefs(state, determinePrefs(fileNameOf(state.filename)));
+    return true;
+}
+
+/** Edit::LoadFile() — asks for a filename first. */
+export function editLoadFilePrompt(state: EditState): boolean
+{
+    if (state.filename !== "")
+    {
+        return editLoadFile(state, state.filename);
+    }
+
+    const dialog = showFileDialog(state, "Open file",
+        FD_OPEN | FD_FILE_MUST_EXIST | FD_CHANGE_DIR);
+    if (!dialog)
+    {
+        return false;
+    }
+    const confirmed = dialog.ShowModal() === ID_OK;
+    const path = confirmed ? takeString(dialog.GetPath()) : "";
+    dialog.Destroy();
+    return path !== "" ? editLoadFile(state, path) : false;
+}
+
+/** Edit::SaveFile() — returns true when nothing needs saving. */
+export function editSaveFilePrompt(state: EditState): boolean
+{
+    if (!editModified(state))
+    {
+        return true;
+    }
+    if (state.filename === "")
+    {
+        const dialog = showFileDialog(state, "Save file", FD_SAVE | FD_OVERWRITE_PROMPT);
+        if (!dialog)
+        {
+            return false;
+        }
+        const confirmed = dialog.ShowModal() === ID_OK;
+        const path = confirmed ? takeString(dialog.GetPath()) : "";
+        dialog.Destroy();
+        if (path === "")
+        {
+            return false;
+        }
+        state.filename = path;
+    }
+    return editSaveFile(state, state.filename);
+}
+
+/** Edit::SaveFile(filename) */
+export function editSaveFile(state: EditState, filename: string): boolean
+{
+    if (!editModified(state))
+    {
+        return true;
+    }
+    return withString(filename, (path) => state.ctrl.SaveFile(state.ctrl.ptr, path));
+}
+
+function showFileDialog(
+    state: EditState, message: string, style: number,
+): wxFileDialog | null
+{
+    return withString(message, (caption) =>
+        withString("", (directory) =>
+            withString("", (files) =>
+                withString("Any file (*)|*", (wildcard) =>
+                    createWxFileDialog(
+                        state.win.ptr, caption, directory, files, wildcard,
+                        -1, -1, style, -1, -1)))));
+}
+
+/** Edit::Modified() */
+export function editModified(state: EditState): boolean
+{
+    return state.ctrl.GetModify(state.ctrl.ptr) && !state.ctrl.GetReadOnly(state.ctrl.ptr);
+}
+
+/** m_filename = filename */
+export function editSetFilename(state: EditState, filename: string): void
+{
+    state.filename = filename;
+}
+
+/** m_edit->ClearAll(); m_edit->SetSavePoint(); */
+export function editResetDocument(state: EditState): void
+{
+    state.ctrl.ClearAll(state.ctrl.ptr);
+    state.ctrl.SetSavePoint(state.ctrl.ptr);
+}
+
+/** Edit::ToggleLineNumbers() */
+export function editToggleLineNumbers(state: EditState): void
+{
+    state.ctrl.SetMarginWidth(state.ctrl.ptr, state.lineNrId,
+        state.ctrl.GetMarginWidth(state.ctrl.ptr, state.lineNrId) === 0
+            ? state.lineNrMargin
+            : 0);
+}
+
+/** The data EditProperties shows. */
+export function editGetInfo(state: EditState): EditInfo
+{
+    return {
+        filename: state.filename,
+        languageName: state.language ? state.language.name : "",
+        lexer: state.ctrl.GetLexer(state.ctrl.ptr),
+        eolMode: state.ctrl.GetEOLMode(state.ctrl.ptr),
+        lineCount: state.ctrl.GetLineCount(state.ctrl.ptr),
+        textLength: state.ctrl.GetTextLength(state.ctrl.ptr),
+        currentLine: state.ctrl.GetCurrentLine(state.ctrl.ptr),
+        currentPos: state.ctrl.GetCurrentPos(state.ctrl.ptr),
+    };
+}
+
+// ---------------------------------------------------------------------------
+// edit event handlers (edit.cpp)
+// ---------------------------------------------------------------------------
+
+function onSize(state: EditState): void
+{
+    const size = state.win.GetClientSize();
+    const width = size ? size.GetWidth() : 0;
+    const x = width +
+        (g_CommonPrefs.lineNumberEnable ? state.lineNrMargin : 0) +
+        (g_CommonPrefs.foldEnable ? state.foldingMargin : 0);
+    if (x > 0)
+    {
+        state.ctrl.SetScrollWidth(state.ctrl.ptr, x);
+    }
+}
+
+function onEditRedo(state: EditState): void
+{
+    if (!state.ctrl.CanRedo(state.ctrl.ptr))
+    {
+        return;
+    }
+    state.ctrl.Redo(state.ctrl.ptr);
+}
+
+function onEditUndo(state: EditState): void
+{
+    if (!state.ctrl.CanUndo(state.ctrl.ptr))
+    {
+        return;
+    }
+    state.ctrl.Undo(state.ctrl.ptr);
+}
+
+function onEditClear(state: EditState): void
+{
+    if (state.ctrl.GetReadOnly(state.ctrl.ptr))
+    {
+        return;
+    }
+    state.ctrl.Clear(state.ctrl.ptr);
+}
+
+function onEditCut(state: EditState): void
+{
+    if (state.ctrl.GetReadOnly(state.ctrl.ptr) ||
+        state.ctrl.GetSelectionEnd(state.ctrl.ptr) - state.ctrl.GetSelectionStart(state.ctrl.ptr) <= 0)
+    {
+        return;
+    }
+    state.ctrl.Cut(state.ctrl.ptr);
+}
+
+function onEditCopy(state: EditState): void
+{
+    if (state.ctrl.GetSelectionEnd(state.ctrl.ptr) - state.ctrl.GetSelectionStart(state.ctrl.ptr) <= 0)
+    {
+        return;
+    }
+    state.ctrl.Copy(state.ctrl.ptr);
+}
+
+function onEditPaste(state: EditState): void
+{
+    if (!state.ctrl.CanPaste(state.ctrl.ptr))
+    {
+        return;
+    }
+    state.ctrl.Paste(state.ctrl.ptr);
+}
+
+/** OnFind / OnFindNext / OnReplace / OnReplaceNext / OnGoto are no-op stubs. */
+function noOp(): void
+{
+}
+
+function onBraceMatch(state: EditState): void
+{
+    const min = state.ctrl.GetCurrentPos(state.ctrl.ptr);
+    const max = state.ctrl.BraceMatch(state.ctrl.ptr, min);
+    if (max > min + 1)
+    {
+        state.ctrl.BraceHighlight(state.ctrl.ptr, min + 1, max);
+        state.ctrl.SetSelection(state.ctrl.ptr, min + 1, max);
+    }
+    else
+    {
+        state.ctrl.BraceBadLight(state.ctrl.ptr, min);
+    }
+}
+
+function onEditIndentInc(state: EditState): void
+{
+    state.ctrl.CmdKeyExecute(state.ctrl.ptr, wxSTC_CMD_TAB);
+}
+
+function onEditIndentRed(state: EditState): void
+{
+    state.ctrl.CmdKeyExecute(state.ctrl.ptr, wxSTC_CMD_DELETEBACK);
+}
+
+function onEditSelectAll(state: EditState): void
+{
+    state.ctrl.SetSelection(state.ctrl.ptr, 0, state.ctrl.GetTextLength(state.ctrl.ptr));
+}
+
+function onEditSelectLine(state: EditState): void
+{
+    const current = state.ctrl.GetCurrentLine(state.ctrl.ptr);
+    const lineStart = state.ctrl.PositionFromLine(state.ctrl.ptr, current);
+    const lineEnd = state.ctrl.PositionFromLine(state.ctrl.ptr, current + 1);
+    state.ctrl.SetSelection(state.ctrl.ptr, lineStart, lineEnd);
+}
+
+function onHighlightLang(state: EditState, id: number): void
+{
+    const index = id - myID.HIGHLIGHTFIRST;
+    if (index < 0 || index >= g_LanguagePrefsSize)
+    {
+        return;
+    }
+    initializePrefs(state, g_LanguagePrefs[index].name);
+}
+
+function onDisplayEOL(state: EditState): void
+{
+    state.ctrl.SetViewEOL(state.ctrl.ptr, !state.ctrl.GetViewEOL(state.ctrl.ptr));
+}
+
+function onIndentGuide(state: EditState): void
+{
+    state.ctrl.SetIndentationGuides(state.ctrl.ptr,
+        !state.ctrl.GetIndentationGuides(state.ctrl.ptr));
+}
+
+function onLineNumber(state: EditState): void
+{
+    editToggleLineNumbers(state);
+}
+
+function onLongLineOn(state: EditState): void
+{
+    state.ctrl.SetEdgeMode(state.ctrl.ptr,
+        state.ctrl.GetEdgeMode(state.ctrl.ptr) === 0 ? wxSTC_EDGE_LINE : wxSTC_EDGE_NONE);
+}
+
+function onWhiteSpace(state: EditState): void
+{
+    state.ctrl.SetViewWhiteSpace(state.ctrl.ptr,
+        state.ctrl.GetViewWhiteSpace(state.ctrl.ptr) === 0
+            ? wxSTC_WS_VISIBLEALWAYS
+            : wxSTC_WS_INVISIBLE);
+}
+
+function onFoldToggle(state: EditState): void
+{
+    state.ctrl.ToggleFold(state.ctrl.ptr,
+        state.ctrl.GetFoldParent(state.ctrl.ptr, state.ctrl.GetCurrentLine(state.ctrl.ptr)));
+}
+
+function onSetOverType(state: EditState): void
+{
+    state.ctrl.SetOvertype(state.ctrl.ptr, !state.ctrl.GetOvertype(state.ctrl.ptr));
+}
+
+function onSetReadOnly(state: EditState): void
+{
+    state.ctrl.SetReadOnly(state.ctrl.ptr, !state.ctrl.GetReadOnly(state.ctrl.ptr));
+}
+
+function onWrapmodeOn(state: EditState): void
+{
+    state.ctrl.SetWrapMode(state.ctrl.ptr,
+        state.ctrl.GetWrapMode(state.ctrl.ptr) === 0 ? wxSTC_WRAP_WORD : wxSTC_WRAP_NONE);
+}
+
+function onUseCharset(state: EditState, id: number): void
+{
+    // The C++ maps myID_CHARSETMAC to wxSTC_CHARSET_ANSI as well.
+    let charset = state.ctrl.GetCodePage(state.ctrl.ptr);
+    switch (id)
+    {
+        case myID.CHARSETANSI: charset = wxSTC_CHARSET_ANSI; break;
+        case myID.CHARSETMAC: charset = wxSTC_CHARSET_ANSI; break;
+    }
+    for (let nr = 0; nr < wxSTC_STYLE_LASTPREDEFINED; nr++)
+    {
+        state.ctrl.StyleSetCharacterSet(state.ctrl.ptr, nr, charset);
+    }
+    state.ctrl.SetCodePage(state.ctrl.ptr, charset);
+}
+
+/** wxGetTextFromUser(...) returning "" on cancel. */
+function getTextFromUser(
+    message: string, caption: string, defaultValue: string, parent: Pointer,
+): string
+{
+    // The binding's wxGetTextFromUser writes into a caller buffer; the first
+    // call (null buffer) reports the required length.
+    const messageBuffer = new TextEncoder().encode(message + "\0");
+    const captionBuffer = new TextEncoder().encode(caption + "\0");
+    const defaultBuffer = new TextEncoder().encode(defaultValue + "\0");
+
+    const length = wxGetTextFromUser(
+        pointerOf(messageBuffer),
+        pointerOf(captionBuffer),
+        pointerOf(defaultBuffer),
+        parent,
+        -1,
+        -1,
+        1,
+        null);
+    if (length <= 0)
+    {
+        return "";
+    }
+
+    const output = new Uint8Array(length + 1);
+    wxGetTextFromUser(
+        pointerOf(messageBuffer),
+        pointerOf(captionBuffer),
+        pointerOf(defaultBuffer),
+        parent,
+        -1,
+        -1,
+        1,
+        pointerOf(output));
+
+    return readCString(pointerOf(output));
+}
+
+function onAnnotationAdd(state: EditState): void
+{
+    const ctrl = state.ctrl;
+    const line = ctrl.GetCurrentLine(ctrl.ptr);
+    const ann = takeString(ctrl.AnnotationGetText(line));
+
+    const text = getTextFromUser(
+        `Enter annotation for the line ${line}`, "Edit annotation", ann, ctrl.ptr);
+    if (text === "")
+    {
+        return;
+    }
+
+    withString(text, (value) => ctrl.AnnotationSetText(line, value));
+    ctrl.AnnotationSetStyle(line, ANNOTATION_STYLE);
+
+    // Scintilla doesn't update the scroll width for annotations, so do it here.
+    const width = ctrl.GetScrollWidth(ctrl.ptr);
+
+    let indent = ctrl.GetLineIndentation(ctrl.ptr, line) + 3;
+    if (indent < 0)
+    {
+        indent = 0;
+    }
+
+    const padded = text + " ".repeat(indent);
+    const widthAnn = withString(padded, (value) =>
+        ctrl.TextWidth(ctrl.ptr, ANNOTATION_STYLE, value));
+
+    if (widthAnn > width)
+    {
+        ctrl.SetScrollWidth(ctrl.ptr, widthAnn);
+    }
+}
+
+function onAnnotationRemove(state: EditState): void
+{
+    const line = state.ctrl.GetCurrentLine(state.ctrl.ptr);
+    withString("", (empty) => state.ctrl.AnnotationSetText(line, empty));
+}
+
+function onAnnotationClear(state: EditState): void
+{
+    state.ctrl.AnnotationClearAll();
+}
+
+function onAnnotationStyle(state: EditState, id: number): void
+{
+    let style = 0;
+    switch (id)
+    {
+        case myID.ANNOTATION_STYLE_HIDDEN: style = wxSTC_ANNOTATION_HIDDEN; break;
+        case myID.ANNOTATION_STYLE_STANDARD: style = wxSTC_ANNOTATION_STANDARD; break;
+        case myID.ANNOTATION_STYLE_BOXED: style = wxSTC_ANNOTATION_BOXED; break;
+    }
+    state.ctrl.AnnotationSetVisible(style);
+}
+
+function onIndicatorFill(state: EditState): void
+{
+    const from = state.ctrl.GetSelectionStart(state.ctrl.ptr);
+    const to = state.ctrl.GetSelectionEnd(state.ctrl.ptr);
+    state.ctrl.IndicatorFillRange(from, to - from);
+}
+
+function onIndicatorClear(state: EditState): void
+{
+    const from = state.ctrl.GetSelectionStart(state.ctrl.ptr);
+    const to = state.ctrl.GetSelectionEnd(state.ctrl.ptr);
+    state.ctrl.IndicatorClearRange(from, to - from);
+}
+
+function onIndicatorStyle(state: EditState, id: number): void
+{
+    state.ctrl.IndicatorSetStyle(state.ctrl.ptr,
+        state.ctrl.GetIndicatorCurrent(), id - myID.INDICATOR_STYLE_FIRST);
+}
+
+function onChangeCase(state: EditState, id: number): void
+{
+    switch (id)
+    {
+        case myID.CHANGELOWER:
+            state.ctrl.CmdKeyExecute(state.ctrl.ptr, wxSTC_CMD_LOWERCASE);
+            break;
+        case myID.CHANGEUPPER:
+            state.ctrl.CmdKeyExecute(state.ctrl.ptr, wxSTC_CMD_UPPERCASE);
+            break;
+    }
+}
+
+function onConvertEOL(state: EditState, id: number): void
+{
+    let eolMode = state.ctrl.GetEOLMode(state.ctrl.ptr);
+    switch (id)
+    {
+        case myID.CONVERTCR: eolMode = wxSTC_EOL_CR; break;
+        case myID.CONVERTCRLF: eolMode = wxSTC_EOL_CRLF; break;
+        case myID.CONVERTLF: eolMode = wxSTC_EOL_LF; break;
+    }
+    state.ctrl.ConvertEOLs(state.ctrl.ptr, eolMode);
+    state.ctrl.SetEOLMode(state.ctrl.ptr, eolMode);
+}
+
+function onMultipleSelections(state: EditState): void
+{
+    const isSet = state.ctrl.GetMultipleSelection();
+    state.ctrl.SetMultipleSelection(!isSet);
+}
+
+function onMultiPaste(state: EditState): void
+{
+    const pasteMode = state.ctrl.GetMultiPaste();
+    if (pasteMode === wxSTC_MULTIPASTE_EACH)
+    {
+        state.ctrl.SetMultiPaste(wxSTC_MULTIPASTE_ONCE);
+    }
+    else
+    {
+        state.ctrl.SetMultiPaste(wxSTC_MULTIPASTE_EACH);
+    }
+}
+
+function onMultipleSelectionsTyping(state: EditState): void
+{
+    const isSet = state.ctrl.GetAdditionalSelectionTyping();
+    state.ctrl.SetAdditionalSelectionTyping(!isSet);
+}
+
+function onCustomPopup(state: EditState, isChecked: boolean): void
+{
+    const allow = (isChecked ? wxSTC_POPUP_NEVER : wxSTC_POPUP_ALL) !== 0;
+    state.ctrl.UsePopUp(state.ctrl.ptr, allow);
+}
+
+function onTechnology(state: EditState, id: number): void
+{
+    state.ctrl.SetTechnology(id === myID.TECHNOLOGY_DIRECTWRITE
+        ? wxSTC_TECHNOLOGY_DIRECTWRITE
+        : wxSTC_TECHNOLOGY_DEFAULT);
+}
+
+function onMarginClick(state: EditState, event: wxStyledTextEvent): void
+{
+    if (event.GetMargin(event.ptr) !== state.foldingId)
+    {
+        return;
+    }
+    const lineClick = state.ctrl.LineFromPosition(state.ctrl.ptr, event.GetPosition(event.ptr));
+    const levelClick = state.ctrl.GetFoldLevel(state.ctrl.ptr, lineClick);
+    if ((levelClick & wxSTC_FOLDLEVELHEADERFLAG) > 0)
+    {
+        state.ctrl.ToggleFold(state.ctrl.ptr, lineClick);
+    }
+}
+
+function onCharAdded(state: EditState, event: wxStyledTextEvent): void
+{
+    const chr = event.GetKey(event.ptr) & 0xff;
+    const currentLine = state.ctrl.GetCurrentLine(state.ctrl.ptr);
+    if (chr === 10) // '\n'
+    {
+        let lineInd = 0;
+        if (currentLine > 0)
+        {
+            lineInd = state.ctrl.GetLineIndentation(state.ctrl.ptr, currentLine - 1);
+        }
+        if (lineInd === 0)
+        {
+            return;
+        }
+        state.ctrl.SetLineIndentation(state.ctrl.ptr, currentLine, lineInd);
+        state.ctrl.GotoPos(state.ctrl.ptr,
+            state.ctrl.PositionFromLine(state.ctrl.ptr, currentLine) + lineInd);
+    }
+    else if (chr === 35) // '#'
+    {
+        const list =
+            "define?0 elif?0 else?0 endif?0 error?0 if?0 ifdef?0 " +
+            "ifndef?0 include?0 line?0 pragma?0 undef?0";
+        withString(list, (items) => state.ctrl.AutoCompShow(state.ctrl.ptr, 0, items));
+    }
+}
+
+function showCallTipAt(state: EditState, position: number): void
+{
+    let text = `\u0001 ${state.calltipNo} of 3 \u0002 `;
+    if (state.calltipNo === 1)
+    {
+        text += "This is a call tip. Try clicking the up or down buttons.";
+    }
+    else if (state.calltipNo === 2)
+    {
+        text += "It is meant to be a context sensitive popup helper for the user.";
+    }
+    else
+    {
+        text += "This is a call tip with multiple lines.\n" +
+            "You can provide slightly longer help with call tips like these.";
+    }
+
+    if (state.ctrl.CallTipActive(state.ctrl.ptr))
+    {
+        state.ctrl.CallTipCancel(state.ctrl.ptr);
+    }
+    withString(text, (value) => state.ctrl.CallTipShow(state.ctrl.ptr, position, value));
+}
+
+function onCallTipClick(state: EditState, event: wxStyledTextEvent): void
+{
+    if (event.GetPosition(event.ptr) === 1)
+    {
+        state.calltipNo = state.calltipNo === 3 ? 1 : state.calltipNo + 1;
+        showCallTipAt(state, state.ctrl.CallTipPosAtStart(state.ctrl.ptr));
+    }
+    else if (event.GetPosition(event.ptr) === 2)
+    {
+        state.calltipNo = state.calltipNo === 1 ? 3 : state.calltipNo - 1;
+        showCallTipAt(state, state.ctrl.CallTipPosAtStart(state.ctrl.ptr));
+    }
+}
+
+function onKeyDown(state: EditState, event: wxKeyEvent): void
+{
+    if (state.ctrl.CallTipActive(state.ctrl.ptr))
+    {
+        state.ctrl.CallTipCancel(state.ctrl.ptr);
+    }
+    if (event.GetKeyCode() === WXK_SPACE && event.ControlDown() && event.ShiftDown())
+    {
+        state.calltipNo = 1;
+        showCallTipAt(state, state.ctrl.GetCurrentPos(state.ctrl.ptr));
+        return;
+    }
+    event.Skip(true);
+}
+
+// ---------------------------------------------------------------------------
+// event dispatch
+// ---------------------------------------------------------------------------
+
+let menuCallback: Callback | null = null;
+let sizeCallback: Callback | null = null;
+let keyDownCallback: Callback | null = null;
+let marginClickCallback: Callback | null = null;
+let charAddedCallback: Callback | null = null;
+let callTipClickCallback: Callback | null = null;
+
+function stateFor(data: Pointer): EditState | null
+{
+    return data === null ? null : editStates.get(String(data)) ?? null;
+}
+
+/**
+ * One dispatcher for every menu command the Edit event table handles. Commands
+ * it does not handle call Skip(), so they continue to the frame (and then the
+ * application), exactly as the C++ event table propagation does.
+ */
+function dispatchEditMenu(state: EditState, eventPtr: Pointer): void
+{
+    const event = new wxCommandEvent(eventPtr);
+    const id = event.GetId();
+
+    switch (id)
+    {
+        case ID_CLEAR: onEditClear(state); break;
+        case ID_CUT: onEditCut(state); break;
+        case ID_COPY: onEditCopy(state); break;
+        case ID_PASTE: onEditPaste(state); break;
+        case ID_SELECTALL: onEditSelectAll(state); break;
+        case ID_REDO: onEditRedo(state); break;
+        case ID_UNDO: onEditUndo(state); break;
+        case ID_FIND: noOp(); break;
+
+        case myID.INDENTINC: onEditIndentInc(state); break;
+        case myID.INDENTRED: onEditIndentRed(state); break;
+        case myID.FINDNEXT: noOp(); break;
+        case myID.REPLACE: noOp(); break;
+        case myID.REPLACENEXT: noOp(); break;
+        case myID.BRACEMATCH: onBraceMatch(state); break;
+        case myID.GOTO: noOp(); break;
+        case myID.DISPLAYEOL: onDisplayEOL(state); break;
+        case myID.INDENTGUIDE: onIndentGuide(state); break;
+        case myID.LINENUMBER: onLineNumber(state); break;
+        case myID.LONGLINEON: onLongLineOn(state); break;
+        case myID.WHITESPACE: onWhiteSpace(state); break;
+        case myID.FOLDTOGGLE: onFoldToggle(state); break;
+        case myID.OVERTYPE: onSetOverType(state); break;
+        case myID.READONLY: onSetReadOnly(state); break;
+        case myID.WRAPMODEON: onWrapmodeOn(state); break;
+        case myID.CHARSETANSI: onUseCharset(state, id); break;
+        case myID.CHARSETMAC: onUseCharset(state, id); break;
+        case myID.ANNOTATION_ADD: onAnnotationAdd(state); break;
+        case myID.ANNOTATION_REMOVE: onAnnotationRemove(state); break;
+        case myID.ANNOTATION_CLEAR: onAnnotationClear(state); break;
+        case myID.ANNOTATION_STYLE_HIDDEN: onAnnotationStyle(state, id); break;
+        case myID.ANNOTATION_STYLE_STANDARD: onAnnotationStyle(state, id); break;
+        case myID.ANNOTATION_STYLE_BOXED: onAnnotationStyle(state, id); break;
+        case myID.INDICATOR_FILL: onIndicatorFill(state); break;
+        case myID.INDICATOR_CLEAR: onIndicatorClear(state); break;
+        case myID.CHANGELOWER: onChangeCase(state, id); break;
+        case myID.CHANGEUPPER: onChangeCase(state, id); break;
+        case myID.CONVERTCR: onConvertEOL(state, id); break;
+        case myID.CONVERTCRLF: onConvertEOL(state, id); break;
+        case myID.CONVERTLF: onConvertEOL(state, id); break;
+        case myID.MULTIPLE_SELECTIONS: onMultipleSelections(state); break;
+        case myID.MULTI_PASTE: onMultiPaste(state); break;
+        case myID.MULTIPLE_SELECTIONS_TYPING: onMultipleSelectionsTyping(state); break;
+        case myID.CUSTOM_POPUP: onCustomPopup(state, event.IsChecked()); break;
+        case myID.TECHNOLOGY_DEFAULT: onTechnology(state, id); break;
+        case myID.TECHNOLOGY_DIRECTWRITE: onTechnology(state, id); break;
+        case myID.SELECTLINE: onEditSelectLine(state); break;
+
+        default:
+            if (id >= myID.INDICATOR_STYLE_FIRST && id <= myID.INDICATOR_STYLE_LAST)
+            {
+                onIndicatorStyle(state, id);
+                break;
+            }
+            if (id >= myID.HIGHLIGHTFIRST && id <= myID.HIGHLIGHTFIRST + g_LanguagePrefsSize - 1)
+            {
+                onHighlightLang(state, id);
+                break;
+            }
+            // Not ours: let it propagate to the frame and the application.
+            event.Skip(true);
+            return;
+    }
+}
+
+/** Edit event table: EVT_SIZE plus every EVT_MENU the Edit handles. */
+export function bindEditEvents(state: EditState): void
+{
+    const ptr = state.ctrl.ptr;
+
+    if (!menuCallback)
+    {
+        menuCallback = newCallback((_fun, data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const target = stateFor(data);
+            if (target)
+            {
+                dispatchEditMenu(target, eventPtr);
+            }
+        });
+    }
+    // Standard ids (handled here or propagated) and the whole edit id range.
+    bindPointer(ptr, ID_LOWEST, ID_HIGHEST, EVT_MENU, menuCallback, ptr);
+    bindPointer(ptr, myID.EDIT_FIRST, myID.EDIT_LAST, EVT_MENU, menuCallback, ptr);
+
+    if (!sizeCallback)
+    {
+        sizeCallback = newCallback((_fun, data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const target = stateFor(data);
+            if (!target)
+            {
+                return;
+            }
+            onSize(target);
+            new wxSizeEvent(eventPtr).Skip(true);
+        });
+    }
+    bindPointer(ptr, ID_ANY, ID_ANY, EVT_SIZE, sizeCallback, ptr);
+
+    if (!keyDownCallback)
+    {
+        keyDownCallback = newCallback((_fun, data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const target = stateFor(data);
+            if (target)
+            {
+                onKeyDown(target, new wxKeyEvent(eventPtr));
+            }
+        });
+    }
+    bindPointer(ptr, ID_ANY, ID_ANY, EVT_KEY_DOWN, keyDownCallback, ptr);
+
+    if (!marginClickCallback)
+    {
+        marginClickCallback = newCallback((_fun, data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const target = stateFor(data);
+            if (target)
+            {
+                onMarginClick(target, new wxStyledTextEvent(eventPtr));
+            }
+        });
+    }
+    bindPointer(ptr, ID_ANY, ID_ANY, EVT_STC_MARGINCLICK, marginClickCallback, ptr);
+
+    if (!charAddedCallback)
+    {
+        charAddedCallback = newCallback((_fun, data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const target = stateFor(data);
+            if (target)
+            {
+                onCharAdded(target, new wxStyledTextEvent(eventPtr));
+            }
+        });
+    }
+    bindPointer(ptr, ID_ANY, ID_ANY, EVT_STC_CHARADDED, charAddedCallback, ptr);
+
+    if (!callTipClickCallback)
+    {
+        callTipClickCallback = newCallback((_fun, data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const target = stateFor(data);
+            if (target)
+            {
+                onCallTipClick(target, new wxStyledTextEvent(eventPtr));
+            }
+        });
+    }
+    bindPointer(ptr, ID_ANY, ID_ANY, EVT_STC_CALLTIP_CLICK, callTipClickCallback, ptr);
+}
+
+/** Forgets a destroyed Edit (the document-map dialog's editor). */
+export function releaseEdit(state: EditState): void
+{
+    editStates.delete(String(state.ctrl.ptr));
+}

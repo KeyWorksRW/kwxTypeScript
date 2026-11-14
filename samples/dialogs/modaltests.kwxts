@@ -1,0 +1,1245 @@
+// modaltests.kwxts — the sample-defined modal dialogs of the "dialogs" sample.
+//
+//   StdButtonSizerDialog          (dialogs.cpp:3944)
+//   TestDefaultActionDialog       (dialogs.cpp:3216)
+//   TestMessageBoxDialog          (dialogs.cpp:4301)
+//   TestRichMessageDialog         (dialogs.cpp:4594)
+//   SettingsDialog                (dialogs.cpp:4102)
+
+import {
+    ALL,
+    ALIGN_CENTRE,
+    APPLY,
+    ART_ERROR,
+    ART_INFORMATION,
+    ART_OTHER,
+    ART_QUESTION,
+    ART_WARNING,
+    BOTH,
+    BOTTOM,
+    CANCEL,
+    CENTRE,
+    CENTRE_ON_SCREEN,
+    CLOSE,
+    DEFAULT_DIALOG_STYLE,
+    DIALOG_EX_CONTEXTHELP,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_LISTBOX_DCLICK,
+    EVT_RADIOBUTTON,
+    EVT_TEXT_ENTER,
+    EVT_UPDATE_UI,
+    EVT_WINDOW_MODAL_DIALOG_CLOSED,
+    HELP,
+    HORIZONTAL,
+    ICON_AUTH_NEEDED,
+    ICON_ERROR,
+    ICON_INFORMATION,
+    ICON_NONE,
+    ICON_QUESTION,
+    ICON_WARNING,
+    ID_ANY,
+    ID_APPLY,
+    ID_CANCEL,
+    ID_CLOSE,
+    ID_HELP,
+    ID_NO,
+    ID_OK,
+    ID_STATIC,
+    ID_YES,
+    NO,
+    NO_DEFAULT,
+    OK,
+    PROPSHEET_BUTTONTOOLBOOK,
+    PROPSHEET_SHRINKTOFIT,
+    PROPSHEET_TOOLBOOK,
+    RA_SPECIFY_ROWS,
+    RB_GROUP,
+    RESIZE_BORDER,
+    RIGHT,
+    SP_ARROW_KEYS,
+    ST_NO_AUTORESIZE,
+    TAB_TRAVERSAL,
+    LEFT,
+    TOP,
+    TE_MULTILINE,
+    TE_PROCESS_ENTER,
+    VERTICAL,
+    YES,
+    YES_NO,
+    createWxArrayInt,
+    createWxBoxSizer,
+    createWxButton,
+    createWxCheckBox,
+    createWxChoice,
+    createWxDialog,
+    createWxFlexGridSizer,
+    createWxGenericValidatorBool,
+    createWxGenericValidatorInt,
+    createWxImageList,
+    createWxListBox,
+    createWxMessageDialog,
+    createWxPanel,
+    createWxPropertySheetDialogDefault,
+    createWxRadioBox,
+    createWxRadioButton,
+    createWxRichMessageDialog,
+    createWxSpinCtrl,
+    createWxStaticBox,
+    createWxStaticBoxSizer,
+    createWxStaticText,
+    createWxTextCtrl,
+    LogMessage,
+    wrapWxChoice,
+    wrapWxRadioBox,
+    wrapWxRadioButton,
+    wrapWxSizer,
+    wrapWxSpinCtrl,
+    wrapWxWindow,
+    wxButton,
+    wxCheckBox,
+    wxChoice,
+    wxDialog,
+    wxImageList,
+    wxMessageDialog,
+    wxPropertySheetDialog,
+    wxRadioBox,
+    wxSize,
+    wxStaticText,
+    wxTextCtrl,
+    wxUpdateUIEvent,
+    wxWindowModalDialogEvent,
+    wxWindow,
+    wxCommandEvent,
+    wxArtProvider_GetIcon,
+    wxSizer_GetDefaultBorder,
+} from "kwx";
+import { Pointer, pointerOf } from "kwx/platform";
+import {
+    addChild,
+    addWin,
+    charPtrArray,
+    EventRouter,
+    EventSink,
+    findChildById,
+    setLabelText,
+    takeText,
+    withString,
+    withStrings,
+} from "./support.kwxts";
+import {
+    DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,
+    DIALOGS_PROPERTY_SHEET_TOOLBOOK,
+} from "./support.kwxts";
+
+//-----------------------------------------------------------------------------
+// Router registry
+//-----------------------------------------------------------------------------
+
+const routerMap = new Map<string, EventRouter>();
+
+function routerFor(key: string, sink: EventSink): EventRouter
+{
+    let router = routerMap.get(key);
+    if (!router)
+    {
+        router = new EventRouter(sink);
+        routerMap.set(key, router);
+    }
+    return router;
+}
+
+export function closeModalTestRouters(): void
+{
+    routerMap.forEach((router) => { router.close(); });
+    routerMap.clear();
+}
+
+//-----------------------------------------------------------------------------
+// Ids and helpers
+//-----------------------------------------------------------------------------
+
+const ID_CATCH_LISTBOX_DCLICK = 100;
+const ID_LISTBOX = 101;
+const ID_DISABLE_OK = 102;
+const ID_DISABLE_CANCEL = 103;
+
+const ID_SHOW_TOOLTIPS = 100;
+const ID_AUTO_SAVE = 101;
+const ID_AUTO_SAVE_MINS = 102;
+const ID_LOAD_LAST_PROJECT = 103;
+const ID_APPLY_SETTINGS_TO = 104;
+const ID_BACKGROUND_STYLE = 105;
+const ID_FONT_SIZE = 106;
+
+const DEFAULT_BORDER = wxSizer_GetDefaultBorder();
+
+function staticText(parent: Pointer, label: string, style = 0): Pointer
+{
+    const text = withString(label, (ptr) =>
+        createWxStaticText(parent, ID_ANY, ptr, -1, -1, -1, -1, style));
+    return text ? text.ptr : null;
+}
+
+function makeButton(parent: Pointer, id: number, label: string): wxButton
+{
+    return withString(label, (ptr) =>
+        createWxButton(parent, id, ptr, -1, -1, -1, -1, 0))!;
+}
+
+function makeCheck(parent: Pointer, id: number, label: string): wxCheckBox
+{
+    return withString(label, (ptr) =>
+        createWxCheckBox(parent, id, ptr, -1, -1, -1, -1, 0))!;
+}
+
+function makeRadio(parent: Pointer, label: string, style: number): Pointer
+{
+    return withString(label, (ptr) =>
+        createWxRadioButton(parent, ID_ANY, ptr, -1, -1, -1, -1, style))!.ptr;
+}
+
+function makeText(parent: Pointer, value: string, style: bigint = 0n): wxTextCtrl
+{
+    return withString(value, (ptr) =>
+        createWxTextCtrl(parent, ID_ANY, ptr, -1, -1, -1, -1, style))!;
+}
+
+function makeListBox(parent: Pointer, id: number, items: string[]): Pointer
+{
+    const built = charPtrArray(items);
+    const box = createWxListBox(
+        parent, id, -1, -1, -1, -1, items.length, built.ptr, 0);
+    void built.keep;
+    return box ? box.ptr : null;
+}
+
+function makeRadioBox(
+    parent: Pointer, caption: string, items: string[],
+    dimension: number, style: number): wxRadioBox
+{
+    const built = charPtrArray(items);
+    const box = withString(caption, (text) =>
+        createWxRadioBox(
+            parent, ID_ANY, text, -1, -1, -1, -1,
+            items.length, built.ptr, dimension, style));
+    void built.keep;
+    return box!;
+}
+
+function makeChoice(parent: Pointer, id: number, items: string[]): Pointer
+{
+    const built = charPtrArray(items);
+    const box = createWxChoice(
+        parent, id, -1, -1, -1, -1, items.length, built.ptr, 0);
+    void built.keep;
+    return box ? box.ptr : null;
+}
+
+function staticBoxSizer(
+    parent: Pointer, label: string, orient: number,
+): { sizer: Pointer; box: Pointer }
+{
+    const box = withString(label, (text) =>
+        createWxStaticBox(parent, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (!box) return { sizer: null, box: null };
+    const sizer = createWxStaticBoxSizer(box.ptr, orient);
+    return { sizer: sizer ? sizer.ptr : null, box: box.ptr };
+}
+
+function valueOf(control: wxTextCtrl): string
+{
+    return takeText(control.GetValue());
+}
+
+function sizeW(size: wxSize | null): number
+{
+    return size ? size.GetWidth() : -1;
+}
+
+function sizeH(size: wxSize | null): number
+{
+    return size ? size.GetHeight() : -1;
+}
+
+//-----------------------------------------------------------------------------
+// StdButtonSizerDialog
+//-----------------------------------------------------------------------------
+
+interface StdButtonState
+{
+    dialog: wxDialog;
+    chkAffirmative: wxCheckBox;
+    chkDismiss: wxCheckBox;
+    radioOk: Pointer;
+    radioYes: Pointer;
+    radioCancel: Pointer;
+    radioClose: Pointer;
+    chkApply: wxCheckBox;
+    chkNo: wxCheckBox;
+    chkHelp: wxCheckBox;
+    chkNoDefault: wxCheckBox;
+    buttonsSizer: Pointer;
+}
+
+let stdButtonState: StdButtonState | null = null;
+
+function enableDisableStdButtonControls(state: StdButtonState): void
+{
+    const affirmative = state.chkAffirmative.GetValue();
+    const dismiss = state.chkDismiss.GetValue();
+
+    for (const ptr of [state.radioOk, state.radioYes])
+    {
+        const radio = wrapWxRadioButton(ptr);
+        if (affirmative) radio.Enable(true); else radio.Disable();
+    }
+    for (const ptr of [state.radioCancel, state.radioClose])
+    {
+        const radio = wrapWxRadioButton(ptr);
+        if (dismiss) radio.Enable(true); else radio.Disable();
+    }
+}
+
+function stdButtonOnEvent(_tag: number, _eventPtr: Pointer): void
+{
+    const state = stdButtonState;
+    if (!state) return;
+
+    const top = state.dialog.GetSizer();
+    if (!top) return;
+
+    if (state.buttonsSizer)
+    {
+        wrapWxSizer(state.buttonsSizer).DeleteWindows();
+        top.RemoveSizer(state.buttonsSizer);
+    }
+
+    enableDisableStdButtonControls(state);
+
+    let flags = 0;
+    if (state.chkAffirmative.GetValue())
+    {
+        if (wrapWxRadioButton(state.radioOk).GetValue()) flags |= OK;
+        else if (wrapWxRadioButton(state.radioYes).GetValue()) flags |= YES;
+    }
+    if (state.chkDismiss.GetValue())
+    {
+        if (wrapWxRadioButton(state.radioCancel).GetValue()) flags |= CANCEL;
+        else if (wrapWxRadioButton(state.radioClose).GetValue()) flags |= CLOSE;
+    }
+    if (state.chkApply.GetValue()) flags |= APPLY;
+    if (state.chkNo.GetValue()) flags |= NO;
+    if (state.chkHelp.GetValue()) flags |= HELP;
+    if (state.chkNoDefault.GetValue()) flags |= NO_DEFAULT;
+
+    const buttons = state.dialog.CreateStdDialogButtonSizer(BigInt(flags));
+    if (buttons)
+    {
+        state.buttonsSizer = buttons.ptr;
+        addChild(top, buttons.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+    }
+
+    state.dialog.Layout();
+    top.SetSizeHints(state.dialog.ptr);
+}
+
+export function showStdButtonSizerDialog(parent: Pointer): void
+{
+    const dialog = withString("StdButtonSizer dialog", (text) =>
+        createWxDialog(
+            parent, ID_ANY, text, -1, -1, -1, -1,
+            DEFAULT_DIALOG_STYLE | RESIZE_BORDER));
+    if (!dialog) return;
+
+    const sizerTop = createWxBoxSizer(VERTICAL)!;
+    const sizer = createWxBoxSizer(HORIZONTAL)!;
+    const sizerInside1 = createWxBoxSizer(VERTICAL)!;
+
+    const chkAffirmative = makeCheck(dialog.ptr, ID_ANY, "Enable Affirmative Button");
+
+    const sizer1 = staticBoxSizer(dialog.ptr, "Affirmative Button", VERTICAL);
+    const radioOk = makeRadio(sizer1.box, "Ok", RB_GROUP);
+    const radioYes = makeRadio(sizer1.box, "Yes", 0);
+
+    const sizerInside2 = createWxBoxSizer(VERTICAL)!;
+    const chkDismiss = makeCheck(dialog.ptr, ID_ANY, "Enable Dismiss Button");
+    const sizer2 = staticBoxSizer(dialog.ptr, "Dismiss Button", VERTICAL);
+    const radioCancel = makeRadio(sizer2.box, "Cancel", RB_GROUP);
+    const radioClose = makeRadio(sizer2.box, "Close", 0);
+
+    const sizer3 = createWxBoxSizer(HORIZONTAL)!;
+    const chkNo = makeCheck(dialog.ptr, ID_ANY, "No");
+    const chkHelp = makeCheck(dialog.ptr, ID_ANY, "Help");
+    const chkApply = makeCheck(dialog.ptr, ID_ANY, "Apply");
+    const chkNoDefault = makeCheck(dialog.ptr, ID_ANY, "No Default");
+
+    const inner1 = wrapWxSizer(sizer1.sizer);
+    addWin(inner1, radioOk, 0, (f) => { f.Border(ALL); });
+    addWin(inner1, radioYes, 0, (f) => { f.Border(ALL); });
+
+    addChild(sizer, sizerInside1.ptr);
+    addWin(sizerInside1, chkAffirmative.ptr, 0, (f) => { f.Border(ALL); });
+    addChild(sizerInside1, sizer1.sizer, 0, (f) => { f.Border(ALL); });
+    const best1 = wrapWxWindow(sizer1.box).GetBestSize();
+    sizerInside1.SetItemMinSizeSizer(sizer1.sizer, sizeW(best1), sizeH(best1));
+
+    const inner2 = wrapWxSizer(sizer2.sizer);
+    addWin(inner2, radioCancel, 0, (f) => { f.Border(ALL); });
+    addWin(inner2, radioClose, 0, (f) => { f.Border(ALL); });
+
+    addChild(sizer, sizerInside2.ptr);
+    addWin(sizerInside2, chkDismiss.ptr, 0, (f) => { f.Border(ALL); });
+    addChild(sizerInside2, sizer2.sizer, 0, (f) => { f.Border(ALL); });
+    const best2 = wrapWxWindow(sizer2.box).GetBestSize();
+    sizerInside2.SetItemMinSizeSizer(sizer2.sizer, sizeW(best2), sizeH(best2));
+
+    addChild(sizerTop, sizer.ptr, 0, (f) => { f.Border(ALL); });
+
+    addWin(sizer3, chkNo.ptr, 0, (f) => { f.Border(ALL); });
+    addWin(sizer3, chkHelp.ptr, 0, (f) => { f.Border(ALL); });
+    addWin(sizer3, chkApply.ptr, 0, (f) => { f.Border(ALL); });
+    addChild(sizerTop, sizer3.ptr, 0, (f) => { f.Border(ALL); });
+
+    addWin(sizerTop, chkNoDefault.ptr, 0, (f) => { f.DoubleHorzBorder(); });
+
+    const state: StdButtonState = {
+        dialog,
+        chkAffirmative,
+        chkDismiss,
+        radioOk,
+        radioYes,
+        radioCancel,
+        radioClose,
+        chkApply,
+        chkNo,
+        chkHelp,
+        chkNoDefault,
+        buttonsSizer: null,
+    };
+    stdButtonState = state;
+
+    enableDisableStdButtonControls(state);
+    dialog.SetSizerAndFit(sizerTop.ptr, true);
+
+    // The C++ constructor ends with OnEvent(wxCommandEvent()).
+    stdButtonOnEvent(0, null as unknown as Pointer);
+
+    const router = routerFor("stdButton", stdButtonOnEvent);
+    router.connect(dialog.ptr, ID_ANY, ID_ANY, EVT_CHECKBOX);
+    router.connect(dialog.ptr, ID_ANY, ID_ANY, EVT_RADIOBUTTON);
+
+    dialog.ShowModal();
+    stdButtonState = null;
+    dialog.Destroy();
+}
+
+//-----------------------------------------------------------------------------
+// TestDefaultActionDialog
+//-----------------------------------------------------------------------------
+
+interface DefaultActionState
+{
+    catchDClick: boolean;
+    dialog: wxDialog;
+}
+
+let defaultActionState: DefaultActionState | null = null;
+
+export function showTestDefaultActionDialog(parent: Pointer): void
+{
+    const dialog = withString("Test default action", (text) =>
+        createWxDialog(parent, -1, text, -1, -1, -1, -1, DEFAULT_DIALOG_STYLE))!;
+
+    const state: DefaultActionState = { catchDClick: false, dialog };
+    defaultActionState = state;
+
+    const mainSizer = createWxBoxSizer(VERTICAL)!;
+    const grid = createWxFlexGridSizer(0, 2, DEFAULT_BORDER, DEFAULT_BORDER)!;
+
+    addWin(grid, makeListBox(dialog.ptr, ID_LISTBOX,
+        ["String 1", "String 2", "String 3", "String 4"]));
+
+    addWin(grid, makeCheck(dialog.ptr, ID_CATCH_LISTBOX_DCLICK,
+        "Catch DoubleClick from wxListBox").ptr, 0, (f) => { f.CenterVertical(); });
+
+    addWin(grid, makeText(dialog.ptr, "Enter here closes the dialog").ptr, 0,
+        (f) => { f.Expand(); f.CenterVertical(); });
+
+    addWin(grid, staticText(dialog.ptr, "wxTextCtrl without wxTE_PROCESS_ENTER"), 0,
+        (f) => { f.CenterVertical(); });
+
+    const textHandlingEnter = makeText(
+        dialog.ptr, "Enter here is handled by the application",
+        BigInt(TE_PROCESS_ENTER));
+    textHandlingEnter.SetMinSize(50 * dialog.GetCharWidth(), -1);
+    addWin(grid, textHandlingEnter.ptr, 0, (f) => { f.CenterVertical(); });
+
+    addWin(grid, staticText(dialog.ptr, "wxTextCtrl with wxTE_PROCESS_ENTER"), 0,
+        (f) => { f.CenterVertical(); });
+
+    addWin(grid, makeText(dialog.ptr,
+        "Enter here adds another line,\nwhile Ctrl-Enter closes the dialog",
+        BigInt(TE_MULTILINE)).ptr, 0, (f) => { f.Expand(); });
+
+    addWin(grid, staticText(dialog.ptr, "wxTextCtrl without wxTE_PROCESS_ENTER"), 0,
+        (f) => { f.CenterVertical(); });
+
+    addWin(grid, makeCheck(dialog.ptr, ID_DISABLE_OK, "Disable \"OK\"").ptr, 0,
+        (f) => { f.CenterVertical(); });
+
+    addWin(grid, makeCheck(dialog.ptr, ID_DISABLE_CANCEL, "Disable \"Cancel\"").ptr, 0,
+        (f) => { f.CenterVertical(); });
+
+    addChild(mainSizer, grid.ptr, 0, (f) => { f.DoubleBorder(ALL); });
+
+    const buttonSizer = dialog.CreateSeparatedButtonSizer(BigInt(OK | CANCEL));
+    if (buttonSizer)
+    {
+        addChild(mainSizer, buttonSizer.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+    }
+
+    dialog.SetSizerAndFit(mainSizer.ptr, true);
+
+    const router = routerFor("defaultAction", (tag, eventPtr) =>
+    {
+        const current = defaultActionState;
+        if (!current) return;
+        const event = new wxCommandEvent(eventPtr);
+
+        if (tag === 1)
+        {
+            if (event.GetId() === ID_CATCH_LISTBOX_DCLICK)
+            {
+                current.catchDClick = !current.catchDClick;
+            }
+            else if (event.GetId() === ID_DISABLE_OK)
+            {
+                const ok = findChildById(current.dialog.ptr, ID_OK);
+                if (ok) wrapWxWindow(ok).Enable(!event.IsChecked());
+            }
+            else if (event.GetId() === ID_DISABLE_CANCEL)
+            {
+                const cancel = findChildById(current.dialog.ptr, ID_CANCEL);
+                if (cancel) wrapWxWindow(cancel).Enable(!event.IsChecked());
+            }
+        }
+        else if (tag === 2)
+        {
+            // EVT_LISTBOX_DCLICK: event.Skip(!m_catchListBoxDClick)
+            event.Skip(!current.catchDClick);
+        }
+        else if (tag === 3)
+        {
+            const text = takeText(event.GetString());
+            if (text === "")
+            {
+                event.Skip(true);
+                return;
+            }
+            withString(`Text "${text}" entered.`, (msg) => { LogMessage(msg); });
+        }
+        else if (tag === 4)
+        {
+            // Per-control lambda: log and deliberately do not Skip, so the
+            // dialog does not close.
+            withString("Enter pressed", (msg) => { LogMessage(msg); });
+        }
+    });
+
+    router.connect(dialog.ptr, ID_ANY, ID_ANY, EVT_CHECKBOX, 1);
+    router.connect(dialog.ptr, ID_LISTBOX, ID_LISTBOX, EVT_LISTBOX_DCLICK, 2);
+    router.connect(dialog.ptr, ID_ANY, ID_ANY, EVT_TEXT_ENTER, 3);
+    router.connect(textHandlingEnter.ptr, ID_ANY, ID_ANY, EVT_TEXT_ENTER, 4);
+
+    dialog.ShowModal();
+    defaultActionState = null;
+    dialog.Destroy();
+}
+
+//-----------------------------------------------------------------------------
+// TestMessageBoxDialog / TestRichMessageDialog
+//-----------------------------------------------------------------------------
+
+const BTN_YES = 0;
+const BTN_NO = 1;
+const BTN_OK = 2;
+const BTN_CANCEL = 3;
+const BTN_HELP = 4;
+const BTN_MAX = 5;
+
+const BTN_FLAGS = [YES, NO, OK, CANCEL, HELP];
+const BTN_LABELS = ["&Yes", "&No", "&Ok", "&Cancel", "&Help"];
+
+const MSGDLG_ICON_NO = 0;
+const MSGDLG_ICON_NONE = 1;
+const MSGDLG_ICON_INFO = 2;
+const MSGDLG_ICON_QUESTION = 3;
+const MSGDLG_ICON_WARNING = 4;
+const MSGDLG_ICON_ERROR = 5;
+const MSGDLG_ICON_AUTH = 6;
+
+interface MessageBoxState
+{
+    dialog: wxDialog;
+    textTitle: wxTextCtrl;
+    textMsg: wxTextCtrl;
+    textExtMsg: wxTextCtrl;
+    buttons: wxCheckBox[];
+    labels: wxTextCtrl[];
+    icons: wxRadioBox;
+    chkNoDefault: wxCheckBox;
+    chkCentre: wxCheckBox;
+    labelResult: wxStaticText;
+    rich: boolean;
+    textCheckBox: wxTextCtrl | null;
+    initialValueCheckBox: wxCheckBox | null;
+    textDetailed: wxTextCtrl | null;
+    textFooter: wxTextCtrl | null;
+    iconsFooter: Pointer | null;
+}
+
+let messageBoxState: MessageBoxState | null = null;
+
+function messageBoxStyle(state: MessageBoxState): number
+{
+    let style = 0;
+    for (let n = 0; n < BTN_MAX; n++)
+    {
+        if (state.buttons[n].GetValue()) style |= BTN_FLAGS[n];
+    }
+
+    switch (state.icons.GetSelection())
+    {
+        case MSGDLG_ICON_NONE: style |= ICON_NONE; break;
+        case MSGDLG_ICON_INFO: style |= ICON_INFORMATION; break;
+        case MSGDLG_ICON_QUESTION: style |= ICON_QUESTION; break;
+        case MSGDLG_ICON_WARNING: style |= ICON_WARNING; break;
+        case MSGDLG_ICON_ERROR: style |= ICON_ERROR; break;
+        case MSGDLG_ICON_AUTH: style |= ICON_AUTH_NEEDED; break;
+        default: break;
+    }
+
+    if (state.chkCentre.GetValue()) style |= CENTRE;
+    if (state.chkNoDefault.IsEnabled() && state.chkNoDefault.GetValue())
+    {
+        style |= NO_DEFAULT;
+    }
+    return style;
+}
+
+function prepareMessageDialog(
+    dialog: wxMessageDialog, style: number, state: MessageBoxState): void
+{
+    const extMsg = valueOf(state.textExtMsg);
+    if (extMsg !== "")
+    {
+        withString(extMsg, (ptr) => { dialog.SetExtendedMessage(ptr); });
+    }
+
+    const yes = valueOf(state.labels[BTN_YES]);
+    const no = valueOf(state.labels[BTN_NO]);
+    const ok = valueOf(state.labels[BTN_OK]);
+    const cancel = valueOf(state.labels[BTN_CANCEL]);
+
+    if (style & YES_NO)
+    {
+        if (style & CANCEL)
+        {
+            withStrings([yes, no, cancel],
+                (ptrs) => { dialog.SetYesNoCancelLabels(ptrs[0], ptrs[1], ptrs[2]); });
+        }
+        else
+        {
+            withStrings([yes, no],
+                (ptrs) => { dialog.SetYesNoLabels(ptrs[0], ptrs[1]); });
+        }
+    }
+    else
+    {
+        if (style & CANCEL)
+        {
+            withStrings([ok, cancel],
+                (ptrs) => { dialog.SetOKCancelLabels(ptrs[0], ptrs[1]); });
+        }
+        else
+        {
+            withStrings([ok], (ptrs) => { dialog.SetOKLabel(ptrs[0]); });
+        }
+    }
+
+    if (style & HELP)
+    {
+        withStrings([valueOf(state.labels[BTN_HELP])],
+            (ptrs) => { dialog.SetHelpLabel(ptrs[0]); });
+    }
+}
+
+function showMessageBoxResult(state: MessageBoxState, res: number): void
+{
+    let name: string;
+    switch (res)
+    {
+        case ID_OK: name = "OK"; break;
+        case ID_CANCEL: name = "Cancel"; break;
+        case ID_YES: name = "Yes"; break;
+        case ID_NO: name = "No"; break;
+        case ID_HELP: name = "Help"; break;
+        default: name = "Unknown"; break;
+    }
+    setLabelText(state.labelResult, `Dialog was closed with the "${name}" button.`);
+}
+
+function messageBoxApply(): void
+{
+    const state = messageBoxState;
+    if (!state) return;
+
+    const style = messageBoxStyle(state);
+    const title = valueOf(state.textTitle);
+    const message = valueOf(state.textMsg);
+
+    if (state.rich)
+    {
+        const dialog = withStrings([message, title], (ptrs) =>
+            createWxRichMessageDialog(state.dialog.ptr, ptrs[0], ptrs[1], style));
+        if (!dialog) return;
+        prepareMessageDialog(dialog, style, state);
+
+        withString(valueOf(state.textCheckBox!),
+            (ptr) => dialog.ShowCheckBox(ptr, state.initialValueCheckBox!.GetValue()));
+        withString(valueOf(state.textDetailed!),
+            (ptr) => dialog.ShowDetailedText(ptr));
+        withString(valueOf(state.textFooter!),
+            (ptr) => dialog.SetFooterText(ptr));
+
+        const footer = wrapWxChoice(state.iconsFooter!).GetSelection();
+        switch (footer)
+        {
+            case 1: dialog.SetFooterIcon(ICON_INFORMATION); break;
+            case 2: dialog.SetFooterIcon(ICON_WARNING); break;
+            case 3: dialog.SetFooterIcon(ICON_ERROR); break;
+            case 4: dialog.SetFooterIcon(ICON_AUTH_NEEDED); break;
+            default: break;
+        }
+
+        showMessageBoxResult(state, dialog.ShowModal());
+        dialog.Destroy();
+    }
+    else
+    {
+        const dialog = withStrings([message, title], (ptrs) =>
+            createWxMessageDialog(state.dialog.ptr, ptrs[0], ptrs[1], style));
+        if (!dialog) return;
+        prepareMessageDialog(dialog, style, state);
+        showMessageBoxResult(state, dialog.ShowModal());
+        dialog.Destroy();
+    }
+}
+
+export function showTestMessageBoxDialog(
+    parent: Pointer, rich: boolean, windowModal = false): void
+{
+    const dialog = withString(
+        rich ? "Rich Message Dialog Test Dialog" : "Message Box Test Dialog",
+        (text) => createWxDialog(
+            parent, ID_ANY, text, -1, -1, -1, -1,
+            DEFAULT_DIALOG_STYLE | RESIZE_BORDER));
+    if (!dialog) return;
+
+    const sizerTop = createWxBoxSizer(VERTICAL)!;
+
+    // --- messages
+    const sizerMsgs = staticBoxSizer(dialog.ptr, "&Messages", VERTICAL);
+    const msgs = wrapWxSizer(sizerMsgs.sizer);
+
+    addWin(msgs, staticText(sizerMsgs.box, "&Title:"));
+
+    const textTitle = makeText(sizerMsgs.box, "Test Message Box");
+    addWin(msgs, textTitle.ptr, 0, (f) => { f.Expand(); f.Border(BOTTOM); });
+
+    addWin(msgs, staticText(sizerMsgs.box, "&Main message:"));
+
+    const textMsg = makeText(sizerMsgs.box, "Hello from a box!", BigInt(TE_MULTILINE));
+    addWin(msgs, textMsg.ptr, 1, (f) => { f.Expand(); f.Border(BOTTOM); });
+
+    addWin(msgs, staticText(sizerMsgs.box, "&Extended message:"));
+
+    const textExtMsg = makeText(sizerMsgs.box, "", BigInt(TE_MULTILINE));
+    addWin(msgs, textExtMsg.ptr, 0, (f) => { f.Expand(); });
+
+    addChild(sizerTop, sizerMsgs.sizer, 1, (f) => { f.Expand(); f.Border(ALL); });
+
+    // --- rich dialog extra elements (AddAdditionalTextOptions)
+    let textCheckBox: wxTextCtrl | null = null;
+    let textDetailed: wxTextCtrl | null = null;
+    let textFooter: wxTextCtrl | null = null;
+    let iconsFooter: Pointer | null = null;
+
+    if (rich)
+    {
+        const sizerExtras = staticBoxSizer(dialog.ptr, "&Additional Elements", VERTICAL);
+        const extras = wrapWxSizer(sizerExtras.sizer);
+
+        const sizerCheckBox = createWxBoxSizer(HORIZONTAL)!;
+        addWin(sizerCheckBox, staticText(sizerExtras.box, "&Check box:"), 0,
+            (f) => { f.Center(); f.Border(RIGHT); });
+        textCheckBox = makeText(sizerExtras.box, "");
+        addWin(sizerCheckBox, textCheckBox.ptr, 1, (f) => { f.Center(); });
+        addChild(extras, sizerCheckBox.ptr, 0,
+            (f) => { f.Expand(); f.Border(BOTTOM); });
+
+        addWin(extras, staticText(sizerExtras.box, "&Detailed message:"));
+        textDetailed = makeText(sizerExtras.box, "", BigInt(TE_MULTILINE));
+        addWin(extras, textDetailed.ptr, 0, (f) => { f.Expand(); });
+
+        const sizerFooter = createWxBoxSizer(HORIZONTAL)!;
+        addWin(sizerFooter, staticText(sizerExtras.box, "&Footer Text:"), 0,
+            (f) => { f.Center(); f.Border(RIGHT); });
+        textFooter = makeText(sizerExtras.box, "");
+        addWin(sizerFooter, textFooter.ptr, 1, (f) => { f.Center(); });
+
+        addWin(sizerFooter, staticText(sizerExtras.box, "Icon:"), 0,
+            (f) => { f.Center(); f.Border(LEFT); });
+
+        iconsFooter = makeChoice(sizerExtras.box, ID_ANY,
+            ["None", "Info", "Warning", "Error", "Auth needed"]);
+        wrapWxChoice(iconsFooter).SetSelection(0);
+        addWin(sizerFooter, iconsFooter, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+        addChild(extras, sizerFooter.ptr, 0, (f) => { f.Expand(); f.Border(TOP); });
+
+        addChild(sizerTop, sizerExtras.sizer, 0, (f) => { f.Expand(); f.Border(ALL); });
+    }
+
+    // --- buttons
+    const sizerBtns = staticBoxSizer(dialog.ptr, "&Buttons", VERTICAL);
+    const btns = wrapWxSizer(sizerBtns.sizer);
+    const sizerBtnDetails = createWxFlexGridSizer(0, 2, 5, 5)!;
+    sizerBtnDetails.AddGrowableCol(BigInt(1), 0);
+
+    addWin(sizerBtnDetails, staticText(sizerBtns.box, "Button(s)"));
+    addWin(sizerBtnDetails, staticText(sizerBtns.box, "Custom label"));
+
+    const buttons: wxCheckBox[] = [];
+    const labels: wxTextCtrl[] = [];
+    for (let n = 0; n < BTN_MAX; n++)
+    {
+        buttons.push(makeCheck(sizerBtns.box, ID_ANY, BTN_LABELS[n]));
+        addWin(sizerBtnDetails, buttons[n].ptr, 0, (f) => { f.Center(); f.Left(); });
+
+        labels.push(makeText(sizerBtns.box, ""));
+        addWin(sizerBtnDetails, labels[n].ptr, 0, (f) => { f.Expand(); });
+    }
+
+    addChild(btns, sizerBtnDetails.ptr, 0, (f) => { f.Expand(); });
+    addChild(sizerTop, sizerBtns.sizer, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    // --- icon choice
+    const icons = makeRadioBox(dialog.ptr, "&Icon style",
+        ["&Not specified", "E&xplicitly none", "&Information icon",
+            "&Question icon", "&Warning icon", "&Error icon", "A&uth needed icon"],
+        2, RA_SPECIFY_ROWS);
+    icons.SetSelection(MSGDLG_ICON_INFO);
+    addWin(sizerTop, icons.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    // --- other flags
+    const sizerFlags = staticBoxSizer(dialog.ptr, "&Other flags", HORIZONTAL);
+    const flagsBox = wrapWxSizer(sizerFlags.sizer);
+
+    const chkNoDefault = makeCheck(sizerFlags.box, ID_ANY, "Make \"No\" &default");
+    addWin(flagsBox, chkNoDefault.ptr, 0, (f) => { f.Border(ALL); });
+
+    const chkCentre = makeCheck(sizerFlags.box, ID_ANY, "Centre on &parent");
+    addWin(flagsBox, chkCentre.ptr, 0, (f) => { f.Border(ALL); });
+
+    let initialValueCheckBox: wxCheckBox | null = null;
+    if (rich)
+    {
+        initialValueCheckBox = makeCheck(
+            sizerFlags.box, ID_ANY, "Checkbox initially checked");
+        addWin(flagsBox, initialValueCheckBox.ptr, 0, (f) => { f.Border(ALL); });
+    }
+
+    addChild(sizerTop, sizerFlags.sizer, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    // --- result label
+    const labelResult = withString("", (text) => createWxStaticText(
+        dialog.ptr, ID_ANY, text, -1, -1, -1, -1,
+        ST_NO_AUTORESIZE | ALIGN_CENTRE))!;
+    addWin(sizerTop, labelResult.ptr, 0, (f) => { f.Expand(); f.DoubleBorder(ALL); });
+
+    // --- dialog buttons
+    const chip = dialog.CreateStdDialogButtonSizer(BigInt(APPLY | CLOSE));
+    if (chip)
+    {
+        addChild(sizerTop, chip.ptr, 0, (f) => { f.Right(); f.Border(ALL); });
+    }
+
+    dialog.SetSizerAndFit(sizerTop.ptr, true);
+
+    buttons[BTN_OK].SetValue(true);
+    dialog.CentreOnScreen(BOTH);
+
+    const state: MessageBoxState = {
+        dialog,
+        textTitle,
+        textMsg,
+        textExtMsg,
+        buttons,
+        labels,
+        icons,
+        chkNoDefault,
+        chkCentre,
+        labelResult,
+        rich,
+        textCheckBox,
+        initialValueCheckBox,
+        textDetailed,
+        textFooter,
+        iconsFooter,
+    };
+    messageBoxState = state;
+
+    const router = routerFor("messageBox", (tag, eventPtr) =>
+    {
+        const current = messageBoxState;
+        if (!current) return;
+
+        if (tag === 1)
+        {
+            // EVT_BUTTON(wxID_APPLY)
+            messageBoxApply();
+            return;
+        }
+        if (tag === 2)
+        {
+            // EVT_BUTTON(wxID_CLOSE)
+            current.dialog.EndModal(ID_CANCEL);
+            return;
+        }
+        if (tag === 3)
+        {
+            // EVT_UPDATE_UI for a label: enable it when its button is checked.
+            const event = new wxUpdateUIEvent(eventPtr);
+            const object = event.GetEventObject();
+            const objectPtr = object ? object.ptr : null;
+            for (let n = 0; n < BTN_MAX; n++)
+            {
+                if (objectPtr === current.labels[n].ptr)
+                {
+                    event.Enable(current.buttons[n].GetValue());
+                    return;
+                }
+            }
+            return;
+        }
+        if (tag === 4)
+        {
+            // EVT_UPDATE_UI for the "No default" checkbox.
+            const event = new wxUpdateUIEvent(eventPtr);
+            event.Enable(current.buttons[BTN_NO].GetValue());
+        }
+    });
+
+    router.connect(dialog.ptr, ID_APPLY, ID_APPLY, EVT_BUTTON, 1);
+    router.connect(dialog.ptr, ID_CLOSE, ID_CLOSE, EVT_BUTTON, 2);
+    for (let n = 0; n < BTN_MAX; n++)
+    {
+        router.connect(labels[n].ptr, ID_ANY, ID_ANY, EVT_UPDATE_UI, 3);
+    }
+    router.connect(chkNoDefault.ptr, ID_ANY, ID_ANY, EVT_UPDATE_UI, 4);
+
+    if (windowModal)
+    {
+        const modalRouter = routerFor("messageBoxModal", (_tag, eventPtr) =>
+        {
+            const event = new wxWindowModalDialogEvent(eventPtr);
+            const closed = event.GetDialog();
+            messageBoxState = null;
+            if (closed) closed.Destroy();
+        });
+        modalRouter.connect(dialog.ptr, ID_ANY, ID_ANY, EVT_WINDOW_MODAL_DIALOG_CLOSED);
+        dialog.ShowWindowModal();
+    }
+    else
+    {
+        dialog.ShowModal();
+        messageBoxState = null;
+        dialog.Destroy();
+    }
+}
+
+//-----------------------------------------------------------------------------
+// SettingsDialog (wxPropertySheetDialog)
+//-----------------------------------------------------------------------------
+
+export interface SettingsData
+{
+    loadLastOnStartup: boolean;
+    autoSaveInterval: number;
+    showToolTips: boolean;
+    applyTo: number;
+    bgStyle: number;
+    titleFontSize: number;
+}
+
+export function createSettingsData(): SettingsData
+{
+    return {
+        loadLastOnStartup: false,
+        autoSaveInterval: 1,
+        showToolTips: false,
+        applyTo: 0,
+        bgStyle: 0,
+        titleFontSize: 10,
+    };
+}
+
+interface SettingsControls
+{
+    loadLast: wxCheckBox;
+    autoSave: wxCheckBox;
+    autoSaveMins: Pointer;
+    showToolTips: wxCheckBox;
+    applyTo: Pointer;
+    bgStyle: Pointer;
+    titleFontSize: Pointer;
+}
+
+function setBoolValidator(control: wxWindow, store: Int32Array): void
+{
+    const validator = createWxGenericValidatorBool(pointerOf(store));
+    if (!validator) return;
+    control.SetValidator(validator.ptr);
+    validator.Delete();
+}
+
+function setIntValidator(control: wxWindow, store: Int32Array): void
+{
+    const validator = createWxGenericValidatorInt(pointerOf(store));
+    if (!validator) return;
+    control.SetValidator(validator.ptr);
+    validator.Delete();
+}
+
+export function showSettingsDialog(
+    parent: Pointer, settings: SettingsData, dialogType: number): void
+{
+    const useToolBook = dialogType === DIALOGS_PROPERTY_SHEET_TOOLBOOK
+        || dialogType === DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK;
+    const resizeBorder = useToolBook ? 0 : RESIZE_BORDER;
+
+    const dialog = createWxPropertySheetDialogDefault();
+    if (!dialog) return;
+
+    dialog.SetExtraStyle(BigInt(DIALOG_EX_CONTEXTHELP));
+
+    let imageList: wxImageList | null = null;
+    let tabImage1 = -1;
+    let tabImage2 = -1;
+
+    if (useToolBook)
+    {
+        tabImage1 = 0;
+        tabImage2 = 1;
+
+        let sheetStyle = PROPSHEET_SHRINKTOFIT;
+        if (dialogType === DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK)
+        {
+            sheetStyle |= PROPSHEET_BUTTONTOOLBOOK;
+        }
+        else
+        {
+            sheetStyle |= PROPSHEET_TOOLBOOK;
+        }
+
+        dialog.SetSheetStyle(sheetStyle);
+        dialog.SetSheetInnerBorder(0);
+        dialog.SetSheetOuterBorder(0);
+
+        imageList = createWxImageList(32, 32, true, 1);
+        if (imageList)
+        {
+            for (const art of [ART_INFORMATION, ART_QUESTION, ART_WARNING, ART_ERROR])
+            {
+                const icon = wxArtProvider_GetIcon(art, ART_OTHER, 32, 32);
+                if (icon)
+                {
+                    imageList.AddIcon(icon.ptr);
+                    icon.Delete();
+                }
+            }
+        }
+    }
+
+    const created = withString("Preferences", (title) =>
+        dialog.CreateEx(
+            parent, ID_ANY, title, -1, -1, -1, -1,
+            DEFAULT_DIALOG_STYLE | resizeBorder));
+    if (!created)
+    {
+        if (imageList) imageList.Delete();
+        dialog.Destroy();
+        return;
+    }
+
+    if (!useToolBook) dialog.CreateButtons(OK | CANCEL | HELP);
+
+    const book = dialog.GetBookCtrl();
+    if (!book)
+    {
+        if (imageList) imageList.Delete();
+        dialog.Destroy();
+        return;
+    }
+    book.SetImageList(imageList ? imageList.ptr : null);
+
+    const controls: SettingsControls = {
+        loadLast: null as unknown as wxCheckBox,
+        autoSave: null as unknown as wxCheckBox,
+        autoSaveMins: null,
+        showToolTips: null as unknown as wxCheckBox,
+        applyTo: null,
+        bgStyle: null,
+        titleFontSize: null,
+    };
+
+    const general = createGeneralSettingsPage(book.ptr, settings, controls);
+    const aesthetic = createAestheticSettingsPage(book.ptr, settings, controls);
+
+    // The C++ dialog binds wxGenericValidator(&m_settingsData.field) to each
+    // control.  wxGenericValidator transfers TBool as an int, so the bool
+    // fields use the int-backed bool adapter (kwxFFI wx_validator.cpp) and all
+    // stores are 4-byte ints.
+    const loadLastValue = new Int32Array(1);
+    const autoSaveValue = new Int32Array(1);
+    const showToolTipsValue = new Int32Array(1);
+    const applyToValue = new Int32Array(1);
+    const bgStyleValue = new Int32Array(1);
+    const fontSizeValue = new Int32Array(1);
+
+    loadLastValue[0] = settings.loadLastOnStartup ? 1 : 0;
+    autoSaveValue[0] = settings.autoSaveInterval;
+    showToolTipsValue[0] = settings.showToolTips ? 1 : 0;
+    applyToValue[0] = settings.applyTo;
+    bgStyleValue[0] = settings.bgStyle;
+    fontSizeValue[0] = settings.titleFontSize;
+
+    setBoolValidator(controls.loadLast, loadLastValue);
+    setIntValidator(wrapWxSpinCtrl(controls.autoSaveMins), autoSaveValue);
+    setBoolValidator(controls.showToolTips, showToolTipsValue);
+    setIntValidator(wrapWxRadioBox(controls.applyTo), applyToValue);
+    setIntValidator(wrapWxChoice(controls.bgStyle), bgStyleValue);
+    setIntValidator(wrapWxSpinCtrl(controls.titleFontSize), fontSizeValue);
+
+    withString("General", (text) => { book.AddPage(general, text, true, tabImage1); });
+    withString("Aesthetics", (text) => { book.AddPage(aesthetic, text, false, tabImage2); });
+
+    dialog.LayoutDialog(0);
+
+    const result = dialog.ShowModal();
+
+    if (result === ID_OK)
+    {
+        dialog.TransferDataFromWindow();
+        settings.loadLastOnStartup = loadLastValue[0] !== 0;
+        settings.autoSaveInterval = autoSaveValue[0];
+        settings.showToolTips = showToolTipsValue[0] !== 0;
+        settings.applyTo = applyToValue[0];
+        settings.bgStyle = bgStyleValue[0];
+        settings.titleFontSize = fontSizeValue[0];
+    }
+
+    if (imageList) imageList.Delete();
+    dialog.Destroy();
+}
+
+function createGeneralSettingsPage(
+    parent: Pointer, settings: SettingsData, controls: SettingsControls): Pointer
+{
+    const panel = createWxPanel(parent, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL)!;
+    const topSizer = createWxBoxSizer(VERTICAL)!;
+    const item0 = createWxBoxSizer(VERTICAL)!;
+
+    // Load last project
+    const itemSizer3 = createWxBoxSizer(HORIZONTAL)!;
+    controls.loadLast = makeCheck(
+        panel.ptr, ID_LOAD_LAST_PROJECT, "&Load last project on startup");
+    controls.loadLast.SetValue(settings.loadLastOnStartup);
+    addWin(itemSizer3, controls.loadLast.ptr, 0, (f) => { f.CenterVertical(); f.Border(ALL); });
+    addChild(item0, itemSizer3.ptr, 0, (f) => { f.Expand(); });
+
+    // Auto-save
+    const itemSizer12 = createWxBoxSizer(HORIZONTAL)!;
+    controls.autoSave = makeCheck(panel.ptr, ID_AUTO_SAVE, "&Auto-save every");
+
+    const spin = withString("", (text) => createWxSpinCtrl(
+        panel.ptr, ID_AUTO_SAVE_MINS, text, -1, -1, -1, -1,
+        BigInt(SP_ARROW_KEYS), 1, 60, settings.autoSaveInterval))!;
+    controls.autoSaveMins = spin.ptr;
+
+    addWin(itemSizer12, controls.autoSave.ptr, 0, (f) => { f.CenterVertical(); f.Border(ALL); });
+    addWin(itemSizer12, spin.ptr, 0, (f) => { f.CenterVertical(); f.Border(ALL); });
+    addWin(itemSizer12, staticText(panel.ptr, "mins", 0), 0,
+        (f) => { f.CenterVertical(); f.Border(ALL); });
+    addChild(item0, itemSizer12.ptr, 0, (f) => { f.Expand(); });
+
+    // Tooltips
+    const itemSizer8 = createWxBoxSizer(HORIZONTAL)!;
+    controls.showToolTips = makeCheck(panel.ptr, ID_SHOW_TOOLTIPS, "Show &tooltips");
+    controls.showToolTips.SetValue(settings.showToolTips);
+    addWin(itemSizer8, controls.showToolTips.ptr, 0,
+        (f) => { f.CenterVertical(); f.Border(ALL); });
+    addChild(item0, itemSizer8.ptr, 0, (f) => { f.Expand(); });
+
+    addChild(topSizer, item0.ptr, 1, (f) => { f.Expand(); f.Border(ALL); });
+    panel.SetSizerAndFit(topSizer.ptr, true);
+    return panel.ptr;
+}
+
+function createAestheticSettingsPage(
+    parent: Pointer, settings: SettingsData, controls: SettingsControls): Pointer
+{
+    const panel = createWxPanel(parent, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL)!;
+    const topSizer = createWxBoxSizer(VERTICAL)!;
+    const item0 = createWxBoxSizer(VERTICAL)!;
+
+    controls.applyTo = makeRadioBox(panel.ptr, "&Apply settings to:",
+        ["&New projects", "&This project"], 0, RA_SPECIFY_ROWS).ptr;
+    wrapWxRadioBox(controls.applyTo).SetSelection(settings.applyTo);
+    addWin(item0, controls.applyTo, 0, (f) => { f.Expand(); f.Border(ALL); });
+    wrapWxRadioBox(controls.applyTo).SetSelection(0);
+
+    // Background style
+    const styleSizer = staticBoxSizer(panel.ptr, "Background style:", VERTICAL);
+    addChild(item0, styleSizer.sizer, 0, (f) => { f.Expand(); f.Border(ALL); });
+
+    const itemSizer2 = createWxBoxSizer(HORIZONTAL)!;
+    controls.bgStyle = makeChoice(styleSizer.box, ID_BACKGROUND_STYLE,
+        ["Colour", "Image"]);
+    wrapWxChoice(controls.bgStyle).SetSelection(settings.bgStyle);
+
+    addWin(itemSizer2, staticText(styleSizer.box, "&Window:"), 0,
+        (f) => { f.CenterVertical(); f.Border(ALL); });
+    itemSizer2.AddSpacer(5);
+    addWin(itemSizer2, controls.bgStyle, 0, (f) => { f.CenterVertical(); f.Border(ALL); });
+
+    addChild(wrapWxSizer(styleSizer.sizer), itemSizer2.ptr, 0,
+        (f) => { f.Expand(); f.Border(ALL); });
+
+    // Tile font size
+    const fontSizer = staticBoxSizer(panel.ptr, "Tile font size:", HORIZONTAL);
+    const fontSizeSpin = withString("", (text) => createWxSpinCtrl(
+        fontSizer.box, ID_FONT_SIZE, text, -1, -1, -1, -1, 0n, 0, 100,
+        settings.titleFontSize))!;
+    controls.titleFontSize = fontSizeSpin.ptr;
+    addWin(wrapWxSizer(fontSizer.sizer), fontSizeSpin.ptr, 0,
+        (f) => { f.Center(); f.Border(ALL); });
+    addChild(item0, fontSizer.sizer, 0, (f) => { f.Expand(); f.HorzBorder(); });
+
+    addChild(topSizer, item0.ptr, 1, (f) => { f.Expand(); f.Border(ALL); });
+    topSizer.AddSpacer(5);
+    panel.SetSizerAndFit(topSizer.ptr, true);
+    return panel.ptr;
+}

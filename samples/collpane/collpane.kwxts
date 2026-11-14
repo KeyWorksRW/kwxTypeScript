@@ -1,0 +1,717 @@
+// collpane.kwxts — kwxTypeScript port of wxSamples/src/collpane/collpane.cpp
+//
+// The wxCollapsiblePane sample: a frame with a collapsible pane holding a
+// couple of static texts, a text control, a button and a nested (empty)
+// collapsible pane, a wxCollapsibleHeaderCtrl below it that relabels itself
+// when clicked, plus a modal dialog that demonstrates the same control with a
+// "Change status" button and a pane-changed log message.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\collpane\collpane.kwxts
+//
+// Porting note (details in the report):
+//   * SetIcon(wxICON(sample)) uses the same sample.xpm artwork, loaded at run
+//     time because a kwxTypeScript program has no Win32 resources.
+
+declare const __dirname: string;
+
+import {
+    ALL,
+    ALIGN_RIGHT,
+    BITMAP_TYPE_XPM,
+    BORDER_NONE,
+    DEFAULT_DIALOG_STYLE,
+    DEFAULT_FRAME_STYLE,
+    EVT_BUTTON,
+    EVT_CLOSE_WINDOW,
+    EVT_COLLAPSIBLEHEADER_CHANGED,
+    EVT_COLLAPSIBLEPANE_CHANGED,
+    EVT_MENU,
+    EVT_UPDATE_UI,
+    EXPAND,
+    HORIZONTAL,
+    ID_ABOUT,
+    ID_ANY,
+    ID_EXIT,
+    ID_HIGHEST,
+    ID_OK,
+    LogMessage,
+    RESIZE_BORDER,
+    STB_DEFAULT_STYLE,
+    VERTICAL,
+    createWxAboutDialogInfo,
+    createWxBoxSizer,
+    createWxButton,
+    createWxClosure,
+    createWxCollapsibleHeaderCtrl,
+    createWxCollapsiblePane,
+    createWxDialog,
+    createWxFrame,
+    createWxGridSizer,
+    createWxIconLoad,
+    createWxMenu,
+    createWxMenuBar,
+    createWxSizerFlags,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    exitMainLoop,
+    expCP_DEFAULT_STYLE,
+    initialize,
+    readAndDeleteWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wxAboutBox,
+    wxAboutDialogInfo,
+    wxBoxSizer,
+    wxButton,
+    wxClosure,
+    wxCollapsibleHeaderCtrl,
+    wxCollapsiblePane,
+    wxFrame,
+    wxGetTextFromUser,
+    wxGridSizer,
+    wxMenu,
+    wxMenuBar,
+    wxSizer,
+    wxSizerFlags,
+    wxStaticText,
+    wxTextCtrl,
+    wxWindow_FindWindowById,
+    wrapWxCollapsiblePaneEvent,
+    wrapWxUpdateUIEvent,
+} from "kwx";
+import { Callback, exit, Pointer, pointerOf, readCString } from "kwx/platform";
+
+// ---------------------------------------------------------------------------
+// collpane.cpp: enum { PANE_COLLAPSE = 100, ... }
+//
+// The enum continues after PANE_QUIT = wxID_EXIT, so the two control ids are
+// one and two past the stock exit id.
+// ---------------------------------------------------------------------------
+const PANE_COLLAPSE = 100;
+const PANE_EXPAND = 101;
+const PANE_SETLABEL = 102;
+const PANE_SHOWDLG = 103;
+const PANE_ABOUT = ID_ABOUT;
+const PANE_QUIT = ID_EXIT;
+
+const PANE_BUTTON = PANE_QUIT + 1;
+const PANE_TEXTCTRL = PANE_QUIT + 2;
+
+// enum { PANEDLG_TOGGLESTATUS_BTN = wxID_HIGHEST }
+const PANEDLG_TOGGLESTATUS_BTN = ID_HIGHEST;
+
+/** wxGetTextFromUserPromptStr from wx/textdlg.h. */
+const GET_TEXT_PROMPT = "Input text";
+
+// ---------------------------------------------------------------------------
+// Small helpers
+// ---------------------------------------------------------------------------
+
+interface EventBinding
+{
+    callback: Callback;
+    closure: wxClosure;
+}
+
+/** Creates a wxString for the duration of `fn` and releases it afterwards. */
+function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** Absolute path of an asset shipped next to this module. */
+function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** sizer->Add(window, wxSizerFlags(proportion).<setup>()) */
+function addWindowWithFlags(
+    sizer: wxSizer,
+    window: Pointer,
+    proportion: number,
+    setup: (flags: wxSizerFlags) => void,
+): void
+{
+    const flags = createWxSizerFlags(proportion);
+    if (!flags)
+    {
+        sizer.AddWindow(window, proportion, 0, 0, null);
+        return;
+    }
+    setup(flags);
+    sizer.AddWindowFlags(window, flags.ptr);
+    flags.Delete();
+}
+
+/** wxLogMessage(message) — the whole message is the format string. */
+function logMessage(text: string): void
+{
+    withString(text.replace(/%/g, "%%"), (ptr) => LogMessage(ptr));
+}
+
+/** wxStaticText(parent, wxID_ANY, text) with default position/size/style. */
+function createLabel(parent: Pointer, text: string): wxStaticText | null
+{
+    return withString(text, (ptr) =>
+        createWxStaticText(parent, ID_ANY, ptr, -1, -1, -1, -1, 0));
+}
+
+/** wxButton(parent, id, text) with default position/size/style. */
+function createButton(
+    parent: Pointer,
+    id: number,
+    text: string,
+): wxButton | null
+{
+    return withString(text, (ptr) =>
+        createWxButton(parent, id, ptr, -1, -1, -1, -1, 0));
+}
+
+/** wxTextCtrl(parent, id, text) with default position/size/style. */
+function createText(parent: Pointer, id: number, text: string): wxTextCtrl | null
+{
+    return withString(text, (ptr) =>
+        createWxTextCtrl(parent, id, ptr, -1, -1, -1, -1, 0n));
+}
+
+/** wxCollapsiblePane(parent, id, label) with wxCP_DEFAULT_STYLE. */
+function createPane(parent: Pointer, label: string): wxCollapsiblePane | null
+{
+    const style = expCP_DEFAULT_STYLE();
+    return withString(label, (ptr) =>
+        createWxCollapsiblePane(parent, ID_ANY, ptr, -1, -1, -1, -1, style));
+}
+
+/** wxMenu(style = 0) with an empty title. */
+function createPlainMenu(): wxMenu | null
+{
+    return withString("", (ptr) => createWxMenu(ptr, 0n));
+}
+
+/**
+ * wxString overload of wxGetTextFromUser(...) returning "" on cancel.
+ * The first call (null buffer) shows the dialog and caches the UTF-8 result;
+ * the second one copies it into the caller's buffer.
+ */
+function getTextFromUser(
+    message: string,
+    caption: string,
+    defaultValue: string,
+    parent: Pointer,
+): string
+{
+    const messageBuffer = new TextEncoder().encode(message + "\0");
+    const captionBuffer = new TextEncoder().encode(caption + "\0");
+    const defaultBuffer = new TextEncoder().encode(defaultValue + "\0");
+
+    const length = wxGetTextFromUser(
+        pointerOf(messageBuffer),
+        pointerOf(captionBuffer),
+        pointerOf(defaultBuffer),
+        parent,
+        -1,
+        -1,
+        1,
+        null,
+    );
+    if (length <= 0)
+    {
+        return "";
+    }
+
+    const output = new Uint8Array(length + 1);
+    wxGetTextFromUser(
+        pointerOf(messageBuffer),
+        pointerOf(captionBuffer),
+        pointerOf(defaultBuffer),
+        parent,
+        -1,
+        -1,
+        1,
+        pointerOf(output),
+    );
+
+    return readCString(pointerOf(output));
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame
+// ---------------------------------------------------------------------------
+
+/** MyFrame's control members. */
+interface CollPaneFrameState
+{
+    frame: wxFrame;
+    collPane: wxCollapsiblePane;
+    collHeaderCtrl: wxCollapsibleHeaderCtrl;
+    paneSizer: wxBoxSizer;
+    bindings: EventBinding[];
+}
+
+/** MyFrame::MyFrame() — menu bar, collapsible pane and its contents. */
+function createMainFrame(): CollPaneFrameState | null
+{
+    const frame = withString("wxCollapsiblePane sample", (ptr) =>
+        createWxFrame(null, ID_ANY, ptr, -1, -1, 420, 300, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    // SetIcon(wxICON(sample)) — load the same XPM artwork at run time.
+    const iconPath = createWxString(samplePath("sample.xpm"));
+    const icon = createWxIconLoad(iconPath.ptr, BigInt(BITMAP_TYPE_XPM), -1, -1);
+    iconPath.Delete();
+    if (icon)
+    {
+        if (icon.IsOk())
+        {
+            frame.SetIcon(icon.ptr);
+        }
+        icon.Delete();
+    }
+
+    // CreateStatusBar(2);
+    frame.CreateStatusBar(2, STB_DEFAULT_STYLE, ID_ANY);
+
+    // Menu bar: paneMenu("&Pane") + helpMenu("&Help").
+    const paneMenu = createPlainMenu();
+    const helpMenu = createPlainMenu();
+    if (!paneMenu || !helpMenu)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    const append = (menu: wxMenu, id: number, text: string): void =>
+    {
+        withString(text, (textPtr) =>
+            withString("", (helpPtr) => { menu.Append(id, textPtr, helpPtr, false); }));
+    };
+
+    append(paneMenu, PANE_COLLAPSE, "Collapse\tCtrl-C");
+    append(paneMenu, PANE_EXPAND, "Expand\tCtrl-E");
+    paneMenu.AppendSeparator();
+    append(paneMenu, PANE_SETLABEL, "Set label...\tCtrl-L");
+    paneMenu.AppendSeparator();
+    append(paneMenu, PANE_SHOWDLG, "Show dialog...\tCtrl-S");
+    paneMenu.AppendSeparator();
+    append(paneMenu, PANE_QUIT, "");
+
+    append(helpMenu, PANE_ABOUT, "");
+
+    const menuBar = createWxMenuBar(0);
+    if (!menuBar)
+    {
+        frame.Destroy();
+        return null;
+    }
+    withString("&Pane", (ptr) => { menuBar.Append(paneMenu.ptr, ptr); });
+    withString("&Help", (ptr) => { menuBar.Append(helpMenu.ptr, ptr); });
+    frame.SetMenuBar(menuBar.ptr);
+
+    // m_collPane = new wxCollapsiblePane(this, -1, "...")
+    const collPane = createPane(frame.ptr, "This is a wxCollapsiblePane");
+    if (!collPane)
+    {
+        frame.Destroy();
+        return null;
+    }
+    const win = collPane.GetPane();
+    if (!win)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    const paneSizer = createWxBoxSizer(HORIZONTAL);
+    const paneSubSizer = createWxBoxSizer(VERTICAL);
+    if (!paneSizer || !paneSubSizer)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    paneSizer.AddSpacer(20);
+    paneSizer.AddSizer(paneSubSizer.ptr, 1, 0, 0, null);
+
+    const staticText = createLabel(win.ptr, "Static text");
+    if (staticText)
+    {
+        addWindowWithFlags(paneSubSizer, staticText.ptr, 0, (f) => { f.Left(); f.Border(ALL); });
+    }
+
+    const staticText2 = createLabel(win.ptr, "Yet another one!");
+    if (staticText2)
+    {
+        addWindowWithFlags(paneSubSizer, staticText2.ptr, 0, (f) => { f.Left(); f.Border(ALL); });
+    }
+
+    const textCtrl = createText(win.ptr, PANE_TEXTCTRL, "Text control");
+    if (textCtrl)
+    {
+        addWindowWithFlags(paneSubSizer, textCtrl.ptr, 0, (f) => { f.Left(); f.Border(ALL); });
+    }
+
+    const button = createButton(win.ptr, PANE_BUTTON, "Press to align right");
+    if (button)
+    {
+        addWindowWithFlags(paneSubSizer, button.ptr, 0, (f) => { f.Left(); f.Border(ALL); });
+    }
+
+    const nestedPane = createPane(win.ptr, "Nested empty wxCollapsiblePane");
+    if (nestedPane)
+    {
+        addWindowWithFlags(paneSubSizer, nestedPane.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+    }
+
+    win.SetSizer(paneSizer.ptr, true);
+
+    // m_collHeaderCtrl = new wxCollapsibleHeaderCtrl(this, wxID_ANY, "...");
+    // The C++ constructor leaves style at its default, wxBORDER_NONE.
+    const collHeaderCtrl = withString("Collapsed wxCollapsibleHeaderCtrl", (ptr) =>
+        createWxCollapsibleHeaderCtrl(
+            frame.ptr, ID_ANY, ptr, -1, -1, -1, -1, BORDER_NONE));
+    if (!collHeaderCtrl)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // wxSizer* const sizerTop = new wxBoxSizer(wxVERTICAL);
+    // sizerTop->Add(m_collPane, wxSizerFlags(1).Expand());
+    const sizerTop = createWxBoxSizer(VERTICAL);
+    if (!sizerTop)
+    {
+        frame.Destroy();
+        return null;
+    }
+    addWindowWithFlags(sizerTop, collPane.ptr, 1, (f) => { f.Expand(); });
+    // sizerTop->Add(m_collHeaderCtrl) — plain flags: proportion 0, no border.
+    sizerTop.AddWindow(collHeaderCtrl.ptr, 0, 0, 0, null);
+
+    frame.SetSizer(sizerTop.ptr, true);
+
+    return { frame, collPane, collHeaderCtrl, paneSizer, bindings: [] };
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame event handlers
+// ---------------------------------------------------------------------------
+
+/** MyFrame::OnSetLabel */
+function onSetLabel(state: CollPaneFrameState): void
+{
+    const currentLabel = state.collPane.GetLabel();
+    const currentText = currentLabel ? readAndDeleteWxString(currentLabel.ptr) : "";
+    // The C++ call omits the parent argument, so the dialog is not parented.
+    const text = getTextFromUser("Enter new label", GET_TEXT_PROMPT, currentText, null);
+    withString(text, (ptr) => { state.collPane.SetLabel(ptr); });
+}
+
+/** MyFrame::OnAbout */
+function onAbout(state: CollPaneFrameState): void
+{
+    const infoPtr = createWxAboutDialogInfo();
+    if (!infoPtr)
+    {
+        return;
+    }
+    const info = new wxAboutDialogInfo(infoPtr);
+
+    withString("wxCollapsiblePane sample", (ptr) => info.SetName(ptr));
+    withString("This sample program demonstrates usage of wxCollapsiblePane",
+        (ptr) => info.SetDescription(ptr));
+    withString("(C) 2006 Francesco Montorsi <frm@users.sourceforge.net>",
+        (ptr) => info.SetCopyright(ptr));
+
+    wxAboutBox(info.ptr, state.frame.ptr);
+
+    info.Delete();
+}
+
+/** MyFrame::OnShowDialog */
+function onShowDialog(state: CollPaneFrameState): void
+{
+    showTestDialog(state.frame);
+}
+
+/** Connects the MyFrame event table entries. */
+function connectFrameEvents(state: CollPaneFrameState): void
+{
+    const bind = (
+        first: number,
+        last: number,
+        eventType: number,
+        handler: (eventPtr: Pointer) => void,
+    ): void =>
+    {
+        const callback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_closureFun, _data, eventPtr) =>
+            {
+                // wxClosure invokes every handler with a null event at teardown.
+                if (!eventPtr)
+                {
+                    return;
+                }
+                handler(eventPtr);
+            },
+        );
+        const closure = createWxClosure(callback.pointer, null)!;
+        state.frame.Connect(first, last, eventType, closure.ptr);
+        state.bindings.push({ callback, closure });
+    };
+
+    // EVT_MENU(PANE_COLLAPSE, MyFrame::OnCollapse)
+    bind(PANE_COLLAPSE, PANE_COLLAPSE, EVT_MENU, () => { state.collPane.Collapse(true); });
+    // EVT_MENU(PANE_EXPAND, MyFrame::OnExpand)
+    bind(PANE_EXPAND, PANE_EXPAND, EVT_MENU, () => { state.collPane.Expand(); });
+    // EVT_MENU(PANE_SETLABEL, MyFrame::OnSetLabel)
+    bind(PANE_SETLABEL, PANE_SETLABEL, EVT_MENU, () => { onSetLabel(state); });
+    // EVT_MENU(PANE_SHOWDLG, MyFrame::OnShowDialog)
+    bind(PANE_SHOWDLG, PANE_SHOWDLG, EVT_MENU, () => { onShowDialog(state); });
+    // EVT_MENU(PANE_ABOUT, MyFrame::OnAbout)
+    bind(PANE_ABOUT, PANE_ABOUT, EVT_MENU, () => { onAbout(state); });
+    // EVT_MENU(PANE_QUIT, MyFrame::Quit)
+    bind(PANE_QUIT, PANE_QUIT, EVT_MENU, () => { state.frame.Close(true); });
+
+    // EVT_UPDATE_UI(PANE_COLLAPSE, MyFrame::OnCollapseUpdateUI)
+    bind(PANE_COLLAPSE, PANE_COLLAPSE, EVT_UPDATE_UI, (eventPtr) =>
+        { wrapWxUpdateUIEvent(eventPtr).Enable(!state.collPane.IsCollapsed()); });
+    // EVT_UPDATE_UI(PANE_EXPAND, MyFrame::OnExpandUpdateUI)
+    bind(PANE_EXPAND, PANE_EXPAND, EVT_UPDATE_UI, (eventPtr) =>
+        { wrapWxUpdateUIEvent(eventPtr).Enable(state.collPane.IsCollapsed()); });
+
+    // EVT_COLLAPSIBLEHEADER_CHANGED(wxID_ANY, MyFrame::OnCollapsibleHeaderChanged)
+    bind(ID_ANY, ID_ANY, EVT_COLLAPSIBLEHEADER_CHANGED, () =>
+    {
+        const label = state.collHeaderCtrl.IsCollapsed()
+            ? "Collapsed wxCollapsibleHeaderCtrl"
+            : "Expanded wxCollapsibleHeaderCtrl";
+        withString(label, (ptr) => { state.collHeaderCtrl.SetLabel(ptr); });
+    });
+
+    // The C++ frame has no explicit close handler; ending the loop here is the
+    // kwxTypeScript equivalent of the last top-level window being destroyed.
+    bind(ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, () => { exitMainLoop(); });
+}
+
+// ---------------------------------------------------------------------------
+// MyDialog
+// ---------------------------------------------------------------------------
+
+/** MyDialog::MyDialog(parent) + ShowModal(). */
+function showTestDialog(parent: wxFrame): void
+{
+    const dialog = withString("Test dialog", (ptr) =>
+        createWxDialog(
+            parent.ptr, ID_ANY, ptr, -1, -1, -1, -1,
+            RESIZE_BORDER | DEFAULT_DIALOG_STYLE,
+        ));
+    if (!dialog)
+    {
+        return;
+    }
+
+    const bindings: EventBinding[] = [];
+    const bind = (
+        first: number,
+        last: number,
+        eventType: number,
+        handler: (eventPtr: Pointer) => void,
+    ): void =>
+    {
+        const callback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_closureFun, _data, eventPtr) =>
+            {
+                if (!eventPtr)
+                {
+                    return;
+                }
+                handler(eventPtr);
+            },
+        );
+        const closure = createWxClosure(callback.pointer, null)!;
+        dialog.Connect(first, last, eventType, closure.ptr);
+        bindings.push({ callback, closure });
+    };
+
+    const sz = createWxBoxSizer(VERTICAL);
+    if (!sz)
+    {
+        dialog.Destroy();
+        return;
+    }
+
+    const caption = createLabel(
+        dialog.ptr, "This dialog allows you to test the wxCollapsiblePane control");
+    if (caption)
+    {
+        addWindowWithFlags(sz, caption.ptr, 0, (f) => { f.Border(ALL); });
+    }
+
+    const toggleButton = createButton(
+        dialog.ptr, PANEDLG_TOGGLESTATUS_BTN, "Change status");
+    if (toggleButton)
+    {
+        addWindowWithFlags(sz, toggleButton.ptr, 1, (f) => { f.Expand(); f.Border(ALL); });
+    }
+
+    const collPane = createPane(dialog.ptr, "Click here for a surprise");
+    if (collPane)
+    {
+        addWindowWithFlags(sz, collPane.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+    }
+
+    const testCtrl = createText(dialog.ptr, ID_ANY, "just a test");
+    if (testCtrl)
+    {
+        addWindowWithFlags(sz, testCtrl.ptr, 0, (f) => { f.Expand(); f.Border(ALL); });
+    }
+
+    sz.AddSpacer(10);
+
+    const okButton = createButton(dialog.ptr, ID_OK, "");
+    if (okButton)
+    {
+        addWindowWithFlags(sz, okButton.ptr, 0, (f) => { f.Right(); f.Border(ALL); });
+    }
+
+    // Test controls inside the collapsible pane: wxGridSizer(4, 1, 5, 5).
+    let paneSizer: wxGridSizer | null = null;
+    const win = collPane ? collPane.GetPane() : null;
+    if (win)
+    {
+        paneSizer = createWxGridSizer(4, 1, 5, 5);
+        if (paneSizer)
+        {
+            const staticText = createLabel(win.ptr, "Static text");
+            if (staticText)
+            {
+                addWindowWithFlags(paneSizer, staticText.ptr, 0, (f) => { f.Left(); });
+            }
+
+            const staticText2 = createLabel(win.ptr, "Yet another one!");
+            if (staticText2)
+            {
+                addWindowWithFlags(paneSizer, staticText2.ptr, 0, (f) => { f.Left(); });
+            }
+
+            const paneTextCtrl = createText(win.ptr, PANE_TEXTCTRL, "Text control");
+            if (paneTextCtrl)
+            {
+                addWindowWithFlags(paneSizer, paneTextCtrl.ptr, 0, (f) => { f.Left(); });
+            }
+
+            const paneButton = createButton(win.ptr, PANE_BUTTON, "Press to align right");
+            if (paneButton)
+            {
+                addWindowWithFlags(paneSizer, paneButton.ptr, 0, (f) => { f.Left(); });
+            }
+
+            win.SetSizer(paneSizer.ptr, true);
+            paneSizer.SetSizeHints(win.ptr);
+        }
+    }
+
+    dialog.SetSizer(sz.ptr, true);
+    sz.SetSizeHints(dialog.ptr);
+
+    // EVT_BUTTON(PANEDLG_TOGGLESTATUS_BTN, MyDialog::OnToggleStatus)
+    if (collPane)
+    {
+        bind(PANEDLG_TOGGLESTATUS_BTN, PANEDLG_TOGGLESTATUS_BTN, EVT_BUTTON,
+            () => { collPane.Collapse(!collPane.IsCollapsed()); });
+    }
+
+    // EVT_COLLAPSIBLEPANE_CHANGED(wxID_ANY, MyDialog::OnPaneChanged)
+    bind(ID_ANY, ID_ANY, EVT_COLLAPSIBLEPANE_CHANGED, (eventPtr) =>
+    {
+        const collapsed = wrapWxCollapsiblePaneEvent(eventPtr).GetCollapsed();
+        logMessage(
+            `The pane has just been ${collapsed ? "collapsed" : "expanded"} by the user`);
+    });
+
+    // EVT_BUTTON(PANE_BUTTON, MyDialog::OnAlignButton)
+    if (paneSizer)
+    {
+        const grid = paneSizer;
+        bind(PANE_BUTTON, PANE_BUTTON, EVT_BUTTON, () =>
+        {
+            const textWindow = wxWindow_FindWindowById(BigInt(PANE_TEXTCTRL), dialog.ptr);
+            if (!textWindow)
+            {
+                return;
+            }
+            const item = grid.GetItemWindow(textWindow, true);
+            if (!item)
+            {
+                return;
+            }
+            item.SetFlag(ALIGN_RIGHT);
+            dialog.Layout();
+        });
+    }
+
+    dialog.ShowModal();
+
+    dialog.Delete();
+    for (const binding of bindings)
+    {
+        binding.callback.close();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// MyApp::OnInit
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("collpane: initialize() failed");
+        return 1;
+    }
+
+    setAppName("wxCollapsiblePane sample");
+
+    const state = createMainFrame();
+    if (!state)
+    {
+        console.error("collpane: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    connectFrameEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    for (const binding of state.bindings)
+    {
+        binding.callback.close();
+    }
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

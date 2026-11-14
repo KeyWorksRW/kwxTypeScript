@@ -1,0 +1,134 @@
+// activityindicator.kwxts — port of wxSamples/src/widgets/activityindicator.cpp
+
+import {
+    ALIGN_CENTRE,
+    BORDER_DEFAULT,
+    createWxActivityIndicator,
+    createWxBoxSizer,
+    createWxButton,
+    createWxStaticText,
+    EVT_BUTTON,
+    EVT_UPDATE_UI,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    VERTICAL,
+    wxActivityIndicator,
+    wxButton,
+    wxStaticText,
+    wxUpdateUIEvent,
+    wxWindow,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import {
+    addSizer,
+    addStretchSpacer,
+    addWin,
+    bindEvent,
+    border,
+    doubleBorder,
+    makeStaticBoxSizer,
+    StaticBoxSizerParts,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+const ACTIVITY_INDICATOR_START = ID_HIGHEST;
+const ACTIVITY_INDICATOR_STOP = ACTIVITY_INDICATOR_START + 1;
+const ACTIVITY_INDICATOR_IS_RUNNING = ACTIVITY_INDICATOR_STOP + 1;
+
+export class ActivityIndicatorPage extends WidgetsPage
+{
+    private indicator: wxActivityIndicator | null = null;
+    private indicatorSizer: StaticBoxSizerParts | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/activityindicator");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.indicator;
+    }
+
+    override createContent(): void
+    {
+        const oper = makeStaticBoxSizer(this.page.ptr, VERTICAL, "&Operations");
+
+        const start = withString("&Start", (ptr) =>
+            createWxButton(oper.box.ptr, ACTIVITY_INDICATOR_START, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(oper.sizer, start, 0, EXPAND, border());
+
+        const stop = withString("&Stop", (ptr) =>
+            createWxButton(oper.box.ptr, ACTIVITY_INDICATOR_STOP, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(oper.sizer, stop, 0, EXPAND, border());
+
+        const status = withString("Indicator is initializing...", (ptr) =>
+            createWxStaticText(oper.box.ptr, ACTIVITY_INDICATOR_IS_RUNNING, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(oper.sizer, status, 0, EXPAND, border());
+
+        const indicatorSizer = makeStaticBoxSizer(
+            this.page.ptr, HORIZONTAL, "Activity Indicator");
+        this.indicatorSizer = indicatorSizer;
+
+        this.recreateWidget();
+
+        const top = createWxBoxSizer(HORIZONTAL)!;
+        addSizer(top, oper.sizer, 0, EXPAND, doubleBorder());
+        addSizer(top, indicatorSizer.sizer, 1, EXPAND, doubleBorder());
+
+        this.page.SetSizer(top.ptr, false);
+
+        bindEvent(this.page, ACTIVITY_INDICATOR_START, ACTIVITY_INDICATOR_START,
+            EVT_BUTTON, () => this.indicator?.Start());
+        bindEvent(this.page, ACTIVITY_INDICATOR_STOP, ACTIVITY_INDICATOR_STOP,
+            EVT_BUTTON, () => this.indicator?.Stop());
+
+        bindEvent(status, ACTIVITY_INDICATOR_IS_RUNNING,
+            ACTIVITY_INDICATOR_IS_RUNNING, EVT_UPDATE_UI, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxUpdateUIEvent(eventPtr, true);
+                withString(
+                    this.indicator && this.indicator.IsRunning()
+                        ? "Indicator is running"
+                        : "Indicator is stopped",
+                    (ptr) => event.SetText(ptr));
+            });
+    }
+
+    override recreateWidget(): void
+    {
+        const sizer = this.indicatorSizer;
+        if (!sizer)
+        {
+            return;
+        }
+
+        sizer.sizer.Clear(true /* delete windows */);
+
+        // wxActivityIndicator derives from wxControl (and therefore wxWindow)
+        // in the generated wrappers, so it is passed on directly.
+        const indicator = createWxActivityIndicator(
+            sizer.box.ptr, ID_ANY, -1, -1, -1, -1, BORDER_DEFAULT)!;
+        this.indicator = indicator;
+
+        this.notifyWidgetRecreation(indicator);
+
+        addStretchSpacer(sizer.sizer, 1);
+        addWin(sizer.sizer, indicator, 0, ALIGN_CENTRE, 0);
+        addStretchSpacer(sizer.sizer, 1);
+        sizer.sizer.Layout();
+    }
+}
+
+export function createActivityIndicatorPage(parent: Pointer): WidgetsPage
+{
+    return new ActivityIndicatorPage(parent);
+}

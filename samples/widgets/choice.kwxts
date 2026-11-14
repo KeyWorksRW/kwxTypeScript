@@ -1,0 +1,594 @@
+// choice.kwxts — port of wxSamples/src/widgets/choice.cpp
+//
+// The C++ page derives from ItemContainerWidgetsPage only to reuse
+// OnButtonTestItemContainer(); the "Run tests" button therefore calls
+// runItemContainerTest() from itemcontainer.kwxts.
+//
+// Notes on the port:
+//  * wxItemContainer::Set(wxArrayString) is not bound (only Set(count, char**)),
+//    so the choice content is restored item by item with Append().  Appending
+//    in the original order produces the same result as Set().
+//  * The C++ sample gives its text controls the default style (no
+//    wxTE_PROCESS_ENTER), so the EVT_TEXT_ENTER handlers below cannot fire in
+//    the original either; the bindings are kept for parity.
+
+import {
+    ALIGN_CENTRE_HORIZONTAL,
+    ALL,
+    CB_SORT,
+    createWxBoxSizer,
+    createWxButton,
+    createWxChoice,
+    createWxTextCtrl,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_CHOICE,
+    EVT_RADIOBOX,
+    EVT_TEXT_ENTER,
+    EVT_UPDATE_UI,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    LEFT,
+    NOT_FOUND,
+    readAndDeleteWxString,
+    RIGHT,
+    VERTICAL,
+    wrapWxWindow,
+    wxCheckBox,
+    wxChoice,
+    wxCommandEvent,
+    wxItemContainer,
+    wxSizer,
+    wxTextCtrl,
+    wxUpdateUIEvent,
+    wxWindow,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import {
+    addSizer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    doubleBorder,
+    logMessage,
+    makeStaticBoxSizer,
+    tripleBorder,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+import { runItemContainerTest } from "./itemcontainer.kwxts";
+
+const CHOICE_PAGE_RESET = ID_HIGHEST;
+const CHOICE_PAGE_ADD = CHOICE_PAGE_RESET + 1;
+const CHOICE_PAGE_ADD_TEXT = CHOICE_PAGE_ADD + 1;
+const CHOICE_PAGE_ADD_SEVERAL = CHOICE_PAGE_ADD_TEXT + 1;
+const CHOICE_PAGE_ADD_MANY = CHOICE_PAGE_ADD_SEVERAL + 1;
+const CHOICE_PAGE_CLEAR = CHOICE_PAGE_ADD_MANY + 1;
+const CHOICE_PAGE_CHANGE = CHOICE_PAGE_CLEAR + 1;
+const CHOICE_PAGE_CHANGE_TEXT = CHOICE_PAGE_CHANGE + 1;
+const CHOICE_PAGE_DELETE = CHOICE_PAGE_CHANGE_TEXT + 1;
+const CHOICE_PAGE_DELETE_TEXT = CHOICE_PAGE_DELETE + 1;
+const CHOICE_PAGE_DELETE_SEL = CHOICE_PAGE_DELETE_TEXT + 1;
+const CHOICE_PAGE_CHOICE = CHOICE_PAGE_DELETE_SEL + 1;
+const CHOICE_PAGE_CONTAINER_TESTS = CHOICE_PAGE_CHOICE + 1;
+
+/** "many" means 1000 here, as in the C++ sample. */
+const MANY_ITEMS_COUNT = 1000;
+
+/** wxString m_textCtrl->GetValue() */
+function readTextValue(control: wxTextCtrl): string {
+    const value = control.GetValue();
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** m_textCtrl->SetValue() */
+function writeTextValue(control: wxTextCtrl, text: string): void {
+    withString(text, (ptr) => control.SetValue(ptr));
+}
+
+/** wxString::ToULong(): null stands for a failed conversion. */
+function parseUnsigned(text: string): number | null {
+    if (!/^[0-9]+$/.test(text)) {
+        return null;
+    }
+    const parsed = Number(text);
+    return Number.isSafeInteger(parsed) ? parsed : null;
+}
+
+export class ChoicePage extends WidgetsPage
+{
+    private sortCheckbox: wxCheckBox | null = null;
+    private choice: wxChoice | null = null;
+    private choiceSizer: wxSizer | null = null;
+
+    private textAdd: wxTextCtrl | null = null;
+    private textChange: wxTextCtrl | null = null;
+    private textDelete: wxTextCtrl | null = null;
+
+    /** static unsigned int s_item of OnButtonAdd() */
+    private addItemCounter = 0;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/choice");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.choice;
+    }
+
+    override createContent(): void
+    {
+        const top = createWxBoxSizer(HORIZONTAL)!;
+
+        // left pane
+        const left = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&Set choice parameters");
+
+        this.sortCheckbox = this.createCheckBoxAndAddToSizer(
+            left.sizer, "&Sort items", ID_ANY, left.box.ptr);
+
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(left.box.ptr, CHOICE_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(left.sizer, resetButton, 0, ALIGN_CENTRE_HORIZONTAL,
+            tripleBorder());
+
+        // middle pane
+        const middle = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&Change choice contents");
+
+        const addRow = createWxBoxSizer(HORIZONTAL)!;
+        const addButton = withString("&Add this string", (ptr) =>
+            createWxButton(middle.box.ptr, CHOICE_PAGE_ADD, ptr,
+                -1, -1, -1, -1, 0))!;
+        this.textAdd = withString("test item 0", (ptr) =>
+            createWxTextCtrl(middle.box.ptr, CHOICE_PAGE_ADD_TEXT, ptr,
+                -1, -1, -1, -1, BigInt(0)))!;
+        addWin(addRow, addButton, 0, RIGHT, border());
+        addWin(addRow, this.textAdd, 1, LEFT, border());
+        addSizer(middle.sizer, addRow, 0, EXPAND | ALL, border());
+
+        const addSeveralButton = withString("&Insert a few strings", (ptr) =>
+            createWxButton(middle.box.ptr, CHOICE_PAGE_ADD_SEVERAL, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(middle.sizer, addSeveralButton, 0, EXPAND | ALL, border());
+
+        const addManyButton = withString("Add &many strings", (ptr) =>
+            createWxButton(middle.box.ptr, CHOICE_PAGE_ADD_MANY, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(middle.sizer, addManyButton, 0, EXPAND | ALL, border());
+
+        const changeRow = createWxBoxSizer(HORIZONTAL)!;
+        const changeButton = withString("C&hange current", (ptr) =>
+            createWxButton(middle.box.ptr, CHOICE_PAGE_CHANGE, ptr,
+                -1, -1, -1, -1, 0))!;
+        this.textChange = withString("", (ptr) =>
+            createWxTextCtrl(middle.box.ptr, CHOICE_PAGE_CHANGE_TEXT, ptr,
+                -1, -1, -1, -1, BigInt(0)))!;
+        addWin(changeRow, changeButton, 0, RIGHT, border());
+        addWin(changeRow, this.textChange, 1, LEFT, border());
+        addSizer(middle.sizer, changeRow, 0, EXPAND | ALL, border());
+
+        const deleteRow = createWxBoxSizer(HORIZONTAL)!;
+        const deleteButton = withString("&Delete this item", (ptr) =>
+            createWxButton(middle.box.ptr, CHOICE_PAGE_DELETE, ptr,
+                -1, -1, -1, -1, 0))!;
+        this.textDelete = withString("", (ptr) =>
+            createWxTextCtrl(middle.box.ptr, CHOICE_PAGE_DELETE_TEXT, ptr,
+                -1, -1, -1, -1, BigInt(0)))!;
+        addWin(deleteRow, deleteButton, 0, RIGHT, border());
+        addWin(deleteRow, this.textDelete, 1, LEFT, border());
+        addSizer(middle.sizer, deleteRow, 0, EXPAND | ALL, border());
+
+        const deleteSelButton = withString("Delete &selection", (ptr) =>
+            createWxButton(middle.box.ptr, CHOICE_PAGE_DELETE_SEL, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(middle.sizer, deleteSelButton, 0, EXPAND | ALL, border());
+
+        const clearButton = withString("&Clear", (ptr) =>
+            createWxButton(middle.box.ptr, CHOICE_PAGE_CLEAR, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(middle.sizer, clearButton, 0, EXPAND | ALL, border());
+
+        const testsButton = withString("Run &tests", (ptr) =>
+            createWxButton(middle.box.ptr, CHOICE_PAGE_CONTAINER_TESTS, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(middle.sizer, testsButton, 0, EXPAND | ALL, border());
+
+        // right pane
+        const right = createWxBoxSizer(VERTICAL)!;
+        this.choiceSizer = right;
+        right.SetMinSize(this.dip(150), 0);
+
+        // final initializations
+        this.reset();
+        this.recreateWidget();
+
+        addSizer(top, left.sizer, 0, EXPAND | (ALL & ~LEFT), doubleBorder());
+        addSizer(top, middle.sizer, 1, EXPAND | ALL, doubleBorder());
+        addSizer(top, right, 1, EXPAND | (ALL & ~RIGHT), doubleBorder());
+
+        this.page.SetSizer(top.ptr, false);
+
+        // -- event handlers ---------------------------------------------------
+
+        bindEvent(this.page, CHOICE_PAGE_RESET, CHOICE_PAGE_RESET, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.reset();
+                this.recreateWidget();
+            });
+
+        bindEvent(this.page, CHOICE_PAGE_CHANGE, CHOICE_PAGE_CHANGE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonChange();
+            });
+
+        bindEvent(this.page, CHOICE_PAGE_DELETE, CHOICE_PAGE_DELETE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonDelete();
+            });
+
+        bindEvent(this.page, CHOICE_PAGE_DELETE_SEL, CHOICE_PAGE_DELETE_SEL,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonDeleteSelection();
+            });
+
+        bindEvent(this.page, CHOICE_PAGE_CLEAR, CHOICE_PAGE_CLEAR, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.choice?.Clear();
+            });
+
+        bindEvent(this.page, CHOICE_PAGE_ADD, CHOICE_PAGE_ADD, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonAdd();
+            });
+
+        bindEvent(this.page, CHOICE_PAGE_ADD_SEVERAL, CHOICE_PAGE_ADD_SEVERAL,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonAddSeveral();
+            });
+
+        bindEvent(this.page, CHOICE_PAGE_ADD_MANY, CHOICE_PAGE_ADD_MANY,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonAddMany();
+            });
+
+        bindEvent(this.page, CHOICE_PAGE_CONTAINER_TESTS,
+            CHOICE_PAGE_CONTAINER_TESTS, EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const choice = this.choice;
+                if (!choice) return;
+                runItemContainerTest(
+                    new wxItemContainer(choice.ptr, true),
+                    wrapWxWindow(choice.ptr),
+                );
+            });
+
+        // EVT_TEXT_ENTER(ChoicePage_AddText/DeleteText)
+        bindEvent(this.page, CHOICE_PAGE_ADD_TEXT, CHOICE_PAGE_ADD_TEXT,
+            EVT_TEXT_ENTER, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonAdd();
+            });
+
+        bindEvent(this.page, CHOICE_PAGE_DELETE_TEXT, CHOICE_PAGE_DELETE_TEXT,
+            EVT_TEXT_ENTER, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonDelete();
+            });
+
+        // EVT_CHOICE(ChoicePage_Choice)
+        bindEvent(this.page, CHOICE_PAGE_CHOICE, CHOICE_PAGE_CHOICE,
+            EVT_CHOICE, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const selection = new wxCommandEvent(eventPtr, true).
+                    GetSelection();
+                if (this.textDelete)
+                {
+                    writeTextValue(this.textDelete, String(selection));
+                }
+                logMessage(`Choice item ${selection} selected`);
+            });
+
+        // EVT_UPDATE_UI entries, bound on the controls they belong to.
+        if (resetButton)
+        {
+            bindEvent(resetButton, CHOICE_PAGE_RESET, CHOICE_PAGE_RESET,
+                EVT_UPDATE_UI, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    new wxUpdateUIEvent(eventPtr, true).Enable(
+                        this.sortCheckbox?.GetValue() ?? false);
+                });
+        }
+
+        if (addSeveralButton)
+        {
+            bindEvent(addSeveralButton, CHOICE_PAGE_ADD_SEVERAL,
+                CHOICE_PAGE_ADD_SEVERAL, EVT_UPDATE_UI, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    new wxUpdateUIEvent(eventPtr, true).Enable(
+                        !(this.choice?.HasFlag(CB_SORT) ?? false));
+                });
+        }
+
+        if (clearButton)
+        {
+            bindEvent(clearButton, CHOICE_PAGE_CLEAR, CHOICE_PAGE_CLEAR,
+                EVT_UPDATE_UI, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    new wxUpdateUIEvent(eventPtr, true).Enable(
+                        (this.choice?.GetCount() ?? 0) !== 0);
+                });
+        }
+
+        if (this.textDelete)
+        {
+            bindEvent(this.textDelete, CHOICE_PAGE_DELETE_TEXT,
+                CHOICE_PAGE_DELETE_TEXT, EVT_UPDATE_UI, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    new wxUpdateUIEvent(eventPtr, true).Enable(
+                        (this.choice?.GetCount() ?? 0) !== 0);
+                });
+        }
+
+        if (deleteButton)
+        {
+            bindEvent(deleteButton, CHOICE_PAGE_DELETE, CHOICE_PAGE_DELETE,
+                EVT_UPDATE_UI, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    const index = this.textDelete
+                        ? parseUnsigned(readTextValue(this.textDelete))
+                        : null;
+                    new wxUpdateUIEvent(eventPtr, true).Enable(
+                        index !== null
+                        && index < (this.choice?.GetCount() ?? 0));
+                });
+        }
+
+        const updateSelectionState = (eventPtr: Pointer): void =>
+        {
+            if (!eventPtr) return;
+            new wxUpdateUIEvent(eventPtr, true).Enable(
+                (this.choice?.GetSelection() ?? NOT_FOUND) !== NOT_FOUND);
+        };
+
+        if (changeButton)
+        {
+            bindEvent(changeButton, CHOICE_PAGE_CHANGE, CHOICE_PAGE_CHANGE,
+                EVT_UPDATE_UI, updateSelectionState);
+        }
+
+        if (this.textChange)
+        {
+            bindEvent(this.textChange, CHOICE_PAGE_CHANGE_TEXT,
+                CHOICE_PAGE_CHANGE_TEXT, EVT_UPDATE_UI, updateSelectionState);
+        }
+
+        if (deleteSelButton)
+        {
+            bindEvent(deleteSelButton, CHOICE_PAGE_DELETE_SEL,
+                CHOICE_PAGE_DELETE_SEL, EVT_UPDATE_UI, updateSelectionState);
+        }
+
+        // EVT_CHECKBOX(wxID_ANY) / EVT_RADIOBOX(wxID_ANY): the "Sort items"
+        // checkbox recreates the choice.
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateWidget();
+        });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_RADIOBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateWidget();
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.createChoice();
+    }
+
+    /** ChoiceWidgetsPage::Reset() */
+    private reset(): void
+    {
+        this.sortCheckbox?.SetValue(false);
+    }
+
+    /** ChoiceWidgetsPage::CreateChoice() */
+    private createChoice(): void
+    {
+        let flags = attrs.defaultFlags;
+
+        if (this.sortCheckbox?.GetValue())
+        {
+            flags |= CB_SORT;
+        }
+
+        const items: string[] = [];
+        if (this.choice)
+        {
+            const count = this.choice.GetCount();
+            for (let index = 0; index < count; index++)
+            {
+                const value = this.choice.GetString(index);
+                items.push(value ? readAndDeleteWxString(value.ptr) : "");
+            }
+
+            // wxSizer::Detach() is index based; the choice is the only child of
+            // its sizer, so clearing it is the same operation.
+            this.choiceSizer?.Clear(true /* delete windows */);
+            this.choice = null;
+        }
+
+        this.choice = createWxChoice(this.page.ptr, CHOICE_PAGE_CHOICE,
+            -1, -1, -1, -1, 0, null, flags);
+
+        if (!this.choice)
+        {
+            return;
+        }
+
+        this.notifyWidgetRecreation(this.choice);
+
+        for (const item of items)
+        {
+            withString(item, (ptr) => this.choice?.Append(ptr));
+        }
+
+        if (this.choiceSizer)
+        {
+            addWin(this.choiceSizer, this.choice, 0, EXPAND | ALL, border());
+            this.choiceSizer.Layout();
+        }
+    }
+
+    /** OnButtonChange() */
+    private onButtonChange(): void
+    {
+        const choice = this.choice;
+        if (!choice || !this.textChange)
+        {
+            return;
+        }
+
+        const selection = choice.GetSelection();
+        if (selection !== NOT_FOUND)
+        {
+            withString(readTextValue(this.textChange), (ptr) =>
+                choice.SetString(selection, ptr));
+        }
+    }
+
+    /** OnButtonDelete() */
+    private onButtonDelete(): void
+    {
+        const choice = this.choice;
+        const textDelete = this.textDelete;
+        if (!choice || !textDelete)
+        {
+            return;
+        }
+
+        const index = parseUnsigned(readTextValue(textDelete));
+        if (index === null || index >= choice.GetCount())
+        {
+            return;
+        }
+
+        choice.DeleteItem(index);
+    }
+
+    /** OnButtonDeleteSel() */
+    private onButtonDeleteSelection(): void
+    {
+        const choice = this.choice;
+        if (!choice)
+        {
+            return;
+        }
+
+        const selection = choice.GetSelection();
+        if (selection !== NOT_FOUND)
+        {
+            choice.DeleteItem(selection);
+        }
+    }
+
+    /** OnButtonAdd() */
+    private onButtonAdd(): void
+    {
+        const choice = this.choice;
+        const textAdd = this.textAdd;
+        if (!choice || !textAdd)
+        {
+            return;
+        }
+
+        const value = readTextValue(textAdd);
+        if (!textAdd.IsModified())
+        {
+            // update the default string
+            this.addItemCounter += 1;
+            writeTextValue(textAdd, `test item ${this.addItemCounter}`);
+        }
+
+        withString(value, (ptr) => choice.Append(ptr));
+    }
+
+    /** OnButtonAddSeveral() */
+    private onButtonAddSeveral(): void
+    {
+        const choice = this.choice;
+        if (!choice)
+        {
+            return;
+        }
+
+        const items = [
+            "First",
+            "another one",
+            "and the last (very very very very very very very very very very long) one",
+        ];
+
+        // wxItemContainer::Insert(wxArrayString, 0) is not bound; inserting in
+        // reverse at position 0 keeps the order (a sorted choice ignores the
+        // position).
+        for (let index = items.length - 1; index >= 0; index--)
+        {
+            withString(items[index], (ptr) => choice.Insert(ptr, 0));
+        }
+    }
+
+    /** OnButtonAddMany() */
+    private onButtonAddMany(): void
+    {
+        const choice = this.choice;
+        if (!choice)
+        {
+            return;
+        }
+
+        for (let index = 0; index < MANY_ITEMS_COUNT; index++)
+        {
+            withString(`item #${index}`, (ptr) => choice.Append(ptr));
+        }
+    }
+}
+
+export function createChoicePage(parent: Pointer): WidgetsPage
+{
+    return new ChoicePage(parent);
+}

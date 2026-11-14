@@ -1,0 +1,999 @@
+// preferences.kwxts — kwxTypeScript port of wxSamples/src/preferences/preferences.cpp
+//
+// Demonstrates wxPreferencesEditor: a frame showing two settings values and a
+// File menu whose "Preferences" item opens the platform-native preferences
+// dialog built from a stock "General" page and a custom "Topics" page.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\preferences\preferences.kwxts
+//
+// ---------------------------------------------------------------------------
+// Conversion notes
+// ---------------------------------------------------------------------------
+// * PrefsPageGeneral derives from wxStockPreferencesPage(Kind_General); the
+//   binding spells that as createWxStockPreferencesPage(0). Its CreateWindow()
+//   override is supplied through the SetOnCreateWindow hook, and the hook
+//   publishes the wxPanel it built with SetOnCreateWindowResult(). (The stock
+//   helper always passes a null object pointer, so the page is identified by the
+//   module variable.)
+// * PrefsPageTopics derives from wxPreferencesPage; createKwxPreferencesPage()
+//   builds the helper, and GetName()/GetIcon()/CreateWindow() are supplied
+//   through the corresponding SetOn* hooks. The FFI callback ABI is void-only,
+//   so each hook publishes its result with the matching SetOn*Result() call
+//   before returning.
+// * MyApp's std::unique_ptr<wxPreferencesEditor> is the `prefEditor` variable.
+//   The editor owns the two pages, so their wrappers are borrowed.
+// * PrefsPageGeneralPanel/PrefsPageTopicsPanel derive from wxPanel only to
+//   override TransferDataToWindow()/TransferDataFromWindow(). Those two methods
+//   return bool, and the kwxPanel hooks that would host them are declared
+//   int(*)(void*) natively while every JS callback thunk is void - the return
+//   value would be undefined, which makes the modal dialog ignore the OK button.
+//   The overrides are therefore reproduced explicitly: TransferDataToWindow()
+//   runs right after the panel is built (which is when the dialog creates it),
+//   and TransferDataFromWindow() runs from an EVT_BUTTON(wxID_OK) handler on the
+//   owning preferences dialog.
+// ---------------------------------------------------------------------------
+
+import {
+    ALL,
+    ART_HELP,
+    ART_TOOLBAR,
+    BORDER_NONE,
+    createKwxPreferencesPage,
+    createWxBoxSizer,
+    createWxCheckBox,
+    createWxClosure,
+    createWxFlexGridSizer,
+    createWxFrame,
+    createWxListBox,
+    createWxMenu,
+    createWxMenuBar,
+    createWxPanel,
+    createWxPreferencesEditor,
+    createWxSizerFlags,
+    createWxStaticText,
+    createWxStockPreferencesPage,
+    createWxString,
+    DEFAULT_FRAME_STYLE,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    exitMainLoop,
+    GTKAllowDiagnosticsControl,
+    ID_ANY,
+    ID_EXIT,
+    ID_OK,
+    ID_PREFERENCES,
+    initialize,
+    kwxPreferencesPage,
+    lib,
+    run,
+    setTopWindow,
+    shutdown,
+    TAB_TRAVERSAL,
+    VERTICAL,
+    wrapWxApp,
+    wrapWxkwxPreferencesPage,
+    wrapWxWindow,
+    wxArtProvider_GetBitmapBundle,
+    wxCheckBox,
+    wxCommandEvent,
+    wxEvent,
+    wxFrame,
+    wxGetApp,
+    wxListBox,
+    wxPanel,
+    wxPreferencesEditor,
+    wxPreferencesEditor_ShouldApplyChangesImmediately,
+    wxSizer,
+    wxSizerFlags,
+    wxStaticText,
+    wxStockPreferencesPage,
+} from "kwx";
+import { Callback, exit, platform, pointerOf, Pointer } from "kwx/platform";
+
+/** wxStockPreferencesPage::Kind_General */
+const KIND_GENERAL = 0;
+
+/** Every live wxClosure, kept referenced for the whole event loop. */
+const closures: unknown[] = [];
+
+/** Every live Callback, closed only after run() returns. */
+const callbacks: Callback[] = [];
+
+/** MySettings — the values edited in the preferences dialog. */
+interface MySettings
+{
+    useMarkdown: boolean;
+    spellcheck: boolean;
+}
+
+/** MySettings::MySettings() — hardcoded for demonstration, as in the C++. */
+function newSettings(): MySettings
+{
+    return { useMarkdown: true, spellcheck: false };
+}
+
+/** The application's current settings (MyApp::m_settings). */
+const settings: MySettings = newSettings();
+
+/** Call fn with a temporary wxString and release it on every path. */
+function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** sizer->Add(window, wxSizerFlags(proportion).<setup>()) */
+function addWindowWithFlags(
+    sizer: wxSizer,
+    window: Pointer,
+    proportion: number,
+    setup: (flags: wxSizerFlags) => void,
+): void
+{
+    const flags = createWxSizerFlags(proportion);
+    if (!flags)
+    {
+        sizer.AddWindow(window, proportion, 0, 0, null);
+        return;
+    }
+    setup(flags);
+    sizer.AddWindowFlags(window, flags.ptr);
+    flags.Delete();
+}
+
+/** Creates a Callback for the fixed void(void*, void*, void*) thunk shape. */
+function newCallback(handler: (arg0: Pointer, arg1: Pointer, arg2: Pointer) => void): Callback
+{
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" }, handler,
+    );
+    callbacks.push(callback);
+    return callback;
+}
+
+interface PreferencesFrameState
+{
+    readonly frame: wxFrame;
+    readonly textMarkdownSyntax: wxStaticText;
+    readonly textSpellcheck: wxStaticText;
+}
+
+let frameState: PreferencesFrameState | null = null;
+
+/** MyFrame::UpdateSettings() — refreshes the values shown on screen. */
+function updateSettingsDisplay(state: PreferencesFrameState): void
+{
+    withString(settings.useMarkdown ? "yes" : "no", (label) =>
+        state.textMarkdownSyntax.SetLabel(label));
+    withString(settings.spellcheck ? "on" : "off", (label) =>
+        state.textSpellcheck.SetLabel(label));
+}
+
+/** MyApp::UpdateSettings(settings) — store the values and refresh the frame. */
+function updateSettings(updated: MySettings): void
+{
+    settings.useMarkdown = updated.useMarkdown;
+    settings.spellcheck = updated.spellcheck;
+    if (frameState)
+    {
+        updateSettingsDisplay(frameState);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// PrefsPageGeneralPanel
+// ---------------------------------------------------------------------------
+
+/**
+ * The panel created last by PrefsPageGeneral::CreateWindow(). CreateWindow()
+ * may be called more than once, so the hooks read this "current" panel instead
+ * of capturing one instance.
+ */
+interface GeneralPanelState
+{
+    readonly panel: wxPanel;
+    readonly useMarkdown: wxCheckBox;
+    readonly spellcheck: wxCheckBox;
+    /** MySettings corresponding to the current values in this dialog. */
+    current: MySettings;
+}
+
+let generalPanel: GeneralPanelState | null = null;
+let generalPage: wxStockPreferencesPage | null = null;
+
+let changedUseMarkdown: Callback | null = null;
+let changedSpellcheck: Callback | null = null;
+let createWindowGeneral: Callback | null = null;
+
+/**
+ * PrefsPageGeneralPanel::UpdateSettingsIfNecessary()
+ *
+ * Changes are applied immediately only on platforms whose preferences dialog
+ * works that way (macOS, GTK+); elsewhere they wait for the OK button.
+ */
+function updateSettingsIfNecessary(): void
+{
+    if (wxPreferencesEditor_ShouldApplyChangesImmediately())
+    {
+        const state = generalPanel;
+        if (state)
+        {
+            updateSettings(state.current);
+        }
+    }
+}
+
+/** PrefsPageGeneralPanel::ChangedUseMarkdown() */
+function onChangedUseMarkdown(eventPtr: Pointer): void
+{
+    if (!eventPtr)
+    {
+        return;
+    }
+    const state = generalPanel;
+    if (!state)
+    {
+        return;
+    }
+    state.current.useMarkdown = new wxCommandEvent(eventPtr).IsChecked();
+    updateSettingsIfNecessary();
+}
+
+/** PrefsPageGeneralPanel::ChangedSpellcheck() */
+function onChangedSpellcheck(eventPtr: Pointer): void
+{
+    if (!eventPtr)
+    {
+        return;
+    }
+    const state = generalPanel;
+    if (!state)
+    {
+        return;
+    }
+    state.current.spellcheck = new wxCommandEvent(eventPtr).IsChecked();
+    updateSettingsIfNecessary();
+}
+
+/** PrefsPageGeneralPanel::TransferDataToWindow() */
+function transferToGeneralWindow(): void
+{
+    const state = generalPanel;
+    if (!state)
+    {
+        return;
+    }
+    state.current.useMarkdown = settings.useMarkdown;
+    state.current.spellcheck = settings.spellcheck;
+    state.useMarkdown.SetValue(state.current.useMarkdown);
+    state.spellcheck.SetValue(state.current.spellcheck);
+}
+
+/**
+ * PrefsPageGeneralPanel::TransferDataFromWindow()
+ *
+ * Modal platforms only: called when the user confirms with OK (see
+ * bindPreferencesConfirm). The companion EVT_CHECKBOX handlers cover the
+ * immediate-apply platforms.
+ */
+function transferFromGeneralWindow(): void
+{
+    const state = generalPanel;
+    if (state)
+    {
+        updateSettings(state.current);
+    }
+}
+
+/**
+ * Reproduces wxDialogBase::AcceptAndClose() for the preferences dialog.
+ *
+ * On modal platforms OK runs TransferDataFromWindow() on every page before the
+ * dialog ends. wxWidgets dispatches Bind() handlers ahead of its own event
+ * tables, so this handler performs both pages' transfers and then calls Skip()
+ * to let wxDialogBase::OnButton finish with EndDialog(wxID_OK).
+ *
+ * Both pages call this, but the dialog only gets one ID_OK binding.
+ */
+function bindPreferencesConfirm(parentPtr: Pointer): void
+{
+    // CreateWindow() receives the dialog's notebook; its parent is the dialog
+    // that owns the OK button.
+    const dialog = wrapWxWindow(parentPtr).GetParent();
+    if (!dialog)
+    {
+        return;
+    }
+
+    // Modeless platforms (GTK+, OS X) keep one dialog for the editor's whole
+    // lifetime, and both pages arrive here while that dialog is being built, so
+    // re-binding the same dialog must be skipped.
+    if (confirmDialog === dialog.ptr)
+    {
+        return;
+    }
+
+    if (!confirmPreferences)
+    {
+        confirmPreferences = newCallback((_object, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            // Validate() && TransferDataFromWindow() per page. There are no
+            // validators, so Validate() is the trivial true the C++ relies on.
+            transferFromGeneralWindow();
+            transferFromTopicsWindow();
+            // Let wxDialogBase::OnButton finish with EndDialog(wxID_OK).
+            new wxEvent(eventPtr).Skip(true);
+        });
+    }
+
+    // Modal platforms (MSW) build a brand-new dialog for every Show() and
+    // destroy the previous one. wxEvtHandler's destructor deletes the
+    // wxCallback that wxEvtHandler_Bind() allocated, and that callback's
+    // DecRef() frees the wxClosure. A closure cached from the previous dialog
+    // is therefore dangling: reusing it made the second Show() bind freed
+    // memory and crash on the first OK click. Bind a fresh closure to every
+    // new dialog instead; the previous ones are owned by the destroyed dialogs.
+    const closure = createWxClosure(confirmPreferences.pointer, null)!;
+    closures.push(closure);
+
+    confirmDialog = dialog.ptr;
+    lib.symbols.wxEvtHandler_Bind(
+        dialog.ptr, ID_OK, ID_OK, EVT_BUTTON, closure.ptr,
+    );
+}
+
+/** Binds the two EVT_CHECKBOX handlers of a freshly created panel. */
+function bindGeneralPanelCheckboxes(state: GeneralPanelState): void
+{
+    if (!changedUseMarkdown)
+    {
+        changedUseMarkdown = newCallback((_object, _data, eventPtr) =>
+            onChangedUseMarkdown(eventPtr));
+    }
+    if (!changedSpellcheck)
+    {
+        changedSpellcheck = newCallback((_object, _data, eventPtr) =>
+            onChangedSpellcheck(eventPtr));
+    }
+
+    const useMarkdownClosure = createWxClosure(changedUseMarkdown.pointer, null)!;
+    closures.push(useMarkdownClosure);
+    lib.symbols.wxEvtHandler_Bind(
+        state.useMarkdown.ptr, ID_ANY, ID_ANY, EVT_CHECKBOX, useMarkdownClosure.ptr,
+    );
+
+    const spellcheckClosure = createWxClosure(changedSpellcheck.pointer, null)!;
+    closures.push(spellcheckClosure);
+    lib.symbols.wxEvtHandler_Bind(
+        state.spellcheck.ptr, ID_ANY, ID_ANY, EVT_CHECKBOX, spellcheckClosure.ptr,
+    );
+}
+
+/** PrefsPageGeneralPanel constructor. */
+function createGeneralPanel(parentPtr: Pointer): wxPanel | null
+{
+    // wxPanel(parent), i.e. wxTAB_TRAVERSAL | wxNO_BORDER.
+    // wxPanel(parent) — the derived class only exists to override the two
+    // transfer methods, so a plain wxPanel is the faithful equivalent here.
+    const panel = createWxPanel(
+        parentPtr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL | BORDER_NONE);
+    if (!panel)
+    {
+        return null;
+    }
+
+    // m_useMarkdown = new wxCheckBox(this, wxID_ANY, "Use Markdown syntax");
+    // m_spellcheck  = new wxCheckBox(this, wxID_ANY, "Check spelling");
+    const useMarkdown = withString("Use Markdown syntax", (text) =>
+        createWxCheckBox(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    const spellcheck = withString("Check spelling", (text) =>
+        createWxCheckBox(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (!useMarkdown || !spellcheck)
+    {
+        return null;
+    }
+
+    // wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    // sizer->Add(m_useMarkdown, wxSizerFlags().Border());
+    // sizer->Add(m_spellcheck, wxSizerFlags().Border());
+    // SetSizerAndFit(sizer);
+    const sizer = createWxBoxSizer(VERTICAL);
+    if (!sizer)
+    {
+        return null;
+    }
+    addWindowWithFlags(sizer, useMarkdown.ptr, 0, (flags) => flags.Border(ALL));
+    addWindowWithFlags(sizer, spellcheck.ptr, 0, (flags) => flags.Border(ALL));
+    panel.SetSizerAndFit(sizer.ptr, true);
+
+    bindPreferencesConfirm(parentPtr);
+
+    const state: GeneralPanelState = {
+        panel,
+        useMarkdown,
+        spellcheck,
+        current: newSettings(),
+    };
+    generalPanel = state;
+
+    // PrefsPageGeneralPanel::TransferDataToWindow() — the dialog calls it from
+    // wxWindowBase::OnInitDialog(), i.e. right after creating the page, which is
+    // exactly here.
+    transferToGeneralWindow();
+
+    bindGeneralPanelCheckboxes(state);
+
+    return panel;
+}
+
+// ---------------------------------------------------------------------------
+// PrefsPageGeneral : wxStockPreferencesPage(Kind_General)
+// ---------------------------------------------------------------------------
+
+/** PrefsPageGeneral::CreateWindow(parent) */
+function onCreateGeneralPageWindow(parentPtr: Pointer): void
+{
+    const page = generalPage;
+    if (!page || !parentPtr)
+    {
+        return;
+    }
+
+    const panel = createGeneralPanel(parentPtr);
+    if (panel)
+    {
+        page.SetOnCreateWindowResult(panel.ptr);
+    }
+}
+
+/** PrefsPageGeneral::PrefsPageGeneral() */
+function createPrefsPageGeneral(): wxStockPreferencesPage | null
+{
+    const page = createWxStockPreferencesPage(KIND_GENERAL);
+    if (!page)
+    {
+        return null;
+    }
+
+    generalPage = page;
+    if (!createWindowGeneral)
+    {
+        createWindowGeneral = newCallback((_object, parentPtr, _data) =>
+            onCreateGeneralPageWindow(parentPtr));
+    }
+    page.SetOnCreateWindow(createWindowGeneral.pointer);
+
+    return page;
+}
+
+// ---------------------------------------------------------------------------
+// PrefsPageTopicsPanel
+// ---------------------------------------------------------------------------
+
+interface TopicsPanelState
+{
+    readonly panel: wxPanel;
+    readonly fulltext: wxCheckBox;
+}
+
+let topicsPanel: TopicsPanelState | null = null;
+let changedFulltext: Callback | null = null;
+
+/** The callbacks are shared by both pages; only one is ever bound per dialog. */
+let confirmPreferences: Callback | null = null;
+/** The dialog that currently carries the EVT_BUTTON(wxID_OK) binding. */
+let confirmDialog: Pointer = null;
+
+/**
+ * PrefsPageTopicsPanel::ChangedFulltext()
+ *
+ * The C++ body only holds a comment ("save new m_fulltext value and apply the
+ * change to the app"), so the event is read and nothing else happens.
+ */
+function onChangedFulltext(eventPtr: Pointer): void
+{
+    if (!eventPtr)
+    {
+        return;
+    }
+    void new wxCommandEvent(eventPtr).IsChecked();
+}
+
+/** PrefsPageTopicsPanel::TransferDataToWindow() — hardcoded true. */
+function transferToTopicsWindow(): void
+{
+    if (topicsPanel)
+    {
+        topicsPanel.fulltext.SetValue(true);
+    }
+}
+
+/**
+ * PrefsPageTopicsPanel::TransferDataFromWindow()
+ * Only the modal-dialog platforms call it, and ChangedFulltext(dummy) is a
+ * no-op there, so nothing is transferred back.
+ */
+function transferFromTopicsWindow(): void
+{
+    if (!topicsPanel)
+    {
+        return;
+    }
+    // ChangedFulltext(wxCommandEvent dummy) — a comment-only body in the C++.
+}
+
+/** PrefsPageTopicsPanel constructor. */
+function createTopicsPanel(parentPtr: Pointer): wxPanel | null
+{
+    const panel = createWxPanel(
+        parentPtr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL | BORDER_NONE);
+    if (!panel)
+    {
+        return null;
+    }
+
+    const sizer = createWxBoxSizer(VERTICAL);
+    if (!sizer)
+    {
+        return null;
+    }
+
+    // sizer->Add(new wxStaticText(this, wxID_ANY, "Search in these topics:"),
+    //            wxSizerFlags().Border());
+    const label = withString("Search in these topics:", (text) =>
+        createWxStaticText(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (label)
+    {
+        addWindowWithFlags(sizer, label.ptr, 0, (flags) => flags.Border(ALL));
+    }
+
+    // wxListBox *box = new wxListBox(this, wxID_ANY);
+    // box->SetMinSize(wxSize(400, 300));
+    // sizer->Add(box, wxSizerFlags(1).Border().Expand());
+    const box: wxListBox | null = createWxListBox(
+        panel.ptr, ID_ANY, -1, -1, -1, -1, 0, null, 0);
+    if (!box)
+    {
+        return null;
+    }
+    box.SetMinSize(400, 300);
+    addWindowWithFlags(sizer, box.ptr, 1, (flags) =>
+    {
+        flags.Border(ALL);
+        flags.Expand();
+    });
+
+    // m_fulltext = new wxCheckBox(this, wxID_ANY,
+    //                            "Automatically build fulltext index");
+    const fulltext = withString("Automatically build fulltext index", (text) =>
+        createWxCheckBox(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (!fulltext)
+    {
+        return null;
+    }
+    addWindowWithFlags(sizer, fulltext.ptr, 0, (flags) => flags.Border(ALL));
+
+    panel.SetSizerAndFit(sizer.ptr, true);
+
+    const state: TopicsPanelState = { panel, fulltext };
+    topicsPanel = state;
+
+    // PrefsPageTopicsPanel::TransferDataToWindow() — wxWindowBase::OnInitDialog()
+    // calls it right after the dialog creates the page, which is here.
+    transferToTopicsWindow();
+
+    bindPreferencesConfirm(parentPtr);
+
+    // Only platforms that apply the changes immediately need the live handler.
+    if (wxPreferencesEditor_ShouldApplyChangesImmediately())
+    {
+        if (!changedFulltext)
+        {
+            changedFulltext = newCallback((_object, _data, eventPtr) =>
+                onChangedFulltext(eventPtr));
+        }
+        const closure = createWxClosure(changedFulltext.pointer, null)!;
+        closures.push(closure);
+        lib.symbols.wxEvtHandler_Bind(
+            fulltext.ptr, ID_ANY, ID_ANY, EVT_CHECKBOX, closure.ptr,
+        );
+    }
+
+    return panel;
+}
+
+// ---------------------------------------------------------------------------
+// PrefsPageTopics : wxPreferencesPage
+// ---------------------------------------------------------------------------
+
+let topicsPage: kwxPreferencesPage | null = null;
+let getNameTopics: Callback | null = null;
+let getIconTopics: Callback | null = null;
+let createWindowTopics: Callback | null = null;
+
+/** PrefsPageTopics::GetName() */
+function onGetTopicsName(): void
+{
+    const page = topicsPage;
+    if (!page)
+    {
+        return;
+    }
+
+    // The hook copies the UTF-8 string before the callback returns, so a
+    // temporary buffer is enough.
+    const buffer = new TextEncoder().encode("Topics\0");
+    page.SetOnGetNameResult(pointerOf(buffer));
+}
+
+/** PrefsPageTopics::GetIcon() */
+function onGetTopicsIcon(): void
+{
+    const page = topicsPage;
+    if (!page)
+    {
+        return;
+    }
+
+    // wxArtProvider::GetBitmapBundle(wxART_HELP, wxART_TOOLBAR); the helper
+    // copies the bundle and deletes the original, so ownership passes over.
+    const bundle = wxArtProvider_GetBitmapBundle(ART_HELP, ART_TOOLBAR, -1, -1);
+    if (bundle)
+    {
+        page.SetOnGetIconResult(bundle.ptr);
+    }
+}
+
+/** PrefsPageTopics::CreateWindow(parent) */
+function onCreateTopicsWindow(parentPtr: Pointer): void
+{
+    const page = topicsPage;
+    if (!page || !parentPtr)
+    {
+        return;
+    }
+
+    const panel = createTopicsPanel(parentPtr);
+    if (panel)
+    {
+        page.SetOnCreateWindowResult(panel.ptr);
+    }
+}
+
+/** PrefsPageTopics::PrefsPageTopics() */
+function createPrefsPageTopics(): kwxPreferencesPage | null
+{
+    const raw = createKwxPreferencesPage(null);
+    if (raw === null)
+    {
+        return null;
+    }
+
+    // The editor takes ownership of the page, so this wrapper must not delete
+    // it: wrapWxkwxPreferencesPage() marks it borrowed.
+    const page = wrapWxkwxPreferencesPage(raw);
+    topicsPage = page;
+
+    if (!getNameTopics)
+    {
+        getNameTopics = newCallback(() => onGetTopicsName());
+    }
+    if (!getIconTopics)
+    {
+        getIconTopics = newCallback(() => onGetTopicsIcon());
+    }
+    if (!createWindowTopics)
+    {
+        createWindowTopics = newCallback((_object, parentPtr, _data) =>
+            onCreateTopicsWindow(parentPtr));
+    }
+
+    page.SetOnGetName(getNameTopics.pointer);
+    page.SetOnGetIcon(getIconTopics.pointer);
+    page.SetOnCreateWindow(createWindowTopics.pointer);
+
+    return page;
+}
+
+// ---------------------------------------------------------------------------
+// MyApp
+// ---------------------------------------------------------------------------
+
+/** MyApp::m_prefEditor — std::unique_ptr<wxPreferencesEditor> */
+let prefEditor: wxPreferencesEditor | null = null;
+
+/** MyApp::ShowPreferencesEditor(parent) */
+function showPreferencesEditor(parent: Pointer): void
+{
+    if (!prefEditor)
+    {
+        // new wxPreferencesEditor — the empty title makes the platform use
+        // "<display name> Preferences".
+        const editor = createWxPreferencesEditor(null);
+        if (!editor)
+        {
+            return;
+        }
+
+        // AddPage(new PrefsPageGeneral());
+        const general = createPrefsPageGeneral();
+        if (general)
+        {
+            // The editor owns the page; its wrapper must never be deleted.
+            editor.AddPage(general.ptr);
+        }
+
+        // AddPage(new PrefsPageTopics());
+        const topics = createPrefsPageTopics();
+        if (topics)
+        {
+            editor.AddPage(topics.ptr);
+        }
+
+        prefEditor = editor;
+    }
+
+    // Modal platforms destroy the dialog when Show() returns, so any address
+    // recorded for the previous dialog is stale — and the new dialog may even be
+    // allocated at that same address. Clearing it forces the pages of this
+    // dialog to install their own binding instead of being skipped as a repeat.
+    confirmDialog = null;
+
+    prefEditor.Show(parent);
+}
+
+/** MyApp::DismissPreferencesEditor() */
+function dismissPreferencesEditor(): void
+{
+    if (prefEditor)
+    {
+        prefEditor.Dismiss();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame
+// ---------------------------------------------------------------------------
+
+/** MyFrame constructor — frame, File menu and the settings panel. */
+function createPreferencesFrame(): PreferencesFrameState | null
+{
+    const title = createWxString("Preferences sample");
+    const frame = createWxFrame(null, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE);
+    title.Delete();
+
+    if (!frame)
+    {
+        return null;
+    }
+
+    // wxMenu *fileMenu = new wxMenu;
+    const empty = createWxString("");
+    const fileMenu = createWxMenu(empty.ptr, 0n);
+    empty.Delete();
+
+    if (fileMenu)
+    {
+        // fileMenu->Append(wxID_PREFERENCES); fileMenu->Append(wxID_EXIT);
+        // Both use the one-argument overload: the empty label/help make
+        // wxMenuItemBase::SetItemLabel()/SetHelp() substitute the stock
+        // strings (label with accelerator and mnemonic, stock help text).
+        withString("", (label) =>
+        {
+            withString("", (help) =>
+            {
+                fileMenu.Append(ID_PREFERENCES, label, help, false);
+                fileMenu.Append(ID_EXIT, label, help, false);
+            });
+        });
+
+        // menuBar->Append(fileMenu, "&File"); SetMenuBar(menuBar);
+        const menuBar = createWxMenuBar(0);
+        if (menuBar)
+        {
+            withString("&File", (menuLabel) => menuBar.Append(fileMenu.ptr, menuLabel));
+            frame.SetMenuBar(menuBar.ptr);
+        }
+    }
+
+    // wxPanel* const panel = new wxPanel(this);
+    // wxPanel defaults: wxTAB_TRAVERSAL | wxNO_BORDER.
+    const panel = createWxPanel(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL | BORDER_NONE);
+    if (!panel)
+    {
+        return null;
+    }
+
+    // m_textMarkdownSyntax = new wxStaticText(panel, wxID_ANY, "");
+    // m_textSpellcheck = new wxStaticText(panel, wxID_ANY, "");
+    const textMarkdownSyntax = withString("", (text) =>
+        createWxStaticText(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    const textSpellcheck = withString("", (text) =>
+        createWxStaticText(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (!textMarkdownSyntax || !textSpellcheck)
+    {
+        return null;
+    }
+
+    // wxSizer* const sizer = new wxFlexGridSizer(2, wxSize(5, 5));
+    // That constructor takes two columns and a (5, 5) gap; the binding spells
+    // it as rows, cols, vgap, hgap.
+    const sizer = createWxFlexGridSizer(0, 2, 5, 5);
+    if (!sizer)
+    {
+        return null;
+    }
+
+    // sizer->Add(new wxStaticText(panel, wxID_ANY, "Markdown syntax:"),
+    //            wxSizerFlags().Center().Right());
+    const labelMarkdown = withString("Markdown syntax:", (text) =>
+        createWxStaticText(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (labelMarkdown)
+    {
+        addWindowWithFlags(sizer, labelMarkdown.ptr, 0, (flags) =>
+        {
+            flags.Center();
+            flags.Right();
+        });
+    }
+
+    // sizer->Add(m_textMarkdownSyntax, wxSizerFlags().Center());
+    addWindowWithFlags(sizer, textMarkdownSyntax.ptr, 0, (flags) => flags.Center());
+
+    // sizer->Add(new wxStaticText(panel, wxID_ANY, "Spell checking:"),
+    //            wxSizerFlags().Center().Right());
+    const labelSpellcheck = withString("Spell checking:", (text) =>
+        createWxStaticText(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (labelSpellcheck)
+    {
+        addWindowWithFlags(sizer, labelSpellcheck.ptr, 0, (flags) =>
+        {
+            flags.Center();
+            flags.Right();
+        });
+    }
+
+    // sizer->Add(m_textSpellcheck, wxSizerFlags().Center());
+    addWindowWithFlags(sizer, textSpellcheck.ptr, 0, (flags) => flags.Center());
+
+    panel.SetSizer(sizer.ptr, true);
+
+    const state: PreferencesFrameState = { frame, textMarkdownSyntax, textSpellcheck };
+
+    // Show the initial values.
+    updateSettingsDisplay(state);
+
+    return state;
+}
+
+/**
+ * The frame's Bind() calls:
+ *   Bind(wxEVT_MENU, OnPref, wxID_PREFERENCES)
+ *   Bind(wxEVT_MENU, OnExit, wxID_EXIT)
+ *   Bind(wxEVT_CLOSE_WINDOW, OnClose)
+ */
+function bindPreferencesFrameEvents(state: PreferencesFrameState): void
+{
+    // OnPref: wxGetApp().ShowPreferencesEditor(this)
+    const prefCallback = newCallback((_object, _data, eventPtr) =>
+    {
+        if (!eventPtr)
+        {
+            return;
+        }
+        showPreferencesEditor(state.frame.ptr);
+    });
+    const prefClosure = createWxClosure(prefCallback.pointer, null)!;
+    closures.push(prefClosure);
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr, ID_PREFERENCES, ID_PREFERENCES, EVT_MENU, prefClosure.ptr,
+    );
+
+    // OnExit: Close();
+    const exitCallback = newCallback((_object, _data, eventPtr) =>
+    {
+        if (!eventPtr)
+        {
+            return;
+        }
+        state.frame.Close(false);
+    });
+    const exitClosure = createWxClosure(exitCallback.pointer, null)!;
+    closures.push(exitClosure);
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr, ID_EXIT, ID_EXIT, EVT_MENU, exitClosure.ptr,
+    );
+
+    // OnClose: wxGetApp().DismissPreferencesEditor(); e.Skip();
+    // The frame must not be destroyed from inside its own close handler, so the
+    // editor is dismissed and the event loop is ended explicitly.
+    const closeCallback = newCallback((_object, _data, eventPtr) =>
+    {
+        if (!eventPtr)
+        {
+            return;
+        }
+        dismissPreferencesEditor();
+        exitMainLoop();
+    });
+    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
+    closures.push(closeClosure);
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr,
+    );
+}
+
+/** MyApp::OnInit() */
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    // #ifdef __WXGTK__ — many wxGTK versions emit spurious diagnostics when a
+    // wxNotebook is destroyed; let wxWidgets suppress them.
+    if (platform === "linux")
+    {
+        GTKAllowDiagnosticsControl();
+    }
+
+    // SetAppDisplayName("wxWidgets Sample") — used in the preferences dialog
+    // title, so it must not stay the default "Preferences".
+    withString("wxWidgets Sample", (name) => wrapWxApp(wxGetApp()).SetAppDisplayName(name));
+
+    const state = createPreferencesFrame();
+    if (!state)
+    {
+        console.error("preferences: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+    frameState = state;
+
+    bindPreferencesFrameEvents(state);
+
+    // m_frame->Show(true);
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    // Destroying the editor hides the preferences window; it also deletes the
+    // two pages it owns, so clear the module references first.
+    generalPage = null;
+    topicsPage = null;
+    generalPanel = null;
+    topicsPanel = null;
+    if (prefEditor)
+    {
+        prefEditor.Delete();
+        prefEditor = null;
+    }
+    frameState = null;
+
+    for (const callback of callbacks)
+    {
+        callback.close();
+    }
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

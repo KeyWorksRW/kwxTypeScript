@@ -1,0 +1,775 @@
+// config.kwxts — kwxTypeScript port of wxSamples/src/config/conftest.cpp
+//
+// wxConfig demo: a small frame whose text/checkbox values and position/size are
+// restored from the config on startup and written back when the frame is
+// destroyed. The File menu can also delete the config.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\config\config.kwxts
+
+declare const __dirname: string;
+
+import {
+    BITMAP_TYPE_XPM,
+    BOTTOM,
+    CONFIG_USE_GLOBAL_FILE,
+    CONFIG_USE_LOCAL_FILE,
+    createWxBoxSizer,
+    createWxCheckBox,
+    createWxClosure,
+    createWxFileConfigFor,
+    createWxFrame,
+    createWxIconLoad,
+    createWxMenu,
+    createWxMenuBar,
+    createWxPanel,
+    createWxSizerFlags,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    DEFAULT_FRAME_STYLE,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    exitMainLoop,
+    ICON_INFORMATION,
+    ID_ABOUT,
+    ID_ANY,
+    ID_DELETE,
+    ID_EXIT,
+    initAllImageHandlers,
+    initialize,
+    kwxMessageBox,
+    LEFT,
+    lib,
+    LogError,
+    LogMessage,
+    LogStatus,
+    OK,
+    readAndDeleteWxString,
+    readWxString,
+    RIGHT,
+    run,
+    setAppName,
+    setTopWindow,
+    setVendorName,
+    shutdown,
+    SIZE_USE_EXISTING,
+    STB_DEFAULT_STYLE,
+    TAB_TRAVERSAL,
+    TOP,
+    VERTICAL,
+    wrapWxConfigBase,
+    wxBoxSizer,
+    wxCheckBox,
+    wxClosure,
+    wxConfigBase,
+    wxConfigBase_DontCreateOnDemand,
+    wxConfigBase_Get,
+    wxFrame,
+    wxMenu,
+    wxMenuBar,
+    wxPoint,
+    wxSize,
+    wxSizerFlags,
+    wxTextCtrl,
+    wxGetEnv,
+} from "kwx";
+import { Callback, exit, Pointer } from "kwx/platform";
+
+// ---------------------------------------------------------------------------
+// Small helpers (wxString lifetime and config access)
+// ---------------------------------------------------------------------------
+
+function withString(text: string, fn: (ptr: Pointer) => void): void
+{
+    const value = createWxString(text);
+    try
+    {
+        fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+function samplePath(name: string): string
+{
+    return __dirname + "/" + name;
+}
+
+/** wxConfigBase::Get() as a borrowed wrapper (never call Delete() on it). */
+function getConfig(): wxConfigBase | null
+{
+    const ptr = wxConfigBase_Get();
+    return ptr ? wrapWxConfigBase(ptr) : null;
+}
+
+function setConfigPath(config: wxConfigBase, path: string): void
+{
+    withString(path, (ptr) => { config.SetPath(ptr); });
+}
+
+function readConfigLong(
+    config: wxConfigBase, key: string, defaultValue: number,
+): bigint
+{
+    const keyString = createWxString(key);
+    try
+    {
+        return config.ReadLong(keyString.ptr, BigInt(defaultValue));
+    }
+    finally
+    {
+        keyString.Delete();
+    }
+}
+
+/**
+ * wxConfigBase::Read(key, wxString*) — the out-parameter string is caller-owned,
+ * exactly like the C++ local `wxString s`.
+ */
+function readConfigString(
+    config: wxConfigBase, key: string,
+): { found: boolean; value: string }
+{
+    const keyString = createWxString(key);
+    const value = createWxString("");
+    try
+    {
+        const found = config.Read(keyString.ptr, value.ptr);
+        return { found, value: readWxString(value.ptr) };
+    }
+    finally
+    {
+        value.Delete();
+        keyString.Delete();
+    }
+}
+
+function writeConfigString(
+    config: wxConfigBase, key: string, value: string,
+): void
+{
+    const keyString = createWxString(key);
+    const valueString = createWxString(value);
+    try
+    {
+        config.WriteString(keyString.ptr, valueString.ptr);
+    }
+    finally
+    {
+        valueString.Delete();
+        keyString.Delete();
+    }
+}
+
+function writeConfigLong(
+    config: wxConfigBase, key: string, value: number,
+): void
+{
+    const keyString = createWxString(key);
+    try
+    {
+        config.WriteLong(keyString.ptr, BigInt(value));
+    }
+    finally
+    {
+        keyString.Delete();
+    }
+}
+
+function logStatus(message: string): void
+{
+    withString(message, (ptr) => { LogStatus(ptr); });
+}
+
+function logMessage(message: string): void
+{
+    withString(message, (ptr) => { LogMessage(ptr); });
+}
+
+function logError(message: string): void
+{
+    withString(message, (ptr) => { LogError(ptr); });
+}
+
+/** wxMessageBox(message, caption, style) with the default null parent. */
+function showMessage(message: string, caption: string, style: number): void
+{
+    const messageString = createWxString(message);
+    const captionString = createWxString(caption);
+    try
+    {
+        kwxMessageBox(messageString.ptr, captionString.ptr, style, null, -1, -1);
+    }
+    finally
+    {
+        captionString.Delete();
+        messageString.Delete();
+    }
+}
+
+function setTextValue(control: wxTextCtrl, value: string): void
+{
+    withString(value, (ptr) => { control.SetValue(ptr); });
+}
+
+// ---------------------------------------------------------------------------
+// Menu construction (MyFrame ctor)
+// ---------------------------------------------------------------------------
+
+function appendMenuItem(
+    menu: wxMenu, id: number, label: string, help: string,
+): void
+{
+    const labelString = createWxString(label);
+    const helpString = createWxString(help);
+    try
+    {
+        menu.Append(id, labelString.ptr, helpString.ptr, false);
+    }
+    finally
+    {
+        helpString.Delete();
+        labelString.Delete();
+    }
+}
+
+function buildMenuBar(): wxMenuBar | null
+{
+    const emptyTitle = createWxString("");
+    const fileMenu = createWxMenu(emptyTitle.ptr, 0n);
+    emptyTitle.Delete();
+    if (!fileMenu)
+    {
+        return null;
+    }
+
+    appendMenuItem(fileMenu, ID_DELETE, "&Delete", "Delete config file");
+    fileMenu.AppendSeparator();
+    appendMenuItem(fileMenu, ID_ABOUT, "&About\tF1", "About this sample");
+    fileMenu.AppendSeparator();
+    appendMenuItem(fileMenu, ID_EXIT, "E&xit\tAlt-X", "Exit the program");
+
+    const menuBar = createWxMenuBar(0);
+    if (!menuBar)
+    {
+        return null;
+    }
+
+    const fileTitle = createWxString("&File");
+    try
+    {
+        menuBar.Append(fileMenu.ptr, fileTitle.ptr);
+    }
+    finally
+    {
+        fileTitle.Delete();
+    }
+
+    return menuBar;
+}
+
+// ---------------------------------------------------------------------------
+// Sizer flags (wxSizerFlags().DoubleBorder(...).Expand())
+// ---------------------------------------------------------------------------
+
+function addWindowWithFlags(
+    sizer: wxBoxSizer,
+    window: Pointer,
+    configure: (flags: wxSizerFlags) => void,
+): void
+{
+    if (!sizer)
+    {
+        return;
+    }
+
+    const flags = createWxSizerFlags(0);
+    if (!flags)
+    {
+        sizer.AddWindow(window, 0, 0, 0, null);
+        return;
+    }
+
+    configure(flags);
+    sizer.AddWindowFlags(window, flags.ptr);
+    flags.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// Frame (MyFrame::MyFrame)
+// ---------------------------------------------------------------------------
+
+interface FrameState
+{
+    frame: wxFrame;
+    text: wxTextCtrl;
+    check: wxCheckBox;
+    callbacks: Callback[];
+    closures: wxClosure[];
+}
+
+function createConfigFrame(): FrameState | null
+{
+    const title = createWxString("wxConfig Demo");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+    if (!frame)
+    {
+        return null;
+    }
+
+    // wxLogStatus(this, ...) is not bound with a window argument; the bound
+    // LogStatus() uses the application's top window, so register it now.
+    setTopWindow(frame.ptr);
+
+    // SetIcon(wxICON(sample)): the XPM artwork is loaded at run time.
+    const iconPath = createWxString(samplePath("sample.xpm"));
+    const icon = createWxIconLoad(iconPath.ptr, BigInt(BITMAP_TYPE_XPM), -1, -1);
+    iconPath.Delete();
+    if (icon)
+    {
+        if (icon.IsOk())
+        {
+            frame.SetIcon(icon.ptr);
+        }
+        icon.Delete();
+    }
+
+    const menuBar = buildMenuBar();
+    if (!menuBar)
+    {
+        console.error("config: failed to create the menu bar");
+        frame.Destroy();
+        return null;
+    }
+    frame.SetMenuBar(menuBar.ptr);
+
+    // CreateStatusBar() with its default arguments.
+    frame.CreateStatusBar(1, STB_DEFAULT_STYLE, ID_ANY);
+
+    // Child controls.
+    const panel = createWxPanel(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL,
+    );
+    if (!panel)
+    {
+        console.error("config: failed to create the panel");
+        frame.Destroy();
+        return null;
+    }
+
+    const label = createWxString("These controls remember their values!");
+    const staticText = createWxStaticText(
+        panel.ptr, ID_ANY, label.ptr, -1, -1, -1, -1, 0,
+    );
+    label.Delete();
+    if (!staticText)
+    {
+        console.error("config: failed to create the static text");
+        frame.Destroy();
+        return null;
+    }
+
+    const emptyText = createWxString("");
+    const text = createWxTextCtrl(
+        panel.ptr, ID_ANY, emptyText.ptr, -1, -1, -1, -1, 0n,
+    );
+    emptyText.Delete();
+    if (!text)
+    {
+        console.error("config: failed to create the text control");
+        frame.Destroy();
+        return null;
+    }
+
+    const checkLabel = createWxString("show welcome message box at startup");
+    const check = createWxCheckBox(
+        panel.ptr, ID_ANY, checkLabel.ptr, -1, -1, -1, -1, 0,
+    );
+    checkLabel.Delete();
+    if (!check)
+    {
+        console.error("config: failed to create the check box");
+        frame.Destroy();
+        return null;
+    }
+
+    const sizer = createWxBoxSizer(VERTICAL);
+    if (!sizer)
+    {
+        console.error("config: failed to create the sizer");
+        frame.Destroy();
+        return null;
+    }
+
+    // sizer->Add(st, wxSizerFlags().DoubleBorder(wxLEFT|wxBOTTOM|wxTOP));
+    addWindowWithFlags(sizer, staticText.ptr, (flags) => {
+        flags.DoubleBorder(LEFT | BOTTOM | TOP);
+    });
+
+    // sizer->Add(m_text, wxSizerFlags()
+    //      .DoubleBorder(wxLEFT|wxBOTTOM|wxRIGHT).Expand());
+    addWindowWithFlags(sizer, text.ptr, (flags) => {
+        flags.DoubleBorder(LEFT | BOTTOM | RIGHT);
+        flags.Expand();
+    });
+
+    // sizer->Add(m_check, wxSizerFlags().DoubleBorder(wxLEFT));
+    addWindowWithFlags(sizer, check.ptr, (flags) => {
+        flags.DoubleBorder(LEFT);
+    });
+
+    panel.SetSizer(sizer.ptr, false);
+
+    // Restore the control's values from the config.
+    const config = getConfig();
+    if (config)
+    {
+        // We could write Read("/Controls/Text") as well; SetPath() is shown
+        // here to mirror the C++ sample.
+        setConfigPath(config, "/Controls");
+        setTextValue(text, readConfigString(config, "Text").value);
+        check.SetValue(readConfigLong(config, "Check", 1) !== 0n);
+
+        // SetPath() understands "..".
+        setConfigPath(config, "../MainFrame");
+
+        // Restore frame position and size.
+        const x = Number(readConfigLong(config, "x", 50));
+        const y = Number(readConfigLong(config, "y", 50));
+        const w = Number(readConfigLong(config, "w", 350));
+        const h = Number(readConfigLong(config, "h", 200));
+        frame.Move(x, y, SIZE_USE_EXISTING);
+        frame.SetClientSize(w, h);
+
+        setConfigPath(config, "/");
+        const testValue = readConfigString(config, "TestValue");
+        if (testValue.found)
+        {
+            logStatus(`TestValue from config is '${testValue.value}'`);
+        }
+        else
+        {
+            logStatus("TestValue not found in the config");
+        }
+    }
+    else
+    {
+        // Defensive path; the application always creates a config in main().
+        check.SetValue(true);
+        frame.Move(50, 50, SIZE_USE_EXISTING);
+        frame.SetClientSize(350, 200);
+        logStatus("TestValue not found in the config");
+    }
+
+    return {
+        frame,
+        text,
+        check,
+        callbacks: [],
+        closures: [],
+    };
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame::~MyFrame — save the control values and frame geometry
+// ---------------------------------------------------------------------------
+
+function saveFrameConfig(state: FrameState): void
+{
+    const config = getConfig();
+    if (!config)
+    {
+        return;
+    }
+
+    // pConfig->Write("/Controls/Text", m_text->GetValue());
+    const textPointer = state.text.GetValue();
+    const textValue = readAndDeleteWxString(textPointer);
+    writeConfigString(config, "/Controls/Text", textValue);
+
+    // pConfig->Write("/Controls/Check", m_check->GetValue());
+    const checkKey = createWxString("/Controls/Check");
+    try
+    {
+        config.WriteBool(checkKey.ptr, state.check.GetValue());
+    }
+    finally
+    {
+        checkKey.Delete();
+    }
+
+    // pConfig->Write("/MainFrame/x", (long) x); ...
+    const sizePointer = state.frame.GetClientSize();
+    let width = 0;
+    let height = 0;
+    if (sizePointer)
+    {
+        const size = new wxSize(sizePointer);
+        width = size.GetWidth();
+        height = size.GetHeight();
+        size.Delete();
+    }
+
+    const positionPointer = state.frame.GetPosition();
+    let x = 0;
+    let y = 0;
+    if (positionPointer)
+    {
+        const position = new wxPoint(positionPointer);
+        x = position.GetX();
+        y = position.GetY();
+        position.Delete();
+    }
+
+    writeConfigLong(config, "/MainFrame/x", x);
+    writeConfigLong(config, "/MainFrame/y", y);
+    writeConfigLong(config, "/MainFrame/w", width);
+    writeConfigLong(config, "/MainFrame/h", height);
+
+    writeConfigString(config, "/TestValue", "A test value");
+}
+
+// ---------------------------------------------------------------------------
+// Menu handlers
+// ---------------------------------------------------------------------------
+
+function onDelete(): void
+{
+    // wxConfigBase *pConfig = wxConfigBase::Get();
+    const configPointer = wxConfigBase_Get();
+    if (!configPointer)
+    {
+        logError("No config to delete!");
+        return;
+    }
+
+    const config = wrapWxConfigBase(configPointer);
+    if (config.DeleteAll())
+    {
+        logMessage("Config file/registry key successfully deleted.");
+
+        // delete wxConfigBase::Set(nullptr): clear the global pointer first,
+        // then delete the object it returned.
+        lib.symbols.wxConfigBase_Set(null);
+        lib.symbols.wxConfigBase_Delete(configPointer);
+        wxConfigBase_DontCreateOnDemand();
+    }
+    else
+    {
+        logError("Deleting config file/registry key failed.");
+    }
+}
+
+function onAbout(): void
+{
+    showMessage(
+        "wxConfig demo\n(c) 1998-2001 Vadim Zeitlin",
+        "About",
+        ICON_INFORMATION | OK,
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Event connections (MyFrame event table)
+// ---------------------------------------------------------------------------
+
+function connectMenuEvent(
+    state: FrameState, id: number, handler: () => void,
+): void
+{
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            handler();
+        },
+    );
+    const closure = createWxClosure(callback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(
+        state.frame.ptr, id, id, EVT_MENU, closure.ptr,
+    );
+    state.callbacks.push(callback);
+    state.closures.push(closure);
+}
+
+function connectEvents(state: FrameState): void
+{
+    // EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+    connectMenuEvent(state, ID_EXIT, () => { state.frame.Close(true); });
+
+    // EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
+    connectMenuEvent(state, ID_ABOUT, () => { onAbout(); });
+
+    // EVT_MENU(wxID_DELETE, MyFrame::OnDelete)
+    connectMenuEvent(state, ID_DELETE, () => { onDelete(); });
+
+    // MyFrame has no EVT_CLOSE handler in C++: the frame is destroyed and its
+    // destructor saves the config. The equivalent here saves and stops the loop.
+    const closeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            saveFrameConfig(state);
+            exitMainLoop();
+        },
+    );
+    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(
+        state.frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr,
+    );
+    state.callbacks.push(closeCallback);
+    state.closures.push(closeClosure);
+}
+
+// ---------------------------------------------------------------------------
+// MyApp::OnInit / wxIMPLEMENT_APP
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    // The application and vendor names are used by wxConfig to construct the
+    // name of the config file/registry key and must be set before the first
+    // call to Get().
+    setVendorName("wxWidgets");
+    setAppName("conftest");
+
+    // Needed before createWxIconLoad() reads sample.xpm.
+    initAllImageHandlers();
+
+    let config: wxConfigBase | null = null;
+
+    // if ( wxGetEnv("WX_CONFIG_CREATE_ON_DEMAND", nullptr) )
+    const envName = createWxString("WX_CONFIG_CREATE_ON_DEMAND");
+    const envValue = createWxString("");
+    let createOnDemand = false;
+    try
+    {
+        createOnDemand = wxGetEnv(envName.ptr, envValue.ptr);
+    }
+    finally
+    {
+        envValue.Delete();
+        envName.Delete();
+    }
+
+    if (createOnDemand)
+    {
+        // Let wxConfigBase::Get() create the platform default config object.
+        config = getConfig();
+    }
+    else
+    {
+        // The C++ code calls new wxConfig(GetAppName(), GetVendorName(), "",
+        // "", wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE). The only
+        // constructor binding with those arguments is wxFileConfig's, so the
+        // same arguments and flags are used here. On Unix/macOS wxConfig is
+        // wxFileConfig, so this is identical. On Windows it uses a config file
+        // where the C++ original uses wxRegConfig (the registry).
+        const appName = createWxString("conftest");
+        const vendorName = createWxString("wxWidgets");
+        const localFile = createWxString("");
+        const globalFile = createWxString("");
+        try
+        {
+            config = createWxFileConfigFor(
+                appName.ptr,
+                vendorName.ptr,
+                localFile.ptr,
+                globalFile.ptr,
+                BigInt(CONFIG_USE_LOCAL_FILE | CONFIG_USE_GLOBAL_FILE),
+            );
+        }
+        finally
+        {
+            globalFile.Delete();
+            localFile.Delete();
+            vendorName.Delete();
+            appName.Delete();
+        }
+
+        if (config)
+        {
+            // Set it as the global config object: this also gives its ownership
+            // to wxWidgets, which will delete it.
+            config.Set();
+        }
+        else
+        {
+            console.error(
+                "config: failed to create wxFileConfig; using the platform default",
+            );
+            config = getConfig();
+        }
+    }
+
+    if (!config)
+    {
+        console.error("config: no config object available");
+        shutdown();
+        return 1;
+    }
+
+    config.SetRecordDefaults(true);
+
+    // Create the main program window (its constructor restores the values).
+    const state = createConfigFrame();
+    if (!state)
+    {
+        console.error("config: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    connectEvents(state);
+
+    state.frame.Show();
+
+    // Use our config object...
+    if (readConfigLong(config, "/Controls/Check", 1) !== 0n)
+    {
+        showMessage(
+            "You can disable this message box by unchecking\n" +
+            "the checkbox in the main window (of course, a real\n" +
+            "program would have a checkbox right here but we\n" +
+            "keep it simple)",
+            "Welcome to wxConfig demo",
+            ICON_INFORMATION | OK,
+        );
+    }
+
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    // ~MyFrame has already written its values from the close handler. The
+    // config object itself is owned by wxWidgets and deleted by shutdown().
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

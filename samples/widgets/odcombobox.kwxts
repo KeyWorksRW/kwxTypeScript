@@ -1,0 +1,1215 @@
+// odcombobox.kwxts — port of wxSamples/src/widgets/odcombobox.cpp
+//
+// Known binding gaps (see the final report):
+//  * wxVListBoxComboPopup is not bound, so the popup is the one
+//    wxOwnerDrawnComboBox creates internally; SetPopupControl() is never called
+//    (the C++ sample does not call it either).
+//  * DemoODComboBox's OnDrawItem()/OnDrawBackground()/OnMeasureItem()/
+//    OnMeasureItemWidth() overrides cannot be reproduced: kwxOwnerDrawnComboBox
+//    does expose them as native callbacks, but the runtime's callback trampoline
+//    forwards exactly three pointer arguments and discards the return value, so
+//    neither the item index/flags nor the measured height reach JavaScript.  The
+//    items therefore use wxOwnerDrawnComboBox's default drawing.
+//  * wxNullBitmap has no binding and wxMemoryDC_SelectObject() dereferences its
+//    argument, so the memory DC used for the button bitmaps is deselected by
+//    selecting a default (empty) wxBitmap, which wxWidgets treats like
+//    wxNullBitmap.
+
+import {
+    ALL,
+    ALIGN_CENTRE_HORIZONTAL,
+    BRUSHSTYLE_SOLID,
+    CB_READONLY,
+    CB_SORT,
+    createWxBitmapEmpty,
+    createWxBoxSizer,
+    createWxBrushFromColour,
+    createWxButton,
+    createWxColourRGB,
+    createWxMaskColoured,
+    createWxMemoryDC,
+    createWxOwnerDrawnComboBox,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_COMBOBOX,
+    EVT_COMBOBOX_CLOSEUP,
+    EVT_COMBOBOX_DROPDOWN,
+    EVT_RADIOBOX,
+    EVT_TEXT,
+    EVT_TEXT_ENTER,
+    EVT_UPDATE_UI,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    LEFT,
+    NOT_FOUND,
+    Null_Bitmap,
+    ODCB_DCLICK_CYCLES,
+    readAndDeleteWxString,
+    RIGHT,
+    TOP,
+    TRANSPARENT_PEN,
+    VERTICAL,
+    wxBitmap,
+    wxCheckBox,
+    wxColour,
+    wxCommandEvent,
+    wxItemContainer,
+    wxOwnerDrawnComboBox,
+    wxSizer,
+    wxTextCtrl,
+    wxTextEntry,
+    wxUpdateUIEvent,
+    wxWindow,
+    wrapWxWindow,
+} from "kwx";
+import { platform, Pointer } from "kwx/platform";
+
+import {
+    addSizer,
+    addSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    doubleBorder,
+    logMessage,
+    makeStaticBoxSizer,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+import { runItemContainerTest } from "./itemcontainer.kwxts";
+
+// Control ids, in the order of the C++ enum.
+const ODCOMBO_PAGE_RESET = ID_HIGHEST;
+const ODCOMBO_PAGE_POPUP_MIN_WIDTH = ODCOMBO_PAGE_RESET + 1;
+const ODCOMBO_PAGE_POPUP_HEIGHT = ODCOMBO_PAGE_POPUP_MIN_WIDTH + 1;
+const ODCOMBO_PAGE_BUTTON_WIDTH = ODCOMBO_PAGE_POPUP_HEIGHT + 1;
+const ODCOMBO_PAGE_BUTTON_HEIGHT = ODCOMBO_PAGE_BUTTON_WIDTH + 1;
+const ODCOMBO_PAGE_BUTTON_SPACING = ODCOMBO_PAGE_BUTTON_HEIGHT + 1;
+const ODCOMBO_PAGE_CUR_TEXT = ODCOMBO_PAGE_BUTTON_SPACING + 1;
+const ODCOMBO_PAGE_INSERTION_POINT_TEXT = ODCOMBO_PAGE_CUR_TEXT + 1;
+const ODCOMBO_PAGE_INSERT = ODCOMBO_PAGE_INSERTION_POINT_TEXT + 1;
+const ODCOMBO_PAGE_INSERT_TEXT = ODCOMBO_PAGE_INSERT + 1;
+const ODCOMBO_PAGE_ADD = ODCOMBO_PAGE_INSERT_TEXT + 1;
+const ODCOMBO_PAGE_ADD_TEXT = ODCOMBO_PAGE_ADD + 1;
+const ODCOMBO_PAGE_ADD_SEVERAL = ODCOMBO_PAGE_ADD_TEXT + 1;
+const ODCOMBO_PAGE_ADD_MANY = ODCOMBO_PAGE_ADD_SEVERAL + 1;
+const ODCOMBO_PAGE_CLEAR = ODCOMBO_PAGE_ADD_MANY + 1;
+const ODCOMBO_PAGE_CHANGE = ODCOMBO_PAGE_CLEAR + 1;
+const ODCOMBO_PAGE_CHANGE_TEXT = ODCOMBO_PAGE_CHANGE + 1;
+const ODCOMBO_PAGE_DELETE = ODCOMBO_PAGE_CHANGE_TEXT + 1;
+const ODCOMBO_PAGE_DELETE_TEXT = ODCOMBO_PAGE_DELETE + 1;
+const ODCOMBO_PAGE_DELETE_SEL = ODCOMBO_PAGE_DELETE_TEXT + 1;
+const ODCOMBO_PAGE_COMBO = ODCOMBO_PAGE_DELETE_SEL + 1;
+const ODCOMBO_PAGE_CONTAINER_TESTS = ODCOMBO_PAGE_COMBO + 1;
+
+// ---------------------------------------------------------------------------
+// Text control helpers (wxTextCtrl::GetValue() / wxString::ToLong() etc.)
+// ---------------------------------------------------------------------------
+
+/** Current text of a text control, '' when the control has no value. */
+function textValue(control: wxTextCtrl): string
+{
+    const value = control.GetValue();
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** wxString::ToLong(): null when the text is not a (signed) number. */
+function integerValue(control: wxTextCtrl | null): number | null
+{
+    if (!control)
+    {
+        return null;
+    }
+    const text = textValue(control).trim();
+    return /^[+-]?\d+$/.test(text) ? Number(text) : null;
+}
+
+/** wxString::ToULong(): null when the text is not an unsigned number. */
+function unsignedValue(control: wxTextCtrl | null): number | null
+{
+    if (!control)
+    {
+        return null;
+    }
+    const text = textValue(control).trim();
+    return /^\d+$/.test(text) ? Number(text) : null;
+}
+
+/** wxTextCtrl::SetValue() */
+function setTextValue(control: wxTextCtrl | null, text: string): void
+{
+    if (!control)
+    {
+        return;
+    }
+    withString(text, (ptr) => control.SetValue(ptr));
+}
+
+/** wxOwnerDrawnComboBox::GetString(n) as a JavaScript string. */
+function itemText(combo: wxOwnerDrawnComboBox, index: number): string
+{
+    const value = combo.GetString(index);
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** wxColour(r, g, b) with an opaque alpha channel. */
+function colour(red: number, green: number, blue: number): wxColour | null
+{
+    return createWxColourRGB(red, green, blue, 255);
+}
+
+export class ODComboboxPage extends WidgetsPage
+{
+    // the checkboxes for styles
+    private chkSort: wxCheckBox | null = null;
+    private chkReadonly: wxCheckBox | null = null;
+    private chkDclickcycles: wxCheckBox | null = null;
+    private chkBitmapbutton: wxCheckBox | null = null;
+    private chkStdbutton: wxCheckBox | null = null;
+
+    // the text entries for popup and button adjustment
+    private textPopupMinWidth: wxTextCtrl | null = null;
+    private textPopupHeight: wxTextCtrl | null = null;
+    private textButtonWidth: wxTextCtrl | null = null;
+    private textButtonHeight: wxTextCtrl | null = null;
+    private textButtonSpacing: wxTextCtrl | null = null;
+
+    // the checkboxes for same
+    private chkAlignpopupright: wxCheckBox | null = null;
+    private chkAlignbutleft: wxCheckBox | null = null;
+
+    // the combobox itself and the sizer it is in
+    private comboBox: wxOwnerDrawnComboBox | null = null;
+    private sizerCombo: wxSizer | null = null;
+
+    // the text entries for "Add/change string" and "Delete" buttons
+    private textInsert: wxTextCtrl | null = null;
+    private textAdd: wxTextCtrl | null = null;
+    private textChange: wxTextCtrl | null = null;
+    private textDelete: wxTextCtrl | null = null;
+
+    // the "static unsigned int s_item" counters of the C++ handlers
+    private insertCounter = 0;
+    private addCounter = 0;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/odcombobox");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.comboBox ? wrapWxWindow(this.comboBox.ptr) : null;
+    }
+
+    override getTextEntry(): wxTextEntry | null
+    {
+        const textCtrl = this.comboBox ? this.comboBox.GetTextCtrl() : null;
+        return textCtrl ? new wxTextEntry(textCtrl, true) : null;
+    }
+
+    override createContent(): void
+    {
+        const sizerTop = createWxBoxSizer(HORIZONTAL)!;
+        const sizerLeft = createWxBoxSizer(VERTICAL)!;
+
+        // left pane - style box
+        const sizerStyle = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&Set style");
+
+        this.chkSort = this.createCheckBoxAndAddToSizer(
+            sizerStyle.sizer, "&Sort items", ID_ANY, sizerStyle.box.ptr);
+        this.chkReadonly = this.createCheckBoxAndAddToSizer(
+            sizerStyle.sizer, "&Read only", ID_ANY, sizerStyle.box.ptr);
+        this.chkDclickcycles = this.createCheckBoxAndAddToSizer(
+            sizerStyle.sizer, "&Double-click Cycles", ID_ANY,
+            sizerStyle.box.ptr);
+
+        addSpacer(sizerStyle.sizer, this.dip(4));
+
+        this.chkBitmapbutton = this.createCheckBoxAndAddToSizer(
+            sizerStyle.sizer, "&Bitmap button", ID_ANY, sizerStyle.box.ptr);
+        this.chkStdbutton = this.createCheckBoxAndAddToSizer(
+            sizerStyle.sizer, "B&lank button background", ID_ANY,
+            sizerStyle.box.ptr);
+
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(sizerStyle.box.ptr, ODCOMBO_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerStyle.sizer, resetButton, 0,
+            ALIGN_CENTRE_HORIZONTAL | ALL, this.dip(3));
+
+        addSizer(sizerLeft, sizerStyle.sizer, 0, EXPAND, 0);
+
+        // left pane - popup adjustment box
+        const sizerPopupPos = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "Adjust &popup");
+
+        let sizerRow = this.createSizerWithTextAndLabel(
+            "Min. Width:", ODCOMBO_PAGE_POPUP_MIN_WIDTH,
+            (text) =>
+            {
+                this.textPopupMinWidth = text;
+                setTextValue(text, "-1");
+            },
+            sizerPopupPos.box.ptr);
+        addSizer(sizerPopupPos.sizer, sizerRow, 0, EXPAND, border());
+
+        sizerRow = this.createSizerWithTextAndLabel(
+            "Max. Height:", ODCOMBO_PAGE_POPUP_HEIGHT,
+            (text) =>
+            {
+                this.textPopupHeight = text;
+                setTextValue(text, "-1");
+            },
+            sizerPopupPos.box.ptr);
+        addSizer(sizerPopupPos.sizer, sizerRow, 0, EXPAND, border());
+
+        this.chkAlignpopupright = this.createCheckBoxAndAddToSizer(
+            sizerPopupPos.sizer, "Align Right", ID_ANY, sizerPopupPos.box.ptr);
+
+        addSizer(sizerLeft, sizerPopupPos.sizer, 0, EXPAND | TOP, this.dip(2));
+
+        // left pane - button adjustment box
+        const sizerButtonPos = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "Adjust &button");
+
+        sizerRow = this.createSizerWithTextAndLabel(
+            "Width:", ODCOMBO_PAGE_BUTTON_WIDTH,
+            (text) =>
+            {
+                this.textButtonWidth = text;
+                setTextValue(text, "-1");
+            },
+            sizerButtonPos.box.ptr);
+        addSizer(sizerButtonPos.sizer, sizerRow, 0, EXPAND, border());
+
+        sizerRow = this.createSizerWithTextAndLabel(
+            "VSpacing:", ODCOMBO_PAGE_BUTTON_SPACING,
+            (text) =>
+            {
+                this.textButtonSpacing = text;
+                setTextValue(text, "0");
+            },
+            sizerButtonPos.box.ptr);
+        addSizer(sizerButtonPos.sizer, sizerRow, 0, EXPAND, border());
+
+        sizerRow = this.createSizerWithTextAndLabel(
+            "Height:", ODCOMBO_PAGE_BUTTON_HEIGHT,
+            (text) =>
+            {
+                this.textButtonHeight = text;
+                setTextValue(text, "-1");
+            },
+            sizerButtonPos.box.ptr);
+        addSizer(sizerButtonPos.sizer, sizerRow, 0, EXPAND, border());
+
+        this.chkAlignbutleft = this.createCheckBoxAndAddToSizer(
+            sizerButtonPos.sizer, "Align Left", ID_ANY, sizerButtonPos.box.ptr);
+
+        addSizer(sizerLeft, sizerButtonPos.sizer, 0, EXPAND | TOP, this.dip(2));
+
+        // middle pane
+        const sizerMiddle = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&Change combobox contents");
+
+        const testButton = withString("Run &tests", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, ODCOMBO_PAGE_CONTAINER_TESTS,
+                ptr, -1, -1, -1, -1, 0))!;
+        addWin(sizerMiddle.sizer, testButton, 0, EXPAND, border());
+
+        sizerRow = this.createSizerWithTextAndLabel(
+            "Current selection", ODCOMBO_PAGE_CUR_TEXT,
+            (text) =>
+            {
+                text.SetEditable(false);
+            },
+            sizerMiddle.box.ptr);
+        addSizer(sizerMiddle.sizer, sizerRow, 0, EXPAND, border());
+
+        sizerRow = this.createSizerWithTextAndLabel(
+            "Insertion Point", ODCOMBO_PAGE_INSERTION_POINT_TEXT,
+            (text) =>
+            {
+                text.SetEditable(false);
+            },
+            sizerMiddle.box.ptr);
+        addSizer(sizerMiddle.sizer, sizerRow, 0, EXPAND, border());
+
+        sizerRow = this.createSizerWithTextAndButton(
+            ODCOMBO_PAGE_INSERT, "&Insert this string",
+            ODCOMBO_PAGE_INSERT_TEXT,
+            (text) =>
+            {
+                this.textInsert = text;
+            },
+            sizerMiddle.box.ptr);
+        addSizer(sizerMiddle.sizer, sizerRow, 0, EXPAND, border());
+
+        sizerRow = this.createSizerWithTextAndButton(
+            ODCOMBO_PAGE_ADD, "&Add this string", ODCOMBO_PAGE_ADD_TEXT,
+            (text) =>
+            {
+                this.textAdd = text;
+            },
+            sizerMiddle.box.ptr);
+        addSizer(sizerMiddle.sizer, sizerRow, 0, EXPAND, border());
+
+        const addSeveralButton = withString("&Append a few strings", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, ODCOMBO_PAGE_ADD_SEVERAL, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerMiddle.sizer, addSeveralButton, 0, EXPAND, border());
+
+        const addManyButton = withString("Append &many strings", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, ODCOMBO_PAGE_ADD_MANY, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerMiddle.sizer, addManyButton, 0, EXPAND, border());
+
+        sizerRow = this.createSizerWithTextAndButton(
+            ODCOMBO_PAGE_CHANGE, "C&hange current", ODCOMBO_PAGE_CHANGE_TEXT,
+            (text) =>
+            {
+                this.textChange = text;
+            },
+            sizerMiddle.box.ptr);
+        addSizer(sizerMiddle.sizer, sizerRow, 0, EXPAND, border());
+
+        sizerRow = this.createSizerWithTextAndButton(
+            ODCOMBO_PAGE_DELETE, "&Delete this item", ODCOMBO_PAGE_DELETE_TEXT,
+            (text) =>
+            {
+                this.textDelete = text;
+            },
+            sizerMiddle.box.ptr);
+        addSizer(sizerMiddle.sizer, sizerRow, 0, EXPAND, border());
+
+        const deleteSelButton = withString("Delete &selection", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, ODCOMBO_PAGE_DELETE_SEL, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerMiddle.sizer, deleteSelButton, 0, EXPAND, border());
+
+        const clearButton = withString("&Clear", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, ODCOMBO_PAGE_CLEAR, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerMiddle.sizer, clearButton, 0, EXPAND, border());
+
+        // right pane
+        const sizerRight = createWxBoxSizer(VERTICAL)!;
+        this.sizerCombo = sizerRight;
+
+        const combo = this.createComboControl(attrs.defaultFlags);
+        if (combo)
+        {
+            addWin(sizerRight, wrapWxWindow(combo.ptr), 0, EXPAND, border());
+        }
+        sizerRight.SetMinSize(this.dip(150), 0);
+
+        // the 3 panes compose the window
+        addSizer(sizerTop, sizerLeft, 4, EXPAND | (ALL & ~LEFT),
+            doubleBorder());
+        addSizer(sizerTop, sizerMiddle.sizer, 5, EXPAND, doubleBorder());
+        addSizer(sizerTop, sizerRight, 4, EXPAND | (ALL & ~RIGHT),
+            doubleBorder());
+
+        // final initializations
+        this.reset();
+
+        this.page.SetSizer(sizerTop.ptr, false);
+
+        this.bindEvents();
+    }
+
+    override recreateWidget(): void
+    {
+        this.createCombo();
+    }
+
+    // -- event bindings ------------------------------------------------------
+
+    private bindEvents(): void
+    {
+        bindEvent(this.page, ODCOMBO_PAGE_RESET, ODCOMBO_PAGE_RESET,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.reset();
+                this.createCombo();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_CHANGE, ODCOMBO_PAGE_CHANGE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonChange();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_DELETE, ODCOMBO_PAGE_DELETE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonDelete();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_DELETE_SEL, ODCOMBO_PAGE_DELETE_SEL,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonDeleteSelection();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_CLEAR, ODCOMBO_PAGE_CLEAR,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.comboBox?.Clear();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_INSERT, ODCOMBO_PAGE_INSERT,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonInsert();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_ADD, ODCOMBO_PAGE_ADD,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonAdd();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_ADD_SEVERAL, ODCOMBO_PAGE_ADD_SEVERAL,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonAddSeveral();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_ADD_MANY, ODCOMBO_PAGE_ADD_MANY,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonAddMany();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_CONTAINER_TESTS,
+            ODCOMBO_PAGE_CONTAINER_TESTS, EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const combo = this.comboBox;
+                if (!combo)
+                {
+                    return;
+                }
+                runItemContainerTest(
+                    new wxItemContainer(combo.ptr, true),
+                    wrapWxWindow(combo.ptr));
+            });
+
+        // EVT_TEXT_ENTER() of the three text entries repeats the button.
+        bindEvent(this.page, ODCOMBO_PAGE_INSERT_TEXT,
+            ODCOMBO_PAGE_INSERT_TEXT, EVT_TEXT_ENTER, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonInsert();
+            });
+        bindEvent(this.page, ODCOMBO_PAGE_ADD_TEXT, ODCOMBO_PAGE_ADD_TEXT,
+            EVT_TEXT_ENTER, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonAdd();
+            });
+        bindEvent(this.page, ODCOMBO_PAGE_DELETE_TEXT, ODCOMBO_PAGE_DELETE_TEXT,
+            EVT_TEXT_ENTER, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonDelete();
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_POPUP_MIN_WIDTH,
+            ODCOMBO_PAGE_POPUP_MIN_WIDTH, EVT_TEXT, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.setPopupWidth();
+            });
+        bindEvent(this.page, ODCOMBO_PAGE_POPUP_HEIGHT,
+            ODCOMBO_PAGE_POPUP_HEIGHT, EVT_TEXT, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.setPopupHeight();
+            });
+
+        for (const id of [
+            ODCOMBO_PAGE_BUTTON_WIDTH, ODCOMBO_PAGE_BUTTON_HEIGHT,
+            ODCOMBO_PAGE_BUTTON_SPACING,
+        ])
+        {
+            bindEvent(this.page, id, id, EVT_TEXT, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onTextButtonAll();
+            });
+        }
+
+        // EVT_UPDATE_UI: bound on the control itself.
+        this.bindUpdateUI(ODCOMBO_PAGE_CUR_TEXT, (event) =>
+        {
+            const combo = this.comboBox;
+            if (!combo)
+            {
+                return;
+            }
+            const selection = combo.GetSelection();
+            withString(String(selection), (ptr) => event.SetText(ptr));
+        });
+
+        this.bindUpdateUI(ODCOMBO_PAGE_INSERTION_POINT_TEXT, (event) =>
+        {
+            const combo = this.comboBox;
+            if (!combo)
+            {
+                return;
+            }
+            const point = combo.GetInsertionPoint();
+            withString(String(point), (ptr) => event.SetText(ptr));
+        });
+
+        this.bindUpdateUI(ODCOMBO_PAGE_RESET, (event) =>
+        {
+            if (!this.comboBox)
+            {
+                return;
+            }
+            event.Enable(
+                this.chkSort?.GetValue() === true ||
+                this.chkReadonly?.GetValue() === true ||
+                this.chkBitmapbutton?.GetValue() === true);
+        });
+
+        this.bindUpdateUI(ODCOMBO_PAGE_INSERT, (event) =>
+        {
+            const combo = this.comboBox;
+            if (!combo)
+            {
+                return;
+            }
+            const flag = BigInt(CB_SORT);
+            event.Enable(
+                (combo.GetWindowStyle() & flag) === 0n &&
+                combo.GetSelection() >= 0);
+        });
+
+        this.bindUpdateUI(ODCOMBO_PAGE_ADD_SEVERAL, (event) =>
+        {
+            const combo = this.comboBox;
+            if (!combo)
+            {
+                return;
+            }
+            event.Enable((combo.GetWindowStyle() & BigInt(CB_SORT)) === 0n);
+        });
+
+        this.bindUpdateUI(ODCOMBO_PAGE_CLEAR, (event) =>
+        {
+            const combo = this.comboBox;
+            if (!combo)
+            {
+                return;
+            }
+            event.Enable(combo.GetCount() !== 0);
+        });
+
+        this.bindUpdateUI(ODCOMBO_PAGE_DELETE_TEXT, (event) =>
+        {
+            const combo = this.comboBox;
+            if (!combo)
+            {
+                return;
+            }
+            event.Enable(combo.GetCount() !== 0);
+        });
+
+        this.bindUpdateUI(ODCOMBO_PAGE_DELETE, (event) =>
+        {
+            const combo = this.comboBox;
+            if (!combo)
+            {
+                return;
+            }
+            const index = unsignedValue(this.textDelete);
+            event.Enable(index !== null && index < combo.GetCount());
+        });
+
+        for (const id of [
+            ODCOMBO_PAGE_CHANGE, ODCOMBO_PAGE_CHANGE_TEXT,
+            ODCOMBO_PAGE_DELETE_SEL,
+        ])
+        {
+            this.bindUpdateUI(id, (event) =>
+            {
+                const combo = this.comboBox;
+                if (!combo)
+                {
+                    return;
+                }
+                event.Enable(combo.GetSelection() !== NOT_FOUND);
+            });
+        }
+
+        // the combo box events, dispatched through the page by control id
+        bindEvent(this.page, ODCOMBO_PAGE_COMBO, ODCOMBO_PAGE_COMBO,
+            EVT_COMBOBOX_DROPDOWN, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                logMessage("Combobox dropped down");
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_COMBO, ODCOMBO_PAGE_COMBO,
+            EVT_COMBOBOX_CLOSEUP, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                logMessage("Combobox closed up");
+            });
+
+        bindEvent(this.page, ODCOMBO_PAGE_COMBO, ODCOMBO_PAGE_COMBO,
+            EVT_COMBOBOX, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onComboBox(eventPtr);
+            });
+
+        for (const type of [EVT_TEXT, EVT_TEXT_ENTER])
+        {
+            bindEvent(this.page, ODCOMBO_PAGE_COMBO, ODCOMBO_PAGE_COMBO, type,
+                (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    this.onComboText(eventPtr);
+                });
+        }
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.onCheckOrRadioBox(eventPtr);
+        });
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_RADIOBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.onCheckOrRadioBox(eventPtr);
+        });
+    }
+
+    /** Binds EVT_UPDATE_UI on the control that owns `id`. */
+    private bindUpdateUI(
+        id: number,
+        handler: (event: wxUpdateUIEvent) => void,
+    ): void
+    {
+        const control = this.page.FindWindowByIdSelf(id);
+        if (!control)
+        {
+            return;
+        }
+        bindEvent(control, id, id, EVT_UPDATE_UI, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            handler(new wxUpdateUIEvent(eventPtr, true));
+        });
+    }
+
+    // -- operations ----------------------------------------------------------
+
+    /** Reset the odcombobox parameters. */
+    private reset(): void
+    {
+        this.chkSort?.SetValue(false);
+        this.chkReadonly?.SetValue(false);
+        this.chkDclickcycles?.SetValue(false);
+        this.chkDclickcycles?.Enable(false);
+        this.chkBitmapbutton?.SetValue(false);
+        this.chkStdbutton?.SetValue(false);
+        this.chkStdbutton?.Enable(false);
+    }
+
+    /** Creates a wxOwnerDrawnComboBox with the given style flags. */
+    private createComboControl(styleFlags: number): wxOwnerDrawnComboBox | null
+    {
+        const raw = withString("", (ptr) =>
+            createWxOwnerDrawnComboBox(
+                this.page.ptr, ODCOMBO_PAGE_COMBO, ptr,
+                -1, -1, -1, -1, BigInt(styleFlags)));
+        return raw ? new wxOwnerDrawnComboBox(raw) : null;
+    }
+
+    /** (Re)create the odcombobox. */
+    private createCombo(): void
+    {
+        const sizer = this.sizerCombo;
+        if (!sizer)
+        {
+            return;
+        }
+
+        let flags = attrs.defaultFlags;
+
+        if (this.chkSort?.GetValue())
+        {
+            flags |= CB_SORT;
+        }
+        if (this.chkReadonly?.GetValue())
+        {
+            flags |= CB_READONLY;
+        }
+        if (this.chkDclickcycles?.GetValue())
+        {
+            flags |= ODCB_DCLICK_CYCLES;
+        }
+
+        const items: string[] = [];
+        const previous = this.comboBox;
+        if (previous)
+        {
+            const count = previous.GetCount();
+            for (let index = 0; index < count; index++)
+            {
+                items.push(itemText(previous, index));
+            }
+
+            sizer.DetachWindow(previous.ptr);
+            previous.Delete();
+            this.comboBox = null;
+        }
+
+        const combo = this.createComboControl(flags);
+        if (!combo)
+        {
+            return;
+        }
+        this.comboBox = combo;
+
+        this.notifyWidgetRecreation(wrapWxWindow(combo.ptr));
+
+        for (const item of items)
+        {
+            withString(item, (ptr) => combo.Append(ptr));
+        }
+
+        // Update from controls that edit popup position etc.
+        this.setPopupWidth();
+        this.setPopupHeight();
+        this.setButtonPosition();
+
+        combo.SetPopupAnchor(this.chkAlignpopupright?.GetValue() ? RIGHT : LEFT);
+
+        if (this.chkBitmapbutton?.GetValue())
+        {
+            this.setButtonBitmaps();
+        }
+
+        addWin(sizer, wrapWxWindow(combo.ptr), 0, EXPAND, border());
+        sizer.Layout();
+    }
+
+    /** OnTextPopupWidth() */
+    private setPopupWidth(): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+        const width = integerValue(this.textPopupMinWidth) ?? 0;
+        if (width > 0)
+        {
+            combo.SetPopupMinWidth(width);
+        }
+    }
+
+    /** OnTextPopupHeight() */
+    private setPopupHeight(): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+        const height = integerValue(this.textPopupHeight) ?? 0;
+        if (height > 0)
+        {
+            combo.SetPopupMaxHeight(height);
+        }
+    }
+
+    /** GetButtonPosition() */
+    private setButtonPosition(): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+        const width = integerValue(this.textButtonWidth) ?? -1;
+        const height = integerValue(this.textButtonHeight) ?? -1;
+        const spacing = integerValue(this.textButtonSpacing) ?? 0;
+        const align = this.chkAlignbutleft?.GetValue() ? LEFT : RIGHT;
+
+        combo.SetButtonPosition(width, height, align, spacing);
+    }
+
+    /** OnTextButtonAll() */
+    private onTextButtonAll(): void
+    {
+        if (!this.comboBox)
+        {
+            return;
+        }
+        if (this.chkBitmapbutton?.GetValue())
+        {
+            this.createCombo();
+        }
+        else
+        {
+            this.setButtonPosition();
+        }
+    }
+
+    /** Applies the three button bitmaps built by CreateBitmap(). */
+    private setButtonBitmaps(): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+
+        const normalColour = colour(0, 0, 255);
+        const pressedColour = colour(0, 0, 128);
+        const hoverColour = colour(128, 128, 255);
+
+        const normal = this.createButtonBitmap(combo, normalColour);
+        const pressed = this.createButtonBitmap(combo, pressedColour);
+        const hover = this.createButtonBitmap(combo, hoverColour);
+
+        if (normal && pressed && hover)
+        {
+            combo.SetButtonBitmaps(normal.ptr,
+                this.chkStdbutton?.GetValue() === true,
+                pressed.ptr, hover.ptr, null);
+        }
+
+        normal?.Delete();
+        pressed?.Delete();
+        hover?.Delete();
+        normalColour?.Delete();
+        pressedColour?.Delete();
+        hoverColour?.Delete();
+    }
+
+    /** CreateBitmap(): a round, transparent-cornered button bitmap. */
+    private createButtonBitmap(
+        combo: wxOwnerDrawnComboBox,
+        fill: wxColour | null,
+    ): wxBitmap | null
+    {
+        if (!fill)
+        {
+            return null;
+        }
+
+        const clientSize = combo.GetClientSize();
+        if (!clientSize)
+        {
+            return null;
+        }
+
+        const clientHeight = clientSize.GetHeight() - 1;
+        const defaultHeight = clientHeight - 5;
+
+        let width = integerValue(this.textButtonWidth) ?? -1;
+        let height = integerValue(this.textButtonHeight) ?? -1;
+
+        if (width <= 0)
+        {
+            width = defaultHeight - 1;
+        }
+        if (height <= 0)
+        {
+            height = defaultHeight;
+        }
+        if (height > clientHeight)
+        {
+            height = clientHeight;
+        }
+
+        // wxBitmap(-w, -h) would be invalid; skip the bitmap button instead.
+        if (width <= 0 || height <= 0)
+        {
+            return null;
+        }
+
+        const bitmap = createWxBitmapEmpty(width, height, -1);
+        if (!bitmap)
+        {
+            return null;
+        }
+
+        const memoryDc = createWxMemoryDC();
+        if (!memoryDc)
+        {
+            bitmap.Delete();
+            return null;
+        }
+        memoryDc.SelectObject(bitmap.ptr);
+
+        const magicColour = colour(255, 0, 255);
+        const magicBrush = magicColour
+            ? createWxBrushFromColour(magicColour.ptr, BRUSHSTYLE_SOLID)
+            : null;
+        if (magicBrush)
+        {
+            memoryDc.SetBrush(magicBrush.ptr);
+        }
+        memoryDc.SetPen(TRANSPARENT_PEN);
+        memoryDc.DrawRectangle(0, 0, bitmap.GetWidth(), bitmap.GetHeight());
+
+        const fillBrush = createWxBrushFromColour(fill.ptr, BRUSHSTYLE_SOLID);
+        if (fillBrush)
+        {
+            memoryDc.SetBrush(fillBrush.ptr);
+        }
+        const radius = Math.floor(height / 2);
+        memoryDc.DrawCircle(radius, radius + 1, radius);
+
+        memoryDc.SelectObject(Null_Bitmap());
+        memoryDc.Delete();
+        magicBrush?.Delete();
+        fillBrush?.Delete();
+
+        // Finalize transparency with a mask.
+        const maskColour = colour(255, 0, 255);
+        if (maskColour)
+        {
+            const mask = createWxMaskColoured(bitmap.ptr, maskColour.ptr);
+            if (mask)
+            {
+                bitmap.SetMask(mask);
+            }
+            maskColour.Delete();
+        }
+
+        return bitmap;
+    }
+
+    // -- event handlers ------------------------------------------------------
+
+    private onButtonChange(): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+
+        const selection = combo.GetSelection();
+        if (selection === NOT_FOUND)
+        {
+            return;
+        }
+
+        if (platform === "linux")
+        {
+            // The C++ sample disables SetString() for wxGTK.
+            logMessage("Not implemented in wxGTK");
+            return;
+        }
+
+        if (!this.textChange)
+        {
+            return;
+        }
+        withString(textValue(this.textChange),
+            (ptr) => combo.SetString(selection, ptr));
+    }
+
+    private onButtonDelete(): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+
+        const index = unsignedValue(this.textDelete);
+        if (index === null || index >= combo.GetCount())
+        {
+            return;
+        }
+
+        combo.DeleteItem(index);
+    }
+
+    private onButtonDeleteSelection(): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+
+        const selection = combo.GetSelection();
+        if (selection !== NOT_FOUND)
+        {
+            combo.DeleteItem(selection);
+        }
+    }
+
+    private onButtonInsert(): void
+    {
+        const combo = this.comboBox;
+        const input = this.textInsert;
+        if (!combo || !input)
+        {
+            return;
+        }
+
+        const text = textValue(input);
+        if (!input.IsModified())
+        {
+            // update the default string
+            this.insertCounter++;
+            setTextValue(input, `test item ${this.insertCounter}`);
+        }
+
+        const selection = combo.GetSelection();
+        if (selection >= 0)
+        {
+            withString(text, (ptr) => combo.Insert(ptr, selection));
+        }
+    }
+
+    private onButtonAdd(): void
+    {
+        const combo = this.comboBox;
+        const input = this.textAdd;
+        if (!combo || !input)
+        {
+            return;
+        }
+
+        const text = textValue(input);
+        if (!input.IsModified())
+        {
+            // update the default string
+            this.addCounter++;
+            setTextValue(input, `test item ${this.addCounter}`);
+        }
+
+        withString(text, (ptr) => combo.Append(ptr));
+    }
+
+    private onButtonAddSeveral(): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+
+        for (const item of [
+            "First",
+            "another one",
+            "and the last (very very very very very very very very very very long) one",
+        ])
+        {
+            withString(item, (ptr) => combo.Append(ptr));
+        }
+    }
+
+    private onButtonAddMany(): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+
+        // "many" means 1000 here
+        for (let index = 0; index < 1000; index++)
+        {
+            withString(`item #${index}`, (ptr) => combo.Append(ptr));
+        }
+    }
+
+    private onComboBox(eventPtr: Pointer): void
+    {
+        const combo = this.comboBox;
+        if (!combo)
+        {
+            return;
+        }
+
+        const event = new wxCommandEvent(eventPtr, true);
+        const selection = event.GetInt();
+
+        setTextValue(this.textDelete, String(selection));
+
+        logMessage(`OwnerDrawnCombobox item ${selection} selected`);
+
+        const value = combo.GetValue();
+        logMessage(
+            `OwnerDrawnCombobox GetValue(): ${value ? readAndDeleteWxString(value.ptr) : ""}`);
+    }
+
+    private onComboText(eventPtr: Pointer): void
+    {
+        if (!this.comboBox)
+        {
+            return;
+        }
+
+        const event = new wxCommandEvent(eventPtr, true);
+        const value = event.GetString();
+        const text = value ? readAndDeleteWxString(value.ptr) : "";
+
+        if (event.GetEventType() === EVT_TEXT_ENTER)
+        {
+            logMessage(`OwnerDrawnCombobox enter pressed (now '${text}')`);
+        }
+        else
+        {
+            logMessage(`OwnerDrawnCombobox text changed (now '${text}')`);
+        }
+    }
+
+    private onCheckOrRadioBox(eventPtr: Pointer): void
+    {
+        const event = new wxCommandEvent(eventPtr, true);
+        const source = event.GetEventObject();
+        const sourcePtr = source ? source.ptr : null;
+
+        // Double-click cycles only applies to read-only combobox
+        if (this.chkReadonly && sourcePtr === this.chkReadonly.ptr)
+        {
+            this.chkDclickcycles?.Enable(this.chkReadonly.GetValue());
+        }
+        else if (this.chkBitmapbutton && sourcePtr === this.chkBitmapbutton.ptr)
+        {
+            this.chkStdbutton?.Enable(this.chkBitmapbutton.GetValue());
+        }
+        else if (this.chkAlignbutleft && sourcePtr === this.chkAlignbutleft.ptr)
+        {
+            this.onTextButtonAll();
+        }
+
+        this.createCombo();
+    }
+}
+
+export function createODComboboxPage(parent: Pointer): WidgetsPage
+{
+    return new ODComboboxPage(parent);
+}

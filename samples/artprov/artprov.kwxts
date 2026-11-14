@@ -1,92 +1,191 @@
-// artprov.kwxts — kwxTypeScript port of wxSamples/src/artprov/arttest.cpp
+// artprov.kwxts — kwxTypeScript port of wxSamples/src/artprov
 //
-// wxArtProvider sample: a frame with File/Help menus. "Resources browser"
-// opens wxArtBrowserDialog, which lists every wxArtID and previews it for the
-// selected wxArtClient.
+//   arttest.cpp   MyApp::OnInit, MyFrame (File/Help menus and the
+//                 OnQuit/OnLogs/OnAbout/OnBrowser/OnPlugProvider handlers),
+//                 MyArtProvider::CreateBitmap()
+//   artbrows.cpp  wxArtBrowserDialog: FillClients/FillBitmaps, SetArtClient,
+//                 SetArtBitmap, OnSelectItem, OnChangeSize, OnChooseClient
 //
 // Run from the repository root:
 //   bin\Release\kwxts.exe samples\artprov\artprov.kwxts
 //
-// Known gap: the C++ "Plug-in art provider" item installs MyArtProvider, a
-// wxArtProvider subclass overriding CreateBitmap(). kwxTypeScript cannot
-// override a C++ virtual, and kwxArtProv's callback has a void return type, so
-// no bitmap can be returned to the art provider. The menu item is kept (and
-// reports the limitation instead of silently doing nothing); every other part
-// of the sample is implemented.
+// Assets: the four 48x48 art bitmaps (info/error/warning/question.xpm), the
+// 16x16 null.xpm placeholder and the 32x32 sample.xpm frame icon are the same
+// artwork converted to SVG and loaded at run time from this folder.
+//
+// Reported deviation: a custom wxArtProvider subclass cannot be plugged in from
+// the TypeScript runtime — the only callback shape available is
+// `void(pointer, pointer, pointer)`, while kwxArtProv's CreateBitmap callback
+// must *return* a wxBitmap pointer. File/Plug-in art provider therefore drives
+// an equivalent local provider that answers exactly the four wxART_MESSAGE_BOX
+// ids MyArtProvider::CreateBitmap() answered.
 
 declare const __dirname: string;
 
 import {
-    BITMAP_TYPE_XPM,
+    ALL,
+    ART_ADD_BOOKMARK,
+    ART_BUTTON,
+    ART_CDROM,
+    ART_CMN_DIALOG,
+    ART_COPY,
+    ART_CROSS_MARK,
+    ART_CUT,
+    ART_DELETE,
+    ART_DEL_BOOKMARK,
+    ART_ERROR,
+    ART_EXECUTABLE_FILE,
+    ART_FILE_OPEN,
+    ART_FILE_SAVE,
+    ART_FILE_SAVE_AS,
+    ART_FIND,
+    ART_FIND_AND_REPLACE,
+    ART_FLOPPY,
+    ART_FOLDER,
+    ART_FOLDER_OPEN,
+    ART_FRAME_ICON,
+    ART_FULL_SCREEN,
+    ART_GO_BACK,
+    ART_GO_DIR_UP,
+    ART_GO_DOWN,
+    ART_GO_FORWARD,
+    ART_GO_HOME,
+    ART_GO_TO_PARENT,
+    ART_GO_UP,
+    ART_HARDDISK,
+    ART_HELP,
+    ART_HELP_BOOK,
+    ART_HELP_BROWSER,
+    ART_HELP_FOLDER,
+    ART_HELP_PAGE,
+    ART_HELP_SETTINGS,
+    ART_HELP_SIDE_PANEL,
+    ART_INFORMATION,
+    ART_LIST_VIEW,
+    ART_MENU,
+    ART_MESSAGE_BOX,
+    ART_MISSING_IMAGE,
+    ART_NEW,
+    ART_NEW_DIR,
+    ART_NORMAL_FILE,
+    ART_OTHER,
+    ART_PASTE,
+    ART_PRINT,
+    ART_QUESTION,
+    ART_QUIT,
+    ART_REDO,
+    ART_REMOVABLE,
+    ART_REPORT_VIEW,
+    ART_TICK_MARK,
+    ART_TIP,
+    ART_TOOLBAR,
+    ART_UNDO,
+    ART_WARNING,
+    BORDER_SUNKEN,
+    createWxBitmapDefault,
+    createWxBitmapFromImage,
+    createWxBoxSizer,
+    createWxBusyCursor,
+    createWxButton,
+    createWxChoice,
     createWxClosure,
+    createWxDialog,
     createWxFrame,
-    createWxIconLoad,
+    createWxIconDefault,
+    createWxImageList,
+    createWxListCtrl,
     createWxMenu,
     createWxMenuBar,
+    createWxSizerFlags,
+    createWxStaticBitmap,
+    createWxStaticText,
     createWxString,
+    createWxStringClientDataWithData,
+    DEFAULT_DIALOG_STYLE,
     DEFAULT_FRAME_STYLE,
-    EVT_CLOSE_WINDOW,
+    EVT_CHOICE,
+    EVT_LIST_ITEM_SELECTED,
     EVT_MENU,
-    exitMainLoop,
+    HORIZONTAL,
     ICON_INFORMATION,
     ID_ABOUT,
     ID_ANY,
     ID_EXIT,
     ID_HIGHEST,
-    initAllImageHandlers,
+    ID_OK,
+    IMAGE_LIST_SMALL,
     initialize,
-    kwxMessageBox,
-    lib,
+    LC_REPORT,
+    LEFT,
+    LIST_AUTOSIZE,
+    LIST_FORMAT_LEFT,
+    LIST_NEXT_ALL,
+    LIST_STATE_FOCUSED,
     LogError,
     LogMessage,
     LogWarning,
+    kwxMessageBox,
     OK,
     readAndDeleteWxString,
+    readWxString,
+    RESIZE_BORDER,
+    RIGHT,
     run,
     setAppName,
     setTopWindow,
     shutdown,
+    SIZE_USE_EXISTING,
+    VERTICAL,
+    wrapWxLog,
+    wxArtProvider_GetBitmap,
+    wxArtProvider_GetIcon,
+    wxBitmap,
+    wxBitmapBundle_FromSVGFile,
+    wxBitmapBundle,
+    wxChoice,
     wxClosure,
     wxCommandEvent,
+    wxDialog,
     wxFrame,
-    wxMenuBar,
+    wxIcon,
+    wxImageList,
+    wxListCtrl,
+    wxListEvent,
+    wxLog_GetActiveTarget,
     wxNewId,
+    wxSizer,
+    wxSizerFlags,
+    wxStaticBitmap,
+    wxStaticText,
+    wxString,
+    wxStringClientData,
     wxVersionString,
+    wxWindow,
 } from "kwx";
 import { Callback, exit, Pointer } from "kwx/platform";
 
-import {
-    initArtBrowser,
-    showArtBrowserDialog,
-    shutdownArtBrowser,
-} from "./artbrowser.kwxts";
+// ---------------------------------------------------------------------------
+// IDs — arttest.cpp:59-65
+//   enum { ID_Quit = wxID_EXIT, ID_Logs = wxID_HIGHEST, ID_Browser,
+//          ID_PlugProvider };
+// ---------------------------------------------------------------------------
 
-// enum { ID_Quit = wxID_EXIT, ID_Logs = wxID_HIGHEST, ID_Browser, ID_PlugProvider }
 const ID_QUIT = ID_EXIT;
 const ID_LOGS = ID_HIGHEST;
 const ID_BROWSER = ID_HIGHEST + 1;
 const ID_PLUG_PROVIDER = ID_HIGHEST + 2;
 
-interface ArtProvFrameState
-{
-    readonly frame: wxFrame;
-    readonly menuBar: wxMenuBar;
-    readonly callbacks: Callback[];
-    readonly closures: wxClosure[];
-}
-
-function samplePath(name: string): string
-{
-    return __dirname.replace(/\\/g, "/") + "/" + name;
-}
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 
 /** Call fn with a temporary wxString and release it on every path. */
-function withString(text: string, fn: (ptr: Pointer) => void): void
+function withString<T>(text: string, fn: (ptr: Pointer) => T): T
 {
     const value = createWxString(text);
     try
     {
-        fn(value.ptr);
+        return fn(value.ptr);
     }
     finally
     {
@@ -94,128 +193,812 @@ function withString(text: string, fn: (ptr: Pointer) => void): void
     }
 }
 
-/** MyFrame::OnLogs() */
-function showLoggingOutput(): void
+function addWindow(
+    sizer: wxSizer, window: Pointer, proportion: number,
+    configure: (flags: wxSizerFlags) => void): void
 {
-    withString("Some information.", (message) => LogMessage(message));
-    withString("This is an error.", (message) => LogError(message));
-    withString("A warning.", (message) => LogWarning(message));
-    withString("Yet another error.", (message) => LogError(message));
-
-    // wxLog::GetActiveTarget()->Flush()
-    const target = lib.symbols.wxLog_GetActiveTarget();
-    if (target)
+    const flags = createWxSizerFlags(proportion);
+    if (!flags) return;
+    try
     {
-        lib.symbols.wxLog_Flush(target);
+        configure(flags);
+        sizer.AddWindowFlags(window, flags.ptr);
     }
-
-    withString(
-        "Check/uncheck 'File/Plug-in art provider' and try again.",
-        (message) => LogMessage(message),
-    );
+    finally
+    {
+        flags.Delete();
+    }
 }
 
-/** MyFrame::OnAbout() */
-function showAbout(frame: wxFrame): void
+function addSizer(
+    sizer: wxSizer, child: Pointer, proportion: number,
+    configure: (flags: wxSizerFlags) => void): void
 {
-    const version = readAndDeleteWxString(wxVersionString());
-    const message =
-        "This is the about dialog of wxArtProvider sample.\nWelcome to " + version;
-
-    withString(message, (text) =>
+    const flags = createWxSizerFlags(proportion);
+    if (!flags) return;
+    try
     {
-        withString("About wxArtProvider sample", (caption) =>
-        {
-            kwxMessageBox(
-                text,
-                caption,
-                OK | ICON_INFORMATION,
-                frame.ptr,
-                -1,
-                -1,
-            );
-        });
-    });
+        configure(flags);
+        sizer.AddSizerFlags(child, flags.ptr);
+    }
+    finally
+    {
+        flags.Delete();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Assets
+// ---------------------------------------------------------------------------
+
+interface Assets
+{
+    /** null.xpm — 16x16 placeholder bitmap and image-list slot 0. */
+    nullArt: wxBitmapBundle | null;
+    /** info/error/warning/question.xpm — 48x48, MyArtProvider's artwork. */
+    info: wxBitmapBundle | null;
+    error: wxBitmapBundle | null;
+    warning: wxBitmapBundle | null;
+    question: wxBitmapBundle | null;
+    /** ../sample.xpm — 32x32 frame icon. */
+    sample: wxBitmapBundle | null;
+}
+
+/** Owned bundles, kept alive for the whole run. */
+const assets: Assets = {
+    nullArt: null, info: null, error: null, warning: null, question: null, sample: null,
+};
+
+function assetPath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** wxBitmapBundle_FromSVGFile(assetPath(name), width, height). */
+function loadBundle(name: string, width: number, height: number): wxBitmapBundle | null
+{
+    const path = createWxString(assetPath(name));
+    try
+    {
+        return wxBitmapBundle_FromSVGFile(path.ptr, width, height);
+    }
+    finally
+    {
+        path.Delete();
+    }
+}
+
+function loadAssets(): void
+{
+    assets.nullArt = loadBundle("null.svg", 16, 16);
+    assets.info = loadBundle("info.svg", 48, 48);
+    assets.error = loadBundle("error.svg", 48, 48);
+    assets.warning = loadBundle("warning.svg", 48, 48);
+    assets.question = loadBundle("question.svg", 48, 48);
+    assets.sample = loadBundle("sample.svg", 32, 32);
+}
+
+function releaseAssets(): void
+{
+    for (const bundle of [assets.nullArt, assets.info, assets.error, assets.warning,
+        assets.question, assets.sample])
+    {
+        if (bundle) bundle.Delete();
+    }
+
+    assets.nullArt = null;
+    assets.info = null;
+    assets.error = null;
+    assets.warning = null;
+    assets.question = null;
+    assets.sample = null;
+}
+
+// ---------------------------------------------------------------------------
+// Art id / client tables — artbrows.cpp:45-118
+// ---------------------------------------------------------------------------
+
+interface ArtEntry
+{
+    /** The C++ label: the stringized art id, e.g. "wxART_ERROR". */
+    label: string;
+    id: Pointer;
+}
+
+interface ClientEntry
+{
+    label: string;
+    client: Pointer;
 }
 
 /**
- * MyFrame::OnPlugProvider() — wxArtProvider::Push(new MyArtProvider) / Pop().
- *
- * MyArtProvider overrides CreateBitmap() to return the sample's info/error/
- * warning/question XPMs for the wxART_MESSAGE_BOX client. The binding exposes
- * wxArtProvider as a non-subclassable generated wrapper, and the kwxArtProv
- * bridge discards the callback result, so this feature cannot be reproduced.
- * Keep the check item for UI fidelity, reset it, and explain the gap.
+ * FillClients() — the client list; wxART_MESSAGE_BOX is last because it is the
+ * initially selected one.
  */
-function installPluginProvider(
-    state: ArtProvFrameState,
-    event: wxCommandEvent,
-): void
+const CLIENT_IDS: ClientEntry[] = [
+    { label: "wxART_OTHER", client: ART_OTHER },
+    { label: "wxART_BUTTON", client: ART_BUTTON },
+    { label: "wxART_TOOLBAR", client: ART_TOOLBAR },
+    { label: "wxART_MENU", client: ART_MENU },
+    { label: "wxART_FRAME_ICON", client: ART_FRAME_ICON },
+    { label: "wxART_CMN_DIALOG", client: ART_CMN_DIALOG },
+    { label: "wxART_HELP_BROWSER", client: ART_HELP_BROWSER },
+    { label: "wxART_MESSAGE_BOX", client: ART_MESSAGE_BOX },
+];
+
+/**
+ * The art ids FillBitmaps() inserts, in source order.
+ *
+ * Eight of them (wxART_GOTO_FIRST, wxART_GOTO_LAST, wxART_PLUS, wxART_MINUS,
+ * wxART_CLOSE, wxART_EDIT, wxART_REFRESH, wxART_STOP) have no exported constant
+ * in the current kwxFFI build. wx/artprov.h defines every wxART_* with
+ * wxART_MAKE_ART_ID(), i.e. a plain string literal of the macro name, so the
+ * identical id is reproduced with a wxString of that literal.
+ */
+let artTable: ArtEntry[] = [];
+
+/** wxStrings created for the art ids that have no exported constant. */
+const extraArtIdStrings: wxString[] = [];
+
+function extraArtId(label: string): Pointer
 {
-    if (!event.IsChecked())
+    const value = createWxString(label);
+    extraArtIdStrings.push(value);
+    return value.ptr;
+}
+
+function buildArtTable(): void
+{
+    const entries: ArtEntry[] = [];
+    const add = (label: string, id: Pointer) => { entries.push({ label, id }); };
+
+    add("wxART_ERROR", ART_ERROR);
+    add("wxART_QUESTION", ART_QUESTION);
+    add("wxART_WARNING", ART_WARNING);
+    add("wxART_INFORMATION", ART_INFORMATION);
+    add("wxART_ADD_BOOKMARK", ART_ADD_BOOKMARK);
+    add("wxART_DEL_BOOKMARK", ART_DEL_BOOKMARK);
+    add("wxART_HELP_SIDE_PANEL", ART_HELP_SIDE_PANEL);
+    add("wxART_HELP_SETTINGS", ART_HELP_SETTINGS);
+    add("wxART_HELP_BOOK", ART_HELP_BOOK);
+    add("wxART_HELP_FOLDER", ART_HELP_FOLDER);
+    add("wxART_HELP_PAGE", ART_HELP_PAGE);
+    add("wxART_GO_BACK", ART_GO_BACK);
+    add("wxART_GO_FORWARD", ART_GO_FORWARD);
+    add("wxART_GO_UP", ART_GO_UP);
+    add("wxART_GO_DOWN", ART_GO_DOWN);
+    add("wxART_GO_TO_PARENT", ART_GO_TO_PARENT);
+    add("wxART_GO_HOME", ART_GO_HOME);
+    add("wxART_GOTO_FIRST", extraArtId("wxART_GOTO_FIRST"));
+    add("wxART_GOTO_LAST", extraArtId("wxART_GOTO_LAST"));
+    add("wxART_PRINT", ART_PRINT);
+    add("wxART_HELP", ART_HELP);
+    add("wxART_TIP", ART_TIP);
+    add("wxART_REPORT_VIEW", ART_REPORT_VIEW);
+    add("wxART_LIST_VIEW", ART_LIST_VIEW);
+    add("wxART_NEW_DIR", ART_NEW_DIR);
+    add("wxART_FOLDER", ART_FOLDER);
+    add("wxART_FOLDER_OPEN", ART_FOLDER_OPEN);
+    add("wxART_GO_DIR_UP", ART_GO_DIR_UP);
+    add("wxART_EXECUTABLE_FILE", ART_EXECUTABLE_FILE);
+    add("wxART_NORMAL_FILE", ART_NORMAL_FILE);
+    add("wxART_TICK_MARK", ART_TICK_MARK);
+    add("wxART_CROSS_MARK", ART_CROSS_MARK);
+    add("wxART_MISSING_IMAGE", ART_MISSING_IMAGE);
+    add("wxART_NEW", ART_NEW);
+    add("wxART_FILE_OPEN", ART_FILE_OPEN);
+    add("wxART_FILE_SAVE", ART_FILE_SAVE);
+    add("wxART_FILE_SAVE_AS", ART_FILE_SAVE_AS);
+    add("wxART_DELETE", ART_DELETE);
+    add("wxART_COPY", ART_COPY);
+    add("wxART_CUT", ART_CUT);
+    add("wxART_PASTE", ART_PASTE);
+    add("wxART_UNDO", ART_UNDO);
+    add("wxART_REDO", ART_REDO);
+    add("wxART_PLUS", extraArtId("wxART_PLUS"));
+    add("wxART_MINUS", extraArtId("wxART_MINUS"));
+    add("wxART_CLOSE", extraArtId("wxART_CLOSE"));
+    add("wxART_QUIT", ART_QUIT);
+    add("wxART_FIND", ART_FIND);
+    add("wxART_FIND_AND_REPLACE", ART_FIND_AND_REPLACE);
+    add("wxART_EDIT", extraArtId("wxART_EDIT"));
+    add("wxART_FULL_SCREEN", ART_FULL_SCREEN);
+    add("wxART_HARDDISK", ART_HARDDISK);
+    add("wxART_FLOPPY", ART_FLOPPY);
+    add("wxART_CDROM", ART_CDROM);
+    add("wxART_REMOVABLE", ART_REMOVABLE);
+    add("wxART_REFRESH", extraArtId("wxART_REFRESH"));
+    add("wxART_STOP", extraArtId("wxART_STOP"));
+
+    artTable = entries;
+}
+
+function releaseArtTable(): void
+{
+    for (const value of extraArtIdStrings)
     {
+        value.Delete();
+    }
+    extraArtIdStrings.length = 0;
+    artTable = [];
+}
+
+// ---------------------------------------------------------------------------
+// MyArtProvider — arttest.cpp:108-136
+// ---------------------------------------------------------------------------
+
+/** The fixed pixel size of the art MyArtProvider returns. */
+const PROVIDER_ART_SIZE = 48;
+
+/** Set by File/Plug-in art provider: wxArtProvider::Push(new MyArtProvider). */
+let plugInProviderActive = false;
+
+/** readWxString(ART_MESSAGE_BOX) — the client MyArtProvider answers. */
+let messageBoxClientName = "";
+
+/**
+ * MyArtProvider::CreateBitmap(): the four standard message-box icons for the
+ * wxART_MESSAGE_BOX client, wxNullBitmap for every other id or client.
+ */
+function customBundle(id: Pointer, clientName: string): wxBitmapBundle | null
+{
+    if (!plugInProviderActive) return null;
+    if (clientName !== messageBoxClientName) return null;
+
+    if (id === ART_INFORMATION) return assets.info;
+    if (id === ART_ERROR) return assets.error;
+    if (id === ART_WARNING) return assets.warning;
+    if (id === ART_QUESTION) return assets.question;
+    return null;
+}
+
+/** wxArtProvider::GetBitmap(id, client, size). */
+function requestArtBitmap(
+    id: Pointer, client: Pointer, clientName: string,
+    width: number, height: number): wxBitmap | null
+{
+    const custom = customBundle(id, clientName);
+    if (!custom)
+    {
+        return wxArtProvider_GetBitmap(id, client, width, height);
+    }
+
+    // MyArtProvider hands over its fixed 48x48 bitmap whatever size is asked
+    // for; wxArtProvider::RescaleOrResizeIfNeeded() then adapts it.
+    const art = custom.GetBitmap(PROVIDER_ART_SIZE, PROVIDER_ART_SIZE);
+    if (!art) return null;
+
+    if (width <= 0 || height <= 0) return art;
+    if (width === PROVIDER_ART_SIZE && height === PROVIDER_ART_SIZE) return art;
+
+    if (width < PROVIDER_ART_SIZE || height < PROVIDER_ART_SIZE)
+    {
+        // Scaling down: the same vector artwork is rendered at the target size.
+        // Dimensions and artwork match wxBitmap::Rescale() of the 48x48 raster;
+        // the sampled pixels differ slightly because the vector is rendered at
+        // the target size instead of being area-averaged from the raster.
+        const scaled = custom.GetBitmap(width, height);
+        art.Delete();
+        return scaled;
+    }
+
+    // Larger than the provider art: wxArtProvider pads it into a transparent
+    // bitmap of the requested size (its ExtendBitmap path). No size offered by
+    // this sample is an integer multiple of 48, so the upscale-by-integer-factor
+    // branch of RescaleOrResizeIfNeeded() is unreachable here.
+    const padded = padBitmapCentered(art, width, height);
+    if (!padded) return art;
+    art.Delete();
+    return padded;
+}
+
+/** artprov.cpp's ExtendBitmap(): paste the art into a larger transparent image. */
+function padBitmapCentered(bitmap: wxBitmap, width: number, height: number): wxBitmap | null
+{
+    const image = bitmap.ConvertToImage();
+    if (!image) return null;
+    try
+    {
+        const offsetX = Math.floor((width - bitmap.GetWidth()) / 2);
+        const offsetY = Math.floor((height - bitmap.GetHeight()) / 2);
+        image.Resize(width, height, offsetX, offsetY, -1, -1, -1);
+        return createWxBitmapFromImage(image.ptr, -1);
+    }
+    finally
+    {
+        image.Delete();
+    }
+}
+
+/**
+ * wxArtProvider::GetIcon(id, client, size). For the custom provider the vector
+ * art is rendered at the icon size, giving the same artwork and dimensions as
+ * wxArtProvider rescaling the fixed 48x48 bitmap.
+ */
+function requestArtIcon(
+    id: Pointer, client: Pointer, clientName: string,
+    width: number, height: number): wxIcon | null
+{
+    const custom = customBundle(id, clientName);
+    if (custom) return custom.GetIcon(width, height);
+
+    return wxArtProvider_GetIcon(id, client, width, height);
+}
+
+// ---------------------------------------------------------------------------
+// wxArtBrowserDialog — artbrows.cpp:138-267
+// ---------------------------------------------------------------------------
+
+/** Bitmap sizes offered by the size wxChoice (artbrows.cpp:130). */
+const BITMAP_SIZES: number[] = [-1, 16, 32, 64, 128, 256, 0];
+
+/** const int SIZE_CHOICE_ID = ::wxNewId(); — assigned in main(). */
+let sizeChoiceId = 0;
+
+interface BoundEvent
+{
+    target: wxWindow;
+    first: number;
+    last: number;
+    type: number;
+    closure: wxClosure;
+    callback: Callback;
+}
+
+interface BrowserState
+{
+    dialog: wxDialog;
+    list: wxListCtrl;
+    canvas: wxStaticBitmap;
+    text: wxStaticText;
+    sizes: wxChoice;
+    choice: wxChoice;
+    /** m_client — an owned wxString holding the current wxArtClient id. */
+    client: wxString | null;
+    /** The same value as a JS string, used by the custom provider match. */
+    clientName: string;
+    /** m_currentArtId */
+    currentArtId: Pointer;
+    events: BoundEvent[];
+}
+
+/** FillClients(): one "wxART_*" entry per client, data = the client id. */
+function fillClients(choice: wxChoice): void
+{
+    for (const entry of CLIENT_IDS)
+    {
+        withString(entry.label, (item) =>
+        {
+            // choice->Append(#id, new wxStringClientData(id)) — the choice takes
+            // ownership of the client data.
+            const data = createWxStringClientDataWithData(entry.client);
+            if (!data) return;
+            choice.AppendWithClientObject(item, data.ptr);
+        });
+    }
+}
+
+/** FillBitmaps(): one row per art id; image 0 when the id has no art. */
+function fillBitmaps(
+    state: BrowserState, images: wxImageList,
+    client: Pointer, clientName: string): void
+{
+    for (let index = 0; index < artTable.length; ++index)
+    {
+        const entry = artTable[index];
+        let imageIndex = 0;
+
+        const icon = requestArtIcon(entry.id, client, clientName, 16, 16);
+        if (icon)
+        {
+            try
+            {
+                if (icon.IsOk()) imageIndex = images.AddIcon(icon.ptr);
+            }
+            finally
+            {
+                icon.Delete();
+            }
+        }
+
+        withString(entry.label, (label) =>
+        {
+            state.list.InsertItemWithLabel(index, label, imageIndex);
+        });
+    }
+}
+
+/** GetSelectedBitmapSize(): bitmapSizes[m_sizes->GetSelection()]. */
+function selectedBitmapSize(state: BrowserState): number
+{
+    const selection = state.sizes.GetSelection();
+    if (selection < 0 || selection >= BITMAP_SIZES.length) return -1;
+    return BITMAP_SIZES[selection];
+}
+
+/**
+ * SetArtBitmap(): show the art for (id, client, size) on the canvas and report
+ * the dimensions it actually came back with.
+ */
+function setArtBitmap(
+    state: BrowserState, id: Pointer, client: Pointer,
+    clientName: string, size: number): void
+{
+    const bitmap = requestArtBitmap(id, client, clientName, size, size);
+
+    const width = bitmap ? bitmap.GetWidth() : 0;
+    const height = bitmap ? bitmap.GetHeight() : 0;
+
+    // m_canvas->SetSize(bmp.GetWidth(), bmp.GetHeight())
+    state.canvas.SetSize(-1, -1, width, height, SIZE_USE_EXISTING);
+
+    // m_canvas->SetBitmap(bmp) — wxStaticBitmap copies the bitmap, but the
+    // native setter dereferences its argument, so an invalid art result is
+    // passed as a real (still invalid) wxBitmap, exactly like wxNullBitmap.
+    const valid = bitmap !== null && bitmap.IsOk();
+    const empty = valid ? null : createWxBitmapDefault();
+    if (valid && bitmap)
+    {
+        state.canvas.SetBitmap(bitmap.ptr);
+    }
+    else if (empty)
+    {
+        state.canvas.SetBitmap(empty.ptr);
+    }
+    if (empty) empty.Delete();
+    if (bitmap) bitmap.Delete();
+
+    withString(`Size: ${width} x ${height}`, (label) => { state.text.SetLabel(label); });
+
+    state.dialog.Layout();
+}
+
+/**
+ * SetArtClient(): rebuild the list for a new client and show the art of the
+ * first row, or of the row that still has the focus.
+ */
+function setArtClient(state: BrowserState, clientName: string): void
+{
+    const busy = createWxBusyCursor();
+
+    const images = createWxImageList(16, 16, true, 0);
+
+    let selection = state.list.GetNextItem(-1, LIST_NEXT_ALL, LIST_STATE_FOCUSED);
+    if (selection < 0) selection = 0;
+
+    state.list.DeleteAllItems();
+
+    const client = createWxString(clientName);
+    const previous = state.client;
+    state.client = client;
+    state.clientName = clientName;
+
+    if (images)
+    {
+        // img->Add(wxIcon(null_xpm)) — slot 0 is the placeholder.
+        if (assets.nullArt)
+        {
+            const nullIcon = assets.nullArt.GetIcon(16, 16);
+            if (nullIcon)
+            {
+                try
+                {
+                    images.AddIcon(nullIcon.ptr);
+                }
+                finally
+                {
+                    nullIcon.Delete();
+                }
+            }
+        }
+
+        fillBitmaps(state, images, client.ptr, clientName);
+
+        // m_list->AssignImageList(img, wxIMAGE_LIST_SMALL) — the list takes
+        // ownership of the image list.
+        state.list.AssignImageList(images.ptr, IMAGE_LIST_SMALL);
+    }
+
+    state.list.SetColumnWidth(0, LIST_AUTOSIZE);
+    state.list.SetItemState(selection, LIST_STATE_FOCUSED, LIST_STATE_FOCUSED);
+
+    if (previous) previous.Delete();
+
+    // C++ SetArtClient() overwrites m_client only: m_currentArtId keeps its
+    // previous value (wxART_ERROR if no row has ever been selected).
+    const entry = artTable[selection];
+    if (entry)
+    {
+        setArtBitmap(state, entry.id, client.ptr, clientName, -1);
+    }
+
+    if (busy) busy.Delete();
+}
+
+/** Install one dynamic handler and remember it for teardown. */
+function bindEvent(
+    state: BrowserState, target: wxWindow, first: number, last: number,
+    type: number, handler: (eventPtr: Pointer) => void): void
+{
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            handler(eventPtr);
+        },
+    );
+    const closure = createWxClosure(callback.pointer, null);
+    if (!closure)
+    {
+        callback.close();
         return;
     }
 
-    state.menuBar.Check(ID_PLUG_PROVIDER, false);
-    withString(
-        "The custom art provider cannot be installed: this binding cannot " +
-            "subclass wxArtProvider::CreateBitmap().",
-        (message) =>
-        {
-            withString("wxArtProvider sample", (caption) =>
-            {
-                kwxMessageBox(message, caption, OK, state.frame.ptr, -1, -1);
-            });
-        },
-    );
+    target.Bind(first, last, type, closure.ptr);
+    state.events.push({ target, first, last, type, closure, callback });
 }
 
-/** MyFrame constructor: frame, icon and menu bar. */
-function createArtProviderFrame(): ArtProvFrameState | null
+/** Remove every handler this dialog installed; call before Destroy(). */
+function releaseEvents(state: BrowserState): void
 {
-    const title = createWxString("wxArtProvider sample");
-    const frame = createWxFrame(
-        null,
-        ID_ANY,
-        title.ptr,
-        50,
-        50,
-        450,
-        340,
-        DEFAULT_FRAME_STYLE,
-    );
-    title.Delete();
-
-    if (!frame)
+    for (const event of state.events)
     {
+        // The wxCallback record wxEvtHandler_Bind() allocated owns the closure:
+        // it is released with the handler chain, so the closure must not be
+        // deleted here.
+        event.target.UnbindClosure(event.first, event.last, event.type, event.closure.ptr);
+        event.callback.close();
+    }
+    state.events.length = 0;
+}
+
+/** wxArtBrowserDialog::wxArtBrowserDialog(parent) */
+function createArtBrowserDialog(parent: wxFrame): BrowserState | null
+{
+    const dialog = withString("Art resources browser", (title) =>
+        createWxDialog(parent.ptr, ID_ANY, title, -1, -1, -1, -1,
+            DEFAULT_DIALOG_STYLE | RESIZE_BORDER));
+    if (!dialog) return null;
+
+    const sizer = createWxBoxSizer(VERTICAL);
+    if (!sizer)
+    {
+        dialog.Destroy();
         return null;
     }
 
-    // SetIcon(wxICON(sample)) — the C++ sample compiles ../../sample.xpm in as
-    // a resource. kwxTypeScript has no XPM resources, so the same XPM file is
-    // loaded at run time through wxIcon::Load(..., wxBITMAP_TYPE_XPM).
-    const iconPath = createWxString(samplePath("sample.xpm"));
-    const icon = createWxIconLoad(
-        iconPath.ptr,
-        BigInt(BITMAP_TYPE_XPM),
-        -1,
-        -1,
-    );
-    iconPath.Delete();
-    if (icon)
+    // wxChoice *choice = new wxChoice(this, wxID_ANY); FillClients(choice);
+    const choice = createWxChoice(dialog.ptr, ID_ANY, -1, -1, -1, -1, 0, null, 0);
+    if (!choice)
     {
-        if (icon.IsOk())
-        {
-            frame.SetIcon(icon.ptr);
-        }
-        icon.Delete();
+        dialog.Destroy();
+        return null;
+    }
+    fillClients(choice);
+
+    // Client row: "Client:" label (centered vertically) + choice (proportion 1).
+    const clientRow = createWxBoxSizer(HORIZONTAL);
+    if (!clientRow)
+    {
+        dialog.Destroy();
+        return null;
     }
 
-    const emptyTitle = createWxString("");
-    const fileMenu = createWxMenu(emptyTitle.ptr, 0n);
-    const helpMenu = createWxMenu(emptyTitle.ptr, 0n);
-    emptyTitle.Delete();
+    const clientLabel = withString("Client:", (label) =>
+        createWxStaticText(dialog.ptr, ID_ANY, label, -1, -1, -1, -1, 0));
+    if (clientLabel)
+    {
+        addWindow(clientRow, clientLabel.ptr, 0, (flags) => { flags.CenterVertical(); });
+    }
+    addWindow(clientRow, choice.ptr, 1, (flags) => { flags.Border(LEFT); });
+
+    addSizer(sizer, clientRow.ptr, 0, (flags) =>
+    {
+        flags.Expand();
+        flags.DoubleBorder(ALL);
+    });
+
+    // List row: the report list plus the right-hand column.
+    const listRow = createWxBoxSizer(HORIZONTAL);
+    if (!listRow)
+    {
+        dialog.Destroy();
+        return null;
+    }
+
+    const list = createWxListCtrl(dialog.ptr, ID_ANY, -1, -1, 250, 300,
+        LC_REPORT | BORDER_SUNKEN);
+    if (!list)
+    {
+        dialog.Destroy();
+        return null;
+    }
+    withString("wxArtID", (heading) =>
+    {
+        list.AppendColumn(heading, LIST_FORMAT_LEFT, LIST_AUTOSIZE);
+    });
+    addWindow(listRow, list.ptr, 0, (flags) =>
+    {
+        flags.Expand();
+        flags.DoubleBorder(RIGHT);
+    });
+
+    const column = createWxBoxSizer(VERTICAL);
+    if (!column)
+    {
+        dialog.Destroy();
+        return null;
+    }
+
+    // m_sizes = new wxChoice(this, SIZE_CHOICE_ID)
+    const sizes = createWxChoice(dialog.ptr, sizeChoiceId, -1, -1, -1, -1, 0, null, 0);
+    if (!sizes)
+    {
+        dialog.Destroy();
+        return null;
+    }
+    for (const size of BITMAP_SIZES)
+    {
+        if (size === 0) break;
+        const label = size === -1 ? "Default" : `${size} x ${size}`;
+        withString(label, (item) => { sizes.Append(item); });
+    }
+    sizes.SetSelection(0);
+    addWindow(column, sizes.ptr, 0, (flags) => { flags.Border(ALL); });
+
+    // m_text = new wxStaticText(this, wxID_ANY, "Size: 333x333")
+    const text = withString("Size: 333x333", (label) =>
+        createWxStaticText(dialog.ptr, ID_ANY, label, -1, -1, -1, -1, 0));
+    if (!text)
+    {
+        dialog.Destroy();
+        return null;
+    }
+    addWindow(column, text.ptr, 0, (flags) => { flags.Border(ALL); });
+
+    // m_canvas = new wxStaticBitmap(this, wxID_ANY, wxBitmap(null_xpm))
+    const canvasBitmap = assets.nullArt ? assets.nullArt.GetBitmap(16, 16) : null;
+    const placeholder = canvasBitmap ? null : createWxBitmapDefault();
+    const canvas = createWxStaticBitmap(dialog.ptr, ID_ANY,
+        canvasBitmap ? canvasBitmap.ptr : (placeholder ? placeholder.ptr : null),
+        -1, -1, -1, -1, 0);
+    if (canvasBitmap) canvasBitmap.Delete();
+    if (placeholder) placeholder.Delete();
+    if (!canvas)
+    {
+        dialog.Destroy();
+        return null;
+    }
+    column.AddWindow(canvas.ptr, 0, 0, 0, null);
+
+    // subsub->Add(256, 256) — fixed spacer keeping the column wide.
+    column.Add(256, 256, 0, 0, 0, null);
+
+    addSizer(listRow, column.ptr, 1, (flags) => { flags.Border(LEFT); });
+
+    addSizer(sizer, listRow.ptr, 1, (flags) =>
+    {
+        flags.Expand();
+        flags.DoubleHorzBorder();
+    });
+
+    // wxButton *ok = new wxButton(this, wxID_OK, "Close"); ok->SetDefault();
+    const ok = withString("Close", (label) =>
+        createWxButton(dialog.ptr, ID_OK, label, -1, -1, -1, -1, 0));
+    if (!ok)
+    {
+        dialog.Destroy();
+        return null;
+    }
+    ok.SetDefault();
+    addWindow(sizer, ok.ptr, 0, (flags) =>
+    {
+        flags.Right();
+        flags.DoubleBorder(ALL);
+    });
+
+    dialog.SetSizerAndFit(sizer.ptr, true);
+
+    choice.SetSelection(choice.GetCount() - 1);
+
+    const state: BrowserState = {
+        dialog, list, canvas, text, sizes, choice,
+        client: null,
+        clientName: "",
+        currentArtId: ART_ERROR,
+        events: [],
+    };
+
+    // The wxDialog event table is reproduced on each emitting control: every
+    // event has exactly one handler, so dispatch order cannot change behaviour.
+    bindEvent(state, list, ID_ANY, ID_ANY, EVT_LIST_ITEM_SELECTED, (eventPtr) =>
+    {
+        const event = new wxListEvent(eventPtr);
+        const index = event.GetIndex();
+        const entry = index >= 0 && index < artTable.length ? artTable[index] : undefined;
+        if (!entry || !state.client) return;
+
+        state.currentArtId = entry.id;
+        setArtBitmap(state, entry.id, state.client.ptr, state.clientName,
+            selectedBitmapSize(state));
+    });
+
+    bindEvent(state, sizes, sizeChoiceId, sizeChoiceId, EVT_CHOICE, () =>
+    {
+        if (!state.client) return;
+        setArtBitmap(state, state.currentArtId, state.client.ptr, state.clientName,
+            selectedBitmapSize(state));
+    });
+
+    bindEvent(state, choice, ID_ANY, ID_ANY, EVT_CHOICE, () =>
+    {
+        const data = state.choice.GetClientObject(state.choice.GetSelection());
+        if (!data) return;
+
+        const stringData = new wxStringClientData(data.ptr, true);
+        const value = stringData.GetData();
+        if (!value) return;
+
+        // wxStringClientData::GetData() hands back a new wxString.
+        const clientName = readAndDeleteWxString(value.ptr);
+        setArtClient(state, clientName);
+    });
+
+    setArtClient(state, readWxString(ART_MESSAGE_BOX));
+
+    return state;
+}
+
+/** MyFrame::OnBrowser — wxArtBrowserDialog dlg(this); dlg.ShowModal(); */
+function showArtBrowserDialog(frame: wxFrame): void
+{
+    const state = createArtBrowserDialog(frame);
+    if (!state) return;
+
+    state.dialog.ShowModal();
+
+    releaseEvents(state);
+    state.dialog.Destroy();
+    if (state.client) state.client.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame — arttest.cpp:144-175
+// ---------------------------------------------------------------------------
+
+/** SetIcon(wxICON(sample)) from the converted 32x32 sample.svg artwork. */
+function setFrameIcon(frame: wxFrame): void
+{
+    if (!assets.sample) return;
+
+    const bitmap = assets.sample.GetBitmap(32, 32);
+    if (!bitmap) return;
+
+    const icon = createWxIconDefault();
+    if (icon)
+    {
+        icon.CopyFromBitmap(bitmap.ptr);
+        frame.SetIcon(icon.ptr);
+        icon.Delete();
+    }
+    bitmap.Delete();
+}
+
+function createMainFrame(): wxFrame | null
+{
+    const title = createWxString("wxArtProvider sample");
+    const frame = createWxFrame(null, ID_ANY, title.ptr, 50, 50, 450, 340,
+        DEFAULT_FRAME_STYLE);
+    title.Delete();
+
+    if (!frame) return null;
+
+    setFrameIcon(frame);
+
+    // wxMenu *menuFile = new wxMenu; wxMenu *helpMenu = new wxMenu;
+    const fileMenu = withString("", (titlePtr) => createWxMenu(titlePtr, 0n));
+    const helpMenu = withString("", (titlePtr) => createWxMenu(titlePtr, 0n));
 
     if (!fileMenu || !helpMenu)
     {
@@ -224,182 +1007,156 @@ function createArtProviderFrame(): ArtProvFrameState | null
     }
 
     // helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
-    withString("&About\tF1", (text) =>
+    withString("&About\tF1", (label) =>
     {
         withString("Show about dialog", (help) =>
         {
-            helpMenu.Append(ID_ABOUT, text, help, false);
+            helpMenu.Append(ID_ABOUT, label, help, false);
         });
     });
 
-    // menuFile->AppendCheckItem(ID_PlugProvider, "&Plug-in art provider\tCtrl-P",
-    //                           "Enable custom art provider");
-    withString("&Plug-in art provider\tCtrl-P", (text) =>
+    // menuFile->AppendCheckItem(ID_PlugProvider, ...);
+    withString("&Plug-in art provider\tCtrl-P", (label) =>
     {
         withString("Enable custom art provider", (help) =>
         {
-            fileMenu.AppendCheckItem(ID_PLUG_PROVIDER, text, help);
+            fileMenu.AppendCheckItem(ID_PLUG_PROVIDER, label, help);
         });
     });
     fileMenu.AppendSeparator();
 
     // menuFile->Append(ID_Logs, "&Logging test\tCtrl-L", ...);
-    withString("&Logging test\tCtrl-L", (text) =>
+    withString("&Logging test\tCtrl-L", (label) =>
     {
         withString("Show some logging output", (help) =>
         {
-            fileMenu.Append(ID_LOGS, text, help, false);
+            fileMenu.Append(ID_LOGS, label, help, false);
         });
     });
 
     // menuFile->Append(ID_Browser, "&Resources browser\tCtrl-R", ...);
-    withString("&Resources browser\tCtrl-R", (text) =>
+    withString("&Resources browser\tCtrl-R", (label) =>
     {
         withString("Browse all available icons", (help) =>
         {
-            fileMenu.Append(ID_BROWSER, text, help, false);
+            fileMenu.Append(ID_BROWSER, label, help, false);
         });
     });
     fileMenu.AppendSeparator();
 
     // menuFile->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");
-    withString("E&xit\tAlt-X", (text) =>
+    withString("E&xit\tAlt-X", (label) =>
     {
         withString("Quit this program", (help) =>
         {
-            fileMenu.Append(ID_QUIT, text, help, false);
+            fileMenu.Append(ID_QUIT, label, help, false);
         });
     });
 
     const menuBar = createWxMenuBar(0);
-    if (!menuBar)
+    if (menuBar)
     {
-        frame.Destroy();
-        return null;
+        withString("&File", (label) => { menuBar.Append(fileMenu.ptr, label); });
+        withString("&Help", (label) => { menuBar.Append(helpMenu.ptr, label); });
+        frame.SetMenuBar(menuBar.ptr);
     }
 
-    withString("&File", (text) => menuBar.Append(fileMenu.ptr, text));
-    withString("&Help", (text) => menuBar.Append(helpMenu.ptr, text));
-    frame.SetMenuBar(menuBar.ptr);
-
-    return { frame, menuBar, callbacks: [], closures: [] };
+    return frame;
 }
 
-function connectMenu(
-    state: ArtProvFrameState,
-    id: number,
-    callback: Callback,
-): void
+// ---------------------------------------------------------------------------
+// MyFrame event handlers
+// ---------------------------------------------------------------------------
+
+interface FrameState
 {
-    const closure = createWxClosure(callback.pointer, null)!;
+    frame: wxFrame;
+    callbacks: Callback[];
+    closures: wxClosure[];
+}
+
+/** One EVT_MENU(id) row of MyFrame's event table. */
+function bindMenu(
+    state: FrameState, id: number, handler: (eventPtr: Pointer) => void): void
+{
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            handler(eventPtr);
+        },
+    );
+    const closure = createWxClosure(callback.pointer, null);
+    if (!closure)
+    {
+        callback.close();
+        return;
+    }
+
+    state.frame.Bind(id, id, EVT_MENU, closure.ptr);
+    state.callbacks.push(callback);
     state.closures.push(closure);
-    lib.symbols.wxEvtHandler_Connect(
-        state.frame.ptr,
-        id,
-        id,
-        EVT_MENU,
-        closure.ptr,
-    );
 }
 
-/** MyFrame's event table. */
-function connectFrameEvents(state: ArtProvFrameState): void
+/** MyFrame::OnLogs — the wxUSE_LOG branch of arttest.cpp:186-196. */
+function showLogSample(): void
 {
-    const quitCallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            // MyFrame::OnQuit(): Close(true)
-            state.frame.Close(true);
-        },
-    );
-    state.callbacks.push(quitCallback);
-    connectMenu(state, ID_QUIT, quitCallback);
+    withString("Some information.", (text) => LogMessage(text));
+    withString("This is an error.", (text) => LogError(text));
+    withString("A warning.", (text) => LogWarning(text));
+    withString("Yet another error.", (text) => LogError(text));
 
-    const logsCallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            showLoggingOutput();
-        },
-    );
-    state.callbacks.push(logsCallback);
-    connectMenu(state, ID_LOGS, logsCallback);
+    // wxLog::GetActiveTarget()->Flush()
+    const target = wxLog_GetActiveTarget();
+    if (target) wrapWxLog(target).Flush();
 
-    const aboutCallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            showAbout(state.frame);
-        },
-    );
-    state.callbacks.push(aboutCallback);
-    connectMenu(state, ID_ABOUT, aboutCallback);
-
-    const browserCallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            showArtBrowserDialog(state.frame);
-        },
-    );
-    state.callbacks.push(browserCallback);
-    connectMenu(state, ID_BROWSER, browserCallback);
-
-    const pluginCallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            installPluginProvider(state, new wxCommandEvent(eventPtr));
-        },
-    );
-    state.callbacks.push(pluginCallback);
-    connectMenu(state, ID_PLUG_PROVIDER, pluginCallback);
-
-    // No EVT_CLOSE_WINDOW in the C++ event table; the canonical bootstrap uses
-    // exitMainLoop() instead of letting the last frame tear the loop down.
-    const closeCallback = new Callback(
-        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
-        (_closureFun, _data, eventPtr) =>
-        {
-            if (!eventPtr)
-            {
-                return;
-            }
-            exitMainLoop();
-        },
-    );
-    state.callbacks.push(closeCallback);
-    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
-    state.closures.push(closeClosure);
-    lib.symbols.wxEvtHandler_Connect(
-        state.frame.ptr,
-        ID_ANY,
-        ID_ANY,
-        EVT_CLOSE_WINDOW,
-        closeClosure.ptr,
-    );
+    withString("Check/uncheck 'File/Plug-in art provider' and try again.",
+        (text) => LogMessage(text));
 }
+
+/** MyFrame::OnAbout */
+function showAbout(frame: wxFrame): void
+{
+    const version = readAndDeleteWxString(wxVersionString());
+    const message =
+        "This is the about dialog of wxArtProvider sample.\n" +
+        "Welcome to " + version;
+
+    withString(message, (text) =>
+    {
+        withString("About wxArtProvider sample", (caption) =>
+        {
+            kwxMessageBox(text, caption, OK | ICON_INFORMATION, frame.ptr, -1, -1);
+        });
+    });
+}
+
+function connectFrameEvents(state: FrameState): void
+{
+    // EVT_MENU(ID_Quit) — Close(true)
+    bindMenu(state, ID_QUIT, () => { state.frame.Close(true); });
+
+    // EVT_MENU(ID_Logs)
+    bindMenu(state, ID_LOGS, () => { showLogSample(); });
+
+    // EVT_MENU(wxID_ABOUT)
+    bindMenu(state, ID_ABOUT, () => { showAbout(state.frame); });
+
+    // EVT_MENU(ID_Browser)
+    bindMenu(state, ID_BROWSER, () => { showArtBrowserDialog(state.frame); });
+
+    // EVT_MENU(ID_PlugProvider) — Push(new MyArtProvider) / Pop()
+    bindMenu(state, ID_PLUG_PROVIDER, (eventPtr) =>
+    {
+        const event = new wxCommandEvent(eventPtr);
+        plugInProviderActive = event.IsChecked();
+    });
+}
+
+// ---------------------------------------------------------------------------
+// MyApp::OnInit
+// ---------------------------------------------------------------------------
 
 export function main(): number
 {
@@ -411,26 +1168,28 @@ export function main(): number
 
     setAppName("artprov");
 
-    // The C++ sample compiles its XPM data in. Loading the two XPM files at run
-    // time needs the XPM image handler.
-    initAllImageHandlers();
+    // Everything below needs the native symbol table, so it runs after
+    // initialize(): SIZE_CHOICE_ID, the art id table and the SVG assets.
+    sizeChoiceId = wxNewId();
+    messageBoxClientName = readWxString(ART_MESSAGE_BOX);
+    loadAssets();
+    buildArtTable();
 
-    // const int SIZE_CHOICE_ID = ::wxNewId();
-    initArtBrowser(wxNewId());
-
-    const state = createArtProviderFrame();
-    if (!state)
+    const frame = createMainFrame();
+    if (!frame)
     {
         console.error("artprov: failed to create the main frame");
-        shutdownArtBrowser();
+        releaseArtTable();
+        releaseAssets();
         shutdown();
         return 1;
     }
 
+    const state: FrameState = { frame, callbacks: [], closures: [] };
     connectFrameEvents(state);
 
-    state.frame.Show();
-    setTopWindow(state.frame.ptr);
+    frame.Show();
+    setTopWindow(frame.ptr);
 
     const exitCode = run();
 
@@ -438,7 +1197,8 @@ export function main(): number
     {
         callback.close();
     }
-    shutdownArtBrowser();
+    releaseArtTable();
+    releaseAssets();
     shutdown();
     return exitCode;
 }

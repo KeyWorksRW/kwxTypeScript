@@ -1,0 +1,285 @@
+// timepick.kwxts — port of wxSamples/src/widgets/timepick.cpp
+
+
+import {
+    ALIGN_CENTRE,
+    ALL,
+    BOTTOM,
+    createWxBoxSizer,
+    createWxButton,
+    createWxDateTime,
+    createWxTimePickerCtrl,
+    EVT_BUTTON,
+    EVT_TIME_CHANGED,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    LEFT,
+    readAndDeleteWxString,
+    RIGHT,
+    TOP,
+    VERTICAL,
+    wxDateEvent,
+    wxDateTime,
+    wxSizer,
+    wxTextCtrl,
+    wxTimePickerCtrl,
+    wxWindow,
+} from "kwx";
+import { Pointer, pointerOf } from "kwx/platform";
+
+import {
+    addSizer,
+    addStretchSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    doubleBorder,
+    logError,
+    logMessage,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+const TIME_PICKER_PAGE_RESET = ID_HIGHEST;
+const TIME_PICKER_PAGE_SET = TIME_PICKER_PAGE_RESET + 1;
+const TIME_PICKER_PAGE_PICKER = TIME_PICKER_PAGE_SET + 1;
+
+/** wxDateTime::FormatISOTime() as a plain string. */
+function formatISOTime(date: wxDateTime): string
+{
+    const value = date.FormatISOTime();
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** Today at the current time, as a wxDateTime. */
+function today(): wxDateTime | null
+{
+    const date = createWxDateTime();
+    if (date)
+    {
+        date.Today();
+    }
+    return date;
+}
+
+export class TimePickerPage extends WidgetsPage
+{
+    private timePicker: wxTimePickerCtrl | null = null;
+    private sizerTimePicker: wxSizer | null = null;
+    private textCur: wxTextCtrl | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/timepick");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.timePicker;
+    }
+
+    override createContent(): void
+    {
+        const sizerTop = createWxBoxSizer(HORIZONTAL)!;
+
+        // left pane
+        const sizerLeft = createWxBoxSizer(VERTICAL)!;
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(this.page.ptr, TIME_PICKER_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerLeft, resetButton, 0, ALIGN_CENTRE, border());
+
+        // middle pane: operations
+        const sizerMiddle = createWxBoxSizer(VERTICAL)!;
+        const setRow = this.createSizerWithTextAndButton(
+            TIME_PICKER_PAGE_SET, "&Set time", ID_ANY,
+            (text) =>
+            {
+                this.textCur = text;
+            });
+        addSizer(sizerMiddle, setRow, 0, EXPAND, border());
+
+        // m_textCur->SetMinSize(m_textCur->GetSizeFromText("00:00:00 AM"))
+        if (this.textCur)
+        {
+            const width = new Int32Array(1);
+            const height = new Int32Array(1);
+            withString("00:00:00 AM", (ptr) => this.textCur?.GetSizeFromText(
+                ptr, pointerOf(width), pointerOf(height)));
+            this.textCur.SetMinSize(width[0], height[0]);
+        }
+
+        // right pane: the control itself
+        const sizerRight = createWxBoxSizer(HORIZONTAL)!;
+        this.timePicker = createWxTimePickerCtrl(
+            this.page.ptr, TIME_PICKER_PAGE_PICKER, null,
+            -1, -1, -1, -1, BigInt(attrs.defaultFlags));
+        if (this.timePicker)
+        {
+            addStretchSpacer(sizerRight);
+            addWin(sizerRight, this.timePicker, 1, ALIGN_CENTRE, 0);
+            addStretchSpacer(sizerRight);
+        }
+        this.sizerTimePicker = sizerRight;
+
+        // the 3 panes compose the window
+        addSizer(sizerTop, sizerLeft, 0, ALL & ~LEFT, doubleBorder());
+        addSizer(sizerTop, sizerMiddle, 0, TOP | BOTTOM, doubleBorder());
+        addSizer(sizerTop, sizerRight, 1, EXPAND | (ALL & ~RIGHT), doubleBorder());
+
+        this.reset();
+
+        this.page.SetSizer(sizerTop.ptr, false);
+
+        bindEvent(this.page, TIME_PICKER_PAGE_RESET, TIME_PICKER_PAGE_RESET,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.reset();
+                this.createTimePicker();
+            });
+
+        bindEvent(this.page, TIME_PICKER_PAGE_SET, TIME_PICKER_PAGE_SET,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSet();
+            });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_TIME_CHANGED, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.onTimeChanged(eventPtr);
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.createTimePicker();
+    }
+
+    /** Reset the time picker parameters to the current time. */
+    private reset(): void
+    {
+        const now = today();
+        if (!now)
+        {
+            return;
+        }
+
+        this.timePicker?.SetValue(now.ptr);
+        if (this.textCur)
+        {
+            const isoTime = formatISOTime(now);
+            withString(isoTime, (ptr) => this.textCur?.SetValue(ptr));
+        }
+        now.Delete();
+    }
+
+    /** (Re)create the time picker. */
+    private createTimePicker(): void
+    {
+        const current = createWxDateTime();
+        if (current && this.timePicker)
+        {
+            this.timePicker.GetValue(current.ptr);
+        }
+
+        const sizer = this.sizerTimePicker;
+        if (sizer)
+        {
+            const count = sizer.GetItemCount();
+            for (let index = 0; index < count; index++)
+            {
+                sizer.Remove(0);
+            }
+        }
+
+        // wxTimePickerCtrl has no owning Delete(); destroy the window, as the
+        // C++ "delete m_timePicker" does.
+        if (this.timePicker)
+        {
+            this.timePicker.Destroy();
+            this.timePicker = null;
+        }
+
+        const style = attrs.defaultFlags;
+        this.timePicker = createWxTimePickerCtrl(
+            this.page.ptr, TIME_PICKER_PAGE_PICKER, current ? current.ptr : null,
+            -1, -1, -1, -1, BigInt(style));
+
+        if (this.timePicker)
+        {
+            this.notifyWidgetRecreation(this.timePicker);
+        }
+
+        if (sizer && this.timePicker)
+        {
+            addStretchSpacer(sizer);
+            addWin(sizer, this.timePicker, 1, ALIGN_CENTRE, 0);
+            addStretchSpacer(sizer);
+            sizer.Layout();
+        }
+
+        current?.Delete();
+    }
+
+    /** OnButtonSet(): parse HH:MM:SS from the text control. */
+    private onButtonSet(): void
+    {
+        if (!this.textCur || !this.timePicker)
+        {
+            return;
+        }
+
+        const value = this.textCur.GetValue();
+        const text = value ? readAndDeleteWxString(value.ptr) : "";
+
+        // wxSscanf(value, "%d:%d:%d", &h, &m, &s) != 3
+        const match = /^\s*(\d+)\s*:\s*(\d+)\s*:\s*(\d+)\s*$/.exec(text);
+        if (!match)
+        {
+            logError("Invalid time, please use HH:MM:SS format.");
+            return;
+        }
+
+        this.timePicker.SetTime(
+            Number(match[1]), Number(match[2]), Number(match[3]));
+    }
+
+    /** OnTimeChanged(): log the new time. */
+    private onTimeChanged(eventPtr: Pointer): void
+    {
+        if (!this.timePicker)
+        {
+            return;
+        }
+
+        const hour = new Int32Array(1);
+        const minute = new Int32Array(1);
+        const second = new Int32Array(1);
+        this.timePicker.GetTime(pointerOf(hour), pointerOf(minute), pointerOf(second));
+
+        const event = new wxDateEvent(eventPtr, true);
+        const date = createWxDateTime();
+        let isoTime = "";
+        if (date)
+        {
+            event.GetDate(date.ptr);
+            isoTime = formatISOTime(date);
+            date.Delete();
+        }
+
+        const pad = (value: number): string => String(value).padStart(2, "0");
+        logMessage(`Time changed, now is ${isoTime} (control value is `
+            + `${pad(hour[0])}:${pad(minute[0])}:${pad(second[0])}).`);
+    }
+}
+
+export function createTimePickerPage(parent: Pointer): WidgetsPage
+{
+    return new TimePickerPage(parent);
+}

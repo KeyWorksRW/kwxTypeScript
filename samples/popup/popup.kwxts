@@ -1,0 +1,705 @@
+// popup.kwxts — kwxTypeScript port of wxSamples/src/popup/popup.cpp
+//
+// The sample demonstrates wxPopupTransientWindow: two buttons open a popup
+// holding a static text, a button, a spin control, a text control and a label
+// whose background follows the mouse. The second variant keeps a fixed
+// 300x300 client area so its panel shows scrollbars. A "Test dialog" menu item
+// opens the same two buttons inside a modal dialog. Every popup lifecycle hook
+// and every popup event is echoed to the multiline log window, exactly like the
+// C++ original.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\popup\popup.kwxts
+//
+// Icon: popup.cpp uses SetIcon(wxICON(sample)). The "sample" icon resource
+// comes from ../sample.xpm, converted here to sample.svg (loaded with
+// wxBitmapBundle::FromSVGFile at the artwork's original 32x32 size).
+//
+// Logging note: wxLogMessage() takes a format string and kwxFFI forwards the
+// whole wxString as that format, so the C++ "%p"/"%d" conversions are resolved
+// into the message text before the call; "%p" is printed as 0x-prefixed hex.
+
+declare const __dirname: string;
+
+import {
+    ALL,
+    DEFAULT_DIALOG_STYLE,
+    DEFAULT_FRAME_STYLE,
+    EVT_ACTIVATE,
+    EVT_BUTTON,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    ICON_INFORMATION,
+    ID_ANY,
+    ID_OK,
+    OK,
+    STB_DEFAULT_STYLE,
+    TAB_TRAVERSAL,
+    TE_MULTILINE,
+    VERTICAL,
+    createWxButton,
+    createWxClosure,
+    createWxDialog,
+    createWxFrame,
+    createWxIconDefault,
+    createWxLogTextCtrl,
+    createWxMenu,
+    createWxMenuBar,
+    createWxPanel,
+    createWxSize,
+    createWxString,
+    createWxTextCtrl,
+    initialize,
+    kwxMessageBox,
+    lib,
+    readAndDeleteWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wxBitmap,
+    wxBitmapBundle,
+    wxBitmapBundle_FromSVGFile,
+    wxDialog,
+    wxEvent,
+    wxFrame,
+    wxLog,
+    wxLog_SetActiveTarget,
+    wxPoint,
+    wxSize,
+    wxTextCtrl,
+    wxVersionString,
+} from "kwx";
+import { Callback, Pointer, exit, pointerOf } from "kwx/platform";
+import {
+    MINIMAL_ABOUT,
+    MINIMAL_QUIT,
+    MINIMAL_START_SCROLLED_POPUP,
+    MINIMAL_START_SIMPLE_POPUP,
+    MINIMAL_TEST_DIALOG,
+    addWithFlags,
+    fmtPointer,
+    logMessage,
+    newBoxSizer,
+    withString,
+} from "./support.kwxts";
+import {
+    PopupState,
+    createSimpleTransientPopup,
+    destroySimpleTransientPopup,
+    releasePopupHooks,
+} from "./popupwin.kwxts";
+
+/** Absolute path of an asset shipped next to this module. */
+function assetPath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** SetIcon(wxICON(sample)) from the converted 32x32 sample.svg artwork. */
+function setFrameIcon(frame: wxFrame): void
+{
+    const path = createWxString(assetPath("sample.svg"));
+    let rawBundle: Pointer = null;
+    try
+    {
+        rawBundle = wxBitmapBundle_FromSVGFile(path.ptr, 32, 32);
+    }
+    finally
+    {
+        path.Delete();
+    }
+
+    if (!rawBundle)
+    {
+        return;
+    }
+
+    const bundle = new wxBitmapBundle(rawBundle);
+    const size = createWxSize(32, 32);
+
+    if (size)
+    {
+        const rawBitmap = lib.symbols.wxBitmapBundle_GetBitmap(bundle.ptr, size.ptr);
+        if (rawBitmap)
+        {
+            const bitmap = new wxBitmap(rawBitmap);
+            const icon = createWxIconDefault();
+            if (icon)
+            {
+                // wxTopLevelWindow::SetIcon copies the icon.
+                icon.CopyFromBitmap(bitmap.ptr);
+                frame.SetIcon(icon.ptr);
+                icon.Delete();
+            }
+            bitmap.Delete();
+        }
+        size.Delete();
+    }
+
+    bundle.Delete();
+}
+
+/** event.GetEventObject() as a raw pointer. */
+function eventObject(eventPtr: Pointer): Pointer
+{
+    if (!eventPtr)
+    {
+        return null;
+    }
+    return new wxEvent(eventPtr).GetEventObject()?.ptr ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// Popup owners
+// ---------------------------------------------------------------------------
+
+interface PopupOwner
+{
+    simplePopup: PopupState | null;
+    scrolledPopup: PopupState | null;
+}
+
+/**
+ * MyFrame::OnStartSimplePopup / OnStartScrolledPopup and the matching MyDialog
+ * handlers (popup.cpp:406-430 and 482-506).
+ */
+function startPopup(
+    owner: PopupOwner,
+    ownerPtr: Pointer,
+    scrolled: boolean,
+    prefix: string,
+    eventPtr: Pointer,
+): void
+{
+    logMessage("================================================");
+
+    // delete m_simplePopup; m_simplePopup = new SimpleTransientPopup(this, ...)
+    if (scrolled)
+    {
+        destroySimpleTransientPopup(owner.scrolledPopup);
+        owner.scrolledPopup = null;
+    }
+    else
+    {
+        destroySimpleTransientPopup(owner.simplePopup);
+        owner.simplePopup = null;
+    }
+
+    const popup = createSimpleTransientPopup(ownerPtr, scrolled);
+    if (!popup)
+    {
+        return;
+    }
+
+    if (scrolled)
+    {
+        owner.scrolledPopup = popup;
+    }
+    else
+    {
+        owner.simplePopup = popup;
+    }
+
+    // wxWindow *btn = (wxWindow*) event.GetEventObject();
+    const buttonPtr = eventObject(eventPtr) ?? ownerPtr;
+    const rawPos = lib.symbols.wxWindow_ClientToScreen(buttonPtr, 0, 0);
+    const rawSize = lib.symbols.wxWindow_GetSize(buttonPtr);
+    const pos = rawPos ? new wxPoint(rawPos) : null;
+    const size = rawSize ? new wxSize(rawSize) : null;
+
+    const x = pos ? pos.GetX() : 0;
+    const y = pos ? pos.GetY() : 0;
+    const width = size ? size.GetWidth() : 0;
+    const height = size ? size.GetHeight() : 0;
+
+    popup.popup.Position(x, y, width, height);
+    logMessage(
+        `${fmtPointer(popup.popupPtr)} ${prefix} Popup Shown ` +
+        `pos(${x}, ${y}) size(${width}, ${height})`,
+    );
+
+    // SimpleTransientPopup::Popup logs before showing the window.
+    logMessage(`${fmtPointer(popup.popupPtr)} SimpleTransientPopup::Popup`);
+    popup.popup.Popup(null);
+
+    if (pos)
+    {
+        pos.Delete();
+    }
+    if (size)
+    {
+        size.Delete();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame
+// ---------------------------------------------------------------------------
+
+interface FrameState extends PopupOwner
+{
+    readonly frame: wxFrame;
+    readonly logWin: wxTextCtrl;
+    logOld: wxLog | null;
+    logRestored: boolean;
+    readonly callbacks: Callback[];
+}
+
+/**
+ * MyFrame::~MyFrame — delete wxLog::SetActiveTarget(m_logOld).
+ *
+ * Run from the wxEVT_CLOSE_WINDOW handler, i.e. before the frame and its log
+ * text control are destroyed, which is when the C++ destructor runs.
+ */
+function restoreLogTarget(state: FrameState): void
+{
+    if (state.logRestored)
+    {
+        return;
+    }
+    state.logRestored = true;
+
+    // SetActiveTarget() returns the target that was replaced, i.e. the
+    // wxLogTextCtrl installed by the constructor; the C++ code deletes it.
+    const previous = wxLog_SetActiveTarget(state.logOld ? state.logOld.ptr : null);
+    if (previous)
+    {
+        previous.Delete();
+    }
+    state.logOld = null;
+}
+
+/** MyFrame::MyFrame (popup.cpp:341-391). */
+function createPopupFrame(): FrameState | null
+{
+    const title = createWxString("Popup wxWidgets App");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, -1, -1, 500, 300, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+
+    if (!frame)
+    {
+        return null;
+    }
+
+    setFrameIcon(frame);
+
+    // -----------------------------------------------------------------------
+    // Menu bar
+    // -----------------------------------------------------------------------
+    const noTitle = createWxString("");
+    const fileMenu = createWxMenu(noTitle.ptr, 0n);
+    const helpMenu = createWxMenu(noTitle.ptr, 0n);
+    noTitle.Delete();
+
+    if (!fileMenu || !helpMenu)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // helpMenu->Append(Minimal_About, "&About\tF1", "Show about dialog");
+    withString("&About\tF1", (label) => withString("Show about dialog", (help) => {
+        helpMenu.Append(MINIMAL_ABOUT, label, help, false);
+    }));
+
+    // menuFile->Append(Minimal_TestDialog, "&Test dialog\tAlt-T", ...);
+    withString("&Test dialog\tAlt-T", (label) => withString("Test dialog", (help) => {
+        fileMenu.Append(MINIMAL_TEST_DIALOG, label, help, false);
+    }));
+
+    // menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+    withString("E&xit\tAlt-X", (label) => withString("Quit this program", (help) => {
+        fileMenu.Append(MINIMAL_QUIT, label, help, false);
+    }));
+
+    const menuBar = createWxMenuBar(0);
+    if (menuBar)
+    {
+        withString("&File", (label) => menuBar.Append(fileMenu.ptr, label));
+        withString("&Help", (label) => menuBar.Append(helpMenu.ptr, label));
+        frame.SetMenuBar(menuBar.ptr);
+    }
+
+    // -----------------------------------------------------------------------
+    // Status bar (2 panes)
+    // -----------------------------------------------------------------------
+    frame.CreateStatusBar(2, STB_DEFAULT_STYLE, 0);
+    withString("Welcome to wxWidgets!", (text) => frame.SetStatusText(text, 0));
+
+    // -----------------------------------------------------------------------
+    // Panel, buttons and log window
+    // -----------------------------------------------------------------------
+    const panel = createWxPanel(frame.ptr, -1, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (!panel)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    const button1 = withString("Show simple popup", (ptr) => createWxButton(
+        panel.ptr, MINIMAL_START_SIMPLE_POPUP, ptr, 20, 20, -1, -1, 0,
+    ));
+    const button2 = withString("Show scrolled popup", (ptr) => createWxButton(
+        panel.ptr, MINIMAL_START_SCROLLED_POPUP, ptr, 20, 70, -1, -1, 0,
+    ));
+    const logWin = withString("", (ptr) => createWxTextCtrl(
+        panel.ptr, ID_ANY, ptr, -1, -1, -1, -1, BigInt(TE_MULTILINE),
+    ));
+
+    if (!button1 || !button2 || !logWin)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    logWin.SetEditable(false);
+
+    // wxLogTextCtrl* logger = new wxLogTextCtrl(m_logWin);
+    // m_logOld = logger->SetActiveTarget(logger);
+    // logger->DisableTimestamp();
+    const logger = createWxLogTextCtrl(logWin.ptr);
+    let logOld: wxLog | null = null;
+    if (logger)
+    {
+        logOld = wxLog_SetActiveTarget(logger.ptr);
+        // DisableTimestamp() == SetTimestamp(wxEmptyString); kwxFFI's
+        // wxLog_SetTimestamp() takes a C string and builds the wxString.
+        const empty = new TextEncoder().encode("\0");
+        logger.SetTimestamp(pointerOf(empty));
+    }
+
+    const topSizer = newBoxSizer(VERTICAL);
+    addWithFlags(topSizer, button1.ptr, (flags) => flags.Border(ALL));
+    addWithFlags(topSizer, button2.ptr, (flags) => flags.Border(ALL));
+    addWithFlags(topSizer, logWin.ptr, (flags) => {
+        flags.Expand();
+        flags.Border(ALL);
+    }, 1);
+
+    panel.SetSizer(topSizer.ptr, true);
+
+    return {
+        frame,
+        logWin,
+        logOld,
+        logRestored: false,
+        simplePopup: null,
+        scrolledPopup: null,
+        callbacks: [],
+    };
+}
+
+/** MyFrame::OnAbout (popup.cpp:444-451). */
+function showAbout(state: FrameState): void
+{
+    const version = readAndDeleteWxString(wxVersionString());
+    const message =
+        "This is the About dialog of the popup sample.\n" +
+        "Welcome to " + version;
+
+    withString(message, (text) => withString("About Popup", (caption) => {
+        kwxMessageBox(text, caption, OK | ICON_INFORMATION, state.frame.ptr, -1, -1);
+    }));
+}
+
+// ---------------------------------------------------------------------------
+// MyDialog
+// ---------------------------------------------------------------------------
+
+interface DialogState extends PopupOwner
+{
+    readonly dialog: wxDialog;
+    readonly callbacks: Callback[];
+}
+
+/** MyDialog::MyDialog (popup.cpp:462-480). */
+function createTestDialog(dialog: wxDialog): DialogState | null
+{
+    const panel = createWxPanel(dialog.ptr, -1, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (!panel)
+    {
+        return null;
+    }
+
+    const button1 = withString("Show simple popup", (ptr) => createWxButton(
+        panel.ptr, MINIMAL_START_SIMPLE_POPUP, ptr, 20, 20, -1, -1, 0,
+    ));
+    const button2 = withString("Show scrolled popup", (ptr) => createWxButton(
+        panel.ptr, MINIMAL_START_SCROLLED_POPUP, ptr, 20, 60, -1, -1, 0,
+    ));
+    const okButton = withString("OK", (ptr) => createWxButton(
+        panel.ptr, ID_OK, ptr, 20, 200, -1, -1, 0,
+    ));
+
+    if (!button1 || !button2 || !okButton)
+    {
+        return null;
+    }
+
+    const topSizer = newBoxSizer(VERTICAL);
+    addWithFlags(topSizer, button1.ptr, (flags) => flags.Border(ALL));
+    addWithFlags(topSizer, button2.ptr, (flags) => flags.Border(ALL));
+    topSizer.AddSpacer(40);
+    addWithFlags(topSizer, okButton.ptr, (flags) => flags.Border(ALL));
+
+    panel.SetSizerAndFit(topSizer.ptr, true);
+
+    return {
+        dialog,
+        simplePopup: null,
+        scrolledPopup: null,
+        callbacks: [],
+    };
+}
+
+/** The event table of MyDialog: EVT_BUTTON for both popup buttons. */
+function bindDialogEvents(state: DialogState): void
+{
+    const simpleCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            startPopup(
+                state, state.dialog.ptr, false, "Dialog Simple", eventPtr,
+            );
+        },
+    );
+    const simpleClosure = createWxClosure(simpleCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Bind(
+        state.dialog.ptr,
+        MINIMAL_START_SIMPLE_POPUP,
+        MINIMAL_START_SIMPLE_POPUP,
+        EVT_BUTTON,
+        simpleClosure.ptr,
+    );
+
+    const scrolledCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            startPopup(
+                state, state.dialog.ptr, true, "Dialog Scrolled", eventPtr,
+            );
+        },
+    );
+    const scrolledClosure = createWxClosure(scrolledCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Bind(
+        state.dialog.ptr,
+        MINIMAL_START_SCROLLED_POPUP,
+        MINIMAL_START_SCROLLED_POPUP,
+        EVT_BUTTON,
+        scrolledClosure.ptr,
+    );
+
+    state.callbacks.push(simpleCallback, scrolledCallback);
+}
+
+/** MyFrame::OnTestDialog (popup.cpp:432-436). */
+function showTestDialog(): void
+{
+    const title = createWxString("Test");
+    const dialog = createWxDialog(
+        null, ID_ANY, title.ptr, 50, 50, 400, 300, DEFAULT_DIALOG_STYLE,
+    );
+    title.Delete();
+
+    if (!dialog)
+    {
+        return;
+    }
+
+    const state = createTestDialog(dialog);
+    if (!state)
+    {
+        dialog.Destroy();
+        return;
+    }
+
+    bindDialogEvents(state);
+    dialog.ShowModal();
+
+    // The C++ popups are children of the stack dialog and die with it; delete
+    // them explicitly so the live-popup registry never keeps a stale pointer.
+    destroySimpleTransientPopup(state.simplePopup);
+    destroySimpleTransientPopup(state.scrolledPopup);
+
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+    dialog.Destroy();
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame event table (popup.cpp:332-339)
+// ---------------------------------------------------------------------------
+
+function bindFrameEvents(state: FrameState): void
+{
+    // EVT_MENU(Minimal_Quit) — Close(true)
+    const quitCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            state.frame.Close(true);
+        },
+    );
+    const quitClosure = createWxClosure(quitCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr, MINIMAL_QUIT, MINIMAL_QUIT, EVT_MENU, quitClosure.ptr,
+    );
+
+    // EVT_MENU(Minimal_About) — About message box
+    const aboutCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            showAbout(state);
+        },
+    );
+    const aboutClosure = createWxClosure(aboutCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr, MINIMAL_ABOUT, MINIMAL_ABOUT, EVT_MENU, aboutClosure.ptr,
+    );
+
+    // EVT_MENU(Minimal_TestDialog) — modal test dialog
+    const dialogCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            showTestDialog();
+        },
+    );
+    const dialogClosure = createWxClosure(dialogCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr,
+        MINIMAL_TEST_DIALOG,
+        MINIMAL_TEST_DIALOG,
+        EVT_MENU,
+        dialogClosure.ptr,
+    );
+
+    // EVT_ACTIVATE — wxLogMessage("In activate..."); no Skip() in the original.
+    const activateCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            logMessage("In activate...");
+        },
+    );
+    const activateClosure = createWxClosure(activateCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr, ID_ANY, ID_ANY, EVT_ACTIVATE, activateClosure.ptr,
+    );
+
+    // EVT_BUTTON(Minimal_StartSimplePopup)
+    const simpleCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            startPopup(state, state.frame.ptr, false, "Simple", eventPtr);
+        },
+    );
+    const simpleClosure = createWxClosure(simpleCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr,
+        MINIMAL_START_SIMPLE_POPUP,
+        MINIMAL_START_SIMPLE_POPUP,
+        EVT_BUTTON,
+        simpleClosure.ptr,
+    );
+
+    // EVT_BUTTON(Minimal_StartScrolledPopup)
+    const scrolledCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            startPopup(state, state.frame.ptr, true, "Scrolled", eventPtr);
+        },
+    );
+    const scrolledClosure = createWxClosure(scrolledCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr,
+        MINIMAL_START_SCROLLED_POPUP,
+        MINIMAL_START_SCROLLED_POPUP,
+        EVT_BUTTON,
+        scrolledClosure.ptr,
+    );
+
+    // Not in the C++ event table: restore the previous log target before the
+    // frame (and its log text control) is destroyed, mirroring ~MyFrame().
+    const closeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            restoreLogTarget(state);
+            new wxEvent(eventPtr).Skip(true);
+        },
+    );
+    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr,
+    );
+
+    state.callbacks.push(
+        quitCallback,
+        aboutCallback,
+        dialogCallback,
+        activateCallback,
+        simpleCallback,
+        scrolledCallback,
+        closeCallback,
+    );
+}
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("popup");
+
+    const state = createPopupFrame();
+    if (!state)
+    {
+        console.error("popup: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    bindFrameEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    // ~MyFrame() when the close event never reached the frame.
+    restoreLogTarget(state);
+
+    releasePopupHooks();
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

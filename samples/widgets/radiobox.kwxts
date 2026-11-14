@@ -1,0 +1,621 @@
+// radiobox.kwxts — port of wxSamples/src/widgets/radiobox.cpp
+//
+// kwxFFI's wxRadioBox_Create() takes a `char**` choice array, so the item
+// strings are encoded as NUL-terminated UTF-8 buffers and an array of their
+// addresses is passed (same pattern as samples/notebook/books.kwxts).  Both the
+// buffers and the address array stay reachable until the native call has copied
+// them into the control.
+
+import {
+    ALIGN_CENTRE_HORIZONTAL,
+    ALL,
+    createWxBoxSizer,
+    createWxButton,
+    createWxRadioBox,
+    createWxStaticText,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_RADIOBOX,
+    EVT_UPDATE_UI,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    LEFT,
+    RA_SPECIFY_COLS,
+    RA_SPECIFY_ROWS,
+    readAndDeleteWxString,
+    RIGHT,
+    VERTICAL,
+    wxCheckBox,
+    wxCommandEvent,
+    wxRadioBox,
+    wxSizer,
+    wxTextCtrl,
+    wxUpdateUIEvent,
+    wxWindow,
+} from "kwx";
+import { Pointer, pointerOf } from "kwx/platform";
+
+import {
+    addSizer,
+    addSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    doubleBorder,
+    logMessage,
+    makeStaticBoxSizer,
+    tripleBorder,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+const RADIO_PAGE_RESET = ID_HIGHEST;
+const RADIO_PAGE_UPDATE = RADIO_PAGE_RESET + 1;
+const RADIO_PAGE_SELECTION = RADIO_PAGE_UPDATE + 1;
+const RADIO_PAGE_LABEL = RADIO_PAGE_SELECTION + 1;
+const RADIO_PAGE_LABEL_BTN = RADIO_PAGE_LABEL + 1;
+const RADIO_PAGE_ENABLE_ITEM = RADIO_PAGE_LABEL_BTN + 1;
+const RADIO_PAGE_SHOW_ITEM = RADIO_PAGE_ENABLE_ITEM + 1;
+const RADIO_PAGE_RADIO = RADIO_PAGE_SHOW_ITEM + 1;
+
+/** default values for the number of radiobox items */
+const DEFAULT_NUM_ENTRIES = 12;
+const DEFAULT_MAJOR_DIMENSION = 3;
+
+/** this item is enabled/disabled shown/hidden by the test checkboxes */
+const TEST_BUTTON = 1;
+
+/** wxString m_textCtrl->GetValue() */
+function readTextValue(control: wxTextCtrl): string {
+    const value = control.GetValue();
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** m_textCtrl->SetValue() */
+function writeTextValue(control: wxTextCtrl, text: string): void {
+    withString(text, (ptr) => control.SetValue(ptr));
+}
+
+/** wxString::ToULong(): null stands for a failed conversion. */
+function parseUnsigned(text: string): number | null {
+    if (!/^[0-9]+$/.test(text)) {
+        return null;
+    }
+    const parsed = Number(text);
+    return Number.isSafeInteger(parsed) ? parsed : null;
+}
+
+/**
+ * Creates the wxRadioBox with the `char**` items array kwxFFI expects.  The
+ * label pointer is owned by the caller (see withString()).
+ */
+function createRadioBox(
+    parent: Pointer,
+    label: Pointer,
+    items: string[],
+    dimension: number,
+    style: number,
+): wxRadioBox | null
+{
+    const buffers: Uint8Array[] = [];
+    const pointers = new BigUint64Array(items.length);
+
+    for (let index = 0; index < items.length; index++)
+    {
+        const bytes = new TextEncoder().encode(items[index] + "\0");
+        buffers.push(bytes);
+        const address = pointerOf(bytes);
+        pointers[index] = address === null ? 0n : address;
+    }
+
+    const choices = items.length > 0 ? pointerOf(pointers) : null;
+
+    const box = createWxRadioBox(
+        parent, RADIO_PAGE_RADIO, label, -1, -1, -1, -1,
+        items.length, choices, dimension, style);
+
+    // Keep the native buffers alive until the constructor has copied them.
+    void buffers;
+    return box;
+}
+
+export class RadioPage extends WidgetsPage
+{
+    private specifyRowsCheckbox: wxCheckBox | null = null;
+    private enableItemCheckbox: wxCheckBox | null = null;
+    private showItemCheckbox: wxCheckBox | null = null;
+
+    private radio: wxRadioBox | null = null;
+    private radioSizer: wxSizer | null = null;
+
+    private textNumButtons: wxTextCtrl | null = null;
+    private textMajorDimension: wxTextCtrl | null = null;
+    private textCurrentSelection: wxTextCtrl | null = null;
+    private textSelection: wxTextCtrl | null = null;
+    private textLabel: wxTextCtrl | null = null;
+    private textLabelButtons: wxTextCtrl | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/radiobox");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.radio;
+    }
+
+    override createContent(): void
+    {
+        const top = createWxBoxSizer(HORIZONTAL)!;
+
+        // left pane
+        const left = makeStaticBoxSizer(this.page.ptr, VERTICAL, "&Set style");
+
+        this.specifyRowsCheckbox = this.createCheckBoxAndAddToSizer(
+            left.sizer, "Major specifies &rows count", ID_ANY, left.box.ptr);
+
+        const majorDimensionLabel = withString("&Major dimension:", (ptr) =>
+            createWxStaticText(left.box.ptr, ID_ANY, ptr,
+                -1, -1, -1, -1, 0))!;
+        const majorDimensionRow = this.createSizerWithText(
+            majorDimensionLabel, ID_ANY, (text) =>
+            {
+                this.textMajorDimension = text;
+            });
+        addSizer(left.sizer, majorDimensionRow, 0, EXPAND | ALL, border());
+
+        const numButtonsLabel = withString("&Number of buttons:", (ptr) =>
+            createWxStaticText(left.box.ptr, ID_ANY, ptr,
+                -1, -1, -1, -1, 0))!;
+        const numButtonsRow = this.createSizerWithText(
+            numButtonsLabel, ID_ANY, (text) =>
+            {
+                this.textNumButtons = text;
+            });
+        addSizer(left.sizer, numButtonsRow, 0, EXPAND | ALL, border());
+
+        const updateButton = withString("&Update", (ptr) =>
+            createWxButton(left.box.ptr, RADIO_PAGE_UPDATE, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(left.sizer, updateButton, 0, ALIGN_CENTRE_HORIZONTAL, border());
+
+        addSpacer(left.sizer, this.dip(5));
+
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(left.box.ptr, RADIO_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(left.sizer, resetButton, 0, ALIGN_CENTRE_HORIZONTAL,
+            tripleBorder());
+
+        // middle pane
+        const middle = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&Change parameters");
+
+        const currentSelectionLabel = withString("Current selection:", (ptr) =>
+            createWxStaticText(middle.box.ptr, ID_ANY, ptr,
+                -1, -1, -1, -1, 0))!;
+        const currentSelectionRow = this.createSizerWithText(
+            currentSelectionLabel, ID_ANY, (text) =>
+            {
+                this.textCurrentSelection = text;
+            });
+        addSizer(middle.sizer, currentSelectionRow, 0, EXPAND | ALL, border());
+
+        const selectionButton = withString("&Change selection:", (ptr) =>
+            createWxButton(middle.box.ptr, RADIO_PAGE_SELECTION, ptr,
+                -1, -1, -1, -1, 0))!;
+        const selectionRow = this.createSizerWithText(
+            selectionButton, ID_ANY, (text) =>
+            {
+                this.textSelection = text;
+            });
+        addSizer(middle.sizer, selectionRow, 0, EXPAND | ALL, border());
+
+        const labelButton = withString("&Label for box:", (ptr) =>
+            createWxButton(middle.box.ptr, RADIO_PAGE_LABEL, ptr,
+                -1, -1, -1, -1, 0))!;
+        const labelRow = this.createSizerWithText(
+            labelButton, ID_ANY, (text) =>
+            {
+                this.textLabel = text;
+            });
+        addSizer(middle.sizer, labelRow, 0, EXPAND | ALL, border());
+
+        const labelButtonsButton = withString("&Label for buttons:", (ptr) =>
+            createWxButton(middle.box.ptr, RADIO_PAGE_LABEL_BTN, ptr,
+                -1, -1, -1, -1, 0))!;
+        const labelButtonsRow = this.createSizerWithText(
+            labelButtonsButton, ID_ANY, (text) =>
+            {
+                this.textLabelButtons = text;
+            });
+        addSizer(middle.sizer, labelButtonsRow, 0, EXPAND | ALL, border());
+
+        this.enableItemCheckbox = this.createCheckBoxAndAddToSizer(
+            middle.sizer, "Disable &2nd item", RADIO_PAGE_ENABLE_ITEM,
+            middle.box.ptr);
+        this.showItemCheckbox = this.createCheckBoxAndAddToSizer(
+            middle.sizer, "Hide 2nd &item", RADIO_PAGE_SHOW_ITEM,
+            middle.box.ptr);
+
+        // right pane
+        const right = createWxBoxSizer(HORIZONTAL)!;
+        this.radioSizer = right;
+
+        // final initializations
+        this.reset();
+        this.recreateWidget();
+
+        addSizer(top, left.sizer, 0, EXPAND | (ALL & ~LEFT), doubleBorder());
+        addSizer(top, middle.sizer, 1, EXPAND | ALL, doubleBorder());
+        addSizer(top, right, 0, EXPAND | (ALL & ~RIGHT), doubleBorder());
+
+        this.page.SetSizer(top.ptr, false);
+
+        // -- event handlers ---------------------------------------------------
+
+        bindEvent(this.page, RADIO_PAGE_RESET, RADIO_PAGE_RESET, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.reset();
+                this.recreateWidget();
+            });
+
+        // EVT_BUTTON(RadioPage_Update) and EVT_BUTTON(RadioPage_LabelBtn)
+        bindEvent(this.page, RADIO_PAGE_UPDATE, RADIO_PAGE_UPDATE, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.recreateWidget();
+            });
+
+        bindEvent(this.page, RADIO_PAGE_LABEL_BTN, RADIO_PAGE_LABEL_BTN,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.recreateWidget();
+            });
+
+        bindEvent(this.page, RADIO_PAGE_SELECTION, RADIO_PAGE_SELECTION,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSelection();
+            });
+
+        bindEvent(this.page, RADIO_PAGE_LABEL, RADIO_PAGE_LABEL, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSetLabel();
+            });
+
+        // EVT_RADIOBOX(RadioPage_Radio) — bound before the wxID_ANY catch-all,
+        // which never runs for this event because OnRadioBox() does not Skip().
+        bindEvent(this.page, RADIO_PAGE_RADIO, RADIO_PAGE_RADIO, EVT_RADIOBOX,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onRadioBox(eventPtr);
+            });
+
+        // EVT_CHECKBOX(RadioPage_EnableItem) / (RadioPage_ShowItem)
+        bindEvent(this.page, RADIO_PAGE_ENABLE_ITEM, RADIO_PAGE_ENABLE_ITEM,
+            EVT_CHECKBOX, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxCommandEvent(eventPtr, true);
+                this.radio?.Enable(TEST_BUTTON, event.IsChecked());
+            });
+
+        bindEvent(this.page, RADIO_PAGE_SHOW_ITEM, RADIO_PAGE_SHOW_ITEM,
+            EVT_CHECKBOX, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxCommandEvent(eventPtr, true);
+                this.radio?.Show(TEST_BUTTON, event.IsChecked());
+            });
+
+        // EVT_UPDATE_UI entries, bound on the controls they belong to.
+        bindEvent(updateButton, RADIO_PAGE_UPDATE, RADIO_PAGE_UPDATE,
+            EVT_UPDATE_UI, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const valid = this.validateUpdateState();
+                new wxUpdateUIEvent(eventPtr, true).Enable(valid);
+            });
+
+        bindEvent(selectionButton, RADIO_PAGE_SELECTION, RADIO_PAGE_SELECTION,
+            EVT_UPDATE_UI, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const selection = this.textSelection
+                    ? parseUnsigned(readTextValue(this.textSelection))
+                    : null;
+                new wxUpdateUIEvent(eventPtr, true).Enable(
+                    selection !== null
+                    && selection < (this.radio?.GetCount() ?? 0));
+            });
+
+        bindEvent(resetButton, RADIO_PAGE_RESET, RADIO_PAGE_RESET,
+            EVT_UPDATE_UI, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                new wxUpdateUIEvent(eventPtr, true).Enable(
+                    this.isNonDefault());
+            });
+
+        if (this.enableItemCheckbox)
+        {
+            bindEvent(this.enableItemCheckbox, RADIO_PAGE_ENABLE_ITEM,
+                RADIO_PAGE_ENABLE_ITEM, EVT_UPDATE_UI, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    const radio = this.radio;
+                    if (!radio || radio.GetCount() <= TEST_BUTTON)
+                    {
+                        return;
+                    }
+                    const event = new wxUpdateUIEvent(eventPtr, true);
+                    withString(
+                        radio.IsItemEnabled(TEST_BUTTON)
+                            ? "Disable &2nd item"
+                            : "Enable &2nd item",
+                        (ptr) => event.SetText(ptr));
+                });
+        }
+
+        if (this.showItemCheckbox)
+        {
+            bindEvent(this.showItemCheckbox, RADIO_PAGE_SHOW_ITEM,
+                RADIO_PAGE_SHOW_ITEM, EVT_UPDATE_UI, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    const radio = this.radio;
+                    if (!radio || radio.GetCount() <= TEST_BUTTON)
+                    {
+                        return;
+                    }
+                    const event = new wxUpdateUIEvent(eventPtr, true);
+                    withString(
+                        radio.IsItemShown(TEST_BUTTON)
+                            ? "Hide 2nd &item"
+                            : "Show 2nd &item",
+                        (ptr) => event.SetText(ptr));
+                });
+        }
+
+        // EVT_CHECKBOX(wxID_ANY) / EVT_RADIOBOX(wxID_ANY): recreates the
+        // radiobox after any other style change.
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateWidget();
+        });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_RADIOBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateWidget();
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.createRadio();
+    }
+
+    /** RadioWidgetsPage::Reset() */
+    private reset(): void
+    {
+        if (this.textMajorDimension)
+        {
+            writeTextValue(this.textMajorDimension,
+                String(DEFAULT_MAJOR_DIMENSION));
+        }
+        if (this.textNumButtons)
+        {
+            writeTextValue(this.textNumButtons, String(DEFAULT_NUM_ENTRIES));
+        }
+        if (this.textLabel)
+        {
+            writeTextValue(this.textLabel, "I'm a radiobox");
+        }
+        if (this.textLabelButtons)
+        {
+            writeTextValue(this.textLabelButtons, "item");
+        }
+
+        this.specifyRowsCheckbox?.SetValue(false);
+        this.enableItemCheckbox?.SetValue(true);
+        this.showItemCheckbox?.SetValue(true);
+    }
+
+    /** RadioWidgetsPage::OnUpdateUIUpdate() logic: both texts parse. */
+    private validateUpdateState(): boolean
+    {
+        const numButtons = this.textNumButtons;
+        const majorDimension = this.textMajorDimension;
+        return numButtons !== null
+            && majorDimension !== null
+            && parseUnsigned(readTextValue(numButtons)) !== null
+            && parseUnsigned(readTextValue(majorDimension)) !== null;
+    }
+
+    /** RadioWidgetsPage::OnUpdateUIReset() logic: is something not default? */
+    private isNonDefault(): boolean
+    {
+        if (this.specifyRowsCheckbox?.GetValue())
+        {
+            return true;
+        }
+
+        const numEntries = this.textNumButtons
+            ? parseUnsigned(readTextValue(this.textNumButtons))
+            : null;
+        if (numEntries === null || numEntries !== DEFAULT_NUM_ENTRIES)
+        {
+            return true;
+        }
+
+        const majorDimension = this.textMajorDimension
+            ? parseUnsigned(readTextValue(this.textMajorDimension))
+            : null;
+        return majorDimension === null
+            || majorDimension !== DEFAULT_MAJOR_DIMENSION;
+    }
+
+    /** RadioWidgetsPage::CreateRadio() */
+    private createRadio(): void
+    {
+        let selection = -1;
+        if (this.radio)
+        {
+            selection = this.radio.GetSelection();
+
+            // wxSizer::Detach() is index based; the radio is the only child.
+            this.radioSizer?.Clear(true /* delete windows */);
+            this.radio = null;
+        }
+
+        let count = this.textNumButtons
+            ? parseUnsigned(readTextValue(this.textNumButtons))
+            : null;
+        if (count === null)
+        {
+            logMessage("Should have a valid number for number of items.");
+
+            // fall back to default
+            count = DEFAULT_NUM_ENTRIES;
+        }
+
+        let majorDimension = this.textMajorDimension
+            ? parseUnsigned(readTextValue(this.textMajorDimension))
+            : null;
+        if (majorDimension === null)
+        {
+            logMessage("Should have a valid major dimension number.");
+
+            // fall back to default
+            majorDimension = DEFAULT_MAJOR_DIMENSION;
+        }
+
+        const labelButton = this.textLabelButtons
+            ? readTextValue(this.textLabelButtons)
+            : "";
+
+        const items: string[] = [];
+        for (let index = 0; index < count; index++)
+        {
+            items.push(`${labelButton} ${index + 1}`);
+        }
+
+        let flags = this.specifyRowsCheckbox?.GetValue()
+            ? RA_SPECIFY_ROWS
+            : RA_SPECIFY_COLS;
+
+        flags |= attrs.defaultFlags;
+
+        const label = this.textLabel ? readTextValue(this.textLabel) : "";
+
+        this.radio = withString(label, (ptr) =>
+            createRadioBox(
+                this.page.ptr, ptr, items, majorDimension, flags));
+
+        const radio = this.radio;
+        if (!radio)
+        {
+            return;
+        }
+
+        this.notifyWidgetRecreation(radio);
+
+        if (selection >= 0 && selection < count)
+        {
+            radio.SetSelection(selection);
+        }
+
+        if (count > TEST_BUTTON)
+        {
+            radio.Enable(TEST_BUTTON,
+                this.enableItemCheckbox?.GetValue() ?? false);
+            radio.Show(TEST_BUTTON,
+                this.showItemCheckbox?.GetValue() ?? false);
+        }
+
+        if (this.radioSizer)
+        {
+            addWin(this.radioSizer, radio, 1, EXPAND, 0);
+            this.page.Layout();
+        }
+
+        this.enableItemCheckbox?.Enable(count > TEST_BUTTON);
+        this.showItemCheckbox?.Enable(count > TEST_BUTTON);
+    }
+
+    /** OnRadioBox() */
+    private onRadioBox(eventPtr: Pointer): void
+    {
+        const radio = this.radio;
+        if (!radio)
+        {
+            return;
+        }
+
+        const selection = radio.GetSelection();
+
+        // The C++ sample asserts that the event selection matches the
+        // control's; the event value is only used for that assertion.
+        const eventSelection = new wxCommandEvent(eventPtr, true).GetSelection();
+        void eventSelection;
+
+        logMessage(`Radiobox selection changed, now ${selection}`);
+
+        if (this.textCurrentSelection)
+        {
+            writeTextValue(this.textCurrentSelection, String(selection));
+        }
+    }
+
+    /** OnButtonSetLabel() */
+    private onButtonSetLabel(): void
+    {
+        const radio = this.radio;
+        if (!radio || !this.textLabel)
+        {
+            return;
+        }
+
+        withString(readTextValue(this.textLabel), (ptr) =>
+            radio.SetLabel(ptr));
+    }
+
+    /** OnButtonSelection() */
+    private onButtonSelection(): void
+    {
+        const radio = this.radio;
+        if (!radio || !this.textSelection)
+        {
+            return;
+        }
+
+        const selection = parseUnsigned(readTextValue(this.textSelection));
+        if (selection === null || selection >= radio.GetCount())
+        {
+            logMessage("Invalid number specified as new selection.");
+            return;
+        }
+
+        radio.SetSelection(selection);
+    }
+}
+
+export function createRadioPage(parent: Pointer): WidgetsPage
+{
+    return new RadioPage(parent);
+}

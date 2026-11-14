@@ -1,0 +1,443 @@
+// layout.kwxts — kwxTypeScript port of wxSamples/src/layout/layout.cpp
+//
+// The wxWidgets "Layout Demo" sample: a main frame whose panel demonstrates
+// wxBoxSizer/wxStaticBoxSizer/wxGridSizer/wxStaticLine layout, plus a File menu
+// that opens seven further windows, each exercising a different sizer:
+//   F1 Proportions demo        -> wxStaticBoxSizer proportions + wxSpinCtrl
+//   F2 Test wxFlexSizer        -> wxFlexGridSizer growable rows/cols
+//   F3 Test notebook sizers    -> wxNotebook pages inside a dialog
+//   F4 Test gridbag sizer      -> wxGridBagSizer with hide/show/move buttons
+//   F5 Test SetItemMinSize     -> wxSizer::SetItemMinSize + Fit
+//   F6 Test nested sizer       -> sizer containing a panel containing a sizer
+//   F7 Test wrap sizers        -> wxWrapSizer with add/remove checkboxes
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\layout\layout.kwxts
+//
+// Porting notes:
+//   * SetIcon(wxICON(sample)) loads sample.svg, the pixel-for-pixel conversion
+//     of ../sample.xpm (32x32), at its original size.
+//   * wxWrapSizer(wxHORIZONTAL) uses wxWRAPSIZER_DEFAULT_FLAGS in C++; the
+//     binding needs the flags explicitly, and only wxREMOVE_LEADING_SPACES is
+//     exported as a constant, so wxEXTEND_LAST_ON_EACH_LINE (1) is passed
+//     inline.
+//   * layout.cpp's expt.cpp (abandoned constraint-operator experiment) is not
+//     part of the build (no makefile or project file references it) and none
+//     of its symbols are used by layout.cpp, so it contributes no UI and is
+//     not ported.
+
+import { exit } from "kwx/platform";
+import {
+    ALL,
+    ALIGN_CENTRE_HORIZONTAL,
+    ALIGN_LEFT,
+    ALIGN_RIGHT,
+    BOTTOM,
+    DEFAULT_FRAME_STYLE,
+    EVT_MENU,
+    HORIZONTAL,
+    ICON_INFORMATION,
+    ID_ABOUT,
+    ID_ANY,
+    ID_EXIT,
+    OK,
+    STB_DEFAULT_STYLE,
+    TAB_TRAVERSAL,
+    TE_MULTILINE,
+    VERTICAL,
+    createWxBoxSizer,
+    createWxButton,
+    createWxFrame,
+    createWxGridSizer,
+    createWxMenuBar,
+    createWxPanel,
+    createWxStaticBox,
+    createWxStaticBoxSizer,
+    createWxStaticLine,
+    createWxTextCtrl,
+    initialize,
+    kwxMessageBox,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wxFrame,
+} from "kwx";
+import {
+    EventResources,
+    addSizerWithFlags,
+    addWindowWithFlags,
+    appendMenuItem,
+    appendMenuItemWithHelp,
+    bindEvent,
+    closeEventResources,
+    createEventResources,
+    createPlainMenu,
+    makeStaticText,
+    setFrameIcon,
+    withString,
+} from "./support.kwxts";
+import {
+    createFlexSizerFrame,
+    createGridBagSizerFrame,
+    createNestedSizerFrame,
+    createProportionsFrame,
+    createSimpleSizerFrame,
+    createWrapSizerFrame,
+    showNotebookSizerDialog,
+} from "./demos.kwxts";
+
+// ---------------------------------------------------------------------------
+// controls and menu constants (layout.h)
+// ---------------------------------------------------------------------------
+
+const LAYOUT_TEST_SIZER = 101;
+const LAYOUT_TEST_NB_SIZER = 102;
+const LAYOUT_TEST_GB_SIZER = 103;
+const LAYOUT_TEST_PROPORTIONS = 104;
+const LAYOUT_TEST_SET_MINIMAL = 105;
+const LAYOUT_TEST_NESTED = 106;
+const LAYOUT_TEST_WRAP = 107;
+const LAYOUT_QUIT = ID_EXIT;
+const LAYOUT_ABOUT = ID_ABOUT;
+
+// ---------------------------------------------------------------------------
+// MyFrame
+// ---------------------------------------------------------------------------
+
+function showAbout(): void
+{
+    withString("wxWidgets GUI library layout demo\n", (messagePtr) =>
+        withString("About Layout Demo", (captionPtr) =>
+            kwxMessageBox(
+                messagePtr, captionPtr, OK | ICON_INFORMATION, null, -1, -1)));
+}
+
+function createMainFrame(resources: EventResources): wxFrame | null
+{
+    const frame = withString("wxWidgets Layout Demo", (ptr) =>
+        createWxFrame(null, ID_ANY, ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    setFrameIcon(frame);
+
+    // Make a menubar
+    const fileMenu = createPlainMenu();
+    if (!fileMenu)
+    {
+        return frame;
+    }
+
+    appendMenuItem(fileMenu, LAYOUT_TEST_PROPORTIONS, "&Proportions demo...\tF1");
+    appendMenuItem(fileMenu, LAYOUT_TEST_SIZER, "Test wx&FlexSizer...\tF2");
+    appendMenuItem(fileMenu, LAYOUT_TEST_NB_SIZER, "Test &notebook sizers...\tF3");
+    appendMenuItem(fileMenu, LAYOUT_TEST_GB_SIZER, "Test &gridbag sizer...\tF4");
+    appendMenuItem(fileMenu, LAYOUT_TEST_SET_MINIMAL, "Test Set&ItemMinSize...\tF5");
+    appendMenuItem(fileMenu, LAYOUT_TEST_NESTED, "Test nested sizer in a wxPanel...\tF6");
+    appendMenuItem(fileMenu, LAYOUT_TEST_WRAP, "Test wrap sizers...\tF7");
+
+    fileMenu.AppendSeparator();
+    appendMenuItemWithHelp(fileMenu, LAYOUT_QUIT, "E&xit", "Quit program");
+
+    const helpMenu = createPlainMenu();
+    if (helpMenu)
+    {
+        appendMenuItemWithHelp(helpMenu, LAYOUT_ABOUT, "&About", "About layout demo...");
+    }
+
+    const menuBar = createWxMenuBar(0);
+    if (menuBar)
+    {
+        withString("&File", (ptr) => { menuBar.Append(fileMenu.ptr, ptr); });
+        if (helpMenu)
+        {
+            withString("&Help", (ptr) => { menuBar.Append(helpMenu.ptr, ptr); });
+        }
+
+        // Associate the menu bar with the frame
+        frame.SetMenuBar(menuBar.ptr);
+    }
+
+    frame.CreateStatusBar(2, STB_DEFAULT_STYLE, ID_ANY);
+    withString("wxWidgets layout demo", (ptr) => { frame.SetStatusText(ptr, 0); });
+
+    const p = createWxPanel(frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (!p)
+    {
+        return frame;
+    }
+
+    // we want to get a dialog that is stretchable because it
+    // has a text ctrl in the middle. at the bottom, we have
+    // two buttons which.
+    const topsizer = createWxBoxSizer(VERTICAL);
+    if (!topsizer)
+    {
+        return frame;
+    }
+
+    // 1) top: create wxStaticText with minimum size equal to its default size
+    const right = makeStaticText(p.ptr, "An explanation (wxALIGN_RIGHT).");
+    if (right)
+    {
+        addWindowWithFlags(topsizer, right.ptr, 0, (flags) =>
+        {
+            flags.Align(ALIGN_RIGHT);
+            flags.Border(ALL & ~BOTTOM);
+        });
+    }
+
+    const left = makeStaticText(p.ptr, "An explanation (wxALIGN_LEFT).");
+    if (left)
+    {
+        addWindowWithFlags(topsizer, left.ptr, 0, (flags) =>
+        {
+            flags.Align(ALIGN_LEFT);
+            flags.Border(ALL & ~BOTTOM);
+        });
+    }
+
+    const centred = makeStaticText(
+        p.ptr, "An explanation (wxALIGN_CENTRE_HORIZONTAL).");
+    if (centred)
+    {
+        addWindowWithFlags(topsizer, centred.ptr, 0, (flags) =>
+        {
+            flags.Align(ALIGN_CENTRE_HORIZONTAL);
+            flags.Border(ALL & ~BOTTOM);
+        });
+    }
+
+    // 2) top: create wxTextCtrl with minimum size (100x60)
+    const text = withString("My text (wxEXPAND).", (ptr) =>
+        createWxTextCtrl(
+            p.ptr, ID_ANY, ptr, -1, -1,
+            frame.FromDIP(100), frame.FromDIP(60), BigInt(TE_MULTILINE)));
+    if (text)
+    {
+        addWindowWithFlags(topsizer, text.ptr, 1, (flags) =>
+        {
+            flags.Expand();
+            flags.Border(ALL);
+        });
+    }
+
+    // 2.5) Gratuitous test of wxStaticBoxSizers
+    const statBox = withString("A wxStaticBoxSizer", (ptr) =>
+        createWxStaticBox(p.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+    const statsizer = statBox ? createWxStaticBoxSizer(statBox.ptr, VERTICAL) : null;
+    if (statsizer)
+    {
+        const inner = makeStaticText(p.ptr, "And some TEXT inside it");
+        if (inner)
+        {
+            addWindowWithFlags(statsizer, inner.ptr, 0, (flags) =>
+            {
+                flags.BorderSize(ALL, frame.FromDIP(30));
+            });
+        }
+
+        addSizerWithFlags(topsizer, statsizer.ptr, 1, (flags) =>
+        {
+            flags.Expand();
+            flags.DoubleBorder(ALL);
+        });
+    }
+
+    // 2.7) And a test of wxGridSizer
+    // C++: new wxGridSizer(2, 5, 5) selects wxGridSizer(cols=2, vgap=5, hgap=5),
+    // i.e. rows=0 (computed), cols=2.
+    const gridsizer = createWxGridSizer(0, 2, 5, 5);
+    if (gridsizer)
+    {
+        const rows: { label: string; value: string; valueProportion: number }[] = [
+            { label: "Label", value: "Grid sizer demo", valueProportion: 1 },
+            { label: "Another label", value: "More text", valueProportion: 1 },
+            { label: "Final label", value: "And yet more text", valueProportion: 0 },
+        ];
+
+        for (const row of rows)
+        {
+            const label = makeStaticText(p.ptr, row.label);
+            if (label)
+            {
+                addWindowWithFlags(gridsizer, label.ptr, 0, (flags) =>
+                {
+                    flags.Right();
+                    flags.CenterVertical();
+                });
+            }
+
+            const edit = withString(row.value, (ptr) =>
+                createWxTextCtrl(p.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0n));
+            if (edit)
+            {
+                addWindowWithFlags(gridsizer, edit.ptr, row.valueProportion, (flags) =>
+                {
+                    flags.Expand();
+                    flags.CenterVertical();
+                });
+            }
+        }
+
+        addSizerWithFlags(topsizer, gridsizer.ptr, 1, (flags) =>
+        {
+            flags.Proportion(1);
+            flags.Expand();
+            flags.DoubleBorder(ALL);
+        });
+    }
+
+    // 3) middle: create wxStaticLine with minimum size (3x3)
+    const line = createWxStaticLine(p.ptr, ID_ANY, -1, -1, 3, 3, HORIZONTAL);
+    if (line)
+    {
+        addWindowWithFlags(topsizer, line.ptr, 0, (flags) => { flags.Expand(); });
+    }
+
+    // 4) bottom: create two centred wxButtons
+    const buttonBox = createWxBoxSizer(HORIZONTAL);
+    if (buttonBox)
+    {
+        const button1 = withString("Two buttons in a box", (ptr) =>
+            createWxButton(p.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+        if (button1)
+        {
+            addWindowWithFlags(buttonBox, button1.ptr, 0, (flags) =>
+            {
+                flags.BorderSize(ALL, frame.FromDIP(7));
+            });
+        }
+
+        const button2 = withString("(wxCENTER)", (ptr) =>
+            createWxButton(p.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+        if (button2)
+        {
+            addWindowWithFlags(buttonBox, button2.ptr, 0, (flags) =>
+            {
+                flags.BorderSize(ALL, frame.FromDIP(7));
+            });
+        }
+
+        addSizerWithFlags(topsizer, buttonBox.ptr, 0, (flags) => { flags.Center(); });
+    }
+
+    p.SetSizer(topsizer.ptr, true);
+
+    // don't allow frame to get smaller than what the sizers tell it and also set
+    // the initial size as calculated by the sizers
+    topsizer.SetSizeHints(frame.ptr);
+
+    // -----------------------------------------------------------------------
+    // event table (EVT_MENU)
+    // -----------------------------------------------------------------------
+
+    bindEvent(resources, frame, LAYOUT_ABOUT, LAYOUT_ABOUT, EVT_MENU, () =>
+    {
+        showAbout();
+    });
+
+    bindEvent(resources, frame, LAYOUT_QUIT, LAYOUT_QUIT, EVT_MENU, () =>
+    {
+        frame.Close(true);
+    });
+
+    bindEvent(resources, frame, LAYOUT_TEST_PROPORTIONS, LAYOUT_TEST_PROPORTIONS, EVT_MENU, () =>
+    {
+        const child = createProportionsFrame(frame, resources);
+        if (child)
+        {
+            child.Show();
+        }
+    });
+
+    bindEvent(resources, frame, LAYOUT_TEST_SIZER, LAYOUT_TEST_SIZER, EVT_MENU, () =>
+    {
+        const child = createFlexSizerFrame(frame);
+        if (child)
+        {
+            child.Show();
+        }
+    });
+
+    bindEvent(resources, frame, LAYOUT_TEST_NB_SIZER, LAYOUT_TEST_NB_SIZER, EVT_MENU, () =>
+    {
+        showNotebookSizerDialog(frame);
+    });
+
+    bindEvent(resources, frame, LAYOUT_TEST_GB_SIZER, LAYOUT_TEST_GB_SIZER, EVT_MENU, () =>
+    {
+        const child = createGridBagSizerFrame(frame, resources);
+        if (child)
+        {
+            child.Show();
+        }
+    });
+
+    bindEvent(resources, frame, LAYOUT_TEST_SET_MINIMAL, LAYOUT_TEST_SET_MINIMAL, EVT_MENU, () =>
+    {
+        const child = createSimpleSizerFrame(frame, resources);
+        if (child)
+        {
+            child.Show();
+        }
+    });
+
+    bindEvent(resources, frame, LAYOUT_TEST_NESTED, LAYOUT_TEST_NESTED, EVT_MENU, () =>
+    {
+        const child = createNestedSizerFrame(frame);
+        if (child)
+        {
+            child.Show();
+        }
+    });
+
+    bindEvent(resources, frame, LAYOUT_TEST_WRAP, LAYOUT_TEST_WRAP, EVT_MENU, () =>
+    {
+        const child = createWrapSizerFrame(frame, resources);
+        if (child)
+        {
+            child.Show();
+        }
+    });
+
+    return frame;
+}
+
+// ---------------------------------------------------------------------------
+// MyApp::OnInit
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("Layout sample");
+
+    const resources = createEventResources();
+    const frame = createMainFrame(resources);
+    if (!frame)
+    {
+        closeEventResources(resources);
+        shutdown();
+        return 1;
+    }
+
+    frame.Show();
+    setTopWindow(frame.ptr);
+
+    const exitCode = run();
+
+    closeEventResources(resources);
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

@@ -1,0 +1,134 @@
+// stc_consts.kwxts — Scintilla control (wxSTC_*) constant values.
+//
+// BINDING GAP: kwxFFI exports no wxSTC_* constant at all. The generated
+// constant table (wx/kwx_constants_table_gen.cpp, 2615 entries) and
+// wx/kwx_constants_gen.ts contain not one of them, and no native
+// `exp_wxSTC_*` accessor exists either, so `bound: false` for every symbol
+// below. The sample needs them for its lexer/style/margin/fold/annotation
+// setup, so the values are reproduced verbatim from the wxWidgets 3.3.4
+// header the bindings are built against:
+//
+//     C:/rwCode/forks/wxWidgets/include/wx/stc/stc.h
+//
+// Each value is prefixed with its #define line number in that header. If the
+// bindings gain real wxSTC_* constants, delete this module and import them
+// from "kwx" instead.
+
+// stc.h:68-69
+export const wxSTC_WS_INVISIBLE = 0;
+export const wxSTC_WS_VISIBLEALWAYS = 1;
+
+// stc.h:74-76
+export const wxSTC_EOL_CRLF = 0;
+export const wxSTC_EOL_CR = 1;
+export const wxSTC_EOL_LF = 2;
+
+// stc.h:92-118 — marker symbols
+export const wxSTC_MARK_ROUNDRECT = 1;
+export const wxSTC_MARK_EMPTY = 5;
+export const wxSTC_MARK_ARROWDOWN = 6;
+export const wxSTC_MARK_VLINE = 9;
+export const wxSTC_MARK_LCORNER = 10;
+export const wxSTC_MARK_TCORNER = 11;
+export const wxSTC_MARK_BOXPLUS = 12;
+export const wxSTC_MARK_BOXPLUSCONNECTED = 13;
+export const wxSTC_MARK_BOXMINUS = 14;
+export const wxSTC_MARK_BOXMINUSCONNECTED = 15;
+export const wxSTC_MARK_DOTDOTDOT = 23;
+
+// stc.h:131-137 — folding marker numbers
+export const wxSTC_MARKNUM_FOLDEREND = 25;
+export const wxSTC_MARKNUM_FOLDEROPENMID = 26;
+export const wxSTC_MARKNUM_FOLDERMIDTAIL = 27;
+export const wxSTC_MARKNUM_FOLDERTAIL = 28;
+export const wxSTC_MARKNUM_FOLDERSUB = 29;
+export const wxSTC_MARKNUM_FOLDER = 30;
+export const wxSTC_MARKNUM_FOLDEROPEN = 31;
+
+/** stc.h:140 — 0xFE000000; narrowed to int32 as the C++ implicit conversion does. */
+export const wxSTC_MASK_FOLDERS = 0xFE000000 | 0;
+
+// stc.h:142-143
+export const wxSTC_MARGIN_SYMBOL = 0;
+export const wxSTC_MARGIN_NUMBER = 1;
+
+// stc.h:151-159
+export const wxSTC_STYLE_DEFAULT = 32;
+export const wxSTC_STYLE_LINENUMBER = 33;
+export const wxSTC_STYLE_INDENTGUIDE = 37;
+export const wxSTC_STYLE_LASTPREDEFINED = 39;
+
+// stc.h:164
+export const wxSTC_CHARSET_ANSI = 0;
+
+// stc.h:264-278
+export const wxSTC_FOLDLEVELHEADERFLAG = 0x2000;
+export const wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED = 0x0004;
+export const wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED = 0x0010;
+
+// stc.h:286-291
+export const wxSTC_WRAP_NONE = 0;
+export const wxSTC_WRAP_WORD = 1;
+export const wxSTC_WRAPVISUALFLAG_END = 0x0001;
+
+// stc.h:303
+export const wxSTC_CACHE_PAGE = 2;
+
+// stc.h:315-316
+export const wxSTC_MULTIPASTE_ONCE = 0;
+export const wxSTC_MULTIPASTE_EACH = 1;
+
+// stc.h:319-320
+export const wxSTC_EDGE_NONE = 0;
+export const wxSTC_EDGE_LINE = 1;
+
+// stc.h:323-324
+export const wxSTC_POPUP_NEVER = 0;
+export const wxSTC_POPUP_ALL = 1;
+
+// stc.h:336-363
+export const wxSTC_VISIBLE_SLOP = 0x01;
+export const wxSTC_VISIBLE_STRICT = 0x04;
+export const wxSTC_CARET_SLOP = 0x01;
+export const wxSTC_CARET_EVEN = 0x08;
+
+// stc.h:387-389
+export const wxSTC_ANNOTATION_HIDDEN = 0;
+export const wxSTC_ANNOTATION_STANDARD = 1;
+export const wxSTC_ANNOTATION_BOXED = 2;
+
+// stc.h:397-398
+export const wxSTC_TECHNOLOGY_DEFAULT = 0;
+export const wxSTC_TECHNOLOGY_DIRECTWRITE = 1;
+
+// stc.h:464
+export const wxSTC_KEY_TAB = 9;
+
+// stc.h:497-504
+export const wxSTC_LEX_PYTHON = 2;
+export const wxSTC_LEX_CPP = 3;
+export const wxSTC_LEX_XML = 5;
+export const wxSTC_LEX_PROPERTIES = 9;
+
+// stc.h:763-781 — XML (HTML) lexer styles
+export const wxSTC_H_TAG = 1;
+export const wxSTC_H_TAGUNKNOWN = 2;
+export const wxSTC_H_ATTRIBUTE = 3;
+export const wxSTC_H_ATTRIBUTEUNKNOWN = 4;
+export const wxSTC_H_OTHER = 8;
+export const wxSTC_H_COMMENT = 9;
+export const wxSTC_H_ENTITY = 10;
+export const wxSTC_H_TAGEND = 11;
+export const wxSTC_H_XMLSTART = 12;
+export const wxSTC_H_XMLEND = 13;
+export const wxSTC_H_CDATA = 17;
+
+// stc.h:3287-3340
+export const wxSTC_CMD_DELETEBACK = 2326;
+export const wxSTC_CMD_TAB = 2327;
+export const wxSTC_CMD_LOWERCASE = 2340;
+export const wxSTC_CMD_UPPERCASE = 2341;
+
+// wx/defs.h:2204 — WXK_SPACE. No WXK_* key code is exported by the bindings
+// either, so it is reproduced here for the Ctrl+Shift+Space call-tip handler.
+export const WXK_SPACE = 32;

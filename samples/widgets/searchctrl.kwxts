@@ -1,0 +1,245 @@
+// searchctrl.kwxts — port of wxSamples/src/widgets/searchctrl.cpp
+//
+// wxSearchCtrl is a wxControl which also implements wxTextEntry; the bindings
+// expose the text-entry methods directly on wxSearchCtrl, so GetTextEntry()
+// only has to return a borrowed wxTextEntry view over the same native object.
+//
+// wxMenu ownership: wxSearchCtrl::SetMenu() takes ownership of the menu it is
+// given and deletes the previous one, so this module never Delete()s a menu.
+
+import {
+    ALIGN_CENTRE,
+    createWxBoxSizer,
+    createWxCheckBox,
+    createWxMenu,
+    createWxMenuItemEx,
+    createWxSearchCtrl,
+    EVT_CHECKBOX,
+    EVT_MENU,
+    EVT_SEARCH,
+    EVT_SEARCH_CANCEL,
+    EVT_TEXT,
+    EVT_TEXT_ENTER,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    ITEM_NORMAL,
+    readAndDeleteWxString,
+    VERTICAL,
+    wxCheckBox,
+    wxCommandEvent,
+    wxMenu,
+    wxSearchCtrl,
+    wxTextEntry,
+    wxWindow,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import {
+    addSizer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    logMessage,
+    makeStaticBoxSizer,
+    tripleBorder,
+    WidgetsPage,
+    withString,
+    withStrings,
+} from "./common.kwxts";
+
+const ID_SEARCH_CB = ID_HIGHEST;
+const ID_CANCEL_CB = ID_SEARCH_CB + 1;
+const ID_MENU_CB = ID_CANCEL_CB + 1;
+
+const ID_SEARCHMENU = ID_MENU_CB + 1;
+const ID_SEARCHMENU_LAST = ID_SEARCHMENU + 5;
+
+/** wxCommandEvent::GetString() for a native command event. */
+function eventText(eventPtr: Pointer): string
+{
+    const value = new wxCommandEvent(eventPtr, true).GetString();
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** SearchCtrlWidgetsPage::CreateTestMenu() */
+function createTestMenu(): wxMenu
+{
+    const menu = withString("", (ptr) => createWxMenu(ptr, 0n))!;
+
+    // wxMenu::Append() returns void in the bindings, so the disabled header item
+    // is built with createWxMenuItemEx() and appended afterwards.
+    const title = withStrings(["Recent Searches", ""], (ptrs) =>
+        createWxMenuItemEx(ID_ANY, ptrs[0], ptrs[1], ITEM_NORMAL, null));
+    if (title)
+    {
+        title.Enable(false);
+        menu.AppendItem(title.ptr);
+    }
+
+    for (let index = 0; index < ID_SEARCHMENU_LAST - ID_SEARCHMENU; index++)
+    {
+        withStrings([`item ${index}`, `tip ${index}`], (ptrs) =>
+            menu.AppendCheckItem(ID_SEARCHMENU + index, ptrs[0], ptrs[1]));
+    }
+
+    return menu;
+}
+
+export class SearchCtrlPage extends WidgetsPage
+{
+    private srchCtrl: wxSearchCtrl | null = null;
+
+    private searchBtnCheck: wxCheckBox | null = null;
+    private cancelBtnCheck: wxCheckBox | null = null;
+    private menuBtnCheck: wxCheckBox | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/text");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.srchCtrl;
+    }
+
+    override getTextEntry(): wxTextEntry | null
+    {
+        return this.srchCtrl ? new wxTextEntry(this.srchCtrl.ptr, true) : null;
+    }
+
+    override createContent(): void
+    {
+        this.srchCtrl = null;
+        this.createControl();
+
+        const sizerOptions = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "Options");
+
+        this.searchBtnCheck = withString("Search button", (ptr) =>
+            createWxCheckBox(sizerOptions.box.ptr, ID_SEARCH_CB, ptr,
+                -1, -1, -1, -1, 0));
+        this.cancelBtnCheck = withString("Cancel button", (ptr) =>
+            createWxCheckBox(sizerOptions.box.ptr, ID_CANCEL_CB, ptr,
+                -1, -1, -1, -1, 0));
+        this.menuBtnCheck = withString("Search menu", (ptr) =>
+            createWxCheckBox(sizerOptions.box.ptr, ID_MENU_CB, ptr,
+                -1, -1, -1, -1, 0));
+
+        this.searchBtnCheck?.SetValue(true);
+
+        for (const check of [this.searchBtnCheck, this.cancelBtnCheck, this.menuBtnCheck])
+        {
+            if (check)
+            {
+                addWin(sizerOptions.sizer, check, 0, 0, border());
+            }
+        }
+
+        const sizer = createWxBoxSizer(HORIZONTAL)!;
+        addSizer(sizer, sizerOptions.sizer, 0, EXPAND, tripleBorder());
+        if (this.srchCtrl)
+        {
+            addWin(sizer, this.srchCtrl, 0, ALIGN_CENTRE, tripleBorder());
+        }
+
+        this.page.SetSizer(sizer.ptr, false);
+
+        bindEvent(this.page, ID_SEARCH_CB, ID_SEARCH_CB, EVT_CHECKBOX,
+            () => this.srchCtrl?.ShowSearchButton(
+                this.searchBtnCheck?.GetValue() ?? false));
+
+        bindEvent(this.page, ID_CANCEL_CB, ID_CANCEL_CB, EVT_CHECKBOX,
+            () => this.srchCtrl?.ShowCancelButton(
+                this.cancelBtnCheck?.GetValue() ?? false));
+
+        bindEvent(this.page, ID_MENU_CB, ID_MENU_CB, EVT_CHECKBOX, () =>
+        {
+            // The search control takes ownership of the menu and deletes it.
+            if (this.menuBtnCheck?.GetValue())
+            {
+                const menu = createTestMenu();
+                this.srchCtrl?.SetMenu(menu.ptr);
+            }
+            else
+            {
+                this.srchCtrl?.SetMenu(null);
+            }
+        });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_TEXT, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            logMessage(`Search control: text changes, contents is "${eventText(eventPtr)}".`);
+        });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_TEXT_ENTER, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            logMessage(`Search control: enter pressed, contents is "${eventText(eventPtr)}".`);
+        });
+
+        // EVT_MENU_RANGE(id1, id2, ...) binds wxEVT_MENU over the id range.
+        bindEvent(this.page, ID_SEARCHMENU, ID_SEARCHMENU_LAST, EVT_MENU,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxCommandEvent(eventPtr, true);
+                const item = event.GetId() - ID_SEARCHMENU;
+                const state = event.IsChecked() ? "checked" : "unchecked";
+                logMessage(`Search menu: "item ${item}" selected (${state}).`);
+            });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_SEARCH, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            logMessage(`Search button: search for "${eventText(eventPtr)}".`);
+        });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_SEARCH_CANCEL, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            logMessage("Cancel button pressed.");
+            new wxCommandEvent(eventPtr, true).Skip(true);
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.createControl();
+
+        const sizer = this.page.GetSizer();
+        if (sizer && this.srchCtrl)
+        {
+            addWin(sizer, this.srchCtrl, 0, ALIGN_CENTRE, tripleBorder());
+        }
+
+        this.page.Layout();
+    }
+
+    /** SearchCtrlWidgetsPage::CreateControl() */
+    private createControl(): void
+    {
+        this.srchCtrl?.Destroy();
+
+        const style = attrs.defaultFlags;
+
+        // FromDIP(wxSize(150, -1)): height -1 keeps the native best height.
+        this.srchCtrl = withString("", (ptr) =>
+            createWxSearchCtrl(
+                this.page.ptr, ID_ANY, ptr, -1, -1, this.dip(150), -1, style));
+
+        if (this.srchCtrl)
+        {
+            this.notifyWidgetRecreation(this.srchCtrl);
+        }
+    }
+}
+
+export function createSearchCtrlPage(parent: Pointer): WidgetsPage
+{
+    return new SearchCtrlPage(parent);
+}

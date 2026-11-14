@@ -1,0 +1,276 @@
+// dirpicker.kwxts — port of wxSamples/src/widgets/dirpicker.cpp
+//
+// wxDirPickerCtrl does not derive from wxWindow in the bindings, so the
+// wrapper goes through wrapWxWindow() for GetWidget()/sizer insertion and the
+// owned window is destroyed through a plain wxWindow view.
+
+import {
+    ALIGN_CENTRE_HORIZONTAL,
+    createWxBoxSizer,
+    createWxButton,
+    createWxDirPickerCtrl,
+    DIRP_CHANGE_DIR,
+    DIRP_DEFAULT_STYLE,
+    DIRP_DIR_MUST_EXIST,
+    DIRP_SMALL,
+    DIRP_USE_TEXTCTRL,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_DIRPICKER_CHANGED,
+    EXPAND,
+    FLP_DEFAULT_STYLE,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    readAndDeleteWxString,
+    VERTICAL,
+    wxCheckBox,
+    wxCommandEvent,
+    wxDirPickerCtrl,
+    wxFileDirPickerEvent,
+    wxGetCwd,
+    wxGetHomeDir,
+    wxSizer,
+    wxTextCtrl,
+    wxWindow,
+    wrapWxWindow,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import {
+    addSizer,
+    addSpacer,
+    addStretchSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    logMessage,
+    makeStaticBoxSizer,
+    tripleBorder,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+const PICKER_PAGE_RESET = ID_HIGHEST;
+const PICKER_PAGE_DIR = PICKER_PAGE_RESET + 1;
+const PICKER_PAGE_SET_DIR = PICKER_PAGE_DIR + 1;
+
+/** wxDirPickerCtrl wrapper as a wxWindow view. */
+function pickerWindow(picker: wxDirPickerCtrl): wxWindow
+{
+    return wrapWxWindow(picker.ptr);
+}
+
+export class DirPickerPage extends WidgetsPage
+{
+    private dirPicker: wxDirPickerCtrl | null = null;
+
+    private chkDirTextCtrl: wxCheckBox | null = null;
+    private chkDirChangeDir: wxCheckBox | null = null;
+    private chkDirMustExist: wxCheckBox | null = null;
+    private chkSmall: wxCheckBox | null = null;
+    private textInitialDir: wxTextCtrl | null = null;
+
+    private sizer: wxSizer | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/dirpicker");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.dirPicker ? pickerWindow(this.dirPicker) : null;
+    }
+
+    override createContent(): void
+    {
+        // left pane
+        const sizerLeft = createWxBoxSizer(VERTICAL)!;
+        const styleSizer = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&DirPicker style");
+
+        this.chkDirTextCtrl = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "With textctrl", ID_ANY, styleSizer.box.ptr);
+        this.chkDirMustExist = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "Dir must exist", ID_ANY, styleSizer.box.ptr);
+        this.chkDirChangeDir = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "Change working dir", ID_ANY, styleSizer.box.ptr);
+        this.chkSmall = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "&Small version", ID_ANY, styleSizer.box.ptr);
+        addSizer(sizerLeft, styleSizer.sizer, 0, EXPAND, border());
+
+        addSizer(sizerLeft, this.createSizerWithTextAndButton(
+            PICKER_PAGE_SET_DIR, "&Initial directory", ID_ANY,
+            (text) => { this.textInitialDir = text; },
+        ), 0, EXPAND, border());
+
+        addSpacer(sizerLeft, this.dip(10));
+
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(this.page.ptr, PICKER_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerLeft, resetButton, 0, ALIGN_CENTRE_HORIZONTAL, tripleBorder());
+
+        this.reset(); // set checkboxes state
+
+        // create pickers
+        this.dirPicker = null;
+        this.createPicker();
+
+        // right pane
+        const sizer = createWxBoxSizer(VERTICAL)!;
+        addStretchSpacer(sizer);
+        if (this.dirPicker)
+        {
+            addWin(sizer, pickerWindow(this.dirPicker), 0, EXPAND, border());
+        }
+        addStretchSpacer(sizer);
+        this.sizer = sizer;
+
+        // global pane
+        const globalSizer = createWxBoxSizer(HORIZONTAL)!;
+        addSizer(globalSizer, sizerLeft, 0, EXPAND, border());
+        addSizer(globalSizer, sizer, 1, EXPAND, border());
+
+        this.page.SetSizer(globalSizer.ptr, false);
+
+        bindEvent(this.page, PICKER_PAGE_RESET, PICKER_PAGE_RESET, EVT_BUTTON,
+            () =>
+            {
+                this.reset();
+                this.recreatePicker();
+            });
+
+        bindEvent(this.page, PICKER_PAGE_SET_DIR, PICKER_PAGE_SET_DIR,
+            EVT_BUTTON, () =>
+            {
+                const value = this.textInitialDir?.GetValue();
+                const dirText = value ? readAndDeleteWxString(value.ptr) : "";
+                withString(dirText, (ptr) => this.dirPicker?.SetInitialDirectory(ptr));
+            });
+
+        bindEvent(this.page, PICKER_PAGE_DIR, PICKER_PAGE_DIR,
+            EVT_DIRPICKER_CHANGED, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxFileDirPickerEvent(eventPtr, true);
+                const path = event.GetPath();
+                const dirName = this.dirPicker?.GetDirName();
+
+                logMessage("The directory changed to "
+                    + `'${path ? readAndDeleteWxString(path.ptr) : ""}' (the control has `
+                    + `'${dirName ? readAndDeleteWxString(dirName.ptr) : ""}').`
+                    + `The current working directory is `
+                    + `'${readAndDeleteWxString(wxGetCwd())}'`);
+
+                logMessage("The directory changed to "
+                    + `'${path ? readAndDeleteWxString(path.ptr) : ""}' ! `
+                    + `The current working directory is `
+                    + `'${readAndDeleteWxString(wxGetCwd())}'`);
+            });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            const source = new wxCommandEvent(eventPtr, true).GetEventObject();
+            if (!source)
+            {
+                return;
+            }
+            if (source.ptr === this.chkDirTextCtrl?.ptr
+                || source.ptr === this.chkDirChangeDir?.ptr
+                || source.ptr === this.chkDirMustExist?.ptr
+                || source.ptr === this.chkSmall?.ptr)
+            {
+                this.recreatePicker();
+            }
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.recreatePicker();
+    }
+
+    /** Called only once, at first construction. */
+    private createPicker(): void
+    {
+        let style = attrs.defaultFlags;
+
+        if (this.chkDirTextCtrl?.GetValue())
+        {
+            style |= DIRP_USE_TEXTCTRL;
+        }
+        if (this.chkDirMustExist?.GetValue())
+        {
+            style |= DIRP_DIR_MUST_EXIST;
+        }
+        if (this.chkDirChangeDir?.GetValue())
+        {
+            style |= DIRP_CHANGE_DIR;
+        }
+        if (this.chkSmall?.GetValue())
+        {
+            style |= DIRP_SMALL;
+        }
+
+        const home = readAndDeleteWxString(wxGetHomeDir());
+
+        this.dirPicker = withString(home, (path) =>
+            withString("Hello!", (message) => createWxDirPickerCtrl(
+                this.page.ptr, PICKER_PAGE_DIR, -1, -1, -1, -1,
+                path, message, BigInt(style))));
+
+        if (this.dirPicker)
+        {
+            this.notifyWidgetRecreation(pickerWindow(this.dirPicker));
+        }
+    }
+
+    /** Called to recreate an existing control. */
+    private recreatePicker(): void
+    {
+        if (this.sizer)
+        {
+            this.sizer.Remove(1);
+        }
+
+        // The C++ code deletes the previous picker; the wrapper has no
+        // Delete(), so its window is destroyed through a wxWindow view.
+        if (this.dirPicker)
+        {
+            pickerWindow(this.dirPicker).Destroy();
+            this.dirPicker = null;
+        }
+
+        this.createPicker();
+
+        const picker = this.dirPicker as wxDirPickerCtrl | null;
+        if (this.sizer && picker)
+        {
+            this.sizer.InsertWindow(1, picker.ptr, 0,
+                EXPAND, border(), null);
+            this.sizer.Layout();
+        }
+    }
+
+    /** Restore the checkboxes state to the initial values. */
+    private reset(): void
+    {
+        this.chkDirTextCtrl?.SetValue(
+            (DIRP_DEFAULT_STYLE & DIRP_USE_TEXTCTRL) !== 0);
+        this.chkDirMustExist?.SetValue(
+            (DIRP_DEFAULT_STYLE & DIRP_DIR_MUST_EXIST) !== 0);
+        this.chkDirChangeDir?.SetValue(
+            (DIRP_DEFAULT_STYLE & DIRP_CHANGE_DIR) !== 0);
+        // The C++ sample tests the *file* picker default style here on purpose.
+        this.chkSmall?.SetValue((FLP_DEFAULT_STYLE & DIRP_SMALL) !== 0);
+    }
+}
+
+export function createDirPickerPage(parent: Pointer): WidgetsPage
+{
+    return new DirPickerPage(parent);
+}

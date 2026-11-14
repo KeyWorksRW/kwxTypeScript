@@ -1,0 +1,158 @@
+// runtime.kwxts — shared bookkeeping for the STC sample.
+//
+// Every native event closure and Callback must stay referenced until run()
+// returns, and the Callback pool is fixed at 64 slots, so all modules share
+// these two arrays plus one callback per distinct handler function.
+
+import {
+    createWxClosure,
+    createWxSizerFlags,
+    createWxString,
+    lib,
+    readAndDeleteWxString,
+    wxSizer,
+    wxSizerFlags,
+} from "kwx";
+import { Callback, Pointer } from "kwx/platform";
+
+/** Every live wxClosure, kept referenced for the whole event loop. */
+export const closures: unknown[] = [];
+
+/** Every live Callback, closed only after run() returns. */
+export const callbacks: Callback[] = [];
+
+/** Creates a Callback for the fixed void(void*, void*, void*) thunk shape. */
+export function newCallback(
+    handler: (...parameters: Pointer[]) => void,
+): Callback
+{
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        handler,
+    );
+    callbacks.push(callback);
+    return callback;
+}
+
+/** Calls fn with a temporary wxString and releases it on every path. */
+export function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** Reads an owned wxString getter result and releases the native object. */
+export function takeString(value: { ptr: Pointer } | null): string
+{
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** sizer->Add(window, wxSizerFlags(proportion).<setup>()) */
+export function addWindow(
+    sizer: wxSizer,
+    window: Pointer,
+    proportion: number,
+    setup?: (flags: wxSizerFlags) => void,
+): void
+{
+    const flags = createWxSizerFlags(proportion);
+    if (!flags)
+    {
+        sizer.AddWindow(window, proportion, 0, 0, null);
+        return;
+    }
+    if (setup)
+    {
+        setup(flags);
+    }
+    sizer.AddWindowFlags(window, flags.ptr);
+    flags.Delete();
+}
+
+/** sizer->Add(childSizer, wxSizerFlags(proportion).<setup>()) */
+export function addSizer(
+    sizer: wxSizer,
+    child: Pointer,
+    proportion: number,
+    setup?: (flags: wxSizerFlags) => void,
+): void
+{
+    const flags = createWxSizerFlags(proportion);
+    if (!flags)
+    {
+        sizer.AddSizer(child, proportion, 0, 0, null);
+        return;
+    }
+    if (setup)
+    {
+        setup(flags);
+    }
+    sizer.AddSizerFlags(child, flags.ptr);
+    flags.Delete();
+}
+
+/** sizer->Add(width, height) — an explicit spacer. */
+export function addSpacer(
+    sizer: wxSizer,
+    width: number,
+    height: number,
+): void
+{
+    sizer.Add(width, height, 0, 0, 0, null);
+}
+
+/**
+ * Installs a closure-backed handler through the wrapper Bind() method.
+ *
+ * `data` travels as the wxClosure's client data: wxClosure::Invoke() calls
+ * m_fun(m_fun, m_data, event), so the handler receives it as its second
+ * parameter. The sample passes the owning window pointer, which lets one
+ * shared Callback serve several instances of the same control.
+ */
+export function bindClosure(
+    target: { Bind(first: number, last: number, type_: number, closure: Pointer): number },
+    first: number,
+    last: number,
+    type: number,
+    callback: Callback,
+    data: Pointer = null,
+): void
+{
+    const closure = createWxClosure(callback.pointer, data)!;
+    closures.push(closure);
+    target.Bind(first, last, type, closure.ptr);
+}
+
+/**
+ * Installs a closure-backed handler on a pointer whose wrapper has no Bind()
+ * method (wxStyledTextCtrl does not extend wxEvtHandler in the bindings).
+ */
+export function bindPointer(
+    target: Pointer,
+    first: number,
+    last: number,
+    type: number,
+    callback: Callback,
+    data: Pointer = null,
+): void
+{
+    const closure = createWxClosure(callback.pointer, data)!;
+    closures.push(closure);
+    lib.symbols.wxEvtHandler_Bind(target, first, last, type, closure.ptr);
+}
+
+/** Closes every Callback; call once, after run() has returned. */
+export function closeCallbacks(): void
+{
+    for (const callback of callbacks)
+    {
+        callback.close();
+    }
+}

@@ -1,0 +1,286 @@
+// dialogs.kwxts — the two modal picker dialogs from
+// wxSamples/src/calendar/calendar.cpp (MyDateDialog and MyTimeDialog).
+
+import {
+    ALL,
+    CANCEL,
+    DEFAULT_DIALOG_STYLE,
+    EVT_DATE_CHANGED,
+    EVT_TIME_CHANGED,
+    ID_ANY,
+    ID_OK,
+    OK,
+    VERTICAL,
+    createWxBoxSizer,
+    createWxClosure,
+    createWxDatePickerCtrl,
+    createWxDateTime,
+    createWxDialog,
+    createWxFlexGridSizer,
+    createWxStaticText,
+    createWxString,
+    createWxTimePickerCtrl,
+    wrapWxDateEvent,
+} from "kwx";
+import type {
+    wxDateTime,
+    wxSizerFlags,
+    wxStaticText,
+} from "kwx";
+import { Callback } from "kwx/platform";
+import type { Pointer } from "kwx/platform";
+
+import {
+    addSizerWithFlags,
+    addWindowWithFlags,
+    formatISODate,
+    formatISOTime,
+    getDateEventDate,
+    withString,
+} from "./shared.kwxts";
+
+// ---------------------------------------------------------------------------
+// MyDateDialog
+// ---------------------------------------------------------------------------
+
+/**
+ * wxDialog that asks for a date with wxDatePickerCtrl.
+ *
+ * Returns the selected wxDateTime when the user confirms (possibly invalid
+ * when wxDP_ALLOWNONE is set and no date was entered) or null on cancel.
+ */
+export function showDateDialog(
+    parent: Pointer,
+    initial: wxDateTime,
+    dtpStyle: number,
+): wxDateTime | null
+{
+    const title = createWxString("Calendar: Choose a date");
+    const dialog = createWxDialog(
+        parent, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_DIALOG_STYLE,
+    );
+    title.Delete();
+    if (!dialog)
+    {
+        return null;
+    }
+
+    const picker = createWxDatePickerCtrl(
+        dialog.ptr, ID_ANY, null, -1, -1, -1, -1, BigInt(dtpStyle),
+    );
+    if (!picker)
+    {
+        dialog.Delete();
+        return null;
+    }
+
+    picker.SetValue(initial.ptr);
+
+    // m_datePicker->SetRange(wxDateTime(1, wxDateTime::Jan, 1900),
+    //                        wxDefaultDateTime);
+    const firstDate = createWxDateTime();
+    if (firstDate)
+    {
+        firstDate.Set(1, 0 /* Jan */, 1900, 0, 0, 0, 0);
+        picker.SetRange(firstDate.ptr, null);
+        firstDate.Delete();
+    }
+
+    let initialText = "";
+    if (initial.IsValid())
+    {
+        initialText = formatISODate(initial);
+    }
+
+    const pickerPointer = picker.ptr;
+    const dateText = withString(initialText, (textPtr) =>
+        createWxStaticText(dialog.ptr, ID_ANY, textPtr, -1, -1, -1, -1, 0))!;
+
+    // EVT_DATE_CHANGED(wxID_ANY, MyDateDialog::OnDateChange)
+    const changedCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const event = wrapWxDateEvent(eventPtr);
+            const date = getDateEventDate(event);
+            const label = date.IsValid() ? formatISODate(date) : "";
+            date.Delete();
+            setText(dateText, label);
+        },
+    );
+    const changedClosure = createWxClosure(changedCallback.pointer, null)!;
+    picker.Bind(
+        ID_ANY, ID_ANY, EVT_DATE_CHANGED, changedClosure.ptr,
+    );
+
+    // wxFlexGridSizer(2) — two columns, no gaps.
+    const sizerMain = createWxFlexGridSizer(0, 2, 0, 0)!;
+    const setUpEntry = (flags: wxSizerFlags): void =>
+    {
+        flags.Center();
+        flags.Border(ALL);
+    };
+
+    const labelDate = withString("Enter &date:", (ptr) =>
+        createWxStaticText(dialog.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0))!;
+    addWindowWithFlags(sizerMain, labelDate.ptr, 0, setUpEntry);
+    addWindowWithFlags(sizerMain, pickerPointer, 0, setUpEntry);
+
+    const labelISO = withString("Date in ISO format:", (ptr) =>
+        createWxStaticText(dialog.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0))!;
+    addWindowWithFlags(sizerMain, labelISO.ptr, 0, setUpEntry);
+    addWindowWithFlags(sizerMain, dateText.ptr, 0, setUpEntry);
+
+    const sizerTop = createWxBoxSizer(VERTICAL)!;
+    addSizerWithFlags(sizerTop, sizerMain.ptr, 0, setUpEntry);
+
+    const buttonSizer = dialog.CreateStdDialogButtonSizer(BigInt(OK | CANCEL));
+    if (buttonSizer)
+    {
+        addSizerWithFlags(sizerTop, buttonSizer.ptr, 0, setUpEntry);
+    }
+
+    dialog.SetSizerAndFit(sizerTop.ptr, true);
+
+    const modalResult = dialog.ShowModal();
+
+    let result: wxDateTime | null = null;
+    if (modalResult === ID_OK)
+    {
+        result = createWxDateTime();
+        if (result)
+        {
+            picker.GetValue(result.ptr);
+        }
+    }
+
+    dialog.Delete();
+    changedCallback.close();
+    return result;
+}
+
+// ---------------------------------------------------------------------------
+// MyTimeDialog
+// ---------------------------------------------------------------------------
+
+/**
+ * wxDialog that asks for a time with wxTimePickerCtrl.
+ *
+ * Returns the selected wxDateTime when the user confirms or null on cancel.
+ */
+export function showTimeDialog(parent: Pointer): wxDateTime | null
+{
+    const title = createWxString("Calendar: Choose time");
+    const dialog = createWxDialog(
+        parent, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_DIALOG_STYLE,
+    );
+    title.Delete();
+    if (!dialog)
+    {
+        return null;
+    }
+
+    // wxTimePickerCtrl(this, wxID_ANY): the default style is 0. kwxFFI's
+    // wxTimePickerCtrl_Create takes the style as a plain number, not a bigint.
+    const picker = createWxTimePickerCtrl(
+        dialog.ptr, ID_ANY, null, -1, -1, -1, -1, 0,
+    );
+    if (!picker)
+    {
+        dialog.Delete();
+        return null;
+    }
+
+    const pickerPointer = picker.ptr;
+
+    // m_timeText = new wxStaticText(this, wxID_ANY, GetTime().FormatISOTime())
+    const initialTime = createWxDateTime();
+    let initialText = "";
+    if (initialTime)
+    {
+        picker.GetValue(initialTime.ptr);
+        initialText = formatISOTime(initialTime);
+        initialTime.Delete();
+    }
+
+    const timeText = withString(initialText, (textPtr) =>
+        createWxStaticText(dialog.ptr, ID_ANY, textPtr, -1, -1, -1, -1, 0))!;
+
+    // EVT_TIME_CHANGED(wxID_ANY, MyTimeDialog::OnTimeChange)
+    const changedCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const event = wrapWxDateEvent(eventPtr);
+            const date = getDateEventDate(event);
+            const label = formatISOTime(date);
+            date.Delete();
+            setText(timeText, label);
+        },
+    );
+    const changedClosure = createWxClosure(changedCallback.pointer, null)!;
+    picker.Bind(
+        ID_ANY, ID_ANY, EVT_TIME_CHANGED, changedClosure.ptr,
+    );
+
+    const sizerMain = createWxFlexGridSizer(0, 2, 0, 0)!;
+    const setUpEntry = (flags: wxSizerFlags): void =>
+    {
+        flags.Center();
+        flags.Border(ALL);
+    };
+
+    const labelTime = withString("Enter &time:", (ptr) =>
+        createWxStaticText(dialog.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0))!;
+    addWindowWithFlags(sizerMain, labelTime.ptr, 0, setUpEntry);
+    addWindowWithFlags(sizerMain, pickerPointer, 0, setUpEntry);
+
+    const labelISO = withString("Time in ISO format:", (ptr) =>
+        createWxStaticText(dialog.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0))!;
+    addWindowWithFlags(sizerMain, labelISO.ptr, 0, setUpEntry);
+    addWindowWithFlags(sizerMain, timeText.ptr, 0, setUpEntry);
+
+    const sizerTop = createWxBoxSizer(VERTICAL)!;
+    addSizerWithFlags(sizerTop, sizerMain.ptr, 0, setUpEntry);
+
+    const buttonSizer = dialog.CreateStdDialogButtonSizer(BigInt(OK | CANCEL));
+    if (buttonSizer)
+    {
+        addSizerWithFlags(sizerTop, buttonSizer.ptr, 0, setUpEntry);
+    }
+
+    dialog.SetSizerAndFit(sizerTop.ptr, true);
+
+    const modalResult = dialog.ShowModal();
+
+    let result: wxDateTime | null = null;
+    if (modalResult === ID_OK)
+    {
+        result = createWxDateTime();
+        if (result)
+        {
+            picker.GetValue(result.ptr);
+        }
+    }
+
+    dialog.Delete();
+    changedCallback.close();
+    return result;
+}
+
+// ---------------------------------------------------------------------------
+// Small helpers
+// ---------------------------------------------------------------------------
+
+function setText(control: wxStaticText, text: string): void
+{
+    withString(text, (ptr) => control.SetLabel(ptr));
+}

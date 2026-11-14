@@ -1,0 +1,2443 @@
+// event.kwxts — kwxTypeScript port of wxSamples/src/event
+//
+// Covers event.cpp (main frame, dynamic bind/connect, push/pop handlers, custom
+// event), gestures.cpp (app-level FilterEvent, gesture and mouse frames) and
+// chessboard.cpp/.h (new wxEvent class demo).
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\event\event.kwxts
+//
+// Port notes (see the final report for the full list):
+//   * MyApp::FilterEvent() is an application-level override. It is reproduced
+//     with wxEventFilter: createWxEventFilter() + wxEvtHandler_AddFilter()
+//     installs a filter on the runtime's own wxApp that runs before every
+//     handler, and the callback reports wxEventFilter::Event_Skip with
+//     wxEventFilter_SetResult() (the thunk returns void). kwxEventFilter calls
+//     the callback as FilterFunc(pObject, event), so the event pointer is the
+//     callback's second argument.
+//   * ChessBoardEvent (a new wxEvent-derived class with file/rank fields) cannot
+//     be declared. wxNewEventType() supplies the two event types and a
+//     wxCommandEvent carries the payload in GetExtraLong() as four packed bytes
+//     (file, rank, fileTo, rankTo).
+//   * ChessBoard::DoGetBestClientSize() is a kwxPanel hook: the board is a
+//     kwxPanel and SetOnDoGetBestClientSize() reports the same pixel size, so
+//     the sizer result matches the C++ override exactly.
+//
+// Substitutions:
+//   * sample.xpm is loaded at run time instead of being compiled in by
+//     wxICON(sample) (same artwork, same icon).
+//   * gestures.cpp uses `#include "../image/horse.xpm"`; horse.xpm is loaded at
+//     run time from the sample folder (same artwork, same bitmap).
+//   * wxTwoFingerTapEvent, wxLongPressEvent and wxPressAndTapEvent add no members
+//     of their own, so kwxgen emits no wrapper for them; their handlers wrap the
+//     event as wxGestureEvent, which supplies every accessor they use.
+
+declare const __dirname: string;
+
+import {
+    ALIGN_CENTER,
+    ALIGN_CENTER_HORIZONTAL,
+    ALL,
+    BG_STYLE_PAINT,
+    BITMAP_TYPE_XPM,
+    BORDER_NONE,
+    BORDER_RAISED,
+    BLACK_BRUSH,
+    CURSOR_HAND,
+    CURSOR_QUESTION_ARROW,
+    CLOSE,
+    DEFAULT_DIALOG_STYLE,
+    DEFAULT_FRAME_STYLE,
+    EVT_BUTTON,
+    EVT_CLOSE_WINDOW,
+    EVT_ENTER_WINDOW,
+    EVT_GESTURE_PAN,
+    EVT_GESTURE_ROTATE,
+    EVT_GESTURE_ZOOM,
+    EVT_LEAVE_WINDOW,
+    EVT_LEFT_DCLICK,
+    EVT_LEFT_DOWN,
+    EVT_LEFT_UP,
+    EVT_LONG_PRESS,
+    EVT_MENU,
+    EVT_PAINT,
+    EVT_PRESS_AND_TAP,
+    EVT_RIGHT_DCLICK,
+    EVT_RIGHT_DOWN,
+    EVT_RIGHT_UP,
+    EVT_SET_CURSOR,
+    EVT_TWO_FINGER_TAP,
+    EVT_UPDATE_UI,
+    EXPAND,
+    HORIZONTAL,
+    ICON_INFORMATION,
+    ID_ANY,
+    LIGHT_GREY,
+    LogError,
+    LogMessage,
+    OK,
+    STB_DEFAULT_STYLE,
+    TAB_TRAVERSAL,
+    TE_MULTILINE,
+    TE_READONLY,
+    TE_RICH,
+    TOUCH_ALL_GESTURES,
+    TRANSPARENT_PEN,
+    VERTICAL,
+    WHITE,
+    wxEventFilter_SetResult,
+    wxEvtHandler_AddFilter,
+    wxEvtHandler_RemoveFilter,
+    createWxAffineMatrix2D,
+    createWxAutoBufferedPaintDC,
+    createWxBitmapLoad,
+    createWxBoxSizer,
+    createWxButton,
+    createWxClosure,
+    createWxCommandEvent,
+    createWxCursorFromStock,
+    createWxDialog,
+    createWxEventFilter,
+    createWxEvtHandler,
+    createWxFrame,
+    createWxGCDC,
+    createWxIconLoad,
+    createKwxPanel,
+    createWxLogTextCtrl,
+    createWxMenu,
+    createWxMenuBar,
+    createWxPaintDC,
+    createWxPanel,
+    createWxStaticLine,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    exitMainLoop,
+    initAllImageHandlers,
+    initialize,
+    kwxMessageBox,
+    kwxPanel,
+    lib,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wxAffineMatrix2D,
+    wxAutoBufferedPaintDC,
+    wxBitmap,
+    wxBoxSizer,
+    wxButton,
+    wxClosure,
+    wxCommandEvent,
+    wxDialog,
+    wxEventFilter,
+    wxEvtHandler,
+    wxFrame,
+    wxGCDC,
+    wxGetApp,
+    wxGetDisplaySize,
+    wxGestureEvent,
+    wxLogTextCtrl,
+    wxLog_GetActiveTarget,
+    wxLog_SetActiveTarget,
+    wxMenu,
+    wxMenuBar,
+    wxMouseEvent,
+    wxNewEventType,
+    wxNewId,
+    wxPanel,
+    wxPanGestureEvent,
+    wxPostEvent,
+    wxRotateGestureEvent,
+    wxSetCursorEvent,
+    wxSize,
+    wxSizerFlags_GetDefaultBorderFractional,
+    wxStaticText,
+    wxTextCtrl,
+    wxUpdateUIEvent,
+    wxZoomGestureEvent,
+    wrapWxLog,
+} from "kwx";
+import {
+    arrayBufferView,
+    Callback,
+    exit,
+    Pointer,
+    pointerOf,
+} from "kwx/platform";
+
+// ---------------------------------------------------------------------------
+// event.cpp: enum { Event_Quit = 1, Event_About, ... } — menu command ids
+// ---------------------------------------------------------------------------
+
+const EVENT_QUIT = 1;
+const EVENT_ABOUT = 2;
+const EVENT_BIND = 3;
+const EVENT_CONNECT = 4;
+const EVENT_DYNAMIC = 5;
+const EVENT_PUSH = 6;
+const EVENT_POP = 7;
+const EVENT_CUSTOM = 8;
+const EVENT_TEST = 9;
+const EVENT_GESTURE = 10;
+const EVENT_MOUSE = 11;
+const EVENT_NEW_EVENT_CLASS = 12;
+
+// MyFrame's private status bar indices.
+const STATUS_MAIN = 0;
+const STATUS_DYNAMIC = 1;
+const STATUS_PUSH = 2;
+
+// chessboard.cpp: ChessBoard::SquaresPerSide / SquareSizeInDIPs
+const SQUARES_PER_SIDE = 8;
+const SQUARE_SIZE_IN_DIPS = 40;
+const FILE_LETTERS = "abcdefgh";
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+/** Absolute path of an asset shipped next to this module. */
+function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** Creates a wxString for the duration of `fn` and releases it afterwards. */
+function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/**
+ * wxLogMessage() — kwxFFI forwards the whole wxString as the printf-style
+ * format, so a literal '%' must be doubled. The visible output is unchanged.
+ */
+function logMessage(text: string): void
+{
+    withString(text.replace(/%/g, "%%"), (ptr) => LogMessage(ptr));
+}
+
+/** wxLogError() */
+function logError(text: string): void
+{
+    withString(text.replace(/%/g, "%%"), (ptr) => LogError(ptr));
+}
+
+/** wxStaticText(parent, wxID_ANY, text) with default position/size/style. */
+function createLabel(parent: Pointer, text: string): wxStaticText | null
+{
+    return withString(text, (ptr) =>
+        createWxStaticText(parent, ID_ANY, ptr, -1, -1, -1, -1, 0));
+}
+
+/** A box sizer factory; only fails on allocation failure. */
+function newBoxSizer(orient: number): wxBoxSizer
+{
+    const sizer = createWxBoxSizer(orient);
+    if (!sizer)
+    {
+        throw new Error("event: failed to allocate a wxBoxSizer");
+    }
+    return sizer;
+}
+
+/**
+ * wxSizerFlags::GetDefaultBorder(): the default border rounded to whole pixels.
+ * The fractional getter is bound; GetDefaultBorder() is not, and it is simply
+ * `static_cast<int>(GetDefaultBorderFractional())`, i.e. a truncation.
+ */
+function defaultBorder(): number
+{
+    return Math.trunc(wxSizerFlags_GetDefaultBorderFractional());
+}
+
+interface EventBinding
+{
+    callback: Callback;
+    closure: wxClosure;
+}
+
+/** Every callback/closure pair, kept alive until after run() returns. */
+const bindings: EventBinding[] = [];
+
+/**
+ * A never-posted event type used to park a closure on the application object.
+ *
+ * wxClosure is reference counted by the wxCallback objects that hold it, so a
+ * closure connected only to a transient window would be destroyed together with
+ * that window. The mouse frame and the chessboard dialog are created and
+ * destroyed repeatedly, and their closures are cached to stay inside the 64
+ * callback slots, so each one is also connected to a permanent handler for this
+ * event type. Nothing ever posts it, so the connection can never fire.
+ */
+let keeperEventType = 0;
+let keeperTarget: Pointer = null;
+
+/** Creates a wxClosure for `handler` and registers it for the whole run. */
+function makeClosure(handler: (eventPtr: Pointer) => void): wxClosure
+{
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return; // teardown sweep: wxClosure invokes handlers with null
+            }
+            handler(eventPtr);
+        },
+    );
+    const closure = createWxClosure(callback.pointer, null)!;
+    bindings.push({ callback, closure });
+
+    if (keeperTarget !== null)
+    {
+        lib.symbols.wxEvtHandler_Connect(
+            keeperTarget, ID_ANY, ID_ANY, keeperEventType, closure.ptr,
+        );
+    }
+
+    return closure;
+}
+
+/**
+ * A per-window-class closure cache. A window class that can be opened more than
+ * once (the mouse frame, the chessboard dialog) must not allocate a new closure
+ * per instance: the runtime has only 64 callback slots. Handlers read the
+ * module-level "current instance" state instead of capturing it.
+ */
+interface Router
+{
+    closures: Map<string, wxClosure>;
+}
+
+function newRouter(): Router
+{
+    return { closures: new Map<string, wxClosure>() };
+}
+
+/**
+ * `delete wxLog::SetActiveTarget(m_logOld)` from the mouse/gesture frame
+ * destructors. wxLog_SetActiveTarget() now returns an owned wxLog, so the
+ * displaced target (the frame's wxLogTextCtrl) is released through Delete().
+ */
+function restoreLogTarget(logger: wxLogTextCtrl | null, oldTarget: Pointer): void
+{
+    if (!logger)
+    {
+        return;
+    }
+    const previous = wxLog_SetActiveTarget(oldTarget);
+    if (previous)
+    {
+        previous.Delete();
+    }
+}
+
+function routerConnect(
+    router: Router,
+    target: Pointer,
+    first: number,
+    last: number,
+    eventType: number,
+    key: string,
+    handler: (eventPtr: Pointer) => void,
+): void
+{
+    let closure = router.closures.get(key);
+    if (!closure)
+    {
+        closure = makeClosure(handler);
+        router.closures.set(key, closure);
+    }
+    lib.symbols.wxEvtHandler_Connect(target, first, last, eventType, closure.ptr);
+}
+
+// ---------------------------------------------------------------------------
+// Main frame state (MyFrame fields)
+// ---------------------------------------------------------------------------
+
+interface PushedHandler
+{
+    handler: wxEvtHandler;
+    callback: Callback;
+}
+
+interface MainState
+{
+    frame: wxFrame;
+    dynamicButton: wxButton;
+    testButton: wxButton;
+    /** number of pushed event handlers (MyFrame::m_nPush) */
+    pushCount: number;
+    pushed: PushedHandler[];
+    mouseFrame: wxFrame | null;
+    /** MyFrame::m_gestureFrame */
+    gestureFrame: wxFrame | null;
+    /** wxDEFINE_EVENT(wxEVT_MY_CUSTOM_COMMAND, wxCommandEvent) */
+    customEventType: number;
+    /** shared by the Bind and Connect paths of MyFrame::OnDynamic */
+    onDynamicClosure: wxClosure;
+    customHandlerClosure: wxClosure;
+    /** the five "step" handlers bound on the test button chain */
+    testBindings: TestButtonBindings;
+}
+
+interface TestButtonBindings
+{
+    buttonStatic: wxClosure;
+    buttonDynamic: wxClosure;
+    frameOnButton: wxClosure;
+    frameStatic: wxClosure;
+    frameOnFrame: wxClosure;
+    appStatic: wxClosure;
+    appDynamic: wxClosure;
+}
+
+/** The single main frame instance; handlers read it instead of capturing. */
+let mainState: MainState | null = null;
+
+/** MyFrame::UpdateDynamicStatus() */
+function updateDynamicStatus(state: MainState, on: boolean): void
+{
+    if (on)
+    {
+        withString("You can now use \"Dynamic\" item in the menu",
+            (ptr) => state.frame.SetStatusText(ptr, STATUS_MAIN));
+        withString("Dynamic: on",
+            (ptr) => state.frame.SetStatusText(ptr, STATUS_DYNAMIC));
+    }
+    else
+    {
+        withString("You can no more use \"Dynamic\" item in the menu",
+            (ptr) => state.frame.SetStatusText(ptr, STATUS_MAIN));
+        withString("Dynamic: off",
+            (ptr) => state.frame.SetStatusText(ptr, STATUS_DYNAMIC));
+    }
+}
+
+/** The two `SetStatusText(wxString::Format("Push count: %u", ...), Status_Push)`. */
+function updatePushCount(state: MainState): void
+{
+    withString(`Push count: ${state.pushCount}`,
+        (ptr) => state.frame.SetStatusText(ptr, STATUS_PUSH));
+}
+
+/** MyFrame::OnDynamic — the dynamically connected handler. */
+function onDynamic(event: wxCommandEvent): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+
+    const source = event.GetEventObject();
+    const sourcePtr = source ? source.ptr : null;
+
+    let origin: string;
+    if (sourcePtr === state.frame.ptr)
+    {
+        origin = "menu item";
+    }
+    else if (sourcePtr === state.dynamicButton.ptr)
+    {
+        origin = "button";
+    }
+    else
+    {
+        origin = "unknown event source";
+    }
+
+    const message = "This message box is shown from the dynamically connected "
+        + "event handler in response to event generated by " + origin;
+    withString(message, (messagePtr) =>
+        withString("wxWidgets Event Sample", (captionPtr) =>
+            kwxMessageBox(
+                messagePtr, captionPtr, OK | ICON_INFORMATION,
+                state.frame.ptr, -1, -1,
+            )));
+}
+
+/** MyFrame::OnBind — AppendCheckItem(Event_Bind): bind or unbind. */
+function onBind(event: wxCommandEvent): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+
+    if (event.IsChecked())
+    {
+        // as we bind directly to the button, there is no need to use an id here:
+        // the button will only ever get its own events
+        lib.symbols.wxEvtHandler_Bind(
+            state.dynamicButton.ptr, ID_ANY, ID_ANY, EVT_BUTTON,
+            state.onDynamicClosure.ptr,
+        );
+
+        // but we do need the id for the menu command, as the frame gets all of them
+        lib.symbols.wxEvtHandler_Bind(
+            state.frame.ptr, EVENT_DYNAMIC, EVENT_DYNAMIC, EVT_MENU,
+            state.onDynamicClosure.ptr,
+        );
+    }
+    else // disconnect
+    {
+        // Unbind(wxEVT_BUTTON, &MyFrame::OnDynamic, this) — remove exactly the
+        // connection Bind() installed for this closure, not every handler.
+        lib.symbols.wxEvtHandler_UnbindClosure(
+            state.dynamicButton.ptr, ID_ANY, ID_ANY, EVT_BUTTON,
+            state.onDynamicClosure.ptr,
+        );
+        lib.symbols.wxEvtHandler_UnbindClosure(
+            state.frame.ptr, EVENT_DYNAMIC, EVENT_DYNAMIC, EVT_MENU,
+            state.onDynamicClosure.ptr,
+        );
+    }
+
+    updateDynamicStatus(state, event.IsChecked());
+}
+
+/**
+ * MyFrame::OnConnect — AppendCheckItem(Event_Connect).
+ *
+ * The original code is byte-for-byte the same as OnBind() (it also uses
+ * Bind()/Unbind()); only the menu label says "Connect". Kept identical here.
+ */
+function onConnect(event: wxCommandEvent): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+
+    if (event.IsChecked())
+    {
+        lib.symbols.wxEvtHandler_Bind(
+            state.dynamicButton.ptr, ID_ANY, ID_ANY, EVT_BUTTON,
+            state.onDynamicClosure.ptr,
+        );
+        lib.symbols.wxEvtHandler_Bind(
+            state.frame.ptr, EVENT_DYNAMIC, EVENT_DYNAMIC, EVT_MENU,
+            state.onDynamicClosure.ptr,
+        );
+    }
+    else // disconnect
+    {
+        // Unbind(wxEVT_BUTTON, &MyFrame::OnDynamic, this): remove exactly the
+        // connection Bind() installed for this closure, not every handler.
+        lib.symbols.wxEvtHandler_UnbindClosure(
+            state.dynamicButton.ptr, ID_ANY, ID_ANY, EVT_BUTTON,
+            state.onDynamicClosure.ptr,
+        );
+        lib.symbols.wxEvtHandler_UnbindClosure(
+            state.frame.ptr, EVENT_DYNAMIC, EVENT_DYNAMIC, EVT_MENU,
+            state.onDynamicClosure.ptr,
+        );
+    }
+
+    updateDynamicStatus(state, event.IsChecked());
+}
+
+/** MyFrame::OnPushEventHandler — PushEventHandler(new MyEvtHandler(++m_nPush)). */
+function onPushEventHandler(): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+
+    state.pushCount += 1;
+    const level = state.pushCount;
+
+    const handler = createWxEvtHandler();
+    if (!handler)
+    {
+        state.pushCount -= 1;
+        return;
+    }
+
+    // EVT_MENU(Event_Test, MyEvtHandler::OnTest) on the pushed handler
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            logMessage(`This is the pushed test event handler #${level}`);
+            // if we don't skip the event, the other event handlers won't get it:
+            // try commenting out this line and see what changes
+            new wxCommandEvent(eventPtr).Skip(true);
+        },
+    );
+    const closure = createWxClosure(callback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(
+        handler.ptr, EVENT_TEST, EVENT_TEST, EVT_MENU, closure.ptr,
+    );
+
+    state.frame.PushEventHandler(handler.ptr);
+    state.pushed.push({ handler, callback });
+
+    updatePushCount(state);
+}
+
+/** MyFrame::OnPopEventHandler */
+function onPopEventHandler(): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+    if (state.pushCount === 0)
+    {
+        return; // this command should be disabled!
+    }
+
+    state.frame.PopEventHandler(true /* delete handler */);
+    const popped = state.pushed.pop();
+    if (popped)
+    {
+        // The handler - and with it the wxCallback holding the closure - has
+        // just been deleted, so its native thunk can be released.
+        popped.callback.close();
+    }
+    state.pushCount -= 1;
+
+    updatePushCount(state);
+}
+
+/** MyFrame::OnUpdateUIPop */
+function onUpdateUIPop(event: wxUpdateUIEvent): void
+{
+    event.Enable(mainState !== null && mainState.pushCount > 0);
+}
+
+/** MyFrame::OnTest */
+function onTestFrame(): void
+{
+    logMessage("This is the test event handler in the main frame");
+}
+
+/** MyFrame::OnFireCustom */
+function onFireCustom(): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+
+    // wxCommandEvent eventCustom(wxEVT_MY_CUSTOM_COMMAND); wxPostEvent(this, ...)
+    const eventCustom = createWxCommandEvent(state.customEventType, 0);
+    if (!eventCustom)
+    {
+        return;
+    }
+    // wxPostEvent() clones the event into the pending queue.
+    wxPostEvent(state.frame.ptr, eventCustom.ptr);
+    eventCustom.Delete();
+}
+
+/** MyFrame::OnProcessCustom */
+function onProcessCustom(): void
+{
+    logMessage("Got a custom event!");
+}
+
+/** MyFrame::OnAbout */
+function onAbout(): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+
+    const message = "Event sample shows different ways of using events\n"
+        + "(c) 2001-2009 Vadim Zeitlin";
+    withString(message, (messagePtr) =>
+        withString("About wxWidgets Event Sample", (captionPtr) =>
+            kwxMessageBox(
+                messagePtr, captionPtr, OK | ICON_INFORMATION,
+                state.frame.ptr, -1, -1,
+            )));
+}
+
+/** MyFrame::OnQuit */
+function onQuit(): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+
+    if (state.gestureFrame)
+    {
+        state.gestureFrame.Close(true);
+    }
+
+    if (state.mouseFrame)
+    {
+        state.mouseFrame.Close(true);
+    }
+
+    state.frame.Close(true);
+}
+
+/** MyFrame::OnGesture */
+function onGesture(): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+
+    if (state.gestureFrame)
+    {
+        state.gestureFrame.Raise();
+    }
+    else
+    {
+        state.gestureFrame = createGestureFrame();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// gestures.cpp (mouse half): MyMouseFrame + MyMousePanel
+// ---------------------------------------------------------------------------
+
+interface MouseState
+{
+    frame: wxFrame;
+    panel: wxPanel;
+    logText: wxTextCtrl;
+    /** MyMouseFrame::m_logOld; wxLogTextCtrl is null only on allocation failure */
+    logger: wxLogTextCtrl | null;
+    oldTarget: Pointer;
+}
+
+let mouseState: MouseState | null = null;
+const mouseRouter = newRouter();
+
+/** MyMousePanel::DoLogMouseEvent */
+function doLogMouseEvent(event: wxMouseEvent, eventName: string): void
+{
+    let down = "";
+    if (event.LeftIsDown())
+    {
+        down += " left";
+    }
+    if (event.MiddleIsDown())
+    {
+        down += " middle";
+    }
+    if (event.RightIsDown())
+    {
+        down += " right";
+    }
+
+    if (down === "")
+    {
+        down = " none";
+    }
+
+    logMessage(`${eventName} (buttons down:${down})`);
+}
+
+/** MyMouseFrame::OnQuit — delete wxLog::SetActiveTarget(m_logOld); Destroy(); */
+function onMouseFrameQuit(): void
+{
+    const state = mouseState;
+    if (!state)
+    {
+        return;
+    }
+    mouseState = null;
+
+    // wxLog::SetActiveTarget(m_logOld) returns this frame's wxLogTextCtrl,
+    // which the C++ code deletes.
+    restoreLogTarget(state.logger, state.oldTarget);
+
+    state.frame.Destroy();
+
+    // m_mouseFrame is a wxWindowRef, so it clears itself when the frame dies.
+    if (mainState && mainState.mouseFrame === state.frame)
+    {
+        mainState.mouseFrame = null;
+    }
+}
+
+/** MyMouseFrame/MyMousePanel construction (gestures.cpp lines 10-53). */
+function createMouseFrame(): wxFrame | null
+{
+    const title = createWxString("Mouse events");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+    if (!frame)
+    {
+        return null;
+    }
+
+    // new MyMousePanel(this) — wxPanel defaults (wxTAB_TRAVERSAL | wxNO_BORDER)
+    const panel = createWxPanel(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL | BORDER_NONE,
+    );
+    if (!panel)
+    {
+        frame.Destroy();
+        return null;
+    }
+    panel.SetMinSize(panel.FromDIP(100), panel.FromDIP(200));
+    panel.SetBackgroundColour(LIGHT_GREY);
+
+    // m_logText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+    //                            wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH)
+    const logText = withString("", (ptr) => createWxTextCtrl(
+        frame.ptr, ID_ANY, ptr, -1, -1, -1, -1,
+        BigInt(TE_MULTILINE | TE_READONLY | TE_RICH),
+    ));
+    if (!logText)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // sizer->Add(myPanel, wxSizerFlags().Expand());
+    // sizer->Add(m_logText, wxSizerFlags(1).Expand());
+    const sizer = newBoxSizer(VERTICAL);
+    sizer.AddWindow(panel.ptr, 0, EXPAND, 0, null);
+    sizer.AddWindow(logText.ptr, 1, EXPAND, 0, null);
+    // frame.SetSizer(sizer) — deleteOld defaults to true
+    frame.SetSizer(sizer.ptr, true);
+
+    // m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
+    const logger = createWxLogTextCtrl(logText.ptr);
+    // wxLog::SetActiveTarget() returns the displaced target; keep its pointer
+    // and hand it back when the frame closes.
+    const previousTarget = logger
+        ? wxLog_SetActiveTarget(logger.ptr)
+        : null;
+    const oldTarget: Pointer = previousTarget ? previousTarget.ptr : null;
+
+    frame.SetClientSize(frame.FromDIP(600), frame.FromDIP(800));
+
+    mouseState = { frame, panel, logText, logger, oldTarget };
+
+    // Event handlers
+    routerConnect(mouseRouter, panel.ptr, ID_ANY, ID_ANY, EVT_LEFT_DOWN, "leftDown",
+        (eventPtr) => doLogMouseEvent(new wxMouseEvent(eventPtr), "wxEVT_LEFT_DOWN"));
+    routerConnect(mouseRouter, panel.ptr, ID_ANY, ID_ANY, EVT_LEFT_UP, "leftUp",
+        (eventPtr) => doLogMouseEvent(new wxMouseEvent(eventPtr), "wxEVT_LEFT_UP"));
+    routerConnect(mouseRouter, panel.ptr, ID_ANY, ID_ANY, EVT_LEFT_DCLICK, "leftDClick",
+        (eventPtr) => doLogMouseEvent(new wxMouseEvent(eventPtr), "wxEVT_LEFT_DCLICK"));
+    routerConnect(mouseRouter, panel.ptr, ID_ANY, ID_ANY, EVT_RIGHT_DOWN, "rightDown",
+        (eventPtr) => doLogMouseEvent(new wxMouseEvent(eventPtr), "wxEVT_RIGHT_DOWN"));
+    routerConnect(mouseRouter, panel.ptr, ID_ANY, ID_ANY, EVT_RIGHT_UP, "rightUp",
+        (eventPtr) => doLogMouseEvent(new wxMouseEvent(eventPtr), "wxEVT_RIGHT_UP"));
+    routerConnect(mouseRouter, panel.ptr, ID_ANY, ID_ANY, EVT_RIGHT_DCLICK, "rightDClick",
+        (eventPtr) => doLogMouseEvent(new wxMouseEvent(eventPtr), "wxEVT_RIGHT_DCLICK"));
+    // the two misspelled event names are in the original
+    routerConnect(mouseRouter, panel.ptr, ID_ANY, ID_ANY, EVT_ENTER_WINDOW, "enter",
+        (eventPtr) => doLogMouseEvent(new wxMouseEvent(eventPtr), "wxEVT_ENTER_WINDDOW"));
+    routerConnect(mouseRouter, panel.ptr, ID_ANY, ID_ANY, EVT_LEAVE_WINDOW, "leave",
+        (eventPtr) => doLogMouseEvent(new wxMouseEvent(eventPtr), "wxEVT_LEAVE_WINDDOW"));
+
+    // Bind(wxEVT_CLOSE_WINDOW, &MyMouseFrame::OnQuit, this);
+    routerConnect(mouseRouter, frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, "close",
+        () => onMouseFrameQuit());
+
+    frame.Show();
+    return frame;
+}
+
+/** MyFrame::OnMouseEvents */
+function onMouseEvents(): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+
+    if (state.mouseFrame)
+    {
+        state.mouseFrame.Raise();
+    }
+    else
+    {
+        state.mouseFrame = createMouseFrame();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// gestures.cpp (gesture half): MyGestureFrame + MyGesturePanel
+// ---------------------------------------------------------------------------
+
+interface GestureState
+{
+    frame: wxFrame;
+    panel: wxPanel;
+    logText: wxTextCtrl;
+    /** MyGestureFrame::m_logOld; wxLogTextCtrl is null only on allocation failure */
+    logger: wxLogTextCtrl | null;
+    oldTarget: Pointer;
+    /** MyGesturePanel::m_bitmap */
+    bitmap: wxBitmap | null;
+    /** MyGesturePanel::m_affineMatrix */
+    matrix: wxAffineMatrix2D;
+    /** MyGesturePanel::m_lastZoomFactor */
+    lastZoomFactor: number;
+    /** MyGesturePanel::m_lastRotationAngle */
+    lastRotationAngle: number;
+    /** MyGesturePanel::m_lastGesturePos */
+    lastGesturePosX: number;
+    lastGesturePosY: number;
+}
+
+let gestureState: GestureState | null = null;
+const gestureRouter = newRouter();
+
+interface AffineParts
+{
+    m11: number;
+    m12: number;
+    m21: number;
+    m22: number;
+    tx: number;
+    ty: number;
+}
+
+/**
+ * wxAffineMatrix2D::Get(&m, &tr): the binding takes the four matrix scalars and
+ * the translation pair as double* outputs.
+ */
+function affineGet(matrix: wxAffineMatrix2D): AffineParts
+{
+    const m11 = new Float64Array(1);
+    const m12 = new Float64Array(1);
+    const m21 = new Float64Array(1);
+    const m22 = new Float64Array(1);
+    const tx = new Float64Array(1);
+    const ty = new Float64Array(1);
+
+    matrix.Get(
+        pointerOf(m11), pointerOf(m12), pointerOf(m21), pointerOf(m22),
+        pointerOf(tx), pointerOf(ty),
+    );
+
+    return {
+        m11: m11[0],
+        m12: m12[0],
+        m21: m21[0],
+        m22: m22[0],
+        tx: tx[0],
+        ty: ty[0],
+    };
+}
+
+/** wxAffineMatrix2D::TransformDistance(wxDouble*, wxDouble*). */
+function affineTransformDistance(
+    matrix: wxAffineMatrix2D, x: number, y: number,
+): { x: number; y: number }
+{
+    const dx = new Float64Array(1);
+    const dy = new Float64Array(1);
+    dx[0] = x;
+    dy[0] = y;
+
+    matrix.TransformDistance(pointerOf(dx), pointerOf(dy));
+
+    return { x: dx[0], y: dy[0] };
+}
+
+/** Copies and inverts a matrix (wxAffineMatrix2D inv = m_affineMatrix; inv.Invert()). */
+function invertAffine(matrix: wxAffineMatrix2D): wxAffineMatrix2D | null
+{
+    const parts = affineGet(matrix);
+    const inverse = createWxAffineMatrix2D();
+    if (!inverse)
+    {
+        return null;
+    }
+    inverse.Set(
+        parts.m11, parts.m12, parts.m21, parts.m22, parts.tx, parts.ty,
+    );
+    inverse.Invert();
+    return inverse;
+}
+
+/** Reads event.GetPosition() and releases the owned wxPoint. */
+function readGesturePoint(event: wxGestureEvent): { x: number; y: number } | null
+{
+    const position = event.GetPosition();
+    if (!position)
+    {
+        return null;
+    }
+    const x = position.GetX();
+    const y = position.GetY();
+    position.Delete();
+    return { x, y };
+}
+
+/** MyGestureFrame::OnGesture — runs before the panel's own handler. */
+function onGestureFrameEvent(event: wxGestureEvent): void
+{
+    const state = gestureState;
+    if (!state)
+    {
+        return;
+    }
+
+    if (event.IsGestureStart())
+    {
+        state.logText.Clear();
+    }
+
+    event.Skip(true);
+}
+
+/** MyGesturePanel::OnPaint */
+function onGesturePanelPaint(): void
+{
+    const state = gestureState;
+    if (!state)
+    {
+        return;
+    }
+
+    const paintDC = createWxAutoBufferedPaintDC(state.panel.ptr);
+    if (!paintDC)
+    {
+        return;
+    }
+    paintDC.Clear();
+
+    const dc = createWxGCDC(paintDC.ptr);
+    if (dc)
+    {
+        dc.SetTransformMatrix(state.matrix.ptr);
+        if (state.bitmap)
+        {
+            dc.DrawBitmap(state.bitmap.ptr, 0, 0, false);
+        }
+        dc.Delete();
+    }
+
+    paintDC.Delete();
+}
+
+/** MyGesturePanel::OnPan */
+function onGesturePan(event: wxPanGestureEvent): void
+{
+    const state = gestureState;
+    if (!state)
+    {
+        return;
+    }
+
+    if (event.IsGestureStart())
+    {
+        logMessage("Pan gesture started");
+    }
+
+    const delta = event.GetDelta();
+    const position = readGesturePoint(event);
+    if (!delta || !position)
+    {
+        if (delta)
+        {
+            delta.Delete();
+        }
+        return;
+    }
+    const dx = delta.GetX();
+    const dy = delta.GetY();
+    delta.Delete();
+
+    logMessage("Pan gesture performed with delta = (" + dx + "," + dy
+        + "), with current position (" + position.x + ","
+        + position.y + ")");
+
+    // Transform the distance using the transpose of the matrix, in order to
+    // translate the image to match the screen coordinates.
+    const parts = affineGet(state.matrix);
+    state.matrix.Set(
+        parts.m11, parts.m12, parts.m21, parts.m22,
+        parts.tx + dx, parts.ty + dy,
+    );
+
+    if (event.IsGestureEnd())
+    {
+        logMessage("Pan gesture ended");
+    }
+
+    state.panel.Refresh(true);
+}
+
+/** MyGesturePanel::OnZoom */
+function onGestureZoom(event: wxZoomGestureEvent): void
+{
+    const state = gestureState;
+    if (!state)
+    {
+        return;
+    }
+
+    const zoomFactor = event.GetZoomFactor();
+    const position = readGesturePoint(event);
+    if (!position)
+    {
+        return;
+    }
+
+    if (event.IsGestureStart())
+    {
+        logMessage("Zoom gesture started");
+
+        state.lastZoomFactor = 1.0;
+        state.lastGesturePosX = position.x;
+        state.lastGesturePosY = position.y;
+    }
+
+    logMessage("Zoom gesture performed with zoom center at (" + position.x
+        + ", " + position.y + ") and zoom Factor = " + zoomFactor);
+
+    const factor = zoomFactor / state.lastZoomFactor;
+    const parts = affineGet(state.matrix);
+
+    let trX = parts.tx - state.lastGesturePosX;
+    let trY = parts.ty - state.lastGesturePosY;
+
+    const inverse = invertAffine(state.matrix);
+    if (inverse)
+    {
+        const transformed = affineTransformDistance(inverse, trX, trY);
+        trX = transformed.x;
+        trY = transformed.y;
+        inverse.Delete();
+    }
+
+    state.matrix.Scale(factor, factor);
+
+    const scaled = affineTransformDistance(state.matrix, trX, trY);
+    trX = scaled.x + position.x;
+    trY = scaled.y + position.y;
+
+    const linear = affineGet(state.matrix);
+    state.matrix.Set(
+        linear.m11, linear.m12, linear.m21, linear.m22, trX, trY,
+    );
+
+    if (event.IsGestureEnd())
+    {
+        logMessage("Zoom gesture ended");
+    }
+
+    state.lastZoomFactor = zoomFactor;
+    state.lastGesturePosX = position.x;
+    state.lastGesturePosY = position.y;
+
+    state.panel.Refresh(true);
+}
+
+/** MyGesturePanel::OnRotate */
+function onGestureRotate(event: wxRotateGestureEvent): void
+{
+    const state = gestureState;
+    if (!state)
+    {
+        return;
+    }
+
+    const rotationAngle = event.GetRotationAngle();
+    const position = readGesturePoint(event);
+    if (!position)
+    {
+        return;
+    }
+
+    if (event.IsGestureStart())
+    {
+        logMessage("Rotate gesture started");
+
+        state.lastRotationAngle = 0.0;
+    }
+
+    logMessage("Rotate gesture performed with rotation center at ("
+        + position.x + ", " + position.y
+        + ") and cumulative rotation angle = " + rotationAngle);
+
+    const parts = affineGet(state.matrix);
+
+    let trX = parts.tx - position.x;
+    let trY = parts.ty - position.y;
+
+    const inverse = invertAffine(state.matrix);
+    if (inverse)
+    {
+        const transformed = affineTransformDistance(inverse, trX, trY);
+        trX = transformed.x;
+        trY = transformed.y;
+        inverse.Delete();
+    }
+
+    state.matrix.Rotate(rotationAngle - state.lastRotationAngle);
+
+    const rotated = affineTransformDistance(state.matrix, trX, trY);
+    trX = rotated.x + position.x;
+    trY = rotated.y + position.y;
+
+    const linear = affineGet(state.matrix);
+    state.matrix.Set(
+        linear.m11, linear.m12, linear.m21, linear.m22, trX, trY,
+    );
+
+    if (event.IsGestureEnd())
+    {
+        logMessage("Rotate gesture ended");
+    }
+
+    state.lastRotationAngle = rotationAngle;
+
+    state.panel.Refresh(true);
+}
+
+/** MyGesturePanel::OnTwoFingerTap */
+function onGestureTwoFingerTap(event: wxGestureEvent): void
+{
+    if (!gestureState)
+    {
+        return;
+    }
+
+    if (event.IsGestureStart())
+    {
+        logMessage("Two Finger Tap gesture gesture started");
+    }
+
+    const position = readGesturePoint(event);
+    if (position)
+    {
+        logMessage("Two Finger Tap gesture performed at (" + position.x
+            + ", " + position.y + ")");
+    }
+
+    if (event.IsGestureEnd())
+    {
+        logMessage("Two Finger Tap gesture ended");
+    }
+}
+
+/** MyGesturePanel::OnLongPress */
+function onGestureLongPress(event: wxGestureEvent): void
+{
+    if (!gestureState)
+    {
+        return;
+    }
+
+    if (event.IsGestureStart())
+    {
+        logMessage("Long Press gesture started");
+    }
+
+    const position = readGesturePoint(event);
+    if (position)
+    {
+        logMessage("Long Press gesture performed at (" + position.x
+            + "," + position.y + ")");
+    }
+
+    if (event.IsGestureEnd())
+    {
+        logMessage("Long Press gesture ended");
+    }
+}
+
+/** MyGesturePanel::OnPressAndTap */
+function onGesturePressAndTap(event: wxGestureEvent): void
+{
+    if (!gestureState)
+    {
+        return;
+    }
+
+    if (event.IsGestureStart())
+    {
+        logMessage("Press and Tap gesture started");
+    }
+
+    const position = readGesturePoint(event);
+    if (position)
+    {
+        logMessage("Press and Tap gesture performed at (" + position.x
+            + "," + position.y + ")");
+    }
+
+    if (event.IsGestureEnd())
+    {
+        logMessage("Press and Tap gesture ended");
+    }
+}
+
+/** MyGestureFrame::OnQuit */
+function onGestureFrameQuit(): void
+{
+    const state = gestureState;
+    if (!state)
+    {
+        return;
+    }
+    gestureState = null;
+
+    restoreLogTarget(state.logger, state.oldTarget);
+
+    state.frame.Destroy();
+
+    // The bitmap and the affine matrix are owned by this port, not by the frame.
+    if (state.bitmap)
+    {
+        state.bitmap.Delete();
+    }
+    state.matrix.Delete();
+
+    if (mainState && mainState.gestureFrame === state.frame)
+    {
+        mainState.gestureFrame = null;
+    }
+}
+
+/** MyGestureFrame / MyGesturePanel construction (gestures.cpp lines 117-173). */
+function createGestureFrame(): wxFrame | null
+{
+    const title = createWxString("Multi-touch Gestures");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, -1, -1, 800, 600, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+    if (!frame)
+    {
+        return null;
+    }
+
+    // new MyGesturePanel(this): wxPanel defaults (wxTAB_TRAVERSAL | wxNO_BORDER)
+    const panel = createWxPanel(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL | BORDER_NONE,
+    );
+    if (!panel)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    panel.SetBackgroundStyle(BG_STYLE_PAINT);
+
+    if (!panel.EnableTouchEvents(TOUCH_ALL_GESTURES))
+    {
+        logError("Failed to enable touch events");
+    }
+
+    // m_logText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+    //                            wxSize(wxDefaultCoord, 100),
+    //                            wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH)
+    const logText = withString("", (ptr) => createWxTextCtrl(
+        frame.ptr, ID_ANY, ptr, -1, -1, -1, 100,
+        BigInt(TE_MULTILINE | TE_READONLY | TE_RICH),
+    ));
+    if (!logText)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // sizer->Add(myPanel, wxSizerFlags(1).Expand());
+    // sizer->Add(m_logText, wxSizerFlags().Expand());
+    const sizer = newBoxSizer(VERTICAL);
+    sizer.AddWindow(panel.ptr, 1, EXPAND, 0, null);
+    sizer.AddWindow(logText.ptr, 0, EXPAND, 0, null);
+    frame.SetSizer(sizer.ptr, true);
+
+    // Set a minimum size for the frame.
+    // wxGetDisplaySize() returns an owned wxSize.
+    let minWidth = 800;
+    let minHeight = 600;
+    const displayPtr = wxGetDisplaySize();
+    if (displayPtr)
+    {
+        const display = new wxSize(displayPtr);
+        minWidth = Math.min(800, display.GetWidth());
+        minHeight = Math.min(600, display.GetHeight());
+        display.Delete();
+    }
+    frame.SetSizeHints(minWidth, minHeight, -1, -1, -1, -1);
+
+    // m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
+    const logger = createWxLogTextCtrl(logText.ptr);
+    const previousTarget = logger
+        ? wxLog_SetActiveTarget(logger.ptr)
+        : null;
+    const oldTarget: Pointer = previousTarget ? previousTarget.ptr : null;
+
+    // MyGesturePanel::m_bitmap(horse_xpm), loaded at run time from the sample.
+    const bitmapPath = createWxString(samplePath("horse.xpm"));
+    const bitmap = createWxBitmapLoad(bitmapPath.ptr, BITMAP_TYPE_XPM);
+    bitmapPath.Delete();
+
+    const matrix = createWxAffineMatrix2D();
+    if (!matrix)
+    {
+        if (bitmap)
+        {
+            bitmap.Delete();
+        }
+        restoreLogTarget(logger, oldTarget);
+        frame.Destroy();
+        return null;
+    }
+
+    gestureState = {
+        frame,
+        panel,
+        logText,
+        logger,
+        oldTarget,
+        bitmap,
+        matrix,
+        lastZoomFactor: 1.0,
+        lastRotationAngle: 0.0,
+        lastGesturePosX: 0,
+        lastGesturePosY: 0,
+    };
+
+    // MyGesturePanel's own handlers run last. The frame handler below is
+    // connected afterwards, and dynamic handlers run newest-first, so
+    // MyGestureFrame::OnGesture clears the log before the panel logs.
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_PAINT, "paint",
+        () => onGesturePanelPaint());
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_GESTURE_PAN, "pan",
+        (eventPtr) => onGesturePan(new wxPanGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_GESTURE_ZOOM, "zoom",
+        (eventPtr) => onGestureZoom(new wxZoomGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_GESTURE_ROTATE, "rotate",
+        (eventPtr) => onGestureRotate(new wxRotateGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_TWO_FINGER_TAP,
+        "twoFingerTap",
+        (eventPtr) => onGestureTwoFingerTap(new wxGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_LONG_PRESS,
+        "longPress",
+        (eventPtr) => onGestureLongPress(new wxGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_PRESS_AND_TAP,
+        "pressAndTap",
+        (eventPtr) => onGesturePressAndTap(new wxGestureEvent(eventPtr)));
+
+    // MyGestureFrame ctor: myPanel->Bind(wxEVT_GESTURE_*, &MyGestureFrame::OnGesture, this)
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_GESTURE_PAN,
+        "frameGesture",
+        (eventPtr) => onGestureFrameEvent(new wxGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_GESTURE_ZOOM,
+        "frameGesture",
+        (eventPtr) => onGestureFrameEvent(new wxGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_GESTURE_ROTATE,
+        "frameGesture",
+        (eventPtr) => onGestureFrameEvent(new wxGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_TWO_FINGER_TAP,
+        "frameGesture",
+        (eventPtr) => onGestureFrameEvent(new wxGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_LONG_PRESS,
+        "frameGesture",
+        (eventPtr) => onGestureFrameEvent(new wxGestureEvent(eventPtr)));
+    routerConnect(gestureRouter, panel.ptr, ID_ANY, ID_ANY, EVT_PRESS_AND_TAP,
+        "frameGesture",
+        (eventPtr) => onGestureFrameEvent(new wxGestureEvent(eventPtr)));
+
+    // Bind(wxEVT_CLOSE_WINDOW, &MyGestureFrame::OnQuit, this);
+    routerConnect(gestureRouter, frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, "close",
+        () => onGestureFrameQuit());
+
+    frame.Show();
+    return frame;
+}
+
+// ---------------------------------------------------------------------------
+// chessboard.cpp / chessboard.h: ChessBoard + MyChessBoardDialog
+// ---------------------------------------------------------------------------
+
+/** The two wxDEFINE_EVENT(myEVT_CHESSBOARD_*, ChessBoardEvent) types. */
+let chessClickedType = 0;
+let chessDraggedType = 0;
+
+interface ChessPayload
+{
+    file: number;
+    rank: number;
+    fileTo: number;
+    rankTo: number;
+}
+
+/**
+ * Replaces ChessBoardEvent's four char/wxUint8 fields with one wxCommandEvent
+ * payload. file/rank are the square the mouse was pressed on; fileTo/rankTo are
+ * the square it was released on (equal to file/rank for a click).
+ */
+function packChessPayload(data: ChessPayload): bigint
+{
+    return BigInt(data.file) | (BigInt(data.rank) << 8n)
+        | (BigInt(data.fileTo) << 16n) | (BigInt(data.rankTo) << 24n);
+}
+
+function unpackChessPayload(value: bigint): ChessPayload
+{
+    return {
+        file: Number(value & 0xffn),
+        rank: Number((value >> 8n) & 0xffn),
+        fileTo: Number((value >> 16n) & 0xffn),
+        rankTo: Number((value >> 24n) & 0xffn),
+    };
+}
+
+interface ChessState
+{
+    board: kwxPanel;
+    /** square on which the mouse left button was pressed */
+    fileLeftMDown: number;
+    rankLeftMDown: number;
+    /** cursor set for the white squares by OnSetCursor */
+    questionCursor: Pointer;
+}
+
+let chessState: ChessState | null = null;
+const chessRouter = newRouter();
+let chessHandCursor: Pointer = null;
+let chessQuestionCursor: Pointer = null;
+let bestSizeCallback: Callback | null = null;
+
+/**
+ * ChessBoard::DoGetBestClientSize(): the kwxPanel hook receives the width and
+ * height as int* outputs and must return the same pixel size as the C++
+ * override, so the sizer computes the same dialog layout.
+ */
+function bestSizeCallbackPointer(): Pointer
+{
+    if (!bestSizeCallback)
+    {
+        bestSizeCallback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_object, widthPtr, heightPtr) =>
+            {
+                if (!widthPtr || !heightPtr)
+                {
+                    return;
+                }
+                const state = chessState;
+                if (!state)
+                {
+                    return;
+                }
+                const side = SQUARES_PER_SIDE
+                    * state.board.FromDIP(SQUARE_SIZE_IN_DIPS);
+                new Int32Array(arrayBufferView(widthPtr, 4))[0] = side;
+                new Int32Array(arrayBufferView(heightPtr, 4))[0] = side;
+            },
+        );
+    }
+    return bestSizeCallback.pointer;
+}
+
+/**
+ * ChessBoard::ConvertMousePosToFileAndRank().
+ * C++ integer division truncates towards zero, which Math.trunc() reproduces.
+ */
+function convertMousePosToFileAndRank(
+    board: wxPanel, x: number, y: number,
+): ChessPayload | null
+{
+    const squareSizeInPx = board.FromDIP(SQUARE_SIZE_IN_DIPS);
+    if (squareSizeInPx === 0)
+    {
+        return null;
+    }
+    const colIdx = Math.trunc(x / squareSizeInPx);
+    const rowIdx = Math.trunc(y / squareSizeInPx);
+
+    if (colIdx < 0 || colIdx >= SQUARES_PER_SIDE
+        || rowIdx < 0 || rowIdx >= SQUARES_PER_SIDE)
+    {
+        return null; // not on a square
+    }
+
+    const file = FILE_LETTERS.charCodeAt(colIdx);
+    // convert rowIdx (top to down 0 to 7) to rank (top to down 8 to 1)
+    const rank = SQUARES_PER_SIDE - rowIdx;
+
+    return { file, rank, fileTo: file, rankTo: rank };
+}
+
+/**
+ * ChessBoard::OnPaint — the background is already white, so only the black
+ * squares are drawn. The wxRect arithmetic is kept: the left edge is 0 for odd
+ * ranks and one square for even ranks, then advances by two squares per column.
+ */
+function onChessBoardPaint(): void
+{
+    const state = chessState;
+    if (!state)
+    {
+        return;
+    }
+
+    const squareSizeInPx = state.board.FromDIP(SQUARE_SIZE_IN_DIPS);
+
+    const dc = createWxPaintDC(state.board.ptr);
+    if (!dc)
+    {
+        return;
+    }
+    dc.SetPen(TRANSPARENT_PEN);
+    dc.SetBrush(BLACK_BRUSH);
+
+    let top = 0;
+    // draw from top to down, left to right
+    for (let rank = SQUARES_PER_SIDE; rank >= 1; rank--)
+    {
+        // odd ranks start with a black square, even ranks with a white one
+        let left = (rank % 2) ? 0 : squareSizeInPx;
+
+        for (let file = 0; file < SQUARES_PER_SIDE / 2; file++)
+        {
+            dc.DrawRectangle(left, top, squareSizeInPx, squareSizeInPx);
+            left += 2 * squareSizeInPx;
+        }
+
+        top += squareSizeInPx;
+    }
+
+    dc.Delete();
+}
+
+/** ChessBoard::OnMouseLeftDown */
+function onChessBoardLeftDown(event: wxMouseEvent): void
+{
+    const state = chessState;
+    if (!state)
+    {
+        return;
+    }
+
+    event.Skip(true);
+
+    const position = event.GetPosition();
+    if (!position)
+    {
+        return;
+    }
+    const x = position.GetX();
+    const y = position.GetY();
+    position.Delete();
+
+    const cell = convertMousePosToFileAndRank(state.board, x, y);
+    if (!cell)
+    {
+        return; // mouse cursor not on a square
+    }
+
+    state.fileLeftMDown = cell.file;
+    state.rankLeftMDown = cell.rank;
+    state.board.CaptureMouse();
+}
+
+/** ChessBoard::OnMouseLeftUp — emits myEVT_CHESSBOARD_CLICKED / _DRAGGED. */
+function onChessBoardLeftUp(event: wxMouseEvent): void
+{
+    const state = chessState;
+    if (!state)
+    {
+        return;
+    }
+
+    event.Skip(true);
+
+    if (!state.board.HasCapture())
+    {
+        return; // capture lost or mouse left down was not on a square
+    }
+
+    const clientRect = state.board.GetClientRect();
+    const position = event.GetPosition();
+    if (!position)
+    {
+        state.board.ReleaseMouse();
+        return;
+    }
+    const x = position.GetX();
+    const y = position.GetY();
+    position.Delete();
+
+    state.board.ReleaseMouse();
+
+    const cell = convertMousePosToFileAndRank(state.board, x, y);
+    if (!clientRect || !clientRect.Contains(x, y) || !cell)
+    {
+        return; // mouse cursor not on a square
+    }
+
+    const isClick = cell.file === state.fileLeftMDown
+        && cell.rank === state.rankLeftMDown;
+
+    // ChessBoardEvent chessBoardEvent;
+    // SetId(GetId()) / SetEventObject(this) / SetFile / SetRank / SetFileTo...
+    const chessEvent = createWxCommandEvent(
+        isClick ? chessClickedType : chessDraggedType, state.board.GetId(),
+    );
+    if (!chessEvent)
+    {
+        return;
+    }
+    chessEvent.SetEventObject(state.board.ptr);
+    chessEvent.SetExtraLong(packChessPayload(
+        isClick
+            ? {
+                file: state.fileLeftMDown,
+                rank: state.rankLeftMDown,
+                fileTo: state.fileLeftMDown,
+                rankTo: state.rankLeftMDown,
+            }
+            : {
+                file: state.fileLeftMDown,
+                rank: state.rankLeftMDown,
+                fileTo: cell.file,
+                rankTo: cell.rank,
+            },
+    ));
+
+    // ProcessWindowEvent(chessBoardEvent)
+    state.board.ProcessWindowEvent(chessEvent.ptr);
+    chessEvent.Delete();
+}
+
+/** ChessBoard::OnSetCursor */
+function onChessBoardSetCursor(event: wxSetCursorEvent): void
+{
+    const state = chessState;
+    if (!state)
+    {
+        return;
+    }
+
+    const position = event.GetPosition();
+    if (!position)
+    {
+        return;
+    }
+    const x = position.GetX();
+    const y = position.GetY();
+    position.Delete();
+
+    const cell = convertMousePosToFileAndRank(state.board, x, y);
+    if (!cell)
+    {
+        return; // mouse cursor not on a square
+    }
+
+    // Set the question cursor on white squares; the others keep the hand cursor.
+    if ((cell.file - "a".charCodeAt(0)) % 2 === cell.rank % 2)
+    {
+        if (state.questionCursor)
+        {
+            event.SetCursor(state.questionCursor);
+        }
+    }
+    else
+    {
+        event.Skip(true);
+    }
+}
+
+/** MyChessBoardDialog::OnChessBoardClicked */
+function onChessBoardClicked(event: wxCommandEvent): void
+{
+    const data = unpackChessPayload(event.GetExtraLong());
+    logMessage("myEVT_CHESSBOARD_CLICKED: "
+        + `${String.fromCharCode(data.file)}${data.rank}`);
+}
+
+/** MyChessBoardDialog::OnChessBoardDragged */
+function onChessBoardDragged(event: wxCommandEvent): void
+{
+    const data = unpackChessPayload(event.GetExtraLong());
+    logMessage("myEVT_CHESSBOARD_DRAGGED: from "
+        + `${String.fromCharCode(data.file)}${data.rank} to `
+        + `${String.fromCharCode(data.fileTo)}${data.rankTo}`);
+}
+
+/** ChessBoard ctor + MyChessBoardDialog ctor + ShowModal. */
+function showChessBoardDialog(parent: wxFrame): void
+{
+    const title = createWxString("New event class demonstration");
+    const dialog: wxDialog | null = createWxDialog(
+        parent.ptr, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_DIALOG_STYLE,
+    );
+    title.Delete();
+    if (!dialog)
+    {
+        return;
+    }
+
+    const border = defaultBorder();
+    const mainSizer = newBoxSizer(VERTICAL);
+
+    // wxStaticText(this, wxID_ANY, "Click or drag the mouse over the chessboard")
+    // wxSizerFlags().Border().CenterHorizontal()
+    const label = createLabel(
+        dialog.ptr, "Click or drag the mouse over the chessboard",
+    );
+    if (label)
+    {
+        mainSizer.AddWindow(
+            label.ptr, 0, ALL | ALIGN_CENTER_HORIZONTAL, border, null,
+        );
+    }
+
+    // new ChessBoard(this): a kwxPanel is required for the DoGetBestClientSize()
+    // hook; the original creates wxPanel(this, wxID_ANY, wxDefaultPosition,
+    // wxDefaultSize, wxBORDER_RAISED).
+    const board = createKwxPanel(
+        null, dialog.ptr, ID_ANY, -1, -1, -1, -1, BigInt(BORDER_RAISED),
+    );
+    if (!board)
+    {
+        dialog.Destroy();
+        return;
+    }
+    // ChessBoard::DoGetBestClientSize(): the same pixel size for both sides.
+    board.SetOnDoGetBestClientSize(bestSizeCallbackPointer());
+
+    if (chessHandCursor === null)
+    {
+        chessHandCursor = createWxCursorFromStock(CURSOR_HAND)?.ptr ?? null;
+    }
+    if (chessQuestionCursor === null)
+    {
+        chessQuestionCursor = createWxCursorFromStock(CURSOR_QUESTION_ARROW)?.ptr ?? null;
+    }
+
+    chessState = {
+        board,
+        fileLeftMDown: "a".charCodeAt(0),
+        rankLeftMDown: 1,
+        questionCursor: chessQuestionCursor,
+    };
+
+    if (chessHandCursor)
+    {
+        board.SetCursor(chessHandCursor);
+    }
+    board.SetBackgroundColour(WHITE);
+
+    // wxSizerFlags().TripleBorder().CenterHorizontal()
+    mainSizer.AddWindow(
+        board.ptr, 0, ALL | ALIGN_CENTER_HORIZONTAL, 3 * border, null,
+    );
+
+    // mainSizer->Add(CreateStdDialogButtonSizer(wxCLOSE),
+    //                wxSizerFlags().Expand().Border());
+    const buttons = dialog.CreateStdDialogButtonSizer(BigInt(CLOSE));
+    if (buttons)
+    {
+        mainSizer.AddSizer(buttons.ptr, 0, EXPAND | ALL, border, null);
+    }
+
+    // SetSizerAndFit(mainSizer) — deleteOld defaults to true
+    dialog.SetSizerAndFit(mainSizer.ptr, true);
+
+    // Bind(wxEVT_PAINT / wxEVT_LEFT_DOWN / wxEVT_LEFT_UP / wxEVT_SET_CURSOR, this)
+    routerConnect(chessRouter, board.ptr, ID_ANY, ID_ANY, EVT_PAINT, "paint",
+        () => onChessBoardPaint());
+    routerConnect(chessRouter, board.ptr, ID_ANY, ID_ANY, EVT_LEFT_DOWN, "leftDown",
+        (eventPtr) => onChessBoardLeftDown(new wxMouseEvent(eventPtr)));
+    routerConnect(chessRouter, board.ptr, ID_ANY, ID_ANY, EVT_LEFT_UP, "leftUp",
+        (eventPtr) => onChessBoardLeftUp(new wxMouseEvent(eventPtr)));
+    routerConnect(chessRouter, board.ptr, ID_ANY, ID_ANY, EVT_SET_CURSOR, "setCursor",
+        (eventPtr) => onChessBoardSetCursor(new wxSetCursorEvent(eventPtr)));
+
+    // MyChessBoardDialog: event table for CLICKED, Bind() for DRAGGED
+    routerConnect(chessRouter, dialog.ptr, ID_ANY, ID_ANY, chessClickedType, "clicked",
+        (eventPtr) => onChessBoardClicked(new wxCommandEvent(eventPtr)));
+    routerConnect(chessRouter, dialog.ptr, ID_ANY, ID_ANY, chessDraggedType, "dragged",
+        (eventPtr) => onChessBoardDragged(new wxCommandEvent(eventPtr)));
+
+    dialog.ShowModal();
+
+    chessState = null;
+    dialog.Destroy();
+}
+
+/** MyFrame::OnNewEventClass */
+function onNewEventClass(): void
+{
+    const state = mainState;
+    if (!state)
+    {
+        return;
+    }
+    showChessBoardDialog(state.frame);
+}
+
+// ---------------------------------------------------------------------------
+// MyApp::FilterEvent — application-level event filter
+// ---------------------------------------------------------------------------
+
+let eventFilter: wxEventFilter | null = null;
+let filterCallback: Callback | null = null;
+
+/**
+ * MyApp::FilterEvent(). kwxEventFilter calls FilterFunc(pObject, event) before
+ * every handler in the process; the verdict comes back through
+ * wxEventFilter_SetResult(), so the callback's own return value is ignored.
+ */
+function installEventFilter(): void
+{
+    // kwxEventFilter calls FilterFunc(pObject, event): the thunk's fixed
+    // (closure, data, event) argument order puts the event in the second slot.
+    filterCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_object, eventPtr) =>
+        {
+            if (eventPtr)
+            {
+                const type = lib.symbols.wxEvent_GetEventType(eventPtr);
+                const id = lib.symbols.wxEvent_GetId(eventPtr);
+                if (type === EVT_BUTTON && id === testButtonIdValue())
+                {
+                    logMessage("Step 0 in \"How Events are Processed\":\n"
+                        + "App::FilterEvent");
+                }
+            }
+
+            // wxApp::FilterEvent(event) returns wxEventFilter::Event_Skip (-1).
+            // That verdict is not exported as a constant.
+            wxEventFilter_SetResult(-1);
+        },
+    );
+
+    eventFilter = createWxEventFilter(null, filterCallback.pointer);
+    if (eventFilter)
+    {
+        wxEvtHandler_AddFilter(eventFilter.ptr);
+    }
+}
+
+/** Removes and releases the filter; wxEventFilter asserts it is unlinked. */
+function removeEventFilter(): void
+{
+    if (eventFilter)
+    {
+        wxEvtHandler_RemoveFilter(eventFilter.ptr);
+        eventFilter.Delete();
+        eventFilter = null;
+    }
+    if (filterCallback)
+    {
+        filterCallback.close();
+        filterCallback = null;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Menu construction helpers
+// ---------------------------------------------------------------------------
+
+/** menu->Append(id, text, help) */
+function appendMenuItem(menu: wxMenu, id: number, label: string, help: string): void
+{
+    withString(label, (labelPtr) =>
+        withString(help, (helpPtr) => menu.Append(id, labelPtr, helpPtr, false)));
+}
+
+/** menu->AppendCheckItem(id, text, help) */
+function appendCheckItem(menu: wxMenu, id: number, label: string, help: string): void
+{
+    withString(label, (labelPtr) =>
+        withString(help, (helpPtr) => menu.AppendCheckItem(id, labelPtr, helpPtr)));
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame::MyFrame
+// ---------------------------------------------------------------------------
+
+/** Builds the "step" closures of the test button chain. */
+function createTestButtonBindings(): TestButtonBindings
+{
+    return {
+        // EVT_BUTTON(BUTTON_ID, MyEvtTestButton::OnClickStaticHandler)
+        buttonStatic: makeClosure((eventPtr) =>
+        {
+            logMessage("Step 4 in \"How Events are Processed\":\n"
+                + "Button::ownStaticHandler");
+            new wxCommandEvent(eventPtr).Skip(true);
+        }),
+        // MyEvtTestButton ctor: Bind(wxEVT_BUTTON, OnClickDynamicHandler)
+        buttonDynamic: makeClosure((eventPtr) =>
+        {
+            logMessage("Step 3 in \"How Events are Processed\":\n"
+                + "Button::ownDynamicHandler");
+            new wxCommandEvent(eventPtr).Skip(true);
+        }),
+        // m_testBtn->Bind(wxEVT_BUTTON, &MyFrame::OnClickDynamicHandlerButton, this)
+        frameOnButton: makeClosure((eventPtr) =>
+        {
+            logMessage("Step 3 in \"How Events are Processed\":\n"
+                + "parentWin::DynamicHandler_InButtonTable");
+            new wxCommandEvent(eventPtr).Skip(true);
+        }),
+        // EVT_BUTTON(BUTTON_ID, MyFrame::OnClickStaticHandlerFrame)
+        frameStatic: makeClosure((eventPtr) =>
+        {
+            logMessage("Step 6, 4 in \"How Events are Processed\":\n"
+                + "parentWin::StaticHandler_InFrameTable");
+            new wxCommandEvent(eventPtr).Skip(true);
+        }),
+        // Bind(wxEVT_BUTTON, &MyFrame::OnClickDynamicHandlerFrame, this, id)
+        frameOnFrame: makeClosure((eventPtr) =>
+        {
+            logMessage("Step 6, 3 in \"How Events are Processed\":\n"
+                + "parentWin::DynamicHandler_InFrameTable");
+            new wxCommandEvent(eventPtr).Skip(true);
+        }),
+        // EVT_BUTTON(BUTTON_ID, MyApp::OnClickStaticHandlerApp)
+        appStatic: makeClosure((eventPtr) =>
+        {
+            logMessage("Step 7, 4 in \"How Events are Processed\":\n"
+                + "App::StaticHandler_InAppTable");
+
+            logMessage("Button click processed, there should be no more messages "
+                + "about handling events from the button.\n\n"
+                + "The log below shows the order in which the handlers "
+                + "were executed.");
+
+            // wxLog::FlushActive()
+            const target = wxLog_GetActiveTarget();
+            if (target)
+            {
+                wrapWxLog(target).FlushActive();
+            }
+
+            new wxCommandEvent(eventPtr).Skip(true);
+        }),
+        // Bind(wxEVT_BUTTON, &MyApp::OnClickDynamicHandlerApp, this, id)
+        appDynamic: makeClosure((eventPtr) =>
+        {
+            logMessage("Step 7, 3 in \"How Events are Processed\":\n"
+                + "App::DynamicHandler_InAppTable");
+            new wxCommandEvent(eventPtr).Skip(true);
+        }),
+    };
+}
+
+/**
+ * The test button chain.
+ *
+ * The original mixes static event tables with Bind() calls. Static tables are
+ * not available, so every entry is a dynamic one. wxWidgets searches a
+ * handler's dynamic entries newest-first and only then consults the static
+ * table, and every handler calls event.Skip(), so installing the entries in
+ * reverse of the required execution order reproduces the original log order:
+ *
+ *   button : parentWin::DynamicHandler_InButtonTable (3)
+ *            Button::ownDynamicHandler              (3)
+ *            Button::ownStaticHandler               (4)
+ *   frame  : parentWin::DynamicHandler_InFrameTable  (6,3)
+ *            parentWin::StaticHandler_InFrameTable  (6,4)
+ *   app    : App::DynamicHandler_InAppTable          (7,3)
+ *            App::StaticHandler_InAppTable          (7,4)
+ */
+function installTestButtonChain(state: MainState): void
+{
+    const t = state.testBindings;
+
+    // --- the button ---
+    lib.symbols.wxEvtHandler_Connect(
+        state.testButton.ptr, testButtonIdValue(), testButtonIdValue(),
+        EVT_BUTTON, t.buttonStatic.ptr,
+    );
+    lib.symbols.wxEvtHandler_Bind(
+        state.testButton.ptr, ID_ANY, ID_ANY, EVT_BUTTON, t.buttonDynamic.ptr,
+    );
+    lib.symbols.wxEvtHandler_Bind(
+        state.testButton.ptr, ID_ANY, ID_ANY, EVT_BUTTON, t.frameOnButton.ptr,
+    );
+
+    // --- the frame ---
+    lib.symbols.wxEvtHandler_Connect(
+        state.frame.ptr, testButtonIdValue(), testButtonIdValue(),
+        EVT_BUTTON, t.frameStatic.ptr,
+    );
+    lib.symbols.wxEvtHandler_Bind(
+        state.frame.ptr, testButtonIdValue(), testButtonIdValue(),
+        EVT_BUTTON, t.frameOnFrame.ptr,
+    );
+
+    // --- the application ---
+    const app = wxGetApp();
+    if (app)
+    {
+        lib.symbols.wxEvtHandler_Connect(
+            app, testButtonIdValue(), testButtonIdValue(), EVT_BUTTON,
+            t.appStatic.ptr,
+        );
+        lib.symbols.wxEvtHandler_Bind(
+            app, testButtonIdValue(), testButtonIdValue(), EVT_BUTTON,
+            t.appDynamic.ptr,
+        );
+    }
+}
+
+/** `long MyEvtTestButton::BUTTON_ID = wxNewId();` */
+let testButtonIdCache = 0;
+
+function testButtonIdValue(): number
+{
+    if (testButtonIdCache === 0)
+    {
+        testButtonIdCache = wxNewId();
+    }
+    return testButtonIdCache;
+}
+
+function createMainFrame(): MainState | null
+{
+    const title = createWxString("Event wxWidgets Sample");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, 50, 50, 600, 340, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+    if (!frame)
+    {
+        return null;
+    }
+
+    // SetIcon(wxICON(sample)) — the same artwork, loaded at run time.
+    {
+        const iconPath = createWxString(samplePath("sample.xpm"));
+        const icon = createWxIconLoad(iconPath.ptr, BigInt(BITMAP_TYPE_XPM), -1, -1);
+        iconPath.Delete();
+        if (icon)
+        {
+            frame.SetIcon(icon.ptr);
+            icon.Delete();
+        }
+    }
+
+    // create a menu bar
+    const emptyTitle = createWxString("");
+    const fileMenu = createWxMenu(emptyTitle.ptr, 0n);
+    const eventMenu = createWxMenu(emptyTitle.ptr, 0n);
+    emptyTitle.Delete();
+
+    const menuBar: wxMenuBar | null = createWxMenuBar(0);
+    if (!fileMenu || !eventMenu || !menuBar)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    appendMenuItem(fileMenu, EVENT_ABOUT, "&About\tCtrl-A", "Show about dialog");
+    fileMenu.AppendSeparator();
+    appendMenuItem(fileMenu, EVENT_QUIT, "E&xit\tAlt-X", "Quit this program");
+
+    appendCheckItem(eventMenu, EVENT_BIND, "&Bind\tCtrl-B",
+        "Bind or unbind a dynamic event handler");
+    appendCheckItem(eventMenu, EVENT_CONNECT, "&Connect\tCtrl-C",
+        "Connect or disconnect the dynamic event handler");
+    appendMenuItem(eventMenu, EVENT_DYNAMIC, "&Dynamic event\tCtrl-D",
+        "Dynamic event sample - only works after Connect");
+    eventMenu.AppendSeparator();
+    appendMenuItem(eventMenu, EVENT_PUSH, "&Push event handler\tCtrl-P",
+        "Push event handler for test event");
+    appendMenuItem(eventMenu, EVENT_POP, "P&op event handler\tCtrl-O",
+        "Pop event handler for test event");
+    appendMenuItem(eventMenu, EVENT_TEST, "Test event\tCtrl-T",
+        "Test event processed by pushed event handler");
+    eventMenu.AppendSeparator();
+    appendMenuItem(eventMenu, EVENT_CUSTOM, "Fire c&ustom event\tCtrl-U",
+        "Generate a custom event");
+    appendMenuItem(eventMenu, EVENT_GESTURE, "&Gesture events\tCtrl-G",
+        "Gesture event");
+    appendMenuItem(eventMenu, EVENT_MOUSE, "&Mouse events\tCtrl-M",
+        "Mouse event");
+    appendMenuItem(eventMenu, EVENT_NEW_EVENT_CLASS,
+        "&New wxEvent class demo\tCtrl-N",
+        "Demonstrates a new wxEvent-derived class");
+
+    withString("&File", (ptr) => menuBar.Append(fileMenu.ptr, ptr));
+    withString("&Event", (ptr) => menuBar.Append(eventMenu.ptr, ptr));
+    frame.SetMenuBar(menuBar.ptr);
+
+    // CreateStatusBar(3); the C++ defaults are wxSTB_DEFAULT_STYLE and id 0.
+    frame.CreateStatusBar(3, STB_DEFAULT_STYLE, 0);
+    withString("Welcome to wxWidgets event sample",
+        (ptr) => frame.SetStatusText(ptr, STATUS_MAIN));
+    withString("Dynamic: off", (ptr) => frame.SetStatusText(ptr, STATUS_DYNAMIC));
+    withString("Push count: 0", (ptr) => frame.SetStatusText(ptr, STATUS_PUSH));
+
+    // wxPanel * const panel = new wxPanel(this); (wxTAB_TRAVERSAL | wxNO_BORDER)
+    const panel = createWxPanel(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL | BORDER_NONE,
+    );
+    if (!panel)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    const border = defaultBorder();
+    const mainSizer = newBoxSizer(VERTICAL);
+    const rowSizer = newBoxSizer(HORIZONTAL);
+
+    // const wxSizerFlags centreY(wxSizerFlags().Centre().Border());
+    const label = createLabel(
+        panel.ptr,
+        "This button will only work if its handler is dynamically connected",
+    );
+    if (label)
+    {
+        rowSizer.AddWindow(label.ptr, 0, ALL | ALIGN_CENTER, border, null);
+    }
+
+    const dynamicButton = withString("&Dynamic button", (ptr) =>
+        createWxButton(panel.ptr, EVENT_DYNAMIC, ptr, -1, -1, -1, -1, 0));
+    if (!dynamicButton)
+    {
+        frame.Destroy();
+        return null;
+    }
+    rowSizer.AddWindow(dynamicButton.ptr, 0, ALL | ALIGN_CENTER, border, null);
+
+    // mainSizer->Add(sizer, wxSizerFlags(1).Expand());
+    mainSizer.AddSizer(rowSizer.ptr, 1, EXPAND, 0, null);
+
+    // mainSizer->Add(new wxStaticLine(panel), wxSizerFlags().Expand());
+    const line1 = createWxStaticLine(panel.ptr, ID_ANY, -1, -1, -1, -1, 0);
+    const line2 = createWxStaticLine(panel.ptr, ID_ANY, -1, -1, -1, -1, 0);
+    if (line1)
+    {
+        mainSizer.AddWindow(line1.ptr, 0, EXPAND, 0, null);
+    }
+    if (line2)
+    {
+        mainSizer.AddWindow(line2.ptr, 0, EXPAND, 0, null);
+    }
+
+    // m_testBtn = new MyEvtTestButton(panel, "Test Event Handlers Execution Order");
+    const testButton = withString("Test Event Handlers Execution Order", (ptr) =>
+        createWxButton(panel.ptr, testButtonIdValue(), ptr, -1, -1, -1, -1, 0));
+    if (!testButton)
+    {
+        frame.Destroy();
+        return null;
+    }
+    mainSizer.AddWindow(testButton.ptr, 0, 0, 0, null);
+
+    // panel->SetSizer(mainSizer) — deleteOld defaults to true
+    panel.SetSizer(mainSizer.ptr, true);
+
+    // MyFrame::OnDynamic, used by both the Bind and the Connect menu commands.
+    const onDynamicClosure = makeClosure(
+        (eventPtr) => onDynamic(new wxCommandEvent(eventPtr)));
+
+    // EVT_MY_CUSTOM_COMMAND(wxID_ANY, MyFrame::OnProcessCustom)
+    const customHandlerClosure = makeClosure(() => onProcessCustom());
+
+    const bindingsForButton = createTestButtonBindings();
+
+    const state: MainState = {
+        frame,
+        dynamicButton,
+        testButton,
+        pushCount: 0,
+        pushed: [],
+        mouseFrame: null,
+        gestureFrame: null,
+        customEventType: wxNewEventType(),
+        onDynamicClosure,
+        customHandlerClosure,
+        testBindings: bindingsForButton,
+    };
+    mainState = state;
+
+    installTestButtonChain(state);
+
+    return state;
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame's event table and the remaining Bind() calls
+// ---------------------------------------------------------------------------
+
+function connectFrameEvents(state: MainState): void
+{
+    const frame = state.frame.ptr;
+
+    // EVT_MENU(Event_Quit, MyFrame::OnQuit)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_QUIT, EVENT_QUIT, EVT_MENU,
+        makeClosure(() => onQuit()).ptr);
+    // EVT_MENU(Event_About, MyFrame::OnAbout)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_ABOUT, EVENT_ABOUT, EVT_MENU,
+        makeClosure(() => onAbout()).ptr);
+    // EVT_MENU(Event_Bind, MyFrame::OnBind)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_BIND, EVENT_BIND, EVT_MENU,
+        makeClosure((eventPtr) => onBind(new wxCommandEvent(eventPtr))).ptr);
+    // EVT_MENU(Event_Connect, MyFrame::OnConnect)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_CONNECT, EVENT_CONNECT, EVT_MENU,
+        makeClosure((eventPtr) => onConnect(new wxCommandEvent(eventPtr))).ptr);
+    // EVT_MENU(Event_Custom, MyFrame::OnFireCustom)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_CUSTOM, EVENT_CUSTOM, EVT_MENU,
+        makeClosure(() => onFireCustom()).ptr);
+    // EVT_MENU(Event_Test, MyFrame::OnTest)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_TEST, EVENT_TEST, EVT_MENU,
+        makeClosure(() => onTestFrame()).ptr);
+    // EVT_MENU(Event_Push, MyFrame::OnPushEventHandler)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_PUSH, EVENT_PUSH, EVT_MENU,
+        makeClosure(() => onPushEventHandler()).ptr);
+    // EVT_MENU(Event_Pop, MyFrame::OnPopEventHandler)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_POP, EVENT_POP, EVT_MENU,
+        makeClosure(() => onPopEventHandler()).ptr);
+    // EVT_MENU(Event_Gesture, MyFrame::OnGesture)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_GESTURE, EVENT_GESTURE, EVT_MENU,
+        makeClosure(() => onGesture()).ptr);
+    // EVT_MENU(Event_Mouse, MyFrame::OnMouseEvents)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_MOUSE, EVENT_MOUSE, EVT_MENU,
+        makeClosure(() => onMouseEvents()).ptr);
+    // EVT_MENU(Event_NewEventClass, MyFrame::OnNewEventClass)
+    lib.symbols.wxEvtHandler_Connect(
+        frame, EVENT_NEW_EVENT_CLASS, EVENT_NEW_EVENT_CLASS, EVT_MENU,
+        makeClosure(() => onNewEventClass()).ptr,
+    );
+
+    // EVT_UPDATE_UI(Event_Pop, MyFrame::OnUpdateUIPop)
+    lib.symbols.wxEvtHandler_Connect(frame, EVENT_POP, EVENT_POP, EVT_UPDATE_UI,
+        makeClosure((eventPtr) => onUpdateUIPop(new wxUpdateUIEvent(eventPtr))).ptr);
+
+    // EVT_MY_CUSTOM_COMMAND(wxID_ANY, MyFrame::OnProcessCustom)
+    lib.symbols.wxEvtHandler_Connect(
+        frame, ID_ANY, ID_ANY, state.customEventType,
+        state.customHandlerClosure.ptr,
+    );
+
+    // Closing the frame ends the program: never call Close() from here.
+    lib.symbols.wxEvtHandler_Connect(frame, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW,
+        makeClosure(() => exitMainLoop()).ptr);
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame::~MyFrame — release the pushed handlers
+// ---------------------------------------------------------------------------
+
+/**
+ * MyFrame::~MyFrame: `while (m_nPush-- != 0) PopEventHandler(true)`.
+ *
+ * The frame is still alive here because the close handler ends the event loop
+ * instead of destroying it, so the pushed handlers are popped exactly as in the
+ * original. Their closures were released by the wxCallback just deleted, so the
+ * thunk slot is closed afterwards.
+ */
+function releasePushedHandlers(state: MainState): void
+{
+    while (state.pushCount > 0)
+    {
+        state.frame.PopEventHandler(true /* delete handler */);
+        const popped = state.pushed.pop();
+        if (popped)
+        {
+            popped.callback.close();
+        }
+        state.pushCount -= 1;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Entry point (MyApp::OnInit)
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("event");
+    // Needed before createWxIconLoad() reads sample.xpm.
+    initAllImageHandlers();
+
+    // wxDEFINE_EVENT(myEVT_CHESSBOARD_CLICKED / _DRAGGED, ChessBoardEvent)
+    chessClickedType = wxNewEventType();
+    chessDraggedType = wxNewEventType();
+
+    // Park every cached closure on the application object so that closing and
+    // reopening the mouse frame (or the chessboard dialog) never leaves a
+    // dangling wxClosure behind.
+    keeperEventType = wxNewEventType();
+    keeperTarget = wxGetApp();
+
+    // MyApp::FilterEvent() override: installed before any event can dispatch.
+    installEventFilter();
+
+    const state = createMainFrame();
+    if (!state)
+    {
+        console.error("Failed to create the main frame");
+        removeEventFilter();
+        shutdown();
+        return 1;
+    }
+
+    connectFrameEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    // ~MyFrame(): release the handlers that are still pushed, then drop every
+    // callback while the native side can no longer invoke them.
+    releasePushedHandlers(state);
+    removeEventFilter();
+    for (const binding of bindings)
+    {
+        binding.callback.close();
+    }
+    bindings.length = 0;
+    if (bestSizeCallback)
+    {
+        bestSizeCallback.close();
+        bestSizeCallback = null;
+    }
+    mainState = null;
+
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

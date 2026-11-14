@@ -1,0 +1,814 @@
+// spinbtn.kwxts — port of wxSamples/src/widgets/spinbtn.cpp
+//
+// wxSP_VERTICAL / wxSP_HORIZONTAL are not exported by kwx_constants_gen.ts, but
+// wx/defs.h defines them as wxVERTICAL / wxHORIZONTAL, which are bound.
+
+import {
+    ALIGN_CENTRE,
+    ALIGN_CENTRE_HORIZONTAL,
+    ALIGN_CENTRE_VERTICAL,
+    ALIGN_LEFT,
+    ALIGN_RIGHT,
+    ALL,
+    createWxBoxSizer,
+    createWxButton,
+    createWxRadioBox,
+    createWxSpinButton,
+    createWxSpinCtrl,
+    createWxSpinCtrlDouble,
+    createWxStaticText,
+    createWxTextCtrl,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_RADIOBOX,
+    EVT_SPIN,
+    EVT_SPIN_DOWN,
+    EVT_SPIN_UP,
+    EVT_SPINCTRL,
+    EVT_SPINCTRLDOUBLE,
+    EVT_TEXT,
+    EVT_TEXT_ENTER,
+    EVT_UPDATE_UI,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    LEFT,
+    LogWarning,
+    readAndDeleteWxString,
+    RIGHT,
+    SP_ARROW_KEYS,
+    SP_WRAP,
+    TE_PROCESS_ENTER,
+    VERTICAL,
+    wxCheckBox,
+    wxCommandEvent,
+    wxRadioBox,
+    wxSizer,
+    wxSpinButton,
+    wxSpinCtrl,
+    wxSpinCtrlDouble,
+    wxSpinDoubleEvent,
+    wxSpinEvent,
+    wxTextCtrl,
+    wxUpdateUIEvent,
+    wxWindow,
+} from "kwx";
+import { Pointer, pointerOf } from "kwx/platform";
+
+import {
+    addSizer,
+    addSpacer,
+    addStretchSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    doubleBorder,
+    logMessage,
+    makeStaticBoxSizer,
+    tripleBorder,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+// Control ids (enum starting at wxID_HIGHEST).
+const SPINBTN_PAGE_RESET = ID_HIGHEST;
+// SpinBtnPage_Clear has no control in the C++ sample; it only keeps the ids
+// below in sync with the enum.
+const SPINBTN_PAGE_SET_VALUE = SPINBTN_PAGE_RESET + 2;
+const SPINBTN_PAGE_SET_MIN_AND_MAX = SPINBTN_PAGE_SET_VALUE + 1;
+const SPINBTN_PAGE_SET_BASE = SPINBTN_PAGE_SET_MIN_AND_MAX + 1;
+const SPINBTN_PAGE_SET_INCREMENT = SPINBTN_PAGE_SET_BASE + 1;
+const SPINBTN_PAGE_CUR_VALUE_TEXT = SPINBTN_PAGE_SET_INCREMENT + 1;
+const SPINBTN_PAGE_VALUE_TEXT = SPINBTN_PAGE_CUR_VALUE_TEXT + 1;
+const SPINBTN_PAGE_MIN_TEXT = SPINBTN_PAGE_VALUE_TEXT + 1;
+const SPINBTN_PAGE_MAX_TEXT = SPINBTN_PAGE_MIN_TEXT + 1;
+const SPINBTN_PAGE_BASE_TEXT = SPINBTN_PAGE_MAX_TEXT + 1;
+const SPINBTN_PAGE_SET_INCREMENT_TEXT = SPINBTN_PAGE_BASE_TEXT + 1;
+const SPINBTN_PAGE_SPIN_BTN = SPINBTN_PAGE_SET_INCREMENT_TEXT + 1;
+const SPINBTN_PAGE_SPIN_CTRL = SPINBTN_PAGE_SPIN_BTN + 1;
+const SPINBTN_PAGE_SPIN_CTRL_DOUBLE = SPINBTN_PAGE_SPIN_CTRL + 1;
+
+// "Text alignment" radio box item indices.
+const SPINBTN_ALIGN_LEFT = 0;
+const SPINBTN_ALIGN_CENTRE = 1;
+const SPINBTN_ALIGN_RIGHT = 2;
+
+/**
+ * Builds the `char**` array expected by wxRadioBox_Create.  The returned
+ * buffers must stay reachable until the native call returns.
+ */
+function makeRadioBox(
+    parent: Pointer,
+    caption: string,
+    items: string[],
+    dimension: number,
+    style: number,
+): wxRadioBox
+{
+    const buffers: Uint8Array[] = [];
+    const pointers = new BigUint64Array(items.length);
+
+    for (let index = 0; index < items.length; index++)
+    {
+        const bytes = new TextEncoder().encode(items[index] + "\0");
+        buffers.push(bytes);
+        const address = pointerOf(bytes);
+        pointers[index] = address === null ? 0n : address;
+    }
+
+    const choices = pointerOf(pointers);
+
+    const box = withString(caption, (ptr) =>
+        createWxRadioBox(
+            parent, ID_ANY, ptr, -1, -1, -1, -1,
+            items.length, choices, dimension, style,
+        ));
+
+    // Keep the string buffers alive until the constructor has copied them.
+    void buffers;
+
+    return box!;
+}
+
+/** wxLogWarning() with a temporary wxString. */
+function logWarning(text: string): void
+{
+    withString(text.replace(/%/g, "%%"), (ptr) => LogWarning(ptr));
+}
+
+/** wxTextCtrl::GetValue() as a JS string. */
+function readText(control: wxTextCtrl | null): string
+{
+    const value = control ? control.GetValue() : null;
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** wxTextCtrl::SetValue(). */
+function writeText(control: wxTextCtrl | null, text: string): void
+{
+    if (!control)
+    {
+        return;
+    }
+    withString(text, (ptr) => control.SetValue(ptr));
+}
+
+/** wxString::ToLong(): null when the text is not an integer. */
+function parseLong(text: string): number | null
+{
+    const trimmed = text.trim();
+    if (!/^[+-]?\d+$/.test(trimmed))
+    {
+        return null;
+    }
+    const value = Number(trimmed);
+    return Number.isSafeInteger(value) ? value : null;
+}
+
+/** wxString::ToULong(): null when the text is not an unsigned integer. */
+function parseUnsigned(text: string): number | null
+{
+    const trimmed = text.trim();
+    if (!/^\d+$/.test(trimmed))
+    {
+        return null;
+    }
+    const value = Number(trimmed);
+    return Number.isSafeInteger(value) ? value : null;
+}
+
+/** wxAtoi(): leading integer of the text, 0 when there is none. */
+function atoi(text: string): number
+{
+    const match = /^\s*([+-]?\d+)/.exec(text);
+    return match ? Number(match[1]) : 0;
+}
+
+/** wxSpinButton / wxSpinCtrl / wxSpinCtrlDouble sample page. */
+export class SpinBtnPage extends WidgetsPage
+{
+    private chkVert: wxCheckBox | null = null;
+    private chkArrowKeys: wxCheckBox | null = null;
+    private chkWrap: wxCheckBox | null = null;
+    private chkProcessEnter: wxCheckBox | null = null;
+    private radioAlign: wxRadioBox | null = null;
+
+    private spinBtn: wxSpinButton | null = null;
+    private spinCtrl: wxSpinCtrl | null = null;
+    private spinCtrlDouble: wxSpinCtrlDouble | null = null;
+
+    private sizerSpin: wxSizer | null = null;
+
+    private textCur: wxTextCtrl | null = null;
+    private textValue: wxTextCtrl | null = null;
+    private textMin: wxTextCtrl | null = null;
+    private textMax: wxTextCtrl | null = null;
+    private textBase: wxTextCtrl | null = null;
+    private textIncrement: wxTextCtrl | null = null;
+
+    private minValue = 0;
+    private maxValue = 10;
+    private baseValue = 10;
+    private incrementValue = 1;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/spinbtn");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.spinBtn;
+    }
+
+    override getWidgets(): wxWindow[]
+    {
+        const widgets = super.getWidgets();
+        if (this.spinCtrl)
+        {
+            widgets.push(this.spinCtrl);
+        }
+        if (this.spinCtrlDouble)
+        {
+            widgets.push(this.spinCtrlDouble);
+        }
+        return widgets;
+    }
+
+    override createContent(): void
+    {
+        const sizerTop = createWxBoxSizer(HORIZONTAL)!;
+
+        // left pane
+        const sizerLeft = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&Set style");
+
+        this.chkVert = this.createCheckBoxAndAddToSizer(
+            sizerLeft.sizer, "&Vertical", ID_ANY, sizerLeft.box.ptr);
+        this.chkArrowKeys = this.createCheckBoxAndAddToSizer(
+            sizerLeft.sizer, "&Arrow Keys", ID_ANY, sizerLeft.box.ptr);
+        this.chkWrap = this.createCheckBoxAndAddToSizer(
+            sizerLeft.sizer, "&Wrap", ID_ANY, sizerLeft.box.ptr);
+        this.chkProcessEnter = this.createCheckBoxAndAddToSizer(
+            sizerLeft.sizer, "Process &Enter", ID_ANY, sizerLeft.box.ptr);
+
+        addSpacer(sizerLeft.sizer, this.dip(5));
+
+        this.radioAlign = makeRadioBox(
+            sizerLeft.box.ptr, "&Text alignment",
+            ["left", "centre", "right"], 1, 0);
+        addWin(sizerLeft.sizer, this.radioAlign, 0, EXPAND | ALL, border());
+
+        addSpacer(sizerLeft.sizer, this.dip(5));
+
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(sizerLeft.box.ptr, SPINBTN_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerLeft.sizer, resetButton, 0,
+            ALIGN_CENTRE_HORIZONTAL, tripleBorder());
+
+        // middle pane
+        const sizerMiddle = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&Change spinbtn value");
+
+        const sizerRowCur = this.createSizerWithTextAndLabel(
+            "Current value", SPINBTN_PAGE_CUR_VALUE_TEXT,
+            (text) =>
+            {
+                this.textCur = text;
+            },
+            sizerMiddle.box.ptr);
+        this.textCur?.SetEditable(false);
+        addSizer(sizerMiddle.sizer, sizerRowCur, 0, EXPAND, border());
+
+        const sizerRowValue = this.createSizerWithTextAndButton(
+            SPINBTN_PAGE_SET_VALUE, "Set &value", SPINBTN_PAGE_VALUE_TEXT,
+            (text) =>
+            {
+                this.textValue = text;
+            },
+            sizerMiddle.box.ptr);
+        addSizer(sizerMiddle.sizer, sizerRowValue, 0, EXPAND, border());
+
+        const sizerRowMinMax = this.createSizerWithTextAndButton(
+            SPINBTN_PAGE_SET_MIN_AND_MAX, "&Min and max",
+            SPINBTN_PAGE_MIN_TEXT,
+            (text) =>
+            {
+                this.textMin = text;
+            },
+            sizerMiddle.box.ptr);
+
+        this.textMax = withString("", (ptr) =>
+            createWxTextCtrl(
+                sizerMiddle.box.ptr, SPINBTN_PAGE_MAX_TEXT, ptr,
+                -1, -1, -1, -1, BigInt(0)));
+        if (this.textMax)
+        {
+            addWin(sizerRowMinMax, this.textMax, 1,
+                ALIGN_CENTRE_VERTICAL | LEFT, border());
+        }
+
+        writeText(this.textMin, String(this.minValue));
+        writeText(this.textMax, String(this.maxValue));
+
+        addSizer(sizerMiddle.sizer, sizerRowMinMax, 0, EXPAND, border());
+
+        const sizerRowBase = this.createSizerWithTextAndButton(
+            SPINBTN_PAGE_SET_BASE, "Set &base", SPINBTN_PAGE_BASE_TEXT,
+            (text) =>
+            {
+                this.textBase = text;
+            },
+            sizerMiddle.box.ptr);
+        writeText(this.textBase, "10");
+        addSizer(sizerMiddle.sizer, sizerRowBase, 0, EXPAND, border());
+
+        const sizerRowIncrement = this.createSizerWithTextAndButton(
+            SPINBTN_PAGE_SET_INCREMENT, "Set Increment",
+            SPINBTN_PAGE_SET_INCREMENT_TEXT,
+            (text) =>
+            {
+                this.textIncrement = text;
+            },
+            sizerMiddle.box.ptr);
+        writeText(this.textIncrement, "1");
+        addSizer(sizerMiddle.sizer, sizerRowIncrement, 0, EXPAND, border());
+
+        // right pane
+        const sizerRight = createWxBoxSizer(VERTICAL)!;
+        sizerRight.SetMinSize(this.dip(150), 0);
+        this.sizerSpin = sizerRight;
+
+        this.reset();
+        this.createSpin();
+
+        // the 3 panes compose the window
+        addSizer(sizerTop, sizerLeft.sizer, 0,
+            EXPAND | (ALL & ~LEFT), doubleBorder());
+        addSizer(sizerTop, sizerMiddle.sizer, 0, EXPAND | ALL, doubleBorder());
+        addSizer(sizerTop, sizerRight, 1,
+            EXPAND | (ALL & ~RIGHT), doubleBorder());
+
+        this.page.SetSizer(sizerTop.ptr, false);
+
+        bindEvent(this.page, SPINBTN_PAGE_RESET, SPINBTN_PAGE_RESET,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.reset();
+                this.createSpin();
+            });
+
+        bindEvent(this.page, SPINBTN_PAGE_SET_VALUE, SPINBTN_PAGE_SET_VALUE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSetValue();
+            });
+
+        bindEvent(this.page, SPINBTN_PAGE_SET_MIN_AND_MAX,
+            SPINBTN_PAGE_SET_MIN_AND_MAX, EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSetMinAndMax();
+            });
+
+        bindEvent(this.page, SPINBTN_PAGE_SET_BASE, SPINBTN_PAGE_SET_BASE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSetBase();
+            });
+
+        bindEvent(this.page, SPINBTN_PAGE_SET_INCREMENT,
+            SPINBTN_PAGE_SET_INCREMENT, EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSetIncrement();
+            });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.createSpin();
+        });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_RADIOBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.createSpin();
+        });
+
+        // EVT_UPDATE_UI handlers (the C++ event table entries).
+        bindEvent(this.page, SPINBTN_PAGE_RESET, SPINBTN_PAGE_RESET,
+            EVT_UPDATE_UI, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                new wxUpdateUIEvent(eventPtr, true)
+                    .Enable(this.resetButtonEnabled());
+            });
+
+        bindEvent(this.page, SPINBTN_PAGE_CUR_VALUE_TEXT,
+            SPINBTN_PAGE_CUR_VALUE_TEXT, EVT_UPDATE_UI, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxUpdateUIEvent(eventPtr, true);
+                const value = this.spinBtn ? this.spinBtn.GetValue() : 0;
+                withString(String(value), (ptr) => event.SetText(ptr));
+            });
+
+        const updateValue = (eventPtr: Pointer): void =>
+        {
+            if (!eventPtr) return;
+            const event = new wxUpdateUIEvent(eventPtr, true);
+            const text = this.textValue;
+            const value = text ? readText(text) : "";
+            const parsed = parseLong(value);
+            event.Enable(text
+                ? text.IsEmpty() || (parsed !== null && this.isValidValue(parsed))
+                : false);
+        };
+
+        const updateMinMax = (eventPtr: Pointer): void =>
+        {
+            if (!eventPtr) return;
+            const event = new wxUpdateUIEvent(eventPtr, true);
+            const minNew = parseLong(readText(this.textMin));
+            const maxNew = parseLong(readText(this.textMax));
+            event.Enable(minNew !== null && maxNew !== null && minNew <= maxNew);
+        };
+
+        const updateBase = (eventPtr: Pointer): void =>
+        {
+            if (!eventPtr) return;
+            const event = new wxUpdateUIEvent(eventPtr, true);
+            const base = parseUnsigned(readText(this.textBase));
+            event.Enable(base !== null && base !== 0);
+        };
+
+        bindEvent(this.page, SPINBTN_PAGE_SET_VALUE, SPINBTN_PAGE_SET_VALUE,
+            EVT_UPDATE_UI, updateValue);
+        bindEvent(this.page, SPINBTN_PAGE_SET_MIN_AND_MAX,
+            SPINBTN_PAGE_SET_MIN_AND_MAX, EVT_UPDATE_UI, updateMinMax);
+        bindEvent(this.page, SPINBTN_PAGE_SET_BASE, SPINBTN_PAGE_SET_BASE,
+            EVT_UPDATE_UI, updateBase);
+    }
+
+    override recreateWidget(): void
+    {
+        this.createSpin();
+    }
+
+    /** Is this spinbtn value in range? */
+    private isValidValue(value: number): boolean
+    {
+        return value >= this.minValue && value <= this.maxValue;
+    }
+
+    /** Reset the spinbtn parameters. */
+    private reset(): void
+    {
+        this.chkVert?.SetValue(true);
+        this.chkArrowKeys?.SetValue(true);
+        this.chkWrap?.SetValue(false);
+        this.chkProcessEnter?.SetValue(false);
+        this.radioAlign?.SetSelection(SPINBTN_ALIGN_RIGHT);
+    }
+
+    /** OnUpdateUIResetButton() */
+    private resetButtonEnabled(): boolean
+    {
+        return !(this.chkVert?.GetValue() ?? false)
+            || (this.chkWrap?.GetValue() ?? false)
+            || (this.chkProcessEnter?.GetValue() ?? false);
+    }
+
+    /** A wxStaticText label owned by the page. */
+    private createLabel(text: string): wxWindow
+    {
+        return withString(text, (ptr) =>
+            createWxStaticText(
+                this.page.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0))!;
+    }
+
+    /** (Re)create the spin controls. */
+    private createSpin(): void
+    {
+        let flags = attrs.defaultFlags;
+
+        if (this.chkVert?.GetValue())
+        {
+            // wxSP_VERTICAL == wxVERTICAL (wx/defs.h).
+            flags |= VERTICAL;
+        }
+        else
+        {
+            // wxSP_HORIZONTAL == wxHORIZONTAL.
+            flags |= HORIZONTAL;
+        }
+
+        if (this.chkArrowKeys?.GetValue())
+        {
+            flags |= SP_ARROW_KEYS;
+        }
+
+        if (this.chkWrap?.GetValue())
+        {
+            flags |= SP_WRAP;
+        }
+
+        if (this.chkProcessEnter?.GetValue())
+        {
+            flags |= TE_PROCESS_ENTER;
+        }
+
+        let textFlags = 0;
+        switch (this.radioAlign ? this.radioAlign.GetSelection() : -1)
+        {
+            case SPINBTN_ALIGN_CENTRE:
+                textFlags |= ALIGN_CENTRE_HORIZONTAL;
+                break;
+
+            case SPINBTN_ALIGN_RIGHT:
+                textFlags |= ALIGN_RIGHT;
+                break;
+
+            default:
+                textFlags |= ALIGN_LEFT; // no-op
+                break;
+        }
+
+        let value = this.minValue;
+        if (this.spinBtn)
+        {
+            const valueOld = this.spinBtn.GetValue();
+            if (!this.isValidValue(valueOld))
+            {
+                value = valueOld;
+            }
+
+            this.sizerSpin?.Clear(true /* delete windows */);
+        }
+
+        this.spinBtn = createWxSpinButton(this.page.ptr, SPINBTN_PAGE_SPIN_BTN,
+            -1, -1, -1, -1, BigInt(flags))!;
+        this.spinBtn.SetValue(value);
+        this.spinBtn.SetRange(this.minValue, this.maxValue);
+
+        this.spinCtrl = withString(String(value), (ptr) =>
+            createWxSpinCtrl(this.page.ptr, SPINBTN_PAGE_SPIN_CTRL, ptr,
+                -1, -1, -1, -1, BigInt(flags | textFlags),
+                this.minValue, this.maxValue, value))!;
+
+        this.spinCtrlDouble = withString(String(value), (ptr) =>
+            createWxSpinCtrlDouble(this.page.ptr,
+                SPINBTN_PAGE_SPIN_CTRL_DOUBLE, ptr,
+                -1, -1, -1, -1, flags | textFlags,
+                this.minValue, this.maxValue, value, 0.1))!;
+
+        this.notifyWidgetRecreation(this.spinBtn);
+        this.notifyWidgetRecreation(this.spinCtrl);
+        this.notifyWidgetRecreation(this.spinCtrlDouble);
+
+        const sizer = this.sizerSpin;
+        if (!sizer)
+        {
+            return;
+        }
+
+        // Add spacers, labels and spin controls to the sizer.
+        addStretchSpacer(sizer, 1);
+        addWin(sizer, this.createLabel("wxSpinButton"), 0, ALIGN_CENTRE, border());
+        addWin(sizer, this.spinBtn, 0, ALIGN_CENTRE, border());
+        addStretchSpacer(sizer, 1);
+        addWin(sizer, this.createLabel("wxSpinCtrl"), 0, ALIGN_CENTRE, border());
+        addWin(sizer, this.spinCtrl, 0, ALIGN_CENTRE, border());
+        addStretchSpacer(sizer, 1);
+        addWin(sizer, this.createLabel("wxSpinCtrlDouble"), 0,
+            ALIGN_CENTRE, border());
+        addWin(sizer, this.spinCtrlDouble, 0, ALIGN_CENTRE, border());
+        addStretchSpacer(sizer, 1);
+
+        sizer.Layout();
+
+        this.bindSpinEvents();
+    }
+
+    /** Event table entries for the recreated controls. */
+    private bindSpinEvents(): void
+    {
+        const button = this.spinBtn;
+        if (button)
+        {
+            bindEvent(button, SPINBTN_PAGE_SPIN_BTN, SPINBTN_PAGE_SPIN_BTN,
+                EVT_SPIN, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    const value = new wxSpinEvent(eventPtr, true).GetInt();
+                    logMessage(`Spin button value changed, now ${value}`);
+                });
+
+            bindEvent(button, SPINBTN_PAGE_SPIN_BTN, SPINBTN_PAGE_SPIN_BTN,
+                EVT_SPIN_UP, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    const event = new wxSpinEvent(eventPtr, true);
+                    const current = this.spinBtn
+                        ? this.spinBtn.GetValue() : 0;
+
+                    // These events can be vetoed to prevent the value change.
+                    if (event.GetInt() === 11)
+                    {
+                        logMessage("Spin button prevented from going up to 11 "
+                            + `(still ${current})`);
+                        event.Veto();
+                        return;
+                    }
+
+                    logMessage("Spin button value incremented, will be "
+                        + `${event.GetInt()} (was ${current})`);
+                });
+
+            bindEvent(button, SPINBTN_PAGE_SPIN_BTN, SPINBTN_PAGE_SPIN_BTN,
+                EVT_SPIN_DOWN, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    const event = new wxSpinEvent(eventPtr, true);
+                    const current = this.spinBtn
+                        ? this.spinBtn.GetValue() : 0;
+
+                    // Vetoing and then skipping does not apply the veto.
+                    if (event.GetInt() === 0)
+                    {
+                        logMessage("Spin button change not effectively "
+                            + "vetoed, will become 0");
+                        event.Veto();
+                        event.Skip(true);
+                    }
+
+                    logMessage("Spin button value decremented, will be "
+                        + `${event.GetInt()} (was ${current})`);
+                });
+        }
+
+        const spinCtrl = this.spinCtrl;
+        if (spinCtrl)
+        {
+            bindEvent(spinCtrl, SPINBTN_PAGE_SPIN_CTRL,
+                SPINBTN_PAGE_SPIN_CTRL, EVT_SPINCTRL, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    const value = new wxSpinEvent(eventPtr, true).GetInt();
+                    logMessage(`Spin control value changed, now ${value}`);
+                });
+
+            bindEvent(spinCtrl, SPINBTN_PAGE_SPIN_CTRL,
+                SPINBTN_PAGE_SPIN_CTRL, EVT_TEXT, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    logMessage("Text changed in spin control, now "
+                        + this.eventString(eventPtr));
+                });
+
+            bindEvent(spinCtrl, SPINBTN_PAGE_SPIN_CTRL,
+                SPINBTN_PAGE_SPIN_CTRL, EVT_TEXT_ENTER, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    logMessage("\"Enter\" pressed in spin control, text is "
+                        + this.eventString(eventPtr));
+                });
+        }
+
+        const spinCtrlDouble = this.spinCtrlDouble;
+        if (spinCtrlDouble)
+        {
+            bindEvent(spinCtrlDouble, SPINBTN_PAGE_SPIN_CTRL_DOUBLE,
+                SPINBTN_PAGE_SPIN_CTRL_DOUBLE, EVT_SPINCTRLDOUBLE,
+                (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    const value = new wxSpinDoubleEvent(eventPtr, true)
+                        .GetValue();
+                    logMessage(`Spin control value changed, now ${value}`);
+                });
+
+            bindEvent(spinCtrlDouble, SPINBTN_PAGE_SPIN_CTRL_DOUBLE,
+                SPINBTN_PAGE_SPIN_CTRL_DOUBLE, EVT_TEXT, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    logMessage("Text changed in spin control, now "
+                        + this.eventString(eventPtr));
+                });
+
+            bindEvent(spinCtrlDouble, SPINBTN_PAGE_SPIN_CTRL_DOUBLE,
+                SPINBTN_PAGE_SPIN_CTRL_DOUBLE, EVT_TEXT_ENTER, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    logMessage("\"Enter\" pressed in spin control, text is "
+                        + this.eventString(eventPtr));
+                });
+        }
+    }
+
+    /** `"<text>"` as used by the wxLogMessage() calls of the sample. */
+    private eventString(eventPtr: Pointer): string
+    {
+        const value = new wxCommandEvent(eventPtr, true).GetString();
+        const text = value ? readAndDeleteWxString(value.ptr) : "";
+        return `"${text}"`;
+    }
+
+    /** OnButtonSetValue() */
+    private onButtonSetValue(): void
+    {
+        const textValue = this.textValue;
+        if (!textValue)
+        {
+            return;
+        }
+
+        if (textValue.IsEmpty())
+        {
+            withString("", (ptr) =>
+            {
+                this.spinCtrl?.SetValueString(ptr);
+                this.spinCtrlDouble?.SetValueString(ptr);
+            });
+            return;
+        }
+
+        const value = parseLong(readText(textValue));
+        if (value === null || !this.isValidValue(value))
+        {
+            logWarning("Invalid spinbtn value.");
+            return;
+        }
+
+        this.spinBtn?.SetValue(value);
+        this.spinCtrl?.SetValue(value);
+        this.spinCtrlDouble?.SetValue(value);
+    }
+
+    /** OnButtonSetMinAndMax() */
+    private onButtonSetMinAndMax(): void
+    {
+        const minNew = parseLong(readText(this.textMin));
+        const maxNew = parseLong(readText(this.textMax));
+        if (minNew === null || maxNew === null || minNew > maxNew)
+        {
+            logWarning("Invalid min/max values for the spinbtn.");
+            return;
+        }
+
+        this.minValue = minNew;
+        this.maxValue = maxNew;
+
+        this.spinBtn?.SetRange(minNew, maxNew);
+        this.spinCtrl?.SetRange(minNew, maxNew);
+        this.spinCtrlDouble?.SetRange(minNew, maxNew);
+
+        this.sizerSpin?.Layout();
+    }
+
+    /** OnButtonSetBase() */
+    private onButtonSetBase(): void
+    {
+        const base = parseUnsigned(readText(this.textBase));
+        if (base === null || base === 0)
+        {
+            logWarning("Invalid base value.");
+            return;
+        }
+
+        this.baseValue = base;
+        if (this.spinCtrl && !this.spinCtrl.SetBase(this.baseValue))
+        {
+            logWarning(`Setting base ${this.baseValue} failed.`);
+        }
+
+        this.sizerSpin?.Layout();
+    }
+
+    /** OnButtonSetIncrement() */
+    private onButtonSetIncrement(): void
+    {
+        const increment = atoi(readText(this.textIncrement));
+        if (increment === 0)
+        {
+            logWarning("Invalid increment value.");
+            return;
+        }
+
+        this.incrementValue = increment;
+        this.spinCtrl?.SetIncrement(this.incrementValue);
+        logWarning(`Setting increment to ${this.incrementValue}.`);
+    }
+}
+
+export function createSpinBtnPage(parent: Pointer): WidgetsPage
+{
+    return new SpinBtnPage(parent);
+}

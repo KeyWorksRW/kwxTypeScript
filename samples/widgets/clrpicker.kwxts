@@ -1,0 +1,245 @@
+// clrpicker.kwxts — port of wxSamples/src/widgets/clrpicker.cpp
+//
+// wxColourPickerCtrl is exposed by kwxgen as wxColorPickerCtrl /
+// createWxColorPickerCtrl (note the American spelling of the factory).
+
+import {
+    ALIGN_CENTRE,
+    ALIGN_CENTRE_HORIZONTAL,
+    C2S_CSS_SYNTAX,
+    CLRP_DEFAULT_STYLE,
+    CLRP_SHOW_ALPHA,
+    CLRP_SHOW_LABEL,
+    CLRP_USE_TEXTCTRL,
+    createWxBoxSizer,
+    createWxButton,
+    createWxColorPickerCtrl,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_COLOURPICKER_CHANGED,
+    EVT_COLOURPICKER_CURRENT_CHANGED,
+    EVT_COLOURPICKER_DIALOG_CANCELLED,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    readAndDeleteWxString,
+    RED,
+    VERTICAL,
+    wxCheckBox,
+    wxColourPickerEvent,
+    wxColorPickerCtrl,
+    wxSizer,
+    wxWindow,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import {
+    addSizer,
+    addStretchSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    logMessage,
+    makeStaticBoxSizer,
+    tripleBorder,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+const PICKER_PAGE_RESET = ID_HIGHEST;
+const PICKER_PAGE_COLOUR = PICKER_PAGE_RESET + 1;
+
+/** event.GetColour().GetAsString(wxC2S_CSS_SYNTAX) */
+function colourAsString(event: wxColourPickerEvent): string
+{
+    const colour = event.GetColour();
+    if (!colour)
+    {
+        return "";
+    }
+    const text = colour.GetAsString(BigInt(C2S_CSS_SYNTAX));
+    colour.Delete();
+    return text ? readAndDeleteWxString(text.ptr) : "";
+}
+
+export class ColourPickerPage extends WidgetsPage
+{
+    private clrPicker: wxColorPickerCtrl | null = null;
+
+    private chkColourTextCtrl: wxCheckBox | null = null;
+    private chkColourShowLabel: wxCheckBox | null = null;
+    private chkColourShowAlpha: wxCheckBox | null = null;
+    private sizer: wxSizer | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/clrpicker");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.clrPicker;
+    }
+
+    override createContent(): void
+    {
+        // left pane
+        const boxLeft = createWxBoxSizer(VERTICAL)!;
+        const styleSizer = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&ColourPicker style");
+
+        this.chkColourTextCtrl = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "With textctrl", ID_ANY, styleSizer.box.ptr);
+        this.chkColourShowLabel = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "With label", ID_ANY, styleSizer.box.ptr);
+        this.chkColourShowAlpha = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "With opacity", ID_ANY, styleSizer.box.ptr);
+        addSizer(boxLeft, styleSizer.sizer, 0, EXPAND, border());
+
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(this.page.ptr, PICKER_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(boxLeft, resetButton, 0, ALIGN_CENTRE_HORIZONTAL, tripleBorder());
+
+        this.reset();
+
+        // create pickers
+        this.clrPicker = null;
+        this.createPicker();
+
+        // right pane
+        const sizer = createWxBoxSizer(VERTICAL)!;
+        addStretchSpacer(sizer);
+        if (this.clrPicker)
+        {
+            addWin(sizer, this.clrPicker, 0, ALIGN_CENTRE, border());
+        }
+        addStretchSpacer(sizer);
+        this.sizer = sizer;
+
+        // global pane
+        const globalSizer = createWxBoxSizer(HORIZONTAL)!;
+        addSizer(globalSizer, boxLeft, 0, EXPAND, border());
+        addSizer(globalSizer, sizer, 1, EXPAND, border());
+
+        this.page.SetSizer(globalSizer.ptr, false);
+
+        bindEvent(this.page, PICKER_PAGE_RESET, PICKER_PAGE_RESET, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.reset();
+                this.recreatePicker();
+            });
+
+        bindEvent(this.page, PICKER_PAGE_COLOUR, PICKER_PAGE_COLOUR,
+            EVT_COLOURPICKER_CHANGED, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxColourPickerEvent(eventPtr, true);
+                logMessage(`The colour changed to '${colourAsString(event)}' !`);
+            });
+
+        bindEvent(this.page, PICKER_PAGE_COLOUR, PICKER_PAGE_COLOUR,
+            EVT_COLOURPICKER_CURRENT_CHANGED, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxColourPickerEvent(eventPtr, true);
+                logMessage("The currently selected colour changed to "
+                    + `'${colourAsString(event)}'`);
+            });
+
+        bindEvent(this.page, PICKER_PAGE_COLOUR, PICKER_PAGE_COLOUR,
+            EVT_COLOURPICKER_DIALOG_CANCELLED, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxColourPickerEvent(eventPtr, true);
+                logMessage("Colour selection dialog cancelled, current colour is "
+                    + `'${colourAsString(event)}'`);
+            });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreatePicker();
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.recreatePicker();
+    }
+
+    /** Called only once, at first construction. */
+    private createPicker(): void
+    {
+        let style = attrs.defaultFlags;
+
+        if (this.chkColourTextCtrl?.GetValue())
+        {
+            style |= CLRP_USE_TEXTCTRL;
+        }
+        if (this.chkColourShowLabel?.GetValue())
+        {
+            style |= CLRP_SHOW_LABEL;
+        }
+        if (this.chkColourShowAlpha?.GetValue())
+        {
+            style |= CLRP_SHOW_ALPHA;
+        }
+
+        this.clrPicker = createWxColorPickerCtrl(
+            this.page.ptr, PICKER_PAGE_COLOUR, RED,
+            -1, -1, -1, -1, style);
+
+        if (this.clrPicker)
+        {
+            this.notifyWidgetRecreation(this.clrPicker);
+        }
+    }
+
+    /** Called to recreate an existing control. */
+    private recreatePicker(): void
+    {
+        if (this.sizer)
+        {
+            this.sizer.Detach(1);
+        }
+
+        // wxColourPickerCtrl has no Delete() in the bindings; Destroy() the
+        // owned window instead, like the C++ delete does implicitly.
+        if (this.clrPicker)
+        {
+            this.clrPicker.Destroy();
+            this.clrPicker = null;
+        }
+
+        this.createPicker();
+
+        const picker = this.clrPicker as wxColorPickerCtrl | null;
+        if (this.sizer && picker)
+        {
+            this.sizer.InsertWindow(1, picker.ptr, 0,
+                ALIGN_CENTRE, border(), null);
+            this.sizer.Layout();
+        }
+    }
+
+    /** Restore the checkboxes state to the initial values. */
+    private reset(): void
+    {
+        this.chkColourTextCtrl?.SetValue(
+            (CLRP_DEFAULT_STYLE & CLRP_USE_TEXTCTRL) !== 0);
+        this.chkColourShowLabel?.SetValue(
+            (CLRP_DEFAULT_STYLE & CLRP_SHOW_LABEL) !== 0);
+        this.chkColourShowAlpha?.SetValue(
+            (CLRP_DEFAULT_STYLE & CLRP_SHOW_ALPHA) !== 0);
+    }
+}
+
+export function createColourPickerPage(parent: Pointer): WidgetsPage
+{
+    return new ColourPickerPage(parent);
+}

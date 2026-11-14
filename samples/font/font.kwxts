@@ -39,7 +39,6 @@ declare const __dirname: string;
 
 import {
     ALL,
-    BITMAP_TYPE_XPM,
     BLUE,
     CANCEL,
     CENTRE,
@@ -108,7 +107,7 @@ import {
     createWxFontDialog,
     createWxFontMapper,
     createWxFrame,
-    createWxIconLoad,
+    createWxIconDefault,
     createWxMenu,
     createWxMenuBar,
     createWxPenFromColour,
@@ -120,7 +119,6 @@ import {
     createWxTextFileFromFile,
     createWxWindow,
     exitMainLoop,
-    initAllImageHandlers,
     initialize,
     kwxMessageBox,
     lib,
@@ -131,20 +129,22 @@ import {
     setAppName,
     setTopWindow,
     shutdown,
+    wrapWxBitmapBundle,
     wxArrayString,
     wxClosure,
     wxColour,
     wxCommandEvent,
     wxFont,
+    wxFontMapper_GetEncodingDescription,
     wxFrame,
     wxGetTextFromUser,
     wxMenu,
     wxMenuBar,
     wxPen,
-    wxSize,
     wxStandardPaths,
     wxTextCtrl,
     wxWindow,
+    wxBitmapBundle_FromSVGFile,
 } from "kwx";
 import { Callback, exit, Pointer, platform, pointerOf, readCString } from "kwx/platform";
 
@@ -158,6 +158,7 @@ import {
     fontUnderlined,
     makeFont,
     paintFontCanvas,
+    readString,
     showFont,
     withString,
 } from "./fontpanel.kwxts";
@@ -274,16 +275,14 @@ function defaultBorderFractional(frame: wxFrame): number
 
 function bestSize(window: wxWindow): { width: number; height: number }
 {
-    const ptr = window.GetBestSize();
-    if (!ptr)
+    // GetBestSize() already returns a borrowed wxSize wrapper.
+    const size = window.GetBestSize();
+    if (!size)
     {
         return { width: 0, height: 0 };
     }
 
-    const size = new wxSize(ptr);
-    const result = { width: size.GetWidth(), height: size.GetHeight() };
-    size.Delete();
-    return result;
+    return { width: size.GetWidth(), height: size.GetHeight() };
 }
 
 /** wxString overload of wxGetTextFromUser(...) returning "" on cancel. */
@@ -586,8 +585,11 @@ function addPrivateFont(): boolean
     if (platform === "darwin")
     {
         // __WXOSX__: wxStandardPaths::Get().GetResourcesDir() + "/Fonts/";
-        const singleton = new wxStandardPaths(lib.symbols.wxStandardPaths_Get());
-        path = readAndDeleteWxString(singleton.GetResourcesDir()) +
+        const singleton = new wxStandardPaths(
+            lib.symbols.wxStandardPaths_Get(),
+            true,
+        );
+        path = readString(singleton.GetResourcesDir()) +
             "/Fonts/wxprivate.ttf";
     }
     else
@@ -929,23 +931,28 @@ function createFontFrame(): FontState | null
         return null;
     }
 
-    // SetIcon(wxICON(sample)) — the XPM is loaded at run time instead of being
-    // compiled in as a resource.
-    const iconPath = createWxString(samplePath("sample.xpm"));
-    const icon = createWxIconLoad(
-        iconPath.ptr,
-        BigInt(BITMAP_TYPE_XPM),
-        -1,
-        -1,
-    );
+    // SetIcon(wxICON(sample)) — the 32x32 XPM artwork is converted to SVG and
+    // loaded at run time.
+    const iconPath = createWxString(samplePath("sample.svg"));
+    const bundlePtr = wxBitmapBundle_FromSVGFile(iconPath.ptr, 32, 32);
     iconPath.Delete();
-    if (icon)
+    if (bundlePtr)
     {
-        if (icon.IsOk())
+        const bundle = wrapWxBitmapBundle(bundlePtr);
+        const bitmap = bundle.GetBitmap(32, 32);
+        if (bitmap)
         {
-            frame.SetIcon(icon.ptr);
+            const icon = createWxIconDefault();
+            if (icon)
+            {
+                icon.CopyFromBitmap(bitmap.ptr);
+                if (icon.IsOk())
+                {
+                    frame.SetIcon(icon.ptr);
+                }
+                icon.Delete();
+            }
         }
-        icon.Delete();
     }
 
     const menuBar = buildMenuBar(frame);
@@ -1020,7 +1027,7 @@ function createFontFrame(): FontState | null
     splitter.SetSashPosition(bestSize(fontWindowParts.fontWindow).height, true);
 
     // Initial font state: FontCanvas defaults to *wxNORMAL_FONT / *wxRED.
-    const normalFont = new wxFont(NORMAL_FONT);
+    const normalFont = new wxFont(NORMAL_FONT, true);
     const font = cloneFont(normalFont);
     if (!font)
     {
@@ -1028,7 +1035,7 @@ function createFontFrame(): FontState | null
         return null;
     }
 
-    const red = new wxColour(RED);
+    const red = new wxColour(RED, true);
     const canvasFont = cloneFont(font);
     const canvasColour = cloneColour(red);
     if (!canvasFont || !canvasColour)
@@ -1128,15 +1135,14 @@ function doChangeFont(
 /** MyFrame::DoChangeFont(m_fontWindow->GetTextFont().GetBaseFont()) */
 function applyBaseFont(state: FontState): void
 {
-    const basePtr = state.font.GetBaseFont();
-    if (!basePtr)
+    // GetBaseFont() returns a borrowed wxFont wrapper; DoChangeFont() copies it.
+    const base = state.font.GetBaseFont();
+    if (!base)
     {
         return;
     }
 
-    const base = new wxFont(basePtr);
     doChangeFont(state, base, null);
-    base.Delete();
 }
 
 /** MyFrame::DoResizeFont(int diff) */
@@ -1208,7 +1214,7 @@ function changeStrikethrough(state: FontState, strikethrough: boolean): void
 /** MyFrame::OnwxPointerFont() — apply one of the stock wxFont objects. */
 function applyStockFont(state: FontState, stock: Pointer): void
 {
-    const borrowed = new wxFont(stock);
+    const borrowed = new wxFont(stock, true);
     const font = cloneFont(borrowed);
     if (!font)
     {
@@ -1263,7 +1269,7 @@ function applySystemFont(state: FontState, index: number): void
 /** MyFrame::OnSetNativeDesc() */
 function setNativeDesc(state: FontState): void
 {
-    const current = readAndDeleteWxString(state.font.GetNativeFontInfoDesc());
+    const current = readString(state.font.GetNativeFontInfoDesc());
     const input = getTextFromUser(
         "Enter native font string",
         "Input font description",
@@ -1296,7 +1302,7 @@ function setNativeDesc(state: FontState): void
 /** MyFrame::OnSetNativeUserDesc() */
 function setNativeUserDesc(state: FontState): void
 {
-    const current = readAndDeleteWxString(state.font.GetNativeFontInfoUserDesc());
+    const current = readString(state.font.GetNativeFontInfoUserDesc());
     const input = getTextFromUser(
         "Here you can edit current font description",
         "Input font description",
@@ -1337,7 +1343,7 @@ function setNativeUserDesc(state: FontState): void
 /** MyFrame::OnSetFaceName() */
 function setFaceName(state: FontState): void
 {
-    const current = readAndDeleteWxString(state.font.GetFaceName());
+    const current = readString(state.font.GetFaceName());
     const input = getTextFromUser(
         "Here you can edit current font face name.",
         "Input font facename",
@@ -1477,10 +1483,10 @@ function selectFont(state: FontState): void
 /** MyFrame::OnTestTextValue() */
 function testTextValue(state: FontState): void
 {
-    const value = readAndDeleteWxString(state.textCtrl.GetValue());
+    const value = readString(state.textCtrl.GetValue());
     withString(value, (ptr) => state.textCtrl.SetValue(ptr));
 
-    const after = readAndDeleteWxString(state.textCtrl.GetValue());
+    const after = readString(state.textCtrl.GetValue());
     if (after !== value)
     {
         logError("Text value changed after getting and setting it");
@@ -1525,9 +1531,9 @@ function viewMessage(state: FontState): void
     }
 
     // save for the next time
-    viewDir = readAndDeleteWxString(dialog.GetDirectory());
-    viewFile = readAndDeleteWxString(dialog.GetFilename());
-    const filename = readAndDeleteWxString(dialog.GetPath());
+    viewDir = readString(dialog.GetDirectory());
+    viewFile = readString(dialog.GetFilename());
+    const filename = readString(dialog.GetPath());
     dialog.Destroy();
 
     // load it and search for Content-Type header
@@ -1548,7 +1554,7 @@ function viewMessage(state: FontState): void
     const count = textFile.GetLineCount();
     for (let n = 0; n < count; n++)
     {
-        const line = readAndDeleteWxString(textFile.GetLine(n));
+        const line = readString(textFile.GetLine(n));
 
         if (line.length === 0)
         {
@@ -1628,10 +1634,14 @@ function viewMessage(state: FontState): void
             {
                 logWarning(
                     `Cannot convert from '${
-                        readAndDeleteWxString(mapper.GetEncodingDescription(fontenc))
+                        readAndDeleteWxString(
+                            wxFontMapper_GetEncodingDescription(fontenc),
+                        )
                     }' to '${
                         readAndDeleteWxString(
-                            mapper.GetEncodingDescription(altEncoding[0]),
+                            wxFontMapper_GetEncodingDescription(
+                                altEncoding[0],
+                            ),
                         )
                     }'.`,
                 );
@@ -1643,7 +1653,9 @@ function viewMessage(state: FontState): void
         {
             logWarning(
                 `No fonts for encoding '${
-                    readAndDeleteWxString(mapper.GetEncodingDescription(fontenc))
+                    readAndDeleteWxString(
+                        wxFontMapper_GetEncodingDescription(fontenc),
+                    )
                 }' on this system.`,
             );
         }
@@ -1652,8 +1664,8 @@ function viewMessage(state: FontState): void
     // The C++ code first calls DoEnumerateFamilies(false, fontenc, true).
     // wxFontEnumerator is unavailable (see the file header), so use the same
     // fallback it uses when no facename is found:
-    //   wxFont(wxFontInfo(wxNORMAL_FONT->GetPointSize()).Encoding(fontenc))
-    const normalPointSize = new wxFont(NORMAL_FONT).GetPointSize();
+    //   wxFont(wxQ(wxNORMAL_FONT->GetPointSize()).Encoding(fontenc))
+    const normalPointSize = new wxFont(NORMAL_FONT, true).GetPointSize();
     const font = withString("", (facePtr) =>
         createWxFont(
             normalPointSize,
@@ -1673,7 +1685,9 @@ function viewMessage(state: FontState): void
     {
         logWarning(
             `No fonts for encoding '${
-                readAndDeleteWxString(mapper.GetEncodingDescription(fontenc))
+                readAndDeleteWxString(
+                    wxFontMapper_GetEncodingDescription(fontenc),
+                )
             }' on this system.`,
         );
     }
@@ -1806,7 +1820,7 @@ function handleMenu(state: FontState, id: number, checked: boolean): void
 
 function connectEvent(
     state: FontState,
-    handler: Pointer,
+    target: wxWindow,
     id: number,
     lastId: number,
     eventType: number,
@@ -1820,13 +1834,7 @@ function connectEvent(
     }
 
     state.closures.push(closure);
-    lib.symbols.wxEvtHandler_Connect(
-        handler,
-        id,
-        lastId,
-        eventType,
-        closure.ptr,
-    );
+    target.Bind(id, lastId, eventType, closure.ptr);
 }
 
 function connectEvents(state: FontState): void
@@ -1870,7 +1878,7 @@ function connectEvents(state: FontState): void
 
     for (const id of menuIds)
     {
-        connectEvent(state, state.frame.ptr, id, id, EVT_MENU, menuCallback);
+        connectEvent(state, state.frame, id, id, EVT_MENU, menuCallback);
     }
 
     // m_fontWindow->Bind(wxEVT_BUTTON, &MyFrame::OnFontPanelApply, this);
@@ -1894,7 +1902,7 @@ function connectEvents(state: FontState): void
     state.callbacks.push(applyCallback);
     connectEvent(
         state,
-        state.fontWindow.ptr,
+        state.fontWindow,
         ID_APPLY,
         ID_APPLY,
         EVT_BUTTON,
@@ -1918,7 +1926,7 @@ function connectEvents(state: FontState): void
     state.callbacks.push(faceNameCallback);
     connectEvent(
         state,
-        state.panel.faceName.ptr,
+        state.panel.faceName,
         ID_ANY,
         ID_ANY,
         EVT_TEXT,
@@ -1942,7 +1950,7 @@ function connectEvents(state: FontState): void
     state.callbacks.push(familyCallback);
     connectEvent(
         state,
-        state.panel.choiceFamily.ptr,
+        state.panel.choiceFamily,
         ID_ANY,
         ID_ANY,
         EVT_CHOICE,
@@ -1966,7 +1974,7 @@ function connectEvents(state: FontState): void
     state.callbacks.push(weightChoiceCallback);
     connectEvent(
         state,
-        state.panel.choiceWeight.ptr,
+        state.panel.choiceWeight,
         ID_ANY,
         ID_ANY,
         EVT_CHOICE,
@@ -1990,7 +1998,7 @@ function connectEvents(state: FontState): void
     state.callbacks.push(weightSpinCallback);
     connectEvent(
         state,
-        state.panel.spinWeight.ptr,
+        state.panel.spinWeight,
         ID_ANY,
         ID_ANY,
         EVT_SPINCTRL,
@@ -2018,7 +2026,7 @@ function connectEvents(state: FontState): void
     state.callbacks.push(paintCallback);
     connectEvent(
         state,
-        state.canvas.ptr,
+        state.canvas,
         ID_ANY,
         ID_ANY,
         EVT_PAINT,
@@ -2041,7 +2049,7 @@ function connectEvents(state: FontState): void
     state.callbacks.push(closeCallback);
     connectEvent(
         state,
-        state.frame.ptr,
+        state.frame,
         ID_ANY,
         ID_ANY,
         EVT_CLOSE_WINDOW,
@@ -2063,8 +2071,7 @@ export function main(): number
 
     setAppName(SAMPLE_TITLE);
 
-    // The frame icon and the private font are loaded from files.
-    initAllImageHandlers();
+    // The frame icon is loaded from a file.
 
     const state = createFontFrame();
     if (!state)

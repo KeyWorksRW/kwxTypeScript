@@ -1,0 +1,126 @@
+// native.kwxts — page shell for wxSamples/src/widgets/native.cpp
+//
+// BLOCKING GAP: native.cpp is built around wxNativeWindow (wx/nativewin.h),
+// which this binding does not export — there is no wxNativeWindow_gen.ts and
+// no Create() accepting an HWND/GtkWidget/NSView pointer.  Raw platform calls
+// are therefore impossible here and must not be faked.
+//
+// What is implemented is everything that does not need the native window:
+//  * the wxNativeWindow page itself (this wxScrolledWindow),
+//  * the "&Expand to all available size" checkbox and its EVT_CHECKBOX
+//    handler, including the sizer re-layout it triggers,
+//  * the center/expand placement logic of RecreateWidget(), applied to a
+//    static text that states the integration is unavailable.
+//
+// GetWidget() returns null, exactly like a C++ page whose native window could
+// not be created (wxHAS_NATIVE_WINDOW builds report creation failures the same
+// way), so the attribute controls have no widget to act on for this page.
+
+import {
+    ALIGN_CENTRE,
+    ALL,
+    createWxBoxSizer,
+    createWxCheckBox,
+    createWxStaticText,
+    EVT_CHECKBOX,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    VERTICAL,
+    wxCheckBox,
+    wxSizer,
+    wxWindow,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import {
+    addSizer,
+    addStretchSpacer,
+    addWin,
+    bindEvent,
+    border,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+export class NativePage extends WidgetsPage
+{
+    private chkExpand: wxCheckBox | null = null;
+    private sizerCtrl: wxSizer | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/native");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        // wxNativeWindow is not bound, so there is no widget to hand out.
+        return null;
+    }
+
+    override createContent(): void
+    {
+        const sizerTop = createWxBoxSizer(HORIZONTAL)!;
+
+        const sizerLeft = createWxBoxSizer(VERTICAL)!;
+        const chkExpand = withString("&Expand to all available size", (ptr) =>
+            createWxCheckBox(this.page.ptr, ID_ANY, ptr,
+                -1, -1, -1, -1, 0))!;
+        this.chkExpand = chkExpand;
+
+        bindEvent(chkExpand, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateWidget();
+        });
+
+        addWin(sizerLeft, chkExpand, 0, ALL, border());
+        addSizer(sizerTop, sizerLeft, 0, 0, 0);
+
+        const sizerCtrl = createWxBoxSizer(HORIZONTAL)!;
+        this.sizerCtrl = sizerCtrl;
+
+        this.recreateWidget();
+
+        addSizer(sizerTop, sizerCtrl, 1, EXPAND, 0);
+        this.page.SetSizer(sizerTop.ptr, false);
+    }
+
+    override recreateWidget(): void
+    {
+        const sizerCtrl = this.sizerCtrl;
+        if (!sizerCtrl)
+        {
+            return;
+        }
+
+        sizerCtrl.Clear(true /* delete windows */);
+
+        // Stands in for the platform split/menu button created in the C++
+        // sample through wxNativeWindow.
+        const note = withString(
+            "wxNativeWindow is not available in this binding: the native "
+            + "split button shown by the C++ sample cannot be created here.",
+            (ptr) => createWxStaticText(this.page.ptr, ID_ANY, ptr,
+                -1, -1, -1, -1, 0))!;
+
+        if (this.chkExpand && this.chkExpand.GetValue())
+        {
+            addWin(sizerCtrl, note, 1, EXPAND, border());
+        }
+        else
+        {
+            addStretchSpacer(sizerCtrl);
+            addWin(sizerCtrl, note, 0, ALIGN_CENTRE, 0);
+            addStretchSpacer(sizerCtrl);
+        }
+
+        sizerCtrl.Layout();
+    }
+}
+
+export function createNativePage(parent: Pointer): WidgetsPage
+{
+    return new NativePage(parent);
+}

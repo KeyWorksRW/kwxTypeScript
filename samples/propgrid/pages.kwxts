@@ -1,0 +1,1104 @@
+// pages.kwxts — property page population for the wxPropertyGrid sample port.
+//
+// The three pages mirror FormMain::PopulateWithStandardItems,
+// PopulateWithLibraryConfig, PopulateWithExamples and AddTestProperties.
+//
+// Every property is created with a public createWx* factory and appended with
+// wxPropertyGridPage::Append.  Nested value properties are assembled with
+// wxPGProperty::AppendChild / wxPropertyGridInterface::AppendIn before insertion.
+// The wxPropertyGridInterface mixin supplies the cell, image, colour, editor and
+// read-only operations on the grid, manager and page objects.
+
+import {
+    ALWAYS_SHOW_SB,
+    ART_FOLDER,
+    ART_OTHER,
+    ART_REMOVABLE,
+    ART_REPORT_VIEW,
+    BLACK,
+    BLACK_PEN,
+    BLUE,
+    BORDER_DOUBLE,
+    BORDER_NONE,
+    BORDER_RAISED,
+    BORDER_SIMPLE,
+    BORDER_SUNKEN,
+    CAPTION,
+    CLIP_CHILDREN,
+    CLOSE_BOX,
+    createWxArrayStringProperty,
+    createWxBitmapEmpty,
+    createWxBitmapVector,
+    createWxBoolProperty,
+    createWxColourProperty,
+    createWxColourRGB,
+    createWxDateProperty,
+    createWxDateTime,
+    createWxDirProperty,
+    createWxEditEnumProperty,
+    createWxEnumProperty,
+    createWxFileProperty,
+    createWxFlagsProperty,
+    createWxFloatProperty,
+    createWxFontDefault,
+    createWxFontProperty,
+    createWxImageFileProperty,
+    createWxIntProperty,
+    createWxLongStringProperty,
+    createWxMemoryDCWithBitmap,
+    createWxMultiChoiceProperty,
+    createWxPenFromColour,
+    createWxPropertyCategory,
+    createWxStringProperty,
+    createWxUIntProperty,
+    DP_ALLOWNONE,
+    DP_DROPDOWN,
+    DP_SHOWCENTURY,
+    FONTSTYLE_ITALIC,
+    FRAME_FLOAT_ON_PARENT,
+    FRAME_NO_TASKBAR,
+    FRAME_SHAPED,
+    FRAME_TOOL_WINDOW,
+    FULL_REPAINT_ON_RESIZE,
+    GREEN,
+    ICONIZE,
+    MAXIMIZE,
+    PENSTYLE_SOLID,
+    PG_LABEL,
+    PG_SPLITTER_AUTO_CENTER,
+    RED,
+    RESIZE_BORDER,
+    STAY_ON_TOP,
+    SYSTEM_MENU,
+    TAB_TRAVERSAL,
+    VERSION_NUM_DOT_STRING,
+    VSCROLL,
+    WANTS_CHARS,
+    WHITE,
+    WHITE_BRUSH,
+    wxArtProvider_GetBitmapBundle,
+    wxBitmapBundle_FromBitmaps,
+    wxGetOsDescription,
+    wxGetUserHome,
+    wxGetUserId,
+    wxGetUserName,
+    wxPGProperty,
+    wxPropertyGrid,
+    wxPropertyGridManager,
+    wxPropertyGridPage,
+    wxColour,
+    wxBitmap,
+    wxBitmapBundle,
+    wxMemoryDC,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import {
+    attrArrayString,
+    attrBool,
+    attrDouble,
+    attrLong,
+    attrString,
+    charPtrArray,
+    intArray,
+    PG_BASE_HEX,
+    PG_DONT_RECURSE,
+    PG_PREFIX_NONE,
+    PG_RECURSE,
+    setValueLong,
+    setValueString,
+    takeText,
+    variantArrayString,
+    variantBool,
+    variantString,
+    walkAll,
+    withString,
+    withStrings,
+} from "./support.kwxts";
+
+//-----------------------------------------------------------------------------
+// Property factories
+//-----------------------------------------------------------------------------
+
+function append(page: wxPropertyGridPage, prop: wxPGProperty | null): wxPGProperty | null
+{
+    if (!prop) return null;
+    return page.Append(prop.ptr);
+}
+
+function makeCategory(label: string): wxPGProperty | null
+{
+    return withString(label, (text) => createWxPropertyCategory(text));
+}
+
+function makeString(label: string, value: string): wxPGProperty | null
+{
+    return withStrings([label, value], (ptrs) =>
+        createWxStringProperty(ptrs[0], PG_LABEL, ptrs[1]));
+}
+
+function makeStringNamed(label: string, name: string, value: string): wxPGProperty | null
+{
+    return withStrings([label, name, value], (ptrs) =>
+        createWxStringProperty(ptrs[0], ptrs[1], ptrs[2]));
+}
+
+function makeStringValueOnly(label: string, value: Pointer): wxPGProperty | null
+{
+    return withString(label, (text) => createWxStringProperty(text, PG_LABEL, value));
+}
+
+function makeInt(label: string, value: number): wxPGProperty | null
+{
+    return withString(label, (text) => createWxIntProperty(text, PG_LABEL, value));
+}
+
+function makeBool(label: string, value: boolean): wxPGProperty | null
+{
+    return withString(label, (text) => createWxBoolProperty(text, PG_LABEL, value));
+}
+
+function makeFloat(label: string, value: number): wxPGProperty | null
+{
+    return withString(label, (text) => createWxFloatProperty(text, PG_LABEL, value));
+}
+
+function makeUInt(label: string, value: bigint): wxPGProperty | null
+{
+    return withString(label, (text) => createWxUIntProperty(text, PG_LABEL, value));
+}
+
+function makeLongString(label: string, value: string): wxPGProperty | null
+{
+    return withStrings([label, value], (ptrs) =>
+        createWxLongStringProperty(ptrs[0], PG_LABEL, ptrs[1]));
+}
+
+function makeArrayString(label: string, value: string[]): wxPGProperty | null
+{
+    const array = charPtrArray(value);
+    return withString(label, (text) =>
+        createWxArrayStringProperty(text, PG_LABEL, value.length, array.ptr));
+}
+
+function makeFile(label: string, value: string): wxPGProperty | null
+{
+    return withStrings([label, value], (ptrs) =>
+        createWxFileProperty(ptrs[0], PG_LABEL, ptrs[1]));
+}
+
+function makeDir(label: string, value: string): wxPGProperty | null
+{
+    return withStrings([label, value], (ptrs) =>
+        createWxDirProperty(ptrs[0], PG_LABEL, ptrs[1]));
+}
+
+function makeImageFile(label: string): wxPGProperty | null
+{
+    return withStrings([label, ""], (ptrs) =>
+        createWxImageFileProperty(ptrs[0], PG_LABEL, ptrs[1]));
+}
+
+function makeColour(label: string, colour: Pointer): wxPGProperty | null
+{
+    let owned: wxColour | null = null;
+    let value = colour;
+    if (!value)
+    {
+        owned = createWxColourRGB(255, 255, 255, 255);
+        value = owned ? owned.ptr : null;
+    }
+    if (!value)
+    {
+        if (owned) owned.Delete();
+        return null;
+    }
+    try
+    {
+        return withString(label, (text) => createWxColourProperty(text, PG_LABEL, value));
+    }
+    finally
+    {
+        if (owned) owned.Delete();
+    }
+}
+
+function makeFont(label: string): wxPGProperty | null
+{
+    const font = createWxFontDefault();
+    if (!font) return null;
+    try
+    {
+        return withString(label, (text) => createWxFontProperty(text, PG_LABEL, font.ptr));
+    }
+    finally
+    {
+        font.Delete();
+    }
+}
+
+function makeDate(label: string): wxPGProperty | null
+{
+    const date = createWxDateTime();
+    if (!date) return null;
+    try
+    {
+        date.Now();
+        return withString(label, (text) => createWxDateProperty(text, PG_LABEL, date.ptr));
+    }
+    finally
+    {
+        date.Delete();
+    }
+}
+
+function makeEnum(
+    label: string, labels: string[], values: number[], value: number,
+    name: string | null = null,
+): wxPGProperty | null
+{
+    const labelArray = charPtrArray(labels);
+    const valueArray = intArray(values);
+    if (name !== null)
+    {
+        return withStrings([label, name], (ptrs) =>
+            createWxEnumProperty(ptrs[0], ptrs[1], labels.length, labelArray.ptr,
+                values.length, valueArray.ptr, value));
+    }
+    return withString(label, (text) =>
+        createWxEnumProperty(text, PG_LABEL, labels.length, labelArray.ptr,
+            values.length, valueArray.ptr, value));
+}
+
+function makeFlags(
+    label: string, labels: string[], values: number[], value: number,
+): wxPGProperty | null
+{
+    const labelArray = charPtrArray(labels);
+    const valueArray = intArray(values);
+    return withString(label, (text) =>
+        createWxFlagsProperty(text, PG_LABEL, labels.length, labelArray.ptr,
+            values.length, valueArray.ptr, value));
+}
+
+function makeEditEnum(
+    label: string, labels: string[], values: number[], value: string,
+): wxPGProperty | null
+{
+    const labelArray = charPtrArray(labels);
+    const valueArray = intArray(values);
+    return withStrings([label, value], (ptrs) =>
+        createWxEditEnumProperty(ptrs[0], PG_LABEL, labels.length, labelArray.ptr,
+            values.length, valueArray.ptr, ptrs[1]));
+}
+
+function makeMultiChoice(label: string, choices: string[]): wxPGProperty | null
+{
+    const array = charPtrArray(choices);
+    return withString(label, (text) =>
+        createWxMultiChoiceProperty(text, PG_LABEL, choices.length, array.ptr));
+}
+
+function setHelp(page: wxPropertyGridPage, prop: wxPGProperty | null, text: string): void
+{
+    if (!prop) return;
+    withString(text, (ptr) => page.SetPropertyHelpString(prop.ptr, ptr));
+}
+
+// wxPropertyGridInterface binds DisableProperty against wxPGProperty*, not a
+// property name, so the caller passes the property it just appended.
+function disable(page: wxPropertyGridPage, prop: wxPGProperty | null): void
+{
+    if (!prop) return;
+    page.DisableProperty(prop.ptr);
+}
+
+function userHome(): string
+{
+    return withString("", (ptr) => takeText(wxGetUserHome(ptr)));
+}
+
+//-----------------------------------------------------------------------------
+// Standard Items page
+//-----------------------------------------------------------------------------
+
+const FS_WINDOWSTYLE_LABELS = [
+    "wxSIMPLE_BORDER",
+    "wxDOUBLE_BORDER",
+    "wxSUNKEN_BORDER",
+    "wxRAISED_BORDER",
+    "wxNO_BORDER",
+    "wxTAB_TRAVERSAL",
+    "wxWANTS_CHARS",
+    "wxVSCROLL",
+    "wxALWAYS_SHOW_SB",
+    "wxCLIP_CHILDREN",
+    "wxFULL_REPAINT_ON_RESIZE",
+];
+
+const FS_WINDOWSTYLE_VALUES = [
+    BORDER_SIMPLE,
+    BORDER_DOUBLE,
+    BORDER_SUNKEN,
+    BORDER_RAISED,
+    BORDER_NONE,
+    TAB_TRAVERSAL,
+    WANTS_CHARS,
+    VSCROLL,
+    ALWAYS_SHOW_SB,
+    CLIP_CHILDREN,
+    FULL_REPAINT_ON_RESIZE,
+];
+
+const FS_FRAMESTYLE_LABELS = [
+    "wxCAPTION",
+    "wxMINIMIZE",
+    "wxMAXIMIZE",
+    "wxCLOSE_BOX",
+    "wxSTAY_ON_TOP",
+    "wxSYSTEM_MENU",
+    "wxRESIZE_BORDER",
+    "wxFRAME_TOOL_WINDOW",
+    "wxFRAME_NO_TASKBAR",
+    "wxFRAME_FLOAT_ON_PARENT",
+    "wxFRAME_SHAPED",
+];
+
+const FS_FRAMESTYLE_VALUES = [
+    CAPTION,
+    ICONIZE,
+    MAXIMIZE,
+    CLOSE_BOX,
+    STAY_ON_TOP,
+    SYSTEM_MENU,
+    RESIZE_BORDER,
+    FRAME_TOOL_WINDOW,
+    FRAME_NO_TASKBAR,
+    FRAME_FLOAT_ON_PARENT,
+    FRAME_SHAPED,
+];
+
+export function populateStandardItems(
+    page: wxPropertyGridPage, grid: wxPropertyGrid, title: string, frameStyle: number,
+): void
+{
+    append(page, makeCategory("Appearance"));
+
+    append(page, makeString("Label", title));
+    const fontProp = append(page, makeFont("Font"));
+    setHelp(page, fontProp, "Editing this will change font used in the property grid.");
+
+    append(page, makeColour("Margin Colour", grid.GetMarginColour()?.ptr ?? null));
+    append(page, makeColour("Cell Colour", grid.GetCellBackgroundColour()?.ptr ?? null));
+    append(page, makeColour("Cell Text Colour", grid.GetCellTextColour()?.ptr ?? null));
+    append(page, makeColour("Line Colour", grid.GetLineColour()?.ptr ?? null));
+
+    append(page, makeFlags(
+        "Window Styles",
+        FS_WINDOWSTYLE_LABELS.concat(FS_FRAMESTYLE_LABELS),
+        FS_WINDOWSTYLE_VALUES.concat(FS_FRAMESTYLE_VALUES),
+        frameStyle));
+
+    // wxCursorProperty is not bound; the Cursor item is omitted.
+
+    const positionCategory = append(page, makeCategory("Position"));
+    if (positionCategory)
+    {
+        withString("PositionCategory", (ptr) => positionCategory.SetName(ptr));
+        withString(
+            "Change in items in this category will cause respective changes in frame.",
+            (ptr) => positionCategory.SetHelpString(ptr));
+    }
+
+    const height = append(page, makeInt("Height", 480));
+    attrLong(height, "Min", 10);
+    attrLong(height, "Max", 2048);
+    attrString(height, "Units", "Pixels");
+    if (height) page.SetPropertyValueUnspecified(height.ptr);
+    attrString(height, "Hint", "Enter new height for window");
+    setHelp(page, height, "This property uses attributes \"Units\" and \"Hint\".");
+
+    const width = append(page, makeInt("Width", 640));
+    attrLong(width, "Min", 10);
+    attrLong(width, "Max", 2048);
+    attrString(width, "Units", "Pixels");
+    if (width) page.SetPropertyValueUnspecified(width.ptr);
+    attrString(width, "Hint", "Enter new width for window");
+    setHelp(page, width, "This property uses attributes \"Units\" and \"Hint\".");
+
+    const x = append(page, makeInt("X", 10));
+    attrString(x, "Units", "Pixels");
+    setHelp(page, x, "This property uses \"Units\" attribute.");
+
+    const y = append(page, makeInt("Y", 10));
+    attrString(y, "Units", "Pixels");
+    setHelp(page, y, "This property uses \"Units\" attribute.");
+
+    const disabledHelp = "This property is simply disabled. In order to have label disabled as well, "
+        + "you need to set wxPG_EX_GREY_LABEL_WHEN_DISABLED using SetExtraStyle.";
+
+    append(page, makeCategory("Environment"));
+    const osProp = append(page, makeString("Operating System", takeText(wxGetOsDescription())));
+    const userId = append(page, makeString("User Id", takeText(wxGetUserId())));
+    append(page, makeDir("User Home", userHome()));
+    const userName = append(page, makeString("User Name", takeText(wxGetUserName())));
+
+    disable(page, osProp);
+    disable(page, userId);
+    disable(page, userName);
+
+    setHelp(page, osProp, disabledHelp);
+    setHelp(page, userId, disabledHelp);
+    setHelp(page, userName, disabledHelp);
+
+    append(page, makeCategory("More Examples"));
+
+    const fontData = append(page, makeFont("FontDataProperty"));
+    setHelp(page, fontData,
+        "This demonstrates wxFontDataProperty class defined in this sample app. "
+        + "It is exactly like wxFontProperty from the library, but also has colour sub-property.");
+
+    const dirs = append(page, makeArrayString("DirsProperty", []));
+    setHelp(page, dirs,
+        "This demonstrates wxDirsProperty class defined in this sample app. "
+        + "It is built with WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR macro, "
+        + "with custom action (dir dialog popup) defined.");
+
+    const arrayDouble = append(page,
+        makeArrayString("ArrayDoubleProperty", ["-1", "-0.5", "0", "0.5", "1"]));
+    setHelp(page, arrayDouble,
+        "This demonstrates wxArrayDoubleProperty class defined in this sample app. "
+        + "It is an example of a custom list editor property.");
+
+    const information = append(page, makeLongString("Information",
+        "Editing properties will have immediate effect on this window, "
+        + "and vice versa (at least in most cases, that is)."));
+    setHelp(page, information, "This property is read-only.");
+    if (information) page.SetPropertyReadOnly(information.ptr, true, PG_RECURSE);
+
+    // Fill columns 3 and 4 with test text, as the C++ sample does.
+    const root = page.GetRoot();
+    const folder = wxArtProvider_GetBitmapBundle(ART_FOLDER, ART_OTHER, -1, -1);
+    if (root && folder)
+    {
+        walkAll(root, (prop) =>
+        {
+            if (prop.IsCategory()) return;
+            withString("Cell 3", (text) =>
+                page.SetPropertyCell(prop.ptr, 3, text, folder.ptr, null, null));
+            withString("Cell 4", (text) =>
+                page.SetPropertyCell(prop.ptr, 4, text, null, WHITE, BLACK));
+        });
+        folder.Delete();
+    }
+}
+
+// Local helper: resolves a property on the page currently being populated.
+function findPropertyByName(page: wxPropertyGridPage, name: string): wxPGProperty | null
+{
+    return withString(name, (ptr) => page.GetPropertyByName(ptr));
+}
+
+//-----------------------------------------------------------------------------
+// wxWidgets Library Config page
+//-----------------------------------------------------------------------------
+
+interface LibConfItem { label: string; value: boolean; defined: boolean }
+interface LibConfGroup { group: string; items: LibConfItem[] }
+
+function onOff(label: string, value: boolean): LibConfItem
+{
+    return { label, value, defined: true };
+}
+
+function missing(label: string): LibConfItem
+{
+    return { label, value: false, defined: false };
+}
+
+// Values taken from the wxWidgets setup.h used to build kwxFFI
+// (build/_deps/wxwidgets-build/lib/*/mswu/wx/setup.h).
+const LIB_CONF: LibConfGroup[] = [
+    {
+        group: "Global Settings",
+        items: [onOff("wxUSE_GUI", true)],
+    },
+    {
+        group: "Compatibility Settings",
+        items: [
+            onOff("WXWIN_COMPATIBILITY_3_0", false),
+            onOff("WXWIN_COMPATIBILITY_3_2", true),
+            missing("wxFONT_SIZE_COMPATIBILITY"),
+            onOff("wxDIALOG_UNIT_COMPATIBILITY", false),
+        ],
+    },
+    {
+        group: "Debugging Settings",
+        items: [
+            onOff("wxUSE_DEBUGREPORT", true),
+            onOff("wxUSE_STACKWALKER", true),
+            onOff("wxUSE_ON_FATAL_EXCEPTION", true),
+        ],
+    },
+    {
+        group: "Unicode Support",
+        items: [onOff("wxUSE_UNICODE", true)],
+    },
+    {
+        group: "Global Features",
+        items: [
+            onOff("wxUSE_EXCEPTIONS", true),
+            onOff("wxUSE_EXTENDED_RTTI", false),
+            onOff("wxUSE_STD_CONTAINERS", true),
+            onOff("wxUSE_LOG", true),
+            onOff("wxUSE_LOGWINDOW", true),
+            onOff("wxUSE_LOGGUI", true),
+            onOff("wxUSE_LOG_DIALOG", true),
+            onOff("wxUSE_CMDLINE_PARSER", true),
+            onOff("wxUSE_THREADS", true),
+            onOff("wxUSE_STREAMS", true),
+            onOff("wxUSE_STD_IOSTREAM", true),
+        ],
+    },
+    {
+        group: "Non-GUI Features",
+        items: [
+            onOff("wxUSE_FILE", true),
+            onOff("wxUSE_FFILE", true),
+            onOff("wxUSE_FSVOLUME", true),
+            onOff("wxUSE_TEXTBUFFER", true),
+            onOff("wxUSE_TEXTFILE", true),
+            onOff("wxUSE_INTL", true),
+            onOff("wxUSE_DATETIME", true),
+            onOff("wxUSE_TIMER", true),
+            onOff("wxUSE_STOPWATCH", true),
+            onOff("wxUSE_CONFIG", true),
+            onOff("wxUSE_CONFIG_NATIVE", true),
+            onOff("wxUSE_DIALUP_MANAGER", true),
+            onOff("wxUSE_DYNLIB_CLASS", true),
+            onOff("wxUSE_DYNAMIC_LOADER", true),
+            onOff("wxUSE_SOCKETS", true),
+            onOff("wxUSE_FILESYSTEM", true),
+            onOff("wxUSE_FS_ZIP", true),
+            onOff("wxUSE_FS_INET", true),
+            onOff("wxUSE_ZIPSTREAM", true),
+            onOff("wxUSE_ZLIB", true),
+            onOff("wxUSE_APPLE_IEEE", true),
+            onOff("wxUSE_JOYSTICK", true),
+            onOff("wxUSE_FONTMAP", true),
+            onOff("wxUSE_MIMETYPE", true),
+            onOff("wxUSE_PROTOCOL", true),
+            onOff("wxUSE_PROTOCOL_FILE", true),
+            onOff("wxUSE_PROTOCOL_FTP", true),
+            onOff("wxUSE_PROTOCOL_HTTP", true),
+            onOff("wxUSE_URL", true),
+            onOff("wxUSE_URL_NATIVE", false),
+            onOff("wxUSE_REGEX", true),
+            onOff("wxUSE_SYSTEM_OPTIONS", true),
+            onOff("wxUSE_SOUND", true),
+            onOff("wxUSE_XRC", true),
+            onOff("wxUSE_XML", true),
+        ],
+    },
+];
+
+const ITALIC_FONT_HELP = "Font of this property's wxPGCell has "
+    + "been modified. Obtain property's cell "
+    + "with wxPGProperty::"
+    + "GetOrCreateCell(column).";
+
+export function populateLibraryConfig(
+    page: wxPropertyGridPage, grid: wxPropertyGrid, manager: wxPropertyGridManager,
+): void
+{
+    if (manager.HasFlag(PG_SPLITTER_AUTO_CENTER))
+    {
+        page.SetColumnProportion(0, 3);
+        page.SetColumnProportion(1, 1);
+    }
+
+    const folder = wxArtProvider_GetBitmapBundle(ART_REPORT_VIEW, ART_OTHER, -1, -1);
+
+    const italicFont = grid.GetCaptionFont();
+    if (italicFont) italicFont.SetStyle(FONTSTYLE_ITALIC);
+
+    const top = append(page, makeCategory("wxWidgets Library Configuration"));
+    if (top && folder)
+    {
+        page.SetPropertyCell(top.ptr, 0, PG_LABEL, folder.ptr, null, null);
+    }
+    if (top)
+    {
+        withString("Is Enabled", (ptr) =>
+            page.SetPropertyCell(top.ptr, 1, ptr, null, null, null));
+        const value = variantString("Is Enabled");
+        if (value)
+        {
+            page.SetPropertyValue(top.ptr, value.ptr);
+            value.Delete();
+        }
+    }
+
+    for (const group of LIB_CONF)
+    {
+        const category = makeCategory(group.group);
+        if (category)
+        {
+            if (top) page.AppendIn(top.ptr, category.ptr);
+            else page.Append(category.ptr);
+
+            if (folder)
+            {
+                page.SetPropertyCell(category.ptr, 0, PG_LABEL, folder.ptr, null, null);
+            }
+            const cell = category.GetCell(0);
+            if (cell && italicFont) cell.SetFont(italicFont.ptr);
+            withString(ITALIC_FONT_HELP, (ptr) => category.SetHelpString(ptr));
+        }
+
+        for (const item of group.items)
+        {
+            const boolProp = append(page, makeBool(item.label, item.value));
+            if (!item.defined) disable(page, boolProp);
+        }
+    }
+
+    if (top)
+    {
+        withString("UseCheckbox", (key) =>
+        {
+            const value = variantBool(true);
+            if (!value) return;
+            page.SetPropertyAttribute(top.ptr, key, value.ptr, PG_RECURSE);
+            value.Delete();
+        });
+    }
+
+    if (folder) folder.Delete();
+}
+
+//-----------------------------------------------------------------------------
+// Examples page
+//-----------------------------------------------------------------------------
+
+const ENUM_LABELS = ["One Item", "Another Item", "One More", "This Is Last"];
+const ENUM_VALUES = [40, 80, 120, 160];
+
+const SOC_LABELS = ENUM_LABELS.concat([
+    "Look, it continues", "Even More", "And More", "", "True End of the List",
+]);
+const SOC_VALUES = ENUM_VALUES.concat([200, 240, 280, 300, 320]);
+
+function makeVectorProperty(label: string): wxPGProperty | null
+{
+    const prop = makeString(label, "<composed>");
+    if (!prop) return null;
+    for (const axis of ["X", "Y", "Z"])
+    {
+        const child = makeFloat(axis, 0.0);
+        if (child) prop.AppendChild(child.ptr);
+    }
+    return prop;
+}
+
+function makeTriangleProperty(label: string): wxPGProperty | null
+{
+    const prop = makeStringNamed(label, label, "<composed>");
+    if (!prop) return null;
+    for (const corner of ["A", "B", "C"])
+    {
+        const child = makeVectorProperty(corner);
+        if (child) prop.AppendChild(child.ptr);
+    }
+    return prop;
+}
+
+function buildSpeeds(): wxPGProperty | null
+{
+    const speeds = makeString("Speeds", "<composed>");
+    if (!speeds) return null;
+    const maxSpeed = makeInt("Max. Speed (mph)", 290);
+    if (maxSpeed) speeds.AppendChild(maxSpeed.ptr);
+    const accel = makeFloat("0-100 mph (sec)", 3.9);
+    if (accel) speeds.AppendChild(accel.ptr);
+    const quarter = makeFloat("1/4 mile (sec)", 8.6);
+    if (quarter) speeds.AppendChild(quarter.ptr);
+    return speeds;
+}
+
+function buildCar(): wxPGProperty | null
+{
+    const car = makeString("Car", "<composed>");
+    if (!car) return null;
+
+    const model = makeString("Model", "Lamborghini Diablo SV");
+    if (model) car.AppendChild(model.ptr);
+
+    const engine = makeInt("Engine Size (cc)", 5707);
+    if (engine) car.AppendChild(engine.ptr);
+
+    const speeds = buildSpeeds();
+    if (speeds) car.AppendChild(speeds.ptr);
+
+    const price = makeInt("Price ($)", 300000);
+    if (price) car.AppendChild(price.ptr);
+
+    const convertible = makeBool("Convertible", false);
+    if (convertible) car.AppendChild(convertible.ptr);
+
+    return car;
+}
+
+// The C++ sample draws two bitmaps (60x15 and 120x30) and combines them into a
+// wxBitmapBundle::FromBitmaps() bundle for "StringPropertyWithBitmap".
+function makeTestBitmapBundle(): wxBitmapBundle | null
+{
+    const bitmap1 = createWxBitmapEmpty(60, 15, 32);
+    const bitmap2 = createWxBitmapEmpty(120, 30, 32);
+    if (!bitmap1 || !bitmap2)
+    {
+        bitmap1?.Delete();
+        bitmap2?.Delete();
+        return null;
+    }
+
+    const dc1 = createWxMemoryDCWithBitmap(bitmap1.ptr);
+    if (dc1)
+    {
+        dc1.SetBackground(WHITE_BRUSH);
+        dc1.Clear();
+        dc1.SetPen(BLACK_PEN);
+        dc1.SetBrush(WHITE_BRUSH);
+        dc1.DrawRectangle(0, 0, 60, 15);
+        dc1.DrawLine(0, 0, 59, 14);
+        dc1.SetTextForeground(BLACK);
+        withString("x1", (ptr) => dc1.DrawText(ptr, 0, 0));
+        dc1.Delete();
+    }
+
+    const dc2 = createWxMemoryDCWithBitmap(bitmap2.ptr);
+    if (dc2)
+    {
+        dc2.SetBackground(WHITE_BRUSH);
+        dc2.Clear();
+        const pen = createWxPenFromColour(BLUE, 2, PENSTYLE_SOLID);
+        if (pen) dc2.SetPen(pen.ptr);
+        dc2.SetBrush(WHITE_BRUSH);
+        dc2.DrawRectangle(0, 0, 120, 30);
+        dc2.DrawLine(0, 0, 119, 31);
+        dc2.SetTextForeground(BLUE);
+        const font = createWxFontDefault();
+        if (font)
+        {
+            dc2.GetFont(font.ptr);
+            font.SetPointSize(2 * font.GetPointSize());
+            dc2.SetFont(font.ptr);
+            font.Delete();
+        }
+        withString("x2", (ptr) => dc2.DrawText(ptr, 0, 0));
+        if (pen) pen.Delete();
+        dc2.Delete();
+    }
+    bitmap2.SetScaleFactor(2);
+
+    const vector = createWxBitmapVector();
+    if (!vector)
+    {
+        bitmap1.Delete();
+        bitmap2.Delete();
+        return null;
+    }
+    vector.Add(bitmap1.ptr);
+    vector.Add(bitmap2.ptr);
+    const raw = wxBitmapBundle_FromBitmaps(vector.ptr);
+    vector.Delete();
+    bitmap1.Delete();
+    bitmap2.Delete();
+    return raw ? new wxBitmapBundle(raw) : null;
+}
+
+export function populateExamples(
+    page: wxPropertyGridPage, multiButtonEditor: Pointer | null,
+): void
+{
+    // IntProperty was appended by populateGrid() before this function runs.
+
+    const spin = append(page, makeInt("SpinCtrl", 0));
+    attrLong(spin, "Min", -2);
+    attrLong(spin, "Max", 16384);
+    attrLong(spin, "Step", 2);
+    attrBool(spin, "MotionSpin", true);
+    if (spin)
+    {
+        withString("SpinCtrl", (ptr) => page.SetPropertyEditorByName(spin.ptr, ptr));
+    }
+    setHelp(page, spin,
+        "This is regular wxIntProperty, which editor has been "
+        + "changed to wxPGEditor_SpinCtrl. Note however that "
+        + "static wxPropertyGrid::RegisterAdditionalEditors() "
+        + "needs to be called prior to using it.");
+
+    append(page, makeBool("BoolProperty", false));
+
+    const boolCheckBox = append(page, makeBool("BoolProperty with CheckBox", false));
+    attrBool(boolCheckBox, "UseCheckbox", true);
+    setHelp(page, boolCheckBox,
+        "Property attribute wxPG_BOOL_USE_CHECKBOX has been set to true.");
+
+    const floatProp = append(page, makeFloat("FloatProperty", 1234500.23));
+    attrDouble(floatProp, "Min", -100.12);
+
+    const longString = append(page, makeLongString("LongStringProperty",
+        "This is much longer string than the first one. Edit it by clicking the button."));
+    if (longString) withString("LongStringProp", (ptr) => longString.SetName(ptr));
+
+    append(page, makeArrayString("ArrayStringProperty",
+        ["String 1", "String 2", "String 3"]));
+
+    const fileProp = append(page, makeFile("FileProperty", ""));
+    attrString(fileProp, "Wildcard", "Text Files (*.txt)|*.txt");
+    attrString(fileProp, "DialogTitle", "Custom File Dialog Title");
+    attrBool(fileProp, "ShowFullPath", false);
+    // The sample's name is "TextFile"; set it explicitly.
+    if (fileProp) withString("TextFile", (ptr) => fileProp.SetName(ptr));
+    if (fileProp)
+    {
+        attrString(fileProp, "ShowRelativePath", "C:\\Windows");
+        setValueString(page, fileProp, "C:\\Windows\\System32\\msvcrt71.dll");
+    }
+
+    append(page, makeImageFile("ImageFile"));
+
+    const colour = append(page, makeColour("ColourProperty", RED));
+    if (colour)
+    {
+        colour.SetAutoUnspecified(true);
+        withString("ComboBox", (ptr) => page.SetPropertyEditorByName(colour.ptr, ptr));
+    }
+    setHelp(page, colour,
+        "wxPropertyGrid::SetPropertyEditor method has been used to change "
+        + "editor of this property to wxPGEditor_ComboBox)");
+
+    const alpha = createWxColourRGB(15, 200, 95, 128);
+    append(page, alpha ? makeColour("ColourPropertyWithAlpha", alpha.ptr) : null);
+    if (alpha) alpha.Delete();
+    attrBool(findPropertyByName(page, "ColourPropertyWithAlpha"), "HasAlpha", true);
+    setHelp(page, findPropertyByName(page, "ColourPropertyWithAlpha"),
+        "Attribute \"HasAlpha\" is set to true for this property.");
+
+    append(page, makeColour("ColourProperty2", GREEN));
+
+    append(page, makeEnum("EnumProperty", ENUM_LABELS, ENUM_VALUES, 80));
+
+    const enum2 = append(page, makeEnum("EnumProperty 2", SOC_LABELS, SOC_VALUES, 240));
+    if (enum2) withString("Testing Extra", (ptr) => enum2.AddChoice(ptr, 360));
+
+    const enum3 = append(page, makeEnum("EnumProperty 3", SOC_LABELS, SOC_VALUES, 240));
+    attrString(enum3, "Hint", "Dummy Hint");
+    setHelp(page, enum3, "This property uses \"Hint\" attribute.");
+
+    const enum4 = append(page, makeEnum("EnumProperty 4", SOC_LABELS, SOC_VALUES, 240));
+    if (enum4) withString("4th only", (ptr) => enum4.AddChoice(ptr, 360));
+    setHelp(page, enum4, "Should have one extra item when compared to EnumProperty 3");
+
+    const enum5 = append(page, makeEnum("EnumProperty With Bitmap", SOC_LABELS, SOC_VALUES,
+        280, "EnumProperty 5"));
+    setHelp(page, enum5, "Should have bitmap in front of the displayed value");
+    const removable = wxArtProvider_GetBitmapBundle(ART_REMOVABLE, ART_OTHER, -1, -1);
+    if (enum5 && removable) page.SetPropertyImage(enum5.ptr, removable.ptr);
+    if (removable) removable.Delete();
+
+    const password = append(page, makeString("Password", "password"));
+    attrBool(password, "Password", true);
+    setHelp(page, password, "Has attribute wxPG_STRING_PASSWORD set to true");
+
+    const dir = append(page, makeDir("DirProperty", userHome()));
+    attrString(dir, "DialogTitle", "This is a custom dir dialog title");
+
+    const stringProp = append(page, makeString("StringProperty", ""));
+    if (stringProp)
+    {
+        page.SetPropertyMaxLength(stringProp.ptr, 6);
+        setValueString(page, stringProp, "some text");
+    }
+    setHelp(page, stringProp,
+        "Max length of this text has been limited to 6, using wxPropertyGrid::SetPropertyMaxLength.");
+
+    const autoComplete = append(page, makeString("StringProperty AutoComplete", ""));
+    attrArrayString(autoComplete, "AutoComplete", [
+        "One choice",
+        "Another choice",
+        "Another choice, yeah",
+        "Yet another choice",
+        "Yet another choice, bear with me",
+    ]);
+    setHelp(page, autoComplete,
+        "AutoComplete attribute has been set for this property "
+        + "(try writing something beginning with 'a', 'o' or 'y').");
+
+    const wideProp = append(page, makeString("StringPropertyWithBitmap", "Test Text"));
+    const wideBundle = makeTestBitmapBundle();
+    if (wideProp && wideBundle) page.SetPropertyImage(wideProp.ptr, wideBundle.ptr);
+    if (wideBundle) wideBundle.Delete();
+
+    const flagsProp = append(page, makeFlags("FlagsProperty",
+        ["Bit 0", "Bit 1", "Bit 2", "Bit 3"], [0x01, 0x02, 0x04, 0x08], 0x03));
+    attrBool(flagsProp, "UseCheckbox", true);
+
+    const tchoices = ["Cabbage", "Carrot", "Onion", "Potato", "Strawberry"];
+    append(page, makeEnum("EnumProperty X", tchoices,
+        tchoices.map((_, index) => index), 0));
+
+    const multi = append(page, makeMultiChoice("MultiChoiceProperty", tchoices));
+    if (multi)
+    {
+        const selection = variantArrayString(["Carrot", "Potato"]);
+        if (selection)
+        {
+            page.SetPropertyValue(multi.ptr, selection.ptr);
+            selection.Delete();
+        }
+        attrLong(multi, "UserStringMode", 1);
+    }
+
+    // wxSizeProperty / wxPointProperty are C++-only classes.  The closest
+    // bound equivalent is a composed wxStringProperty with int children.
+    const sizeProp = makeStringNamed("SizeProperty", "Size", "<composed>");
+    if (sizeProp)
+    {
+        const w = makeInt("Width", 0);
+        const h = makeInt("Height", 0);
+        if (w) sizeProp.AppendChild(w.ptr);
+        if (h) sizeProp.AppendChild(h.ptr);
+        append(page, sizeProp);
+    }
+
+    const pointProp = makeStringNamed("PointProperty", "Position", "<composed>");
+    if (pointProp)
+    {
+        const px = makeInt("X", 0);
+        const py = makeInt("Y", 0);
+        if (px) pointProp.AppendChild(px.ptr);
+        if (py) pointProp.AppendChild(py.ptr);
+        append(page, pointProp);
+    }
+
+    const uint = append(page, makeUInt("UIntProperty", 0xFEEEFEEEFEEEn));
+    attrLong(uint, "Prefix", PG_PREFIX_NONE);
+    attrLong(uint, "Base", PG_BASE_HEX);
+
+    const editEnum = append(page, makeEditEnum("EditEnumProperty",
+        ["Choice 1", "Choice 2", "Choice 3"], [0, 1, 2], "Choice not in the list"));
+    attrString(editEnum, "Hint", "Dummy Hint");
+
+    const date = append(page, makeDate("DateProperty"));
+    attrLong(date, "PickerStyle", DP_DROPDOWN | DP_SHOWCENTURY | DP_ALLOWNONE);
+    setHelp(page, date,
+        "Attribute wxPG_DATE_PICKER_STYLE has been set to (long)"
+        + "(wxDP_DROPDOWN | wxDP_SHOWCENTURY | wxDP_ALLOWNONE).");
+
+    // --- 3D Object ---------------------------------------------------------
+    const top = makeString("3D Object", "<composed>");
+    if (top)
+    {
+        const triangle1 = makeStringNamed("Triangle 1", "Triangle 1", "<composed>");
+        if (triangle1)
+        {
+            for (const label of ["A", "B", "C"])
+            {
+                const child = makeVectorProperty(label);
+                if (child) triangle1.AppendChild(child.ptr);
+            }
+            top.AppendChild(triangle1.ptr);
+        }
+
+        const triangle2 = makeTriangleProperty("Triangle 2");
+        if (triangle2) top.AppendChild(triangle2.ptr);
+
+        const triangle3 = makeStringNamed("Triangle 3", "Triangle 3", "<composed>");
+        if (triangle3)
+        {
+            for (const label of ["A", "B", "C"])
+            {
+                const child = makeVectorProperty(label);
+                if (child) triangle3.AppendChild(child.ptr);
+            }
+            top.AppendChild(triangle3.ptr);
+        }
+
+        const triangle4 = makeTriangleProperty("Triangle 4");
+        if (triangle4) top.AppendChild(triangle4.ptr);
+
+        append(page, top);
+    }
+    setHelp(page, findPropertyByName(page, "3D Object"),
+        "3D Object is wxStringProperty with value \"<composed>\". Two of its children are similar wxStringProperties with "
+        + "three wxVectorProperty children, and other two are custom wxTriangleProperties.");
+
+    // --- Car ---------------------------------------------------------------
+    const car = buildCar();
+    if (car)
+    {
+        append(page, car);
+        // This is how a child property is referred to by name.
+        const maxSpeed = findPropertyByName(page, "Max. Speed (mph)");
+        if (maxSpeed) setValueLong(page, maxSpeed, 300);
+    }
+
+    const multiple = append(page, makeLongString("MultipleButtons", ""));
+    if (multiple && multiButtonEditor)
+        page.SetPropertyEditor(multiple.ptr, multiButtonEditor);
+
+    append(page, makeEnum("SingleChoiceProperty",
+        ["Cat", "Dog", "Gibbon", "Otter"], [0, 1, 2, 3], 0));
+
+    append(page, makeEnum("Variable Height Bitmaps",
+        ["Wee", "Not so wee", "Friggin' huge"], [0, 1, 2], 0));
+
+    // --- wxWidgets Traits --------------------------------------------------
+    const traits = makeString("wxWidgets Traits", "<composed>");
+    if (traits)
+    {
+        const release = makeString("Latest Release", "3.1.2");
+        if (release) traits.AppendChild(release.ptr);
+
+        const winApi = makeBool("Win API", true);
+        if (winApi) traits.AppendChild(winApi.ptr);
+
+        const qt = makeBool("QT", true);
+        if (qt) traits.AppendChild(qt.ptr);
+
+        const cocoa = makeBool("Cocoa", true);
+        if (cocoa) traits.AppendChild(cocoa.ptr);
+
+        const haiku = makeBool("Haiku", false);
+        if (haiku) traits.AppendChild(haiku.ptr);
+
+        const trunk = makeStringValueOnly("Trunk Version", VERSION_NUM_DOT_STRING);
+        if (trunk) traits.AppendChild(trunk.ptr);
+
+        const gtk = makeBool("GTK+", true);
+        if (gtk) traits.AppendChild(gtk.ptr);
+
+        const android = makeBool("Android", false);
+        if (android) traits.AppendChild(android.ptr);
+
+        append(page, traits);
+        // The C++ sample calls SetPropertyReadOnly() before adding the children,
+        // so only the parent ends up read-only.
+        page.SetPropertyReadOnly(traits.ptr, true, PG_DONT_RECURSE);
+    }
+
+    // AddTestProperties(): MyColourProperty is a C++ subclass of
+    // wxColourProperty, so a plain wxColourProperty is used instead.
+    const customColour = append(page, makeColour("CustomColourProperty", GREEN));
+    if (customColour)
+    {
+        customColour.SetAutoUnspecified(true);
+        withString("ComboBox", (ptr) =>
+            page.SetPropertyEditorByName(customColour.ptr, ptr));
+    }
+    setHelp(page, customColour,
+        "This is a MyColourProperty from the sample app. "
+        + "It is built by subclassing wxColourProperty.");
+}
