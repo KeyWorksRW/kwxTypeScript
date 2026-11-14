@@ -103,6 +103,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxWindow_CreateAccessible: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxWindow_SetAccessibleName: {
     parameters: ["pointer", "pointer"],
     result: "void",
@@ -122,6 +126,34 @@ export const lib = dlopen("kwxFFI", {
   wxWindow_NewControlId: {
     parameters: ["i32"],
     result: "i32",
+  },
+  wxWindow_CentreOnParent: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxWindow_FindWindowById: {
+    parameters: ["i64", "pointer"],
+    result: "pointer",
+  },
+  wxWindow_FindWindowByName: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxWindow_GetContainingSizer: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxWindow_GetMinSizeFromKnownDirection: {
+    parameters: ["pointer", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxWindow_IsTransparentBackgroundSupported: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxWindow_PostSizeEvent: {
+    parameters: ["pointer"],
+    result: "void",
   },
   wxWindow_UnreserveControlId: {
     parameters: ["i32", "i32"],
@@ -715,6 +747,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "pointer",
   },
+  wxWindow_FindWindowByIdSelf: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
   wxWindow_Fit: {
     parameters: ["pointer"],
     result: "void",
@@ -877,7 +913,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxWindow_GetWindowStyleFlag: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "i64",
   },
   wxWindow_HasFlag: {
     parameters: ["pointer", "i32"],
@@ -1123,6 +1159,394 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32"],
     result: "void",
   },
+  wxAuiPaneLayoutInfo_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneLayoutInfo_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneLayoutInfo_GetDockDirection: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneLayoutInfo_GetDockLayer: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneLayoutInfo_GetDockRow: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneLayoutInfo_GetDockPos: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneLayoutInfo_GetDockProportion: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneLayoutInfo_GetDockSize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneLayoutInfo_SetDockDirection: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_SetDockLayer: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_SetDockRow: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_SetDockPos: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_SetDockProportion: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_SetDockSize: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_GetFloatingPos: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneLayoutInfo_SetFloatingPos: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_GetFloatingSize: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneLayoutInfo_SetFloatingSize: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_GetFloatingClientSize: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneLayoutInfo_SetFloatingClientSize: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_IsMaximized: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneLayoutInfo_SetMaximized: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfo_IsHidden: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneLayoutInfo_SetHidden: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxAuiTabLayoutInfo_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_GetDockDirection: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiTabLayoutInfo_GetDockLayer: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiTabLayoutInfo_GetDockRow: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiTabLayoutInfo_GetDockPos: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiTabLayoutInfo_GetDockProportion: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiTabLayoutInfo_GetDockSize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiTabLayoutInfo_SetDockDirection: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_SetDockLayer: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_SetDockRow: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_SetDockPos: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_SetDockProportion: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_SetDockSize: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_GetPages: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiTabLayoutInfo_SetPages: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_GetPinned: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiTabLayoutInfo_SetPinned: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfo_GetActive: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiTabLayoutInfo_SetActive: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfoArray_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxAuiPaneLayoutInfoArray_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfoArray_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneLayoutInfoArray_Add: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiPaneLayoutInfoArray_Item: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxAuiTabLayoutInfoArray_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxAuiTabLayoutInfoArray_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfoArray_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiTabLayoutInfoArray_Add: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiTabLayoutInfoArray_Item: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  kwxAuiCallbackResult_SetPointer: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiCallbackResult_GetPointer: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxAuiOrphanedPage_GetNotebook: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxAuiOrphanedPage_GetPage: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  kwxAuiOrphanedPage_GetTabCtrl: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxAuiOrphanedPage_SetTabCtrl: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiOrphanedPage_GetTabIndex: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  kwxAuiOrphanedPage_SetTabIndex: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxAuiOrphanedPage_GetResult: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  kwxAuiOrphanedPage_SetResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxAuiSerializer_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxAuiSerializer_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnBeforeSave: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnBeforeSavePanes: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnSavePane: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnAfterSavePanes: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnBeforeSaveNotebooks: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnAfterSaveNotebooks: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnAfterSave: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnBeforeSaveNotebook: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnSaveNotebookTabControl: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_SetOnAfterSaveNotebook: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_BeforeSave: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_BeforeSavePanes: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_AfterSavePanes: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_BeforeSaveNotebooks: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_AfterSaveNotebooks: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiSerializer_AfterSave: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  kwxAuiDeserializer_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_SetOnBeforeLoad: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_SetOnLoadPanes: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_SetOnLoadNotebookTabs: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_SetOnCreatePaneWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_SetOnHandleOrphanedPage: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_SetOnAfterLoad: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_SetError: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_GetError: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxAuiDeserializer_HasError: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  kwxAuiDeserializer_ClearError: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_BeforeLoad: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAuiDeserializer_AfterLoad: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   kwxHtmlEvent_GetHref: {
     parameters: ["pointer"],
     result: "pointer",
@@ -1220,6 +1644,10 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxAboutDialogInfo_AddArtist: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAboutDialogInfo_SetDocWriters: {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
@@ -1414,6 +1842,10 @@ export const lib = dlopen("kwxFFI", {
   wxBitmap_AddHandler: {
     parameters: ["pointer"],
     result: "void",
+  },
+  wxBitmap_CreateWithDIPSize: {
+    parameters: ["pointer", "pointer", "f64", "i32"],
+    result: "i32",
   },
   wxBitmap_CleanUpHandlers: {
     parameters: [],
@@ -1627,6 +2059,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "u8",
   },
+  wxColour_GetAsString: {
+    parameters: ["pointer", "i64"],
+    result: "pointer",
+  },
+  wxColour_MakeDisabled: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "void",
+  },
   wxColour_Assign: {
     parameters: ["pointer", "pointer"],
     result: "void",
@@ -1703,9 +2143,37 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "void",
   },
+  wxComboCtrl_GetBitmapDisabled: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxComboCtrl_GetBitmapHover: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxComboCtrl_GetBitmapNormal: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxComboCtrl_GetBitmapPressed: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxComboCtrl_GetButtonSize: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxComboCtrl_GetCustomPaintWidth: {
     parameters: ["pointer"],
     result: "i32",
+  },
+  wxComboCtrl_GetFeatures: {
+    parameters: [],
+    result: "i32",
+  },
+  wxComboCtrl_GetHint: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxComboCtrl_GetInsertionPoint: {
     parameters: ["pointer"],
@@ -1714,6 +2182,14 @@ export const lib = dlopen("kwxFFI", {
   wxComboCtrl_GetLastPosition: {
     parameters: ["pointer"],
     result: "i64",
+  },
+  wxComboCtrl_GetMargins: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxComboCtrl_GetPopupControl: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxComboCtrl_GetPopupWindow: {
     parameters: ["pointer"],
@@ -1727,6 +2203,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxComboCtrl_GetTextRect: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxComboCtrl_GetValue: {
     parameters: ["pointer"],
     result: "pointer",
@@ -1737,6 +2217,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxComboCtrl_IsEditable: {
     parameters: ["pointer"],
+    result: "i32",
+  },
+  wxComboCtrl_IsKeyPopupToggle: {
+    parameters: ["pointer", "pointer"],
     result: "i32",
   },
   wxComboCtrl_IsPopupShown: {
@@ -1753,6 +2237,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxComboCtrl_Popup: {
     parameters: ["pointer"],
+    result: "void",
+  },
+  wxComboCtrl_PrepareBackground: {
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
     result: "void",
   },
   wxComboCtrl_Remove: {
@@ -1779,6 +2267,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "void",
   },
+  wxComboCtrl_SetHint: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
   wxComboCtrl_SetInsertionPoint: {
     parameters: ["pointer", "i64"],
     result: "void",
@@ -1787,12 +2279,20 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxComboCtrl_SetMainControl: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxComboCtrl_SetMargins: {
     parameters: ["pointer", "i32", "i32"],
     result: "void",
   },
   wxComboCtrl_SetPopupAnchor: {
     parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxComboCtrl_SetPopupControl: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   wxComboCtrl_SetPopupExtents: {
@@ -1823,12 +2323,24 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxComboCtrl_SetValueByUser: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxComboCtrl_ShouldDrawFocus: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxComboCtrl_ShowPopup: {
     parameters: ["pointer"],
     result: "void",
   },
   wxComboCtrl_Undo: {
     parameters: ["pointer"],
+    result: "void",
+  },
+  wxComboCtrl_UseAltPopupWindow: {
+    parameters: ["pointer", "i32"],
     result: "void",
   },
   wxConfigBase_Get: {
@@ -1839,9 +2351,25 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxConfigBase_DontCreateOnDemand: {
+    parameters: [],
+    result: "void",
+  },
+  wxConfigBase_ReadLong: {
+    parameters: ["pointer", "pointer", "i64"],
+    result: "i64",
+  },
   wxConfigBase_Create: {
     parameters: [],
     result: "pointer",
+  },
+  wxConfigBase_Read: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxConfigBase_Write: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
   },
   wxConfigBase_Delete: {
     parameters: ["pointer"],
@@ -2058,6 +2586,118 @@ export const lib = dlopen("kwxFFI", {
   wxDateTime_Delete: {
     parameters: ["pointer"],
     result: "void",
+  },
+  wxDateTime_SetFromTimeT: {
+    parameters: ["pointer", "i64"],
+    result: "void",
+  },
+  wxDateTime_SetFromJDN: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
+  wxDateTime_CreateFromTimeT: {
+    parameters: ["i64"],
+    result: "pointer",
+  },
+  wxDateTime_CreateFromJDN: {
+    parameters: ["f64"],
+    result: "pointer",
+  },
+  wxDateTime_GetFirstWeekDay: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDateTime_GetEnglishMonthName: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxDateTime_GetEnglishWeekDayName: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxDateTime_GetDateOnly: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDateTime_SetToYearDay: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDateTime_GetYearDay: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxDateTime_GetJulianDayNumber: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxDateTime_GetModifiedJulianDayNumber: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxDateTime_GetRataDie: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxDateTime_FromTimezone: {
+    parameters: ["pointer", "i32", "i32", "pointer"],
+    result: "void",
+  },
+  wxDateTime_MakeFromTimezone: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxDateTime_ToUTC: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxDateTime_MakeUTC: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDateTime_FromUTC: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxDateTime_MakeFromUTC: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDateTime_GetCenturyTZ: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxDateTime_GetWeekBasedYear: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxDateTime_FormatISOCombined: {
+    parameters: ["pointer", "u8"],
+    result: "pointer",
+  },
+  wxDateTime_ParseISODate: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDateTime_ParseISOTime: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDateTime_ParseISOCombined: {
+    parameters: ["pointer", "pointer", "u8"],
+    result: "i32",
+  },
+  wxDateTime_DiffAsDateSpan: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxDateTime_SetFromDOS: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDateTime_GetAsDOS: {
+    parameters: ["pointer"],
+    result: "i32",
   },
   wxDateTime_AddDate: {
     parameters: ["pointer", "pointer", "pointer"],
@@ -2571,6 +3211,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
     result: "i32",
   },
+  wxDC_CanUseTransformMatrix: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDC_SetTransformMatrix: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
   wxDC_CalcBoundingBox: {
     parameters: ["pointer", "i32", "i32"],
     result: "void",
@@ -2911,9 +3559,45 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxArrayVideoModes_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxArrayVideoModes_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxArrayVideoModes_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxArrayVideoModes_Item: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
   wxDisplay_Create: {
     parameters: ["u32"],
     result: "pointer",
+  },
+  wxDisplay_ChangeMode: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDisplay_GetModes: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDisplay_GetDepth: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDisplay_GetRawPPI: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDisplay_ResetMode: {
+    parameters: ["pointer"],
+    result: "void",
   },
   wxDisplay_CreateFromWindow: {
     parameters: ["pointer"],
@@ -3031,6 +3715,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxEvent_IsOfClass: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
   wxEvent_NewEventType: {
     parameters: [],
     result: "i32",
@@ -3055,11 +3743,19 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "void",
   },
+  wxEvent_SetOnClone: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxEvtHandler_GetClientClosure: {
     parameters: ["pointer"],
     result: "pointer",
   },
   wxEvtHandler_SetClientClosure: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxEvtHandler_SetOnProcessEvent: {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
@@ -3075,6 +3771,18 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxEvtHandler_CallAfter: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxEvtHandler_GetClientData: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxEvtHandler_Bind: {
+    parameters: ["pointer", "i32", "i32", "i32", "pointer"],
+    result: "i32",
+  },
   wxEvtHandler_Connect: {
     parameters: ["pointer", "i32", "i32", "i32", "pointer"],
     result: "i32",
@@ -3089,6 +3797,14 @@ export const lib = dlopen("kwxFFI", {
   },
   wxEvtHandler_Disconnect: {
     parameters: ["pointer", "i32", "i32", "i32", "i32"],
+    result: "i32",
+  },
+  wxEvtHandler_Unbind: {
+    parameters: ["pointer", "i32", "i32", "i32"],
+    result: "i32",
+  },
+  wxEvtHandler_UnbindClosure: {
+    parameters: ["pointer", "i32", "i32", "i32", "pointer"],
     result: "i32",
   },
   wxEvtHandler_GetEvtHandlerEnabled: {
@@ -3127,9 +3843,41 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxFileConfig_CreateFor: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i64"],
+    result: "pointer",
+  },
+  wxFileConfig_GetGlobalFileName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileConfig_GetLocalFileName: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxFileConfig_SetUmask: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFileConfig_Save: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFileConfig_EnableAutoSave: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFileConfig_DisableAutoSave: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxFileInputStream_Create: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxFileInputStream_GetLength: {
+    parameters: ["pointer"],
+    result: "i64",
   },
   wxFileInputStream_Delete: {
     parameters: ["pointer"],
@@ -3150,6 +3898,18 @@ export const lib = dlopen("kwxFFI", {
   wxFileOutputStream_IsOk: {
     parameters: ["pointer"],
     result: "i32",
+  },
+  wxStringOutputStream_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxStringOutputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStringOutputStream_GetString: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxFrame_Centre: {
     parameters: ["pointer", "i32"],
@@ -3221,6 +3981,14 @@ export const lib = dlopen("kwxFFI", {
   },
   wxFrame_Create: {
     parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxFrame_MSWGetTaskBarButton: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFrame_MSWGetSystemMenu: {
+    parameters: ["pointer"],
     result: "pointer",
   },
   wxFrame_CreateStatusBar: {
@@ -3411,6 +4179,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxGenericDirCtrl_GetPathForItem: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
   wxGenericDragImage_Create: {
     parameters: ["pointer"],
     result: "pointer",
@@ -3474,6 +4246,58 @@ export const lib = dlopen("kwxFFI", {
   wxGraphicsContext_Clip: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxGraphicsContext_BeginLayer: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
+  wxGraphicsContext_CreateBitmap: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGraphicsContext_CreateBitmapFromImage: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGraphicsContext_CreateFont: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGraphicsContext_CreateFromUnknownDC: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGraphicsContext_CreateLinearGradientBrush: {
+    parameters: ["pointer", "f64", "f64", "f64", "f64", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGraphicsContext_CreatePen: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGraphicsContext_CreateRadialGradientBrush: {
+    parameters: ["pointer", "f64", "f64", "f64", "f64", "f64", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGraphicsContext_CreateSubBitmap: {
+    parameters: ["pointer", "pointer", "f64", "f64", "f64", "f64"],
+    result: "pointer",
+  },
+  wxGraphicsContext_EndLayer: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGraphicsContext_FromDIP: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGraphicsContext_SetAntialiasMode: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGraphicsContext_SetCompositionMode: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
   },
   wxGraphicsContext_ClipByRectangle: {
     parameters: ["pointer", "f64", "f64", "f64", "f64"],
@@ -3807,10 +4631,6 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
-  wxGraphicsRenderer_Create: {
-    parameters: [],
-    result: "pointer",
-  },
   wxGraphicsRenderer_CreateContext: {
     parameters: ["pointer", "pointer"],
     result: "pointer",
@@ -3838,6 +4658,22 @@ export const lib = dlopen("kwxFFI", {
   wxGraphicsRenderer_GetDefaultRenderer: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxGraphicsRenderer_GetDirect2DRenderer: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGraphicsRenderer_GetGDIPlusRenderer: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGraphicsRenderer_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGraphicsRenderer_GetVersion: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "void",
   },
   wxGridCellTextEnterEditor_Ctor: {
     parameters: [],
@@ -4127,6 +4963,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxHtmlWindow_SetHTMLBackgroundImage: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxHtmlWindow_SetStandardFonts: {
     parameters: ["pointer", "i32", "pointer", "pointer"],
     result: "void",
@@ -4205,6 +5045,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxImage_CreateFromXPMData: {
     parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxImage_GetAlpha: {
+    parameters: ["pointer", "i32", "i32"],
     result: "i32",
   },
   wxImage_Clear: {
@@ -4480,11 +5324,11 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxImage_CreateFromByteString: {
-    parameters: ["i32", "i32", "pointer", "i32"],
+    parameters: ["i32", "i32", "pointer"],
     result: "pointer",
   },
   wxImage_CreateFromLazyByteString: {
-    parameters: ["i32", "i32", "pointer", "i32"],
+    parameters: ["i32", "i32", "pointer"],
     result: "pointer",
   },
   wxImage_CreateFromData: {
@@ -4699,6 +5543,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxInputStream_TellI: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxInputStream_Eof: {
     parameters: ["pointer"],
     result: "i32",
@@ -4771,6 +5619,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "i32",
   },
+  wxIPaddress_OrigHostname: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxIPV4address_Create: {
     parameters: [],
     result: "pointer",
@@ -4778,6 +5630,14 @@ export const lib = dlopen("kwxFFI", {
   wxIPV4address_Delete: {
     parameters: ["pointer"],
     result: "void",
+  },
+  wxIPV4address_HostnameAddr: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxIPV4address_BroadcastAddress: {
+    parameters: ["pointer"],
+    result: "i32",
   },
   wxListCtrl_AssignImageList: {
     parameters: ["pointer", "pointer", "i32"],
@@ -5171,6 +6031,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxListEvent_GetKeyCode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxListEvent_IsEditCancelled: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxListEvent_GetCode: {
     parameters: ["pointer"],
     result: "i32",
@@ -5214,6 +6082,14 @@ export const lib = dlopen("kwxFFI", {
   wxMediaCtrl_Create: {
     parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64", "pointer", "pointer"],
     result: "pointer",
+  },
+  wxMediaCtrl_GetDownloadProgress: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMediaCtrl_GetDownloadTotal: {
+    parameters: ["pointer"],
+    result: "i32",
   },
   wxMediaCtrl_Delete: {
     parameters: ["pointer"],
@@ -5322,6 +6198,14 @@ export const lib = dlopen("kwxFFI", {
   wxMenu_Append: {
     parameters: ["pointer", "i32", "pointer", "pointer", "i32"],
     result: "void",
+  },
+  wxMenu_AppendById: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxMenu_Destroy: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
   },
   wxMenu_AppendItem: {
     parameters: ["pointer", "pointer"],
@@ -5659,12 +6543,24 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["i32", "pointer", "pointer", "i32", "pointer"],
     result: "pointer",
   },
+  wxMenuItem_CreateExWithParent: {
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "pointer"],
+    result: "pointer",
+  },
   wxMenuItem_CreateSeparator: {
     parameters: [],
     result: "pointer",
   },
   wxMenuItem_Check: {
     parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxMenuItem_SetBitmaps: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxMenuItem_SetDisabledBitmap: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   wxMenuItem_Create: {
@@ -5771,6 +6667,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxMenuItem_GetAccel: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxMouseEvent_GetButton: {
     parameters: ["pointer"],
     result: "i32",
@@ -5784,6 +6684,50 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxMouseEvent_AltDown: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_Aux1DClick: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_Aux1Down: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_Aux1IsDown: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_Aux1Up: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_Aux2DClick: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_Aux2Down: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_Aux2IsDown: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_Aux2Up: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_GetModifiers: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_GetWheelAxis: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMouseEvent_IsWheelInverted: {
     parameters: ["pointer"],
     result: "i32",
   },
@@ -6091,6 +7035,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxNotificationMessage_SetIconBitmap: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxNotificationMessage_SetMessage: {
     parameters: ["pointer", "pointer"],
     result: "void",
@@ -6111,9 +7059,17 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxGenericNotificationMessage_Create: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
   wxObject_Delete: {
     parameters: ["pointer"],
     result: "void",
+  },
+  wxObject_IsSameAs: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
   },
   wxObject_GetClassInfo: {
     parameters: ["pointer"],
@@ -6132,6 +7088,10 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxObject_SetClientClosure: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxObject_SetOnGetClassInfo: {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
@@ -6239,6 +7199,22 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxPanel_SetOnTransferDataFromWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPanel_SetOnTransferDataToWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPanel_SetOnDoGetBestClientSize: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPanel_SetOnScrollWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxPopupTransientWindow_Create: {
     parameters: ["pointer", "i32"],
     result: "pointer",
@@ -6248,6 +7224,22 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxPopupTransientWindow_Popup: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPopupTransientWindow_SetOnPopup: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPopupTransientWindow_SetOnShow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPopupTransientWindow_SetOnProcessLeftDown: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPopupTransientWindow_SetOnOnDismiss: {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
@@ -6267,6 +7259,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "pointer"],
     result: "pointer",
   },
+  wxPreviewFrame_InitializeWithModality: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
   wxPreviewFrame_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -6278,6 +7274,22 @@ export const lib = dlopen("kwxFFI", {
   wxPrintout_GetDC: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxPrintout_FitThisSizeToPageMargins: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxPrintout_GetLogicalPageMarginsRect: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPrintout_MapScreenSizeToPage: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPrintout_OffsetLogicalOrigin: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
   },
   wxPrintout_GetPageSizeMM: {
     parameters: ["pointer", "pointer", "pointer"],
@@ -6327,6 +7339,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "i32", "pointer", "i32"],
     result: "pointer",
   },
+  wxProgressDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxProgressDialog_Fit: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxProgressDialog_Resume: {
     parameters: ["pointer"],
     result: "void",
@@ -6339,9 +7359,105 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
+  wxProgressDialog_UpdateWithSkip: {
+    parameters: ["pointer", "i32", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxProgressDialog_Pulse: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxGenericProgressDialog_Create: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxGenericProgressDialog_Update: {
+    parameters: ["pointer", "i32", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxGenericProgressDialog_Pulse: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxGenericProgressDialog_Resume: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGenericProgressDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxRect_Create: {
     parameters: ["i32", "i32", "i32", "i32"],
     result: "pointer",
+  },
+  wxRect_CentreIn: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRect_Contains: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxRect_Deflate: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxRect_GetBottom: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRect_GetBottomLeft: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRect_GetLeft: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRect_GetLeftTop: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRect_GetPosition: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRect_GetRight: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRect_GetSize: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRect_GetTop: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRect_GetTopLeft: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRect_GetTopRight: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRect_Inflate: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxRect_Offset: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxRect_SetLeft: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRect_SetPosition: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
   },
   wxRect_Delete: {
     parameters: ["pointer"],
@@ -6491,9 +7607,17 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxSockAddress_GetType: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSockAddress_GetAddressDataLen: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxSocketBase_Close: {
     parameters: ["pointer"],
-    result: "void",
+    result: "i32",
   },
   wxSocketBase_Delete: {
     parameters: ["pointer"],
@@ -6631,6 +7755,62 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "i32"],
     result: "pointer",
   },
+  wxSocketBase_GetTimeout: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSocketBase_IsClosed: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSocketBase_LastReadCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSocketBase_LastWriteCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSocketBase_GetLastIOSize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSocketBase_GetLastIOReadSize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSocketBase_GetLastIOWriteSize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSocketBase_ShutdownOutput: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSocketBase_GetOption: {
+    parameters: ["pointer", "i32", "i32", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxSocketBase_SetOption: {
+    parameters: ["pointer", "i32", "i32", "pointer", "i32"],
+    result: "i32",
+  },
+  wxSocketBase_GetEventHandler: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxSocketBase_Initialize: {
+    parameters: [],
+    result: "i32",
+  },
+  wxSocketBase_Shutdown: {
+    parameters: [],
+    result: "void",
+  },
+  wxSocketBase_IsInitialized: {
+    parameters: [],
+    result: "i32",
+  },
   wxSocketClient_Connect: {
     parameters: ["pointer", "pointer", "i32"],
     result: "i32",
@@ -6650,6 +7830,10 @@ export const lib = dlopen("kwxFFI", {
   wxSocketClient_WaitOnConnect: {
     parameters: ["pointer", "i64", "i64"],
     result: "i32",
+  },
+  wxSocketClient_SetInitialSocketBuffers: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
   },
   wxSocketEvent_Create: {
     parameters: ["i32"],
@@ -6729,6 +7913,86 @@ export const lib = dlopen("kwxFFI", {
   },
   wxStyledTextCtrl_AddRefDocument: {
     parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxStyledTextCtrl_AnnotationClearAll: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStyledTextCtrl_AnnotationGetText: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxStyledTextCtrl_AnnotationSetStyle: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxStyledTextCtrl_AnnotationSetText: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxStyledTextCtrl_AnnotationSetVisible: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStyledTextCtrl_GetAdditionalSelectionTyping: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStyledTextCtrl_GetIndicatorCurrent: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStyledTextCtrl_GetMultiPaste: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStyledTextCtrl_GetMultipleSelection: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStyledTextCtrl_IndicatorClearRange: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxStyledTextCtrl_IndicatorFillRange: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxStyledTextCtrl_SetAdditionalSelectionTyping: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStyledTextCtrl_SetMultiPaste: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStyledTextCtrl_SetMultipleSelection: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStyledTextCtrl_SetTechnology: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStyledTextCtrl_SetWrapVisualFlags: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStyledTextCtrl_StyleGetBackground: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxStyledTextCtrl_StyleGetForeground: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxStyledTextCtrl_StyleGetSizeFractional: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxStyledTextCtrl_StyleSetSizeFractional: {
+    parameters: ["pointer", "i32", "i32"],
     result: "void",
   },
   wxStyledTextCtrl_AddStyledText: {
@@ -8223,6 +9487,74 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer"],
     result: "pointer",
   },
+  wxTextAttr_GetAlignment: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttr_GetLeftIndent: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxTextAttr_GetParagraphSpacingAfter: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttr_HasAlignment: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttr_HasFontPixelSize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttr_HasLeftIndent: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttr_SetAlignment: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttr_SetFlags: {
+    parameters: ["pointer", "i64"],
+    result: "void",
+  },
+  wxTextAttr_SetFontFaceName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextAttr_SetFontSize: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttr_SetFontStyle: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttr_SetFontUnderlined: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttr_SetFontWeight: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttr_SetLeftIndent: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxTextAttr_SetLineSpacing: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttr_SetParagraphSpacingAfter: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttr_SetRightIndent: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
   wxTextAttr_CreateDefault: {
     parameters: [],
     result: "pointer",
@@ -8270,6 +9602,14 @@ export const lib = dlopen("kwxFFI", {
   wxTextAttr_SetTextColour: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxTextAttr_SetTabs: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextAttr_GetTabs: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxTextCtrl_EmulateKeyPress: {
     parameters: ["pointer", "pointer"],
@@ -8573,11 +9913,11 @@ export const lib = dlopen("kwxFFI", {
   },
   wxToolBar_AddSeparator: {
     parameters: ["pointer"],
-    result: "void",
+    result: "pointer",
   },
   wxToolBar_AddTool: {
     parameters: ["pointer", "i32", "pointer", "pointer", "pointer", "i32", "pointer", "pointer", "pointer"],
-    result: "void",
+    result: "pointer",
   },
   wxToolBar_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
@@ -8649,7 +9989,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxToolBar_RemoveTool: {
     parameters: ["pointer", "i32"],
-    result: "void",
+    result: "pointer",
   },
   wxToolBar_SetMargins: {
     parameters: ["pointer", "i32", "i32"],
@@ -8729,7 +10069,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxToolBar_GetToolsCount: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "usize",
   },
   wxToolBar_IsVertical: {
     parameters: ["pointer"],
@@ -8745,7 +10085,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxToolBar_SetDropdownMenu: {
     parameters: ["pointer", "i32", "pointer"],
-    result: "void",
+    result: "i32",
   },
   wxToolBar_SetToggle: {
     parameters: ["pointer", "i32", "i32"],
@@ -8853,6 +10193,14 @@ export const lib = dlopen("kwxFFI", {
   },
   wxTreeCtrl_AddRoot: {
     parameters: ["pointer", "pointer", "i32", "i32", "pointer", "pointer"],
+    result: "void",
+  },
+  wxTreeCtrl_AssignButtonsImageList: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTreeCtrl_SetButtonsImageList: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   wxTreeCtrl_AppendItem: {
@@ -9039,7 +10387,19 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxTreeCtrl_SelectItem2: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
   wxTreeCtrl_SetImageList: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTreeCtrl_SetImages: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTreeCtrl_SetStateImages: {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
@@ -9207,6 +10567,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "pointer",
   },
+  wxTreeItemId_Unset: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxTreeItemId_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -9284,6 +10648,10 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxVideoMode_GetHeight: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxVideoMode_GetRefresh: {
     parameters: ["pointer"],
     result: "i32",
   },
@@ -9383,6 +10751,18 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "usize"],
     result: "void",
   },
+  wxVListBox_SetOnOnDrawItem: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVListBox_SetOnOnDrawSeparator: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVListBox_SetOnOnMeasureItem: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxVScrolledWindow_Create: {
     parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64", "pointer"],
     result: "i32",
@@ -9442,6 +10822,14 @@ export const lib = dlopen("kwxFFI", {
   wxXmlResource_AddHandler: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxXmlResource_LoadAllFiles: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxXmlResource_LoadObjectRecursively: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
   },
   wxXmlResource_AddSubclassFactory: {
     parameters: ["pointer", "pointer"],
@@ -9703,6 +11091,158 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "void",
   },
+  wxComboPopup_Init: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxComboPopup_DestroyPopup: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxComboPopup_GetControl: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxComboPopup_OnPopup: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxComboPopup_OnDismiss: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxComboPopup_SetStringValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxComboPopup_GetStringValue: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxComboPopup_FindItem: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxComboPopup_PaintComboControl: {
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32"],
+    result: "void",
+  },
+  wxComboPopup_OnComboKeyEvent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxComboPopup_OnComboCharEvent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxComboPopup_OnComboDoubleClick: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxComboPopup_GetAdjustedSize: {
+    parameters: ["pointer", "i32", "i32", "i32", "pointer", "pointer"],
+    result: "void",
+  },
+  wxComboPopup_LazyCreate: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxComboPopup_Dismiss: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxComboPopup_IsCreated: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxComboPopup_GetComboCtrl: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericComboCtrl_Create: {
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
+  kwxComboCtrl_CreateDefault: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxComboCtrl_CreateWith: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
+  kwxComboCtrl_Create: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
+    result: "i32",
+  },
+  kwxComboCtrl_SetOnButtonClick: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxComboCtrl_SetOnAnimateShow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxComboCtrl_SetOnDoSetPopupControl: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxComboCtrl_SetOnDoShowPopup: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxOwnerDrawnComboBox_CreateDefault: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxOwnerDrawnComboBox_CreateWith: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
+  kwxOwnerDrawnComboBox_Create: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
+    result: "i32",
+  },
+  kwxOwnerDrawnComboBox_SetOnDrawItem: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxOwnerDrawnComboBox_SetOnDrawBackground: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxOwnerDrawnComboBox_SetOnMeasureItem: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxOwnerDrawnComboBox_SetOnMeasureItemWidth: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxListViewComboPopup_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  kwxListViewComboPopup_AddString: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxListViewComboPopup_GetItemCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  kwxTreeCtrlComboPopup_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  kwxTreeCtrlComboPopup_AddRoot: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  kwxTreeCtrlComboPopup_AppendItem: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "void",
+  },
   wxPlatformInfo_Create: {
     parameters: [],
     result: "pointer",
@@ -9898,6 +11438,14 @@ export const lib = dlopen("kwxFFI", {
   wxSecretValue_Create: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxSecretValue_GetSize: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxSecretValue_WipeString: {
+    parameters: ["pointer"],
+    result: "void",
   },
   wxSecretValue_CreateDefault: {
     parameters: [],
@@ -10171,9 +11719,17 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "pointer",
   },
+  wxFileSystem_AddHandler: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxFileName_Create: {
     parameters: [],
     result: "pointer",
+  },
+  wxFileName_SplitPath: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "pointer", "pointer", "i32"],
+    result: "void",
   },
   wxFileName_CreateFromPath: {
     parameters: ["pointer", "i32"],
@@ -10240,7 +11796,7 @@ export const lib = dlopen("kwxFFI", {
     result: "usize",
   },
   wxFileName_GetDirs: {
-    parameters: ["pointer", "pointer"],
+    parameters: ["pointer", "pointer", "i32"],
     result: "i32",
   },
   wxFileName_HasName: {
@@ -10334,6 +11890,10 @@ export const lib = dlopen("kwxFFI", {
   wxFileName_MakeRelativeTo: {
     parameters: ["pointer", "pointer", "i32"],
     result: "i32",
+  },
+  wxFileName_MakeSafeRelativePath: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
   },
   wxFileName_GetAbsolutePath: {
     parameters: ["pointer", "pointer", "i32"],
@@ -10572,7 +12132,7 @@ export const lib = dlopen("kwxFFI", {
     result: "usize",
   },
   wxDir_GetAllFiles: {
-    parameters: ["pointer", "pointer", "pointer", "i32"],
+    parameters: ["pointer", "pointer", "pointer", "i32", "i32"],
     result: "usize",
   },
   wxDir_FindFirst: {
@@ -10775,80 +12335,16 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
-  wxDialUpManager_Create: {
-    parameters: [],
-    result: "pointer",
-  },
-  wxDialUpManager_Delete: {
-    parameters: ["pointer"],
-    result: "void",
-  },
-  wxDialUpManager_IsOk: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxDialUpManager_GetISPNames: {
-    parameters: ["pointer", "pointer"],
-    result: "i32",
-  },
-  wxDialUpManager_Dial: {
-    parameters: ["pointer", "pointer", "pointer", "pointer", "i32"],
-    result: "i32",
-  },
-  wxDialUpManager_IsDialing: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxDialUpManager_CancelDialing: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxDialUpManager_HangUp: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxDialUpManager_IsAlwaysOnline: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxDialUpManager_IsOnline: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxDialUpManager_SetOnlineStatus: {
-    parameters: ["pointer", "i32"],
-    result: "void",
-  },
-  wxDialUpManager_EnableAutoCheckOnlineStatus: {
-    parameters: ["pointer", "i32"],
-    result: "i32",
-  },
-  wxDialUpManager_DisableAutoCheckOnlineStatus: {
-    parameters: ["pointer"],
-    result: "void",
-  },
-  wxDialUpManager_SetWellKnownHost: {
-    parameters: ["pointer", "pointer", "i32"],
-    result: "void",
-  },
-  wxDialUpManager_SetConnectCommand: {
-    parameters: ["pointer", "pointer", "pointer"],
-    result: "void",
-  },
-  wxDialUpEvent_IsConnectedEvent: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxDialUpEvent_IsOwnEvent: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
   wxEventFilter_Create: {
     parameters: ["pointer", "pointer"],
     result: "pointer",
   },
   wxEventFilter_Delete: {
     parameters: ["pointer"],
+    result: "void",
+  },
+  wxEventFilter_SetResult: {
+    parameters: ["i32"],
     result: "void",
   },
   wxEventBlocker_Create: {
@@ -10882,6 +12378,842 @@ export const lib = dlopen("kwxFFI", {
   wxIconLocation_SetFileName: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxTimeSpan_Create: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxTimeSpan_CreateFromHours: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxTimeSpan_CreateFromMinutes: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxTimeSpan_CreateFromSeconds: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxTimeSpan_CreateFromMilliseconds: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxTimeSpan_CreateFromDays: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxTimeSpan_CreateFromWeeks: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxTimeSpan_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTimeSpan_Add: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxTimeSpan_AddInPlace: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTimeSpan_Subtract: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxTimeSpan_SubtractInPlace: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTimeSpan_Multiply: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxTimeSpan_MultiplyInPlace: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTimeSpan_Negate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTimeSpan_NegateInPlace: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTimeSpan_Abs: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTimeSpan_IsNull: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_IsPositive: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_IsNegative: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_IsEqualTo: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_IsLongerThan: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_IsShorterThan: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_GetWeeks: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_GetDays: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_GetHours: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_GetMinutes: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_GetSeconds: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_GetMilliseconds: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_GetValue: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTimeSpan_Format: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxDateSpan_Create: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxDateSpan_CreateFromYears: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxDateSpan_CreateFromMonths: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxDateSpan_CreateFromWeeks: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxDateSpan_CreateFromDays: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxDateSpan_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxDateSpan_SetYears: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDateSpan_SetMonths: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDateSpan_SetWeeks: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDateSpan_SetDays: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDateSpan_GetYears: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDateSpan_GetMonths: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDateSpan_GetTotalMonths: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDateSpan_GetWeeks: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDateSpan_GetDays: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDateSpan_GetTotalDays: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDateSpan_Add: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxDateSpan_AddInPlace: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDateSpan_Subtract: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxDateSpan_SubtractInPlace: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDateSpan_Negate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDateSpan_NegateInPlace: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxDateSpan_Multiply: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxDateSpan_MultiplyInPlace: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDateSpan_IsEqualTo: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxLocale_Init: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxLocale_InitFromName: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxLocale_GetLanguage: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxLocale_GetSysName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxLocale_GetCanonicalName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxLocale_GetHeaderValue: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxLocale_GetPluralString: {
+    parameters: ["pointer", "pointer", "pointer", "i32", "pointer"],
+    result: "pointer",
+  },
+  wxLocale_GetSystemLanguage: {
+    parameters: [],
+    result: "i32",
+  },
+  wxLocale_GetSystemEncoding: {
+    parameters: [],
+    result: "i32",
+  },
+  wxLocale_GetSystemEncodingName: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxLocale_GetInfo: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxLocale_GetOSInfo: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxLocale_IsAvailable: {
+    parameters: ["i32"],
+    result: "i32",
+  },
+  wxLocale_GetLanguageName: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxLocale_GetLanguageCanonicalName: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxLocale_AddCatalog: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxLocale_AddCatalogLookupPathPrefix: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxLocale_Create: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxLocale_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxLocale_GetLocale: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxLocale_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxLocale_GetString: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxLocale_IsLoaded: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxLocale_IsOk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxUILocale_CreateFromTag: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxUILocale_FromTag: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxUILocale_GetLanguageInfo: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxUILocale_GetCurrent: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxUILocale_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxUILocale_UseLocaleName: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxUILocale_IsSupported: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxUILocale_IsDefault: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxUILocale_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxUILocale_GetLocaleTag: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxUILocale_GetLocalizedName: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxUILocale_GetMonthName: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxUILocale_GetWeekDayName: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxUILocale_GetLayoutDirection: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxUILocale_GetCurrencySymbol: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxUILocale_GetCurrencyCode: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxUILocale_GetCurrencySymbolPosition: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxUILocale_UsesMetricSystem: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxUILocale_CompareStrings: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxUILocale_GetSystemLocaleTag: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxUILocale_GetSystemLanguage: {
+    parameters: [],
+    result: "i32",
+  },
+  wxUILocale_GetSystemLocale: {
+    parameters: [],
+    result: "i32",
+  },
+  wxUILocale_GetLanguageName: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxUILocale_GetLanguageCanonicalName: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxUILocale_GetInfo: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxUILocale_IsSet: {
+    parameters: [],
+    result: "i32",
+  },
+  wxUILocale_UseDefault: {
+    parameters: [],
+    result: "i32",
+  },
+  wxTranslations_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxTranslations_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTranslations_Get: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxTranslations_Set: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTranslations_SetLanguage: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTranslations_SetLanguageName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTranslations_GetAvailableTranslations: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxTranslations_GetBestAvailableTranslation: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxTranslations_GetBestTranslation: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxTranslations_GetBestTranslationForName: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxTranslations_AddAvailableCatalog: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxTranslations_AddStdCatalog: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTranslations_AddCatalog: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxTranslations_IsLoaded: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTranslations_GetTranslatedString: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxTranslations_GetHeaderValue: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxTranslations_GetUntranslatedString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxNumberFormatter_ToStringLong: {
+    parameters: ["i64", "i32"],
+    result: "pointer",
+  },
+  wxNumberFormatter_ToString: {
+    parameters: ["i64", "i32"],
+    result: "pointer",
+  },
+  wxNumberFormatter_Format: {
+    parameters: ["pointer", "f64"],
+    result: "pointer",
+  },
+  wxNumberFormatter_FromStringLong: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxNumberFormatter_FromStringDouble: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxNumberFormatter_RemoveTrailingZeroes: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxNumberFormatter_RemoveCurrencySymbolOrCode: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxNumberFormatter_GetDecimalSeparator: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxNumberFormatter_GetThousandsSeparator: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxNumberFormatter_ToStringDouble: {
+    parameters: ["f64", "i32", "i32"],
+    result: "pointer",
+  },
+  wxNumberFormatter_ToStringLongLong: {
+    parameters: ["i64", "i32"],
+    result: "pointer",
+  },
+  wxConfig_Create: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i64"],
+    result: "pointer",
+  },
+  wxCmdLineParser_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxCmdLineParser_AddLongOption: {
+    parameters: ["pointer", "pointer", "pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxCmdLineParser_AddUsageText: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCmdLineParser_FoundSwitch: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxCmdLineParser_Usage: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxCmdLineParser_GetUsageString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxCmdLineParser_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxCmdLineParser_SetDesc: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCmdLineParser_AddSwitch: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxCmdLineParser_AddOption: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxCmdLineParser_AddParam: {
+    parameters: ["pointer", "pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxCmdLineParser_Parse: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "i32",
+  },
+  wxCmdLineParser_ParseString: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxCmdLineParser_ParseArgs: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "i32",
+  },
+  wxCmdLineParser_ParseStringArgs: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxCmdLineParser_Found: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxCmdLineParser_GetParamCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxCmdLineParser_GetParam: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxCmdLineParser_GetOptionValue: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxCmdLineParser_GetOptionLong: {
+    parameters: ["pointer", "pointer", "i64"],
+    result: "i64",
+  },
+  kwxCmdLineDesc_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  kwxCmdLineDesc_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxCmdLineDesc_AddSwitch: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i32"],
+    result: "void",
+  },
+  kwxCmdLineDesc_AddOption: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "i32"],
+    result: "void",
+  },
+  kwxCmdLineDesc_AddParam: {
+    parameters: ["pointer", "pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxVariant_CreateFromBool: {
+    parameters: ["i32", "pointer"],
+    result: "pointer",
+  },
+  wxVariant_GetReal: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxVariant_CreateFromLong: {
+    parameters: ["i64", "pointer"],
+    result: "pointer",
+  },
+  wxVariant_CreateFromDouble: {
+    parameters: ["f64", "pointer"],
+    result: "pointer",
+  },
+  wxVariant_CreateFromString: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxVariant_CreateFromDateTime: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxVariant_CreateFromChar: {
+    parameters: ["u8", "pointer"],
+    result: "pointer",
+  },
+  wxVariant_CreateFromVoidPtr: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxVariant_CreateFromObject: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxVariant_CreateFromArrayString: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxVariant_SetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariant_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxVariant_IsNull: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxVariant_IsType: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxVariant_MakeNull: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxVariant_Clear: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxVariant_SetBool: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxVariant_SetLong: {
+    parameters: ["pointer", "i64"],
+    result: "void",
+  },
+  wxVariant_SetDouble: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
+  wxVariant_SetString: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariant_SetDateTime: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariant_SetVoidPtr: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariant_SetObject: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariant_SetArrayString: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariant_GetChar: {
+    parameters: ["pointer"],
+    result: "u8",
+  },
+  wxVariant_GetVoidPtr: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxVariant_GetWxObjectPtr: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxVariant_GetArrayString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxVariant_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxVariant_NullList: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxVariant_Append: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariant_Insert: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariant_Member: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxVariant_ClearList: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxVariant_ConvertToLong: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxVariant_ConvertToDouble: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxVariant_ConvertToBool: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxVariant_Item: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
+  },
+  wxVariant_GetFont: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxVariant_GetColourPropertyValue: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxVariant_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxVariant_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxVariant_GetType: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxVariant_MakeString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxVariant_GetString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxVariant_GetBool: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxVariant_GetLong: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxVariant_GetDouble: {
+    parameters: ["pointer"],
+    result: "f64",
   },
   wxCredentialEntryDialog_Create: {
     parameters: ["pointer", "pointer", "pointer", "pointer", "pointer"],
@@ -11019,6 +13351,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "pointer"],
     result: "pointer",
   },
+  wxFileDialogCustomize_AddRadioButton: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
   wxFileDialogCustomize_AddStaticText: {
     parameters: ["pointer", "pointer"],
     result: "pointer",
@@ -11043,11 +13379,127 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "i32",
   },
+  wxGenericAboutDialog_GetCustomControlParent: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericAboutDialog_AddText: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
   wxGenericAboutDialog_ShowModal: {
     parameters: ["pointer"],
     result: "i32",
   },
   wxGenericAboutDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGenericColourDialog_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGenericColourDialog_GetColourData: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericColourDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGenericDirDialog_Create: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxGenericDirDialog_GetMessage: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericDirDialog_GetPath: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericDirDialog_GetPaths: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxGenericDirDialog_SetMessage: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericDirDialog_SetPath: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericDirDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGenericFileDialog_Create: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxGenericFileDialog_GetPath: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericFileDialog_SetPath: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericFileDialog_GetPaths: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxGenericFileDialog_GetFilenames: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxGenericFileDialog_GetDirectory: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericFileDialog_GetFilename: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericFileDialog_SetFilename: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericFileDialog_GetWildcard: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericFileDialog_SetWildcard: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericFileDialog_GetFilterIndex: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGenericFileDialog_SetFilterIndex: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGenericFileDialog_SetCustomizeHook: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxGenericFileDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGenericFontDialog_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGenericFontDialog_GetFontData: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericFontDialog_Delete: {
     parameters: ["pointer"],
     result: "void",
   },
@@ -11167,12 +13619,24 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "pointer",
   },
+  wxRichToolTip_SetTipKind: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
   wxRichToolTip_SetBackgroundColour: {
     parameters: ["pointer", "pointer", "pointer"],
     result: "void",
   },
+  wxRichToolTip_SetBackgroundColourSingle: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxRichToolTip_SetIcon: {
     parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichToolTip_SetIconBitmap: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   wxRichToolTip_SetTimeout: {
@@ -11189,6 +13653,14 @@ export const lib = dlopen("kwxFFI", {
   },
   wxTaskBarButton_New: {
     parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTaskBarButton_AppendThumbBarButton: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTaskBarButton_RemoveThumbBarButton: {
+    parameters: ["pointer", "pointer"],
     result: "pointer",
   },
   wxTaskBarButton_Hide: {
@@ -11233,6 +13705,1390 @@ export const lib = dlopen("kwxFFI", {
   },
   wxTaskBarButton_Delete: {
     parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichMessageDialog_Create: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRichMessageDialog_ShowCheckBox: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxRichMessageDialog_IsCheckBoxChecked: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichMessageDialog_ShowDetailedText: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichMessageDialog_SetFooterText: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichMessageDialog_SetFooterIcon: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichMessageDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAddRemoveCtrl_Create: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxAddRemoveCtrl_SetAdaptor: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAddRemoveCtrl_SetButtonsToolTips: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxAddRemoveCtrl_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAppProgressIndicator_Create: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxAppProgressIndicator_IsAvailable: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAppProgressIndicator_SetValue: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAppProgressIndicator_SetRange: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAppProgressIndicator_Pulse: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAppProgressIndicator_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRearrangeDialog_Create: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxRearrangeDialog_GetOrder: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRearrangeDialog_GetList: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRearrangeDialog_AddExtraControls: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRearrangeDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxColourDialogEvent_Create: {
+    parameters: ["i32", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxColourDialogEvent_GetColour: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxColourDialogEvent_GetDialog: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxColourDialogEvent_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxColourDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxColourDialog_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxColourDialog_GetColourData: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxWindowModalDialogEvent_Create: {
+    parameters: ["i32", "pointer"],
+    result: "pointer",
+  },
+  wxWindowModalDialogEvent_GetDialog: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxWindowModalDialogEvent_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFileDialog_SetExtraControlCreator: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFileDialog_Create: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxFileDialog_AddShortcut: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFileDialog_GetCurrentlySelectedFilterIndex: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileDialog_SetCustomizeHook: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFileDialog_GetDirectory: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileDialog_GetFilename: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileDialog_GetFilenames: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFileDialog_GetFilterIndex: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileDialog_GetMessage: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileDialog_GetPath: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileDialog_GetPaths: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFileDialog_GetStyle: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileDialog_GetWildcard: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileDialog_SetDirectory: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileDialog_SetFilename: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileDialog_SetFilterIndex: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFileDialog_SetMessage: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileDialog_SetPath: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileDialog_SetStyle: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFileDialog_SetWildcard: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileDialog_GetCurrentlySelectedFilename: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFileDialog_GetExtraControl: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFontDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFontDialog_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxFontDialog_GetFontData: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextFile_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxTextFile_CreateFromFile: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextFile_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTextFile_Exists: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_CreateOnDisk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_CreateOnDiskNamed: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTextFile_Open: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_OpenNamed: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTextFile_Close: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_IsOpened: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_GetLineCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_GetLine: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxTextFile_GetCurrentLine: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_GoToLine: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextFile_Eof: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_GetFirstLine: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextFile_GetNextLine: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextFile_GetPrevLine: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextFile_GetLastLine: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextFile_GetLineType: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxTextFile_GuessType: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextFile_AddLine: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxTextFile_InsertLine: {
+    parameters: ["pointer", "pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxTextFile_RemoveLine: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextFile_Clear: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTextFile_Write: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextFile_WriteAs: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxTextFile_Translate: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxTextFile_GetEol: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxTempFile_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxTempFile_CreateForName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTempFile_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTempFile_Open: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTempFile_IsOpened: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTempFile_Length: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTempFile_Seek: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxTempFile_Tell: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTempFile_WriteBytes: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxTempFile_WriteText: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTempFile_Flush: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTempFile_Commit: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTempFile_Discard: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTempFileOutputStream_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTempFileOutputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTempFileOutputStream_Commit: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTempFileOutputStream_Discard: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTempFileOutputStream_Close: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTempFileOutputStream_GetLength: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTempFileOutputStream_IsSeekable: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStringTokenizer_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxStringTokenizer_CreateFor: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxStringTokenizer_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStringTokenizer_SetString: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxStringTokenizer_Reinit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxStringTokenizer_CountTokens: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStringTokenizer_HasMoreTokens: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStringTokenizer_GetNextToken: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStringTokenizer_GetLastDelimiter: {
+    parameters: ["pointer"],
+    result: "u8",
+  },
+  wxStringTokenizer_GetString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStringTokenizer_GetPosition: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStringTokenizer_GetMode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStringTokenizer_AllowEmpty: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_CreateRead: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxStreamBuffer_CreateWrite: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxStreamBuffer_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStreamBuffer_Read: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxStreamBuffer_Write: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxStreamBuffer_Peek: {
+    parameters: ["pointer"],
+    result: "u8",
+  },
+  wxStreamBuffer_GetChar: {
+    parameters: ["pointer"],
+    result: "u8",
+  },
+  wxStreamBuffer_PutChar: {
+    parameters: ["pointer", "u8"],
+    result: "void",
+  },
+  wxStreamBuffer_Tell: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_Seek: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxStreamBuffer_ResetBuffer: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStreamBuffer_Truncate: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStreamBuffer_SetBufferIO: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxStreamBuffer_SetBufferSize: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStreamBuffer_GetBufferStart: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStreamBuffer_GetBufferEnd: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStreamBuffer_GetBufferPos: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStreamBuffer_GetBufferSize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_GetIntPosition: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_SetIntPosition: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStreamBuffer_GetLastAccess: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_GetBytesLeft: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_Fixed: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStreamBuffer_Flushable: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStreamBuffer_FlushBuffer: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_FillBuffer: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_GetDataLeft: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_GetStream: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStreamBuffer_HasBuffer: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_IsFixed: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStreamBuffer_IsFlushable: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFilterInputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFilterInputStream_GetLength: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxFilterInputStream_GetFilterInputStream: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFilterOutputStream_GetLength: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxFilterOutputStream_GetFilterOutputStream: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFilterOutputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFilterOutputStream_Close: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFilterClassFactoryBase_GetProtocol: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFilterClassFactoryBase_GetProtocols: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxFilterClassFactoryBase_CanHandle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFilterClassFactoryBase_PopExtension: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxFilterClassFactory_NewStreamInput: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxFilterClassFactory_NewStreamOutput: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxFilterClassFactory_Find: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxFilterClassFactory_GetFirst: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxFilterClassFactory_GetNext: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxArchiveClassFactory_NewEntry: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxArchiveClassFactory_NewStreamInput: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxArchiveClassFactory_NewStreamOutput: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxArchiveClassFactory_GetInternalName: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxArchiveClassFactory_Find: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxArchiveClassFactory_GetFirst: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxArchiveClassFactory_GetNext: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxArchiveEntry_GetDateTime: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxArchiveEntry_GetSize: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxArchiveEntry_GetOffset: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxArchiveEntry_IsDir: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxArchiveEntry_IsReadOnly: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxArchiveEntry_GetInternalName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxArchiveEntry_GetInternalFormat: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxArchiveEntry_GetName: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxArchiveEntry_Clone: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxArchiveEntry_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxArchiveEntry_SetDateTime: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxArchiveEntry_SetSize: {
+    parameters: ["pointer", "i64"],
+    result: "void",
+  },
+  wxArchiveEntry_SetIsDir: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxArchiveEntry_SetIsReadOnly: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxArchiveEntry_SetName: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxArchiveInputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxArchiveInputStream_GetNextEntry: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxArchiveInputStream_OpenEntry: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxArchiveInputStream_CloseEntry: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxArchiveOutputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxArchiveOutputStream_PutNextEntry: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxArchiveOutputStream_PutNextEntryDate: {
+    parameters: ["pointer", "pointer", "pointer", "i64"],
+    result: "i32",
+  },
+  wxArchiveOutputStream_PutNextDirEntryDate: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxArchiveOutputStream_CopyEntry: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxArchiveOutputStream_CopyArchiveMetaData: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxArchiveOutputStream_CloseEntry: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxZipEntry_CreateNamed: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxZipEntry_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxZipEntry_Clone: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxZipEntry_GetSize: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxZipEntry_GetOffset: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxZipEntry_GetCompressedSize: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxZipEntry_GetName: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxZipEntry_GetInternalName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxZipEntry_GetMethod: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_GetFlags: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_GetCrc: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_GetSystemMadeBy: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_GetExternalAttributes: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_GetMode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_GetComment: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxZipEntry_IsDir: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_IsText: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_IsReadOnly: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_IsMadeByUnix: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipEntry_SetSize: {
+    parameters: ["pointer", "i64"],
+    result: "void",
+  },
+  wxZipEntry_SetMethod: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxZipEntry_SetComment: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxZipEntry_SetExternalAttributes: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxZipEntry_SetSystemMadeBy: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxZipEntry_SetMode: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxZipEntry_SetName: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxZipEntry_SetIsDir: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxZipEntry_SetIsReadOnly: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxZipEntry_SetIsText: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxZipInputStream_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxZipInputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxZipInputStream_GetNextEntry: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxZipInputStream_OpenEntry: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxZipInputStream_CloseEntry: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipInputStream_GetComment: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxZipInputStream_GetTotalEntries: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipInputStream_GetLength: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxZipOutputStream_Create: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxZipOutputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxZipOutputStream_PutNextEntry: {
+    parameters: ["pointer", "pointer", "i64"],
+    result: "i32",
+  },
+  wxZipOutputStream_PutNextEntryDate: {
+    parameters: ["pointer", "pointer", "pointer", "i64"],
+    result: "i32",
+  },
+  wxZipOutputStream_PutNextDirEntry: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxZipOutputStream_PutNextDirEntryDate: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxZipOutputStream_PutEntry: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxZipOutputStream_CopyEntry: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxZipOutputStream_CopyArchiveMetaData: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxZipOutputStream_Write: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxZipOutputStream_Sync: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxZipOutputStream_CloseEntry: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipOutputStream_Close: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipOutputStream_SetComment: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxZipOutputStream_GetLevel: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZipOutputStream_SetLevel: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxZipOutputStream_SetFormat: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxZipOutputStream_GetFormat: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZlibInputStream_Create: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxZlibInputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxZlibInputStream_CanHandleGZip: {
+    parameters: [],
+    result: "i32",
+  },
+  wxZlibInputStream_SetDictionary: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxZlibInputStream_GetLength: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxZlibOutputStream_Create: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxZlibOutputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxZlibOutputStream_CanHandleGZip: {
+    parameters: [],
+    result: "i32",
+  },
+  wxZlibOutputStream_SetDictionary: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxZlibOutputStream_Sync: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxZlibOutputStream_Close: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxZlibOutputStream_GetLength: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxTarEntry_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxTarEntry_CreateNamed: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTarEntry_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTarEntry_Clone: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTarEntry_GetName: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxTarEntry_GetInternalName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTarEntry_GetMode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarEntry_GetUserId: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarEntry_GetGroupId: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarEntry_GetSize: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxTarEntry_GetOffset: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxTarEntry_GetTypeFlag: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarEntry_GetLinkName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTarEntry_GetUserName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTarEntry_GetGroupName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTarEntry_GetDevMajor: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarEntry_GetDevMinor: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarEntry_IsDir: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarEntry_IsReadOnly: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarEntry_SetName: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxTarEntry_SetUserId: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTarEntry_SetGroupId: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTarEntry_SetMode: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTarEntry_SetSize: {
+    parameters: ["pointer", "i64"],
+    result: "void",
+  },
+  wxTarEntry_SetTypeFlag: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTarEntry_SetLinkName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTarEntry_SetUserName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTarEntry_SetGroupName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTarEntry_SetDevMajor: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTarEntry_SetDevMinor: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTarEntry_SetIsDir: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTarEntry_SetIsReadOnly: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTarInputStream_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTarInputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTarInputStream_GetNextEntry: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTarInputStream_OpenEntry: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTarInputStream_CloseEntry: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarInputStream_GetLength: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxTarInputStream_GetMaxExtendedHeaderSize: {
+    parameters: [],
+    result: "i32",
+  },
+  wxTarInputStream_SetMaxExtendedHeaderSize: {
+    parameters: ["i32"],
+    result: "void",
+  },
+  wxTarOutputStream_Create: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxTarOutputStream_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTarOutputStream_PutNextEntry: {
+    parameters: ["pointer", "pointer", "i64"],
+    result: "i32",
+  },
+  wxTarOutputStream_PutNextEntryDate: {
+    parameters: ["pointer", "pointer", "pointer", "i64"],
+    result: "i32",
+  },
+  wxTarOutputStream_PutNextDirEntry: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTarOutputStream_PutNextDirEntryDate: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxTarOutputStream_PutEntry: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTarOutputStream_CopyEntry: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxTarOutputStream_CopyArchiveMetaData: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxTarOutputStream_Write: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxTarOutputStream_Sync: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTarOutputStream_CloseEntry: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarOutputStream_Close: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarOutputStream_IsSeekable: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTarOutputStream_SetBlockingFactor: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTarOutputStream_GetBlockingFactor: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGestureEvent_GetPosition: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGestureEvent_SetPosition: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGestureEvent_IsGestureStart: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGestureEvent_SetGestureStart: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGestureEvent_IsGestureEnd: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGestureEvent_SetGestureEnd: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPanGestureEvent_GetDelta: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPanGestureEvent_SetDelta: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxZoomGestureEvent_GetZoomFactor: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxZoomGestureEvent_SetZoomFactor: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
+  wxRotateGestureEvent_GetRotationAngle: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxRotateGestureEvent_SetRotationAngle: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
+  wxPoint2DDouble_Create: {
+    parameters: ["f64", "f64"],
+    result: "pointer",
+  },
+  wxPoint2DDouble_CreateFromPoint: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPoint2DDouble_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPoint2DDouble_GetX: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxPoint2DDouble_GetY: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxPoint2DDouble_SetX: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
+  wxPoint2DDouble_SetY: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
+  wxPoint2DDouble_Add: {
+    parameters: ["pointer", "f64", "f64"],
+    result: "void",
+  },
+  wxPoint2DDouble_Subtract: {
+    parameters: ["pointer", "f64", "f64"],
     result: "void",
   },
   wxGridCellEnumEditor_Ctor: {
@@ -11405,6 +15261,922 @@ export const lib = dlopen("kwxFFI", {
   },
   wxGridTableMessage_SetCommandInt2: {
     parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxGridCellRendererHook_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxGridCellRendererHook_SetOnDraw: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridCellRendererHook_SetOnGetBestSize: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridCellRendererHook_SetGetBestSizeResult: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  kwxGridCellActivatableEditorHook_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxGridCellActivatableEditorHook_SetOnTryActivate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridCellActivatableEditorHook_SetOnDoActivate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridCellActivatableEditorHook_SetTryActivateResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxGridCellActivatableEditorHook_SetTryActivateValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridColumnHeaderRendererHook_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxGridColumnHeaderRendererHook_SetOnDrawLabel: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridColumnHeaderRendererHook_SetOnDrawBorder: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridColumnHeaderRendererHook_SetOnDrawHighlighted: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridCellAttrProviderHook_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxGridCellAttrProviderHook_SetOnGetColumnHeaderRenderer: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridCellAttrProviderHook_SetGetColumnHeaderRendererResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridCellAttrProviderHook_SetOnGetAttr: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridCellAttrProviderHook_SetGetAttrResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridCellAttrProviderHook_GetBaseAttr: {
+    parameters: ["pointer", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxGridBlockCoordsArray_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGridBlockCoordsArray_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGridBlockCoordsArray_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGridBlockCoordsArray_ItemTopLeft: {
+    parameters: ["pointer", "i32", "pointer", "pointer"],
+    result: "void",
+  },
+  wxGridBlockCoordsArray_ItemBottomRight: {
+    parameters: ["pointer", "i32", "pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxAppConsole_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnOnCmdLineParsed: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnOnInitCmdLine: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnOnExit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnOnRun: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnOnAssertFailure: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnOnEventLoopEnter: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnOnExceptionInMainLoop: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnOnFatalException: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnOnUnhandledException: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnStoreCurrentException: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnRethrowStoredException: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppConsole_SetOnCreateTraits: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnOnCmdLineParsed: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnOnInitCmdLine: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnOnExit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnOnRun: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnOnAssertFailure: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnOnEventLoopEnter: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnOnExceptionInMainLoop: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnOnFatalException: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnOnUnhandledException: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnStoreCurrentException: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnRethrowStoredException: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_SetOnCreateTraits: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_GetAppName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAppConsole_SetAppName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_GetAppDisplayName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAppConsole_SetAppDisplayName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_GetVendorName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAppConsole_SetVendorName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppConsole_ExitMainLoop: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAppConsole_ProcessPendingEvents: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAppConsole_Yield: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  kwxApp_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxApp_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxApp_SetOnOnCmdLineParsed: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxApp_SetOnOnInitCmdLine: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxApp_SetOnOnExit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxApp_SetOnFilterEvent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxApp_SetOnGetClassInfo: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxApp_SetOnOnAssertFailure: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxApp_SetOnCreateTraits: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxObject_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxObject_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxObject_SetOnGetClassInfo: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPanel_Create: {
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
+  kwxPanel_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxPanel_SetOnTransferDataFromWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPanel_SetOnTransferDataToWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPanel_SetOnDoGetBestClientSize: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPanel_SetOnScrollWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxEvtHandler_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxEvtHandler_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxEvtHandler_SetOnProcessEvent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxVarHScrollHelper_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  kwxVarHScrollHelper_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxVarHScrollHelper_SetOnOnGetColumnWidth: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVarHScrollHelper_SetOnOnGetColumnWidth: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxVarVScrollHelper_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  kwxVarVScrollHelper_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxVarVScrollHelper_SetOnOnGetRowHeight: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVarVScrollHelper_SetOnOnGetRowHeight: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxTimer_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxTimer_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxTimer_SetOnNotify: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxValidator_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxValidator_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxValidator_SetOnClone: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxValidator_SetOnValidate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxValidator_SetOnTransferFromWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxValidator_SetOnTransferToWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPreferencesPage_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxPreferencesPage_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxPreferencesPage_SetOnGetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPreferencesPage_SetOnGetNameResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPreferencesPage_SetOnCreateWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPreferencesPage_SetOnCreateWindowResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPreferencesPage_SetOnGetIcon: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPreferencesPage_SetOnGetIconResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesEditor_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPreferencesEditor_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPreferencesEditor_AddPage: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesEditor_AddStockPage: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesEditor_Show: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesEditor_Dismiss: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPreferencesEditor_ShouldApplyChangesImmediately: {
+    parameters: [],
+    result: "i32",
+  },
+  wxPreferencesEditor_ShownModally: {
+    parameters: [],
+    result: "i32",
+  },
+  wxStockPreferencesPage_Create: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxStockPreferencesPage_CreateWithState: {
+    parameters: ["i32", "pointer"],
+    result: "pointer",
+  },
+  wxStockPreferencesPage_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStockPreferencesPage_GetKind: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxStockPreferencesPage_SetOnCreateWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxStockPreferencesPage_SetOnCreateWindowResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesPage_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPreferencesPage_SetOnGetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesPage_SetOnCreateWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesPage_SetOnGetIcon: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesPage_SetOnGetNameResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesPage_SetOnCreateWindowResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPreferencesPage_SetOnGetIconResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxHtmlListBox_Create: {
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
+  kwxHtmlListBox_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxHtmlListBox_SetOnOnGetItem: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxHtmlListBox_SetOnGetSelectedTextColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxVListBox_Create: {
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
+  kwxVListBox_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxVListBox_SetOnOnDrawItem: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxVListBox_SetOnOnDrawSeparator: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxVListBox_SetOnOnMeasureItem: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRendererNative_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxRendererNative_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxRendererNative_SetOnDrawHeaderButton: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRendererNative_SetOnGetVersion: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRendererNative_SetOnDrawHeaderButton: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRendererNative_SetOnGetVersion: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxModalDialogHook_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxModalDialogHook_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxModalDialogHook_SetOnEnter: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxModalDialogHook_SetOnExit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxModalDialogHook_CaptureEnterDialog: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxModalDialogHook_SetOnEnter: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxModalDialogHook_SetOnExit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxModalDialogHook_CaptureEnterDialog: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxModalDialogHook_Register: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxModalDialogHook_Unregister: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxModalDialogHook_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAddRemoveAdaptor_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxAddRemoveAdaptor_SetOnGetItemsCtrl: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAddRemoveAdaptor_SetOnCanAdd: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAddRemoveAdaptor_SetOnCanRemove: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAddRemoveAdaptor_SetOnAdd: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAddRemoveAdaptor_SetOnRemove: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAddRemoveAdaptor_SetItemsCtrl: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAddRemoveAdaptor_SetCanAdd: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxAddRemoveAdaptor_SetCanRemove: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxAddRemoveAdaptor_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxTextCompleterSimple_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxTextCompleterSimple_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxTextCompleterSimple_SetOnGetCompletions: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextCompleterSimple_SetOnGetCompletions: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxHtmlTagsModule_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxHtmlTagsModule_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxHtmlTagsModule_SetOnFillHandlersTable: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxHtmlTagsModule_SetOnFillHandlersTable: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppTraits_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxAppTraits_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxAppTraits_SetOnCreateLogTarget: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppTraits_SetOnCreateRenderer: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxAppTraits_SetLogTarget: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxAppTraits_SetOnCreateLogTarget: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppTraits_SetOnCreateRenderer: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAppTraits_SetLogTarget: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  kwxDocument_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxDocument_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxDocument_SetOnDoOpenDocument: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxDocument_SetOnDoSaveDocument: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxDocument_SetOnGetClassInfo: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxDocument_SetOnIsModified: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxDocument_SetOnModify: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxDocument_SetOnOnCreate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxDocument_SetOnOnOpenDocument: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxView_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxView_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxView_SetOnOnDraw: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxView_SetOnOnClose: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxView_SetOnOnCreate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxView_SetOnOnUpdate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxFileSystemHandler_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxFileSystemHandler_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxFileSystemHandler_SetOnCanOpen: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxFileSystemHandler_SetOnOpenFile: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxHtmlTagHandler_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxHtmlTagHandler_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxHtmlTagHandler_SetOnGetSupportedTags: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxHtmlTagHandler_SetOnHandleTag: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxEvent_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxEvent_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxEvent_SetOnClone: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxVariantData_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxVariantData_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxVariantData_SetOnEq: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxVariantData_SetOnGetType: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxWizardPage_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxWizardPage_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxWizardPage_Create2: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  kwxWizardPage_SetOnGetNext: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxWizardPage_SetOnGetPrev: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxWizardPage_SetOnTransferDataFromWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxWizardPage_SetOnTransferDataToWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxWizardPage_SetOnGetNextOut: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxWizardPage_SetOnGetPrevOut: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxWizardPage_SetOnTransferDataFromWindowOut: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxWizardPage_SetOnTransferDataToWindowOut: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPopupTransientWindow_Create: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  kwxPopupTransientWindow_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxPopupTransientWindow_SetOnPopup: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPopupTransientWindow_SetOnShow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPopupTransientWindow_SetOnProcessLeftDown: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPopupTransientWindow_SetOnOnDismiss: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPopupTransientWindow_CallBasePopup: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPopupTransientWindow_CallBaseShow: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  kwxPopupTransientWindow_CallBaseProcessLeftDown: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  kwxPopupTransientWindow_CallBaseOnDismiss: {
+    parameters: ["pointer"],
     result: "void",
   },
   wxHtmlCell_Create: {
@@ -11819,6 +16591,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxHtmlListBox_SetOnOnGetItem: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxHtmlListBox_SetOnGetSelectedTextColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxHTMLDataObject_Create: {
     parameters: ["pointer"],
     result: "pointer",
@@ -11841,6 +16621,22 @@ export const lib = dlopen("kwxFFI", {
   },
   wxLog_Create: {
     parameters: [],
+    result: "pointer",
+  },
+  wxLog_SetOnDoLogRecord: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxLog_SetOnDoLogTextAtLevel: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxLog_LogTextAtLevel: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxLog_SetThreadActiveTarget: {
+    parameters: ["pointer"],
     result: "pointer",
   },
   wxLog_Delete: {
@@ -11927,6 +16723,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "i32",
   },
+  wxLog_DisableTimestamp: {
+    parameters: [],
+    result: "void",
+  },
   wxLog_GetComponentLevel: {
     parameters: ["pointer"],
     result: "i32",
@@ -12003,6 +16803,22 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  kwxLogGui_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxLogGui_SetOnDoShowSingleLogMessage: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxLogGui_GetPendingStyle: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  kwxLogGui_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxLogStderr_Create: {
     parameters: [],
     result: "pointer",
@@ -12031,9 +16847,17 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxLogTextCtrl_DisableTimestamp: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxLogWindow_Create: {
     parameters: ["pointer", "pointer", "i32", "i32"],
     result: "pointer",
+  },
+  wxLogWindow_Show: {
+    parameters: ["pointer", "i32"],
+    result: "void",
   },
   wxLogWindow_GetFrame: {
     parameters: ["pointer"],
@@ -12097,6 +16921,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxSizer_GetItemCount: {
     parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSizer_GetDefaultBorder: {
+    parameters: [],
     result: "i32",
   },
   wxSizer_IsEmpty: {
@@ -12217,7 +17045,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxSizer_AddSpacer: {
     parameters: ["pointer", "i32"],
-    result: "void",
+    result: "pointer",
   },
   wxSizer_AddStretchSpacer: {
     parameters: ["pointer", "i32"],
@@ -12258,6 +17086,22 @@ export const lib = dlopen("kwxFFI", {
   wxSizer_GetItem: {
     parameters: ["pointer", "i32"],
     result: "pointer",
+  },
+  wxSizer_AddWindowFlags: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxSizer_AddSizerFlags: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxSizer_InsertWindowFlags: {
+    parameters: ["pointer", "i32", "pointer", "pointer"],
+    result: "void",
+  },
+  wxSizer_InsertSizerFlags: {
+    parameters: ["pointer", "i32", "pointer", "pointer"],
+    result: "void",
   },
   wxSizer_HideWindow: {
     parameters: ["pointer", "pointer"],
@@ -12333,6 +17177,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxBoxSizer_CalcMin: {
     parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxBoxSizer_AddSpacer: {
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxBoxSizer_Create: {
@@ -12719,6 +17567,18 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "pointer",
   },
+  wxFont_CreateFromInfo: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFont_CreateFromFont: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFont_Assign: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxFont_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -12880,6 +17740,26 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxDataViewCtrl_SetHeaderAttr: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDataViewCtrl_Enable: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxDataViewCtrl_EnableDragSource: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDataViewCtrl_SetBackgroundColour: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDataViewCtrl_SetFocus: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxDataViewCtrl_SetForegroundColour: {
     parameters: ["pointer", "pointer"],
     result: "i32",
   },
@@ -13483,6 +18363,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxControl_Create: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
   wxControl_Command: {
     parameters: ["pointer", "pointer"],
     result: "void",
@@ -13521,6 +18405,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxControl_RemoveMnemonics: {
     parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxControl_Ellipsize: {
+    parameters: ["pointer", "pointer", "i32", "i32", "i32"],
     result: "pointer",
   },
   wxControl_EscapeMnemonics: {
@@ -13819,6 +18707,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxDialog_Show: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
   wxDialog_GetModality: {
     parameters: ["pointer"],
     result: "i32",
@@ -13951,6 +18843,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "i32",
   },
+  wxTopLevelWindow_CentreOnScreen: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
   wxTopLevelWindow_GetDefaultButton: {
     parameters: ["pointer"],
     result: "pointer",
@@ -14064,6 +18960,278 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxTopLevelWindow_SetRepresentedFilename: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxProtocol_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxProtocol_Reconnect: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxProtocol_Connect: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxProtocol_ConnectAddr: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxProtocol_ReadLine: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxProtocol_Abort: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxProtocol_GetInputStream: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxProtocol_GetContentType: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxProtocol_GetError: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxProtocol_SetUser: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxProtocol_SetPassword: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxProtocol_SetDefaultTimeout: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxProtocol_LogRequest: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxProtocol_LogResponse: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxHTTP_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxHTTP_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxHTTP_Connect: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxHTTP_ConnectPort: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxHTTP_ConnectAddr: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxHTTP_Abort: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxHTTP_GetInputStream: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxHTTP_GetContentType: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxHTTP_GetHeader: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxHTTP_GetResponse: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxHTTP_SetMethod: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxHTTP_SetHeader: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxHTTP_SetPostText: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxHTTP_SetPostBuffer: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxHTTP_SetProxyMode: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxHTTP_GetCookie: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxHTTP_HasCookies: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFTP_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxFTP_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFTP_Connect: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFTP_ConnectPort: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFTP_ConnectAddr: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFTP_Close: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFTP_SetPassive: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFTP_SetBinary: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFTP_SetAscii: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFTP_SetTransferMode: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxFTP_GetContentType: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFTP_GetLastResult: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFTP_SendCommand: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFTP_CheckCommand: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFTP_ChDir: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFTP_MkDir: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFTP_RmDir: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFTP_Pwd: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFTP_Rename: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxFTP_RmFile: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFTP_GetFileSize: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFTP_FileExists: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxFTP_Abort: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFTP_GetInputStream: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxFTP_GetOutputStream: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxFTP_GetList: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxURL_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxURL_CreateFromString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURL_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxURL_GetProtocol: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURL_GetError: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURL_GetURL: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURL_SetURL: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxURL_IsOk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURL_GetInputStream: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURL_SetDefaultProxy: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxURL_SetProxy: {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
@@ -14495,6 +19663,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxPGArrayEditorDialog_Init: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxPGArrayEditorDialog_GetDialogValue: {
     parameters: ["pointer"],
     result: "pointer",
@@ -14567,6 +19739,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "u32"],
     result: "i32",
   },
+  wxPropertyGridPageState_GetColumnFullWidth: {
+    parameters: ["pointer", "pointer", "u32"],
+    result: "i32",
+  },
   wxPropertyGridPageState_GetVirtualWidth: {
     parameters: ["pointer"],
     result: "i32",
@@ -14610,6 +19786,18 @@ export const lib = dlopen("kwxFFI", {
   wxPropertyGridInterface_GetPropertyByName: {
     parameters: ["pointer", "pointer"],
     result: "pointer",
+  },
+  wxPropertyGridInterface_GetProperty: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_RegisterAdditionalEditors: {
+    parameters: [],
+    result: "void",
+  },
+  wxPropertyGridInterface_SetPropertyAttributeAll: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
   },
   wxPropertyGridInterface_GetPropertyByName2: {
     parameters: ["pointer", "pointer", "pointer"],
@@ -14883,9 +20071,121 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "i32"],
     result: "void",
   },
+  wxPropertyGridInterface_BeginAddChildren: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPropertyGridInterface_EndAddChildren: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPropertyGridInterface_ChangePropertyValue: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxPropertyGridInterface_GetPropertyAttribute: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_SetPropertyAttribute: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridInterface_GetPropertyClientData: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_SetPropertyClientData: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxPropertyGridInterface_GetPropertyValidator: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_SetPropertyValidator: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxPropertyGridInterface_GetPropertyValues: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_SetPropertyValues: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxPropertyGridInterface_SetPropertyBackgroundColour: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridInterface_SetPropertyTextColour: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridInterface_SetPropertyColoursToDefault: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridInterface_GetPropertyBackgroundColour: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_GetPropertyTextColour: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_SetPropertyMaxLength: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxPropertyGridInterface_SetValidationFailureBehavior: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridInterface_GetPropertyValueAsULong: {
+    parameters: ["pointer", "pointer"],
+    result: "u64",
+  },
+  wxPropertyGridInterface_GetPropertyValueAsLongLong: {
+    parameters: ["pointer", "pointer"],
+    result: "i64",
+  },
+  wxPropertyGridInterface_GetPropertyValueAsArrayString: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_GetPropertyValueAsArrayInt: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_GetPropertyValueAsDateTime: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_GetEditorByName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridInterface_InitAllTypeHandlers: {
+    parameters: [],
+    result: "void",
+  },
+  wxPropertyGridInterface_SetBoolChoices: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxPropertyGrid_GetColumnCount: {
     parameters: ["pointer"],
     result: "i32",
+  },
+  wxPropertyGrid_GetGoodEditorDialogPosition: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGrid_RegisterEditorClass: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
   },
   wxPropertyGrid_GetRowHeight: {
     parameters: ["pointer"],
@@ -15247,6 +20547,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxPropertyGridPage_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxPropertyGridPage_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxPropertyGridPage_Init: {
     parameters: ["pointer"],
     result: "void",
@@ -15331,6 +20639,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer"],
     result: "pointer",
   },
+  wxFileProperty_GetClassValidator: {
+    parameters: [],
+    result: "pointer",
+  },
   wxPropertyCategory_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -15371,6 +20683,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxArrayStringProperty_CreateFromArray: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
   wxFontProperty_Create: {
     parameters: ["pointer", "pointer", "pointer"],
     result: "pointer",
@@ -15395,6 +20711,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxMultiChoiceProperty_CreateFromArray: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxMultiChoiceProperty_CreateWithChoices: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
   wxEnumProperty_Create: {
     parameters: ["pointer", "pointer", "i32", "pointer", "i32", "pointer", "i32"],
     result: "pointer",
@@ -15402,6 +20726,10 @@ export const lib = dlopen("kwxFFI", {
   wxEnumProperty_Delete: {
     parameters: ["pointer"],
     result: "void",
+  },
+  wxEnumProperty_CreateWithChoices: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "pointer",
   },
   wxEditEnumProperty_Create: {
     parameters: ["pointer", "pointer", "i32", "pointer", "i32", "pointer", "pointer"],
@@ -15411,6 +20739,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxEditEnumProperty_CreateWithChoices: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
   wxFlagsProperty_Create: {
     parameters: ["pointer", "pointer", "i32", "pointer", "i32", "pointer", "i32"],
     result: "pointer",
@@ -15419,11 +20751,863 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxFlagsProperty_CreateWithChoices: {
+    parameters: ["pointer", "pointer", "pointer", "i64"],
+    result: "pointer",
+  },
   wxImageFileProperty_Create: {
     parameters: ["pointer", "pointer", "pointer"],
     result: "pointer",
   },
   wxImageFileProperty_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPropertyGridManager_AddPageObject: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_InsertPageObject: {
+    parameters: ["pointer", "i32", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_Create: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_GetColumnCount: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxPropertyGridManager_SetColumnCount: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxPropertyGridManager_SetColumnTitle: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxPropertyGridManager_AddPage: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_InsertPage: {
+    parameters: ["pointer", "i32", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_RemovePage: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxPropertyGridManager_ClearPage: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridManager_GetPageCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPropertyGridManager_GetPage: {
+    parameters: ["pointer", "u32"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_GetPageByName: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxPropertyGridManager_GetPageName: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_GetSelectedPage: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPropertyGridManager_SelectPage: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridManager_SelectPageByLabel: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPropertyGridManager_GetGrid: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_GetCurrentPage: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_GetToolBar: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridManager_SetDescBoxHeight: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxPropertyGridManager_GetDescBoxHeight: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPropertyGridManager_ShowHeader: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridManager_IsAnyModified: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPropertyGridManager_IsPageModified: {
+    parameters: ["pointer", "usize"],
+    result: "i32",
+  },
+  wxPropertyGridManager_Clear: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxColourPropertyValue_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxColourPropertyValue_CreateWithType: {
+    parameters: ["u32", "pointer"],
+    result: "pointer",
+  },
+  wxColourPropertyValue_CreateFromColour: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxColourPropertyValue_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxColourPropertyValue_Init: {
+    parameters: ["pointer", "u32", "pointer"],
+    result: "void",
+  },
+  wxColourPropertyValue_GetType: {
+    parameters: ["pointer"],
+    result: "u32",
+  },
+  wxColourPropertyValue_SetType: {
+    parameters: ["pointer", "u32"],
+    result: "void",
+  },
+  wxColourPropertyValue_GetColour: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxColourPropertyValue_SetColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPropertyGridXmlHandler_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxPropertyGridXmlHandler_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPGChoices_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxPGChoices_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPGChoices_GetCount: {
+    parameters: ["pointer"],
+    result: "u32",
+  },
+  wxPGChoices_GetLabel: {
+    parameters: ["pointer", "u32"],
+    result: "pointer",
+  },
+  wxPGChoices_GetValue: {
+    parameters: ["pointer", "u32"],
+    result: "i32",
+  },
+  wxPGChoices_Item: {
+    parameters: ["pointer", "u32"],
+    result: "pointer",
+  },
+  wxPGChoices_Add: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxPGChoices_AddAsSorted: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxPGChoices_AddStrings: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxPGChoices_Set: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxPGChoices_RemoveAt: {
+    parameters: ["pointer", "u32", "u32"],
+    result: "void",
+  },
+  wxPGChoices_Index: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxPGChoices_IndexValue: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxPGChoices_Clear: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPGChoices_IsOk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGChoices_Copy: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGChoiceEntry_SetValue: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPGChoiceEntry_GetValue: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_SetChoices: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxPGProperty_GetChoices: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetBaseName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_AddChoice: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxPGProperty_AddPrivateChild: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPGProperty_AppendChild: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_DeleteChoice: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPGProperty_EnableCommonValue: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPGProperty_GetCell: {
+    parameters: ["pointer", "u32"],
+    result: "pointer",
+  },
+  wxPGProperty_GetDisplayedString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetIndexInParent: {
+    parameters: ["pointer"],
+    result: "u32",
+  },
+  wxPGProperty_HasAnyChild: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_InsertChoice: {
+    parameters: ["pointer", "pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxPGProperty_IsCategory: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_IsEnabled: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_IsExpanded: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_IsValueUnspecified: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_RefreshEditor: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPGProperty_SetAttribute: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxPGProperty_SetAutoUnspecified: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPGProperty_SetExpanded: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPGProperty_GetY: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_GetValue: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetHintText: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetGrid: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetGridIfDisplayed: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetMainParent: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetParent: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_Item: {
+    parameters: ["pointer", "u32"],
+    result: "pointer",
+  },
+  wxPGProperty_GetChildCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_GetChoiceSelection: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_SetChoiceSelection: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPGProperty_Enable: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPGProperty_AreChildrenComponents: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_GetDisplayedCommonValueCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPGProperty_SetLabel: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPGProperty_SetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPGProperty_GetLabel: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetValueAsString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_GetValueType: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPGProperty_SetHelpString: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxSystemColourProperty_Create: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxSystemColourProperty_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSystemColourProperty_GetVal: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxSystemColourProperty_GetColour: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxSystemColourProperty_ColToInd: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxCursorProperty_Create: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxCursorProperty_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPropertyGridEvent_SetValidationFailureBehavior: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridEvent_SetValidationFailureMessage: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPropertyGridEvent_GetValidationFailureBehavior: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPropertyGridEvent_HasProperty: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPropertyGridEvent_CanVeto: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPropertyGridEvent_GetColumn: {
+    parameters: ["pointer"],
+    result: "u32",
+  },
+  wxPropertyGridEvent_GetValue: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPropertyGridEvent_Veto: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPropertyGridEvent_GetProperty: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxPGProperty_Create: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  kwxPGProperty_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetOnChildChanged: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetOnRefreshChildren: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetOnOnSetValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetOnDoGetValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetOnValueToString: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetOnStringToValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetOnValidateValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetChildChangedResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetDoGetValueResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetValueToStringResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGProperty_SetStringToValueResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxPGProperty_SetValidateValueResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxPGTextCtrlEditor_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxPGTextCtrlEditor_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxPGTextCtrlEditor_SetOnCreateControls: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGTextCtrlEditor_SetOnOnEvent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGTextCtrlEditor_SetCreateControlsResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPGTextCtrlEditor_SetOnEventResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxPropertyGridPage_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  kwxPropertyGridPage_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxPropertyGridPage_SetOnIsHandlingAllEvents: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPropertyGridPage_SetIsHandlingAllEventsResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxPropertyGridPage_SetOnInit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxPropertyGridPage_SetOnOnShow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRegEx_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxRegEx_CreateCompiled: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxRegEx_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRegEx_Compile: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxRegEx_IsValid: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRegEx_Matches: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxRegEx_MatchesFrom: {
+    parameters: ["pointer", "pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxRegEx_GetMatchCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRegEx_GetMatch: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRegEx_GetMatchStart: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxRegEx_GetMatchEnd: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxRegEx_Replace: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxRegEx_ReplaceAll: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxRegEx_ReplaceFirst: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxXmlDocument_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxXmlDocument_GetDocumentNode: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxXmlDocument_CreateFromFile: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxXmlDocument_CreateFromString: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxXmlDocument_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxXmlDocument_Load: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxXmlDocument_LoadFromString: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxXmlDocument_Save: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxXmlDocument_SaveToString: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxXmlDocument_GetRoot: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxXmlDocument_SetRoot: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxXmlDocument_DetachRoot: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxXmlDocument_GetVersion: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxXmlDocument_SetVersion: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxXmlDocument_GetFileEncoding: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxXmlDocument_SetFileEncoding: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxXmlDocument_GetFileType: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxXmlDocument_SetFileType: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxXmlDocument_AppendToProlog: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxXmlDocument_AppendChild: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxXmlDocument_IsOk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxURI_CreateFromString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxURI_Parse: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxURI_IsEmpty: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_HasScheme: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_HasUserInfo: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_HasServer: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_HasPort: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_HasPath: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_HasQuery: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_HasFragment: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_GetScheme: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_GetPath: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_GetQuery: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_GetFragment: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_GetPort: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_GetUserInfo: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_GetServer: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_GetUser: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_GetPassword: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_GetHostType: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_SetUserAndPassword: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxURI_BuildURI: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_BuildUnescapedURI: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_Unescape: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxURI_Resolve: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxURI_IsReference: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxURI_IsRelative: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMemoryBuffer_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxMemoryBuffer_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxMemoryBuffer_GetData: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxMemoryBuffer_GetDataLen: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxMemoryBuffer_GetBufSize: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxMemoryBuffer_AppendData: {
+    parameters: ["pointer", "pointer", "usize"],
+    result: "void",
+  },
+  wxMemoryBuffer_AppendByte: {
+    parameters: ["pointer", "u8"],
+    result: "void",
+  },
+  wxMemoryBuffer_SetDataLen: {
+    parameters: ["pointer", "usize"],
+    result: "void",
+  },
+  wxMemoryBuffer_Clear: {
     parameters: ["pointer"],
     result: "void",
   },
@@ -15494,6 +21678,22 @@ export const lib = dlopen("kwxFFI", {
   wxRibbonArtProvider_Clone: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxRibbonArtProvider_GetColor: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxRibbonArtProvider_GetColourScheme: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxRibbonArtProvider_SetColor: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxRibbonArtProvider_SetColourScheme: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "void",
   },
   wxRibbonArtProvider_Delete: {
     parameters: ["pointer"],
@@ -15613,11 +21813,83 @@ export const lib = dlopen("kwxFFI", {
   },
   wxWebView_RegisterHandler: {
     parameters: ["pointer", "pointer"],
-    result: "i32",
+    result: "void",
   },
   wxWebView_New: {
     parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "pointer", "i32"],
     result: "pointer",
+  },
+  wxWebView_AddScriptMessageHandler: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxWebView_AddUserScript: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxWebView_AreBrowserAcceleratorKeysEnabled: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxWebView_CanRedo: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxWebView_CanSetZoomType: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxWebView_CanUndo: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxWebView_ClearBrowsingData: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxWebView_ClearHistory: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxWebView_DeleteSelection: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxWebView_EnableHistory: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxWebView_GetUserAgent: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxWebView_NewConfiguration: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxWebView_Redo: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxWebView_SelectAll: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxWebView_SetProxy: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxWebView_SetUserAgent: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxWebView_ShowDevTools: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxWebView_Undo: {
+    parameters: ["pointer"],
+    result: "void",
   },
   wxWebView_LoadURL: {
     parameters: ["pointer", "pointer"],
@@ -15775,7 +22047,603 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxRichTextAttr_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxRichTextAttr_CreateFromTextAttr: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextAttr_CreateCopy: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextAttr_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextAttr_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextAttr_GetTextBoxAttr: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextAttr_SetTextBoxAttr: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextAttr_HasTextBoxAttr: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextProperties_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxRichTextProperties_CreateCopy: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextProperties_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextProperties_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextProperties_Clear: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextProperties_GetCount: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxRichTextProperties_HasProperty: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextProperties_Find: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextProperties_Remove: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextProperties_GetPropertyString: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxRichTextProperties_GetPropertyLong: {
+    parameters: ["pointer", "pointer"],
+    result: "i64",
+  },
+  wxRichTextProperties_GetPropertyBool: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextProperties_GetPropertyDouble: {
+    parameters: ["pointer", "pointer"],
+    result: "f64",
+  },
+  wxRichTextProperties_SetPropertyString: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextProperties_SetPropertyLong: {
+    parameters: ["pointer", "pointer", "i64"],
+    result: "void",
+  },
+  wxRichTextProperties_SetPropertyBool: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextProperties_SetPropertyDouble: {
+    parameters: ["pointer", "pointer", "f64"],
+    result: "void",
+  },
+  wxRichTextProperties_GetPropertyNames: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextProperties_RemoveProperties: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextProperties_MergeProperties: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleDefinition_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleDefinition_Eq: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextStyleDefinition_SetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleDefinition_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleDefinition_SetDescription: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleDefinition_GetDescription: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleDefinition_SetBaseStyle: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleDefinition_GetBaseStyle: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleDefinition_SetStyle: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleDefinition_GetStyle: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleDefinition_GetProperties: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleDefinition_SetProperties: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_CreateCopy: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_Init: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_AddCharacterStyle: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_AddParagraphStyle: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_AddListStyle: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_AddBoxStyle: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_AddStyle: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_RemoveCharacterStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_RemoveParagraphStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_RemoveListStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_RemoveBoxStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_RemoveStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_FindCharacterStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_FindParagraphStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_FindListStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_FindBoxStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_FindStyle: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_GetCharacterStyleCount: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxRichTextStyleSheet_GetParagraphStyleCount: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxRichTextStyleSheet_GetListStyleCount: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxRichTextStyleSheet_GetBoxStyleCount: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxRichTextStyleSheet_GetCharacterStyle: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_GetParagraphStyle: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_GetListStyle: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_GetBoxStyle: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_DeleteStyles: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_InsertSheet: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_AppendSheet: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextStyleSheet_Unlink: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_GetNextSheet: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_SetNextSheet: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_GetPreviousSheet: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_SetPreviousSheet: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_SetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_SetDescription: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleSheet_GetDescription: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_GetProperties: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleSheet_SetProperties: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextAttrDimension_Reset: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTextAttrDimension_GetValue: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrDimension_SetValue: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttrDimension_SetValueWithUnits: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxTextAttrDimension_GetUnits: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrDimension_SetUnits: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttrDimension_IsValid: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrDimensions_Reset: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTextAttrDimensions_GetLeft: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextAttrDimensions_GetTop: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextAttrDimensions_GetRight: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextAttrDimensions_GetBottom: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextAttrDimensions_IsValid: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrBorder_Reset: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTextAttrBorder_SetStyle: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttrBorder_GetStyle: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrBorder_SetColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextAttrBorder_GetColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextAttrBorder_SetColourLong: {
+    parameters: ["pointer", "u64"],
+    result: "void",
+  },
+  wxTextAttrBorder_GetColourLong: {
+    parameters: ["pointer"],
+    result: "u64",
+  },
+  wxTextAttrBorder_SetWidth: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxTextAttrBorder_GetWidth: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextAttrBorder_HasStyle: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrBorder_HasColour: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrBorder_HasWidth: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrBorder_IsDefault: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrBorders_Reset: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTextAttrBorders_SetStyle: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextAttrBorders_SetColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextAttrBorders_SetColourLong: {
+    parameters: ["pointer", "u64"],
+    result: "void",
+  },
+  wxTextAttrBorders_SetWidth: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxTextAttrBorders_GetLeft: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextAttrBorders_GetTop: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextAttrBorders_GetRight: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextAttrBorders_GetBottom: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextAttrBorders_IsValid: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextAttrBorders_IsDefault: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextBoxAttr_Reset: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTextBoxAttr_IsDefault: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextBoxAttr_SetFlags: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextBoxAttr_GetFlags: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextBoxAttr_HasFlag: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxTextBoxAttr_AddFlag: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextBoxAttr_RemoveFlag: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextBoxAttr_SetFloatMode: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextBoxAttr_GetFloatMode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextBoxAttr_IsFloating: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextBoxAttr_SetClearMode: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxTextBoxAttr_GetClearMode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxTextBoxAttr_GetMargins: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_SetMargins: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextBoxAttr_GetPadding: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_SetPadding: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextBoxAttr_GetBorder: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetLeftBorder: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetTopBorder: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetRightBorder: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetBottomBorder: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetWidth: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetHeight: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetLeft: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetTop: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetRight: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetBottom: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_GetBoxStyleName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextBoxAttr_SetBoxStyleName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxRichTextObject_GetParent: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextObject_GetProperties: {
     parameters: ["pointer"],
     result: "pointer",
   },
@@ -15893,7 +22761,11 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextParagraphLayoutBox_Create: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "pointer",
+  },
+  wxRichTextParagraphLayoutBox_GetLeafObjectAtPosition: {
+    parameters: ["pointer", "i64"],
+    result: "pointer",
   },
   wxRichTextParagraphLayoutBox_Delete: {
     parameters: ["pointer"],
@@ -15999,9 +22871,13 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxRichTextParagraphLayoutBox_GetBuffer: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxRichTextBox_Create: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextBox_Delete: {
     parameters: ["pointer"],
@@ -16011,17 +22887,265 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
-  wxRichTextImage_Create: {
+  wxRichTextTable_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextTable_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextTable_GetRowCount: {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxRichTextTable_SetRowCount: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextTable_GetColumnCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextTable_SetColumnCount: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextTable_GetCell: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxRichTextTable_GetCellAtPosition: {
+    parameters: ["pointer", "i64"],
+    result: "pointer",
+  },
+  wxRichTextTable_GetCellRowColumnPosition: {
+    parameters: ["pointer", "i64", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextTable_GetFocusedCell: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextTable_ClearTable: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextTable_CreateTable: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxRichTextTable_DeleteRows: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxRichTextTable_DeleteColumns: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxRichTextTable_AddRows: {
+    parameters: ["pointer", "i32", "i32", "pointer"],
+    result: "i32",
+  },
+  wxRichTextTable_AddColumns: {
+    parameters: ["pointer", "i32", "i32", "pointer"],
+    result: "i32",
+  },
+  wxRichTextTable_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextCell_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextCell_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextCell_GetColSpan: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextCell_SetColSpan: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextCell_GetRowSpan: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextCell_SetRowSpan: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextCell_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextField_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxRichTextField_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextField_SetFieldType: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextField_GetFieldType: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextField_UpdateField: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextField_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldType_SetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldType_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextFieldType_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_Create: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRichTextFieldTypeStandard_CreateWithBitmap: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxRichTextFieldTypeStandard_CreateDefault: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxRichTextFieldTypeStandard_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_SetLabel: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetLabel: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextFieldTypeStandard_SetBitmap: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetBitmap: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextFieldTypeStandard_GetDisplayStyle: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextFieldTypeStandard_SetDisplayStyle: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetFont: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextFieldTypeStandard_SetFont: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetTextColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_SetTextColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetBorderColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_SetBorderColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetBackgroundColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_SetBackgroundColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_SetVerticalPadding: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetVerticalPadding: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextFieldTypeStandard_SetHorizontalPadding: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetHorizontalPadding: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextFieldTypeStandard_SetHorizontalMargin: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetHorizontalMargin: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextFieldTypeStandard_SetVerticalMargin: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextFieldTypeStandard_GetVerticalMargin: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextDrawingHandler_SetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextDrawingHandler_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextImage_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxRichTextImage_CreateFromImage: {
     parameters: ["pointer", "pointer", "pointer"],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextImage_CreateFromImageBlock: {
     parameters: ["pointer", "pointer", "pointer"],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextImage_Delete: {
     parameters: ["pointer"],
@@ -16057,7 +23181,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextImageBlock_Create: {
     parameters: [],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextImageBlock_Delete: {
     parameters: ["pointer"],
@@ -16077,7 +23201,39 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextBuffer_Create: {
     parameters: [],
+    result: "pointer",
+  },
+  wxRichTextBuffer_AddHandler: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextBuffer_AddFieldType: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextBuffer_RemoveFieldType: {
+    parameters: ["pointer"],
     result: "i32",
+  },
+  wxRichTextBuffer_FindFieldType: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextBuffer_AddDrawingHandler: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextBuffer_InsertDrawingHandler: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextBuffer_RemoveDrawingHandler: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextBuffer_FindDrawingHandler: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxRichTextBuffer_Delete: {
     parameters: ["pointer"],
@@ -16183,9 +23339,17 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxRichTextBuffer_GetExtWildcard: {
+    parameters: ["i32", "i32", "pointer"],
+    result: "pointer",
+  },
   wxRichTextFileHandler_GetName: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxRichTextFileHandler_SaveFile: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
   },
   wxRichTextFileHandler_SetName: {
     parameters: ["pointer", "pointer"],
@@ -16249,7 +23413,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextXMLHandler_Create: {
     parameters: ["pointer", "pointer", "i32"],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextXMLHandler_Delete: {
     parameters: ["pointer"],
@@ -16257,7 +23421,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextHTMLHandler_Create: {
     parameters: ["pointer", "pointer", "i32"],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextHTMLHandler_Delete: {
     parameters: ["pointer"],
@@ -16280,6 +23444,14 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxRichTextHTMLHandler_GetTempDir: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextHTMLHandler_SetFontSizeMapping: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextHTMLHandler_GetFontSizeMapping: {
     parameters: ["pointer"],
     result: "pointer",
   },
@@ -16349,6 +23521,30 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextCtrl_GetBuffer: {
     parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextCtrl_BeginSuppressUndo: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextCtrl_EndSuppressUndo: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextCtrl_GetCommandProcessor: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextCtrl_WriteField: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxRichTextCtrl_WriteTable: {
+    parameters: ["pointer", "i32", "i32", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxRichTextCtrl_WriteTextBox: {
+    parameters: ["pointer", "pointer"],
     result: "pointer",
   },
   wxRichTextCtrl_GetFocusObject: {
@@ -17129,7 +24325,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextHeaderFooterData_Create: {
     parameters: [],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextHeaderFooterData_Delete: {
     parameters: ["pointer"],
@@ -17201,6 +24397,14 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextPrinting_Create: {
     parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxRichTextPrinting_PreviewBuffer: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxRichTextPrinting_PrintBuffer: {
+    parameters: ["pointer", "pointer", "i32"],
     result: "i32",
   },
   wxRichTextPrinting_Delete: {
@@ -17313,7 +24517,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxSymbolPickerDialog_Create: {
     parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
-    result: "i32",
+    result: "pointer",
   },
   wxSymbolPickerDialog_Delete: {
     parameters: ["pointer"],
@@ -17373,7 +24577,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextFormattingDialog_Create: {
     parameters: ["i64", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextFormattingDialog_Delete: {
     parameters: ["pointer"],
@@ -17405,6 +24609,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextFormattingDialog_ApplyStyle: {
     parameters: ["pointer", "pointer", "i64", "i64", "i32"],
+    result: "i32",
+  },
+  wxRichTextFormattingDialog_ApplyStyleToCtrl: {
+    parameters: ["pointer", "pointer", "i32"],
     result: "i32",
   },
   wxRichTextFormattingDialog_GetAttributes: {
@@ -17445,7 +24653,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextStyleOrganiserDialog_Create: {
     parameters: ["i32", "pointer", "pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextStyleOrganiserDialog_Delete: {
     parameters: ["pointer"],
@@ -17505,7 +24713,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextStyleListBox_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextStyleListBox_Delete: {
     parameters: ["pointer"],
@@ -17573,7 +24781,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxRichTextBufferDataObject_Create: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "pointer",
   },
   wxRichTextBufferDataObject_Delete: {
     parameters: ["pointer"],
@@ -17590,6 +24798,310 @@ export const lib = dlopen("kwxFFI", {
   wxRichTextBufferDataObject_GetDataSize: {
     parameters: ["pointer"],
     result: "usize",
+  },
+  wxRichTextCharacterStyleDefinition_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextCharacterStyleDefinition_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextParagraphStyleDefinition_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextParagraphStyleDefinition_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextParagraphStyleDefinition_SetNextStyle: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextParagraphStyleDefinition_GetNextStyle: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextParagraphStyleDefinition_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextListStyleDefinition_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextListStyleDefinition_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextListStyleDefinition_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextListStyleDefinition_SetLevelAttributes: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxRichTextListStyleDefinition_GetLevelAttributes: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxRichTextListStyleDefinition_SetAttributes: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "pointer"],
+    result: "void",
+  },
+  wxRichTextListStyleDefinition_FindLevelForIndent: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxRichTextListStyleDefinition_CombineWithParagraphStyle: {
+    parameters: ["pointer", "i32", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxRichTextListStyleDefinition_GetCombinedStyle: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "pointer",
+  },
+  wxRichTextListStyleDefinition_GetCombinedStyleForLevel: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "pointer",
+  },
+  wxRichTextListStyleDefinition_GetLevelCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextListStyleDefinition_IsNumbered: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxRichTextBoxStyleDefinition_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextBoxStyleDefinition_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextBoxStyleDefinition_Copy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleListCtrl_Create: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
+  wxRichTextStyleListCtrl_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextStyleListCtrl_UpdateStyles: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextStyleListCtrl_SetStyleSheet: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleListCtrl_GetStyleSheet: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleListCtrl_SetRichTextCtrl: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleListCtrl_GetRichTextCtrl: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleListCtrl_SetStyleType: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxRichTextStyleListCtrl_GetStyleType: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRichTextStyleListCtrl_GetStyleListBox: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleListCtrl_GetStyleChoice: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleComboCtrl_Create: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
+  wxRichTextStyleComboCtrl_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextStyleComboCtrl_UpdateStyles: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextStyleComboCtrl_SetStyleSheet: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleComboCtrl_GetStyleSheet: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextStyleComboCtrl_SetRichTextCtrl: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRichTextStyleComboCtrl_GetRichTextCtrl: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRichTextObjectPropertiesDialog_Create: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
+    result: "pointer",
+  },
+  wxRichTextObjectPropertiesDialog_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRichTextRange_GetStart: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxRichTextRange_GetEnd: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxRichTextRange_GetLength: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  kwxRichTextCtrl_Create: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  kwxRichTextCtrl_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxRichTextCtrl_SetOnPrepareContent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextCtrl_SetOnCanDeleteRange: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextCtrl_SetOnCanInsertContent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextCtrl_SetCanDeleteRangeResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxRichTextCtrl_SetCanInsertContentResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_Create: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  kwxRichTextFieldTypeStandard_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetOnCanEditProperties: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetOnEditProperties: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetOnGetPropertiesMenuLabel: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetPropertiesMenuLabelResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetCanEditPropertiesResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetEditPropertiesResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetUpdateFieldResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetIsTopLevelResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetOnUpdateField: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextFieldTypeStandard_SetOnIsTopLevel: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  kwxRichTextDrawingHandler_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetOnHasVirtualAttributes: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetOnGetVirtualAttributes: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetOnGetVirtualSubobjectAttributesCount: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetOnHasVirtualText: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetOnGetVirtualText: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetVirtualTextResult: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetHasVirtualAttributesResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetGetVirtualAttributesResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetGetVirtualSubobjectAttributesCountResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  kwxRichTextDrawingHandler_SetHasVirtualTextResult: {
+    parameters: ["pointer", "i32"],
+    result: "void",
   },
   wxSpinDoubleEvent_Create: {
     parameters: ["i32", "i32", "f64"],
@@ -17771,8 +25283,32 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxTextUrlEvent_Create: {
+    parameters: ["i32", "pointer", "i64", "i64"],
+    result: "pointer",
+  },
+  wxTextUrlEvent_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTextUrlEvent_GetMouseEvent: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextUrlEvent_GetURLStart: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
+  wxTextUrlEvent_GetURLEnd: {
+    parameters: ["pointer"],
+    result: "i64",
+  },
   wxThreadEvent_Create: {
     parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxThreadEvent_Clone: {
+    parameters: ["pointer"],
     result: "pointer",
   },
   wxThreadEvent_Delete: {
@@ -18107,6 +25643,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "i32", "i32"],
     result: "pointer",
   },
+  wxArtProvider_Pop: {
+    parameters: [],
+    result: "i32",
+  },
+  wxArtProvider_Push: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxArtProvider_GetBitmapBundle: {
     parameters: ["pointer", "pointer", "i32", "i32"],
     result: "pointer",
@@ -18243,6 +25787,42 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxWizardPage_SetOnGetNext: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxWizardPage_SetOnGetPrev: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxWizardPage_Create2: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxWizardPage_SetOnTransferDataFromWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxWizardPage_SetOnTransferDataToWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxWizardPage_SetOnGetNextOut: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxWizardPage_SetOnGetPrevOut: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxWizardPage_SetOnTransferDataFromWindowOut: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxWizardPage_SetOnTransferDataToWindowOut: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxMDIClientWindow_Create: {
     parameters: [],
     result: "pointer",
@@ -18258,6 +25838,14 @@ export const lib = dlopen("kwxFFI", {
   wxGridTableBase_GetNumberRows: {
     parameters: ["pointer"],
     result: "i32",
+  },
+  wxGridTableBase_GetAttrProvider: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGridTableBase_SetAttrProvider: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
   },
   wxGridTableBase_GetNumberCols: {
     parameters: ["pointer"],
@@ -18383,6 +25971,34 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxGridTableBase_SetOnGetTypeName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGridTableBase_SetOnCanGetValueAs: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGridTableBase_SetOnCanSetValueAs: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGridTableBase_SetOnGetValueAsLong: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGridTableBase_SetOnGetValueAsBool: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGridTableBase_SetOnSetValueAsLong: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGridTableBase_SetOnSetValueAsBool: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxGridCellRenderer_Draw: {
     parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32", "i32"],
     result: "void",
@@ -18409,6 +26025,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxGridCellBoolRenderer_GetMaxBestSize: {
     parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGridCellBoolRenderer_Ctor: {
+    parameters: [],
     result: "pointer",
   },
   wxGridCellStringRenderer_Draw: {
@@ -18455,38 +26075,6 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
-  wxVariant_Create: {
-    parameters: [],
-    result: "pointer",
-  },
-  wxVariant_Delete: {
-    parameters: ["pointer"],
-    result: "void",
-  },
-  wxVariant_GetType: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxVariant_MakeString: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxVariant_GetString: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxVariant_GetBool: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxVariant_GetLong: {
-    parameters: ["pointer"],
-    result: "i64",
-  },
-  wxVariant_GetDouble: {
-    parameters: ["pointer"],
-    result: "f64",
-  },
   wxDataObject_GetPreferredFormat: {
     parameters: ["pointer", "i32"],
     result: "pointer",
@@ -18511,94 +26099,6 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "i32", "pointer"],
     result: "i32",
   },
-  wxPGProperty_GetBaseName: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_GetY: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPGProperty_GetValue: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_GetHintText: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_GetGrid: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_GetGridIfDisplayed: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_GetMainParent: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_GetParent: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_Item: {
-    parameters: ["pointer", "u32"],
-    result: "pointer",
-  },
-  wxPGProperty_GetChildCount: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPGProperty_GetChoiceSelection: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPGProperty_SetChoiceSelection: {
-    parameters: ["pointer", "i32"],
-    result: "void",
-  },
-  wxPGProperty_Enable: {
-    parameters: ["pointer", "i32"],
-    result: "void",
-  },
-  wxPGProperty_AreChildrenComponents: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPGProperty_GetDisplayedCommonValueCount: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPGProperty_SetLabel: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
-  wxPGProperty_SetName: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
-  wxPGProperty_GetLabel: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_GetName: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_GetValueAsString: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_GetValueType: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPGProperty_SetHelpString: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
   wxPrintAbortDialog_Create: {
     parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
@@ -18610,6 +26110,222 @@ export const lib = dlopen("kwxFFI", {
   wxPrintAbortDialog_SetProgress: {
     parameters: ["pointer", "i32", "i32", "i32", "i32"],
     result: "void",
+  },
+  wxThread_Create: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxThread_GetCPUCount: {
+    parameters: [],
+    result: "i32",
+  },
+  wxThread_GetCurrentId: {
+    parameters: [],
+    result: "i32",
+  },
+  wxThread_GetMainId: {
+    parameters: [],
+    result: "i32",
+  },
+  wxThread_IsPaused: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_Sleep: {
+    parameters: ["u64"],
+    result: "void",
+  },
+  wxThread_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxThread_Start: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_Run: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_Wait: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxThread_Pause: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_Resume: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_IsAlive: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_IsRunning: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_TestDestroy: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_GetId: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_SetPriority: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxThread_GetPriority: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxThread_SetOnTestDestroy: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxThread_SetOnExit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxSemaphore_Create: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxSemaphore_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSemaphore_Wait: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSemaphore_WaitTimeout: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxSemaphore_Post: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDynamicLibrary_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxDynamicLibrary_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxDynamicLibrary_Load: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxDynamicLibrary_Unload: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxDynamicLibrary_IsLoaded: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDynamicLibrary_HasSymbol: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDynamicLibrary_GetSymbol: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxDynamicLibrary_Detach: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDynamicLibrary_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxMutex_IsOk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMutex_LockTimeout: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxMutex_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxMutex_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxMutex_Lock: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMutex_TryLock: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMutex_Unlock: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxCriticalSection_TryEnter: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxCriticalSection_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxCriticalSection_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxCriticalSection_Enter: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxCriticalSection_Leave: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxCondition_IsOk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxCondition_WaitTimeout: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxCondition_Broadcast: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxCondition_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxCondition_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxCondition_Signal: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxCondition_Wait: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxCondition_WaitFor: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
   },
   kwxArtProv_Create: {
     parameters: ["pointer", "pointer"],
@@ -18799,6 +26515,118 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32", "i32"],
     result: "pointer",
   },
+  kwxGridTable_SetOnGetTypeName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnCanGetValueAs: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnCanSetValueAs: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnGetValueAsLong: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnGetValueAsBool: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnSetValueAsLong: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnSetValueAsBool: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnGetNumberRows: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnGetNumberCols: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnGetValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnSetValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnIsEmptyCell: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnGetColLabelValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTable_SetOnSetColLabelValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnGetNumberRows: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnGetNumberCols: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnGetValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnSetValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnIsEmptyCell: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnGetColLabelValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnSetColLabelValue: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnGetTypeName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnCanGetValueAs: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnCanSetValueAs: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnGetValueAsLong: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnGetValueAsBool: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnSetValueAsLong: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxGridTableBase_SetOnSetValueAsBool: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   kwxLog_AddTraceMask: {
     parameters: ["pointer", "pointer"],
     result: "void",
@@ -18809,6 +26637,14 @@ export const lib = dlopen("kwxFFI", {
   },
   kwxLog_Delete: {
     parameters: ["pointer"],
+    result: "void",
+  },
+  kwxLog_SetOnDoLogRecord: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  kwxLog_SetOnDoLogTextAtLevel: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   kwxLog_DontCreateOnDemand: {
@@ -19015,6 +26851,34 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "i32"],
     result: "i32",
   },
+  wxAnimationBundle_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxAnimationBundle_CreateFromAnimation: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAnimationBundle_CreateFromFile: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxAnimationBundle_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAnimationBundle_Add: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAnimationBundle_AddFile: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxAnimationBundle_IsOk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxAnimationCtrl_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
@@ -19059,7 +26923,187 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxAnimationCtrl_CreateAnimation: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAnimationCtrl_GetCompatibleAnimation: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAnimationCtrl_SetAnimationBundle: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxActivateEvent_GetActive: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxApp_GetApp: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxApp_GetAppDisplayName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxApp_GetAppName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxApp_GetComCtl32Version: {
+    parameters: [],
+    result: "i32",
+  },
+  wxApp_GetVendorName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxApp_SetAppDisplayName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxApp_SetAppName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxApp_SetAppearance: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxApp_SetVendorName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxApp_Yield: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxApp_ProcessPendingEvents: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxApp_SetExitOnFrameDelete: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxApp_GetExitOnFrameDelete: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxApp_GetTopWindow: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxApp_GetTraits: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxApp_ExitMainLoop: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxApp_SetOnOnCmdLineParsed: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxApp_SetOnOnInitCmdLine: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxApp_SetOnOnExit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxApp_SetOnFilterEvent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxApp_SetOnGetClassInfo: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxApp_SetOnOnAssertFailure: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxApp_SetOnCreateTraits: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxArrayString_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxArrayString_Add: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxArrayString_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxArrayString_Count: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxArrayString_Insert: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxArrayString_RemoveAt: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxArrayString_IsEmpty: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxArrayString_Item: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxArrayString_Sort: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxArrayString_Alloc: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxArrayString_Clear: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxArrayString_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxArrayInt_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxArrayInt_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxArrayInt_Add: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxArrayInt_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxArrayInt_Item: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxArrayInt_Clear: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxArrayInt_IsEmpty: {
     parameters: ["pointer"],
     result: "i32",
   },
@@ -19771,6 +27815,38 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "pointer",
   },
+  wxAuiNotebook_GetActiveTabCtrl: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiNotebook_GetMainTabCtrl: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiNotebook_GetPageKind: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxAuiNotebook_GetPagePosition: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxAuiNotebook_SetManagerFlags: {
+    parameters: ["pointer", "u32"],
+    result: "void",
+  },
+  wxAuiNotebook_SetPageKind: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxAuiNotebook_SetWindowStyleFlag: {
+    parameters: ["pointer", "i64"],
+    result: "void",
+  },
+  wxAuiNotebook_UnsplitAll: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxAuiNotebook_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
@@ -19792,7 +27868,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxAuiNotebook_ChangeSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxAuiNotebook_DeleteAllPages: {
@@ -19800,7 +27876,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxAuiNotebook_DeletePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxAuiNotebook_GetArtProvider: {
@@ -19816,27 +27892,27 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxAuiNotebook_GetPage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxAuiNotebook_GetPageBitmap: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "void",
   },
   wxAuiNotebook_GetPageCount: {
     parameters: ["pointer"],
-    result: "usize",
+    result: "i32",
   },
   wxAuiNotebook_GetPageIndex: {
     parameters: ["pointer", "pointer"],
     result: "i32",
   },
   wxAuiNotebook_GetPageText: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxAuiNotebook_GetPageToolTip: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxAuiNotebook_GetSelection: {
@@ -19848,15 +27924,15 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxAuiNotebook_InsertPageWithBitmap: {
-    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "pointer"],
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "pointer"],
     result: "i32",
   },
   wxAuiNotebook_InsertPage: {
-    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
     result: "i32",
   },
   wxAuiNotebook_RemovePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxAuiNotebook_SetArtProvider: {
@@ -19876,19 +27952,19 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxAuiNotebook_SetPageBitmap: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
   wxAuiNotebook_SetPageImage: {
-    parameters: ["pointer", "usize", "i32"],
+    parameters: ["pointer", "i32", "i32"],
     result: "i32",
   },
   wxAuiNotebook_SetPageText: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
   wxAuiNotebook_SetPageToolTip: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
   wxAuiNotebook_SetSelectedFont: {
@@ -19896,7 +27972,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxAuiNotebook_SetSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxAuiNotebook_SetTabCtrlHeight: {
@@ -19912,7 +27988,27 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxAuiNotebook_Split: {
-    parameters: ["pointer", "usize", "i32"],
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxAuiNotebook_HitTest: {
+    parameters: ["pointer", "i32", "i32", "pointer"],
+    result: "i32",
+  },
+  wxAuiNotebook_GetAllTabCtrls: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiNotebook_GetPagesInDisplayOrder: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxAuiNotebook_SaveLayout: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiNotebook_LoadLayout: {
+    parameters: ["pointer", "pointer", "pointer"],
     result: "void",
   },
   wxAuiTabContainerButton_Id: {
@@ -20303,9 +28399,73 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer", "i32", "i32"],
     result: "i32",
   },
+  wxAuiFlatTabArt_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxAuiFlatTabArt_Clone: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiFlatTabArt_SetColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiFlatTabArt_SetActiveColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiGenericTabArt_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxAuiGenericTabArt_Clone: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiGenericTabArt_SetColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiGenericTabArt_SetActiveColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiNativeTabArt_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxAuiNativeTabArt_Clone: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiNativeTabArt_SetColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiNativeTabArt_SetActiveColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxAuiManager_Create: {
     parameters: ["pointer", "i32"],
     result: "pointer",
+  },
+  wxAuiManager_AllowDocksForMinPanes: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxAuiManager_AlwaysUsesLiveResize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiManager_GetPane: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxAuiManager_SetDocksForMinPanesStyle: {
+    parameters: ["pointer", "u32"],
+    result: "void",
   },
   wxAuiManager_Delete: {
     parameters: ["pointer"],
@@ -20358,6 +28518,14 @@ export const lib = dlopen("kwxFFI", {
   wxAuiManager_SavePerspective: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxAuiManager_SaveLayout: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxAuiManager_LoadLayout: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
   },
   wxAuiManager_SetArtProvider: {
     parameters: ["pointer", "pointer"],
@@ -20415,6 +28583,18 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer", "i32", "pointer"],
     result: "void",
   },
+  wxAuiDockArt_GetColor: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxAuiDockArt_GetMetricForWindow: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "i32",
+  },
+  wxAuiDockArt_SetColor: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
   wxAuiDockArt_DrawBorder: {
     parameters: ["pointer", "pointer", "pointer", "pointer", "pointer"],
     result: "void",
@@ -20461,6 +28641,66 @@ export const lib = dlopen("kwxFFI", {
   },
   wxAuiPaneInfo_CreateDefault: {
     parameters: [],
+    result: "pointer",
+  },
+  wxAuiPaneInfo_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAuiPaneInfo_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneInfo_GetCaption: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneInfo_GetWindow: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneInfo_GetDockDirection: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneInfo_GetDockLayer: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneInfo_GetDockRow: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneInfo_GetDockPos: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneInfo_GetDockProportion: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneInfo_GetDockSize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneInfo_GetFloatingPos: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneInfo_GetFloatingSize: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneInfo_IsMaximized: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiPaneInfo_FloatingClientSize: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxAuiPaneInfo_IconMin: {
+    parameters: ["pointer", "pointer"],
     result: "pointer",
   },
   wxAuiPaneInfo_Create: {
@@ -20859,20 +29099,24 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32", "pointer"],
     result: "i32",
   },
+  wxBookCtrlBase_HitTestFlags: {
+    parameters: ["pointer", "i32", "i32", "pointer"],
+    result: "i32",
+  },
   wxBookCtrlBase_GetPageImage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxBookCtrlBase_SetPageImage: {
-    parameters: ["pointer", "usize", "i32"],
+    parameters: ["pointer", "i32", "i32"],
     result: "i32",
   },
   wxBookCtrlBase_GetPageText: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxBookCtrlBase_SetPageText: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
   wxBookCtrlBase_GetSelection: {
@@ -20884,7 +29128,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxBookCtrlBase_SetSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxBookCtrlBase_AdvanceSelection: {
@@ -20892,7 +29136,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxBookCtrlBase_ChangeSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxBookCtrlBase_FindPage: {
@@ -20908,23 +29152,23 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxBookCtrlBase_DeletePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxBookCtrlBase_InsertPage: {
-    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
     result: "i32",
   },
   wxBookCtrlBase_RemovePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxBookCtrlBase_GetPageCount: {
     parameters: ["pointer"],
-    result: "usize",
+    result: "i32",
   },
   wxBookCtrlBase_GetPage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxBookCtrlBase_AssignImageList: {
@@ -20937,6 +29181,22 @@ export const lib = dlopen("kwxFFI", {
   },
   wxBookCtrlBase_GetImageList: {
     parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxBookCtrlBase_SetImages: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxBookCtrlBase_GetImageCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxBookCtrlBase_HasImages: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxBookCtrlBase_GetImage: {
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxAuiNotebookPage_Window: {
@@ -20979,6 +29239,42 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "pointer",
   },
+  wxBitmapBundleArray_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxBitmapBundleArray_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxBitmapBundleArray_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxBitmapBundleArray_Add: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxBitmapVector_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxBitmapVector_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxBitmapVector_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxBitmapVector_Add: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxBitmapVector_Item: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
   wxAuiToolBarItemArray_Create: {
     parameters: [],
     result: "pointer",
@@ -20991,7 +29287,27 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxAuiToolBarItemArray_Add: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxAuiToolBarItemArray_Item: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxAuiTabCtrlArray_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxAuiTabCtrlArray_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxAuiTabCtrlArray_GetCount: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxAuiTabCtrlArray_Item: {
     parameters: ["pointer", "i32"],
     result: "pointer",
   },
@@ -21143,6 +29459,30 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxBitmapBundle_FromResources: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxBitmapBundle_FromBitmaps: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxBitmapBundle_GetBitmap: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxBitmapBundle_GetIcon: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
+  wxBitmapBundle_GetDefaultSize: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxBitmapBundle_IsOk: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxBitmapBundle_CreateFromData: {
     parameters: ["pointer", "usize", "i32"],
     result: "pointer",
@@ -21153,6 +29493,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxBitmapBundle_CreateFromSVGBase64: {
     parameters: ["pointer", "usize", "i32", "i32"],
+    result: "pointer",
+  },
+  wxBitmapBundle_FromSVGFile: {
+    parameters: ["pointer", "i32", "i32"],
     result: "pointer",
   },
   wxBitmapBundleBuilder_Create: {
@@ -21255,6 +29599,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxBufferedInputStream_TellI: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxBufferedOutputStream_SeekO: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
   wxBusyCursor_Create: {
     parameters: [],
     result: "pointer",
@@ -21271,7 +29623,47 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "pointer",
   },
+  wxBusyInfo_CreateWithFlags: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxBusyInfo_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxBusyInfoFlags_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxBusyInfoFlags_SetParent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxBusyInfoFlags_SetIcon: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxBusyInfoFlags_SetTitle: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxBusyInfoFlags_SetText: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxBusyInfoFlags_SetForeground: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxBusyInfoFlags_SetBackground: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxBusyInfoFlags_SetTransparency: {
+    parameters: ["pointer", "u8"],
+    result: "void",
+  },
+  wxBusyInfoFlags_Delete: {
     parameters: ["pointer"],
     result: "void",
   },
@@ -21303,6 +29695,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxButton_SetAuthNeeded: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxButton_GetAuthNeeded: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxCalculateLayoutEvent_Create: {
     parameters: ["i32"],
     result: "pointer",
@@ -21321,6 +29721,94 @@ export const lib = dlopen("kwxFFI", {
   },
   wxCalculateLayoutEvent_SetRect: {
     parameters: ["pointer", "i32", "i32", "i32", "i32"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_AllowMonthChange: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxCalendarCtrlBase_EnableHolidayDisplay: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_EnableMonthChange: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_GetAttr: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxCalendarCtrlBase_GetDate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_GetDateRange: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxCalendarCtrlBase_GetHeaderColourBg: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_GetHeaderColourFg: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_GetHighlightColourBg: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_GetHighlightColourFg: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_GetHolidayColourBg: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_GetHolidayColourFg: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_HitTest: {
+    parameters: ["pointer", "i32", "i32", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxCalendarCtrlBase_Mark: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_ResetAttr: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_SetAttr: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_SetDate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_SetDateRange: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxCalendarCtrlBase_SetHeaderColours: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_SetHighlightColours: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_SetHoliday: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxCalendarCtrlBase_SetHolidayColours: {
+    parameters: ["pointer", "pointer", "pointer"],
     result: "void",
   },
   wxCalendarCtrl_Create: {
@@ -21342,6 +29830,10 @@ export const lib = dlopen("kwxFFI", {
   wxCalendarCtrl_GetDate: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxCalendarCtrl_GetDateRange: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
   },
   wxCalendarCtrl_GetHeaderColourBg: {
     parameters: ["pointer", "pointer"],
@@ -21371,6 +29863,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32", "pointer", "pointer"],
     result: "i32",
   },
+  wxCalendarCtrl_Mark: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
   wxCalendarCtrl_ResetAttr: {
     parameters: ["pointer", "i32"],
     result: "void",
@@ -21382,6 +29878,10 @@ export const lib = dlopen("kwxFFI", {
   wxCalendarCtrl_SetDate: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxCalendarCtrl_SetDateRange: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
   },
   wxCalendarCtrl_SetHeaderColours: {
     parameters: ["pointer", "pointer", "pointer"],
@@ -21399,12 +29899,40 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer"],
     result: "void",
   },
+  wxGenericCalendarCtrl_Create: {
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxGenericCalendarCtrl_EnableYearChange: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGenericCalendarCtrl_GetLowerDateLimit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericCalendarCtrl_GetUpperDateLimit: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericCalendarCtrl_SetLowerDateLimit: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxGenericCalendarCtrl_SetUpperDateLimit: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
   wxCalendarDateAttr_Create: {
     parameters: ["pointer", "pointer", "pointer", "pointer", "i32"],
     result: "pointer",
   },
   wxCalendarDateAttr_CreateDefault: {
     parameters: [],
+    result: "pointer",
+  },
+  wxCalendarDateAttr_CreateBorder: {
+    parameters: ["i32", "pointer"],
     result: "pointer",
   },
   wxCalendarDateAttr_Delete: {
@@ -21535,9 +30063,25 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxCaretSuspend_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxCaretSuspend_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxCheckBox_Create: {
     parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
+  },
+  wxCheckBox_CreateDefault: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxCheckBox_Create2: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "i32",
   },
   wxCheckBox_Delete: {
     parameters: ["pointer"],
@@ -21591,6 +30135,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxChoice_AppendWithClientData: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxChoice_AppendWithClientObject: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
   wxChoice_Clear: {
     parameters: ["pointer"],
     result: "void",
@@ -21627,6 +30179,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "pointer"],
     result: "void",
   },
+  wxChoice_SetStringSelection: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
   wxChoice_SetColumns: {
     parameters: ["pointer", "i32"],
     result: "void",
@@ -21645,6 +30201,50 @@ export const lib = dlopen("kwxFFI", {
   },
   wxClientDC_Delete: {
     parameters: ["pointer"],
+    result: "void",
+  },
+  wxClientData_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxClientData_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxClientDataContainer_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxClientDataContainer_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxClientDataContainer_SetClientObject: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxClientDataContainer_GetClientObject: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxClientDataContainer_SetClientData: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxClientDataContainer_GetClientData: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxCollapsibleHeaderCtrl_Create: {
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxCollapsibleHeaderCtrl_IsCollapsed: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxCollapsibleHeaderCtrl_SetCollapsed: {
+    parameters: ["pointer", "i32"],
     result: "void",
   },
   wxCollapsiblePane_Create: {
@@ -21723,6 +30323,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "pointer",
   },
+  wxColourData_SetChooseAlpha: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
   wxColourData_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -21751,14 +30355,6 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "pointer"],
     result: "void",
   },
-  wxColourDialog_Create: {
-    parameters: ["pointer", "pointer"],
-    result: "pointer",
-  },
-  wxColourDialog_GetColourData: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
   wxCommandLinkButton_Create: {
     parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
@@ -21785,6 +30381,18 @@ export const lib = dlopen("kwxFFI", {
   },
   wxComboBox_Append: {
     parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxComboBox_Dismiss: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxComboBox_IsListEmpty: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxComboBox_Popup: {
+    parameters: ["pointer"],
     result: "void",
   },
   wxComboBox_AppendData: {
@@ -21913,7 +30521,7 @@ export const lib = dlopen("kwxFFI", {
   },
   wxCommandEvent_GetInt: {
     parameters: ["pointer"],
-    result: "i64",
+    result: "i32",
   },
   wxCommandEvent_GetSelection: {
     parameters: ["pointer"],
@@ -22007,28 +30615,8 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["i32"],
     result: "pointer",
   },
-  wxCondition_Broadcast: {
-    parameters: ["pointer"],
-    result: "void",
-  },
-  wxCondition_Create: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxCondition_Delete: {
-    parameters: ["pointer"],
-    result: "void",
-  },
-  wxCondition_Signal: {
-    parameters: ["pointer"],
-    result: "void",
-  },
-  wxCondition_Wait: {
-    parameters: ["pointer"],
-    result: "void",
-  },
-  wxCondition_WaitFor: {
-    parameters: ["pointer", "i32", "i32"],
+  wxConnectionBase_IsTextFormat: {
+    parameters: ["i32"],
     result: "i32",
   },
   wxContextHelp_BeginContextHelp: {
@@ -22051,21 +30639,77 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
-  wxCriticalSection_Create: {
-    parameters: [],
+  wxContextMenuEvent_GetPosition: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxContextMenuEvent_SetPosition: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxCustomDataObject_Create: {
+    parameters: ["pointer"],
     result: "pointer",
   },
-  wxCriticalSection_Delete: {
+  wxCustomDataObject_Delete: {
     parameters: ["pointer"],
     result: "void",
   },
-  wxCriticalSection_Enter: {
+  wxCustomDataObject_TakeData: {
+    parameters: ["pointer", "usize", "pointer"],
+    result: "void",
+  },
+  wxCustomDataObject_Alloc: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
+  },
+  wxCustomDataObject_Free: {
     parameters: ["pointer"],
     result: "void",
   },
-  wxCriticalSection_Leave: {
+  wxCustomDataObject_GetSize: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxCustomDataObject_GetData: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxCustomDataObject_SetData: {
+    parameters: ["pointer", "usize", "pointer"],
+    result: "i32",
+  },
+  wxDCClipper_Create: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxDCClipper_CreateFromRect: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxDCClipper_CreateFromRegion: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxDCClipper_Delete: {
     parameters: ["pointer"],
     result: "void",
+  },
+  wxDDEClient_MakeConnection: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxDDEConnection_StartAdvise: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDDEConnection_StopAdvise: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDDEServer_Create: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
   },
   wxDataFormat_CreateFromId: {
     parameters: ["pointer"],
@@ -22099,6 +30743,18 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "void",
   },
+  wxDataInputStream_Read16: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDataInputStream_ReadDouble: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxDataInputStream_ReadString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxDataObjectComposite_Add: {
     parameters: ["pointer", "pointer", "i32"],
     result: "void",
@@ -22109,6 +30765,46 @@ export const lib = dlopen("kwxFFI", {
   },
   wxDataObjectComposite_Delete: {
     parameters: ["pointer"],
+    result: "void",
+  },
+  wxDataObjectSimple_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDataObjectSimple_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxDataObjectSimple_GetFormat: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDataObjectSimple_SetFormat: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDataObjectSimple_GetDataSize: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxDataObjectSimple_GetDataHere: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxDataObjectSimple_SetData: {
+    parameters: ["pointer", "usize", "pointer"],
+    result: "i32",
+  },
+  wxDataOutputStream_Write16: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxDataOutputStream_WriteDouble: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
+  wxDataOutputStream_WriteString: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   wxDirDialog_Create: {
@@ -22128,7 +30824,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxDirDialog_GetPaths: {
-    parameters: ["pointer", "pointer"],
+    parameters: ["pointer", "pointer", "i32"],
     result: "i32",
   },
   wxDirDialog_SetMessage: {
@@ -22276,7 +30972,7 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxAuiMDIChildFrame_CreateToolBar: {
-    parameters: ["pointer", "i32", "i32"],
+    parameters: ["pointer", "i64", "i32"],
     result: "pointer",
   },
   wxAuiMDIChildFrame_SetTitle: {
@@ -22307,6 +31003,38 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxDocManager_CloseDocuments: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxDocManager_CreateDocument: {
+    parameters: ["pointer", "pointer", "i64"],
+    result: "pointer",
+  },
+  wxDocManager_CreateNewDocument: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDocManager_FileHistoryLoad: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDocManager_FileHistorySave: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDocManager_FileHistoryUseMenu: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDocManager_GetDocumentManager: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxDocManager_SetMaxDocsOpen: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
   wxDocParentFrame_Create: {
     parameters: ["pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
@@ -22314,6 +31042,58 @@ export const lib = dlopen("kwxFFI", {
   wxDocParentFrame_GetDocumentManager: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxDocument_DeleteContents: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDocument_GetCommandProcessor: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDocument_GetFilename: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDocument_GetFirstView: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDocument_SetFilename: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxDocument_UpdateAllViews: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxDocument_SetOnDoOpenDocument: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDocument_SetOnDoSaveDocument: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDocument_SetOnGetClassInfo: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDocument_SetOnIsModified: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDocument_SetOnModify: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDocument_SetOnOnCreate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxDocument_SetOnOnOpenDocument: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
   },
   wxDrawControl_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
@@ -22323,9 +31103,33 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
   },
+  wxDPIChangedEvent_GetOldDPI: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDPIChangedEvent_GetNewDPI: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDropFilesEvent_GetPosition: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxDropFilesEvent_GetNumberOfFiles: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxDropFilesEvent_GetFile: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
   DropSource_Create: {
     parameters: ["pointer", "pointer", "pointer", "pointer", "pointer"],
     result: "pointer",
+  },
+  wxDropSource_DoDragDrop: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
   },
   DropSource_Delete: {
     parameters: ["pointer"],
@@ -22346,6 +31150,10 @@ export const lib = dlopen("kwxFFI", {
   wxEncodingConverter_Convert: {
     parameters: ["pointer", "pointer", "pointer"],
     result: "void",
+  },
+  wxEncodingConverter_ConvertString: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
   },
   wxEncodingConverter_Create: {
     parameters: [],
@@ -22371,7 +31179,19 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxFFile_IsOpened: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFFile_ReadAll: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
   FileDataObject_AddFile: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileDataObject_AddFile: {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
@@ -22384,84 +31204,8 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   FileDataObject_GetFilenames: {
-    parameters: ["pointer", "pointer"],
+    parameters: ["pointer", "pointer", "i32"],
     result: "i32",
-  },
-  wxFileDialog_Create: {
-    parameters: ["pointer", "pointer", "pointer", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
-    result: "pointer",
-  },
-  wxFileDialog_GetDirectory: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxFileDialog_GetFilename: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxFileDialog_GetFilenames: {
-    parameters: ["pointer", "pointer"],
-    result: "i32",
-  },
-  wxFileDialog_GetFilterIndex: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxFileDialog_GetMessage: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxFileDialog_GetPath: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxFileDialog_GetPaths: {
-    parameters: ["pointer", "pointer"],
-    result: "i32",
-  },
-  wxFileDialog_GetStyle: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxFileDialog_GetWildcard: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxFileDialog_SetDirectory: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
-  wxFileDialog_SetFilename: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
-  wxFileDialog_SetFilterIndex: {
-    parameters: ["pointer", "i32"],
-    result: "void",
-  },
-  wxFileDialog_SetMessage: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
-  wxFileDialog_SetPath: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
-  wxFileDialog_SetStyle: {
-    parameters: ["pointer", "i32"],
-    result: "void",
-  },
-  wxFileDialog_SetWildcard: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
-  wxFileDialog_GetCurrentlySelectedFilename: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxFileDialog_GetExtraControl: {
-    parameters: ["pointer"],
-    result: "pointer",
   },
   wxFileCtrl_Create: {
     parameters: ["pointer", "i32", "pointer", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
@@ -22531,9 +31275,17 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["i32"],
     result: "pointer",
   },
+  wxFileHistory_CreateEx: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
   wxFileHistory_Delete: {
     parameters: ["pointer"],
     result: "void",
+  },
+  wxFileHistory_GetBaseId: {
+    parameters: ["pointer"],
+    result: "i32",
   },
   wxFileHistory_GetCount: {
     parameters: ["pointer"],
@@ -22544,6 +31296,10 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxFileHistory_GetMaxFiles: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFileHistory_GetMenuPathStyle: {
     parameters: ["pointer"],
     result: "i32",
   },
@@ -22567,7 +31323,23 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxFileHistory_SetBaseId: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFileHistory_SetMenuPathStyle: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
   wxFileHistory_UseMenu: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileSystemHandler_SetOnCanOpen: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFileSystemHandler_SetOnOpenFile: {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
@@ -22608,16 +31380,20 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxFindDialogEvent_GetFindString: {
-    parameters: ["pointer", "pointer"],
-    result: "i32",
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFindDialogEvent_GetDialog: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxFindDialogEvent_GetFlags: {
     parameters: ["pointer"],
     result: "i32",
   },
   wxFindDialogEvent_GetReplaceString: {
-    parameters: ["pointer", "pointer"],
-    result: "i32",
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxFindReplaceData_Create: {
     parameters: ["i32"],
@@ -22659,6 +31435,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer", "i32"],
     result: "pointer",
   },
+  wxFindReplaceDialog_Show: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
   wxFindReplaceDialog_GetData: {
     parameters: ["pointer"],
     result: "pointer",
@@ -22666,6 +31446,110 @@ export const lib = dlopen("kwxFFI", {
   wxFindReplaceDialog_SetData: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxFocusEvent_Create: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxFocusEvent_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFocusEvent_GetWindow: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFocusEvent_SetWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFontInfo_Create: {
+    parameters: ["f64"],
+    result: "pointer",
+  },
+  wxFontInfo_CreateDefault: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxFontInfo_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxFontInfo_SetFamily: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_SetFaceName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxFontInfo_SetWeight: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_SetStyle: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_SetBold: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_SetLight: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_SetItalic: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_SetSlant: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_SetUnderlined: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_SetStrikethrough: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_SetEncoding: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxFontInfo_GetFractionalPointSize: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxFontInfo_GetFamily: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFontInfo_GetStyle: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFontInfo_GetNumericWeight: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFontInfo_GetEncoding: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFontInfo_GetFaceName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxFontInfo_IsUnderlined: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFontInfo_IsStrikethrough: {
+    parameters: ["pointer"],
+    result: "i32",
   },
   wxFontData_Create: {
     parameters: [],
@@ -22735,14 +31619,6 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "void",
   },
-  wxFontDialog_Create: {
-    parameters: ["pointer", "pointer"],
-    result: "pointer",
-  },
-  wxFontDialog_GetFontData: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
   wxFontEnumerator_Create: {
     parameters: ["pointer", "pointer"],
     result: "pointer",
@@ -22759,9 +31635,45 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32"],
     result: "i32",
   },
+  wxFontEnumerator_CreateDefault: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxFontEnumerator_EnumerateFacenamesToArray: {
+    parameters: ["pointer", "i32", "i32", "pointer"],
+    result: "i32",
+  },
+  wxFontEnumerator_EnumerateEncodingsToArray: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
   wxFontMapper_Create: {
     parameters: [],
     result: "pointer",
+  },
+  wxFontMapper_CharsetToEncoding: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxFontMapper_Get: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxFontMapper_GetEncoding: {
+    parameters: ["usize"],
+    result: "i32",
+  },
+  wxFontMapper_GetEncodingDescription: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxFontMapper_GetEncodingName: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxFontMapper_GetSupportedEncodingsCount: {
+    parameters: [],
+    result: "usize",
   },
   wxFontMapper_GetAltForEncoding: {
     parameters: ["pointer", "i32", "pointer", "pointer"],
@@ -22799,9 +31711,117 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxGenericHyperlinkCtrl_Create: {
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxGenericHyperlinkCtrl_GetHoverColour: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericHyperlinkCtrl_GetNormalColour: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericHyperlinkCtrl_GetURL: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericHyperlinkCtrl_GetVisited: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGenericHyperlinkCtrl_GetVisitedColour: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericHyperlinkCtrl_SetHoverColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericHyperlinkCtrl_SetNormalColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericHyperlinkCtrl_SetURL: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericHyperlinkCtrl_SetVisited: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGenericHyperlinkCtrl_SetVisitedColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericStaticBitmap_Create: {
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxGenericStaticBitmap_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGenericStaticBitmap_GetBitmap: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericStaticBitmap_GetIcon: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericStaticBitmap_SetBitmap: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericStaticBitmap_SetIcon: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGenericStaticBitmap_SetScaleMode: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGenericStaticBitmap_GetScaleMode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGenericStaticText_Create: {
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxGenericStaticText_Wrap: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGenericValidator_CreateInt: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericValidator_CreateBool: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericValidator_CreateString: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGenericValidator_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxGrid_AppendCols: {
     parameters: ["pointer", "i32", "i32"],
     result: "i32",
+  },
+  wxGrid_HideRowLabels: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGrid_SetColFormatDate: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
   },
   wxGrid_AppendRows: {
     parameters: ["pointer", "i32", "i32"],
@@ -23467,6 +32487,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxGrid_GetSelectedBlocks: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxGrid_GetSelectedRows: {
     parameters: ["pointer", "pointer"],
     result: "i32",
@@ -23483,8 +32507,236 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32", "i32", "i32"],
     result: "void",
   },
+  wxGrid_FreezeTo: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxGrid_IsFrozen: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGrid_SetGridFrozenBorderColour: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGrid_UseNativeColHeader: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGrid_SetUseNativeColLabels: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_EnableHidingColumns: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGrid_CanHideColumns: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGrid_EnableDragRowMove: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGrid_EnableDragColMove: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGrid_EnableDragCell: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_EnableDragRowLabelSize: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_EnableDragColLabelSize: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_SetTabBehaviour: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_SetCellOverflow: {
+    parameters: ["pointer", "i32", "i32", "i32"],
+    result: "void",
+  },
+  wxGrid_SetDefaultCellOverflow: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_SetCellFitMode: {
+    parameters: ["pointer", "i32", "i32", "pointer"],
+    result: "void",
+  },
+  wxGrid_SetDefaultCellFitMode: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxGrid_GetCornerLabelAlignment: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxGrid_SetCornerLabelAlignment: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxGrid_GetCornerLabelTextOrientation: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGrid_SetCornerLabelTextOrientation: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_GetCellHighlightPenWidth: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGrid_SetCellHighlightPenWidth: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_GetCellHighlightROPenWidth: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGrid_SetCellHighlightROPenWidth: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_DeselectCell: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxGrid_DeselectCol: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_DeselectRow: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_DisableOverlaySelection: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGrid_ForceRefresh: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGrid_AutoSizeRowLabelSize: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_AutoSizeColLabelSize: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_DisableRowResize: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_HideCol: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_ShowCol: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_HideRow: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_ShowRow: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_SetAttr: {
+    parameters: ["pointer", "i32", "i32", "pointer"],
+    result: "void",
+  },
+  wxGrid_AssignTable: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxGrid_GetRowPos: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGrid_GetColPos: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGrid_GetRowAt: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGrid_GetColAt: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGrid_SetColPos: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxGrid_ResetColPos: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGrid_GetSelectionMode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGrid_GetSortingColumn: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGrid_IsSortingBy: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxGrid_IsSortOrderAscending: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGrid_SetSortingColumn: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxGrid_Render: {
+    parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32", "i32", "i32", "i32"],
+    result: "void",
+  },
+  wxGridFitMode_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGridFitMode_CreateClip: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGridFitMode_CreateOverflow: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGridFitMode_CreateEllipsize: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxGridFitMode_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxGridCellAttr_Ctor: {
     parameters: [],
+    result: "pointer",
+  },
+  wxGridCellAttr_Clone: {
+    parameters: ["pointer"],
     result: "pointer",
   },
   wxGridCellAttr_DecRef: {
@@ -23715,6 +32967,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxGridEvent_GetNewCol: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGridEvent_GetNewRow: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxGridEvent_ControlDown: {
     parameters: ["pointer"],
     result: "i32",
@@ -23811,6 +33071,18 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxHelpControllerBase_DisplayContents: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxHelpControllerBase_DisplaySection: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxHelpControllerBase_KeywordSearch: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
   wxHelpControllerHelpProvider_Create: {
     parameters: ["pointer"],
     result: "pointer",
@@ -23879,9 +33151,53 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "i32",
   },
+  wxHtmlContainerCell_InsertCell: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxHtmlDCRenderer_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxHtmlDCRenderer_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxHtmlDCRenderer_SetDC: {
+    parameters: ["pointer", "pointer", "f64", "f64"],
+    result: "void",
+  },
+  wxHtmlDCRenderer_SetSize: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxHtmlDCRenderer_SetHtmlText: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxHtmlDCRenderer_SetStandardFonts: {
+    parameters: ["pointer", "i32", "pointer", "pointer"],
+    result: "void",
+  },
+  wxHtmlDCRenderer_FindNextPageBreak: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxHtmlDCRenderer_Render: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32"],
+    result: "void",
+  },
+  wxHtmlDCRenderer_GetTotalHeight: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxHtmlHelpController_AddBook: {
     parameters: ["pointer", "pointer", "i32"],
     result: "i32",
+  },
+  wxHtmlHelpController_SetShouldPreventAppExit: {
+    parameters: ["pointer", "i32"],
+    result: "void",
   },
   wxHtmlHelpController_Create: {
     parameters: ["i32", "pointer"],
@@ -23971,6 +33287,66 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer"],
     result: "void",
   },
+  wxHtmlLinkInfo_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxHtmlLinkInfo_CreateWithHref: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxHtmlLinkInfo_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxHtmlLinkInfo_GetHref: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxHtmlLinkInfo_GetTarget: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxHtmlLinkInfo_GetEvent: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxHtmlLinkInfo_SetEvent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxHtmlLinkInfo_GetHtmlCell: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxHtmlParser_AddTagHandler: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxHtmlTag_GetParam: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "pointer",
+  },
+  wxHtmlTag_HasParam: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxHtmlTagHandler_SetOnGetSupportedTags: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxHtmlTagHandler_SetOnHandleTag: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxHtmlWinParser_GetContainer: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxHtmlWinParser_GetWindowInterface: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxIcon_Assign: {
     parameters: ["pointer", "pointer"],
     result: "void",
@@ -23996,6 +33372,10 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxIcon_FromXPM: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxIcon_CreateFromXPMData: {
     parameters: ["pointer"],
     result: "pointer",
   },
@@ -24071,6 +33451,18 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "usize", "i32"],
     result: "void",
   },
+  wxIconizeEvent_Create: {
+    parameters: ["i32", "i32"],
+    result: "pointer",
+  },
+  wxIconizeEvent_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxIconizeEvent_IsIconized: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxIdleEvent_MoreRequested: {
     parameters: ["pointer"],
     result: "i32",
@@ -24079,7 +33471,75 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "void",
   },
+  wxImageHandler_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxImageHandler_SetName: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxImageHandler_GetExtension: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxImageHandler_SetExtension: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxImageHandler_GetMimeType: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxImageHandler_SetMimeType: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxImageHandler_GetType: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxImageHandler_SetType: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxImageHandler_GetImageCount: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxImageHandler_CanReadStream: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxImageHandler_CanReadFile: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxImageHandler_LoadFile: {
+    parameters: ["pointer", "pointer", "pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxImageHandler_SaveFile: {
+    parameters: ["pointer", "pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxPNGHandler_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxJPEGHandler_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGIFHandler_Create: {
+    parameters: [],
+    result: "pointer",
+  },
   wxImageList_AddBitmap: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxImageList_Add: {
     parameters: ["pointer", "pointer", "pointer"],
     result: "i32",
   },
@@ -24131,6 +33591,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "pointer",
   },
+  wxInfoBar_CreateEx: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "pointer",
+  },
   wxInfoBar_AddButton: {
     parameters: ["pointer", "i32", "pointer"],
     result: "void",
@@ -24177,6 +33641,34 @@ export const lib = dlopen("kwxFFI", {
   },
   wxInfoBar_ShowMessage: {
     parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxInfoBar_ShowCheckBox: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxInfoBar_IsCheckBoxChecked: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxInfoBar_ShowMessageFor: {
+    parameters: ["pointer", "pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxInfoBar_RemoveAllButtons: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxInfoBar_ShowCloseButton: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxInitDialogEvent_Create: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxInitDialogEvent_Delete: {
+    parameters: ["pointer"],
     result: "void",
   },
   wxJoystick_Create: {
@@ -24423,6 +33915,26 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxKeyEvent_GetRawKeyCode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxKeyEvent_GetRawKeyFlags: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxKeyEvent_GetUnicodeChar: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxKeyEvent_IsAutoRepeat: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxKeyEvent_IsKeyInCategory: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
   wxKeyEvent_ControlDown: {
     parameters: ["pointer"],
     result: "i32",
@@ -24486,6 +33998,14 @@ export const lib = dlopen("kwxFFI", {
   wxListBox_Append: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxListBox_GetItem: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
+  },
+  wxListBox_SetFont: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
   },
   wxListBox_AppendData: {
     parameters: ["pointer", "pointer", "pointer"],
@@ -24735,70 +34255,6 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32"],
     result: "void",
   },
-  wxLocale_AddCatalog: {
-    parameters: ["pointer", "pointer", "i32"],
-    result: "i32",
-  },
-  wxLocale_AddCatalogLookupPathPrefix: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
-  wxLocale_Create: {
-    parameters: ["i32", "i32"],
-    result: "pointer",
-  },
-  wxLocale_Delete: {
-    parameters: ["pointer"],
-    result: "void",
-  },
-  wxLocale_GetLocale: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxLocale_GetName: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxLocale_GetString: {
-    parameters: ["pointer", "pointer", "pointer"],
-    result: "pointer",
-  },
-  wxLocale_IsLoaded: {
-    parameters: ["pointer", "pointer"],
-    result: "i32",
-  },
-  wxLocale_IsOk: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxNumberFormatter_GetDecimalSeparator: {
-    parameters: [],
-    result: "pointer",
-  },
-  wxNumberFormatter_GetThousandsSeparator: {
-    parameters: [],
-    result: "pointer",
-  },
-  wxNumberFormatter_ToStringDouble: {
-    parameters: ["f64", "i32", "i32"],
-    result: "pointer",
-  },
-  wxNumberFormatter_ToStringLongLong: {
-    parameters: ["i64", "i32"],
-    result: "pointer",
-  },
-  wxUILocale_GetInfo: {
-    parameters: ["i32", "i32"],
-    result: "pointer",
-  },
-  wxUILocale_IsSet: {
-    parameters: [],
-    result: "i32",
-  },
-  wxUILocale_UseDefault: {
-    parameters: [],
-    result: "i32",
-  },
   wxMDIChildFrame_Activate: {
     parameters: ["pointer"],
     result: "void",
@@ -24863,9 +34319,21 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "pointer",
   },
+  wxMaximizeEvent_Create: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxMaximizeEvent_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxMemoryDC_Create: {
     parameters: [],
     result: "pointer",
+  },
+  wxMemoryDC_SelectObjectAsSource: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
   },
   wxMemoryDC_CreateCompatible: {
     parameters: ["pointer"],
@@ -24883,7 +34351,47 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxMemoryFSHandler_AddFile: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxMemoryFSHandler_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxMemoryFSHandler_AddFileBinary: {
+    parameters: ["pointer", "pointer", "usize"],
+    result: "void",
+  },
+  wxMemoryFSHandler_AddFileWithMimeType: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxMemoryFSHandler_AddFileWithMimeTypeBinary: {
+    parameters: ["pointer", "pointer", "usize", "pointer"],
+    result: "void",
+  },
+  wxMemoryFSHandler_AddFileImage: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxMemoryFSHandler_AddFileBitmap: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxMemoryFSHandler_RemoveFile: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxMenuEvent_GetMenuId: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxMenuEvent_GetMenu: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxMenuEvent_IsPopup: {
     parameters: ["pointer"],
     result: "i32",
   },
@@ -25003,29 +34511,21 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
-  wxMoveEvent_GetPosition: {
-    parameters: ["pointer"],
+  wxMouseCaptureChangedEvent_Create: {
+    parameters: ["i32", "pointer"],
     result: "pointer",
   },
-  wxMutex_Create: {
-    parameters: [],
-    result: "pointer",
-  },
-  wxMutex_Delete: {
+  wxMouseCaptureChangedEvent_Delete: {
     parameters: ["pointer"],
     result: "void",
   },
-  wxMutex_Lock: {
+  wxMouseCaptureChangedEvent_GetCapturedWindow: {
     parameters: ["pointer"],
-    result: "i32",
+    result: "pointer",
   },
-  wxMutex_TryLock: {
+  wxMoveEvent_GetPosition: {
     parameters: ["pointer"],
-    result: "i32",
-  },
-  wxMutex_Unlock: {
-    parameters: ["pointer"],
-    result: "i32",
+    result: "pointer",
   },
   wxNavigationKeyEvent_GetCurrentFocus: {
     parameters: ["pointer"],
@@ -25072,7 +34572,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxChoicebook_DeletePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxChoicebook_GetChoiceCtrl: {
@@ -25084,19 +34584,19 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxChoicebook_GetPage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxChoicebook_GetPageCount: {
     parameters: ["pointer"],
-    result: "usize",
+    result: "i32",
   },
   wxChoicebook_GetPageImage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxChoicebook_GetPageText: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxChoicebook_GetSelection: {
@@ -25108,11 +34608,11 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxChoicebook_InsertPage: {
-    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
     result: "i32",
   },
   wxChoicebook_RemovePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxChoicebook_SetImageList: {
@@ -25120,15 +34620,15 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxChoicebook_SetPageImage: {
-    parameters: ["pointer", "usize", "i32"],
+    parameters: ["pointer", "i32", "i32"],
     result: "i32",
   },
   wxChoicebook_SetPageText: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
   wxChoicebook_SetSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxListbook_AddPage: {
@@ -25148,7 +34648,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxListbook_DeletePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxListbook_GetImageList: {
@@ -25160,19 +34660,19 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxListbook_GetPage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxListbook_GetPageCount: {
     parameters: ["pointer"],
-    result: "usize",
+    result: "i32",
   },
   wxListbook_GetPageImage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxListbook_GetPageText: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxListbook_GetSelection: {
@@ -25184,11 +34684,11 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxListbook_InsertPage: {
-    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
     result: "i32",
   },
   wxListbook_RemovePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxListbook_SetImageList: {
@@ -25196,15 +34696,15 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxListbook_SetPageImage: {
-    parameters: ["pointer", "usize", "i32"],
+    parameters: ["pointer", "i32", "i32"],
     result: "i32",
   },
   wxListbook_SetPageText: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
   wxListbook_SetSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxSimplebook_AddPage: {
@@ -25212,7 +34712,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxSimplebook_ChangeSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxSimplebook_Create: {
@@ -25224,7 +34724,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxSimplebook_DeletePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxSimplebook_GetImageList: {
@@ -25232,19 +34732,19 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxSimplebook_GetPage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxSimplebook_GetPageCount: {
     parameters: ["pointer"],
-    result: "usize",
+    result: "i32",
   },
   wxSimplebook_GetPageImage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxSimplebook_GetPageText: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxSimplebook_GetSelection: {
@@ -25252,11 +34752,11 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxSimplebook_InsertPage: {
-    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
     result: "i32",
   },
   wxSimplebook_RemovePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxSimplebook_SetImageList: {
@@ -25264,15 +34764,15 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxSimplebook_SetPageImage: {
-    parameters: ["pointer", "usize", "i32"],
+    parameters: ["pointer", "i32", "i32"],
     result: "i32",
   },
   wxSimplebook_SetPageText: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
   wxSimplebook_SetSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxSimplebook_ShowNewPage: {
@@ -25304,7 +34804,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxToolbook_DeletePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxToolbook_GetImageList: {
@@ -25312,19 +34812,19 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxToolbook_GetPage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxToolbook_GetPageCount: {
     parameters: ["pointer"],
-    result: "usize",
+    result: "i32",
   },
   wxToolbook_GetPageImage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxToolbook_GetPageText: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxToolbook_GetSelection: {
@@ -25340,11 +34840,11 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxToolbook_InsertPage: {
-    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
     result: "i32",
   },
   wxToolbook_RemovePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxToolbook_SetImageList: {
@@ -25352,15 +34852,15 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxToolbook_SetPageImage: {
-    parameters: ["pointer", "usize", "i32"],
+    parameters: ["pointer", "i32", "i32"],
     result: "i32",
   },
   wxToolbook_SetPageText: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
   wxToolbook_SetSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxTreebook_AddPage: {
@@ -25384,7 +34884,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxTreebook_DeletePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxTreebook_ExpandNode: {
@@ -25396,23 +34896,23 @@ export const lib = dlopen("kwxFFI", {
     result: "pointer",
   },
   wxTreebook_GetPage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxTreebook_GetPageCount: {
     parameters: ["pointer"],
-    result: "usize",
+    result: "i32",
   },
   wxTreebook_GetPageImage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxTreebook_GetPageParent: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxTreebook_GetPageText: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "pointer",
   },
   wxTreebook_GetSelection: {
@@ -25428,7 +34928,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxTreebook_InsertPage: {
-    parameters: ["pointer", "usize", "pointer", "pointer", "i32", "i32"],
+    parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32"],
     result: "i32",
   },
   wxTreebook_InsertSubPage: {
@@ -25444,7 +34944,7 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   wxTreebook_RemovePage: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxTreebook_SetImageList: {
@@ -25452,15 +34952,15 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTreebook_SetPageImage: {
-    parameters: ["pointer", "usize", "i32"],
+    parameters: ["pointer", "i32", "i32"],
     result: "i32",
   },
   wxTreebook_SetPageText: {
-    parameters: ["pointer", "usize", "pointer"],
+    parameters: ["pointer", "i32", "pointer"],
     result: "i32",
   },
   wxTreebook_SetSelection: {
-    parameters: ["pointer", "usize"],
+    parameters: ["pointer", "i32"],
     result: "i32",
   },
   wxDataViewItem_Create: {
@@ -25536,7 +35036,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxDatePickerCtrl_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxDatePickerCtrl_SetValue: {
@@ -25554,6 +35054,10 @@ export const lib = dlopen("kwxFFI", {
   wxDatePickerCtrl_GetRange: {
     parameters: ["pointer", "pointer", "pointer"],
     result: "i32",
+  },
+  wxDatePickerCtrl_SetNullText: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
   },
   wxDirPickerCtrl_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "pointer", "i64"],
@@ -25624,7 +35128,7 @@ export const lib = dlopen("kwxFFI", {
     result: "void",
   },
   wxTimePickerCtrl_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
   wxTimePickerCtrl_SetValue: {
@@ -25659,6 +35163,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  wxOutputStream_SeekO: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
   wxOutputStream_LastWrite: {
     parameters: ["pointer"],
     result: "i32",
@@ -25685,6 +35193,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxPageSetupDialog_Create: {
     parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPageSetupDialog_GetPageSetupDialogData: {
+    parameters: ["pointer"],
     result: "pointer",
   },
   wxPageSetupDialog_GetPageSetupData: {
@@ -25887,6 +35399,22 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxPathList_Add: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxPathList_FindValidPath: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxPathList_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxPathList_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxPen_Assign: {
     parameters: ["pointer", "pointer"],
     result: "void",
@@ -25983,6 +35511,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["i32", "i32"],
     result: "pointer",
   },
+  wxPoint_IsFullySpecified: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxPoint_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -26021,6 +35553,34 @@ export const lib = dlopen("kwxFFI", {
   },
   wxPreviewCanvas_Create: {
     parameters: ["pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxPreviewControlBar_Create: {
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxPreviewControlBar_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPreviewControlBar_CreateButtons: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxPreviewControlBar_SetPageInfo: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxPreviewControlBar_SetZoomControl: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPreviewControlBar_GetZoomControl: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPreviewControlBar_GetPrintPreview: {
+    parameters: ["pointer"],
     result: "pointer",
   },
   wxPrintData_Assign: {
@@ -26222,6 +35782,14 @@ export const lib = dlopen("kwxFFI", {
   wxPrintDialogData_Assign: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxPrintDialogData_EnableCurrentPage: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxPrintDialogData_GetCurrentPage: {
+    parameters: ["pointer"],
+    result: "i32",
   },
   wxPrintDialogData_AssignData: {
     parameters: ["pointer", "pointer"],
@@ -26499,93 +36067,17 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
-  wxPropertyGridManager_Create: {
-    parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
-    result: "pointer",
-  },
-  wxPropertyGridManager_AddPage: {
-    parameters: ["pointer", "pointer", "pointer"],
-    result: "pointer",
-  },
-  wxPropertyGridManager_InsertPage: {
-    parameters: ["pointer", "i32", "pointer", "pointer"],
-    result: "pointer",
-  },
-  wxPropertyGridManager_RemovePage: {
-    parameters: ["pointer", "i32"],
-    result: "i32",
-  },
-  wxPropertyGridManager_ClearPage: {
-    parameters: ["pointer", "i32"],
-    result: "void",
-  },
-  wxPropertyGridManager_GetPageCount: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPropertyGridManager_GetPage: {
-    parameters: ["pointer", "u32"],
-    result: "pointer",
-  },
-  wxPropertyGridManager_GetPageByName: {
-    parameters: ["pointer", "pointer"],
-    result: "i32",
-  },
-  wxPropertyGridManager_GetPageName: {
-    parameters: ["pointer", "i32"],
-    result: "pointer",
-  },
-  wxPropertyGridManager_GetSelectedPage: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPropertyGridManager_SelectPage: {
-    parameters: ["pointer", "i32"],
-    result: "void",
-  },
-  wxPropertyGridManager_SelectPageByLabel: {
-    parameters: ["pointer", "pointer"],
-    result: "void",
-  },
-  wxPropertyGridManager_GetGrid: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPropertyGridManager_GetCurrentPage: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPropertyGridManager_GetToolBar: {
-    parameters: ["pointer"],
-    result: "pointer",
-  },
-  wxPropertyGridManager_SetDescBoxHeight: {
-    parameters: ["pointer", "i32", "i32"],
-    result: "void",
-  },
-  wxPropertyGridManager_GetDescBoxHeight: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPropertyGridManager_ShowHeader: {
-    parameters: ["pointer", "i32"],
-    result: "void",
-  },
-  wxPropertyGridManager_IsAnyModified: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPropertyGridManager_IsPageModified: {
-    parameters: ["pointer", "usize"],
-    result: "i32",
-  },
-  wxPropertyGridManager_Clear: {
-    parameters: ["pointer"],
-    result: "void",
-  },
   wxPropertySheetDialog_Create: {
     parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
+  },
+  wxPropertySheetDialog_CreateDefault: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxPropertySheetDialog_CreateEx: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "i32",
   },
   wxPropertySheetDialog_CreateButtons: {
     parameters: ["pointer", "i32"],
@@ -26630,6 +36122,18 @@ export const lib = dlopen("kwxFFI", {
   wxPropertySheetDialog_SetSheetInnerBorder: {
     parameters: ["pointer", "i32"],
     result: "void",
+  },
+  wxQuantize_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxQuantize_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxQuantize_Quantize: {
+    parameters: ["pointer", "pointer", "i32", "i32"],
+    result: "i32",
   },
   wxQueryLayoutInfoEvent_Create: {
     parameters: ["i32"],
@@ -26686,6 +36190,14 @@ export const lib = dlopen("kwxFFI", {
   wxRadioBox_Create: {
     parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "pointer", "i32", "i32"],
     result: "pointer",
+  },
+  wxRadioBox_Enable: {
+    parameters: ["pointer", "u32", "i32"],
+    result: "i32",
+  },
+  wxRadioBox_Show: {
+    parameters: ["pointer", "u32", "i32"],
+    result: "i32",
   },
   wxRadioBox_EnableItem: {
     parameters: ["pointer", "i32", "i32"],
@@ -26799,6 +36311,42 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
   },
+  wxRibbonBar_AddPageHighlight: {
+    parameters: ["pointer", "usize", "i32"],
+    result: "void",
+  },
+  wxRibbonBar_ArePanelsShown: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRibbonBar_HidePage: {
+    parameters: ["pointer", "usize"],
+    result: "void",
+  },
+  wxRibbonBar_SetHelpButtonKeyTip: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRibbonBar_SetPageKeyTip: {
+    parameters: ["pointer", "usize", "pointer"],
+    result: "void",
+  },
+  wxRibbonBar_SetTabCtrlMargins: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxRibbonBar_SetToggleButtonKeyTip: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxRibbonBar_ShowPage: {
+    parameters: ["pointer", "usize", "i32"],
+    result: "void",
+  },
+  wxRibbonBar_ShowPanels: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
   wxRibbonBar_DismissExpandedPanel: {
     parameters: ["pointer"],
     result: "void",
@@ -26847,6 +36395,18 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "pointer", "pointer", "i32"],
     result: "pointer",
   },
+  wxRibbonPage_GetPanel: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxRibbonPage_GetPanelCount: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxRibbonPage_SetSizeWithScrollButtonAdjustment: {
+    parameters: ["pointer", "i32", "i32", "i32", "i32"],
+    result: "void",
+  },
   wxRibbonPage_DismissExpandedPanel: {
     parameters: ["pointer"],
     result: "void",
@@ -26882,6 +36442,10 @@ export const lib = dlopen("kwxFFI", {
   wxRibbonPanel_Create: {
     parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
+  },
+  wxRibbonPanel_SetExtButtonKeyTip: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
   },
   wxRibbonPanel_GetLabel: {
     parameters: ["pointer"],
@@ -26934,6 +36498,22 @@ export const lib = dlopen("kwxFFI", {
   wxRibbonButtonBar_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
+  },
+  wxRibbonButtonBar_SetButtonTextMinWidth: {
+    parameters: ["pointer", "i32", "i32", "i32"],
+    result: "void",
+  },
+  wxRibbonButtonBar_SetDropdownKeyTip: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxRibbonButtonBar_SetKeyTip: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxRibbonButtonBar_ToggleButton: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
   },
   wxRibbonButtonBar_AddButton: {
     parameters: ["pointer", "i32", "pointer", "pointer", "pointer", "i32", "pointer", "pointer", "pointer"],
@@ -27063,6 +36643,18 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
   },
+  wxRibbonGallery_GetItemClientObject: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxRibbonGallery_SetItemClientObject: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "void",
+  },
+  wxRibbonGallery_SetKeyTip: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxRibbonGallery_Append: {
     parameters: ["pointer", "pointer", "i32"],
     result: "pointer",
@@ -27154,6 +36746,14 @@ export const lib = dlopen("kwxFFI", {
   wxRibbonToolBar_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
+  },
+  wxRibbonToolBar_SetDropdownKeyTip: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxRibbonToolBar_SetKeyTip: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
   },
   wxRibbonToolBar_AddTool: {
     parameters: ["pointer", "i32", "pointer", "pointer", "i32", "pointer", "pointer"],
@@ -27363,6 +36963,34 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "usize",
   },
+  wxRealPoint_Create: {
+    parameters: ["f64", "f64"],
+    result: "pointer",
+  },
+  wxRealPoint_CreateFromPoint: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxRealPoint_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxRealPoint_GetX: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxRealPoint_GetY: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxRealPoint_SetX: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
+  wxRealPoint_SetY: {
+    parameters: ["pointer", "f64"],
+    result: "void",
+  },
   wxRegion_Assign: {
     parameters: ["pointer", "pointer"],
     result: "void",
@@ -27435,6 +37063,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "pointer",
   },
+  wxRegionIterator_GetRect: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxRegionIterator_CreateFromRegion: {
     parameters: ["pointer"],
     result: "pointer",
@@ -27478,6 +37110,14 @@ export const lib = dlopen("kwxFFI", {
   wxSVGFileDC_Create: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxSVGFileDC_EndAccessibleGroup: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSVGFileDC_SetBitmapHandler: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
   },
   wxSVGFileDC_CreateWithSize: {
     parameters: ["pointer", "i32", "i32"],
@@ -27715,6 +37355,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxSetCursorEvent_GetPosition: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxSetCursorEvent_GetX: {
     parameters: ["pointer"],
     result: "i32",
@@ -27763,6 +37407,22 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["i32", "i32"],
     result: "pointer",
   },
+  wxSize_IncBy: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxSize_IncTo: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxSize_IsFullySpecified: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSize_Scale: {
+    parameters: ["pointer", "f64", "f64"],
+    result: "pointer",
+  },
   wxSize_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -27787,9 +37447,121 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxSizerFlags_Create: {
+    parameters: ["i32"],
+    result: "pointer",
+  },
+  wxSizerFlags_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_Proportion: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxSizerFlags_Expand: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_Align: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxSizerFlags_Border: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxSizerFlags_BorderSize: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxSizerFlags_DoubleBorder: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxSizerFlags_TripleBorder: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxSizerFlags_HorzBorder: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_DoubleHorzBorder: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_Center: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_CenterHorizontal: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_CenterVertical: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_Left: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_Right: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_Top: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_Bottom: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_Shaped: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_FixedMinSize: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_ReserveSpaceEvenIfHidden: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSizerFlags_Flag: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxSizerFlags_GetProportion: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSizerFlags_GetFlags: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSizerFlags_GetBorderInPixels: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSizerFlags_GetDefaultBorderFractional: {
+    parameters: [],
+    result: "f64",
+  },
+  wxSizerFlags_DisableConsistencyChecks: {
+    parameters: [],
+    result: "void",
+  },
   wxSizerItem_CalcMin: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxSizerItem_SetMinSize: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
   },
   wxSizerItem_Create: {
     parameters: ["i32", "i32", "i32", "i32", "i32", "pointer"],
@@ -27995,6 +37767,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "void",
   },
+  wxSlider_SetTickFreq: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
   wxSlider_SetValue: {
     parameters: ["pointer", "i32"],
     result: "void",
@@ -28002,6 +37778,10 @@ export const lib = dlopen("kwxFFI", {
   wxSpinButton_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
+  },
+  wxSpinButton_SetIncrement: {
+    parameters: ["pointer", "i32"],
+    result: "void",
   },
   wxSpinButton_GetMax: {
     parameters: ["pointer"],
@@ -28053,6 +37833,14 @@ export const lib = dlopen("kwxFFI", {
   },
   wxSpinCtrl_SetValue: {
     parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxSpinCtrl_SetIncrement: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxSpinCtrl_SetValueString: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   wxSpinCtrlDouble_Create: {
@@ -28111,6 +37899,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i64", "i32", "pointer", "i32", "i32", "i32", "i32", "i32", "i64"],
     result: "pointer",
   },
+  wxSplashScreen_GetSplashWindow: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
   wxSplashScreen_GetSplashStyle: {
     parameters: ["pointer"],
     result: "i64",
@@ -28122,6 +37914,14 @@ export const lib = dlopen("kwxFFI", {
   wxSplitterWindow_Create: {
     parameters: ["pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
+  },
+  wxSplitterWindow_SashHitTest: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "i32",
+  },
+  wxSplitterWindow_SizeWindows: {
+    parameters: ["pointer"],
+    result: "void",
   },
   wxSplitterWindow_GetBorderSize: {
     parameters: ["pointer"],
@@ -28239,7 +38039,19 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxStaticBitmap_SetScaleMode: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxStaticBitmap_GetScaleMode: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxStaticBox_Create: {
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxStaticBox_CreateWithLabelWindow: {
     parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32", "i32", "i32"],
     result: "pointer",
   },
@@ -28250,6 +38062,10 @@ export const lib = dlopen("kwxFFI", {
   wxStaticBoxSizer_CalcMin: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxStaticBoxSizer_Detach: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
   },
   wxStaticBoxSizer_Create: {
     parameters: ["pointer", "i32"],
@@ -28355,6 +38171,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
+  wxStreamToTextRedirector_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStreamToTextRedirector_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxString_Create: {
     parameters: ["pointer"],
     result: "pointer",
@@ -28379,9 +38203,41 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "usize",
   },
+  wxStringClientData_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxStringClientData_CreateWithData: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStringClientData_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxStringClientData_GetData: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStringClientData_SetData: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxSysColourChangedEvent_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxSysColourChangedEvent_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxSystemSettings_GetColour: {
     parameters: ["i32", "pointer"],
     result: "void",
+  },
+  wxSystemSettings_GetAppearance: {
+    parameters: [],
+    result: "pointer",
   },
   wxSystemSettings_GetFont: {
     parameters: ["i32", "pointer"],
@@ -28394,6 +38250,22 @@ export const lib = dlopen("kwxFFI", {
   wxSystemSettings_GetScreenType: {
     parameters: [],
     result: "i32",
+  },
+  wxSystemSettings_SelectLightDark: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxSystemAppearance_IsDark: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSystemAppearance_IsUsingDarkBackground: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxSystemAppearance_GetName: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxTaskBarIcon_Create: {
     parameters: [],
@@ -28427,6 +38299,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxTextDataObject_GetText: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextDataObject_SetText: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   TextDataObject_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -28443,6 +38323,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer", "pointer", "i64", "i32", "i32", "i32", "i32"],
     result: "pointer",
   },
+  wxTextEntryDialog_SetHint: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxTextEntryDialog_GetValue: {
     parameters: ["pointer"],
     result: "pointer",
@@ -28455,13 +38339,33 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["i32", "pointer"],
     result: "pointer",
   },
+  wxTextValidator_AddCharIncludes: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextValidator_GetCharExcludes: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextValidator_GetCharIncludes: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTextValidator_SetCharExcludes: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxTextValidator_SetCharIncludes: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxTextValidator_GetExcludes: {
     parameters: ["pointer", "pointer"],
-    result: "i32",
+    result: "pointer",
   },
   wxTextValidator_GetIncludes: {
     parameters: ["pointer", "pointer"],
-    result: "i32",
+    result: "pointer",
   },
   wxTextValidator_SetExcludes: {
     parameters: ["pointer", "pointer", "i32"],
@@ -28499,6 +38403,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "i32"],
     result: "pointer",
   },
+  wxTimer_SetOwner: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "void",
+  },
+  wxTimer_StartOnce: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
   wxTimer_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -28521,6 +38433,10 @@ export const lib = dlopen("kwxFFI", {
   },
   wxTimer_Stop: {
     parameters: ["pointer"],
+    result: "void",
+  },
+  wxTimer_SetOnNotify: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   wxTimerEvent_GetInterval: {
@@ -28561,6 +38477,114 @@ export const lib = dlopen("kwxFFI", {
   },
   wxToggleButton_SetValue: {
     parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxToolBarBase_AddCheckTool: {
+    parameters: ["pointer", "i32", "pointer", "pointer", "pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxToolBarBase_AddControl: {
+    parameters: ["pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxToolBarBase_AddRadioTool: {
+    parameters: ["pointer", "i32", "pointer", "pointer", "pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxToolBarBase_AddSeparator: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxToolBarBase_AddStretchableSpace: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxToolBarBase_AddTool: {
+    parameters: ["pointer", "i32", "pointer", "pointer", "pointer", "i32", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxToolBarBase_DeleteTool: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxToolBarBase_EnableTool: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxToolBarBase_GetToolEnabled: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxToolBarBase_GetToolPacking: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxToolBarBase_GetToolState: {
+    parameters: ["pointer", "i32"],
+    result: "i32",
+  },
+  wxToolBarBase_GetToolsCount: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxToolBarBase_InsertTool: {
+    parameters: ["pointer", "usize", "i32", "pointer", "pointer", "pointer", "i32", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxToolBarBase_IsVertical: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxToolBarBase_Realize: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxToolBarBase_RemoveTool: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxToolBarBase_SetDropdownMenu: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "i32",
+  },
+  wxToolBarBase_SetMargins: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxToolBarBase_SetRows: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxToolBarBase_SetToolBitmapSize: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxToolBarBase_SetToolSeparation: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxToolBarBase_SetToolShortHelp: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "void",
+  },
+  wxToolBarBase_ToggleTool: {
+    parameters: ["pointer", "i32", "i32"],
+    result: "void",
+  },
+  wxTreeItemData_Create: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxTreeItemData_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxTreeItemData_GetId: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxTreeItemData_SetId: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   wxTreeListItem_Create: {
@@ -28643,6 +38667,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "pointer",
   },
+  wxValidator_IsSilent: {
+    parameters: [],
+    result: "i32",
+  },
   wxValidator_Delete: {
     parameters: ["pointer"],
     result: "void",
@@ -28671,9 +38699,85 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "i32",
   },
+  wxValidator_SetOnClone: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxValidator_SetOnValidate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxValidator_SetOnTransferFromWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxValidator_SetOnTransferToWindow: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariantData_SetOnEq: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxVariantData_SetOnGetType: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxView_SetOnOnDraw: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxView_SetOnOnClose: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxView_SetOnOnCreate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxView_SetOnOnUpdate: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxView_Activate: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxView_GetDocument: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxView_GetFrame: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxView_SetDocument: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxView_SetFrame: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
   wxWebViewEvent_GetURL: {
     parameters: ["pointer"],
     result: "pointer",
+  },
+  wxWebViewEvent_GetMessageHandler: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxWebViewEvent_GetTargetWindowFeatures: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxWebViewEvent_IsError: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxWebViewEvent_IsTargetMainFrame: {
+    parameters: ["pointer"],
+    result: "i32",
   },
   wxWebViewEvent_GetTarget: {
     parameters: ["pointer"],
@@ -28707,6 +38811,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "pointer",
   },
+  wxWindowUpdateLocker_Create: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxWindowUpdateLocker_Delete: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   wxWrapSizer_Create: {
     parameters: ["i32", "i32"],
     result: "pointer",
@@ -28726,6 +38838,14 @@ export const lib = dlopen("kwxFFI", {
   wxWizard_Chain: {
     parameters: ["pointer", "pointer"],
     result: "void",
+  },
+  wxWizard_SetBitmapPlacement: {
+    parameters: ["pointer", "i32"],
+    result: "void",
+  },
+  wxWizard_ShowPage: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
   },
   wxWizard_Create: {
     parameters: ["pointer", "i32", "pointer", "pointer", "i32", "i32", "i32", "i32", "i64"],
@@ -28771,9 +38891,29 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxWizard_CreateDefault: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxWizard_Create2: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "pointer", "i32", "i32", "i64"],
+    result: "i32",
+  },
+  wxWizard_SetBitmap: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxWizard_GetBitmapPlacement: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   wxWizardEvent_GetDirection: {
     parameters: ["pointer"],
     result: "i32",
+  },
+  wxWizardEvent_GetPage: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   wxWizardPageSimple_Create: {
     parameters: ["pointer", "pointer", "pointer", "pointer"],
@@ -28799,12 +38939,8 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
-  wxPropertyGridEvent_HasProperty: {
-    parameters: ["pointer"],
-    result: "i32",
-  },
-  wxPropertyGridEvent_GetProperty: {
-    parameters: ["pointer"],
+  wxWizardPageSimple_CreateWithBundle: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
     result: "pointer",
   },
   Null_AcceleratorTable: {
@@ -29195,6 +39331,22 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["i32", "i32"],
     result: "pointer",
   },
+  wxPersistentRegisterAndRestore: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxPersistentRegisterAndRestoreNoName: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxPersistentRegisterAndRestoreTreebook: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxPersistentRegisterAndRestoreTreebookNoName: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
   LogError: {
     parameters: ["pointer"],
     result: "void",
@@ -29211,12 +39363,20 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "void",
   },
+  LogInfo: {
+    parameters: ["pointer"],
+    result: "void",
+  },
   LogVerbose: {
     parameters: ["pointer"],
     result: "void",
   },
   LogStatus: {
     parameters: ["pointer"],
+    result: "void",
+  },
+  LogStatusWindow: {
+    parameters: ["pointer", "pointer"],
     result: "void",
   },
   LogSysError: {
@@ -29231,6 +39391,262 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer"],
     result: "void",
   },
+  wxCheckDynamicCast: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxCheckCast: {
+    parameters: ["pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGetApp: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxInitAllImageHandlers: {
+    parameters: [],
+    result: "void",
+  },
+  wxUnusedVar: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxGetSingleChoiceIndex: {
+    parameters: ["pointer", "pointer", "pointer", "i32", "pointer"],
+    result: "i32",
+  },
+  wxGetSingleChoiceIndexEx: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    result: "i32",
+  },
+  wxBeginBusyCursor: {
+    parameters: [],
+    result: "void",
+  },
+  wxEndBusyCursor: {
+    parameters: [],
+    result: "void",
+  },
+  wxJoin: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxAtoi: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxGetDisplaySize: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGetTopLevelParent: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxIsprint: {
+    parameters: ["i32"],
+    result: "i32",
+  },
+  wxRound: {
+    parameters: ["f64"],
+    result: "i32",
+  },
+  wxWakeUpIdle: {
+    parameters: [],
+    result: "void",
+  },
+  wxBell: {
+    parameters: [],
+    result: "void",
+  },
+  wxDegToRad: {
+    parameters: ["f64"],
+    result: "f64",
+  },
+  wxFgets: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "pointer",
+  },
+  wxGetCwd: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxIsMainThread: {
+    parameters: [],
+    result: "i32",
+  },
+  wxNewEventType: {
+    parameters: [],
+    result: "i32",
+  },
+  wxQueueEvent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxSetCursor: {
+    parameters: ["pointer"],
+    result: "void",
+  },
+  wxSplit: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxStrcmp: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxSwap: {
+    parameters: ["pointer", "pointer", "usize"],
+    result: "void",
+  },
+  wxUIntToPtr: {
+    parameters: ["usize"],
+    result: "pointer",
+  },
+  wxCreateFileTipProvider: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxDirSelector: {
+    parameters: ["pointer", "pointer", "i64", "i32", "i32", "pointer"],
+    result: "pointer",
+  },
+  wxFileExists: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxFindFocusDescendant: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGetBatteryState: {
+    parameters: [],
+    result: "i32",
+  },
+  wxGetClientDisplayRect: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGetLocalTime: {
+    parameters: [],
+    result: "i64",
+  },
+  wxGetPowerType: {
+    parameters: [],
+    result: "i32",
+  },
+  wxGetSelectedChoices: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "pointer", "pointer"],
+    result: "i32",
+  },
+  wxGetSelectedChoicesEx: {
+    parameters: ["pointer", "pointer", "pointer", "i32", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32"],
+    result: "i32",
+  },
+  wxGetSingleChoice: {
+    parameters: ["pointer", "pointer", "pointer", "i32", "pointer"],
+    result: "pointer",
+  },
+  wxGetSingleChoiceData: {
+    parameters: ["pointer", "pointer", "pointer", "i32", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGetSingleChoiceDataEx: {
+    parameters: ["pointer", "pointer", "i32", "pointer", "pointer", "pointer", "i32", "i32", "i32", "i32", "i32", "i32"],
+    result: "pointer",
+  },
+  wxGetTranslation: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxGetZlibVersionInfo: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGet_wxConvLibc: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGet_wxConvLocal: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxGet_wxConvUTF8: {
+    parameters: [],
+    result: "pointer",
+  },
+  wxIsalnum: {
+    parameters: ["i32"],
+    result: "i32",
+  },
+  wxIsdigit: {
+    parameters: ["i32"],
+    result: "i32",
+  },
+  wxIslower: {
+    parameters: ["i32"],
+    result: "i32",
+  },
+  wxMakeFloatingPointValidator: {
+    parameters: ["pointer", "i32"],
+    result: "pointer",
+  },
+  wxMutexGuiEnter: {
+    parameters: [],
+    result: "void",
+  },
+  wxMutexGuiLeave: {
+    parameters: [],
+    result: "void",
+  },
+  wxPlatformIs: {
+    parameters: ["i32"],
+    result: "i32",
+  },
+  wxPointRefFromVariant: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxPostEvent: {
+    parameters: ["pointer", "pointer"],
+    result: "void",
+  },
+  wxPtrToUInt: {
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  wxPuts: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRemoveFile: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  wxRenameFile: {
+    parameters: ["pointer", "pointer", "i32"],
+    result: "i32",
+  },
+  wxShowTip: {
+    parameters: ["pointer", "pointer"],
+    result: "i32",
+  },
+  wxSizeRefFromVariant: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStrdup: {
+    parameters: ["pointer"],
+    result: "pointer",
+  },
+  wxStrtod: {
+    parameters: ["pointer"],
+    result: "f64",
+  },
+  wxStrtol: {
+    parameters: ["pointer", "i32"],
+    result: "i64",
+  },
   kwxBeginBusyCursor: {
     parameters: [],
     result: "void",
@@ -29238,6 +39654,10 @@ export const lib = dlopen("kwxFFI", {
   kwxBell: {
     parameters: [],
     result: "void",
+  },
+  kwxBitmapFromBase64: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
   },
   kwxEndBusyCursor: {
     parameters: [],
@@ -29290,6 +39710,10 @@ export const lib = dlopen("kwxFFI", {
   kwxSetPixelRowRGBA: {
     parameters: ["pointer", "i32", "i32", "i32", "u32", "u32", "u32"],
     result: "void",
+  },
+  kwxSvgStringFromBase64: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
   },
   kwxSystemSettingsGetColour: {
     parameters: ["i32"],
@@ -29347,6 +39771,10 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer"],
     result: "void",
   },
+  wxGetColourFromUserEx: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "void",
+  },
   wxGetFontFromUser: {
     parameters: ["pointer", "pointer", "pointer"],
     result: "void",
@@ -29363,6 +39791,14 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "i32", "i32", "pointer"],
     result: "i32",
   },
+  wxGetPasswordFromUserEx: {
+    parameters: ["pointer", "pointer", "pointer", "pointer"],
+    result: "pointer",
+  },
+  wxGetTextFromUserEx: {
+    parameters: ["pointer", "pointer", "pointer", "pointer", "i32", "i32", "i32"],
+    result: "pointer",
+  },
   wxIsDefined: {
     parameters: ["pointer"],
     result: "i32",
@@ -29375,6 +39811,70 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "pointer",
   },
+  kwxConsoleInitialize: {
+    parameters: ["i32", "pointer"],
+    result: "i32",
+  },
+  kwxConsoleRun: {
+    parameters: [],
+    result: "i32",
+  },
+  kwxConsoleExitMainLoop: {
+    parameters: [],
+    result: "void",
+  },
+  kwxConsoleShutdown: {
+    parameters: [],
+    result: "void",
+  },
+  kwxConsoleIsInitialized: {
+    parameters: [],
+    result: "i32",
+  },
+  kwxConsoleGetApp: {
+    parameters: [],
+    result: "pointer",
+  },
+  kwxConsoleProcessPendingEvents: {
+    parameters: [],
+    result: "void",
+  },
+  kwxConsoleYield: {
+    parameters: [],
+    result: "i32",
+  },
+  wxPrintf: {
+    parameters: ["pointer"],
+    result: "i32",
+  },
+  kwxMessageOutputUseStderr: {
+    parameters: [],
+    result: "void",
+  },
+  kwxMessageOutputUseStdout: {
+    parameters: [],
+    result: "void",
+  },
+  kwxMessageOutputReset: {
+    parameters: [],
+    result: "void",
+  },
+  wxBase64EncodeBuffer: {
+    parameters: ["pointer", "usize"],
+    result: "pointer",
+  },
+  wxBase64DecodeBuffer: {
+    parameters: ["pointer", "i32", "pointer"],
+    result: "pointer",
+  },
+  wxBase64EncodedSizeOf: {
+    parameters: ["usize"],
+    result: "usize",
+  },
+  wxBase64DecodedSizeOf: {
+    parameters: ["usize"],
+    result: "usize",
+  },
   PushProvider: {
     parameters: ["pointer"],
     result: "void",
@@ -29383,16 +39883,16 @@ export const lib = dlopen("kwxFFI", {
     parameters: ["pointer"],
     result: "i32",
   },
-  expCP_DEFAULT_STYLE: {
-    parameters: [],
-    result: "i32",
-  },
-  expCP_NO_TLW_RESIZE: {
-    parameters: [],
-    result: "i32",
-  },
   kwxMessageBox: {
     parameters: ["pointer", "pointer", "i32", "pointer", "i32", "i32"],
+    result: "i32",
+  },
+  expNB_DEFAULT: {
+    parameters: [],
+    result: "i32",
+  },
+  expNB_NOPAGETHEME: {
+    parameters: [],
     result: "i32",
   },
   expNB_TOP: {
@@ -29408,6 +39908,10 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   expNB_RIGHT: {
+    parameters: [],
+    result: "i32",
+  },
+  expBK_DEFAULT: {
     parameters: [],
     result: "i32",
   },
@@ -29430,6 +39934,10 @@ export const lib = dlopen("kwxFFI", {
   expBK_HITTEST_ONPAGE: {
     parameters: [],
     result: "i32",
+  },
+  GTKAllowDiagnosticsControl: {
+    parameters: [],
+    result: "void",
   },
   expCHB_DEFAULT: {
     parameters: [],
@@ -29479,10 +39987,6 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "i32",
   },
-  expPGMAN_DEFAULT_STYLE: {
-    parameters: [],
-    result: "i32",
-  },
   expPROPSHEET_DEFAULT: {
     parameters: [],
     result: "i32",
@@ -29515,9 +40019,13 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "i32",
   },
-  expTL_SINGLE: {
+  kwxGetMousePositionPoint: {
     parameters: [],
-    result: "i32",
+    result: "pointer",
+  },
+  kwxSetActiveLogTarget: {
+    parameters: ["pointer"],
+    result: "pointer",
   },
   expTL_MULTIPLE: {
     parameters: [],
@@ -29532,10 +40040,6 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   expTL_USER_3STATE: {
-    parameters: [],
-    result: "i32",
-  },
-  expTL_NO_HEADER: {
     parameters: [],
     result: "i32",
   },
@@ -29568,14 +40072,6 @@ export const lib = dlopen("kwxFFI", {
     result: "i32",
   },
   expWEBVIEW_ZOOM_TYPE_TEXT: {
-    parameters: [],
-    result: "i32",
-  },
-  expWEBVIEW_RELOAD_DEFAULT: {
-    parameters: [],
-    result: "i32",
-  },
-  expWEBVIEW_RELOAD_NO_CACHE: {
     parameters: [],
     result: "i32",
   },
@@ -29635,15 +40131,7 @@ export const lib = dlopen("kwxFFI", {
     parameters: [],
     result: "i32",
   },
-  expWEBVIEW_NAV_ACTION_NONE: {
-    parameters: [],
-    result: "i32",
-  },
   expWEBVIEW_NAV_ACTION_USER: {
-    parameters: [],
-    result: "i32",
-  },
-  expWEBVIEW_NAV_ACTION_OTHER: {
     parameters: [],
     result: "i32",
   },
@@ -29757,6 +40245,7 @@ export const lib = dlopen("kwxFFI", {
   exp_wxEVT_MENU_OPEN: { parameters: [], result: "i32" },
   exp_wxEVT_MENU_CLOSE: { parameters: [], result: "i32" },
   exp_wxEVT_MENU_HIGHLIGHT: { parameters: [], result: "i32" },
+  exp_wxEVT_MENU_HIGHLIGHT_ALL: { parameters: [], result: "i32" },
   exp_wxEVT_CONTEXT_MENU: { parameters: [], result: "i32" },
   exp_wxEVT_SYS_COLOUR_CHANGED: { parameters: [], result: "i32" },
   exp_wxEVT_DISPLAY_CHANGED: { parameters: [], result: "i32" },
@@ -29948,6 +40437,7 @@ export const lib = dlopen("kwxFFI", {
   exp_wxEVT_WIZARD_HELP: { parameters: [], result: "i32" },
   exp_wxEVT_WIZARD_FINISHED: { parameters: [], result: "i32" },
   exp_wxEVT_WIZARD_PAGE_SHOWN: { parameters: [], result: "i32" },
+  exp_wxEVT_WIZARD_BEFORE_PAGE_CHANGED: { parameters: [], result: "i32" },
   exp_wxEVT_DELETE: { parameters: [], result: "i32" },
   exp_wxEVT_HTML_CELL_CLICKED: { parameters: [], result: "i32" },
   exp_wxEVT_HTML_CELL_MOUSE_HOVER: { parameters: [], result: "i32" },
@@ -29955,6 +40445,102 @@ export const lib = dlopen("kwxFFI", {
   exp_wxEVT_HTML_SET_TITLE: { parameters: [], result: "i32" },
   exp_wxEVT_INPUT_SINK: { parameters: [], result: "i32" },
   exp_wxEVT_SORT: { parameters: [], result: "i32" },
+  exp_wxEVT_MAGNIFY: { parameters: [], result: "i32" },
+  exp_wxEVT_SPLITTER_SASH_POS_RESIZE: { parameters: [], result: "i32" },
+  exp_wxEVT_DPI_CHANGED: { parameters: [], result: "i32" },
+  exp_wxEVT_HTML_CELL_HOVER: { parameters: [], result: "i32" },
+  exp_wxEVT_TIME_CHANGED: { parameters: [], result: "i32" },
+  exp_wxEVT_ACCELERATOR_KEY: { parameters: [], result: "i32" },
+  exp_wxEVT_BACKSTAGE_CLICKED: { parameters: [], result: "i32" },
+  exp_wxEVT_BACKSTAGE_ITEM_CLICKED: { parameters: [], result: "i32" },
+  exp_wxEVT_COLLAPSIBLEHEADER_CHANGED: { parameters: [], result: "i32" },
+  exp_wxEVT_COLOURPICKER_CURRENT_CHANGED: { parameters: [], result: "i32" },
+  exp_wxEVT_COLOURPICKER_DIALOG_CANCELLED: { parameters: [], result: "i32" },
+  exp_wxEVT_COLOUR_CHANGED: { parameters: [], result: "i32" },
+  exp_wxEVT_DATAVIEW_COLUMN_HEADER_CLICK: { parameters: [], result: "i32" },
+  exp_wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK: { parameters: [], result: "i32" },
+  exp_wxEVT_DATAVIEW_COLUMN_REORDERED: { parameters: [], result: "i32" },
+  exp_wxEVT_DATAVIEW_COLUMN_SORTED: { parameters: [], result: "i32" },
+  exp_wxEVT_DATAVIEW_ITEM_BEGIN_DRAG: { parameters: [], result: "i32" },
+  exp_wxEVT_DATAVIEW_ITEM_CONTEXT_MENU: { parameters: [], result: "i32" },
+  exp_wxEVT_DATAVIEW_ITEM_DROP: { parameters: [], result: "i32" },
+  exp_wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE: { parameters: [], result: "i32" },
+  exp_wxEVT_DATAVIEW_ITEM_START_EDITING: { parameters: [], result: "i32" },
+  exp_wxEVT_DIRCTRL_FILEACTIVATED: { parameters: [], result: "i32" },
+  exp_wxEVT_DIRCTRL_SELECTIONCHANGED: { parameters: [], result: "i32" },
+  exp_wxEVT_FIND: { parameters: [], result: "i32" },
+  exp_wxEVT_FIND_CLOSE: { parameters: [], result: "i32" },
+  exp_wxEVT_FIND_NEXT: { parameters: [], result: "i32" },
+  exp_wxEVT_FIND_REPLACE: { parameters: [], result: "i32" },
+  exp_wxEVT_FIND_REPLACE_ALL: { parameters: [], result: "i32" },
+  exp_wxEVT_GESTURE_PAN: { parameters: [], result: "i32" },
+  exp_wxEVT_GESTURE_ROTATE: { parameters: [], result: "i32" },
+  exp_wxEVT_GESTURE_ZOOM: { parameters: [], result: "i32" },
+  exp_wxEVT_GRID_COL_AUTO_SIZE: { parameters: [], result: "i32" },
+  exp_wxEVT_GRID_COL_LABEL_SIZE: { parameters: [], result: "i32" },
+  exp_wxEVT_GRID_RANGE_SELECTED: { parameters: [], result: "i32" },
+  exp_wxEVT_GRID_RANGE_SELECTING: { parameters: [], result: "i32" },
+  exp_wxEVT_GRID_ROW_LABEL_SIZE: { parameters: [], result: "i32" },
+  exp_wxEVT_GRID_ROW_MOVE: { parameters: [], result: "i32" },
+  exp_wxEVT_GRID_TABBING: { parameters: [], result: "i32" },
+  exp_wxEVT_HEADER_BEGIN_RESIZE: { parameters: [], result: "i32" },
+  exp_wxEVT_HEADER_END_RESIZE: { parameters: [], result: "i32" },
+  exp_wxEVT_HEADER_RESIZING: { parameters: [], result: "i32" },
+  exp_wxEVT_LIST_CACHE_HINT: { parameters: [], result: "i32" },
+  exp_wxEVT_LIST_COL_BEGIN_DRAG: { parameters: [], result: "i32" },
+  exp_wxEVT_LIST_COL_DRAGGING: { parameters: [], result: "i32" },
+  exp_wxEVT_LIST_COL_END_DRAG: { parameters: [], result: "i32" },
+  exp_wxEVT_LIST_COL_RIGHT_CLICK: { parameters: [], result: "i32" },
+  exp_wxEVT_LIST_ITEM_CHECKED: { parameters: [], result: "i32" },
+  exp_wxEVT_LIST_ITEM_UNCHECKED: { parameters: [], result: "i32" },
+  exp_wxEVT_LONG_PRESS: { parameters: [], result: "i32" },
+  exp_wxEVT_MEDIA_FINISHED: { parameters: [], result: "i32" },
+  exp_wxEVT_MEDIA_LOADED: { parameters: [], result: "i32" },
+  exp_wxEVT_MEDIA_PAUSE: { parameters: [], result: "i32" },
+  exp_wxEVT_MEDIA_PLAY: { parameters: [], result: "i32" },
+  exp_wxEVT_MEDIA_STOP: { parameters: [], result: "i32" },
+  exp_wxEVT_NOTIFICATION_MESSAGE_ACTION: { parameters: [], result: "i32" },
+  exp_wxEVT_NOTIFICATION_MESSAGE_CLICK: { parameters: [], result: "i32" },
+  exp_wxEVT_NOTIFICATION_MESSAGE_DISMISSED: { parameters: [], result: "i32" },
+  exp_wxEVT_PG_COL_BEGIN_DRAG: { parameters: [], result: "i32" },
+  exp_wxEVT_PG_COL_DRAGGING: { parameters: [], result: "i32" },
+  exp_wxEVT_PG_COL_END_DRAG: { parameters: [], result: "i32" },
+  exp_wxEVT_PG_LABEL_EDIT_BEGIN: { parameters: [], result: "i32" },
+  exp_wxEVT_PG_LABEL_EDIT_ENDING: { parameters: [], result: "i32" },
+  exp_wxEVT_PRESS_AND_TAP: { parameters: [], result: "i32" },
+  exp_wxEVT_RIBBONBAR_HELP_CLICK: { parameters: [], result: "i32" },
+  exp_wxEVT_RIBBONBAR_TOGGLED: { parameters: [], result: "i32" },
+  exp_wxEVT_RIBBONBUTTONBAR_CLICKED: { parameters: [], result: "i32" },
+  exp_wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED: { parameters: [], result: "i32" },
+  exp_wxEVT_RIBBONGALLERY_HOVER_CHANGED: { parameters: [], result: "i32" },
+  exp_wxEVT_RIBBONGALLERY_SELECTED: { parameters: [], result: "i32" },
+  exp_wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED: { parameters: [], result: "i32" },
+  exp_wxEVT_RIBBONTOOLBAR_CLICKED: { parameters: [], result: "i32" },
+  exp_wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED: { parameters: [], result: "i32" },
+  exp_wxEVT_RICHTEXT_STYLESHEET_REPLACING: { parameters: [], result: "i32" },
+  exp_wxEVT_SEARCH: { parameters: [], result: "i32" },
+  exp_wxEVT_SEARCH_CANCEL: { parameters: [], result: "i32" },
+  exp_wxEVT_STC_CALLTIP_CLICK: { parameters: [], result: "i32" },
+  exp_wxEVT_STC_CHANGE: { parameters: [], result: "i32" },
+  exp_wxEVT_STC_CHARADDED: { parameters: [], result: "i32" },
+  exp_wxEVT_STC_MARGINCLICK: { parameters: [], result: "i32" },
+  exp_wxEVT_SYS_METRIC_CHANGED: { parameters: [], result: "i32" },
+  exp_wxEVT_TOUCH_BEGIN: { parameters: [], result: "i32" },
+  exp_wxEVT_TOUCH_CANCEL: { parameters: [], result: "i32" },
+  exp_wxEVT_TOUCH_END: { parameters: [], result: "i32" },
+  exp_wxEVT_TOUCH_MOVE: { parameters: [], result: "i32" },
+  exp_wxEVT_TREE_ITEM_MENU: { parameters: [], result: "i32" },
+  exp_wxEVT_TREE_STATE_IMAGE_CLICK: { parameters: [], result: "i32" },
+  exp_wxEVT_TWO_FINGER_TAP: { parameters: [], result: "i32" },
+  exp_wxEVT_WEBREQUEST_DATA: { parameters: [], result: "i32" },
+  exp_wxEVT_WEBREQUEST_STATE: { parameters: [], result: "i32" },
+  exp_wxEVT_WEBVIEW_BROWSING_DATA_CLEARED: { parameters: [], result: "i32" },
+  exp_wxEVT_WEBVIEW_CREATED: { parameters: [], result: "i32" },
+  exp_wxEVT_WEBVIEW_NEWWINDOW_FEATURES: { parameters: [], result: "i32" },
+  exp_wxEVT_WEBVIEW_PDF_SAVED: { parameters: [], result: "i32" },
+  exp_wxEVT_WEBVIEW_WINDOW_CLOSE_REQUESTED: { parameters: [], result: "i32" },
+  exp_wxEVT_MY_CUSTOM_COMMAND: { parameters: [], result: "i32" },
+  exp_wxEVT_WORKER: { parameters: [], result: "i32" },
   expK_BACK: { parameters: [], result: "i32" },
   expK_TAB: { parameters: [], result: "i32" },
   expK_RETURN: { parameters: [], result: "i32" },
@@ -30073,6 +40659,8 @@ export const lib = dlopen("kwxFFI", {
   expwxCENTRE_ON_SCREEN: { parameters: [], result: "i32" },
   expwxHORIZONTAL: { parameters: [], result: "i32" },
   expwxVERTICAL: { parameters: [], result: "i32" },
+  expwxLI_HORIZONTAL: { parameters: [], result: "i32" },
+  expwxLI_VERTICAL: { parameters: [], result: "i32" },
   expwxBOTH: { parameters: [], result: "i32" },
   expwxLEFT: { parameters: [], result: "i32" },
   expwxRIGHT: { parameters: [], result: "i32" },
@@ -30155,7 +40743,10 @@ export const lib = dlopen("kwxFFI", {
   expwxCB_READONLY: { parameters: [], result: "i32" },
   expwxCB_DROPDOWN: { parameters: [], result: "i32" },
   expwxRB_GROUP: { parameters: [], result: "i32" },
+  expwxGA_HORIZONTAL: { parameters: [], result: "i32" },
+  expwxGA_PROGRESS: { parameters: [], result: "i32" },
   expwxGA_SMOOTH: { parameters: [], result: "i32" },
+  expwxGA_VERTICAL: { parameters: [], result: "i32" },
   expwxSL_AUTOTICKS: { parameters: [], result: "i32" },
   expwxSL_LABELS: { parameters: [], result: "i32" },
   expwxSL_LEFT: { parameters: [], result: "i32" },
@@ -30164,6 +40755,9 @@ export const lib = dlopen("kwxFFI", {
   expwxSL_BOTTOM: { parameters: [], result: "i32" },
   expwxSL_BOTH: { parameters: [], result: "i32" },
   expwxSL_SELRANGE: { parameters: [], result: "i32" },
+  expwxSL_INVERSE: { parameters: [], result: "i32" },
+  expwxSL_MIN_MAX_LABELS: { parameters: [], result: "i32" },
+  expwxSL_VALUE_LABEL: { parameters: [], result: "i32" },
   expwxBU_AUTODRAW: { parameters: [], result: "i32" },
   expwxBU_NOAUTODRAW: { parameters: [], result: "i32" },
   expwxBU_LEFT: { parameters: [], result: "i32" },
@@ -30203,6 +40797,18 @@ export const lib = dlopen("kwxFFI", {
   expwxNB_LEFT: { parameters: [], result: "i32" },
   expwxNB_RIGHT: { parameters: [], result: "i32" },
   expwxNB_BOTTOM: { parameters: [], result: "i32" },
+  expwxNB_NOPAGETHEME: { parameters: [], result: "i32" },
+  expwxBK_DEFAULT: { parameters: [], result: "i32" },
+  expwxBK_TOP: { parameters: [], result: "i32" },
+  expwxBK_BOTTOM: { parameters: [], result: "i32" },
+  expwxBK_LEFT: { parameters: [], result: "i32" },
+  expwxBK_RIGHT: { parameters: [], result: "i32" },
+  expwxTBK_BUTTONBAR: { parameters: [], result: "i32" },
+  expwxTBK_HORZ_LAYOUT: { parameters: [], result: "i32" },
+  expwxST_ELLIPSIZE_START: { parameters: [], result: "i32" },
+  expwxST_ELLIPSIZE_MIDDLE: { parameters: [], result: "i32" },
+  expwxST_ELLIPSIZE_END: { parameters: [], result: "i32" },
+  expwxST_WRAP: { parameters: [], result: "i32" },
   expwxST_SIZEGRIP: { parameters: [], result: "i32" },
   expwxST_NO_AUTORESIZE: { parameters: [], result: "i32" },
   expwxHW_SCROLLBAR_NEVER: { parameters: [], result: "i32" },
@@ -30783,6 +41389,7 @@ export const lib = dlopen("kwxFFI", {
   expwxNO: { parameters: [], result: "i32" },
   expwxYES_NO: { parameters: [], result: "i32" },
   expwxCANCEL: { parameters: [], result: "i32" },
+  expwxCANCEL_DEFAULT: { parameters: [], result: "i32" },
   expwxNO_DEFAULT: { parameters: [], result: "i32" },
   expwxYES_DEFAULT: { parameters: [], result: "i32" },
   expwxLANGUAGE_DEFAULT: { parameters: [], result: "i32" },
@@ -31036,6 +41643,9 @@ export const lib = dlopen("kwxFFI", {
   expwxTE_RIGHT: { parameters: [], result: "i32" },
   expwxTE_CENTRE: { parameters: [], result: "i32" },
   expwxTE_WORDWRAP: { parameters: [], result: "i32" },
+  expwxTE_CHARWRAP: { parameters: [], result: "i32" },
+  expwxTE_DONTWRAP: { parameters: [], result: "i32" },
+  expwxTE_BESTWRAP: { parameters: [], result: "i32" },
   expwxEXEC_ASYNC: { parameters: [], result: "i32" },
   expwxEXEC_SYNC: { parameters: [], result: "i32" },
   expwxEXEC_NOHIDE: { parameters: [], result: "i32" },
@@ -31164,6 +41774,12 @@ export const lib = dlopen("kwxFFI", {
   expwxART_QUIT: { parameters: [], result: "pointer" },
   expwxART_FIND: { parameters: [], result: "pointer" },
   expwxART_FIND_AND_REPLACE: { parameters: [], result: "pointer" },
+  expwxART_FULL_SCREEN: { parameters: [], result: "pointer" },
+  expwxMINOR_VERSION: { parameters: [], result: "i32" },
+  expwxALPHA_OPAQUE: { parameters: [], result: "i32" },
+  expwxVERSION_NUM_DOT_STRING: { parameters: [], result: "pointer" },
+  expwxDirDialogDefaultFolderStr: { parameters: [], result: "pointer" },
+  expwxFileSelectorDefaultWildcardStr: { parameters: [], result: "pointer" },
   expwxCHK_2STATE: { parameters: [], result: "i32" },
   expwxCHK_3STATE: { parameters: [], result: "i32" },
   expwxCHK_ALLOW_3RD_STATE_FOR_USER: { parameters: [], result: "i32" },
@@ -31399,6 +42015,7 @@ export const lib = dlopen("kwxFFI", {
   expwxDIR_IGNORE: { parameters: [], result: "i32" },
   expwxDIR_STOP: { parameters: [], result: "i32" },
   expwxDIR_CONTINUE: { parameters: [], result: "i32" },
+  expwxPATH_NATIVE: { parameters: [], result: "i32" },
   expwxPATH_NO_SEPARATOR: { parameters: [], result: "i32" },
   expwxPATH_GET_VOLUME: { parameters: [], result: "i32" },
   expwxPATH_GET_SEPARATOR: { parameters: [], result: "i32" },
@@ -31414,6 +42031,809 @@ export const lib = dlopen("kwxFFI", {
   expwxFILE_EXISTS_SOCKET: { parameters: [], result: "i32" },
   expwxFILE_EXISTS_NO_FOLLOW: { parameters: [], result: "i32" },
   expwxFILE_EXISTS_ANY: { parameters: [], result: "i32" },
+  expwxCC_SPECIAL_DCLICK: { parameters: [], result: "i32" },
+  expwxCC_STD_BUTTON: { parameters: [], result: "i32" },
+  expwxODCB_PAINTING_CONTROL: { parameters: [], result: "i32" },
+  expwxODCB_PAINTING_SELECTED: { parameters: [], result: "i32" },
+  expwxPENSTYLE_BDIAGONAL_HATCH: { parameters: [], result: "i32" },
+  expwxPENSTYLE_CROSSDIAG_HATCH: { parameters: [], result: "i32" },
+  expwxPENSTYLE_FDIAGONAL_HATCH: { parameters: [], result: "i32" },
+  expwxPENSTYLE_CROSS_HATCH: { parameters: [], result: "i32" },
+  expwxPENSTYLE_HORIZONTAL_HATCH: { parameters: [], result: "i32" },
+  expwxPENSTYLE_VERTICAL_HATCH: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_NONE: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_ROLL_TO_LEFT: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_ROLL_TO_RIGHT: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_ROLL_TO_TOP: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_ROLL_TO_BOTTOM: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_SLIDE_TO_LEFT: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_SLIDE_TO_RIGHT: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_SLIDE_TO_TOP: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_SLIDE_TO_BOTTOM: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_BLEND: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_EXPAND: { parameters: [], result: "i32" },
+  expwxSHOW_EFFECT_MAX: { parameters: [], result: "i32" },
+  expwxTR_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxAC_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxAC_NO_AUTORESIZE: { parameters: [], result: "i32" },
+  expwxAEDIALOG_STYLE: { parameters: [], result: "i32" },
+  expwxALIGN_INVALID: { parameters: [], result: "i32" },
+  expwxALIGN_MASK: { parameters: [], result: "i32" },
+  expwxAPPLY: { parameters: [], result: "i32" },
+  expwxANTIALIAS_DEFAULT: { parameters: [], result: "i32" },
+  expwxANTIALIAS_NONE: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_ACTIVE_CAPTION_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_BACKGROUND_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_BORDER_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_CAPTION_SIZE: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_GRADIENT_TYPE: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_GRIPPER_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_INACTIVE_CAPTION_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_PANE_BORDER_SIZE: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_SASH_COLOUR: { parameters: [], result: "i32" },
+  expwxAUI_DOCKART_SASH_SIZE: { parameters: [], result: "i32" },
+  expwxAUI_GRADIENT_HORIZONTAL: { parameters: [], result: "i32" },
+  expwxAUI_GRADIENT_NONE: { parameters: [], result: "i32" },
+  expwxAUI_GRADIENT_VERTICAL: { parameters: [], result: "i32" },
+  expwxAUI_MGR_ALLOW_ACTIVE_PANE: { parameters: [], result: "i32" },
+  expwxAUI_MGR_ALLOW_FLOATING: { parameters: [], result: "i32" },
+  expwxAUI_MGR_HINT_FADE: { parameters: [], result: "i32" },
+  expwxAUI_MGR_LIVE_RESIZE: { parameters: [], result: "i32" },
+  expwxAUI_MGR_RECTANGLE_HINT: { parameters: [], result: "i32" },
+  expwxAUI_MGR_TRANSPARENT_DRAG: { parameters: [], result: "i32" },
+  expwxAUI_MGR_TRANSPARENT_HINT: { parameters: [], result: "i32" },
+  expwxAUI_MGR_VENETIAN_BLINDS_HINT: { parameters: [], result: "i32" },
+  expwxAUI_MIN_DOCK_BOTH: { parameters: [], result: "i32" },
+  expwxAUI_MIN_DOCK_ICONS: { parameters: [], result: "i32" },
+  expwxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT: { parameters: [], result: "i32" },
+  expwxAUI_MIN_DOCK_TEXT: { parameters: [], result: "i32" },
+  expwxAUI_NB_BOTTOM: { parameters: [], result: "i32" },
+  expwxAUI_NB_CLOSE_BUTTON: { parameters: [], result: "i32" },
+  expwxAUI_NB_CLOSE_ON_ACTIVE_TAB: { parameters: [], result: "i32" },
+  expwxAUI_NB_CLOSE_ON_ALL_TABS: { parameters: [], result: "i32" },
+  expwxAUI_NB_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxAUI_NB_MULTILINE: { parameters: [], result: "i32" },
+  expwxAUI_NB_PIN_ON_ACTIVE_TAB: { parameters: [], result: "i32" },
+  expwxAUI_NB_SCROLL_BUTTONS: { parameters: [], result: "i32" },
+  expwxAUI_NB_TAB_EXTERNAL_MOVE: { parameters: [], result: "i32" },
+  expwxAUI_NB_TAB_FIXED_WIDTH: { parameters: [], result: "i32" },
+  expwxAUI_NB_TAB_MOVE: { parameters: [], result: "i32" },
+  expwxAUI_NB_TAB_SPLIT: { parameters: [], result: "i32" },
+  expwxAUI_NB_TOP: { parameters: [], result: "i32" },
+  expwxAUI_NB_UNPIN_ON_ALL_PINNED: { parameters: [], result: "i32" },
+  expwxAUI_NB_WINDOWLIST_BUTTON: { parameters: [], result: "i32" },
+  expwxAUI_TB_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxAUI_TB_HORIZONTAL: { parameters: [], result: "i32" },
+  expwxAUI_TB_HORZ_TEXT: { parameters: [], result: "i32" },
+  expwxAUI_TB_OVERFLOW: { parameters: [], result: "i32" },
+  expwxAUI_TB_TEXT: { parameters: [], result: "i32" },
+  expwxAUI_TB_VERTICAL: { parameters: [], result: "i32" },
+  expwxBATTERY_CRITICAL_STATE: { parameters: [], result: "i32" },
+  expwxBATTERY_LOW_STATE: { parameters: [], result: "i32" },
+  expwxBATTERY_NORMAL_STATE: { parameters: [], result: "i32" },
+  expwxBATTERY_SHUTDOWN_STATE: { parameters: [], result: "i32" },
+  expwxBATTERY_UNKNOWN_STATE: { parameters: [], result: "i32" },
+  expwxBG_STYLE_ERASE: { parameters: [], result: "i32" },
+  expwxBG_STYLE_PAINT: { parameters: [], result: "i32" },
+  expwxBG_STYLE_TRANSPARENT: { parameters: [], result: "i32" },
+  expwxBITMAP_SCREEN_DEPTH: { parameters: [], result: "i32" },
+  expwxBITMAP_TYPE_ANI: { parameters: [], result: "i32" },
+  expwxBITMAP_TYPE_TGA: { parameters: [], result: "i32" },
+  expwxBITMAP_TYPE_TIFF: { parameters: [], result: "i32" },
+  expwxBITMAP_TYPE_WEBP: { parameters: [], result: "i32" },
+  expwxBK_HITTEST_NOWHERE: { parameters: [], result: "i32" },
+  expwxBK_HITTEST_ONICON: { parameters: [], result: "i32" },
+  expwxBK_HITTEST_ONITEM: { parameters: [], result: "i32" },
+  expwxBK_HITTEST_ONLABEL: { parameters: [], result: "i32" },
+  expwxBK_HITTEST_ONPAGE: { parameters: [], result: "i32" },
+  expwxBLUE_PEN: { parameters: [], result: "pointer" },
+  expwxBMP_1BPP: { parameters: [], result: "i32" },
+  expwxBMP_1BPP_BW: { parameters: [], result: "i32" },
+  expwxBMP_24BPP: { parameters: [], result: "i32" },
+  expwxBMP_4BPP: { parameters: [], result: "i32" },
+  expwxBMP_8BPP: { parameters: [], result: "i32" },
+  expwxBMP_8BPP_GREY: { parameters: [], result: "i32" },
+  expwxBMP_8BPP_PALETTE: { parameters: [], result: "i32" },
+  expwxBMP_8BPP_RED: { parameters: [], result: "i32" },
+  expwxBORDER_DOUBLE: { parameters: [], result: "i32" },
+  expwxBORDER_MASK: { parameters: [], result: "i32" },
+  expwxC2S_CSS_SYNTAX: { parameters: [], result: "i32" },
+  expwxC2S_HTML_SYNTAX: { parameters: [], result: "i32" },
+  expwxCAL_HITTEST_DECMONTH: { parameters: [], result: "i32" },
+  expwxCAL_HITTEST_INCMONTH: { parameters: [], result: "i32" },
+  expwxCAL_HITTEST_SURROUNDING_WEEK: { parameters: [], result: "i32" },
+  expwxCAL_SEQUENTIAL_MONTH_SELECTION: { parameters: [], result: "i32" },
+  expwxCAL_SHOW_SURROUNDING_WEEKS: { parameters: [], result: "i32" },
+  expwxCAL_SHOW_WEEK_NUMBERS: { parameters: [], result: "i32" },
+  expwxDateTime_Local: { parameters: [], result: "i32" },
+  expwxDateTime_Country_Unknown: { parameters: [], result: "i32" },
+  expwxDateTime_Country_Default: { parameters: [], result: "i32" },
+  expwxDateTime_Name_Full: { parameters: [], result: "i32" },
+  expwxDateTime_Name_Abbr: { parameters: [], result: "i32" },
+  expwxDateTime_Name_Shortest: { parameters: [], result: "i32" },
+  expwxDateTime_Default_First: { parameters: [], result: "i32" },
+  expwxDateTime_Monday_First: { parameters: [], result: "i32" },
+  expwxDateTime_Sunday_First: { parameters: [], result: "i32" },
+  expwxDateTime_Jan: { parameters: [], result: "i32" },
+  expwxDateTime_Feb: { parameters: [], result: "i32" },
+  expwxDateTime_Mar: { parameters: [], result: "i32" },
+  expwxDateTime_Apr: { parameters: [], result: "i32" },
+  expwxDateTime_May: { parameters: [], result: "i32" },
+  expwxDateTime_Jun: { parameters: [], result: "i32" },
+  expwxDateTime_Jul: { parameters: [], result: "i32" },
+  expwxDateTime_Aug: { parameters: [], result: "i32" },
+  expwxDateTime_Sep: { parameters: [], result: "i32" },
+  expwxDateTime_Oct: { parameters: [], result: "i32" },
+  expwxDateTime_Nov: { parameters: [], result: "i32" },
+  expwxDateTime_Dec: { parameters: [], result: "i32" },
+  expwxDateTime_Sun: { parameters: [], result: "i32" },
+  expwxDateTime_Mon: { parameters: [], result: "i32" },
+  expwxDateTime_Tue: { parameters: [], result: "i32" },
+  expwxDateTime_Wed: { parameters: [], result: "i32" },
+  expwxDateTime_Thu: { parameters: [], result: "i32" },
+  expwxDateTime_Fri: { parameters: [], result: "i32" },
+  expwxDateTime_Sat: { parameters: [], result: "i32" },
+  expwxCLRP_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxCLRP_SHOW_LABEL: { parameters: [], result: "i32" },
+  expwxCLRP_SHOW_ALPHA: { parameters: [], result: "i32" },
+  expwxCLRP_USE_TEXTCTRL: { parameters: [], result: "i32" },
+  expwxCLOSE: { parameters: [], result: "i32" },
+  expwxCMD_LINE_HIDDEN: { parameters: [], result: "i32" },
+  expwxCMD_LINE_NONE: { parameters: [], result: "i32" },
+  expwxCMD_LINE_OPTION_HELP: { parameters: [], result: "i32" },
+  expwxCMD_LINE_PARAM_MULTIPLE: { parameters: [], result: "i32" },
+  expwxCMD_LINE_PARAM_OPTIONAL: { parameters: [], result: "i32" },
+  expwxCMD_LINE_SWITCH: { parameters: [], result: "i32" },
+  expwxCMD_LINE_VAL_NONE: { parameters: [], result: "i32" },
+  expwxCMD_LINE_VAL_NUMBER: { parameters: [], result: "i32" },
+  expwxCMD_LINE_VAL_STRING: { parameters: [], result: "i32" },
+  expwxCMD_SWITCH_ON: { parameters: [], result: "i32" },
+  expwxCOL_DEFAULT_FLAGS: { parameters: [], result: "i32" },
+  expwxCOL_HIDDEN: { parameters: [], result: "i32" },
+  expwxCOL_REORDERABLE: { parameters: [], result: "i32" },
+  expwxCOL_RESIZABLE: { parameters: [], result: "i32" },
+  expwxCOL_SORTABLE: { parameters: [], result: "i32" },
+  expwxCOL_WIDTH_AUTOSIZE: { parameters: [], result: "i32" },
+  expwxCOL_WIDTH_DEFAULT: { parameters: [], result: "i32" },
+  expwxCOMPOSITION_ADD: { parameters: [], result: "i32" },
+  expwxCOMPOSITION_DIFF: { parameters: [], result: "i32" },
+  expwxCOMPOSITION_OVER: { parameters: [], result: "i32" },
+  expwxCONTENT_PROTECTION_ENABLED: { parameters: [], result: "i32" },
+  expwxCONTENT_PROTECTION_NONE: { parameters: [], result: "i32" },
+  expwxCONTROL_CHECKABLE: { parameters: [], result: "i32" },
+  expwxCONTROL_CHECKED: { parameters: [], result: "i32" },
+  expwxCONTROL_CELL: { parameters: [], result: "i32" },
+  expwxCONTROL_CURRENT: { parameters: [], result: "i32" },
+  expwxCONTROL_DIRTY: { parameters: [], result: "i32" },
+  expwxCONTROL_DISABLED: { parameters: [], result: "i32" },
+  expwxCONTROL_EXPANDED: { parameters: [], result: "i32" },
+  expwxCONTROL_FLAGS_MASK: { parameters: [], result: "i32" },
+  expwxCONTROL_FLAT: { parameters: [], result: "i32" },
+  expwxCONTROL_FOCUSED: { parameters: [], result: "i32" },
+  expwxCONTROL_ISDEFAULT: { parameters: [], result: "i32" },
+  expwxCONTROL_ISSUBMENU: { parameters: [], result: "i32" },
+  expwxCONTROL_NONE: { parameters: [], result: "i32" },
+  expwxCONTROL_PRESSED: { parameters: [], result: "i32" },
+  expwxCONTROL_SELECTED: { parameters: [], result: "i32" },
+  expwxCONTROL_SIZEGRIP: { parameters: [], result: "i32" },
+  expwxCONTROL_SPECIAL: { parameters: [], result: "i32" },
+  expwxCONTROL_UNDETERMINED: { parameters: [], result: "i32" },
+  expwxCURSOR_ARROWWAIT: { parameters: [], result: "i32" },
+  expwxColourData_NUM_CUSTOM: { parameters: [], result: "i32" },
+  expwxDATAVIEW_CELL_ACTIVATABLE: { parameters: [], result: "i32" },
+  expwxDATAVIEW_CELL_EDITABLE: { parameters: [], result: "i32" },
+  expwxDATAVIEW_CELL_INERT: { parameters: [], result: "i32" },
+  expwxDATAVIEW_COL_REORDERABLE: { parameters: [], result: "i32" },
+  expwxDATAVIEW_COL_RESIZABLE: { parameters: [], result: "i32" },
+  expwxDATAVIEW_COL_SORTABLE: { parameters: [], result: "i32" },
+  expwxCHOICEDLG_STYLE: { parameters: [], result: "i32" },
+  expwxDEFAULT_DIALOG_STYLE: { parameters: [], result: "i32" },
+  expwxDIALOG_ADAPTATION_MODE_ENABLED: { parameters: [], result: "i32" },
+  expwxDIRCTRL_3D_INTERNAL: { parameters: [], result: "i32" },
+  expwxDIRCTRL_DIR_ONLY: { parameters: [], result: "i32" },
+  expwxDIRCTRL_EDIT_LABELS: { parameters: [], result: "i32" },
+  expwxDIRCTRL_MULTIPLE: { parameters: [], result: "i32" },
+  expwxDIRCTRL_SELECT_FIRST: { parameters: [], result: "i32" },
+  expwxDIRCTRL_SHOW_FILTERS: { parameters: [], result: "i32" },
+  expwxDIRP_CHANGE_DIR: { parameters: [], result: "i32" },
+  expwxDIRP_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxDIRP_DIR_MUST_EXIST: { parameters: [], result: "i32" },
+  expwxDIRP_SMALL: { parameters: [], result: "i32" },
+  expwxDIRP_USE_TEXTCTRL: { parameters: [], result: "i32" },
+  expwxDOC_SILENT: { parameters: [], result: "i32" },
+  expwxDOUBLE_BORDER: { parameters: [], result: "i32" },
+  expwxDP_ALLOWNONE: { parameters: [], result: "i32" },
+  expwxDP_DEFAULT: { parameters: [], result: "i32" },
+  expwxDP_DROPDOWN: { parameters: [], result: "i32" },
+  expwxDP_SHOWCENTURY: { parameters: [], result: "i32" },
+  expwxDP_SPIN: { parameters: [], result: "i32" },
+  expwxDragCancel: { parameters: [], result: "i32" },
+  expwxDragCopy: { parameters: [], result: "i32" },
+  expwxDragError: { parameters: [], result: "i32" },
+  expwxDragLink: { parameters: [], result: "i32" },
+  expwxDragMove: { parameters: [], result: "i32" },
+  expwxDragNone: { parameters: [], result: "i32" },
+  expwxDrag_AllowMove: { parameters: [], result: "i32" },
+  expwxDrag_DefaultMove: { parameters: [], result: "i32" },
+  expwxELLIPSIZE_NONE: { parameters: [], result: "i32" },
+  expwxELLIPSIZE_START: { parameters: [], result: "i32" },
+  expwxELLIPSIZE_MIDDLE: { parameters: [], result: "i32" },
+  expwxELLIPSIZE_END: { parameters: [], result: "i32" },
+  expwxEXEC_SHOW_CONSOLE: { parameters: [], result: "i32" },
+  expwxFC_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxFC_MULTIPLE: { parameters: [], result: "i32" },
+  expwxFC_NOSHOWHIDDEN: { parameters: [], result: "i32" },
+  expwxFC_OPEN: { parameters: [], result: "i32" },
+  expwxFC_SAVE: { parameters: [], result: "i32" },
+  expwxFD_SHORTCUT_TOP: { parameters: [], result: "i32" },
+  expwxFH_PATH_SHOW_ALWAYS: { parameters: [], result: "i32" },
+  expwxFH_PATH_SHOW_IF_DIFFERENT: { parameters: [], result: "i32" },
+  expwxFH_PATH_SHOW_NEVER: { parameters: [], result: "i32" },
+  expwxFILTER_DIGITS: { parameters: [], result: "i32" },
+  expwxFILTER_EMPTY: { parameters: [], result: "i32" },
+  expwxFILTER_EXCLUDE_CHAR_LIST: { parameters: [], result: "i32" },
+  expwxFILTER_INCLUDE_CHAR_LIST: { parameters: [], result: "i32" },
+  expwxFILTER_SPACE: { parameters: [], result: "i32" },
+  expwxFILTER_XDIGITS: { parameters: [], result: "i32" },
+  expwxFLEX_GROWMODE_ALL: { parameters: [], result: "i32" },
+  expwxFLEX_GROWMODE_NONE: { parameters: [], result: "i32" },
+  expwxFLP_OPEN: { parameters: [], result: "i32" },
+  expwxFLP_SAVE: { parameters: [], result: "i32" },
+  expwxFLP_OVERWRITE_PROMPT: { parameters: [], result: "i32" },
+  expwxFLP_FILE_MUST_EXIST: { parameters: [], result: "i32" },
+  expwxFLP_CHANGE_DIR: { parameters: [], result: "i32" },
+  expwxFLP_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxFLP_SMALL: { parameters: [], result: "i32" },
+  expwxFLP_USE_TEXTCTRL: { parameters: [], result: "i32" },
+  expwxFNTP_FONTDESC_AS_LABEL: { parameters: [], result: "i32" },
+  expwxFNTP_USEFONT_FOR_LABEL: { parameters: [], result: "i32" },
+  expwxFNTP_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxFNTP_USE_TEXTCTRL: { parameters: [], result: "i32" },
+  expwxFONTENCODING_UTF8: { parameters: [], result: "i32" },
+  expwxFONTFAMILY_UNKNOWN: { parameters: [], result: "i32" },
+  expwxFONTSTYLE_MAX: { parameters: [], result: "i32" },
+  expwxFR_DOWN: { parameters: [], result: "i32" },
+  expwxFR_MATCHCASE: { parameters: [], result: "i32" },
+  expwxFR_NOWHOLEWORD: { parameters: [], result: "i32" },
+  expwxFR_REPLACEDIALOG: { parameters: [], result: "i32" },
+  expwxFR_WHOLEWORD: { parameters: [], result: "i32" },
+  expwxFSWPath_Dir: { parameters: [], result: "i32" },
+  expwxFSWPath_File: { parameters: [], result: "i32" },
+  expwxFSWPath_None: { parameters: [], result: "i32" },
+  expwxFSWPath_Tree: { parameters: [], result: "i32" },
+  expwxFSW_EVENT_ACCESS: { parameters: [], result: "i32" },
+  expwxFSW_EVENT_ATTRIB: { parameters: [], result: "i32" },
+  expwxFSW_EVENT_CREATE: { parameters: [], result: "i32" },
+  expwxFSW_EVENT_DELETE: { parameters: [], result: "i32" },
+  expwxFSW_EVENT_ERROR: { parameters: [], result: "i32" },
+  expwxFSW_EVENT_MODIFY: { parameters: [], result: "i32" },
+  expwxFSW_EVENT_RENAME: { parameters: [], result: "i32" },
+  expwxFSW_EVENT_WARNING: { parameters: [], result: "i32" },
+  expwxFromEnd: { parameters: [], result: "i32" },
+  expwxGRID_AUTOSIZE: { parameters: [], result: "i32" },
+  expwxGRID_COLUMN: { parameters: [], result: "i32" },
+  expwxGRID_DRAW_BOX_RECT: { parameters: [], result: "i32" },
+  expwxGRID_DRAW_CELL_LINES: { parameters: [], result: "i32" },
+  expwxGRID_DRAW_COLS_HEADER: { parameters: [], result: "i32" },
+  expwxGRID_DRAW_ROWS_HEADER: { parameters: [], result: "i32" },
+  expwxGRID_DRAW_SELECTION: { parameters: [], result: "i32" },
+  expwxGRID_ROW: { parameters: [], result: "i32" },
+  expwxGridSelectCells: { parameters: [], result: "i32" },
+  expwxGridSelectColumns: { parameters: [], result: "i32" },
+  expwxGridSelectNone: { parameters: [], result: "i32" },
+  expwxGridSelectRows: { parameters: [], result: "i32" },
+  expwxGridSelectRowsOrColumns: { parameters: [], result: "i32" },
+  expwxHDR_SORT_ICON_NONE: { parameters: [], result: "i32" },
+  expwxHDR_SORT_ICON_UP: { parameters: [], result: "i32" },
+  expwxHD_ALLOW_HIDE: { parameters: [], result: "i32" },
+  expwxHD_ALLOW_REORDER: { parameters: [], result: "i32" },
+  expwxHD_BITMAP_ON_RIGHT: { parameters: [], result: "i32" },
+  expwxHD_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxHF_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxHL_ALIGN_LEFT: { parameters: [], result: "i32" },
+  expwxHL_ALIGN_RIGHT: { parameters: [], result: "i32" },
+  expwxHL_ALIGN_CENTRE: { parameters: [], result: "i32" },
+  expwxHL_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxHOURGLASS_CURSOR: { parameters: [], result: "pointer" },
+  expwxHTML_OPEN: { parameters: [], result: "i32" },
+  expwxICON_AUTH_NEEDED: { parameters: [], result: "i32" },
+  expwxICON_NONE: { parameters: [], result: "i32" },
+  expwxID_ABORT: { parameters: [], result: "i32" },
+  expwxID_ADD: { parameters: [], result: "i32" },
+  expwxID_BOLD: { parameters: [], result: "i32" },
+  expwxID_BOTTOM: { parameters: [], result: "i32" },
+  expwxID_CDROM: { parameters: [], result: "i32" },
+  expwxID_CLOSE_ALL: { parameters: [], result: "i32" },
+  expwxID_CONVERT: { parameters: [], result: "i32" },
+  expwxID_DELETE: { parameters: [], result: "i32" },
+  expwxID_DOWN: { parameters: [], result: "i32" },
+  expwxID_EDIT: { parameters: [], result: "i32" },
+  expwxID_EXECUTE: { parameters: [], result: "i32" },
+  expwxID_FILE: { parameters: [], result: "i32" },
+  expwxID_FIRST: { parameters: [], result: "i32" },
+  expwxID_FLOPPY: { parameters: [], result: "i32" },
+  expwxID_HARDDISK: { parameters: [], result: "i32" },
+  expwxID_HOME: { parameters: [], result: "i32" },
+  expwxID_INDENT: { parameters: [], result: "i32" },
+  expwxID_INDEX: { parameters: [], result: "i32" },
+  expwxID_INFO: { parameters: [], result: "i32" },
+  expwxID_ITALIC: { parameters: [], result: "i32" },
+  expwxID_JUMP_TO: { parameters: [], result: "i32" },
+  expwxID_JUSTIFY_CENTER: { parameters: [], result: "i32" },
+  expwxID_JUSTIFY_FILL: { parameters: [], result: "i32" },
+  expwxID_JUSTIFY_LEFT: { parameters: [], result: "i32" },
+  expwxID_JUSTIFY_RIGHT: { parameters: [], result: "i32" },
+  expwxID_LAST: { parameters: [], result: "i32" },
+  expwxID_MDI_WINDOW_ARRANGE_ICONS: { parameters: [], result: "i32" },
+  expwxID_MDI_WINDOW_CASCADE: { parameters: [], result: "i32" },
+  expwxID_MDI_WINDOW_TILE_HORZ: { parameters: [], result: "i32" },
+  expwxID_MDI_WINDOW_TILE_VERT: { parameters: [], result: "i32" },
+  expwxID_NETWORK: { parameters: [], result: "i32" },
+  expwxID_NONE: { parameters: [], result: "i32" },
+  expwxID_PREFERENCES: { parameters: [], result: "i32" },
+  expwxID_PROPERTIES: { parameters: [], result: "i32" },
+  expwxID_REFRESH: { parameters: [], result: "i32" },
+  expwxID_REMOVE: { parameters: [], result: "i32" },
+  expwxID_REPLACE: { parameters: [], result: "i32" },
+  expwxID_RESIZE_FRAME: { parameters: [], result: "i32" },
+  expwxID_REVERT_TO_SAVED: { parameters: [], result: "i32" },
+  expwxID_SELECT_COLOR: { parameters: [], result: "i32" },
+  expwxID_SELECT_FONT: { parameters: [], result: "i32" },
+  expwxID_SEPARATOR: { parameters: [], result: "i32" },
+  expwxID_SORT_ASCENDING: { parameters: [], result: "i32" },
+  expwxID_SORT_DESCENDING: { parameters: [], result: "i32" },
+  expwxID_SPELL_CHECK: { parameters: [], result: "i32" },
+  expwxID_STOP: { parameters: [], result: "i32" },
+  expwxID_STRIKETHROUGH: { parameters: [], result: "i32" },
+  expwxID_TOP: { parameters: [], result: "i32" },
+  expwxID_UNDELETE: { parameters: [], result: "i32" },
+  expwxID_UNDERLINE: { parameters: [], result: "i32" },
+  expwxID_UNINDENT: { parameters: [], result: "i32" },
+  expwxID_UP: { parameters: [], result: "i32" },
+  expwxID_ZOOM_100: { parameters: [], result: "i32" },
+  expwxID_ZOOM_FIT: { parameters: [], result: "i32" },
+  expwxID_ZOOM_IN: { parameters: [], result: "i32" },
+  expwxID_ZOOM_OUT: { parameters: [], result: "i32" },
+  expwxIMAGE_QUALITY_BICUBIC: { parameters: [], result: "i32" },
+  expwxIMAGE_QUALITY_BILINEAR: { parameters: [], result: "i32" },
+  expwxIMAGE_QUALITY_BOX_AVERAGE: { parameters: [], result: "i32" },
+  expwxIMAGE_QUALITY_HIGH: { parameters: [], result: "i32" },
+  expwxIMAGE_QUALITY_NEAREST: { parameters: [], result: "i32" },
+  expwxIMAGE_QUALITY_NORMAL: { parameters: [], result: "i32" },
+  expwxIMAGE_RESOLUTION_CM: { parameters: [], result: "i32" },
+  expwxIMAGE_RESOLUTION_INCHES: { parameters: [], result: "i32" },
+  expwxIMAGE_RESOLUTION_NONE: { parameters: [], result: "i32" },
+  expwxINFOBAR_CHECKBOX: { parameters: [], result: "i32" },
+  expwxIPC_INVALID: { parameters: [], result: "i32" },
+  expwxIPC_PRIVATE: { parameters: [], result: "i32" },
+  expwxIPC_TEXT: { parameters: [], result: "i32" },
+  expwxIPC_UNICODETEXT: { parameters: [], result: "i32" },
+  expwxIPC_UTF8TEXT: { parameters: [], result: "i32" },
+  expwxITEM_DROPDOWN: { parameters: [], result: "i32" },
+  expwxInfoBar_Timeout_Auto: { parameters: [], result: "i32" },
+  expwxInfoBar_Timeout_Never: { parameters: [], result: "i32" },
+  expwxLC_MASK_TYPE: { parameters: [], result: "i32" },
+  expwxLIST_AUTOSIZE: { parameters: [], result: "i32" },
+  expwxLIST_AUTOSIZE_USEHEADER: { parameters: [], result: "i32" },
+  expwxLIST_RECT_BOUNDS: { parameters: [], result: "i32" },
+  expwxLIST_RECT_ICON: { parameters: [], result: "i32" },
+  expwxLIST_RECT_LABEL: { parameters: [], result: "i32" },
+  expwxLOCALE_FORM_ENGLISH: { parameters: [], result: "i32" },
+  expwxLOCALE_FORM_NATIVE: { parameters: [], result: "i32" },
+  expwxLOCALE_NAME_LOCALE: { parameters: [], result: "i32" },
+  expwxLayout_Default: { parameters: [], result: "i32" },
+  expwxLayout_LeftToRight: { parameters: [], result: "i32" },
+  expwxLayout_RightToLeft: { parameters: [], result: "i32" },
+  expwxMEDIACTRLPLAYERCONTROLS_DEFAULT: { parameters: [], result: "i32" },
+  expwxMEDIACTRLPLAYERCONTROLS_NONE: { parameters: [], result: "i32" },
+  expwxMEDIASTATE_PLAYING: { parameters: [], result: "i32" },
+  expwxMEDIASTATE_STOPPED: { parameters: [], result: "i32" },
+  expwxMOUSE_BTN_LEFT: { parameters: [], result: "i32" },
+  expwxMOUSE_WHEEL_VERTICAL: { parameters: [], result: "i32" },
+  expwxNUM_VAL_NO_TRAILING_ZEROES: { parameters: [], result: "i32" },
+  expwxNUM_VAL_SIGN_PLUS: { parameters: [], result: "i32" },
+  expwxNUM_VAL_THOUSANDS_SEPARATOR: { parameters: [], result: "i32" },
+  expwxNUM_VAL_ZERO_AS_BLANK: { parameters: [], result: "i32" },
+  expwxNotificationMessage_Timeout_Auto: { parameters: [], result: "i32" },
+  expwxNotificationMessage_Timeout_Never: { parameters: [], result: "i32" },
+  expwxHAS_NATIVE_NOTIFICATION_MESSAGE: { parameters: [], result: "i32" },
+  expwxODCB_DCLICK_CYCLES: { parameters: [], result: "i32" },
+  expwxOS_WINDOWS: { parameters: [], result: "i32" },
+  expwxPAGE_ALL: { parameters: [], result: "i32" },
+  expwxPATH_UNIX: { parameters: [], result: "i32" },
+  expwxPD_APP_MODAL: { parameters: [], result: "i32" },
+  expwxPD_AUTO_HIDE: { parameters: [], result: "i32" },
+  expwxPD_CAN_ABORT: { parameters: [], result: "i32" },
+  expwxPD_CAN_SKIP: { parameters: [], result: "i32" },
+  expwxPD_ELAPSED_TIME: { parameters: [], result: "i32" },
+  expwxPD_ESTIMATED_TIME: { parameters: [], result: "i32" },
+  expwxPD_REMAINING_TIME: { parameters: [], result: "i32" },
+  expwxPD_SMOOTH: { parameters: [], result: "i32" },
+  expwxPG_ARRAY_DELIMITER: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_AUTOCOMPLETE: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_DEFAULT_VALUE: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_HINT: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_MAX: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_MIN: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_MULTICHOICE_USERSTRINGMODE: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_SPINCTRL_MOTION: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_SPINCTRL_STEP: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_SPINCTRL_WRAP: { parameters: [], result: "pointer" },
+  expwxPG_ATTR_UNITS: { parameters: [], result: "pointer" },
+  expwxPG_AUTO_SORT: { parameters: [], result: "i32" },
+  expwxPG_BOLD_MODIFIED: { parameters: [], result: "i32" },
+  expwxPG_BOOL_USE_CHECKBOX: { parameters: [], result: "pointer" },
+  expwxPG_BOOL_USE_DOUBLE_CLICK_CYCLING: { parameters: [], result: "pointer" },
+  expwxPG_COLOUR_ALLOW_CUSTOM: { parameters: [], result: "pointer" },
+  expwxPG_COLOUR_HAS_ALPHA: { parameters: [], result: "pointer" },
+  expwxPG_DATE_FORMAT: { parameters: [], result: "pointer" },
+  expwxPG_DATE_PICKER_STYLE: { parameters: [], result: "pointer" },
+  expwxPG_DESCRIPTION: { parameters: [], result: "i32" },
+  expwxPG_DIALOG_TITLE: { parameters: [], result: "pointer" },
+  expwxPG_EX_ALWAYS_ALLOW_FOCUS: { parameters: [], result: "i32" },
+  expwxPG_EX_AUTO_UNSPECIFIED_VALUES: { parameters: [], result: "i32" },
+  expwxPG_EX_ENABLE_TLP_TRACKING: { parameters: [], result: "i32" },
+  expwxPG_EX_HELP_AS_TOOLTIPS: { parameters: [], result: "i32" },
+  expwxPG_EX_HIDE_PAGE_BUTTONS: { parameters: [], result: "i32" },
+  expwxPG_EX_INIT_NOCAT: { parameters: [], result: "i32" },
+  expwxPG_EX_MODE_BUTTONS: { parameters: [], result: "i32" },
+  expwxPG_EX_MULTIPLE_SELECTION: { parameters: [], result: "i32" },
+  expwxPG_EX_NATIVE_DOUBLE_BUFFERING: { parameters: [], result: "i32" },
+  expwxPG_EX_NO_FLAT_TOOLBAR: { parameters: [], result: "i32" },
+  expwxPG_EX_NO_TOOLBAR_DIVIDER: { parameters: [], result: "i32" },
+  expwxPG_EX_TOOLBAR_SEPARATOR: { parameters: [], result: "i32" },
+  expwxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES: { parameters: [], result: "i32" },
+  expwxPG_FILE_DIALOG_STYLE: { parameters: [], result: "pointer" },
+  expwxPG_FILE_INITIAL_PATH: { parameters: [], result: "pointer" },
+  expwxPG_FILE_SHOW_FULL_PATH: { parameters: [], result: "pointer" },
+  expwxPG_FILE_SHOW_RELATIVE_PATH: { parameters: [], result: "pointer" },
+  expwxPG_FILE_WILDCARD: { parameters: [], result: "pointer" },
+  expwxPG_FLOAT_PRECISION: { parameters: [], result: "pointer" },
+  expwxPG_HIDE_CATEGORIES: { parameters: [], result: "i32" },
+  expwxPG_HIDE_MARGIN: { parameters: [], result: "i32" },
+  expwxPG_ITERATE_ALL: { parameters: [], result: "i32" },
+  expwxPG_ITERATE_CATEGORIES: { parameters: [], result: "i32" },
+  expwxPG_ITERATE_DEFAULT: { parameters: [], result: "i32" },
+  expwxPG_ITERATE_VISIBLE: { parameters: [], result: "i32" },
+  expwxPG_LABEL: { parameters: [], result: "pointer" },
+  expwxPG_LIMITED_EDITING: { parameters: [], result: "i32" },
+  expwxPG_NO_INTERNAL_BORDER: { parameters: [], result: "i32" },
+  expwxPG_SPLITTER_AUTO_CENTER: { parameters: [], result: "i32" },
+  expwxPG_STATIC_LAYOUT: { parameters: [], result: "i32" },
+  expwxPG_STATIC_SPLITTER: { parameters: [], result: "i32" },
+  expwxPG_STRING_PASSWORD: { parameters: [], result: "pointer" },
+  expwxPG_TOOLBAR: { parameters: [], result: "i32" },
+  expwxPG_TOOLTIPS: { parameters: [], result: "i32" },
+  expwxPG_UINT_BASE: { parameters: [], result: "pointer" },
+  expwxPG_UINT_PREFIX: { parameters: [], result: "pointer" },
+  expwxPG_VFB_BEEP: { parameters: [], result: "i32" },
+  expwxPG_VFB_DEFAULT: { parameters: [], result: "i32" },
+  expwxPG_VFB_MARK_CELL: { parameters: [], result: "i32" },
+  expwxPG_VFB_NULL: { parameters: [], result: "i32" },
+  expwxPG_VFB_SHOW_MESSAGE: { parameters: [], result: "i32" },
+  expwxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR: { parameters: [], result: "i32" },
+  expwxPG_VFB_SHOW_MESSAGEBOX: { parameters: [], result: "i32" },
+  expwxPG_VFB_STAY_IN_PROPERTY: { parameters: [], result: "i32" },
+  expwxPG_VFB_UNDEFINED: { parameters: [], result: "i32" },
+  expwxPNG_TYPE_COLOUR: { parameters: [], result: "i32" },
+  expwxPNG_TYPE_GREY: { parameters: [], result: "i32" },
+  expwxPNG_TYPE_GREY_RED: { parameters: [], result: "i32" },
+  expwxPORT_MAC: { parameters: [], result: "i32" },
+  expwxPOWER_BATTERY: { parameters: [], result: "i32" },
+  expwxPOWER_DELAY: { parameters: [], result: "i32" },
+  expwxPOWER_RESOURCE_SYSTEM: { parameters: [], result: "i32" },
+  expwxPOWER_SOCKET: { parameters: [], result: "i32" },
+  expwxPOWER_UNKNOWN: { parameters: [], result: "i32" },
+  expwxPRIORITY_DEFAULT: { parameters: [], result: "i32" },
+  expwxPRIORITY_MAX: { parameters: [], result: "i32" },
+  expwxPRIORITY_MIN: { parameters: [], result: "i32" },
+  expwxPROPSHEET_BUTTONTOOLBOOK: { parameters: [], result: "i32" },
+  expwxPROPSHEET_SHRINKTOFIT: { parameters: [], result: "i32" },
+  expwxPROPSHEET_TOOLBOOK: { parameters: [], result: "i32" },
+  expwxREMOVE_LEADING_SPACES: { parameters: [], result: "i32" },
+  expwxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR: { parameters: [], result: "i32" },
+  expwxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR: { parameters: [], result: "i32" },
+  expwxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FIELD_STYLE_COMPOSITE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FIELD_STYLE_END_TAG: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FIELD_STYLE_NO_BORDER: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FIELD_STYLE_RECTANGLE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FIELD_STYLE_START_TAG: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_BACKGROUND: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_BORDERS: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_BULLETS: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_CHARACTER: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_FONT: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_HELP_BUTTON: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_INDENTS_SPACING: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_LIST_STYLE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_MARGINS: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_PARAGRAPH: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_SIZE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_STYLE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_STYLE_EDITOR: { parameters: [], result: "i32" },
+  expwxRICHTEXT_FORMAT_TABS: { parameters: [], result: "i32" },
+  expwxRICHTEXT_HANDLER_CONVERT_FACENAMES: { parameters: [], result: "i32" },
+  expwxRICHTEXT_HANDLER_INCLUDE_STYLESHEET: { parameters: [], result: "i32" },
+  expwxRICHTEXT_HANDLER_NO_HEADER_FOOTER: { parameters: [], result: "i32" },
+  expwxRICHTEXT_HANDLER_SAVE_IMAGES_TO_BASE64: { parameters: [], result: "i32" },
+  expwxRICHTEXT_HANDLER_SAVE_IMAGES_TO_FILES: { parameters: [], result: "i32" },
+  expwxRICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_APPLY_STYLES: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_BROWSE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_BROWSE_NUMBERING: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_CREATE_STYLES: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_DELETE_STYLES: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_EDIT_STYLES: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_OK_CANCEL: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_ORGANISE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_RENAME_STYLES: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_RENUMBER: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_SHOW_ALL: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_SHOW_BOX: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_SHOW_CHARACTER: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_SHOW_LIST: { parameters: [], result: "i32" },
+  expwxRICHTEXT_ORGANISER_SHOW_PARAGRAPH: { parameters: [], result: "i32" },
+  expwxRICHTEXT_PAGE_ALL: { parameters: [], result: "i32" },
+  expwxRICHTEXT_PAGE_CENTRE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_PAGE_RIGHT: { parameters: [], result: "i32" },
+  expwxRICHTEXT_SETSTYLE_CHARACTERS_ONLY: { parameters: [], result: "i32" },
+  expwxRICHTEXT_SETSTYLE_NONE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_SETSTYLE_OPTIMIZE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY: { parameters: [], result: "i32" },
+  expwxRICHTEXT_SETSTYLE_REMOVE: { parameters: [], result: "i32" },
+  expwxRICHTEXT_SETSTYLE_RENUMBER: { parameters: [], result: "i32" },
+  expwxRICHTEXT_SETSTYLE_RESET: { parameters: [], result: "i32" },
+  expwxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: { parameters: [], result: "i32" },
+  expwxRICHTEXT_SETSTYLE_WITH_UNDO: { parameters: [], result: "i32" },
+  expwxRICHTEXT_TYPE_ANY: { parameters: [], result: "i32" },
+  expwxRICHTEXT_TYPE_HTML: { parameters: [], result: "i32" },
+  expwxRICHTEXT_TYPE_PDF: { parameters: [], result: "i32" },
+  expwxRICHTEXT_TYPE_RTF: { parameters: [], result: "i32" },
+  expwxRICHTEXT_TYPE_TEXT: { parameters: [], result: "i32" },
+  expwxRICHTEXT_TYPE_XML: { parameters: [], result: "i32" },
+  expwxSHOW_SB_DEFAULT: { parameters: [], result: "i32" },
+  expwxSHOW_SB_NEVER: { parameters: [], result: "i32" },
+  expwxSOCKET_BLOCK: { parameters: [], result: "i32" },
+  expwxSOCKET_CONNECTION: { parameters: [], result: "i32" },
+  expwxSOCKET_CONNECTION_FLAG: { parameters: [], result: "i32" },
+  expwxSOCKET_INPUT: { parameters: [], result: "i32" },
+  expwxSOCKET_INPUT_FLAG: { parameters: [], result: "i32" },
+  expwxSOCKET_INVADDR: { parameters: [], result: "i32" },
+  expwxSOCKET_INVOP: { parameters: [], result: "i32" },
+  expwxSOCKET_INVPORT: { parameters: [], result: "i32" },
+  expwxSOCKET_IOERR: { parameters: [], result: "i32" },
+  expwxSOCKET_LOST: { parameters: [], result: "i32" },
+  expwxSOCKET_LOST_FLAG: { parameters: [], result: "i32" },
+  expwxSOCKET_MEMERR: { parameters: [], result: "i32" },
+  expwxSOCKET_NOERROR: { parameters: [], result: "i32" },
+  expwxSOCKET_NOHOST: { parameters: [], result: "i32" },
+  expwxSOCKET_NOWAIT: { parameters: [], result: "i32" },
+  expwxSOCKET_OUTPUT: { parameters: [], result: "i32" },
+  expwxSOCKET_OUTPUT_FLAG: { parameters: [], result: "i32" },
+  expwxSOCKET_REUSEADDR: { parameters: [], result: "i32" },
+  expwxSOCKET_TIMEDOUT: { parameters: [], result: "i32" },
+  expwxSOCKET_WAITALL: { parameters: [], result: "i32" },
+  expwxSOCKET_WOULDBLOCK: { parameters: [], result: "i32" },
+  expwxSTANDARD_CURSOR: { parameters: [], result: "pointer" },
+  expwxSTB_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxSTB_ELLIPSIZE_END: { parameters: [], result: "i32" },
+  expwxSTB_ELLIPSIZE_MIDDLE: { parameters: [], result: "i32" },
+  expwxSTB_ELLIPSIZE_START: { parameters: [], result: "i32" },
+  expwxSTB_SHOW_TIPS: { parameters: [], result: "i32" },
+  expwxSTB_SIZEGRIP: { parameters: [], result: "i32" },
+  expwxSTREAM_FILEEXT: { parameters: [], result: "i32" },
+  expwxSTREAM_PROTOCOL: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_GRADIENTACTIVECAPTION: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_GRADIENTINACTIVECAPTION: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_GRIDLINES: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_HOTLIGHT: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_LISTBOXHIGHLIGHT: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_LISTBOXTEXT: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_MAX: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_MENUBAR: { parameters: [], result: "i32" },
+  expwxSYS_COLOUR_MENUHILIGHT: { parameters: [], result: "i32" },
+  expwxS_DIR_DEFAULT: { parameters: [], result: "i32" },
+  expwxTASKBAR_BUTTON_ERROR: { parameters: [], result: "i32" },
+  expwxTASKBAR_BUTTON_INDETERMINATE: { parameters: [], result: "i32" },
+  expwxTASKBAR_BUTTON_NORMAL: { parameters: [], result: "i32" },
+  expwxTASKBAR_BUTTON_NO_PROGRESS: { parameters: [], result: "i32" },
+  expwxTASKBAR_BUTTON_PAUSED: { parameters: [], result: "i32" },
+  expwxTASKBAR_JUMP_LIST_DESTINATION: { parameters: [], result: "i32" },
+  expwxTASKBAR_JUMP_LIST_SEPARATOR: { parameters: [], result: "i32" },
+  expwxTASKBAR_JUMP_LIST_TASK: { parameters: [], result: "i32" },
+  expwxTB_BOTTOM: { parameters: [], result: "i32" },
+  expwxTB_HORZ_LAYOUT: { parameters: [], result: "i32" },
+  expwxTB_HORZ_TEXT: { parameters: [], result: "i32" },
+  expwxTB_LEFT: { parameters: [], result: "i32" },
+  expwxTB_NO_TOOLTIPS: { parameters: [], result: "i32" },
+  expwxTB_RIGHT: { parameters: [], result: "i32" },
+  expwxTB_TOP: { parameters: [], result: "i32" },
+  expwxTEXT_ALIGNMENT_CENTRE: { parameters: [], result: "i32" },
+  expwxTEXT_ALIGNMENT_JUSTIFIED: { parameters: [], result: "i32" },
+  expwxTEXT_ALIGNMENT_LEFT: { parameters: [], result: "i32" },
+  expwxTEXT_ALIGNMENT_RIGHT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_ALIGNMENT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BACKGROUND_COLOUR: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_NUMBER: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_ARABIC: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_BITMAP: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_CONTINUATION: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_NONE: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_OUTLINE: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_PARENTHESES: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_PERIOD: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_STANDARD: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_BULLET_STYLE_SYMBOL: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_EFFECT_STRIKETHROUGH: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_EFFECT_SUBSCRIPT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_EFFECT_SUPERSCRIPT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_FONT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_FONT_FACE: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_FONT_ITALIC: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_FONT_WEIGHT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_LEFT_INDENT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_LINE_SPACING: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_LINE_SPACING_HALF: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_PARA_SPACING_AFTER: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_PARA_SPACING_BEFORE: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_RIGHT_INDENT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_TABS: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_TEXT_COLOUR: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_UNDERLINE_DOUBLE: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_UNDERLINE_SPECIAL: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_UNITS_HUNDREDTHS_POINT: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_UNITS_MASK: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_UNITS_PERCENTAGE: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_UNITS_PIXELS: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_UNITS_POINTS: { parameters: [], result: "i32" },
+  expwxTEXT_ATTR_UNITS_TENTHS_MM: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_COLOUR: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_DASHED: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_DOTTED: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_DOUBLE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_GROOVE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_INSET: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_MEDIUM: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_NONE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_OUTSET: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_RIDGE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_SOLID: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_STYLE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_THICK: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BORDER_THIN: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_BOX_STYLE_NAME: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_CLEAR: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_CLEAR_BOTH: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_CLEAR_LEFT: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_CLEAR_NONE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_CLEAR_RIGHT: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_COLLAPSE_BORDERS: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_COLLAPSE_FULL: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_COLLAPSE_NONE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_CORNER_RADIUS: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_FLOAT: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_FLOAT_LEFT: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_FLOAT_NONE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_FLOAT_RIGHT: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_POSITION_ABSOLUTE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_POSITION_FIXED: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_POSITION_MASK: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_POSITION_RELATIVE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_POSITION_STATIC: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_BOTTOM: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_CENTRE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_NONE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_TOP: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_WHITESPACE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_WHITESPACE_NONE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_WHITESPACE_NORMAL: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_WHITESPACE_NO_WRAP: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_WHITESPACE_PREFORMATTED: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_WHITESPACE_PREFORMATTED_LINE: { parameters: [], result: "i32" },
+  expwxTEXT_BOX_ATTR_WHITESPACE_PREFORMATTED_WRAP: { parameters: [], result: "i32" },
+  expwxTEXT_TYPE_RTF: { parameters: [], result: "i32" },
+  expwxTEXT_TYPE_ANY: { parameters: [], result: "i32" },
+  expwxTE_HT_BEFORE: { parameters: [], result: "i32" },
+  expwxTE_HT_BELOW: { parameters: [], result: "i32" },
+  expwxTE_HT_BEYOND: { parameters: [], result: "i32" },
+  expwxTE_HT_ON_TEXT: { parameters: [], result: "i32" },
+  expwxTE_HT_UNKNOWN: { parameters: [], result: "i32" },
+  expwxTHREAD_DETACHED: { parameters: [], result: "i32" },
+  expwxTHREAD_JOINABLE: { parameters: [], result: "i32" },
+  expwxTHREAD_NO_ERROR: { parameters: [], result: "i32" },
+  expwxTITLEBAR_BUTTON_CLOSE: { parameters: [], result: "i32" },
+  expwxTITLEBAR_BUTTON_HELP: { parameters: [], result: "i32" },
+  expwxTITLEBAR_BUTTON_ICONIZE: { parameters: [], result: "i32" },
+  expwxTITLEBAR_BUTTON_MAXIMIZE: { parameters: [], result: "i32" },
+  expwxTITLEBAR_BUTTON_RESTORE: { parameters: [], result: "i32" },
+  expwxTL_3STATE: { parameters: [], result: "i32" },
+  expwxTL_CHECKBOX: { parameters: [], result: "i32" },
+  expwxTL_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expwxTL_MULTIPLE: { parameters: [], result: "i32" },
+  expwxTL_USER_3STATE: { parameters: [], result: "i32" },
+  expwxTOKEN_RET_EMPTY: { parameters: [], result: "i32" },
+  expwxTOUCH_ALL_GESTURES: { parameters: [], result: "i32" },
+  expwxTOUCH_RAW_EVENTS: { parameters: [], result: "i32" },
+  expwxTRANSPARENT: { parameters: [], result: "i32" },
+  expwxTheApp: { parameters: [], result: "pointer" },
+  expwxTheClipboard: { parameters: [], result: "pointer" },
+  expwxTipKind_Auto: { parameters: [], result: "i32" },
+  expwxURL_NOERR: { parameters: [], result: "i32" },
+  expwxUSER_ATTENTION_ERROR: { parameters: [], result: "i32" },
+  expwxWEBVIEW_BROWSING_DATA_ALL: { parameters: [], result: "i32" },
+  expwxWEBVIEW_BROWSING_DATA_CACHE: { parameters: [], result: "i32" },
+  expwxWEBVIEW_BROWSING_DATA_COOKIES: { parameters: [], result: "i32" },
+  expwxWEBVIEW_BROWSING_DATA_DOM_STORAGE: { parameters: [], result: "i32" },
+  expwxWEBVIEW_BROWSING_DATA_OTHER: { parameters: [], result: "i32" },
+  expwxWEBVIEW_FIND_BACKWARDS: { parameters: [], result: "i32" },
+  expwxWEBVIEW_FIND_DEFAULT: { parameters: [], result: "i32" },
+  expwxWEBVIEW_FIND_ENTIRE_WORD: { parameters: [], result: "i32" },
+  expwxWEBVIEW_FIND_HIGHLIGHT_RESULT: { parameters: [], result: "i32" },
+  expwxWEBVIEW_FIND_MATCH_CASE: { parameters: [], result: "i32" },
+  expwxWEBVIEW_FIND_WRAP: { parameters: [], result: "i32" },
+  expwxWEBVIEW_NAV_ACTION_USER: { parameters: [], result: "i32" },
+  expwxWEBVIEW_NAV_ERR_AUTH: { parameters: [], result: "i32" },
+  expwxWEBVIEW_NAV_ERR_CERTIFICATE: { parameters: [], result: "i32" },
+  expwxWEBVIEW_NAV_ERR_CONNECTION: { parameters: [], result: "i32" },
+  expwxWEBVIEW_NAV_ERR_NOT_FOUND: { parameters: [], result: "i32" },
+  expwxWEBVIEW_NAV_ERR_OTHER: { parameters: [], result: "i32" },
+  expwxWEBVIEW_NAV_ERR_REQUEST: { parameters: [], result: "i32" },
+  expwxWEBVIEW_NAV_ERR_SECURITY: { parameters: [], result: "i32" },
+  expwxWEBVIEW_NAV_ERR_USER_CANCELLED: { parameters: [], result: "i32" },
+  expwxWEBVIEW_PRINT_DEFAULT: { parameters: [], result: "i32" },
+  expwxWEBVIEW_PRINT_HIDE_HEADER_FOOTER: { parameters: [], result: "i32" },
+  expwxWEBVIEW_ZOOM_LARGE: { parameters: [], result: "i32" },
+  expwxWEBVIEW_ZOOM_LARGEST: { parameters: [], result: "i32" },
+  expwxWEBVIEW_ZOOM_MEDIUM: { parameters: [], result: "i32" },
+  expwxWEBVIEW_ZOOM_SMALL: { parameters: [], result: "i32" },
+  expwxWEBVIEW_ZOOM_TINY: { parameters: [], result: "i32" },
+  expwxWEBVIEW_ZOOM_TYPE_LAYOUT: { parameters: [], result: "i32" },
+  expwxWEBVIEW_ZOOM_TYPE_TEXT: { parameters: [], result: "i32" },
+  expwxWINDOW_VARIANT_LARGE: { parameters: [], result: "i32" },
+  expwxWINDOW_VARIANT_MINI: { parameters: [], result: "i32" },
+  expwxWINDOW_VARIANT_NORMAL: { parameters: [], result: "i32" },
+  expwxWINDOW_VARIANT_SMALL: { parameters: [], result: "i32" },
+  expwxWIZARD_EX_HELPBUTTON: { parameters: [], result: "i32" },
+  expwxWIZARD_VALIGN_TOP: { parameters: [], result: "i32" },
+  expwxWIZARD_VALIGN_CENTRE: { parameters: [], result: "i32" },
+  expwxWIZARD_VALIGN_BOTTOM: { parameters: [], result: "i32" },
+  expwxWIZARD_HALIGN_LEFT: { parameters: [], result: "i32" },
+  expwxWIZARD_HALIGN_CENTRE: { parameters: [], result: "i32" },
+  expwxWIZARD_HALIGN_RIGHT: { parameters: [], result: "i32" },
+  expwxWIZARD_TILE: { parameters: [], result: "i32" },
+  expwxXML_ELEMENT_NODE: { parameters: [], result: "i32" },
+  expwxXML_TEXT_NODE: { parameters: [], result: "i32" },
+  expwxXRC_USE_ENVVARS: { parameters: [], result: "i32" },
+  expwxXRC_USE_LOCALE: { parameters: [], result: "i32" },
+  expwxYELLOW: { parameters: [], result: "pointer" },
+  expwxYELLOW_BRUSH: { parameters: [], result: "pointer" },
+  expwxYELLOW_PEN: { parameters: [], result: "pointer" },
+  expwxZIP_FORMAT_ZIP64: { parameters: [], result: "i32" },
+  expTab_Stop: { parameters: [], result: "i32" },
+  expTab_Wrap: { parameters: [], result: "i32" },
+  expTab_Leave: { parameters: [], result: "i32" },
+  expGridActivationProgram: { parameters: [], result: "i32" },
+  expGridActivationKey: { parameters: [], result: "i32" },
+  expGridActivationMouse: { parameters: [], result: "i32" },
+  expGridActivationIgnore: { parameters: [], result: "i32" },
+  expGridActivationChange: { parameters: [], result: "i32" },
+  expGridActivationShowEditor: { parameters: [], result: "i32" },
   expRIBBON_BAR_DEFAULT_STYLE: { parameters: [], result: "i32" },
   expRIBBON_BAR_FOLDBAR_STYLE: { parameters: [], result: "i32" },
   expRIBBON_BAR_SHOW_PAGE_LABELS: { parameters: [], result: "i32" },
@@ -31442,6 +42862,21 @@ export const lib = dlopen("kwxFFI", {
   expwxRIBBON_GALLERY_BUTTON_HOVERED: { parameters: [], result: "i32" },
   expwxRIBBON_GALLERY_BUTTON_ACTIVE: { parameters: [], result: "i32" },
   expwxRIBBON_GALLERY_BUTTON_DISABLED: { parameters: [], result: "i32" },
+  expwxANIMATION_TYPE_INVALID: { parameters: [], result: "i32" },
+  expwxANIMATION_TYPE_GIF: { parameters: [], result: "i32" },
+  expwxANIMATION_TYPE_ANI: { parameters: [], result: "i32" },
+  expwxANIMATION_TYPE_WEBP: { parameters: [], result: "i32" },
+  expwxANIMATION_TYPE_ANY: { parameters: [], result: "i32" },
+  expCP_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expCP_NO_TLW_RESIZE: { parameters: [], result: "i32" },
+  expPGMAN_DEFAULT_STYLE: { parameters: [], result: "i32" },
+  expTL_SINGLE: { parameters: [], result: "i32" },
+  expTL_NO_HEADER: { parameters: [], result: "i32" },
+  expWEBVIEW_NAV_ACTION_NONE: { parameters: [], result: "i32" },
+  expWEBVIEW_NAV_ACTION_OTHER: { parameters: [], result: "i32" },
+  expWEBVIEW_RELOAD_DEFAULT: { parameters: [], result: "i32" },
+  expWEBVIEW_RELOAD_NO_CACHE: { parameters: [], result: "i32" },
+  expPU_CONTAINS_CONTROLS: { parameters: [], result: "i32" },
   kwxConstants_IntCount: { parameters: [], result: "i32" },
   kwxConstants_IntTable: { parameters: [], result: "pointer" },
 } as const);

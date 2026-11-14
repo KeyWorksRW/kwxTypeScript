@@ -1,0 +1,3497 @@
+// dialogs.kwxts — kwxTypeScript port of wxSamples/src/dialogs/dialogs.cpp
+//
+// The wxWidgets "common dialogs" sample: one frame whose menu bar opens every
+// common dialog wxWidgets provides.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\dialogs\dialogs.kwxts
+
+import {
+    ALIGN_CENTRE,
+    ALL,
+    ALPHA_OPAQUE,
+    BOTH,
+    BLACK,
+    BRUSHSTYLE_SOLID,
+    BRUSHSTYLE_TRANSPARENT,
+    CANCEL,
+    CANCEL_DEFAULT,
+    CAPTION,
+    CENTRE,
+    CENTRE_ON_SCREEN,
+    CHOICEDLG_STYLE,
+    CLOSE_BOX,
+    ColourData_NUM_CUSTOM,
+    DEFAULT_DIALOG_STYLE,
+    DEFAULT_FRAME_STYLE,
+    DD_DEFAULT_STYLE,
+    DD_DIR_MUST_EXIST,
+    DD_MULTIPLE,
+    DD_SHOW_HIDDEN,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_CHOICE,
+    EVT_CLOSE_WINDOW,
+    EVT_COLOUR_CHANGED,
+    EVT_FIND,
+    EVT_FIND_CLOSE,
+    EVT_FIND_NEXT,
+    EVT_FIND_REPLACE,
+    EVT_FIND_REPLACE_ALL,
+    EVT_MENU,
+    EVT_PAINT,
+    EVT_RADIOBUTTON,
+    EVT_TEXT,
+    EVT_UPDATE_UI,
+    EVT_WINDOW_MODAL_DIALOG_CLOSED,
+    FD_CHANGE_DIR,
+    FD_MULTIPLE,
+    FD_NO_FOLLOW,
+    FD_OPEN,
+    FD_OVERWRITE_PROMPT,
+    FD_PREVIEW,
+    FD_SAVE,
+    FD_SHORTCUT_TOP,
+    FD_SHOW_HIDDEN,
+    FileSelectorDefaultWildcardStr,
+    FR_DOWN,
+    FR_MATCHCASE,
+    FR_NOWHOLEWORD,
+    FR_REPLACEDIALOG,
+    FR_WHOLEWORD,
+    ICON_ERROR,
+    ICON_INFORMATION,
+    ICON_QUESTION,
+    ICON_WARNING,
+    ID_ANY,
+    ID_CANCEL,
+    ID_CLEAR,
+    ID_CLOSE,
+    ID_COPY,
+    ID_CUT,
+    ID_EXIT,
+    ID_NO,
+    ID_OK,
+    ID_PASTE,
+    ID_REDO,
+    ID_SELECTALL,
+    ID_UNDO,
+    ID_YES,
+    HORIZONTAL,
+    HSCROLL,
+    InfoBar_Timeout_Auto,
+    INFOBAR_CHECKBOX,
+    MINOR_VERSION,
+    NORMAL_FONT,
+    SHOW_EFFECT_EXPAND,
+    ART_PRINT,
+    ART_OTHER,
+    BITMAP_TYPE_XPM,
+    NO_DEFAULT,
+    NOT_FOUND,
+    OK,
+    PD_APP_MODAL,
+    PD_CAN_ABORT,
+    PD_CAN_SKIP,
+    PD_ELAPSED_TIME,
+    PD_ESTIMATED_TIME,
+    PD_REMAINING_TIME,
+    PD_SMOOTH,
+    RB_GROUP,
+    RIGHT,
+    STAY_ON_TOP,
+    STB_DEFAULT_STYLE,
+    TAB_TRAVERSAL,
+    SYS_COLOUR_WINDOW,
+    TE_MULTILINE,
+    USER_ATTENTION_ERROR,
+    VERTICAL,
+    VERSION_NUM_DOT_STRING,
+    VSCROLL,
+    WHITE,
+    YES,
+    YES_NO,
+    createWxAboutDialogInfo,
+    createWxAppProgressIndicator,
+    createWxArrayInt,
+    createWxBoxSizer,
+    createWxBrushFromColour,
+    createWxBusyCursor,
+    createWxBusyInfo,
+    createWxBusyInfoFlags,
+    createWxColourData,
+    createWxColourDialog,
+    createWxColourEmpty,
+    createWxColourRGB,
+    createWxColourFromInt,
+    createWxButton,
+    createWxCheckBox,
+    createWxChoice,
+    createWxIconLoad,
+    createWxBusyInfoWithFlags,
+    createWxCredentialEntryDialog,
+    createWxDialog,
+    createWxDirDialog,
+    createWxFileDialog,
+    createWxFileDialogCustomizeHook,
+    wxFileDialogCustomizeHook,
+    createWxFindReplaceDataDefault,
+    createWxFindReplaceDialog,
+    createWxFontData,
+    createWxFontDialog,
+    createWxFontDefault,
+    createWxFrame,
+    createWxGenericAboutDialog,
+    createWxGenericColourDialog,
+    createWxGenericDirDialog,
+    createWxGenericFileDialog,
+    createWxGenericFontDialog,
+    createWxGenericProgressDialog,
+    createWxInfoBar,
+    createWxInfoBarEx,
+    createWxMenu,
+    createWxMenuBar,
+    createWxMessageDialog,
+    createWxMiniFrame,
+    createWxMultiChoiceDialog,
+    createWxPaintDC,
+    createWxPanel,
+    createWxProgressDialog,
+    createWxRadioButton,
+    createWxScrolledWindow,
+    createWxSingleChoiceDialog,
+    createWxStaticLine,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    createWxTextEntryDialog,
+    createWxTipWindow,
+    createWxWindowDisabler,
+    wxCreateFileTipProvider,
+    createKwxLogGui,
+    createKwxModalDialogHook,
+    initAllImageHandlers,
+    initialize,
+    kwxMessageBox,
+    LogError,
+    LogMessage,
+    LogStatus,
+    LogWarning,
+    readWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wrapWxAboutDialogInfo,
+    wrapWxApp,
+    wrapWxClassInfo,
+    wrapWxDirDialog,
+    wrapWxFileDialog,
+    wrapWxFileDialogCustomize,
+    wrapWxFrame,
+    wrapWxLog,
+    wrapWxMenuBar,
+    wrapWxModalDialogHook,
+    wrapWxScrolledWindow,
+    wrapWxWindow,
+    wxAboutDialogInfo,
+    wxArtProvider_GetBitmapBundle,
+    wxButton,
+    wxBusyCursor,
+    wxBusyInfo,
+    wxColour,
+    wxColourData,
+    wxDialog,
+    wxDirDialog,
+    wxFileDialog,
+    wxFileDialogCustomControl,
+    wxFindDialogEvent,
+    wxColourDialogEvent,
+    wxFindReplaceData,
+    wxFindReplaceDialog,
+    wxFrame,
+    wxGenericFileDialog,
+    wxGenericProgressDialog,
+    wxInfoBar,
+    kwxLogGui,
+    wxLog,
+    wxMenu,
+    wxMenuBar,
+    wxMessageDialog,
+    wxModalDialogHook,
+    wxProgressDialog,
+    wxScrolledWindow,
+    wxString,
+    wxTipProvider,
+    wxTipWindow,
+    wrapWxTipWindow,
+    wxUpdateUIEvent,
+    wxWindow,
+    wxWindowDisabler,
+    wxWindowModalDialogEvent,
+    wxApp_GetApp,
+    wxAppTraits,
+    wxFileName_DirExistsForPath,
+    wxFileName_FileExistsForPath,
+    wxGetEnv,
+    wxGetHomeDir,
+    wxGetNumberFromUser,
+    wxGetPasswordFromUser,
+    wxGetSelectedChoicesEx,
+    wxGetSingleChoiceDataEx,
+    wxGetSingleChoiceIndexEx,
+    wxInfoMessageBox,
+    wxLog_GetActiveTarget,
+    wxMilliSleep,
+    wxSleep,
+    wxShowTip,
+    wxSizer_GetDefaultBorder,
+    wxSystemOptions_SetOption,
+    wxSystemSettings_GetColour,
+    wxYield,
+    wxFileSelector,
+    wxAboutBox,
+    wxCloseEvent,
+    wxCommandEvent,
+} from "kwx";
+import { Callback, Pointer, args, exit, platform, pointerOf, readCString } from "kwx/platform";
+import {
+    EventRouter,
+    addWin,
+    backgroundColour,
+    charPtrArray,
+    coloursEqual,
+    createArrayString,
+    foregroundColour,
+    readStringArray,
+    stockLabel,
+    takeText,
+    withString,
+    withStrings,
+} from "./support.kwxts";
+import {
+    DIALOGS_ABOUTDLG_CUSTOM,
+    DIALOGS_ABOUTDLG_FANCY,
+    DIALOGS_ABOUTDLG_FULL,
+    DIALOGS_ABOUTDLG_SIMPLE,
+    DIALOGS_ADDREMOVE,
+    DIALOGS_APP_PROGRESS,
+    DIALOGS_BUSYINFO,
+    DIALOGS_BUSYINFO_RICH,
+    DIALOGS_CENTRE_PARENT,
+    DIALOGS_CENTRE_SCREEN,
+    DIALOGS_CHOOSE_COLOUR,
+    DIALOGS_CHOOSE_COLOUR_ALPHA,
+    DIALOGS_CHOOSE_COLOUR_GENERIC,
+    DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA,
+    DIALOGS_CHOOSE_FONT,
+    DIALOGS_CHOOSE_FONT_GENERIC,
+    DIALOGS_CREDENTIAL_ENTRY,
+    DIALOGS_DIR_CHOOSE,
+    DIALOGS_DIR_CHOOSE_WINDOW_MODAL,
+    DIALOGS_DIRMULTIPLE_CHOOSE,
+    DIALOGS_DIRNEW_CHOOSE,
+    DIALOGS_FILE_OPEN,
+    DIALOGS_FILE_OPEN2,
+    DIALOGS_FILE_OPEN_GENERIC,
+    DIALOGS_FILE_SAVE,
+    DIALOGS_FILE_SAVE_GENERIC,
+    DIALOGS_FILE_SAVE_WINDOW_MODAL,
+    DIALOGS_FILE_USE_CUSTOMIZER,
+    DIALOGS_FILE_USE_EXTRA_CONTROL_CREATOR,
+    DIALOGS_FILES_OPEN,
+    DIALOGS_FILES_OPEN_GENERIC,
+    DIALOGS_FILES_OPEN_WINDOW_MODAL,
+    DIALOGS_FIND,
+    DIALOGS_GENERIC_DIR_CHOOSE,
+    DIALOGS_GET_COLOUR,
+    DIALOGS_INFOBAR_ADVANCED,
+    DIALOGS_INFOBAR_SIMPLE,
+    DIALOGS_LINE_ENTRY,
+    DIALOGS_LOG_DIALOG,
+    DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES,
+    DIALOGS_MESSAGE_BOX,
+    DIALOGS_MESSAGE_BOX_WINDOW_MODAL,
+    DIALOGS_MESSAGE_BOX_WXINFO,
+    DIALOGS_MESSAGE_DIALOG,
+    DIALOGS_MESSAGE_DIALOG_WINDOW_MODAL,
+    DIALOGS_MINIFRAME,
+    DIALOGS_MODAL,
+    DIALOGS_MODAL_HOOK,
+    DIALOGS_MODELESS,
+    DIALOGS_MULTI_CHOICE,
+    DIALOGS_NOTIFY_MSG,
+    DIALOGS_NUM_ENTRY,
+    DIALOGS_ONTOP,
+    DIALOGS_PASSWORD_ENTRY,
+    DIALOGS_PROGRESS,
+    DIALOGS_PROGRESS_GENERIC,
+    DIALOGS_PROPERTY_SHEET,
+    DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,
+    DIALOGS_PROPERTY_SHEET_TOOLBOOK,
+    DIALOGS_REARRANGE,
+    DIALOGS_REPLACE,
+    DIALOGS_REQUEST,
+    DIALOGS_RICH_MESSAGE_DIALOG,
+    DIALOGS_RICHTIP_DIALOG,
+    DIALOGS_SHOW_TIP,
+    DIALOGS_SIMULATE_UNSAVED,
+    DIALOGS_SINGLE_CHOICE,
+    DIALOGS_SINGLE_CHOICE_DATA,
+    DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,
+    DIALOGS_TEST_DEFAULT_ACTION,
+    DIALOGS_TEXT_ENTRY,
+    DIALOGS_TIP,
+    DIALOGS_USE_WRAPPER_FUNCTIONS,
+} from "./support.kwxts";
+import {
+    closeModalTestRouters,
+    createSettingsData,
+    SettingsData,
+    showSettingsDialog,
+    showStdButtonSizerDialog,
+    showTestDefaultActionDialog,
+    showTestMessageBoxDialog,
+} from "./modaltests.kwxts";
+import {
+    closeMiscDialogRouters,
+    showAddRemoveDialog,
+    showModalDialog,
+    showNotificationWindow,
+    showRearrangeDialog,
+    showRichTipDialog,
+    toggleModelessDialog,
+} from "./miscdlgs.kwxts";
+
+declare const __dirname: string;
+
+function assetPath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+//-----------------------------------------------------------------------------
+// Frame state
+//-----------------------------------------------------------------------------
+
+interface FrameState
+{
+    frame: wxFrame;
+    menuBar: wxMenuBar;
+    canvas: wxScrolledWindow;
+    infoBarSimple: wxInfoBar;
+    infoBarAdvanced: wxInfoBar;
+    confirmExit: boolean;
+    colourData: wxColourData | null;
+    settings: SettingsData;
+    findData: wxFindReplaceData | null;
+    dlgFind: wxFindReplaceDialog | null;
+    dlgReplace: wxFindReplaceDialog | null;
+    tipWindowRef: BigUint64Array | null;
+    modalHook: wxModalDialogHook | null;
+}
+
+let state: FrameState | null = null;
+
+let infoBarCount = 0;
+let infoBarDontShowAgain = false;
+
+// wxFileDialog customize-hook state (must survive between the callbacks).
+const customizerCallbacks: Callback[] = [];
+const customizerRouters: EventRouter[] = [];
+const modalHookCallbacks: Callback[] = [];
+let hookText: wxFileDialogCustomControl | null = null;
+let hookChoiceSize: wxFileDialogCustomControl | null = null;
+let hookRadioPortrait: wxFileDialogCustomControl | null = null;
+let hookRadioLandscape: wxFileDialogCustomControl | null = null;
+let hookCheckBox: wxFileDialogCustomControl | null = null;
+let hookButton: wxFileDialogCustomControl | null = null;
+let hookLabel: wxFileDialogCustomControl | null = null;
+let hookInfo = "";
+
+let encryptCheckBox: wxFileDialogCustomControl | null = null;
+let encryptValue = false;
+
+let fileOpen2Extension = "";
+let tipIndex = -1;
+
+/** MSW system-menu command ids must be multiples of 16 (see dialogs.cpp). */
+const DIALOGS_SYSTEM_ABOUT = 0x4010;
+
+const DEFAULT_WILDCARD = readWxString(FileSelectorDefaultWildcardStr);
+const PROGRESS_MAX = 100;
+/** Capacity of the char** buffers filled by TArrayStringOutVoid getters. */
+const MAX_SELECTED_PATHS = 1024;
+
+//-----------------------------------------------------------------------------
+// Menu helpers
+//-----------------------------------------------------------------------------
+
+function newMenu(): wxMenu
+{
+    // wxMenu_Create expects a real wxString*; a null title crashes natively.
+    return withString("", (ptr) => createWxMenu(ptr, 0n))!;
+}
+
+function menuAppend(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (ptr) => menu.Append(id, ptr, null, false));
+}
+
+function menuAppendCheck(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (ptr) => menu.AppendCheckItem(id, ptr, null));
+}
+
+function menuAppendRadio(
+    menu: wxMenu, id: number, label: string, help: string | null): void
+{
+    if (help === null)
+    {
+        withString(label, (ptr) => menu.AppendRadioItem(id, ptr, null));
+    }
+    else
+    {
+        withStrings([label, help], (ptrs) =>
+            menu.AppendRadioItem(id, ptrs[0], ptrs[1]));
+    }
+}
+
+function menuAppendSub(menu: wxMenu, id: number, label: string, sub: wxMenu): void
+{
+    withString(label, (ptr) => menu.AppendSub(id, ptr, sub.ptr, null));
+}
+
+function menuAppendSubMenu(menu: wxMenu, label: string, sub: wxMenu): void
+{
+    // wxMenu_AppendSubMenu dereferences its help argument, so pass "" (the
+    // C++ default) rather than null.
+    withStrings([label, ""],
+        (ptrs) => menu.AppendSubMenu(sub.ptr, ptrs[0], ptrs[1]));
+}
+
+//-----------------------------------------------------------------------------
+// Generic helpers
+//-----------------------------------------------------------------------------
+
+function homeDir(): string
+{
+    return takeText(wxGetHomeDir());
+}
+
+function positionOf(window: wxWindow): { x: number; y: number }
+{
+    const point = window.GetPosition();
+    if (!point) return { x: -1, y: -1 };
+    return { x: point.GetX(), y: point.GetY() };
+}
+
+function sizeOf(window: wxWindow): { w: number; h: number }
+{
+    const size = window.GetSize();
+    if (!size) return { w: -1, h: -1 };
+    return { w: size.GetWidth(), h: size.GetHeight() };
+}
+
+function isCheckedOption(id: number): boolean
+{
+    const current = state;
+    return current ? current.menuBar.IsChecked(id) : false;
+}
+
+function messageBox(
+    message: string, caption: string, style: number, parent: Pointer): number
+{
+    return withStrings([message, caption], (ptrs) =>
+        kwxMessageBox(ptrs[0], ptrs[1], style, parent, -1, -1));
+}
+
+/**
+ * wxGetTextFromUser's size overload is not exported, so use the same
+ * wxTextEntryDialog the free function creates. wxTextEntryDialogStyle is
+ * wxOK | wxCANCEL | wxCENTRE, and an explicit position wins over centring.
+ */
+function getTextFromUser(
+    message: string, caption: string, defaultValue: string,
+    parent: Pointer, x: number, y: number, centre: boolean,
+    width: number = -1, height: number = -1): string
+{
+    let style = OK | CANCEL | CENTRE;
+    if (!centre || x !== -1 || y !== -1) style &= ~CENTRE;
+
+    const dialog = withStrings([message, caption, defaultValue], (ptrs) =>
+        createWxTextEntryDialog(parent, ptrs[0], ptrs[1], ptrs[2],
+            BigInt(style), x, y, width, height));
+    if (!dialog) return "";
+
+    let value = "";
+    if (dialog.ShowModal() === ID_OK) value = takeText(dialog.GetValue());
+    dialog.Destroy();
+    return value;
+}
+
+function getPasswordFromUser(
+    message: string, caption: string, defaultValue: string, parent: Pointer): string
+{
+    const messageBuffer = new TextEncoder().encode(message + "\0");
+    const captionBuffer = new TextEncoder().encode(caption + "\0");
+    const defaultBuffer = new TextEncoder().encode(defaultValue + "\0");
+
+    const messagePtr = pointerOf(messageBuffer);
+    const captionPtr = pointerOf(captionBuffer);
+    const defaultPtr = pointerOf(defaultBuffer);
+
+    const length = wxGetPasswordFromUser(
+        messagePtr, captionPtr, defaultPtr, parent, null);
+    if (length <= 0) return "";
+
+    const output = new Uint8Array(length + 1);
+    const outputPtr = pointerOf(output);
+    wxGetPasswordFromUser(messagePtr, captionPtr, defaultPtr, parent, outputPtr);
+    return readCString(outputPtr);
+}
+
+function getEnv(name: string): string | null
+{
+    const variable = createWxString(name);
+    const value = createWxString("");
+    const found = wxGetEnv(variable.ptr, value.ptr);
+    let result: string | null = null;
+    if (found)
+    {
+        const buffer = new Uint8Array(4096);
+        const bufferPtr = pointerOf(buffer);
+        value.GetString(bufferPtr);
+        result = readCString(bufferPtr);
+    }
+    value.Delete();
+    variable.Delete();
+    return result;
+}
+
+//-----------------------------------------------------------------------------
+// Menu bar construction
+//-----------------------------------------------------------------------------
+
+function buildMenuBar(): wxMenuBar
+{
+    const menuDlg = newMenu();
+
+    menuAppend(menuDlg, DIALOGS_MESSAGE_BOX, "&Message box\tCtrl-M");
+    menuAppend(menuDlg, DIALOGS_MESSAGE_BOX_WINDOW_MODAL, "Window-Modal Message box ");
+    menuAppend(menuDlg, DIALOGS_MESSAGE_DIALOG, "Message dialog\tShift-Ctrl-M");
+    menuAppend(menuDlg, DIALOGS_MESSAGE_DIALOG_WINDOW_MODAL, "Window-Modal Message dialog");
+    menuAppend(menuDlg, DIALOGS_RICH_MESSAGE_DIALOG, "Rich message dialog");
+
+    const choicesMenu = newMenu();
+    const colourMenu = newMenu();
+    menuAppend(colourMenu, DIALOGS_CHOOSE_COLOUR, "&No opacity");
+    menuAppend(colourMenu, DIALOGS_CHOOSE_COLOUR_ALPHA, "&With opacity");
+    menuAppendSub(choicesMenu, ID_ANY, "&Choose bg colour", colourMenu);
+    menuAppend(choicesMenu, DIALOGS_GET_COLOUR, "&Choose fg colour");
+    menuAppend(choicesMenu, DIALOGS_CHOOSE_FONT, "Choose &font\tShift-Ctrl-J");
+    menuAppend(choicesMenu, DIALOGS_SINGLE_CHOICE, "&Single choice\tCtrl-C");
+    menuAppend(choicesMenu, DIALOGS_SINGLE_CHOICE_DATA, "Single choice with &data");
+    menuAppend(choicesMenu, DIALOGS_MULTI_CHOICE, "M&ultiple choice\tCtrl-U");
+    menuAppend(choicesMenu, DIALOGS_REARRANGE, "&Rearrange dialog\tCtrl-R");
+    menuAppend(choicesMenu, DIALOGS_ADDREMOVE, "&Add/remove items control\tCtrl-A");
+    choicesMenu.AppendSeparator();
+    const genericColourMenu = newMenu();
+    menuAppend(genericColourMenu, DIALOGS_CHOOSE_COLOUR_GENERIC, "&No opacity");
+    menuAppend(genericColourMenu, DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA, "&With opacity");
+    menuAppendSub(choicesMenu, ID_ANY, "&Choose colour (generic)", genericColourMenu);
+    menuAppend(choicesMenu, DIALOGS_CHOOSE_FONT_GENERIC, "Choose &font (generic)");
+    menuAppendSub(menuDlg, ID_ANY, "&Choices and selectors", choicesMenu);
+
+    const entryMenu = newMenu();
+    menuAppend(entryMenu, DIALOGS_LINE_ENTRY, "Single line &entry\tCtrl-E");
+    menuAppend(entryMenu, DIALOGS_TEXT_ENTRY, "Multi line text &entry\tShift-Ctrl-E");
+    menuAppend(entryMenu, DIALOGS_PASSWORD_ENTRY, "&Password entry\tCtrl-P");
+    menuAppend(entryMenu, DIALOGS_CREDENTIAL_ENTRY, "&Credential entry\tShift-Ctrl-C");
+    menuAppend(entryMenu, DIALOGS_NUM_ENTRY, "&Numeric entry\tCtrl-N");
+    menuAppendSub(menuDlg, ID_ANY, "&Entry dialogs", entryMenu);
+
+    const fileMenu = newMenu();
+    menuAppend(fileMenu, DIALOGS_FILE_OPEN, "&Open file\tCtrl-O");
+    menuAppend(fileMenu, DIALOGS_FILE_OPEN2, "&Second open file\tCtrl-2");
+    menuAppend(fileMenu, DIALOGS_FILES_OPEN, "Open &files\tShift-Ctrl-O");
+    menuAppend(fileMenu, DIALOGS_FILES_OPEN_WINDOW_MODAL, "Window-Modal Open files");
+    menuAppend(fileMenu, DIALOGS_FILE_SAVE, "Sa&ve file\tCtrl-S");
+    menuAppend(fileMenu, DIALOGS_FILE_SAVE_WINDOW_MODAL, "Window-Modal Save file");
+    fileMenu.AppendSeparator();
+    menuAppend(fileMenu, DIALOGS_FILE_OPEN_GENERIC, "&Open file (generic)");
+    menuAppend(fileMenu, DIALOGS_FILES_OPEN_GENERIC, "Open &files (generic)");
+    menuAppend(fileMenu, DIALOGS_FILE_SAVE_GENERIC, "Sa&ve file (generic)");
+    fileMenu.AppendSeparator();
+    menuAppendRadio(fileMenu, DIALOGS_FILE_USE_CUSTOMIZER,
+        "Use new customization API",
+        "Use wxFileDialog::SetCustomizeHook() for file dialog customization");
+    menuAppendRadio(fileMenu, DIALOGS_FILE_USE_EXTRA_CONTROL_CREATOR,
+        "Use old customization API",
+        "Use wxFileDialog::SetExtraControlCreator() for file dialog customization");
+    if (platform === "darwin")
+    {
+        fileMenu.AppendSeparator();
+        menuAppendCheck(fileMenu, DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES,
+            "macOS only: Toggle open file \"Always show types\"\tRawCtrl+Ctrl+S");
+    }
+    menuAppendSub(menuDlg, ID_ANY, "&File operations", fileMenu);
+
+    const dirMenu = newMenu();
+    menuAppend(dirMenu, DIALOGS_DIR_CHOOSE, "&Choose a directory\tCtrl-D");
+    menuAppend(dirMenu, DIALOGS_DIR_CHOOSE_WINDOW_MODAL, "Choose a directory window-modally");
+    menuAppend(dirMenu, DIALOGS_DIRNEW_CHOOSE,
+        "Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D");
+    menuAppend(dirMenu, DIALOGS_DIRMULTIPLE_CHOOSE,
+        "Choose multiple and hidden directories\tAlt-Ctrl-D");
+    menuAppendSub(menuDlg, ID_ANY, "&Directory operations", dirMenu);
+    dirMenu.AppendSeparator();
+    menuAppend(dirMenu, DIALOGS_GENERIC_DIR_CHOOSE, "&Choose a directory (generic)");
+
+    const infoMenu = newMenu();
+    menuAppend(infoMenu, DIALOGS_TIP, "&Tip of the day\tCtrl-T");
+    menuAppend(infoMenu, DIALOGS_PROGRESS, "Pro&gress dialog\tCtrl-G");
+    menuAppend(infoMenu, DIALOGS_PROGRESS_GENERIC, "Generic progress dialog\tCtrl-Alt-G");
+    menuAppend(infoMenu, DIALOGS_APP_PROGRESS, "&App progress\tShift-Ctrl-G");
+    menuAppend(infoMenu, DIALOGS_BUSYINFO, "&Busy info dialog\tCtrl-B");
+    menuAppend(infoMenu, DIALOGS_BUSYINFO_RICH, "&Rich busy info dialog\tShift-Ctrl-B");
+    menuAppend(infoMenu, DIALOGS_LOG_DIALOG, "&Log dialog\tCtrl-L");
+    menuAppend(infoMenu, DIALOGS_INFOBAR_SIMPLE, "Simple &info bar\tCtrl-I");
+    menuAppend(infoMenu, DIALOGS_INFOBAR_ADVANCED, "&Advanced info bar\tShift-Ctrl-I");
+    menuAppend(infoMenu, DIALOGS_MESSAGE_BOX_WXINFO, "&wxWidgets information\tCtrl-W");
+    menuAppendSub(menuDlg, ID_ANY, "&Informative dialogs", infoMenu);
+
+    const findMenu = newMenu();
+    menuAppendCheck(findMenu, DIALOGS_FIND, "&Find dialog\tCtrl-F");
+    menuAppendCheck(findMenu, DIALOGS_REPLACE, "Find and &replace dialog\tShift-Ctrl-F");
+    menuAppendSub(menuDlg, ID_ANY, "&Searching", findMenu);
+
+    const dialogsMenu = newMenu();
+    menuAppend(dialogsMenu, DIALOGS_MODAL, "&Modal dialog\tShift-Ctrl-W");
+    menuAppendCheck(dialogsMenu, DIALOGS_MODELESS, "Mode&less dialog\tShift-Ctrl-Z");
+    menuAppend(dialogsMenu, DIALOGS_CENTRE_SCREEN, "Centered on &screen\tShift-Ctrl-1");
+    menuAppend(dialogsMenu, DIALOGS_CENTRE_PARENT, "Centered on &parent\tShift-Ctrl-2");
+    menuAppend(dialogsMenu, DIALOGS_MINIFRAME, "&Mini frame");
+    menuAppend(dialogsMenu, DIALOGS_ONTOP, "Dialog staying on &top");
+    menuAppendSub(menuDlg, ID_ANY, "&Generic dialogs", dialogsMenu);
+
+    const sheetMenu = newMenu();
+    menuAppend(sheetMenu, DIALOGS_PROPERTY_SHEET, "&Standard property sheet\tShift-Ctrl-P");
+    menuAppend(sheetMenu, DIALOGS_PROPERTY_SHEET_TOOLBOOK, "&Toolbook sheet\tShift-Ctrl-T");
+    if (platform === "darwin")
+    {
+        menuAppend(sheetMenu, DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,
+            "Button &Toolbook sheet\tShift-Ctrl-U");
+    }
+    menuAppendSub(menuDlg, ID_ANY, "&Property sheets", sheetMenu);
+
+    const notifMenu = newMenu();
+    menuAppend(notifMenu, DIALOGS_REQUEST, "&Request user attention\tCtrl-Shift-R");
+    notifMenu.AppendSeparator();
+    menuAppend(notifMenu, DIALOGS_NOTIFY_MSG, "User &Notification\tCtrl-Shift-N");
+    menuAppendSubMenu(menuDlg, "&User notifications", notifMenu);
+
+    menuAppendCheck(menuDlg, DIALOGS_SHOW_TIP, "Show &tip window\tShift-Ctrl-H");
+    menuAppend(menuDlg, DIALOGS_RICHTIP_DIALOG, "Rich &tooltip dialog...\tCtrl-H");
+    menuDlg.AppendSeparator();
+    menuAppend(menuDlg, DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,
+        "&Standard Buttons Sizer Dialog");
+    menuAppend(menuDlg, DIALOGS_TEST_DEFAULT_ACTION, "&Test dialog default action");
+    menuAppendCheck(menuDlg, DIALOGS_MODAL_HOOK, "Enable modal dialog hook");
+    menuAppendCheck(menuDlg, DIALOGS_SIMULATE_UNSAVED,
+        "Simulate an unsaved document at exit");
+    menuAppendCheck(menuDlg, DIALOGS_USE_WRAPPER_FUNCTIONS,
+        "Use wrapper functions for dialogs");
+    menuDlg.AppendSeparator();
+    menuAppend(menuDlg, ID_EXIT, "E&xit\tAlt-X");
+
+    const editMenu = newMenu();
+    menuAppend(editMenu, ID_UNDO, "&Undo\tCtrl+Z");
+    menuAppend(editMenu, ID_REDO, "&Redo\tCtrl+Y");
+    editMenu.AppendSeparator();
+    menuAppend(editMenu, ID_CUT, "Cu&t\tCtrl+X");
+    menuAppend(editMenu, ID_COPY, "&Copy\tCtrl+C");
+    menuAppend(editMenu, ID_PASTE, "&Paste\tCtrl+V");
+    menuAppend(editMenu, ID_CLEAR, "&Delete");
+    editMenu.AppendSeparator();
+    menuAppend(editMenu, ID_SELECTALL, "Select All\tCtrl+A");
+
+    const helpMenu = newMenu();
+    menuAppend(helpMenu, DIALOGS_ABOUTDLG_SIMPLE, "&About (simple)...\tF1");
+    menuAppend(helpMenu, DIALOGS_ABOUTDLG_FANCY, "About (&fancy)...\tShift-F1");
+    menuAppend(helpMenu, DIALOGS_ABOUTDLG_FULL, "About (f&ull)...\tCtrl-F1");
+    menuAppend(helpMenu, DIALOGS_ABOUTDLG_CUSTOM, "About (&custom)...\tCtrl-Shift-F1");
+
+    const menuBar = createWxMenuBar(0)!;
+    withStrings(["&Dialogs", "&Edit", "&Help"], (ptrs) =>
+    {
+        menuBar.Append(menuDlg.ptr, ptrs[0]);
+        menuBar.Append(editMenu.ptr, ptrs[1]);
+        menuBar.Append(helpMenu.ptr, ptrs[2]);
+    });
+    return menuBar;
+}
+
+//-----------------------------------------------------------------------------
+// Colours
+//-----------------------------------------------------------------------------
+
+function applyColour(colour: Pointer): void
+{
+    const current = state;
+    if (!current) return;
+
+    const background = backgroundColour(current.canvas);
+    if (background)
+    {
+        const same = coloursEqual(colour, background.ptr);
+        background.Delete();
+        if (same) return;
+    }
+
+    current.canvas.SetBackgroundColour(colour);
+    current.canvas.Refresh(true);
+}
+
+function chooseColour(alpha: boolean): void
+{
+    const current = state;
+    if (!current || !current.colourData) return;
+    const data = current.colourData;
+
+    const background = backgroundColour(current.canvas);
+    if (background)
+    {
+        data.SetColour(background.ptr);
+        background.Delete();
+    }
+    data.SetChooseAlpha(alpha);
+
+    const dialog = createWxColourDialog(current.frame.ptr, data.ptr);
+    if (!dialog) return;
+    withString("Please choose the background colour", (text) => dialog.SetTitle(text));
+
+    // The dialog is connected once with a router shared by every colour dialog.
+    colourEvents().connect(dialog.ptr, ID_ANY, ID_ANY, EVT_COLOUR_CHANGED);
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        dialog.GetColourData(data.ptr);
+    }
+
+    const chosen = createWxColourEmpty();
+    if (chosen)
+    {
+        data.GetColour(chosen.ptr);
+        applyColour(chosen.ptr);
+        chosen.Delete();
+    }
+    dialog.Destroy();
+}
+
+/**
+ * wxGetColourFromUser() without the caption parameter: same body as the
+ * wxWidgets function, using a persistent wxColourData for the custom colours.
+ */
+let userColourData: wxColourData | null = null;
+let userColourDataUsed = false;
+
+function getColourFromUser(
+    parent: Pointer, initial: Pointer, caption: string): wxColour | null
+{
+    if (!userColourData) userColourData = createWxColourData();
+    const data = userColourData;
+    if (!data) return null;
+
+    if (userColourDataUsed && platform === "windows") data.SetChooseFull(true);
+    if (initial) data.SetColour(initial);
+
+    const dialog = createWxColourDialog(parent, data.ptr);
+    if (!dialog) return null;
+    withString(caption, (ptr) => dialog.SetTitle(ptr));
+
+    let result: wxColour | null = null;
+    if (dialog.ShowModal() === ID_OK)
+    {
+        dialog.GetColourData(data.ptr);
+        result = createWxColourEmpty();
+        if (result) data.GetColour(result.ptr);
+    }
+    dialog.Destroy();
+    userColourDataUsed = true;
+    return result;
+}
+
+function getColour(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const initial = foregroundColour(current.canvas);
+    const result = getColourFromUser(current.frame.ptr,
+        initial ? initial.ptr : null, "Please choose the foreground colour");
+    if (initial) initial.Delete();
+
+    if (result)
+    {
+        if (result.IsOk())
+        {
+            current.canvas.SetForegroundColour(result.ptr);
+            current.canvas.Refresh(true);
+        }
+        result.Delete();
+    }
+}
+
+function chooseColourGeneric(alpha: boolean): void
+{
+    const current = state;
+    if (!current || !current.colourData) return;
+    const data = current.colourData;
+
+    const background = backgroundColour(current.canvas);
+    if (background)
+    {
+        data.SetColour(background.ptr);
+        background.Delete();
+    }
+    data.SetChooseFull(true);
+    data.SetChooseAlpha(alpha);
+
+    const count = ColourData_NUM_CUSTOM;
+    for (let i = 0; i < count; i++)
+    {
+        const level = i * Math.floor(256 / count);
+        const colour = createWxColourRGB(level, level, level, 255);
+        if (colour)
+        {
+            data.SetCustomColour(i, colour.ptr);
+            colour.Delete();
+        }
+    }
+
+    const dialog = createWxGenericColourDialog(current.frame.ptr, data.ptr);
+    if (!dialog) return;
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        dialog.GetColourData(data.ptr);
+        const chosen = createWxColourEmpty();
+        if (chosen)
+        {
+            data.GetColour(chosen.ptr);
+            current.canvas.SetBackgroundColour(chosen.ptr);
+            current.canvas.Refresh(true);
+            chosen.Delete();
+        }
+    }
+    dialog.Destroy();
+}
+
+//-----------------------------------------------------------------------------
+// Fonts
+//-----------------------------------------------------------------------------
+
+function chooseFont(generic: boolean): void
+{
+    const current = state;
+    if (!current) return;
+
+    const data = createWxFontData();
+    if (!data) return;
+
+    const initialFont = createWxFontDefault();
+    if (initialFont)
+    {
+        current.canvas.GetFont(initialFont.ptr);
+        data.SetInitialFont(initialFont.ptr);
+        initialFont.Delete();
+    }
+
+    const fg = foregroundColour(current.canvas);
+    if (fg)
+    {
+        data.SetColour(fg.ptr);
+        fg.Delete();
+    }
+
+    const dialog = generic
+        ? createWxGenericFontDialog(current.frame.ptr, data.ptr)
+        : createWxFontDialog(current.frame.ptr, data.ptr);
+
+    if (dialog && dialog.ShowModal() === ID_OK)
+    {
+        dialog.GetFontData(data.ptr);
+
+        const chosen = createWxFontDefault();
+        if (chosen)
+        {
+            data.GetChosenFont(chosen.ptr);
+            current.canvas.SetFont(chosen.ptr);
+            chosen.Delete();
+        }
+
+        const colour = createWxColourEmpty();
+        if (colour)
+        {
+            data.GetColour(colour.ptr);
+            current.canvas.SetForegroundColour(colour.ptr);
+            colour.Delete();
+        }
+        current.canvas.Refresh(true);
+    }
+
+    if (dialog) dialog.Destroy();
+    data.Delete();
+}
+
+//-----------------------------------------------------------------------------
+// Choice dialogs
+//-----------------------------------------------------------------------------
+
+function choicePosition(): { x: number; y: number }
+{
+    const current = state;
+    if (!current) return { x: 50, y: 50 };
+    const position = positionOf(current.frame);
+    return { x: position.x + 50, y: position.y + 50 };
+}
+
+function singleChoice(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const choices = ["One", "Two", "Three", "Four", "Five"];
+
+    if (isCheckedOption(DIALOGS_USE_WRAPPER_FUNCTIONS))
+    {
+        const array = createArrayString(choices);
+        if (!array) return;
+        const position = choicePosition();
+        const index = withStrings([
+            "This is a small sample\nA single-choice convenience dialog",
+            "Please select a value",
+        ], (ptrs) => wxGetSingleChoiceIndexEx(
+            ptrs[0], ptrs[1], choices.length, array.ptr,
+            current.frame.ptr, position.x, position.y, true, 500, 400, 2));
+        array.Delete();
+
+        if (index !== -1)
+        {
+            withString(`You selected "${choices[index]}"`, (ptr) => LogMessage(ptr));
+        }
+        return;
+    }
+
+    const array = createArrayString(choices);
+    if (!array) return;
+    const dialog = withStrings([
+        "This is a small sample\nA single-choice convenience dialog",
+        "Please select a value",
+    ], (ptrs) => createWxSingleChoiceDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], array.ptr, CHOICEDLG_STYLE));
+    array.Delete();
+    if (!dialog) return;
+
+    dialog.SetSelection(2);
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const value = takeText(dialog.GetStringSelection());
+        withStrings([value, "Got string"], (ptrs) =>
+        {
+            const second = createWxMessageDialog(
+                current.frame.ptr, ptrs[0], ptrs[1], OK | CENTRE);
+            if (!second) return;
+            second.ShowModal();
+            second.Destroy();
+        });
+    }
+    dialog.Destroy();
+}
+
+function singleChoiceData(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const choices = ["One", "Two", "Three", "Four", "Five"];
+    const values = new Int32Array([1, 2, 3, 4, 5]);
+    const base = pointerOf(values) as bigint;
+
+    const clientData = new BigUint64Array(values.length);
+    for (let i = 0; i < values.length; i++)
+    {
+        clientData[i] = base + BigInt(i * 4);
+    }
+
+    const array = createArrayString(choices);
+    if (!array) return;
+    const position = choicePosition();
+    const clientDataPtr = pointerOf(clientData);
+
+    const result = withStrings([
+        "This is a small sample\nA single-choice convenience dialog\n" +
+        "using an explicit position and size",
+        "Please select a value",
+    ], (ptrs) => wxGetSingleChoiceDataEx(
+        ptrs[0], ptrs[1], choices.length, array.ptr, clientDataPtr,
+        current.frame.ptr, position.x, position.y, true, 500, 400, 2));
+    array.Delete();
+
+    if (result === null) return;
+
+    let index = -1;
+    for (let i = 0; i < values.length; i++)
+    {
+        if (clientData[i] === (result as bigint)) index = i;
+    }
+    if (index < 0) return;
+
+    withString(`You selected "${choices[index]}" (${values[index]})`,
+        (ptr) => LogMessage(ptr));
+}
+
+function multiChoice(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const choices = [
+        "One", "Two", "Three", "Four", "Five",
+        "Six", "Seven", "Eight", "Nine", "Ten",
+        "Eleven", "Twelve", "Seventeen",
+    ];
+
+    const selections = createWxArrayInt();
+    const array = createArrayString(choices);
+    if (!selections || !array)
+    {
+        if (selections) selections.Delete();
+        if (array) array.Delete();
+        return;
+    }
+
+    let count: number;
+
+    if (isCheckedOption(DIALOGS_USE_WRAPPER_FUNCTIONS))
+    {
+        const position = choicePosition();
+        count = withStrings([
+            "This is a small sample\nA multi-choice convenience dialog",
+            "Please select a value",
+        ], (ptrs) => wxGetSelectedChoicesEx(
+            selections.ptr, ptrs[0], ptrs[1], choices.length, array.ptr,
+            current.frame.ptr, position.x, position.y, true, 500, 400));
+        array.Delete();
+    }
+    else
+    {
+        const dialog = withStrings([
+            "This is a small sample\nA multi-choice convenience dialog",
+            "Please select a value",
+        ], (ptrs) => createWxMultiChoiceDialog(
+            current.frame.ptr, ptrs[0], ptrs[1], choices.length, array.ptr,
+            BigInt(CHOICEDLG_STYLE), -1, -1));
+        array.Delete();
+
+        if (!dialog)
+        {
+            selections.Delete();
+            return;
+        }
+
+        dialog.SetSelections(selections.ptr);
+        if (dialog.ShowModal() === ID_OK)
+        {
+            dialog.GetSelections(selections.ptr);
+            count = selections.GetCount();
+        }
+        else
+        {
+            count = -1;
+        }
+        dialog.Destroy();
+    }
+
+    if (count >= 0)
+    {
+        let message: string;
+        if (count === 0)
+        {
+            message = "You did not select any items";
+        }
+        else
+        {
+            message = `You selected ${count} items:\n`;
+            for (let n = 0; n < count; n++)
+            {
+                const selection = selections.Item(n);
+                message += `\t${n}: ${selection} (${choices[selection]})\n`;
+            }
+        }
+        withString(message, (ptr) => LogMessage(ptr));
+    }
+
+    selections.Delete();
+}
+
+//-----------------------------------------------------------------------------
+// File dialogs
+//-----------------------------------------------------------------------------
+
+function fileStateDescription(dialog: wxFileDialog): string
+{
+    const filename = takeText(dialog.GetCurrentlySelectedFilename());
+
+    let message: string;
+    if (filename === "")
+    {
+        message = "Nothing";
+    }
+    else
+    {
+        const path = createWxString(filename);
+        const isFile = wxFileName_FileExistsForPath(path.ptr);
+        const isDir = isFile ? false : wxFileName_DirExistsForPath(path.ptr);
+        path.Delete();
+
+        if (isFile) message = "File";
+        else if (isDir) message = "Directory";
+        else message = "Something else";
+    }
+    message += " selected";
+
+    const filter = dialog.GetCurrentlySelectedFilterIndex();
+    if (filter !== NOT_FOUND && filter !== -1)
+    {
+        message += ` (filter=${filter})`;
+    }
+    return message;
+}
+
+function paperSize(selection: number): string
+{
+    switch (selection)
+    {
+        case -1: return "<none>";
+        case 0: return "A4";
+        case 1: return "Letter";
+        default: return "INVALID";
+    }
+}
+
+function createFileCustomizeHook(dialog: wxFileDialog): wxFileDialogCustomizeHook | null
+{
+    const addCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_fun, customizerPtr) =>
+        {
+            if (!customizerPtr) return;
+            const customizer = wrapWxFileDialogCustomize(customizerPtr);
+
+            hookText = withString("Just some extra text:",
+                (ptr) => customizer.AddTextCtrl(ptr));
+
+            const sizes = charPtrArray(["A4", "Letter"]);
+            hookChoiceSize = customizer.AddChoice(2, sizes.ptr);
+            void sizes.keep;
+
+            hookRadioPortrait = withString("&Portrait",
+                (ptr) => customizer.AddRadioButton(ptr));
+            hookRadioLandscape = withString("&Landscape",
+                (ptr) => customizer.AddRadioButton(ptr));
+            hookCheckBox = withString("Enable Custom Button",
+                (ptr) => customizer.AddCheckBox(ptr));
+            hookButton = withString("Custom Button",
+                (ptr) => customizer.AddButton(ptr));
+            hookLabel = withString("Nothing selected",
+                (ptr) => customizer.AddStaticText(ptr));
+
+            if (hookCheckBox && hookButton)
+            {
+                const controlRouter = new EventRouter((tag) =>
+                {
+                    if (tag === 1)
+                    {
+                        if (!hookCheckBox || !hookButton) return;
+                        if (hookCheckBox.GetValue()) hookButton.Enable(true);
+                        else hookButton.Disable();
+                    }
+                    else
+                    {
+                        messageBox("Custom button pressed",
+                            "wxWidgets dialogs sample",
+                            OK | ICON_INFORMATION, dialog.ptr);
+                    }
+                });
+                controlRouter.connect(hookCheckBox.ptr, ID_ANY, ID_ANY, EVT_CHECKBOX, 1);
+                controlRouter.connect(hookButton.ptr, ID_ANY, ID_ANY, EVT_BUTTON, 2);
+                customizerRouters.push(controlRouter);
+            }
+        });
+
+    const updateCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_fun) =>
+        {
+            if (hookCheckBox && hookButton)
+            {
+                if (hookCheckBox.GetValue())
+                {
+                    hookButton.Enable(true);
+                }
+                else
+                {
+                    hookButton.Disable();
+                }
+            }
+
+            const selected = takeText(dialog.GetCurrentlySelectedFilename());
+            const path = createWxString(selected);
+            const hasFile = wxFileName_FileExistsForPath(path.ptr);
+            path.Delete();
+
+            for (const control of [hookRadioPortrait, hookRadioLandscape])
+            {
+                if (!control) continue;
+                if (hasFile) control.Enable(true);
+                else control.Disable();
+            }
+
+            if (hookLabel)
+            {
+                withString(fileStateDescription(dialog),
+                    (ptr) => hookLabel!.SetLabelText(ptr));
+            }
+        });
+
+    const transferCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_fun) =>
+        {
+            const size = hookChoiceSize ? hookChoiceSize.GetSelection() : -1;
+            const portrait = hookRadioPortrait ? hookRadioPortrait.GetValue() : false;
+            const enabled = hookCheckBox ? hookCheckBox.GetValue() : false;
+            const text = hookText ? takeText(hookText.GetTextValue()) : "";
+            hookInfo = `paper=${paperSize(size)} (${portrait ? "portrait" : "landscape"}), ` +
+                `enabled=${enabled ? 1 : 0}, text="${text}"`;
+        });
+
+    customizerCallbacks.push(addCallback, updateCallback, transferCallback);
+
+    return createWxFileDialogCustomizeHook(
+        null, addCallback.pointer, updateCallback.pointer, transferCallback.pointer);
+}
+
+//-----------------------------------------------------------------------------
+// Old-style file dialog customization (MyExtraPanel)
+//-----------------------------------------------------------------------------
+
+interface ExtraPanelState
+{
+    button: wxButton;
+    dialogPtr: Pointer;
+    portraitPtr: Pointer;
+    text: string;
+    checked: boolean;
+    paperSize: string;
+    orientation: string;
+}
+
+const extraPanelStates = new Map<string, ExtraPanelState>();
+const extraControlStates = new Map<string, ExtraPanelState>();
+
+let extraPanelRouter: EventRouter | null = null;
+let extraPanelCallback: Callback | null = null;
+
+function resetExtraPanelState(): void
+{
+    extraPanelStates.clear();
+    extraControlStates.clear();
+}
+
+function extraPanelInfo(state: ExtraPanelState): string
+{
+    return `paper=${state.paperSize} (${state.orientation}), ` +
+        `enabled=${state.checked ? 1 : 0}, text="${state.text}"`;
+}
+
+function extraPanelSink(tag: number, eventPtr: Pointer): void
+{
+    if (!eventPtr) return;
+
+    if (tag === 5)
+    {
+        const event = new wxUpdateUIEvent(eventPtr);
+        const object = event.GetEventObject();
+        const state = object
+            ? extraControlStates.get(String(object.ptr)) : undefined;
+        if (!state) return;
+        withString(fileStateDescription(wrapWxFileDialog(state.dialogPtr)),
+            (ptr) => { event.SetText(ptr); });
+        return;
+    }
+
+    const event = new wxCommandEvent(eventPtr);
+    const object = event.GetEventObject();
+    const objectPtr = object ? object.ptr : null;
+    const state = objectPtr
+        ? extraControlStates.get(String(objectPtr)) : undefined;
+    if (!state) return;
+
+    if (tag === 1)
+    {
+        state.checked = event.IsChecked();
+        state.button.Enable(state.checked);
+    }
+    else if (tag === 2)
+    {
+        state.paperSize = paperSize(event.GetSelection());
+    }
+    else if (tag === 3)
+    {
+        if (objectPtr === state.portraitPtr) state.orientation = "portrait";
+        else state.orientation = "landscape";
+    }
+    else if (tag === 4)
+    {
+        state.text = takeText(event.GetString());
+    }
+}
+
+/** MyExtraPanel: creates the panel under the dialog that wx passes in. */
+function createExtraPanel(parentPtr: Pointer): void
+{
+    const panel = createWxPanel(parentPtr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (!panel) return;
+
+    const button = withString("Custom Button", (text) =>
+        createWxButton(panel.ptr, -1, text, -1, -1, -1, -1, 0));
+    const check = withString("Enable Custom Button", (text) =>
+        createWxCheckBox(panel.ptr, -1, text, -1, -1, -1, -1, 0));
+    if (!button || !check) return;
+    button.Enable(false);
+
+    const sizes = charPtrArray(["A4", "Letter"]);
+    const choice = createWxChoice(
+        panel.ptr, ID_ANY, -1, -1, -1, -1, 2, sizes.ptr, 0);
+    void sizes.keep;
+
+    const portrait = withString("&Portrait", (text) =>
+        createWxRadioButton(panel.ptr, ID_ANY, text, -1, -1, -1, -1, RB_GROUP));
+    const landscape = withString("&Landscape", (text) =>
+        createWxRadioButton(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    const label = withString("Nothing selected", (text) =>
+        createWxStaticText(panel.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    const text = withString("extra text", (value) => createWxTextCtrl(
+        panel.ptr, -1, value, -1, -1, 40 * panel.GetCharWidth(), -1, 0n));
+    if (!choice || !portrait || !landscape || !label || !text) return;
+
+    const state: ExtraPanelState = {
+        button,
+        dialogPtr: parentPtr,
+        portraitPtr: portrait.ptr,
+        text: "extra text",
+        checked: false,
+        paperSize: "",
+        orientation: "",
+    };
+    extraPanelStates.set(String(panel.ptr), state);
+    for (const control of [check, choice, portrait, landscape, text, label])
+    {
+        extraControlStates.set(String(control.ptr), state);
+    }
+
+    if (!extraPanelRouter) extraPanelRouter = new EventRouter(extraPanelSink);
+    extraPanelRouter.connect(check.ptr, ID_ANY, ID_ANY, EVT_CHECKBOX, 1);
+    extraPanelRouter.connect(choice.ptr, ID_ANY, ID_ANY, EVT_CHOICE, 2);
+    extraPanelRouter.connect(portrait.ptr, ID_ANY, ID_ANY, EVT_RADIOBUTTON, 3);
+    extraPanelRouter.connect(landscape.ptr, ID_ANY, ID_ANY, EVT_RADIOBUTTON, 3);
+    extraPanelRouter.connect(text.ptr, ID_ANY, ID_ANY, EVT_TEXT, 4);
+    extraPanelRouter.connect(label.ptr, ID_ANY, ID_ANY, EVT_UPDATE_UI, 5);
+
+    const sizer = createWxBoxSizer(HORIZONTAL)!;
+    const caption = withString("Just some extra text:", (value) =>
+        createWxStaticText(panel.ptr, ID_ANY, value, -1, -1, -1, -1, 0));
+    if (caption) addWin(sizer, caption.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    addWin(sizer, text.ptr, 1, (f) => { f.Center(); f.Border(ALL); });
+    sizer.AddSpacer(10);
+    addWin(sizer, choice.ptr, 0, (f) => { f.Center(); f.Border(RIGHT); });
+    addWin(sizer, portrait.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    addWin(sizer, landscape.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    addWin(sizer, check.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    sizer.AddSpacer(5);
+    addWin(sizer, button.ptr, 0, (f) => { f.Center(); f.Border(ALL); });
+    sizer.AddSpacer(5);
+    addWin(sizer, label.ptr, 1, (f) => { f.Center(); f.Border(ALL); });
+
+    panel.SetSizerAndFit(sizer.ptr, true);
+}
+
+function fileOpen(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const wildcard = `All files (${DEFAULT_WILDCARD})|${DEFAULT_WILDCARD}|` +
+        "C++ files (*.cpp;*.h)|*.cpp;*.h";
+
+    const dialog = withStrings([
+        "Testing open file dialog", "", "", wildcard,
+    ], (ptrs) => createWxFileDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2], ptrs[3],
+        -1, -1, FD_OPEN, -1, -1));
+    if (!dialog) return;
+
+    const wxwin = getEnv("WXWIN");
+    if (wxwin)
+    {
+        withString(`${wxwin}/src`, (ptr) => dialog.AddShortcut(ptr, 0));
+        withString(`${wxwin}/include`, (ptr) => dialog.AddShortcut(ptr, FD_SHORTCUT_TOP));
+    }
+
+    const useExtra = isCheckedOption(DIALOGS_FILE_USE_EXTRA_CONTROL_CREATOR);
+    let hasExtra = false;
+    let hook: wxFileDialogCustomizeHook | null = null;
+
+    hookInfo = "";
+    resetExtraPanelState();
+    resetHookState();
+    if (useExtra)
+    {
+        // The ::SetExtraControlCreator() trampoline calls the callback with the
+        // parent window and returns the first child it creates under it.
+        if (!extraPanelCallback)
+        {
+            extraPanelCallback = new Callback(
+                { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+                (parentPtr) =>
+                {
+                    if (parentPtr) createExtraPanel(parentPtr);
+                });
+        }
+        hasExtra = dialog.SetExtraControlCreator(extraPanelCallback.pointer);
+    }
+    else
+    {
+        hook = createFileCustomizeHook(dialog);
+        hasExtra = hook !== null && dialog.SetCustomizeHook(hook.ptr);
+    }
+
+    dialog.CentreOnParent(BOTH);
+    const home = homeDir();
+    withString(home, (ptr) => dialog.SetDirectory(ptr));
+
+    const result = dialog.ShowModal();
+    let extraInfo = "<not supported>";
+    if (result === ID_OK)
+    {
+        if (hasExtra)
+        {
+            if (useExtra)
+            {
+                const extra = dialog.GetExtraControl();
+                const panelState = extra
+                    ? extraPanelStates.get(String(extra.ptr)) : undefined;
+                if (panelState) extraInfo = extraPanelInfo(panelState);
+            }
+            else
+            {
+                extraInfo = hookInfo;
+            }
+        }
+
+        const info = `Full file name: ${takeText(dialog.GetPath())}\n` +
+            `Path: ${takeText(dialog.GetDirectory())}\n` +
+            `Name: ${takeText(dialog.GetFilename())}\n` +
+            `Custom window: ${extraInfo}`;
+
+        withStrings([info, "Selected file"], (ptrs) =>
+        {
+            const second = createWxMessageDialog(
+                current.frame.ptr, ptrs[0], ptrs[1], OK | CENTRE);
+            if (!second) return;
+            second.ShowModal();
+            second.Destroy();
+        });
+    }
+
+    dialog.Destroy();
+    if (hook) hook.Delete();
+    resetHookState();
+    closeCustomizerCallbacks();
+    if (extraPanelRouter)
+    {
+        extraPanelRouter.close();
+        extraPanelRouter = null;
+    }
+    if (extraPanelCallback)
+    {
+        extraPanelCallback.close();
+        extraPanelCallback = null;
+    }
+    resetExtraPanelState();
+}
+
+function resetHookState(): void
+{
+    hookText = null;
+    hookChoiceSize = null;
+    hookRadioPortrait = null;
+    hookRadioLandscape = null;
+    hookCheckBox = null;
+    hookButton = null;
+    hookLabel = null;
+}
+
+/** Releases the customize-hook callbacks once their dialog is destroyed. */
+function closeCustomizerCallbacks(): void
+{
+    for (const router of customizerRouters) router.close();
+    customizerRouters.length = 0;
+    for (const callback of customizerCallbacks) callback.close();
+    customizerCallbacks.length = 0;
+}
+
+function fileOpen2(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const wildcard = `Waveform (*.wav)|*.wav|Plain text (*.txt)|*.txt|` +
+        `All files (${DEFAULT_WILDCARD})|${DEFAULT_WILDCARD}`;
+
+    const selected = withStrings([
+        "Select the file to load", "", "", fileOpen2Extension, wildcard,
+    ], (ptrs) => wxFileSelector(
+        ptrs[0], ptrs[1], ptrs[2], ptrs[3], ptrs[4],
+        FD_OPEN | FD_CHANGE_DIR | FD_PREVIEW | FD_NO_FOLLOW | FD_SHOW_HIDDEN,
+        current.frame.ptr, -1, -1));
+
+    if (!selected) return;
+
+    const path = takeText(selected);
+    const dot = path.lastIndexOf(".");
+    fileOpen2Extension = dot >= 0 ? path.substring(dot + 1) : "";
+
+    withString(
+        `You selected the file '${path}', remembered extension '${fileOpen2Extension}'`,
+        (ptr) => LogMessage(ptr));
+}
+
+function filesOpen(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const wildcard = `All files (${DEFAULT_WILDCARD})|${DEFAULT_WILDCARD}|` +
+        "C++ files (*.cpp;*.h)|*.cpp;*.h";
+
+    const dialog = withStrings([
+        "Testing open multiple file dialog", "", "", wildcard,
+    ], (ptrs) => createWxFileDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2], ptrs[3],
+        -1, -1, FD_OPEN | FD_MULTIPLE, -1, -1));
+    if (!dialog) return;
+
+    dialog.Centre(CENTRE_ON_SCREEN);
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const pathBuffer = new BigUint64Array(MAX_SELECTED_PATHS);
+        const nameBuffer = new BigUint64Array(MAX_SELECTED_PATHS);
+        const count = dialog.GetPaths(pointerOf(pathBuffer), MAX_SELECTED_PATHS);
+        dialog.GetFilenames(pointerOf(nameBuffer), MAX_SELECTED_PATHS);
+        const paths = readStringArray(count, pathBuffer);
+        const names = readStringArray(count, nameBuffer);
+
+        let message = "";
+        for (let n = 0; n < count; n++)
+        {
+            message += `File ${n}: ${paths[n]} (${names[n]})\n`;
+        }
+        message += `Filter index: ${dialog.GetFilterIndex()}`;
+
+        withStrings([message, "Selected files"], (ptrs) =>
+        {
+            const second = createWxMessageDialog(
+                current.frame.ptr, ptrs[0], ptrs[1], OK | CENTRE);
+            if (!second) return;
+            second.ShowModal();
+            second.Destroy();
+        });
+    }
+    dialog.Destroy();
+}
+
+function filesOpenWindowModal(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const wildcard = `All files (${DEFAULT_WILDCARD})|${DEFAULT_WILDCARD}|` +
+        "C++ files (*.cpp;*.h)|*.cpp;*.h";
+
+    const dialog = withStrings([
+        "Testing open multiple file dialog", "", "", wildcard,
+    ], (ptrs) => createWxFileDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2], ptrs[3],
+        -1, -1, FD_OPEN | FD_MULTIPLE, -1, -1));
+    if (!dialog) return;
+
+    modalDialogs.push(dialog);
+    windowModalEvents().connect(
+        dialog.ptr, ID_ANY, ID_ANY, EVT_WINDOW_MODAL_DIALOG_CLOSED, TAG_FILE_MULTI);
+    dialog.ShowWindowModal();
+}
+
+function fileSave(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withStrings([
+        "Testing save file dialog", "", "myletter.doc",
+        "Text files (*.txt)|*.txt|Document files (*.doc;*.ods)|*.doc;*.ods",
+    ], (ptrs) => createWxFileDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2], ptrs[3],
+        -1, -1, FD_SAVE | FD_OVERWRITE_PROMPT, -1, -1));
+    if (!dialog) return;
+
+    dialog.SetFilterIndex(1);
+
+    encryptCheckBox = null;
+    encryptValue = false;
+
+    const addCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_fun, customizerPtr) =>
+        {
+            if (!customizerPtr) return;
+            const customizer = wrapWxFileDialogCustomize(customizerPtr);
+            encryptCheckBox = withString("Encrypt",
+                (ptr) => customizer.AddCheckBox(ptr));
+        });
+    const transferCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_fun) =>
+        {
+            if (encryptCheckBox) encryptValue = encryptCheckBox.GetValue();
+        });
+    customizerCallbacks.push(addCallback, transferCallback);
+
+    const hook = createWxFileDialogCustomizeHook(
+        null, addCallback.pointer, null, transferCallback.pointer);
+    if (hook) dialog.SetCustomizeHook(hook.ptr);
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const message = `${takeText(dialog.GetPath())}, filter ` +
+            `${dialog.GetFilterIndex()}${encryptValue ? ", encrypt" : ""}`;
+        withString(message, (ptr) => LogMessage(ptr));
+    }
+
+    dialog.Destroy();
+    if (hook) hook.Delete();
+    encryptCheckBox = null;
+    closeCustomizerCallbacks();
+}
+
+function fileSaveWindowModal(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withStrings([
+        "Testing save file dialog", "", "myletter.doc",
+        "Text files (*.txt)|*.txt|Document files (*.doc;*.ods)|*.doc;*.ods",
+    ], (ptrs) => createWxFileDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2], ptrs[3],
+        -1, -1, FD_SAVE | FD_OVERWRITE_PROMPT, -1, -1));
+    if (!dialog) return;
+
+    dialog.SetFilterIndex(1);
+    modalDialogs.push(dialog);
+    windowModalEvents().connect(
+        dialog.ptr, ID_ANY, ID_ANY, EVT_WINDOW_MODAL_DIALOG_CLOSED, TAG_FILE_SAVE);
+    dialog.ShowWindowModal();
+}
+
+function fileOpenGeneric(): void
+{
+    const current = state;
+    if (!current) return;
+
+    // C++ passes wxEmptyString and then SetDirectory(wxGetHomeDir()); the
+    // generic dialog has no SetDirectory binding, so pass the directory to the
+    // constructor, which starts from the same state.
+    const home = homeDir();
+    const dialog = withStrings([
+        "Testing open file dialog", home, "", "C++ files (*.cpp;*.h)|*.cpp;*.h",
+    ], (ptrs) => createWxGenericFileDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2], ptrs[3], FD_OPEN));
+    if (!dialog) return;
+
+    const base = wrapWxFileDialog(dialog.ptr);
+    hookInfo = "";
+    const hook = createFileCustomizeHook(base);
+    if (hook) dialog.SetCustomizeHook(hook.ptr);
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const info = `Full file name: ${takeText(dialog.GetPath())}\n` +
+            `Path: ${takeText(dialog.GetDirectory())}\n` +
+            `Name: ${takeText(dialog.GetFilename())}\n` +
+            `Custom window: ${hookInfo}`;
+
+        withStrings([info, "Selected file"], (ptrs) =>
+        {
+            const second = createWxMessageDialog(
+                current.frame.ptr, ptrs[0], ptrs[1], OK | CENTRE);
+            if (!second) return;
+            second.ShowModal();
+            second.Destroy();
+        });
+    }
+
+    dialog.Destroy();
+    if (hook) hook.Delete();
+    resetHookState();
+    closeCustomizerCallbacks();
+}
+
+function filesOpenGeneric(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withStrings([
+        "Testing open multiple file dialog", "", "",
+        "All files (*.*)|*.*|C++ files (*.cpp;*.h)|*.cpp;*.h",
+    ], (ptrs) => createWxGenericFileDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2], ptrs[3],
+        FD_OPEN | FD_MULTIPLE));
+    if (!dialog) return;
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const pathBuffer = new BigUint64Array(MAX_SELECTED_PATHS);
+        const nameBuffer = new BigUint64Array(MAX_SELECTED_PATHS);
+        const count = dialog.GetPaths(pointerOf(pathBuffer), MAX_SELECTED_PATHS);
+        dialog.GetFilenames(pointerOf(nameBuffer), MAX_SELECTED_PATHS);
+        const paths = readStringArray(count, pathBuffer);
+        const names = readStringArray(count, nameBuffer);
+
+        let message = "";
+        for (let n = 0; n < count; n++)
+        {
+            message += `File ${n}: ${paths[n]} (${names[n]})\n`;
+        }
+        message += `Filter index: ${dialog.GetFilterIndex()}`;
+
+        withStrings([message, "Selected files"], (ptrs) =>
+        {
+            const second = createWxMessageDialog(
+                current.frame.ptr, ptrs[0], ptrs[1], OK | CENTRE);
+            if (!second) return;
+            second.ShowModal();
+            second.Destroy();
+        });
+    }
+    dialog.Destroy();
+}
+
+function fileSaveGeneric(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withStrings([
+        "Testing save file dialog", "", "myletter.doc",
+        "Text files (*.txt)|*.txt|Document files (*.doc;*.ods)|*.doc;*.ods",
+    ], (ptrs) => createWxGenericFileDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2], ptrs[3],
+        FD_SAVE | FD_OVERWRITE_PROMPT));
+    if (!dialog) return;
+
+    dialog.SetFilterIndex(1);
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const message = `${takeText(dialog.GetPath())}, filter ${dialog.GetFilterIndex()}`;
+        withString(message, (ptr) => LogMessage(ptr));
+    }
+    dialog.Destroy();
+}
+
+//-----------------------------------------------------------------------------
+// Directory dialogs
+//-----------------------------------------------------------------------------
+
+function doDirChoose(style: number): void
+{
+    const current = state;
+    if (!current) return;
+
+    const home = homeDir();
+    const dialog = withStrings(["Testing directory picker", home], (ptrs) =>
+        createWxDirDialog(current.frame.ptr, ptrs[0], ptrs[1], -1, -1, style));
+    if (!dialog) return;
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        withString(`Selected path: ${takeText(dialog.GetPath())}`,
+            (ptr) => LogMessage(ptr));
+    }
+    dialog.Destroy();
+}
+
+function dirChooseMultiple(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const style = DD_DEFAULT_STYLE | DD_DIR_MUST_EXIST | DD_MULTIPLE | DD_SHOW_HIDDEN;
+    const home = homeDir();
+    const dialog = withStrings(["Testing multiple directory picker", home], (ptrs) =>
+        createWxDirDialog(current.frame.ptr, ptrs[0], ptrs[1], -1, -1, style));
+    if (!dialog) return;
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const pathBuffer = new BigUint64Array(MAX_SELECTED_PATHS);
+        const count = dialog.GetPaths(pointerOf(pathBuffer), MAX_SELECTED_PATHS);
+        const paths = readStringArray(count, pathBuffer);
+        let message = "";
+        for (let n = 0; n < count; n++)
+        {
+            message += `Directory ${n}: ${paths[n]}\n`;
+        }
+        withStrings([message, "Selected directories"], (ptrs) =>
+        {
+            const second = createWxMessageDialog(
+                current.frame.ptr, ptrs[0], ptrs[1], OK | CENTRE);
+            if (!second) return;
+            second.ShowModal();
+            second.Destroy();
+        });
+    }
+    dialog.Destroy();
+}
+
+function dirChooseWindowModal(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const home = homeDir();
+    const dialog = withStrings(["Testing directory picker", home], (ptrs) =>
+        createWxDirDialog(current.frame.ptr, ptrs[0], ptrs[1],
+            -1, -1, DD_DEFAULT_STYLE | DD_DIR_MUST_EXIST));
+    if (!dialog) return;
+
+    modalDialogs.push(dialog);
+    windowModalEvents().connect(
+        dialog.ptr, ID_ANY, ID_ANY, EVT_WINDOW_MODAL_DIALOG_CLOSED, TAG_DIR);
+    dialog.ShowWindowModal();
+}
+
+function genericDirChoose(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const home = homeDir();
+    const dialog = withStrings(["Testing generic directory picker", home], (ptrs) =>
+        createWxGenericDirDialog(
+            current.frame.ptr, ptrs[0], ptrs[1], DD_DEFAULT_STYLE));
+    if (!dialog) return;
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        withStrings([takeText(dialog.GetPath()), "Selected path"], (ptrs) =>
+        {
+            const second = createWxMessageDialog(
+                current.frame.ptr, ptrs[0], ptrs[1], OK | CENTRE);
+            if (!second) return;
+            second.ShowModal();
+            second.Destroy();
+        });
+    }
+    dialog.Destroy();
+}
+
+//-----------------------------------------------------------------------------
+// Entry dialogs
+//-----------------------------------------------------------------------------
+
+function lineEntry(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const message = "This is a small sample\n" +
+        "A long, long string to test out the text entrybox";
+
+    if (isCheckedOption(DIALOGS_USE_WRAPPER_FUNCTIONS))
+    {
+        const position = positionOf(current.frame);
+        const value = getTextFromUser(message, "Please enter a string",
+            "Default value", current.frame.ptr,
+            position.x + 50, position.y + 50, true, 500, -1);
+        if (value !== "")
+        {
+            messageBox(value, "Got string", OK | ICON_INFORMATION, current.frame.ptr);
+        }
+        return;
+    }
+
+    const dialog = withStrings([
+        message, "Please enter a string", "Default value",
+    ], (ptrs) => createWxTextEntryDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2],
+        BigInt(OK | CANCEL), -1, -1, -1, -1));
+    if (!dialog) return;
+
+    withString("Enter your text here", (ptr) => dialog.SetHint(ptr));
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        messageBox(takeText(dialog.GetValue()), "Got string",
+            OK | ICON_INFORMATION, current.frame.ptr);
+    }
+    dialog.Destroy();
+}
+
+function textEntry(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withStrings([
+        "You can enter a multiline string here.",
+        "Please enter some text",
+        "First line\nSecond one\nAnd another one too",
+    ], (ptrs) => createWxTextEntryDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2],
+        BigInt(OK | CANCEL | TE_MULTILINE), -1, -1, -1, -1));
+    if (!dialog) return;
+
+    withString("Enter your text here", (ptr) => dialog.SetHint(ptr));
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        messageBox(takeText(dialog.GetValue()), "Got text",
+            OK | ICON_INFORMATION, current.frame.ptr);
+    }
+    dialog.Destroy();
+}
+
+function passwordEntry(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const password = getPasswordFromUser("Enter password:",
+        "Password entry dialog", "", current.frame.ptr);
+    if (password !== "")
+    {
+        messageBox(`Your password is '${password}'`, "Got password",
+            OK | ICON_INFORMATION, current.frame.ptr);
+    }
+}
+
+function credentialEntry(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withStrings([
+        "A login is required", "Credentials", "", "",
+    ], (ptrs) => createWxCredentialEntryDialog(
+        current.frame.ptr, ptrs[0], ptrs[1], ptrs[2], ptrs[3]));
+    if (!dialog) return;
+
+    if (dialog.ShowModal() === ID_OK)
+    {
+        const user = takeText(dialog.GetUser());
+        const password = takeText(dialog.GetPassword());
+        messageBox(`User: ${user} Password: ${password}`, "Credentials",
+            OK | ICON_INFORMATION, current.frame.ptr);
+    }
+    dialog.Destroy();
+}
+
+function numericEntry(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const result = withStrings([
+        "This is some text, actually a lot of text.\nEven two rows of text.",
+        "Enter a number:",
+        "Numeric input test",
+    ], (ptrs) => wxGetNumberFromUser(
+        ptrs[0], ptrs[1], ptrs[2], 50n, 0n, 100n, current.frame.ptr, -1, -1));
+
+    if (result === -1n)
+    {
+        messageBox("Invalid number entered or dialog cancelled.",
+            "Numeric test result", OK | ICON_ERROR, current.frame.ptr);
+    }
+    else
+    {
+        messageBox(`You've entered ${result}`, "Numeric test result",
+            OK | ICON_INFORMATION, current.frame.ptr);
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Informative dialogs
+//-----------------------------------------------------------------------------
+
+function logDialog(): void
+{
+    {
+        const busy = createWxBusyCursor();
+        withString("This is some message - everything is ok so far.",
+            (ptr) => LogMessage(ptr));
+        withString("Another message...\n... this one is on multiple lines",
+            (ptr) => LogMessage(ptr));
+        withString("And then something went wrong!", (ptr) => LogWarning(ptr));
+        wxYield();
+        if (busy) busy.Delete();
+    }
+
+    withString("Intermediary error handler decided to abort.",
+        (ptr) => LogError(ptr));
+    withString("The top level caller detected an unrecoverable error.",
+        (ptr) => LogError(ptr));
+
+    const target = wxLog_GetActiveTarget();
+    if (target) wrapWxLog(target).FlushActive();
+
+    withString("And this is the same dialog but with only one message.",
+        (ptr) => LogMessage(ptr));
+}
+
+function infoBarSimple(): void
+{
+    const current = state;
+    if (!current) return;
+
+    if (infoBarDontShowAgain)
+    {
+        messageBox("You asked to not see this again. Remember?", "",
+            OK, current.frame.ptr);
+        return;
+    }
+
+    infoBarCount += 1;
+    let message: string;
+    if (infoBarCount % 2)
+    {
+        message = `Short message #${infoBarCount} in the info bar.`;
+    }
+    else
+    {
+        message = `A very, very, very, very long message #${infoBarCount} showing what ` +
+            "happens when a message is too long to fit in the info bar and has to be " +
+            "either wrapped or ellipsized because it's just too long to fit in the " +
+            "available space (unless you have a humongously wide monitor, in which case, " +
+            "congratulations, you've managed to break this test).";
+    }
+
+    withString("Do not show this again",
+        (ptr) => current.infoBarSimple.ShowCheckBox(ptr, false));
+    withString(message, (ptr) => current.infoBarSimple.ShowMessage(ptr, 0));
+}
+
+function infoBarAdvanced(): void
+{
+    const current = state;
+    if (!current) return;
+    withString("Sorry, it didn't work out.", (ptr) =>
+        current.infoBarAdvanced.ShowMessageFor(ptr, InfoBar_Timeout_Auto, ICON_WARNING));
+}
+
+function onInfoBarButton(tag: number): void
+{
+    const current = state;
+    if (!current) return;
+
+    if (tag === 1)
+    {
+        current.infoBarSimple.Dismiss();
+        if (current.infoBarSimple.IsCheckBoxChecked())
+        {
+            infoBarDontShowAgain = true;
+        }
+    }
+    else
+    {
+        withString("Still no, sorry again.", (ptr) =>
+            current.infoBarAdvanced.ShowMessage(ptr, ICON_ERROR));
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Generic dialogs
+//-----------------------------------------------------------------------------
+
+function centredDialog(onScreen: boolean): void
+{
+    const current = state;
+    if (!current) return;
+
+    const title = onScreen
+        ? "Dialog centered on screen" : "Dialog centered on parent";
+    const dialog = withString(title, (text) => createWxDialog(
+        current.frame.ptr, ID_ANY, text, -1, -1, 200, 100, DEFAULT_DIALOG_STYLE));
+    if (!dialog) return;
+
+    const button = withString("Close", (text) =>
+        createWxButtonLocal(dialog.ptr, ID_OK, text));
+    if (button) wrapWxWindow(button).Centre(BOTH);
+
+    if (onScreen) dialog.CentreOnScreen(BOTH);
+    else dialog.CentreOnParent(BOTH);
+
+    dialog.ShowModal();
+    dialog.Destroy();
+}
+
+function onTopDialog(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withString("Dialog staying on top of other windows", (text) =>
+        createWxDialog(current.frame.ptr, ID_ANY, text, -1, -1, 300, 100,
+            DEFAULT_DIALOG_STYLE | STAY_ON_TOP));
+    if (!dialog) return;
+
+    const button = withString("Close", (text) =>
+        createWxButtonLocal(dialog.ptr, ID_OK, text));
+    if (button) wrapWxWindow(button).Centre(BOTH);
+
+    dialog.ShowModal();
+    dialog.Destroy();
+}
+
+function miniFrame(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const frame = withString("Mini frame", (text) => createWxMiniFrame(
+        current.frame.ptr, ID_ANY, text, -1, -1, -1, -1, CAPTION | CLOSE_BOX));
+    if (!frame) return;
+
+    const sizer = createWxBoxSizer(VERTICAL)!;
+    const line1 = withString("Mini frames have slightly different appearance",
+        (text) => createWxStaticText(frame.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    const line2 = withString("from the normal frames but that's the only difference.",
+        (text) => createWxStaticText(frame.ptr, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (line1) addWin(sizer, line1.ptr, 0, (f) => { f.Border(ALL); });
+    if (line2) addWin(sizer, line2.ptr, 0, (f) => { f.Border(ALL); });
+    frame.SetSizer(sizer.ptr, true);
+
+    const best = frame.GetBestSize();
+    if (best)
+    {
+        frame.SetSize(-1, -1, best.GetWidth(), best.GetHeight(), 0);
+    }
+
+    frame.CentreOnParent(BOTH);
+    frame.Show();
+}
+
+//-----------------------------------------------------------------------------
+// Progress, app progress, busy info
+//-----------------------------------------------------------------------------
+
+function doShowProgress(
+    dialog: wxProgressDialog | wxGenericProgressDialog,
+    generic: boolean): void
+{
+    let cont = true;
+    const skipBuffer = new Int32Array(1);
+    const skipPtr = pointerOf(skipBuffer);
+
+    for (let i = 0; i <= PROGRESS_MAX; i++)
+    {
+        let message: string;
+        const determinate = i > PROGRESS_MAX / 2;
+
+        if (i === PROGRESS_MAX)
+        {
+            message = "That's all, folks!\n\nNothing to see here any more.";
+        }
+        else if (!determinate)
+        {
+            message = "Testing indeterminate mode\n\n" +
+                "This mode allows you to show to the user\n" +
+                "that something is going on even if you don't know\n" +
+                "when exactly will you finish.";
+        }
+        else
+        {
+            message = "Now in standard determinate mode\n\n" +
+                "This is the standard usage mode in which you\n" +
+                "update the dialog after performing each new step of work.\n" +
+                "It requires knowing the total number of steps in advance.";
+        }
+
+        skipBuffer[0] = 0;
+        if (determinate)
+        {
+            cont = generic
+                ? withString(message, (ptr) =>
+                    (dialog as wxGenericProgressDialog).Update(i, ptr, skipPtr))
+                : withString(message, (ptr) =>
+                    (dialog as wxProgressDialog).UpdateWithSkip(i, ptr, skipPtr));
+        }
+        else
+        {
+            cont = withString(message, (ptr) => dialog.Pulse(ptr, skipPtr));
+        }
+
+        if (skipBuffer[0] !== 0)
+        {
+            i += Math.floor(PROGRESS_MAX / 4);
+            if (i >= PROGRESS_MAX) i = PROGRESS_MAX - 1;
+        }
+
+        if (!cont)
+        {
+            const answer = messageBox("Do you really want to cancel?",
+                "Progress dialog question", YES_NO | ICON_QUESTION, null);
+            if (answer === ID_YES) break;
+
+            cont = true;
+            dialog.Resume();
+        }
+
+        wxMilliSleep(100n);
+    }
+
+    if (!cont)
+    {
+        withString("Progress dialog aborted!", (ptr) => LogStatus(ptr));
+    }
+    else
+    {
+        withString(`Countdown from ${PROGRESS_MAX} finished`, (ptr) => LogStatus(ptr));
+    }
+}
+
+function showProgress(generic: boolean): void
+{
+    const current = state;
+    if (!current) return;
+
+    const message = " ".repeat(100) + "\n\n\n\n";
+    const style = PD_CAN_ABORT | PD_CAN_SKIP | PD_APP_MODAL |
+        PD_ELAPSED_TIME | PD_ESTIMATED_TIME | PD_REMAINING_TIME | PD_SMOOTH;
+
+    if (generic)
+    {
+        const dialog = withStrings(["Generic progress dialog example", message],
+            (ptrs) => createWxGenericProgressDialog(
+                ptrs[0], ptrs[1], PROGRESS_MAX, current.frame.ptr, style));
+        if (!dialog) return;
+        doShowProgress(dialog, true);
+        dialog.Destroy();
+    }
+    else
+    {
+        const dialog = withStrings(["Progress dialog example", message],
+            (ptrs) => createWxProgressDialog(
+                ptrs[0], ptrs[1], PROGRESS_MAX, current.frame.ptr, style));
+        if (!dialog) return;
+        doShowProgress(dialog, false);
+        dialog.Destroy();
+    }
+}
+
+function showAppProgress(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const progress = createWxAppProgressIndicator(current.frame.ptr, 100);
+    if (!progress) return;
+
+    if (!progress.IsAvailable())
+    {
+        withString("Progress indicator not available under this platform.",
+            (ptr) => LogStatus(ptr));
+        progress.Delete();
+        return;
+    }
+
+    withString("Using application progress indicator...", (ptr) => LogStatus(ptr));
+
+    const range = 10;
+    progress.SetRange(range);
+    for (let i = 0; i < range; i++)
+    {
+        progress.SetValue(i);
+        wxMilliSleep(200n);
+    }
+
+    withString("Progress finished", (ptr) => LogStatus(ptr));
+    progress.Delete();
+}
+
+function showBusyInfo(rich: boolean): void
+{
+    const current = state;
+    if (!current) return;
+
+    const disablerPtr = createWxWindowDisabler(null);
+    const disabler = disablerPtr ? new wxWindowDisabler(disablerPtr) : null;
+
+    if (!rich)
+    {
+        const info = withString("Working, please wait...", (text) =>
+            createWxBusyInfo(text, current.frame.ptr));
+
+        for (let i = 0; i < 18; i++)
+        {
+            wxMilliSleep(100n);
+            wxYield();
+        }
+        wxSleep(2);
+
+        if (info) info.Delete();
+    }
+    else
+    {
+        const flags = createWxBusyInfoFlags();
+        if (flags)
+        {
+            flags.SetParent(current.frame.ptr);
+            const bundle = wxArtProvider_GetBitmapBundle(ART_PRINT, ART_OTHER, 128, 128);
+            if (bundle)
+            {
+                flags.SetIcon(bundle.ptr);
+                bundle.Delete();
+            }
+            withString("<b>Printing your document</b>", (ptr) => flags.SetTitle(ptr));
+            withString("Please wait...", (ptr) => flags.SetText(ptr));
+            flags.SetForeground(WHITE);
+            flags.SetBackground(BLACK);
+            flags.SetTransparency(4 * ALPHA_OPAQUE / 5);
+
+            const info = createWxBusyInfoWithFlags(flags.ptr);
+            for (let i = 0; i < 20; i++)
+            {
+                wxYield();
+                wxMilliSleep(250n);
+            }
+            if (info) info.Delete();
+            flags.Delete();
+        }
+    }
+
+    if (disabler) disabler.Delete();
+}
+
+//-----------------------------------------------------------------------------
+// About dialogs
+//-----------------------------------------------------------------------------
+
+function aboutVersion(): { version: string; longVersion: string }
+{
+    const version = readWxString(VERSION_NUM_DOT_STRING);
+    const channel = MINOR_VERSION % 2 ? "Development" : "Stable";
+    return { version, longVersion: `${channel} version ${version}` };
+}
+
+function initAboutInfoMinimal(info: wxAboutDialogInfo): void
+{
+    const version = aboutVersion();
+    withString("Dialogs Sample", (ptr) => info.SetName(ptr));
+    withStrings([version.version, version.longVersion],
+        (ptrs) => info.SetVersion(ptrs[0], ptrs[1]));
+    withString("This sample shows different wxWidgets dialogs.",
+        (ptr) => info.SetDescription(ptr));
+    withString("Copyright (C) 1992-2026 wxWidgets dev team.",
+        (ptr) => info.SetCopyright(ptr));
+}
+
+function initAboutInfoWebsite(info: wxAboutDialogInfo): void
+{
+    initAboutInfoMinimal(info);
+    withStrings(["http://www.wxwidgets.org/", "wxWidgets web site"],
+        (ptrs) => info.SetWebSite(ptrs[0], ptrs[1]));
+}
+
+function initAboutInfoAll(info: wxAboutDialogInfo): void
+{
+    initAboutInfoWebsite(info);
+
+    withString("Vadim Zeitlin", (ptr) => info.AddDeveloper(ptr));
+    withString("A.N. Other", (ptr) => info.AddDeveloper(ptr));
+
+    const writers = createArrayString(["First D. Writer", "Second One"]);
+    if (writers)
+    {
+        info.SetDocWriters(writers.ptr);
+        writers.Delete();
+    }
+
+    withString(
+        "                wxWindows Library Licence, Version 3.1\n" +
+        "                ======================================\n" +
+        "\n" +
+        "  Copyright (c) 1998-2018 Julian Smart, Robert Roebling et al\n" +
+        "\n" +
+        "  Everyone is permitted to copy and distribute verbatim copies\n" +
+        "  of this licence document, but changing it is not allowed.\n" +
+        "\n" +
+        "                       WXWINDOWS LIBRARY LICENCE\n" +
+        "     TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION\n" +
+        "\n" +
+        "                    ...and so on and so forth...\n",
+        (ptr) => info.SetLicence(ptr));
+
+    withString("Wun Ngo Wen (Martian)", (ptr) => info.AddTranslator(ptr));
+}
+
+function showAboutDialog(which: number): void
+{
+    const current = state;
+    if (!current) return;
+
+    const infoPtr = createWxAboutDialogInfo();
+    if (!infoPtr) return;
+    const info = new wxAboutDialogInfo(infoPtr);
+    if (!info) return;
+
+    switch (which)
+    {
+        case 0: initAboutInfoMinimal(info); break;
+        case 1: initAboutInfoWebsite(info); break;
+        default: initAboutInfoAll(info); break;
+    }
+
+    if (which === 3)
+    {
+        const dialog = createWxGenericAboutDialog(info.ptr, current.frame.ptr);
+        if (dialog)
+        {
+            const parent = dialog.GetCustomControlParent();
+            const parentPtr = parent ? parent.ptr : null;
+            const line1 = createWxStaticLine(parentPtr, ID_ANY, -1, -1, -1, -1, 0);
+            if (line1) dialog.AddControl(line1.ptr);
+            withString("Some custom text", (ptr) => dialog.AddText(ptr));
+            const line2 = createWxStaticLine(parentPtr, ID_ANY, -1, -1, -1, -1, 0);
+            if (line2) dialog.AddControl(line2.ptr);
+            dialog.ShowModal();
+            dialog.Destroy();
+        }
+    }
+    else
+    {
+        wxAboutBox(info.ptr, current.frame.ptr);
+    }
+
+    info.Delete();
+}
+
+//-----------------------------------------------------------------------------
+// Tips
+//-----------------------------------------------------------------------------
+
+function showTip(): void
+{
+    const current = state;
+    if (!current) return;
+
+    // C++ keeps the last tip index in a function-local static.
+    if (tipIndex < 0) tipIndex = Math.floor(Math.random() * 5);
+
+    const providerPtr = withString(assetPath("tips.txt"),
+        (ptr) => wxCreateFileTipProvider(ptr, tipIndex));
+    if (!providerPtr) return;
+
+    const provider = new wxTipProvider(providerPtr);
+    const showAtStartup = wxShowTip(current.frame.ptr, provider.ptr);
+
+    if (showAtStartup)
+    {
+        messageBox("Will show tips on startup", "Tips dialog",
+            OK | ICON_INFORMATION, current.frame.ptr);
+    }
+
+    tipIndex = provider.GetCurrentTip();
+    provider.Delete();
+}
+
+function toggleTipWindow(): void
+{
+    const current = state;
+    if (!current) return;
+
+    if (current.tipWindowRef && current.tipWindowRef[0] !== 0n)
+    {
+        wrapWxTipWindow(current.tipWindowRef[0]).CloseTip();
+        current.tipWindowRef[0] = 0n;
+    }
+    else
+    {
+        const text = "This is just some text to be shown in the tip window, " +
+            "broken into multiple lines, each less than 60 logical pixels wide.";
+        const tip = withString(text, (ptr) => createWxTipWindow(
+            current.frame.ptr, ptr, current.frame.FromDIP(60)));
+        if (!tip) return;
+
+        // wxTipWindow::Ref clears the pointer from its destructor; mirror it so
+        // the menu check state follows a tip that closes itself.
+        if (!current.tipWindowRef)
+        {
+            current.tipWindowRef = new BigUint64Array(1);
+        }
+        current.tipWindowRef[0] = tip.ptr === null ? 0n : tip.ptr;
+        tip.SetTipWindowPtr(pointerOf(current.tipWindowRef));
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Modal hook / unsaved state
+//-----------------------------------------------------------------------------
+
+/** wxDialog::GetClassInfo()->GetClassName() for the modal-hook messages. */
+function dialogClassName(dialogPtr: Pointer): string
+{
+    const info = wrapWxWindow(dialogPtr).GetClassInfo();
+    if (!info) return "wxDialog";
+    return takeText(info.GetClassNameEx());
+}
+
+function toggleModalHook(enabled: boolean): void
+{
+    const current = state;
+    if (!current) return;
+
+    if (!current.modalHook)
+    {
+        const hookPtr = createKwxModalDialogHook(null);
+        if (!hookPtr) return;
+        const hook = wrapWxModalDialogHook(hookPtr);
+        current.modalHook = hook;
+
+        // CaptureEnterDialog() makes Enter() invoke the callback for its side
+        // effects and return wxID_NONE, so a void thunk can drive the hook.
+        const enterCallback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_fun, dialogPtr) =>
+            {
+                if (!dialogPtr) return;
+                withString(`Showing ${dialogClassName(dialogPtr)} modal dialog`,
+                    (ptr) => LogStatus(ptr));
+            });
+        const exitCallback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_fun, dialogPtr) =>
+            {
+                if (!dialogPtr) return;
+                withString(`Leaving ${dialogClassName(dialogPtr)} modal dialog`,
+                    (ptr) => LogStatus(ptr));
+            });
+        modalHookCallbacks.push(enterCallback, exitCallback);
+        hook.SetOnEnter(enterCallback.pointer);
+        hook.SetOnExit(exitCallback.pointer);
+        hook.CaptureEnterDialog(true);
+    }
+
+    if (enabled) current.modalHook.Register();
+    else current.modalHook.Unregister();
+}
+
+//-----------------------------------------------------------------------------
+// Find / replace
+//-----------------------------------------------------------------------------
+
+function decodeFindFlags(flags: number): string
+{
+    return `${flags & FR_DOWN ? "down" : "up"}, ` +
+        `${flags & FR_WHOLEWORD ? "whole words only, " : ""}` +
+        `${flags & FR_MATCHCASE ? "" : "not "}case sensitive`;
+}
+
+function showFindOrReplace(replace: boolean): void
+{
+    const current = state;
+    if (!current || !current.findData) return;
+
+    const existing = replace ? current.dlgReplace : current.dlgFind;
+    if (existing)
+    {
+        existing.Destroy();
+        if (replace) current.dlgReplace = null;
+        else current.dlgFind = null;
+        return;
+    }
+
+    const style = replace ? FR_REPLACEDIALOG : FR_NOWHOLEWORD;
+    const dialog = withString(replace ? "Find and replace dialog" : "Find dialog",
+        (title) => createWxFindReplaceDialog(
+            current.frame.ptr, current.findData!.ptr, title, style));
+    if (!dialog) return;
+
+    if (replace) current.dlgReplace = dialog;
+    else current.dlgFind = dialog;
+
+    dialog.Show();
+}
+
+function onFindEvent(tag: number, eventPtr: Pointer): void
+{
+    const current = state;
+    if (!current) return;
+
+    const event = new wxFindDialogEvent(eventPtr);
+
+    if (tag === 5)
+    {
+        // wxEVT_FIND_CLOSE
+        const dialog = event.GetDialog();
+        const dialogPtr = dialog ? dialog.ptr : null;
+        let title = "Unknown";
+        let idMenu = ID_ANY;
+
+        if (current.dlgFind && current.dlgFind.ptr === dialogPtr)
+        {
+            title = "Find";
+            idMenu = DIALOGS_FIND;
+            current.dlgFind = null;
+        }
+        else if (current.dlgReplace && current.dlgReplace.ptr === dialogPtr)
+        {
+            title = "Replace";
+            idMenu = DIALOGS_REPLACE;
+            current.dlgReplace = null;
+        }
+
+        withString(`${title} dialog is being closed.`, (ptr) => LogMessage(ptr));
+
+        if (idMenu !== ID_ANY) current.menuBar.Check(idMenu, false);
+
+        if (dialog) dialog.Destroy();
+        return;
+    }
+
+    const findString = takeText(event.GetFindString());
+    const replaceString = takeText(event.GetReplaceString());
+    const flags = decodeFindFlags(event.GetFlags());
+
+    if (tag === 1 || tag === 2)
+    {
+        const prefix = tag === 2 ? "next " : "";
+        withString(`Find ${prefix}'${findString}' (flags: ${flags})`,
+            (ptr) => LogMessage(ptr));
+    }
+    else if (tag === 3 || tag === 4)
+    {
+        const prefix = tag === 4 ? "all " : "";
+        withString(`Replace ${prefix}'${findString}' with '${replaceString}' (flags: ${flags})`,
+            (ptr) => LogMessage(ptr));
+    }
+    else
+    {
+        withString("Unknown find dialog event!", (ptr) => LogError(ptr));
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Canvas
+//-----------------------------------------------------------------------------
+
+function canvasPaint(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dc = createWxPaintDC(current.canvas.ptr);
+    if (!dc) return;
+
+    const colour = createWxColourEmpty();
+    if (!colour)
+    {
+        dc.Delete();
+        return;
+    }
+
+    if (current.canvas.UseBackgroundColour())
+    {
+        current.canvas.GetBackgroundColour(colour.ptr);
+    }
+    else
+    {
+        wxSystemSettings_GetColour(SYS_COLOUR_WINDOW, colour.ptr);
+    }
+
+    const brush = createWxBrushFromColour(colour.ptr, BRUSHSTYLE_SOLID);
+    if (brush)
+    {
+        dc.SetBackground(brush.ptr);
+        dc.Clear();
+        brush.Delete();
+    }
+    dc.SetBackgroundMode(BRUSHSTYLE_TRANSPARENT);
+    withString("wxWidgets common dialogs test application",
+        (ptr) => dc.DrawText(ptr, 10, 10));
+
+    colour.Delete();
+    dc.Delete();
+}
+
+//-----------------------------------------------------------------------------
+// Message box menu entries
+//-----------------------------------------------------------------------------
+
+function showMessageBox(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withStrings([
+        "This is a message box\nThis is a long, long string to test out if the " +
+        "message box is laid out properly.",
+        "Message box text",
+    ], (ptrs) => createWxMessageDialog(current.frame.ptr, ptrs[0], ptrs[1],
+        CENTRE | NO_DEFAULT | YES_NO | CANCEL | ICON_INFORMATION));
+    if (!dialog) return;
+
+    const supported = withStrings([
+        "Answer &Yes", "Answer &No", "Refuse to answer",
+    ], (ptrs) => dialog.SetYesNoCancelLabels(ptrs[0], ptrs[1], ptrs[2]));
+
+    const extended = supported
+        ? "This platform supports custom button labels,\n" +
+          "so you should see the descriptive labels below."
+        : "Custom button labels are not supported on this platform,\n" +
+          "so the default \"Yes\"/\"No\"/\"Cancel\" buttons are used.";
+    withString(extended, (ptr) => dialog.SetExtendedMessage(ptr));
+
+    handleMessageResult(dialog.ShowModal());
+    dialog.Destroy();
+}
+
+function handleMessageResult(result: number): void
+{
+    switch (result)
+    {
+        case ID_YES:
+            withString("You pressed \"Yes\"", (ptr) => LogStatus(ptr));
+            break;
+        case ID_NO:
+            withString("You pressed \"No\"", (ptr) => LogStatus(ptr));
+            break;
+        case ID_CANCEL:
+            withString("You pressed \"Cancel\"", (ptr) => LogStatus(ptr));
+            break;
+        default:
+            withString("Unexpected wxMessageDialog return code!",
+                (ptr) => LogError(ptr));
+    }
+}
+
+function showMessageBoxWindowModal(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withStrings([
+        "This is a message box\nThis is a long, long string to test out if the " +
+        "message box is laid out properly.",
+        "Message box text",
+    ], (ptrs) => createWxMessageDialog(current.frame.ptr, ptrs[0], ptrs[1],
+        CENTRE | NO_DEFAULT | YES_NO | CANCEL | ICON_INFORMATION));
+    if (!dialog) return;
+
+    const supported = withStrings([
+        "Answer &Yes", "Answer &No", "Refuse to answer",
+    ], (ptrs) => dialog.SetYesNoCancelLabels(ptrs[0], ptrs[1], ptrs[2]));
+
+    const extended = supported
+        ? "This platform supports custom button labels,\n" +
+          "so you should see the descriptive labels below."
+        : "Custom button labels are not supported on this platform,\n" +
+          "so the default \"Yes\"/\"No\"/\"Cancel\" buttons are used.";
+    withString(extended, (ptr) => dialog.SetExtendedMessage(ptr));
+
+    modalDialogs.push(dialog);
+    windowModalEvents().connect(
+        dialog.ptr, ID_ANY, ID_ANY, EVT_WINDOW_MODAL_DIALOG_CLOSED, TAG_MESSAGE_BOX);
+    dialog.ShowWindowModal();
+}
+
+//-----------------------------------------------------------------------------
+// Menu dispatch
+//-----------------------------------------------------------------------------
+
+function handleMenuId(id: number): void
+{
+    const current = state;
+    if (!current) return;
+
+    switch (id)
+    {
+        case DIALOGS_MESSAGE_BOX: showMessageBox(); break;
+        case DIALOGS_MESSAGE_BOX_WINDOW_MODAL: showMessageBoxWindowModal(); break;
+        case DIALOGS_MESSAGE_DIALOG: showTestMessageBoxDialog(current.frame.ptr, false); break;
+        case DIALOGS_MESSAGE_DIALOG_WINDOW_MODAL:
+            showTestMessageBoxDialog(current.frame.ptr, false, true);
+            break;
+        case DIALOGS_RICH_MESSAGE_DIALOG:
+            showTestMessageBoxDialog(current.frame.ptr, true, false);
+            break;
+        case DIALOGS_MESSAGE_BOX_WXINFO: wxInfoMessageBox(current.frame.ptr); break;
+
+        case DIALOGS_CHOOSE_COLOUR: chooseColour(false); break;
+        case DIALOGS_CHOOSE_COLOUR_ALPHA: chooseColour(true); break;
+        case DIALOGS_CHOOSE_COLOUR_GENERIC: chooseColourGeneric(false); break;
+        case DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA: chooseColourGeneric(true); break;
+        case DIALOGS_GET_COLOUR: getColour(); break;
+        case DIALOGS_CHOOSE_FONT: chooseFont(false); break;
+        case DIALOGS_CHOOSE_FONT_GENERIC: chooseFont(true); break;
+
+        case DIALOGS_SINGLE_CHOICE: singleChoice(); break;
+        case DIALOGS_SINGLE_CHOICE_DATA: singleChoiceData(); break;
+        case DIALOGS_MULTI_CHOICE: multiChoice(); break;
+        case DIALOGS_REARRANGE: showRearrangeDialog(current.frame.ptr); break;
+        case DIALOGS_ADDREMOVE: showAddRemoveDialog(current.frame.ptr); break;
+
+        case DIALOGS_LINE_ENTRY: lineEntry(); break;
+        case DIALOGS_TEXT_ENTRY: textEntry(); break;
+        case DIALOGS_PASSWORD_ENTRY: passwordEntry(); break;
+        case DIALOGS_CREDENTIAL_ENTRY: credentialEntry(); break;
+        case DIALOGS_NUM_ENTRY: numericEntry(); break;
+
+        case DIALOGS_FILE_OPEN: fileOpen(); break;
+        case DIALOGS_FILE_OPEN2: fileOpen2(); break;
+        case DIALOGS_FILES_OPEN: filesOpen(); break;
+        case DIALOGS_FILES_OPEN_WINDOW_MODAL: filesOpenWindowModal(); break;
+        case DIALOGS_FILE_SAVE: fileSave(); break;
+        case DIALOGS_FILE_SAVE_WINDOW_MODAL: fileSaveWindowModal(); break;
+        case DIALOGS_FILE_OPEN_GENERIC: fileOpenGeneric(); break;
+        case DIALOGS_FILES_OPEN_GENERIC: filesOpenGeneric(); break;
+        case DIALOGS_FILE_SAVE_GENERIC: fileSaveGeneric(); break;
+        case DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES:
+            withStrings([
+                "osx.openfiledialog.always-show-types",
+                current.menuBar.IsChecked(id) ? "1" : "0",
+            ], (ptrs) => wxSystemOptions_SetOption(ptrs[0], ptrs[1]));
+            break;
+
+        case DIALOGS_DIR_CHOOSE:
+            doDirChoose(DD_DEFAULT_STYLE | DD_DIR_MUST_EXIST);
+            break;
+        case DIALOGS_DIRNEW_CHOOSE:
+            doDirChoose(DD_DEFAULT_STYLE & ~DD_DIR_MUST_EXIST);
+            break;
+        case DIALOGS_DIRMULTIPLE_CHOOSE: dirChooseMultiple(); break;
+        case DIALOGS_DIR_CHOOSE_WINDOW_MODAL: dirChooseWindowModal(); break;
+        case DIALOGS_GENERIC_DIR_CHOOSE: genericDirChoose(); break;
+
+        case DIALOGS_TIP: showTip(); break;
+        case DIALOGS_LOG_DIALOG: logDialog(); break;
+        case DIALOGS_INFOBAR_SIMPLE: infoBarSimple(); break;
+        case DIALOGS_INFOBAR_ADVANCED: infoBarAdvanced(); break;
+
+        case DIALOGS_MODAL: showModalDialog(current.frame.ptr); break;
+        case DIALOGS_MODELESS:
+            toggleModelessDialog(current.frame.ptr,
+                current.menuBar.IsChecked(DIALOGS_MODELESS));
+            break;
+        case DIALOGS_CENTRE_SCREEN: centredDialog(true); break;
+        case DIALOGS_CENTRE_PARENT: centredDialog(false); break;
+        case DIALOGS_MINIFRAME: miniFrame(); break;
+        case DIALOGS_ONTOP: onTopDialog(); break;
+
+        case DIALOGS_PROGRESS: showProgress(false); break;
+        case DIALOGS_PROGRESS_GENERIC: showProgress(true); break;
+        case DIALOGS_APP_PROGRESS: showAppProgress(); break;
+        case DIALOGS_BUSYINFO: showBusyInfo(false); break;
+        case DIALOGS_BUSYINFO_RICH: showBusyInfo(true); break;
+
+        case DIALOGS_ABOUTDLG_SIMPLE:
+        case DIALOGS_SYSTEM_ABOUT:
+            showAboutDialog(0);
+            break;
+        case DIALOGS_ABOUTDLG_FANCY: showAboutDialog(1); break;
+        case DIALOGS_ABOUTDLG_FULL: showAboutDialog(2); break;
+        case DIALOGS_ABOUTDLG_CUSTOM: showAboutDialog(3); break;
+
+        case DIALOGS_FIND: showFindOrReplace(false); break;
+        case DIALOGS_REPLACE: showFindOrReplace(true); break;
+
+        case DIALOGS_REQUEST:
+            withString("Sleeping for 3 seconds to allow you to switch to another window",
+                (ptr) => LogStatus(ptr));
+            wxSleep(3);
+            current.frame.RequestUserAttention(USER_ATTENTION_ERROR);
+            break;
+
+        case DIALOGS_NOTIFY_MSG: showNotificationWindow(current.frame.ptr); break;
+        case DIALOGS_SHOW_TIP: toggleTipWindow(); break;
+        case DIALOGS_RICHTIP_DIALOG: showRichTipDialog(current.frame.ptr); break;
+
+        case DIALOGS_PROPERTY_SHEET:
+        case DIALOGS_PROPERTY_SHEET_TOOLBOOK:
+        case DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK:
+            showSettingsDialog(current.frame.ptr, current.settings, id);
+            break;
+
+        case DIALOGS_STANDARD_BUTTON_SIZER_DIALOG:
+            showStdButtonSizerDialog(current.frame.ptr);
+            break;
+        case DIALOGS_TEST_DEFAULT_ACTION:
+            showTestDefaultActionDialog(current.frame.ptr);
+            break;
+        case DIALOGS_MODAL_HOOK:
+            toggleModalHook(current.menuBar.IsChecked(DIALOGS_MODAL_HOOK));
+            break;
+        case DIALOGS_SIMULATE_UNSAVED:
+            current.confirmExit = current.menuBar.IsChecked(DIALOGS_SIMULATE_UNSAVED);
+            break;
+
+        case ID_EXIT:
+            current.frame.Close(true);
+            break;
+        default:
+            break;
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Window-modal dialog completion
+//-----------------------------------------------------------------------------
+
+interface ModalDialogHolder
+{
+    ptr: Pointer;
+}
+
+const modalDialogs: unknown[] = [];
+
+const TAG_MESSAGE_BOX = 1;
+const TAG_FILE_MULTI = 2;
+const TAG_FILE_SAVE = 3;
+const TAG_DIR = 4;
+
+function onWindowModalClosed(tag: number, eventPtr: Pointer): void
+{
+    const current = state;
+    if (!current) return;
+
+    const event = new wxWindowModalDialogEvent(eventPtr);
+    const dialog = event.GetDialog();
+    if (!dialog) return;
+    const dialogPtr = dialog.ptr;
+
+    switch (tag)
+    {
+        case TAG_MESSAGE_BOX:
+            handleMessageResult(dialog.GetReturnCode());
+            break;
+
+        case TAG_FILE_MULTI:
+            if (dialog.GetReturnCode() === ID_OK)
+            {
+                const fileDialog = wrapWxFileDialog(dialogPtr);
+                const pathBuffer = new BigUint64Array(MAX_SELECTED_PATHS);
+                const nameBuffer = new BigUint64Array(MAX_SELECTED_PATHS);
+                const count = fileDialog.GetPaths(pointerOf(pathBuffer), MAX_SELECTED_PATHS);
+                fileDialog.GetFilenames(pointerOf(nameBuffer), MAX_SELECTED_PATHS);
+                const paths = readStringArray(count, pathBuffer);
+                const names = readStringArray(count, nameBuffer);
+                let message = "";
+                for (let n = 0; n < count; n++)
+                {
+                    message += `File ${n}: ${paths[n]} (${names[n]})\n`;
+                }
+                message += `Filter index: ${fileDialog.GetFilterIndex()}`;
+
+                withStrings([message, "Selected files"], (ptrs) =>
+                {
+                    const second = createWxMessageDialog(
+                        current.frame.ptr, ptrs[0], ptrs[1], OK | CENTRE);
+                    if (!second) return;
+                    second.ShowModal();
+                    second.Destroy();
+                });
+            }
+            break;
+
+        case TAG_FILE_SAVE:
+            if (dialog.GetReturnCode() === ID_OK)
+            {
+                const fileDialog = wrapWxFileDialog(dialogPtr);
+                withString(
+                    `${takeText(fileDialog.GetPath())}, filter ` +
+                    `${fileDialog.GetFilterIndex()}`,
+                    (ptr) => LogMessage(ptr));
+            }
+            break;
+
+        case TAG_DIR:
+            if (dialog.GetReturnCode() === ID_OK)
+            {
+                const dirDialog = wrapWxDirDialog(dialogPtr);
+                withString(`Selected path: ${takeText(dirDialog.GetPath())}`,
+                    (ptr) => LogMessage(ptr));
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    dialog.Destroy();
+}
+
+//-----------------------------------------------------------------------------
+// Routers
+//-----------------------------------------------------------------------------
+
+let menuRouter: EventRouter | null = null;
+let closeRouter: EventRouter | null = null;
+let updateRouter: EventRouter | null = null;
+let paintRouter: EventRouter | null = null;
+let infoBarRouter: EventRouter | null = null;
+let colourRouter: EventRouter | null = null;
+let findRouter: EventRouter | null = null;
+let windowModalRouter: EventRouter | null = null;
+
+function colourEvents(): EventRouter
+{
+    if (!colourRouter)
+    {
+        colourRouter = new EventRouter((_tag, eventPtr) =>
+        {
+            const event = new wxColourDialogEvent(eventPtr);
+            const borrowed = event.GetColour();
+            if (borrowed)
+            {
+                // The getter allocates; the generated wrapper is borrowed, so
+                // take ownership explicitly and release it after the event.
+                const colour = new wxColour(borrowed.ptr);
+                applyColour(colour.ptr);
+                colour.Delete();
+            }
+        });
+    }
+    return colourRouter;
+}
+
+function windowModalEvents(): EventRouter
+{
+    if (!windowModalRouter)
+    {
+        windowModalRouter = new EventRouter(onWindowModalClosed);
+    }
+    return windowModalRouter;
+}
+
+//-----------------------------------------------------------------------------
+// Close handler
+//-----------------------------------------------------------------------------
+
+function onFrameClose(eventPtr: Pointer): void
+{
+    const current = state;
+    if (!current) return;
+
+    const event = new wxCloseEvent(eventPtr);
+
+    if (current.confirmExit && event.CanVeto())
+    {
+        const dialog = withStrings([
+            "You have an unsaved file; save before closing?", "OnClose",
+        ], (ptrs) => createWxMessageDialog(current.frame.ptr, ptrs[0], ptrs[1],
+            CENTRE | YES_NO | CANCEL | ICON_QUESTION));
+
+        if (dialog)
+        {
+            withStrings(["&Save", "&Discard changes"], (ptrs) =>
+                dialog.SetYesNoLabels(ptrs[0], ptrs[1]));
+
+            const result = dialog.ShowModal();
+            dialog.Destroy();
+
+            if (result === ID_CANCEL)
+            {
+                event.Veto(true);
+                withString("You cancelled closing the application.",
+                    (ptr) => LogStatus(ptr));
+                return;
+            }
+            if (result === ID_YES)
+            {
+                messageBox("You chose to save your file.", "OnClose", OK,
+                    current.frame.ptr);
+            }
+            else if (result !== ID_NO)
+            {
+                withString("Unexpected wxMessageDialog return code!",
+                    (ptr) => LogError(ptr));
+            }
+        }
+    }
+
+    event.Skip(true);
+}
+
+/** Creates a plain wxButton and returns its pointer. */
+function createWxButtonLocal(parent: Pointer, id: number, text: Pointer): Pointer | null
+{
+    const button = createWxButton(parent, id, text, -1, -1, -1, -1, 0);
+    return button ? button.ptr : null;
+}
+
+//-----------------------------------------------------------------------------
+// Frame construction
+//-----------------------------------------------------------------------------
+
+function createFrame(): FrameState | null
+{
+    const title = createWxString("wxWidgets dialogs example");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE);
+    title.Delete();
+    if (!frame) return null;
+
+    // SetIcon(wxICON(sample)): the XPM artwork is loaded from disk.
+    const iconName = createWxString(assetPath("sample.xpm"));
+    const icon = createWxIconLoad(
+        iconName.ptr, BigInt(BITMAP_TYPE_XPM), -1, -1);
+    iconName.Delete();
+    if (icon)
+    {
+        if (icon.IsOk()) frame.SetIcon(icon.ptr);
+        icon.Delete();
+    }
+
+    const colourData = createWxColourData();
+    if (colourData)
+    {
+        colourData.SetChooseFull(true);
+        const count = ColourData_NUM_CUSTOM;
+        for (let i = 0; i < count; i++)
+        {
+            const level = i * 16;
+            const colour = createWxColourRGB(level, level, level, 255);
+            if (colour)
+            {
+                colourData.SetCustomColour(i, colour.ptr);
+                colour.Delete();
+            }
+        }
+    }
+
+    frame.CreateStatusBar(1, STB_DEFAULT_STYLE, 0);
+
+    const canvas = createWxScrolledWindow(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, HSCROLL | VSCROLL)!;
+    canvas.SetFont(NORMAL_FONT);
+
+    const infoBarSimple = createWxInfoBarEx(frame.ptr, ID_ANY, INFOBAR_CHECKBOX)!;
+    const infoBarAdvanced = createWxInfoBar(frame.ptr, ID_ANY)!;
+
+    withString("", (ptr) => infoBarAdvanced.AddButton(ID_UNDO, ptr));
+    withString("", (ptr) => infoBarAdvanced.AddButton(ID_REDO, ptr));
+    withString("", (ptr) => infoBarAdvanced.AddButton(ID_EXIT, ptr));
+    infoBarAdvanced.RemoveButton(ID_EXIT);
+
+    const ownBackground = createWxColourFromInt(0xc8ffff);
+    if (ownBackground)
+    {
+        infoBarAdvanced.SetOwnBackgroundColour(ownBackground.ptr);
+        ownBackground.Delete();
+    }
+    const ownForeground = createWxColourFromInt(0x123312);
+    if (ownForeground)
+    {
+        infoBarAdvanced.SetForegroundColour(ownForeground.ptr);
+        ownForeground.Delete();
+    }
+
+    // GetFont().Bold().Larger(): mutate a copy in place rather than wrapping the
+    // borrowed wxFont results of Bold()/Larger().
+    const frameFont = createWxFontDefault();
+    if (frameFont)
+    {
+        frame.GetFont(frameFont.ptr);
+        frameFont.MakeBold();
+        frameFont.MakeLarger();
+        infoBarAdvanced.SetFont(frameFont.ptr);
+        frameFont.Delete();
+    }
+
+    infoBarAdvanced.SetShowHideEffects(SHOW_EFFECT_EXPAND, SHOW_EFFECT_EXPAND);
+    infoBarAdvanced.SetEffectDuration(1500);
+
+    const sizer = createWxBoxSizer(VERTICAL)!;
+    addWin(sizer, infoBarSimple.ptr, 0, (f) => { f.Expand(); });
+    addWin(sizer, canvas.ptr, 1, (f) => { f.Expand(); });
+    addWin(sizer, infoBarAdvanced.ptr, 0, (f) => { f.Expand(); });
+    frame.SetSizer(sizer.ptr, true);
+
+    const canvasColour = backgroundColour(canvas);
+    if (canvasColour)
+    {
+        frame.SetOwnBackgroundColour(canvasColour.ptr);
+        canvasColour.Delete();
+    }
+
+    const menuBar = buildMenuBar();
+    frame.SetMenuBar(menuBar.ptr);
+
+    // MSW-specific access to the "system" menu (returns null elsewhere).
+    const systemMenu = frame.MSWGetSystemMenu();
+    if (systemMenu)
+    {
+        systemMenu.AppendSeparator();
+        withString("&About",
+            (ptr) => systemMenu.Append(DIALOGS_SYSTEM_ABOUT, ptr, null, false));
+    }
+
+    const frameState: FrameState = {
+        frame,
+        menuBar,
+        canvas,
+        infoBarSimple,
+        infoBarAdvanced,
+        confirmExit: false,
+        colourData,
+        settings: createSettingsData(),
+        findData: createWxFindReplaceDataDefault(),
+        dlgFind: null,
+        dlgReplace: null,
+        tipWindowRef: null,
+        modalHook: null,
+    };
+    state = frameState;
+
+    // --- event wiring
+    menuRouter = new EventRouter((_tag, eventPtr) =>
+    {
+        const event = new wxCommandEvent(eventPtr);
+        handleMenuId(event.GetId());
+    });
+    menuRouter.connect(frame.ptr, ID_ANY, ID_ANY, EVT_MENU);
+
+    closeRouter = new EventRouter((_tag, eventPtr) => onFrameClose(eventPtr));
+    closeRouter.connect(frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW);
+
+    updateRouter = new EventRouter((_tag, eventPtr) =>
+    {
+        const event = new wxUpdateUIEvent(eventPtr);
+        event.Check(frameState.tipWindowRef !== null
+            && frameState.tipWindowRef[0] !== 0n);
+    });
+    updateRouter.connect(frame.ptr, DIALOGS_SHOW_TIP, DIALOGS_SHOW_TIP, EVT_UPDATE_UI);
+
+    paintRouter = new EventRouter(() => canvasPaint());
+    paintRouter.connect(canvas.ptr, ID_ANY, ID_ANY, EVT_PAINT);
+
+    infoBarRouter = new EventRouter((tag) => onInfoBarButton(tag));
+    infoBarRouter.connect(infoBarSimple.ptr, ID_CLOSE, ID_CLOSE, EVT_BUTTON, 1);
+    infoBarRouter.connect(infoBarAdvanced.ptr, ID_REDO, ID_REDO, EVT_BUTTON, 2);
+
+    findRouter = new EventRouter(onFindEvent);
+    findRouter.connect(frame.ptr, ID_ANY, ID_ANY, EVT_FIND, 1);
+    findRouter.connect(frame.ptr, ID_ANY, ID_ANY, EVT_FIND_NEXT, 2);
+    findRouter.connect(frame.ptr, ID_ANY, ID_ANY, EVT_FIND_REPLACE, 3);
+    findRouter.connect(frame.ptr, ID_ANY, ID_ANY, EVT_FIND_REPLACE_ALL, 4);
+    findRouter.connect(frame.ptr, ID_ANY, ID_ANY, EVT_FIND_CLOSE, 5);
+
+    frame.Centre(BOTH);
+    return frameState;
+}
+
+//-----------------------------------------------------------------------------
+// Custom log target (MyLogGui / MyAppTraits::CreateLogTarget)
+//-----------------------------------------------------------------------------
+
+let customLogGui: kwxLogGui | null = null;
+let logShowCallback: Callback | null = null;
+let previousLogTarget: wxLog | null = null;
+let logTraits: wxAppTraits | null = null;
+
+function installCustomLogTarget(): void
+{
+    const appPtr = wxApp_GetApp();
+    if (!appPtr) return;
+    const traits = wrapWxApp(appPtr).GetTraits();
+    if (!traits) return;
+
+    const logGui = createKwxLogGui(null);
+    if (!logGui) return;
+
+    logShowCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_fun, messagePtr, titlePtr) =>
+        {
+            if (!messagePtr) return;
+            const style = OK | CANCEL | CANCEL_DEFAULT | logGui.GetPendingStyle();
+            const dialog = createWxMessageDialog(
+                null, messagePtr, titlePtr, style);
+            if (!dialog) return;
+            withStrings([stockLabel(ID_COPY), stockLabel(ID_OK)],
+                (ptrs) => dialog.SetOKCancelLabels(ptrs[0], ptrs[1]));
+            withString("Note that this is a custom log dialog.",
+                (ptr) => dialog.SetExtendedMessage(ptr));
+            dialog.ShowModal();
+            dialog.Destroy();
+        });
+    logGui.SetOnDoShowSingleLogMessage(logShowCallback.pointer);
+
+    previousLogTarget = traits.SetLogTarget(logGui.ptr);
+    logTraits = traits;
+    customLogGui = logGui;
+}
+
+function uninstallCustomLogTarget(): void
+{
+    if (logTraits)
+    {
+        logTraits.SetLogTarget(previousLogTarget ? previousLogTarget.ptr : null);
+    }
+    if (customLogGui) customLogGui.Delete();
+    customLogGui = null;
+    logTraits = null;
+    previousLogTarget = null;
+    if (logShowCallback)
+    {
+        logShowCallback.close();
+        logShowCallback = null;
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Command line (MyApp::OnInitCmdLine / OnCmdLineParsed)
+//-----------------------------------------------------------------------------
+
+function startupProgressStyle(): number
+{
+    for (let i = 0; i < args.length; i++)
+    {
+        const arg = args[i];
+        if (arg === "--progress")
+        {
+            const next = args[i + 1];
+            return next !== undefined ? Number(next) : -1;
+        }
+        if (arg.startsWith("--progress="))
+        {
+            return Number(arg.substring("--progress=".length));
+        }
+    }
+    return -1;
+}
+
+function showStartupProgress(style: number): void
+{
+    if (!Number.isFinite(style) || style === -1) return;
+
+    const dialog = withStrings(
+        ["Progress in progress", "Please wait, starting..."],
+        (ptrs) => createWxProgressDialog(
+            ptrs[0], ptrs[1], PROGRESS_MAX, null, style));
+    if (!dialog) return;
+
+    for (let i = 0; i <= PROGRESS_MAX; i++)
+    {
+        let message = "";
+        if (i === 15)
+        {
+            message = "And the same dialog but with a very, very, very long" +
+                " message, just to test how it appears in this case.";
+        }
+        else if (i === 30)
+        {
+            message = "Back to brevity";
+        }
+        else if (i === 80)
+        {
+            message = "Back and adjusted";
+            dialog.Fit();
+        }
+
+        const cont = withString(message,
+            (ptr) => dialog.UpdateWithMessage(i, ptr));
+        if (!cont) break;
+        wxMilliSleep(50n);
+    }
+    dialog.Destroy();
+}
+
+//-----------------------------------------------------------------------------
+// Bootstrap
+//-----------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    // The C++ executable is "dialogs", so wxApp::GetAppName() is "dialogs".
+    setAppName("dialogs");
+    installCustomLogTarget();
+    showStartupProgress(startupProgressStyle());
+    initAllImageHandlers();
+
+    const frameState = createFrame();
+    if (!frameState)
+    {
+        console.error("Failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    frameState.frame.Show();
+    setTopWindow(frameState.frame.ptr);
+
+    const exitCode = run();
+
+    if (menuRouter) menuRouter.close();
+    if (closeRouter) closeRouter.close();
+    if (updateRouter) updateRouter.close();
+    if (paintRouter) paintRouter.close();
+    if (infoBarRouter) infoBarRouter.close();
+    if (colourRouter) colourRouter.close();
+    if (findRouter) findRouter.close();
+    if (windowModalRouter) windowModalRouter.close();
+    closeModalTestRouters();
+    closeMiscDialogRouters();
+
+    closeCustomizerCallbacks();
+    if (extraPanelRouter)
+    {
+        extraPanelRouter.close();
+        extraPanelRouter = null;
+    }
+    if (extraPanelCallback)
+    {
+        extraPanelCallback.close();
+        extraPanelCallback = null;
+    }
+    for (const callback of modalHookCallbacks) callback.close();
+
+    uninstallCustomLogTarget();
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

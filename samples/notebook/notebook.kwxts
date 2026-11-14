@@ -1,0 +1,1578 @@
+// notebook.kwxts — kwxTypeScript port of wxSamples/src/notebook/notebook.cpp
+//
+// The wxWidgets "book controls" sample: one frame that hosts a wxNotebook,
+// wxListbook, wxChoicebook, wxTreebook, wxToolbook, wxAuiNotebook or
+// wxSimplebook, recreated on demand from the File/Pages/Operations menus, with
+// a read-only log window above the book control.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\notebook\notebook.kwxts
+//
+// Differences from the C++ original, forced by the binding (see the final
+// report for details):
+//   * SetIcon(wxICON(sample)) loads the sample's sample.xpm file at run time
+//     instead of using the icon resource compiled into the C++ executable;
+//   * the GTK-only GTKAllowDiagnosticsControl() call is guarded by a run-time
+//     platform check instead of #ifdef __WXGTK__.
+
+import {
+    ALL,
+    ART_ERROR,
+    ART_INFORMATION,
+    ART_OTHER,
+    ART_QUESTION,
+    ART_WARNING,
+    BK_HITTEST_NOWHERE,
+    BK_HITTEST_ONICON,
+    BK_HITTEST_ONITEM,
+    BK_HITTEST_ONLABEL,
+    BK_HITTEST_ONPAGE,
+    BITMAP_TYPE_XPM,
+    createWxBitmapBundleArray,
+    createWxBoxSizer,
+    createWxClosure,
+    createWxContextHelp,
+    createWxFrame,
+    createWxIconLoad,
+    createWxLogTextCtrl,
+    createWxMenu,
+    createWxMenuBar,
+    createWxPanel,
+    createWxSimpleHelpProvider,
+    createWxString,
+    createWxTextCtrl,
+    DEFAULT_FRAME_STYLE,
+    EVT_AUINOTEBOOK_PAGE_CHANGED,
+    EVT_AUINOTEBOOK_PAGE_CHANGING,
+    EVT_CHOICEBOOK_PAGE_CHANGED,
+    EVT_CHOICEBOOK_PAGE_CHANGING,
+    EVT_IDLE,
+    EVT_LISTBOOK_PAGE_CHANGED,
+    EVT_LISTBOOK_PAGE_CHANGING,
+    EVT_MENU,
+    EVT_NOTEBOOK_PAGE_CHANGED,
+    EVT_NOTEBOOK_PAGE_CHANGING,
+    EVT_TOOLBOOK_PAGE_CHANGED,
+    EVT_TOOLBOOK_PAGE_CHANGING,
+    EVT_TREEBOOK_PAGE_CHANGED,
+    EVT_TREEBOOK_PAGE_CHANGING,
+    EVT_UPDATE_UI,
+    EXPAND,
+    expNB_BOTTOM,
+    expNB_LEFT,
+    expNB_NOPAGETHEME,
+    expNB_RIGHT,
+    expNB_TOP,
+    expTBK_BUTTONBAR,
+    expTBK_HORZ_LAYOUT,
+    FRAME_EX_CONTEXTHELP,
+    GTKAllowDiagnosticsControl,
+    ICON_QUESTION,
+    ID_ANY,
+    ID_EXIT,
+    ID_HIGHEST,
+    initAllImageHandlers,
+    initialize,
+    kwxGetMousePosition,
+    kwxMessageBox,
+    lib,
+    LogError,
+    LogMessage,
+    NB_FIXEDWIDTH,
+    NB_MULTILINE,
+    NOT_FOUND,
+    readAndDeleteWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    TAB_TRAVERSAL,
+    TE_MULTILINE,
+    TE_READONLY,
+    VERTICAL,
+    wxArtProvider_GetBitmapBundle,
+    wxBitmapBundle,
+    wxBitmapBundleArray,
+    wxBookCtrlEvent,
+    wxBoxSizer,
+    wxClosure,
+    wxCommandEvent,
+    wxFrame,
+    wxLogTextCtrl,
+    wxMenu,
+    wxMenuBar,
+    wxPanel,
+    wxPoint,
+    wxString,
+    wxTextCtrl,
+    wxLog_SetActiveTarget,
+    wxUpdateUIEvent,
+    YES,
+    YES_NO,
+} from "kwx";
+import { Callback, exit, platform, Pointer } from "kwx/platform";
+import {
+    ADDED_PAGE_NAME,
+    ADDED_PAGE_NAME_BEFORE,
+    ADDED_SUB_PAGE_NAME,
+    addPageWithLabel,
+    Book,
+    BOOK_AUINOTEBOOK,
+    BOOK_CHOICEBOOK,
+    BOOK_LISTBOOK,
+    BOOK_MAX,
+    BOOK_NOTEBOOK,
+    BOOK_SIMPLEBOOK,
+    BOOK_TOOLBOOK,
+    BOOK_TREEBOOK,
+    createBook,
+    createInitialPages,
+    createNewPage,
+    createPage,
+    createUserPage,
+    fromDIP,
+    insertPageWithLabel,
+    insertSubPageWithLabel,
+    INSERTED_PAGE_NAME,
+    VETO_PAGE_NAME,
+    windowSize,
+} from "./books.kwxts";
+
+declare const __dirname: string;
+
+/** Absolute path of an asset shipped next to this module. */
+function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+//-----------------------------------------------------------------------------
+// IDs (enum ID_COMMANDS in notebook.h)
+//-----------------------------------------------------------------------------
+
+// These are in the same order as the BookType elements in books.kwxts.
+const ID_BOOK_NOTEBOOK = ID_HIGHEST;
+const ID_BOOK_LISTBOOK = ID_BOOK_NOTEBOOK + 1;
+const ID_BOOK_CHOICEBOOK = ID_BOOK_LISTBOOK + 1;
+const ID_BOOK_TREEBOOK = ID_BOOK_CHOICEBOOK + 1;
+const ID_BOOK_TOOLBOOK = ID_BOOK_TREEBOOK + 1;
+const ID_BOOK_AUINOTEBOOK = ID_BOOK_TOOLBOOK + 1;
+const ID_BOOK_SIMPLEBOOK = ID_BOOK_AUINOTEBOOK + 1;
+const ID_BOOK_MAX = ID_BOOK_SIMPLEBOOK + 1;
+
+const ID_ORIENT_DEFAULT = ID_BOOK_MAX;
+const ID_ORIENT_TOP = ID_ORIENT_DEFAULT + 1;
+const ID_ORIENT_BOTTOM = ID_ORIENT_TOP + 1;
+const ID_ORIENT_LEFT = ID_ORIENT_BOTTOM + 1;
+const ID_ORIENT_RIGHT = ID_ORIENT_LEFT + 1;
+const ID_ORIENT_MAX = ID_ORIENT_RIGHT + 1;
+
+const ID_SHOW_IMAGES = ID_ORIENT_MAX;
+const ID_FIXEDWIDTH = ID_SHOW_IMAGES + 1;
+const ID_MULTI = ID_FIXEDWIDTH + 1;
+const ID_NOPAGETHEME = ID_MULTI + 1;
+const ID_BUTTONBAR = ID_NOPAGETHEME + 1;
+const ID_HORZ_LAYOUT = ID_BUTTONBAR + 1;
+
+const ID_ADD_PAGE = ID_HORZ_LAYOUT + 1;
+const ID_ADD_PAGE_NO_SELECT = ID_ADD_PAGE + 1;
+const ID_INSERT_PAGE = ID_ADD_PAGE_NO_SELECT + 1;
+const ID_DELETE_CUR_PAGE = ID_INSERT_PAGE + 1;
+const ID_DELETE_LAST_PAGE = ID_DELETE_CUR_PAGE + 1;
+const ID_NEXT_PAGE = ID_DELETE_LAST_PAGE + 1;
+const ID_ADD_PAGE_BEFORE = ID_NEXT_PAGE + 1;
+const ID_ADD_SUB_PAGE = ID_ADD_PAGE_BEFORE + 1;
+const ID_CHANGE_SELECTION = ID_ADD_SUB_PAGE + 1;
+const ID_SET_SELECTION = ID_CHANGE_SELECTION + 1;
+const ID_GET_PAGE_SIZE = ID_SET_SELECTION + 1;
+const ID_SET_PAGE_SIZE = ID_GET_PAGE_SIZE + 1;
+
+const ID_CONTEXT_HELP = ID_SET_PAGE_SIZE + 1;
+const ID_HITTEST = ID_CONTEXT_HELP + 1;
+
+//-----------------------------------------------------------------------------
+// Frame state (MyFrame member fields)
+//-----------------------------------------------------------------------------
+
+interface FrameState
+{
+    readonly frame: wxFrame;
+    readonly panel: wxPanel;
+    readonly sizerFrame: wxBoxSizer;
+    readonly text: wxTextCtrl;
+    readonly logTarget: wxLogTextCtrl;
+    readonly logOldTarget: Pointer;
+    readonly images: wxBitmapBundleArray | null;
+
+    book: Book | null;
+
+    // Sample setup
+    type: number;
+    orient: number;
+    chkShowImages: boolean;
+    fixedWidth: boolean;
+    multi: boolean;
+    noPageTheme: boolean;
+    buttonBar: boolean;
+    horzLayout: boolean;
+
+    // Function-local statics of the C++ handlers
+    pageAdded: number;
+    pageAddedNoSelect: number;
+    pageInserted: number;
+    subPageAdded: number;
+    pageBeforeAdded: number;
+
+    // MyFrame::OnIdle() statics
+    idlePages: number;
+    idleSel: number;
+    idleBook: Book | null;
+
+    // MyFrame::OnBookCtrl() static
+    num: number;
+
+    readonly callbacks: Callback[];
+    readonly closures: wxClosure[];
+}
+
+/** Call fn with a temporary wxString and release it on every path. */
+function withString(text: string, fn: (ptr: Pointer) => void): void
+{
+    const value = createWxString(text);
+    try
+    {
+        fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** wxLogMessage(message) */
+function logMessage(message: string): void
+{
+    withString(message, (text) => LogMessage(text));
+}
+
+/** wxLogError(message) */
+function logError(message: string): void
+{
+    withString(message, (text) => LogError(text));
+}
+
+/** SetTitle(title) */
+function setFrameTitle(state: FrameState, title: string): void
+{
+    withString(title, (text) => state.frame.SetTitle(text));
+}
+
+//-----------------------------------------------------------------------------
+// Menu construction (MyFrame::MyFrame)
+//-----------------------------------------------------------------------------
+
+function appendItem(menu: wxMenu, id: number, label: string, help: string | null): void
+{
+    const text = createWxString(label);
+    let helpString: wxString | null = null;
+    if (help !== null)
+    {
+        helpString = createWxString(help);
+    }
+
+    try
+    {
+        menu.Append(id, text.ptr, helpString ? helpString.ptr : null, false);
+    }
+    finally
+    {
+        text.Delete();
+        if (helpString)
+        {
+            helpString.Delete();
+        }
+    }
+}
+
+function appendRadioItem(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (text) => menu.AppendRadioItem(id, text, null));
+}
+
+function appendCheckItem(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (text) => menu.AppendCheckItem(id, text, null));
+}
+
+function appendSubMenu(
+    menu: wxMenu,
+    label: string,
+    submenu: wxMenu,
+    help: string | null,
+): void
+{
+    const text = createWxString(label);
+    let helpString: wxString | null = null;
+    if (help !== null)
+    {
+        helpString = createWxString(help);
+    }
+
+    try
+    {
+        menu.AppendSub(ID_ANY, text.ptr, submenu.ptr, helpString ? helpString.ptr : null);
+    }
+    finally
+    {
+        text.Delete();
+        if (helpString)
+        {
+            helpString.Delete();
+        }
+    }
+}
+
+/** Builds the whole menu bar; returns null when a menu could not be created. */
+function createMenuBar(type: number, showImages: boolean): wxMenuBar | null
+{
+    const emptyTitle = createWxString("");
+
+    const menuType = createWxMenu(emptyTitle.ptr, 0n);
+    const menuOrient = createWxMenu(emptyTitle.ptr, 0n);
+    const menuStyle = createWxMenu(emptyTitle.ptr, 0n);
+    const menuPageOperations = createWxMenu(emptyTitle.ptr, 0n);
+    const menuOperations = createWxMenu(emptyTitle.ptr, 0n);
+    const menuFile = createWxMenu(emptyTitle.ptr, 0n);
+    emptyTitle.Delete();
+
+    if (!menuType || !menuOrient || !menuStyle || !menuPageOperations ||
+            !menuOperations || !menuFile)
+    {
+        return null;
+    }
+
+    appendRadioItem(menuType, ID_BOOK_NOTEBOOK, "&Notebook\tCtrl-1");
+    appendRadioItem(menuType, ID_BOOK_LISTBOOK, "&Listbook\tCtrl-2");
+    appendRadioItem(menuType, ID_BOOK_CHOICEBOOK, "&Choicebook\tCtrl-3");
+    appendRadioItem(menuType, ID_BOOK_TREEBOOK, "&Treebook\tCtrl-4");
+    appendRadioItem(menuType, ID_BOOK_TOOLBOOK, "T&oolbook\tCtrl-5");
+    appendRadioItem(menuType, ID_BOOK_AUINOTEBOOK, "&AuiNotebook\tCtrl-6");
+    appendRadioItem(menuType, ID_BOOK_SIMPLEBOOK, "&Simple book\tCtrl-7");
+    menuType.Check(ID_BOOK_NOTEBOOK + type, true);
+
+    appendRadioItem(menuOrient, ID_ORIENT_DEFAULT, "&Default\tAlt-0");
+    appendRadioItem(menuOrient, ID_ORIENT_TOP, "&Top\tAlt-1");
+    appendRadioItem(menuOrient, ID_ORIENT_BOTTOM, "&Bottom\tAlt-2");
+    appendRadioItem(menuOrient, ID_ORIENT_LEFT, "&Left\tAlt-3");
+    appendRadioItem(menuOrient, ID_ORIENT_RIGHT, "&Right\tAlt-4");
+
+    appendCheckItem(menuStyle, ID_FIXEDWIDTH, "&Fixed Width (wxNotebook)");
+    appendCheckItem(menuStyle, ID_MULTI, "&Multiple lines (wxNotebook)");
+    appendCheckItem(menuStyle, ID_NOPAGETHEME, "&No Page Theme (wxNotebook)");
+    appendCheckItem(menuStyle, ID_BUTTONBAR, "&Button Bar (wxToolbook)");
+    appendCheckItem(menuStyle, ID_HORZ_LAYOUT, "&Horizontal layout (wxToolbook)");
+
+    appendItem(menuPageOperations, ID_ADD_PAGE, "&Add page\tAlt-A", null);
+    appendItem(
+        menuPageOperations, ID_ADD_PAGE_NO_SELECT,
+        "&Add page (don't select)\tAlt-B", null,
+    );
+    appendItem(menuPageOperations, ID_INSERT_PAGE, "&Insert page\tAlt-I", null);
+    appendItem(
+        menuPageOperations, ID_DELETE_CUR_PAGE,
+        "&Delete current page\tAlt-D", null,
+    );
+    appendItem(
+        menuPageOperations, ID_DELETE_LAST_PAGE,
+        "D&elete last page\tAlt-L", null,
+    );
+    appendItem(menuPageOperations, ID_NEXT_PAGE, "&Next page\tAlt-N", null);
+
+    menuPageOperations.AppendSeparator();
+    appendItem(
+        menuPageOperations, ID_ADD_PAGE_BEFORE,
+        "Insert page &before\tAlt-B", null,
+    );
+    appendItem(menuPageOperations, ID_ADD_SUB_PAGE, "Add s&ub page\tAlt-U", null);
+
+    menuPageOperations.AppendSeparator();
+    appendItem(
+        menuPageOperations, ID_CHANGE_SELECTION,
+        "&Change selection to 0\tCtrl-0", null,
+    );
+    appendItem(
+        menuPageOperations, ID_SET_SELECTION,
+        "&Set selection to 0\tShift-Ctrl-0", null,
+    );
+
+    menuPageOperations.AppendSeparator();
+    appendItem(menuPageOperations, ID_GET_PAGE_SIZE, "Sho&w page size", null);
+    appendItem(menuPageOperations, ID_SET_PAGE_SIZE, "Set &page size", null);
+
+    appendItem(menuOperations, ID_CONTEXT_HELP, "&Context help\tCtrl-F1", null);
+    appendItem(menuOperations, ID_HITTEST, "&Hit test\tCtrl-H", null);
+
+    appendSubMenu(menuFile, "&Type", menuType, "Type of control");
+    appendSubMenu(menuFile, "&Orientation", menuOrient, "Orientation of control");
+    appendCheckItem(menuFile, ID_SHOW_IMAGES, "&Show images\tAlt-S");
+    appendSubMenu(menuFile, "&Style", menuStyle, "Style of control");
+    menuFile.AppendSeparator();
+    appendItem(menuFile, ID_EXIT, "E&xit", "Quits the application");
+    menuFile.Check(ID_SHOW_IMAGES, showImages);
+
+    const menuBar = createWxMenuBar(0);
+    if (!menuBar)
+    {
+        return null;
+    }
+
+    withString("&File", (label) => menuBar.Append(menuFile.ptr, label));
+    withString("&Pages", (label) => menuBar.Append(menuPageOperations.ptr, label));
+    withString("&Operations", (label) => menuBar.Append(menuOperations.ptr, label));
+
+    return menuBar;
+}
+
+//-----------------------------------------------------------------------------
+// Book control handling (MyFrame::RecreateBook)
+//-----------------------------------------------------------------------------
+
+function recreateBook(state: FrameState): void
+{
+    let flags: number;
+    switch (state.orient)
+    {
+        case ID_ORIENT_TOP:
+            flags = expNB_TOP();
+            break;
+
+        case ID_ORIENT_BOTTOM:
+            flags = expNB_BOTTOM();
+            break;
+
+        case ID_ORIENT_LEFT:
+            flags = expNB_LEFT();
+            break;
+
+        case ID_ORIENT_RIGHT:
+            flags = expNB_RIGHT();
+            break;
+
+        default:
+            // wxBK_DEFAULT, shared by wxNB_DEFAULT, wxLB_DEFAULT, wxCHB_DEFAULT
+            // and wxTBK_DEFAULT.
+            flags = 0;
+    }
+
+    if (state.fixedWidth && state.type === BOOK_NOTEBOOK)
+    {
+        flags |= NB_FIXEDWIDTH;
+    }
+    if (state.multi && state.type === BOOK_NOTEBOOK)
+    {
+        flags |= NB_MULTILINE;
+    }
+    if (state.noPageTheme && state.type === BOOK_NOTEBOOK)
+    {
+        flags |= expNB_NOPAGETHEME();
+    }
+    if (state.buttonBar && state.type === BOOK_TOOLBOOK)
+    {
+        flags |= expTBK_BUTTONBAR();
+    }
+    if (state.horzLayout && state.type === BOOK_TOOLBOOK)
+    {
+        flags |= expTBK_HORZ_LAYOUT();
+    }
+
+    const oldBook = state.book;
+    state.book = null;
+
+    const book = createBook(state.panel.ptr, state.type, flags);
+    if (!book)
+    {
+        return;
+    }
+
+    book.hide();
+
+    // wxToolbook doesn't work without icons so always use them for it.
+    const useImages = state.chkShowImages || state.type === BOOK_TOOLBOOK;
+    if (useImages && state.images)
+    {
+        book.setImages(state.images.ptr);
+    }
+
+    if (oldBook)
+    {
+        // we only need the old treebook if we're recreating another treebook
+        // (wxDynamicCast(oldBook, wxTreebook) in the C++ original)
+        const tbkOld = state.type === BOOK_TREEBOOK &&
+                oldBook.kind === BOOK_TREEBOOK
+            ? oldBook
+            : null;
+
+        const count = oldBook.getPageCount();
+        for (let n = 0; n < count; n++)
+        {
+            const str = oldBook.getPageText(n);
+
+            const page = createPage(book, str);
+            if (!page)
+            {
+                continue;
+            }
+
+            // treebook complication: need to account for possible parent page
+            if (tbkOld)
+            {
+                const parent = tbkOld.getPageParent(n);
+                if (parent !== NOT_FOUND)
+                {
+                    insertSubPageWithLabel(book, parent, page, str, false);
+
+                    // skip adding it again below
+                    continue;
+                }
+            }
+
+            addPageWithLabel(book, page, str, false);
+        }
+
+        const sel = oldBook.getSelection();
+        if (sel !== NOT_FOUND)
+        {
+            book.setSelection(sel);
+        }
+
+        state.sizerFrame.DetachWindow(oldBook.ptr);
+        oldBook.destroy();
+    }
+    else // no old book
+    {
+        createInitialPages(book);
+    }
+
+    state.book = book;
+
+    state.sizerFrame.InsertWindow(
+        0, book.ptr, 5, EXPAND | ALL, fromDIP(state.panel.ptr, 5), null,
+    );
+
+    state.sizerFrame.ShowWindow(book.ptr, true, false);
+    state.sizerFrame.Layout();
+}
+
+/** Creates the four 32x32 page images (wxArtProvider::GetBitmapBundle()). */
+function createBookImages(): wxBitmapBundleArray | null
+{
+    const images = createWxBitmapBundleArray();
+    if (!images)
+    {
+        return null;
+    }
+
+    const artIds: Pointer[] = [ART_INFORMATION, ART_QUESTION, ART_WARNING, ART_ERROR];
+    for (const id of artIds)
+    {
+        const bundlePtr = wxArtProvider_GetBitmapBundle(id, ART_OTHER, 32, 32);
+        if (!bundlePtr)
+        {
+            continue;
+        }
+
+        // wxBitmapBundleArray::Add() copies the bundle into the vector.
+        images.Add(bundlePtr);
+
+        const bundle = new wxBitmapBundle(bundlePtr);
+        bundle.Delete();
+    }
+
+    return images;
+}
+
+//-----------------------------------------------------------------------------
+// Event handlers
+//-----------------------------------------------------------------------------
+
+/** MyFrame::OnHitTest() */
+function addFlagStrIfFlagPresent(
+    flagStr: string,
+    flags: number,
+    flag: number,
+    flagName: string,
+): string
+{
+    if ((flags & flag) === flag)
+    {
+        if (flagStr !== "")
+        {
+            flagStr += " | ";
+        }
+        flagStr += flagName;
+    }
+    return flagStr;
+}
+
+function onHitTest(state: FrameState): void
+{
+    const book = state.book;
+    if (!book)
+    {
+        return;
+    }
+
+    const pointPtr = kwxGetMousePosition();
+    if (!pointPtr)
+    {
+        return;
+    }
+
+    const point = new wxPoint(pointPtr);
+    const screenX = point.GetX();
+    const screenY = point.GetY();
+    point.Delete();
+
+    let clientX = screenX;
+    let clientY = screenY;
+    const clientPtr = lib.symbols.wxWindow_ScreenToClient2(
+        book.ptr, screenX, screenY,
+    );
+    if (clientPtr)
+    {
+        const client = new wxPoint(clientPtr);
+        clientX = client.GetX();
+        clientY = client.GetY();
+        client.Delete();
+    }
+
+    const hit = book.hitTest(clientX, clientY);
+
+    let flagsStr = "";
+    flagsStr = addFlagStrIfFlagPresent(
+        flagsStr, hit.flags, BK_HITTEST_NOWHERE, "wxBK_HITTEST_NOWHERE",
+    );
+    flagsStr = addFlagStrIfFlagPresent(
+        flagsStr, hit.flags, BK_HITTEST_ONICON, "wxBK_HITTEST_ONICON",
+    );
+    flagsStr = addFlagStrIfFlagPresent(
+        flagsStr, hit.flags, BK_HITTEST_ONLABEL, "wxBK_HITTEST_ONLABEL",
+    );
+    flagsStr = addFlagStrIfFlagPresent(
+        flagsStr, hit.flags, BK_HITTEST_ONITEM, "wxBK_HITTEST_ONITEM",
+    );
+    flagsStr = addFlagStrIfFlagPresent(
+        flagsStr, hit.flags, BK_HITTEST_ONPAGE, "wxBK_HITTEST_ONPAGE",
+    );
+
+    logMessage(
+        "HitTest at (" + screenX + "," + screenY + "): " + hit.page +
+        ": " + flagsStr,
+    );
+}
+
+/** MyFrame::OnType() */
+function onType(state: FrameState, id: number): void
+{
+    state.type = id - ID_BOOK_NOTEBOOK;
+
+    if (state.book)
+    {
+        state.sizerFrame.HideWindow(state.book.ptr);
+    }
+
+    recreateBook(state);
+}
+
+/** MyFrame::OnOrient() */
+function onOrient(state: FrameState, id: number): void
+{
+    state.orient = id;
+    recreateBook(state);
+    state.sizerFrame.Layout();
+}
+
+/** MyFrame::OnShowImages() */
+function onShowImages(state: FrameState, checked: boolean): void
+{
+    state.chkShowImages = checked;
+    recreateBook(state);
+    state.sizerFrame.Layout();
+}
+
+/** MyFrame::OnStyle() */
+function onStyle(state: FrameState, id: number, checked: boolean): void
+{
+    switch (id)
+    {
+        case ID_FIXEDWIDTH:
+            state.fixedWidth = checked;
+            break;
+
+        case ID_MULTI:
+            state.multi = checked;
+            break;
+
+        case ID_NOPAGETHEME:
+            state.noPageTheme = checked;
+            break;
+
+        case ID_BUTTONBAR:
+            state.buttonBar = checked;
+            break;
+
+        case ID_HORZ_LAYOUT:
+            state.horzLayout = checked;
+            break;
+
+        default:
+            break; // avoid compiler warning
+    }
+
+    recreateBook(state);
+    state.sizerFrame.Layout();
+}
+
+/** MyFrame::OnAddPage() */
+function onAddPage(state: FrameState): void
+{
+    const book = state.book;
+    if (!book)
+    {
+        return;
+    }
+
+    const page = createNewPage(book);
+    if (!page)
+    {
+        return;
+    }
+
+    state.pageAdded += 1;
+    addPageWithLabel(book, page, ADDED_PAGE_NAME + state.pageAdded, true);
+}
+
+/** MyFrame::OnAddPageNoSelect() */
+function onAddPageNoSelect(state: FrameState): void
+{
+    const book = state.book;
+    if (!book)
+    {
+        return;
+    }
+
+    const page = createNewPage(book);
+    if (!page)
+    {
+        return;
+    }
+
+    state.pageAddedNoSelect += 1;
+    addPageWithLabel(book, page, ADDED_PAGE_NAME + state.pageAddedNoSelect, false);
+}
+
+/** MyFrame::OnInsertPage() */
+function onInsertPage(state: FrameState): void
+{
+    const book = state.book;
+    if (!book)
+    {
+        return;
+    }
+
+    const panel = createUserPage(book);
+    if (!panel)
+    {
+        return;
+    }
+
+    state.pageInserted += 1;
+    insertPageWithLabel(
+        book, 0, panel, INSERTED_PAGE_NAME + state.pageInserted, false,
+    );
+
+    book.setSelection(0);
+}
+
+/** MyFrame::OnDeleteCurPage() */
+function onDeleteCurPage(state: FrameState): void
+{
+    const book = state.book;
+    if (!book)
+    {
+        return;
+    }
+
+    const sel = book.getSelection();
+    if (sel !== NOT_FOUND)
+    {
+        book.deletePage(sel);
+    }
+}
+
+/** MyFrame::OnDeleteLastPage() */
+function onDeleteLastPage(state: FrameState): void
+{
+    const book = state.book;
+    if (!book)
+    {
+        return;
+    }
+
+    const page = book.getPageCount();
+    if (page !== 0)
+    {
+        book.deletePage(page - 1);
+    }
+}
+
+/** MyFrame::OnNextPage() */
+function onNextPage(state: FrameState): void
+{
+    if (state.book)
+    {
+        state.book.advanceSelection();
+    }
+}
+
+/** MyFrame::OnChangeSelection() */
+function onChangeSelection(state: FrameState): void
+{
+    if (state.book)
+    {
+        state.book.changeSelection(0);
+    }
+}
+
+/** MyFrame::OnSetSelection() */
+function onSetSelection(state: FrameState): void
+{
+    if (state.book)
+    {
+        state.book.setSelection(0);
+    }
+}
+
+/** MyFrame::OnGetPageSize() */
+function onGetPageSize(state: FrameState): void
+{
+    const book = state.book;
+    if (!book)
+    {
+        return;
+    }
+
+    const pagePtr = book.getPage(0);
+    if (!pagePtr)
+    {
+        return;
+    }
+
+    const sizePage = windowSize(pagePtr);
+    const sizeBook = book.getSize();
+
+    logMessage(
+        "Page size is (" + sizePage.width + ", " + sizePage.height +
+        "), book size (" + sizeBook.width + ", " + sizeBook.height + ")",
+    );
+}
+
+/** MyFrame::OnSetPageSize() */
+function onSetPageSize(state: FrameState): void
+{
+    const book = state.book;
+    if (!book)
+    {
+        return;
+    }
+
+    book.setPageSize(300, 300);
+    logMessage("Page size set to (300, 300)");
+}
+
+/** MyFrame::OnAddSubPage() */
+function onAddSubPage(state: FrameState): void
+{
+    const book = state.book;
+    if (!book || book.kind !== BOOK_TREEBOOK)
+    {
+        return;
+    }
+
+    const selPos = book.getSelection();
+    if (selPos === NOT_FOUND)
+    {
+        logError("Select the parent page first!");
+        return;
+    }
+
+    const page = createNewPage(book);
+    if (!page)
+    {
+        return;
+    }
+
+    state.subPageAdded += 1;
+    insertSubPageWithLabel(
+        book, selPos, page, ADDED_SUB_PAGE_NAME + state.subPageAdded, true,
+    );
+}
+
+/** MyFrame::OnAddPageBefore() */
+function onAddPageBefore(state: FrameState): void
+{
+    const book = state.book;
+    if (!book)
+    {
+        return;
+    }
+
+    const selPos = book.getSelection();
+    if (selPos === NOT_FOUND)
+    {
+        logError("Select the parent page first!");
+        return;
+    }
+
+    const page = createNewPage(book);
+    if (!page)
+    {
+        return;
+    }
+
+    state.pageBeforeAdded += 1;
+    insertPageWithLabel(
+        book, selPos, page,
+        ADDED_PAGE_NAME_BEFORE + state.pageBeforeAdded, true,
+    );
+}
+
+/** MyFrame::OnContextHelp() — `wxContextHelp ch(this);` */
+function onContextHelp(state: FrameState): void
+{
+    const contextHelp = createWxContextHelp(state.frame.ptr, true);
+    if (contextHelp)
+    {
+        contextHelp.Delete();
+    }
+}
+
+/** MyFrame::OnIdle() */
+function onIdle(state: FrameState): void
+{
+    const currBook = state.book;
+
+    const nPages = currBook ? currBook.getPageCount() : 0;
+    const nSel = currBook ? currBook.getSelection() : NOT_FOUND;
+
+    if (nPages !== state.idlePages || nSel !== state.idleSel ||
+            state.idleBook !== currBook)
+    {
+        state.idlePages = nPages;
+        state.idleSel = nSel;
+        state.idleBook = currBook;
+
+        const selection = nSel === NOT_FOUND ? "not found" : String(nSel);
+
+        setFrameTitle(
+            state,
+            "Notebook and friends (" + nPages + " pages, selection: " +
+            selection + ")",
+        );
+    }
+}
+
+/** One entry of the EventInfo table in MyFrame::OnBookCtrl(). */
+const BOOK_EVENT_INFO: Array<{
+    changed: number;
+    changing: number;
+    name: string;
+}> = [
+    {
+        changed: EVT_NOTEBOOK_PAGE_CHANGED,
+        changing: EVT_NOTEBOOK_PAGE_CHANGING,
+        name: "wxNotebook",
+    },
+    {
+        changed: EVT_LISTBOOK_PAGE_CHANGED,
+        changing: EVT_LISTBOOK_PAGE_CHANGING,
+        name: "wxListbook",
+    },
+    {
+        changed: EVT_CHOICEBOOK_PAGE_CHANGED,
+        changing: EVT_CHOICEBOOK_PAGE_CHANGING,
+        name: "wxChoicebook",
+    },
+    {
+        changed: EVT_TREEBOOK_PAGE_CHANGED,
+        changing: EVT_TREEBOOK_PAGE_CHANGING,
+        name: "wxTreebook",
+    },
+    {
+        changed: EVT_TOOLBOOK_PAGE_CHANGED,
+        changing: EVT_TOOLBOOK_PAGE_CHANGING,
+        name: "wxToolbook",
+    },
+    {
+        changed: EVT_AUINOTEBOOK_PAGE_CHANGED,
+        changing: EVT_AUINOTEBOOK_PAGE_CHANGING,
+        name: "wxAuiNotebook",
+    },
+];
+
+/** MyFrame::OnBookCtrl() */
+function onBookCtrl(state: FrameState, event: wxBookCtrlEvent): void
+{
+    let nameEvent = "";
+    let nameControl = "";
+    let veto = "";
+    const eventType = event.GetEventType();
+    const eventObject = event.GetEventObject();
+
+    for (const entry of BOOK_EVENT_INFO)
+    {
+        if (eventType === entry.changed)
+        {
+            nameEvent = "Changed";
+        }
+        else if (eventType === entry.changing)
+        {
+            const idx = event.GetOldSelection();
+
+            if (idx !== NOT_FOUND && eventObject)
+            {
+                const oldPageText = readAndDeleteWxString(
+                    lib.symbols.wxBookCtrlBase_GetPageText(eventObject, idx),
+                );
+
+                if (oldPageText === VETO_PAGE_NAME)
+                {
+                    const answer = showVetoQuestion(state);
+                    if (answer !== YES)
+                    {
+                        event.Veto();
+                        veto = " (vetoed)";
+                    }
+                }
+            }
+
+            nameEvent = "Changing";
+        }
+        else // skip end of the loop
+        {
+            continue;
+        }
+
+        nameControl = entry.name;
+        break;
+    }
+
+    state.num += 1;
+
+    const currentSel = eventObject
+        ? lib.symbols.wxBookCtrlBase_GetSelection(eventObject)
+        : NOT_FOUND;
+
+    logMessage(
+        "Event #" + state.num + ": " + nameControl + ": " + nameEvent +
+        " (" + eventType + ") new sel " + event.GetSelection() +
+        ", old " + event.GetOldSelection() + ", current " + currentSel + veto,
+    );
+
+    state.text.SetInsertionPointEnd();
+}
+
+/** wxMessageBox(...) — "Are you sure you want to leave this page?" */
+function showVetoQuestion(state: FrameState): number
+{
+    const message = createWxString(
+        "Are you sure you want to leave this page?\n" +
+        "(This demonstrates veto-ing)",
+    );
+    const caption = createWxString("Notebook sample");
+
+    try
+    {
+        return kwxMessageBox(
+            message.ptr, caption.ptr, ICON_QUESTION | YES_NO,
+            state.frame.ptr, -1, -1,
+        );
+    }
+    finally
+    {
+        message.Delete();
+        caption.Delete();
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Event connections (wxBEGIN_EVENT_TABLE ... wxEND_EVENT_TABLE)
+//-----------------------------------------------------------------------------
+
+/**
+ * Registers one menu handler for every menu command. The C++ table uses
+ * EVT_MENU_RANGE / EVT_MENU; connecting each concrete ID with EVT_MENU is
+ * equivalent because the sample's ranges contain only menu commands.
+ */
+function connectMenuEvents(state: FrameState, callback: Callback): void
+{
+    const closure = createWxClosure(callback.pointer, null);
+    if (!closure)
+    {
+        return;
+    }
+    state.closures.push(closure);
+
+    const ids: number[] = [
+        ID_BOOK_NOTEBOOK, ID_BOOK_LISTBOOK, ID_BOOK_CHOICEBOOK,
+        ID_BOOK_TREEBOOK, ID_BOOK_TOOLBOOK, ID_BOOK_AUINOTEBOOK,
+        ID_BOOK_SIMPLEBOOK,
+        ID_ORIENT_DEFAULT, ID_ORIENT_TOP, ID_ORIENT_BOTTOM,
+        ID_ORIENT_LEFT, ID_ORIENT_RIGHT,
+        ID_SHOW_IMAGES,
+        ID_FIXEDWIDTH, ID_MULTI, ID_NOPAGETHEME, ID_BUTTONBAR, ID_HORZ_LAYOUT,
+        ID_EXIT,
+        ID_ADD_PAGE, ID_ADD_PAGE_NO_SELECT, ID_INSERT_PAGE,
+        ID_DELETE_CUR_PAGE, ID_DELETE_LAST_PAGE, ID_NEXT_PAGE,
+        ID_CHANGE_SELECTION, ID_SET_SELECTION,
+        ID_GET_PAGE_SIZE, ID_SET_PAGE_SIZE,
+        ID_ADD_PAGE_BEFORE, ID_ADD_SUB_PAGE,
+        ID_CONTEXT_HELP, ID_HITTEST,
+    ];
+
+    for (const id of ids)
+    {
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, id, id, EVT_MENU, closure.ptr,
+        );
+    }
+}
+
+/** Registers the book-control events (EVT_*BOOK_PAGE_CHANGED/CHANGING). */
+function connectBookEvents(
+    state: FrameState,
+    callback: Callback,
+): void
+{
+    const closure = createWxClosure(callback.pointer, null);
+    if (!closure)
+    {
+        return;
+    }
+    state.closures.push(closure);
+
+    for (const entry of BOOK_EVENT_INFO)
+    {
+        for (const type of [entry.changed, entry.changing])
+        {
+            lib.symbols.wxEvtHandler_Connect(
+                state.frame.ptr, ID_ANY, ID_ANY, type, closure.ptr,
+            );
+        }
+    }
+}
+
+/** Connects the two EVT_UPDATE_UI items of EVT_UPDATE_UI_RANGE(). */
+function connectUpdateUIEvents(state: FrameState, callback: Callback): void
+{
+    const closure = createWxClosure(callback.pointer, null);
+    if (!closure)
+    {
+        return;
+    }
+    state.closures.push(closure);
+
+    for (const id of [ID_ADD_PAGE_BEFORE, ID_ADD_SUB_PAGE])
+    {
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, id, id, EVT_UPDATE_UI, closure.ptr,
+        );
+    }
+}
+
+function connectNotebookEvents(state: FrameState): void
+{
+    // EVT_MENU_RANGE / EVT_MENU handlers
+    const menuCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+
+            const event = new wxCommandEvent(eventPtr);
+            const checked = event.IsChecked();
+            const id = event.GetId();
+
+            switch (id)
+            {
+                case ID_BOOK_NOTEBOOK:
+                case ID_BOOK_LISTBOOK:
+                case ID_BOOK_CHOICEBOOK:
+                case ID_BOOK_TREEBOOK:
+                case ID_BOOK_TOOLBOOK:
+                case ID_BOOK_AUINOTEBOOK:
+                case ID_BOOK_SIMPLEBOOK:
+                    onType(state, id);
+                    break;
+
+                case ID_ORIENT_DEFAULT:
+                case ID_ORIENT_TOP:
+                case ID_ORIENT_BOTTOM:
+                case ID_ORIENT_LEFT:
+                case ID_ORIENT_RIGHT:
+                    onOrient(state, id);
+                    break;
+
+                case ID_SHOW_IMAGES:
+                    onShowImages(state, checked);
+                    break;
+
+                case ID_FIXEDWIDTH:
+                case ID_MULTI:
+                case ID_NOPAGETHEME:
+                case ID_BUTTONBAR:
+                case ID_HORZ_LAYOUT:
+                    onStyle(state, id, checked);
+                    break;
+
+                case ID_EXIT:
+                    state.frame.Close(false);
+                    break;
+
+                case ID_ADD_PAGE:
+                    onAddPage(state);
+                    break;
+
+                case ID_ADD_PAGE_NO_SELECT:
+                    onAddPageNoSelect(state);
+                    break;
+
+                case ID_INSERT_PAGE:
+                    onInsertPage(state);
+                    break;
+
+                case ID_DELETE_CUR_PAGE:
+                    onDeleteCurPage(state);
+                    break;
+
+                case ID_DELETE_LAST_PAGE:
+                    onDeleteLastPage(state);
+                    break;
+
+                case ID_NEXT_PAGE:
+                    onNextPage(state);
+                    break;
+
+                case ID_CHANGE_SELECTION:
+                    onChangeSelection(state);
+                    break;
+
+                case ID_SET_SELECTION:
+                    onSetSelection(state);
+                    break;
+
+                case ID_GET_PAGE_SIZE:
+                    onGetPageSize(state);
+                    break;
+
+                case ID_SET_PAGE_SIZE:
+                    onSetPageSize(state);
+                    break;
+
+                case ID_ADD_PAGE_BEFORE:
+                    onAddPageBefore(state);
+                    break;
+
+                case ID_ADD_SUB_PAGE:
+                    onAddSubPage(state);
+                    break;
+
+                case ID_CONTEXT_HELP:
+                    onContextHelp(state);
+                    break;
+
+                case ID_HITTEST:
+                    onHitTest(state);
+                    break;
+
+                default:
+                    break;
+            }
+        },
+    );
+    state.callbacks.push(menuCallback);
+    connectMenuEvents(state, menuCallback);
+
+    // EVT_NOTEBOOK_PAGE_* / EVT_LISTBOOK_PAGE_* / ... handlers
+    const bookCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onBookCtrl(state, new wxBookCtrlEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(bookCallback);
+    connectBookEvents(state, bookCallback);
+
+    // EVT_UPDATE_UI_RANGE(ID_ADD_PAGE_BEFORE, ID_ADD_SUB_PAGE)
+    const updateUICallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const event = new wxUpdateUIEvent(eventPtr);
+            event.Enable(state.type === BOOK_TREEBOOK);
+        },
+    );
+    state.callbacks.push(updateUICallback);
+    connectUpdateUIEvents(state, updateUICallback);
+
+    // EVT_IDLE
+    const idleCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onIdle(state);
+        },
+    );
+    state.callbacks.push(idleCallback);
+    const idleClosure = createWxClosure(idleCallback.pointer, null);
+    if (idleClosure)
+    {
+        state.closures.push(idleClosure);
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, ID_ANY, ID_ANY, EVT_IDLE, idleClosure.ptr,
+        );
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Frame construction (MyFrame::MyFrame)
+//-----------------------------------------------------------------------------
+
+function createNotebookFrame(): FrameState | null
+{
+    const title = createWxString("wxWidgets book controls sample");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+
+    if (!frame)
+    {
+        return null;
+    }
+
+    frame.SetExtraStyle(BigInt(FRAME_EX_CONTEXTHELP));
+
+    // SetIcon(wxICON(sample)): the C++ sample compiles sample.ico (Windows) or
+    // ../sample.xpm (other platforms) into the executable; the same XPM artwork
+    // is loaded from disk here.
+    const iconPath = createWxString(samplePath("sample.xpm"));
+    const icon = createWxIconLoad(
+        iconPath.ptr, BigInt(BITMAP_TYPE_XPM), -1, -1,
+    );
+    iconPath.Delete();
+    if (icon)
+    {
+        if (icon.IsOk())
+        {
+            frame.SetIcon(icon.ptr);
+        }
+        icon.Delete();
+    }
+
+    // Initial values of the sample setup fields; the menu bar is built first,
+    // exactly like the C++ constructor does before creating the controls.
+    const initialType = BOOK_NOTEBOOK;
+    const initialShowImages = true;
+
+    // menu of the sample
+    const menuBar = createMenuBar(initialType, initialShowImages);
+    if (menuBar)
+    {
+        frame.SetMenuBar(menuBar.ptr);
+    }
+
+    const panel = createWxPanel(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL,
+    );
+    if (!panel)
+    {
+        return null;
+    }
+
+    const empty = createWxString("");
+    const text = createWxTextCtrl(
+        panel.ptr, ID_ANY, empty.ptr, -1, -1, -1, -1,
+        BigInt(TE_MULTILINE | TE_READONLY),
+    );
+    empty.Delete();
+
+    if (!text)
+    {
+        return null;
+    }
+
+    const logTarget = createWxLogTextCtrl(text.ptr);
+    if (!logTarget)
+    {
+        return null;
+    }
+
+    // m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text))
+    const logOldTarget = wxLog_SetActiveTarget(logTarget.ptr);
+
+    const sizerFrame = createWxBoxSizer(VERTICAL);
+    if (!sizerFrame)
+    {
+        return null;
+    }
+
+    const state: FrameState = {
+        frame,
+        panel,
+        sizerFrame,
+        text,
+        logTarget,
+        logOldTarget,
+        images: createBookImages(),
+        book: null,
+
+        // m_type = Type_Notebook (the first enabled book control)
+        type: initialType,
+        orient: ID_ORIENT_DEFAULT,
+        chkShowImages: initialShowImages,
+        fixedWidth: false,
+        multi: false,
+        noPageTheme: false,
+        buttonBar: false,
+        horzLayout: false,
+
+        pageAdded: 0,
+        pageAddedNoSelect: 0,
+        pageInserted: 0,
+        subPageAdded: 0,
+        pageBeforeAdded: 0,
+
+        idlePages: NOT_FOUND,
+        idleSel: NOT_FOUND,
+        idleBook: null,
+
+        num: 0,
+
+        callbacks: [],
+        closures: [],
+    };
+
+    // sizerFrame->Add(m_text, wxSizerFlags(1).Expand())
+    sizerFrame.AddWindow(text.ptr, 1, EXPAND, 0, null);
+
+    recreateBook(state);
+
+    panel.SetSizer(sizerFrame.ptr, true);
+    panel.Layout();
+
+    const sizer = createWxBoxSizer(VERTICAL);
+    if (!sizer)
+    {
+        return null;
+    }
+
+    sizer.AddWindow(panel.ptr, 1, EXPAND, 0, null);
+    frame.SetSizerAndFit(sizer.ptr, true);
+
+    return state;
+}
+
+/** `delete wxLog::SetActiveTarget(m_logTargetOld)` from ~MyFrame(). */
+function restoreLogTarget(state: FrameState): void
+{
+    // wxLog::SetActiveTarget() is static: it is exposed as a free function
+    // (wxLog_gen.ts itself has no SetActiveTarget method).
+    wxLog_SetActiveTarget(state.logOldTarget);
+
+    state.logTarget.Delete();
+}
+
+//-----------------------------------------------------------------------------
+// wxApp::OnInit / wxIMPLEMENT_APP
+//-----------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("notebook");
+
+    // The C++ sample gets its frame icon from compiled-in resources; this port
+    // loads sample.xpm, so the XPM image handler must be registered first.
+    initAllImageHandlers();
+
+    // #ifdef __WXGTK__: lets wxWidgets suppress GTK diagnostics while it
+    // destroys wxNotebook pages (a no-op on the other ports).
+    if (platform === "linux")
+    {
+        GTKAllowDiagnosticsControl();
+    }
+
+    // wxHelpProvider::Set(new wxSimpleHelpProvider)
+    const helpProvider = createWxSimpleHelpProvider();
+    if (helpProvider)
+    {
+        helpProvider.Set();
+    }
+
+    const state = createNotebookFrame();
+    if (!state)
+    {
+        console.error("notebook: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    connectNotebookEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    restoreLogTarget(state);
+
+    shutdown();
+
+    // The books copy the bundles in SetImages(); the vector itself is owned by
+    // the frame object in the C++ original (m_images) and released here.
+    if (state.images)
+    {
+        state.images.Delete();
+    }
+
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+
+    return exitCode;
+}
+
+exit(main());

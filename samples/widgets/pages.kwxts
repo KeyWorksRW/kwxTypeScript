@@ -1,0 +1,247 @@
+// pages.kwxts — the WidgetsPage registry (WidgetsPageInfo linked list).
+//
+// The C++ sample registers one WidgetsPageInfo per page from each source file;
+// the labels are kept sorted when the book is built, and each page declares the
+// category bit mask it belongs to.  IMPLEMENT_WIDGETS_PAGE() always ORs in
+// ALL_CTRLS, so every page also appears under "All controls".
+
+import { Pointer } from "kwx/platform";
+import { WidgetsPage } from "./common.kwxts";
+
+// WidgetsCategories indices from widgets.h
+export const NATIVE_PAGE = 0;
+export const GENERIC_PAGE = 1;
+export const PICKER_PAGE = 2;
+export const COMBO_PAGE = 3;
+export const WITH_ITEMS_PAGE = 4;
+export const EDITABLE_PAGE = 5;
+export const BOOK_PAGE = 6;
+export const ALL_PAGE = 7;
+export const MAX_PAGES = 8;
+
+export const NATIVE_CTRLS = 1 << NATIVE_PAGE;
+export const GENERIC_CTRLS = 1 << GENERIC_PAGE;
+export const PICKER_CTRLS = 1 << PICKER_PAGE;
+export const COMBO_CTRLS = 1 << COMBO_PAGE;
+export const WITH_ITEMS_CTRLS = 1 << WITH_ITEMS_PAGE;
+export const EDITABLE_CTRLS = 1 << EDITABLE_PAGE;
+export const BOOK_CTRLS = 1 << BOOK_PAGE;
+export const ALL_CTRLS = 1 << ALL_PAGE;
+
+export const CATEGORY_LABELS: string[] = [
+    "Native",
+    "Generic",
+    "Pickers",
+    "Comboboxes",
+    "With items",
+    "Editable",
+    "Books",
+    "All controls",
+];
+
+import { createActivityIndicatorPage } from "./activityindicator.kwxts";
+import { createBitmapComboBoxPage } from "./bmpcombobox.kwxts";
+import { createButtonPage } from "./button.kwxts";
+import { createCheckBoxPage } from "./checkbox.kwxts";
+import { createChoicePage } from "./choice.kwxts";
+import { createColourPickerPage } from "./clrpicker.kwxts";
+import { createComboboxPage } from "./combobox.kwxts";
+import { createDatePickerPage } from "./datepick.kwxts";
+import { createDirCtrlPage } from "./dirctrl.kwxts";
+import { createDirPickerPage } from "./dirpicker.kwxts";
+import { createEditableListboxPage } from "./editlbox.kwxts";
+import { createFileCtrlPage } from "./filectrl.kwxts";
+import { createFilePickerPage } from "./filepicker.kwxts";
+import { createFontPickerPage } from "./fontpicker.kwxts";
+import { createGaugePage } from "./gauge.kwxts";
+import { createHeaderCtrlPage } from "./headerctrl.kwxts";
+import { createHyperlinkPage } from "./hyperlnk.kwxts";
+import { createListboxPage } from "./listbox.kwxts";
+import { createNativePage } from "./native.kwxts";
+import {
+    createChoicebookPage,
+    createListbookPage,
+    createNotebookPage,
+} from "./notebook.kwxts";
+import { createODComboboxPage } from "./odcombobox.kwxts";
+import { createRadioPage } from "./radiobox.kwxts";
+import { createSearchCtrlPage } from "./searchctrl.kwxts";
+import { createSliderPage } from "./slider.kwxts";
+import { createSpinBtnPage } from "./spinbtn.kwxts";
+import { createStaticPage } from "./static.kwxts";
+import { createStatBmpPage } from "./statbmp.kwxts";
+import { createTextPage } from "./textctrl.kwxts";
+import { createTimePickerPage } from "./timepick.kwxts";
+import { createTogglePage } from "./toggle.kwxts";
+
+export interface PageEntry
+{
+    label: string;
+    categories: number;
+    create: (parent: Pointer) => WidgetsPage;
+}
+
+// Windows category bits (the C++ FAMILY_CTRLS definitions resolved for
+// __WXMSW__).  Every page also gets ALL_CTRLS from IMPLEMENT_WIDGETS_PAGE.
+export const pageEntries: PageEntry[] = [
+    {
+        label: "ActivityIndicator",
+        categories: ALL_CTRLS | NATIVE_CTRLS,
+        create: createActivityIndicatorPage,
+    },
+    {
+        label: "BitmapCombobox",
+        categories: ALL_CTRLS | NATIVE_CTRLS | WITH_ITEMS_CTRLS | COMBO_CTRLS,
+        create: createBitmapComboBoxPage,
+    },
+    {
+        label: "Button",
+        categories: ALL_CTRLS | NATIVE_CTRLS,
+        create: createButtonPage,
+    },
+    {
+        label: "CheckBox",
+        categories: ALL_CTRLS | NATIVE_CTRLS,
+        create: createCheckBoxPage,
+    },
+    {
+        label: "Choice",
+        categories: ALL_CTRLS | NATIVE_CTRLS | WITH_ITEMS_CTRLS,
+        create: createChoicePage,
+    },
+    {
+        label: "ColourPicker",
+        categories: ALL_CTRLS | PICKER_CTRLS | GENERIC_CTRLS,
+        create: createColourPickerPage,
+    },
+    {
+        label: "Combobox",
+        categories: ALL_CTRLS | NATIVE_CTRLS | WITH_ITEMS_CTRLS | COMBO_CTRLS,
+        create: createComboboxPage,
+    },
+    {
+        label: "DatePicker",
+        categories: ALL_CTRLS | NATIVE_CTRLS | PICKER_CTRLS,
+        create: createDatePickerPage,
+    },
+    {
+        label: "DirCtrl",
+        categories: ALL_CTRLS | GENERIC_CTRLS,
+        create: createDirCtrlPage,
+    },
+    {
+        label: "DirPicker",
+        categories: ALL_CTRLS | PICKER_CTRLS | GENERIC_CTRLS,
+        create: createDirPickerPage,
+    },
+    {
+        label: "EditableListbox",
+        categories: ALL_CTRLS | GENERIC_CTRLS,
+        create: createEditableListboxPage,
+    },
+    {
+        label: "FileCtrl",
+        categories: ALL_CTRLS | GENERIC_CTRLS,
+        create: createFileCtrlPage,
+    },
+    {
+        label: "FilePicker",
+        categories: ALL_CTRLS | PICKER_CTRLS | GENERIC_CTRLS,
+        create: createFilePickerPage,
+    },
+    {
+        label: "FontPicker",
+        categories: ALL_CTRLS | PICKER_CTRLS | GENERIC_CTRLS,
+        create: createFontPickerPage,
+    },
+    {
+        label: "Gauge",
+        categories: ALL_CTRLS | NATIVE_CTRLS,
+        create: createGaugePage,
+    },
+    {
+        label: "Header",
+        categories: ALL_CTRLS | NATIVE_CTRLS,
+        create: createHeaderCtrlPage,
+    },
+    {
+        label: "Hyperlink",
+        categories: ALL_CTRLS | GENERIC_CTRLS,
+        create: createHyperlinkPage,
+    },
+    {
+        label: "Listbox",
+        categories: ALL_CTRLS | NATIVE_CTRLS | WITH_ITEMS_CTRLS,
+        create: createListboxPage,
+    },
+    {
+        label: "Native",
+        categories: ALL_CTRLS | NATIVE_CTRLS,
+        create: createNativePage,
+    },
+    {
+        label: "Notebook",
+        categories: ALL_CTRLS | NATIVE_CTRLS | BOOK_CTRLS,
+        create: createNotebookPage,
+    },
+    {
+        label: "Listbook",
+        categories: ALL_CTRLS | GENERIC_CTRLS | BOOK_CTRLS,
+        create: createListbookPage,
+    },
+    {
+        label: "Choicebook",
+        categories: ALL_CTRLS | GENERIC_CTRLS | BOOK_CTRLS,
+        create: createChoicebookPage,
+    },
+    {
+        label: "OwnerDrawnCombobox",
+        categories: ALL_CTRLS | GENERIC_CTRLS | WITH_ITEMS_CTRLS | COMBO_CTRLS,
+        create: createODComboboxPage,
+    },
+    {
+        label: "Radio",
+        categories: ALL_CTRLS | NATIVE_CTRLS | WITH_ITEMS_CTRLS,
+        create: createRadioPage,
+    },
+    {
+        label: "SearchCtrl",
+        categories: ALL_CTRLS | GENERIC_CTRLS | EDITABLE_CTRLS,
+        create: createSearchCtrlPage,
+    },
+    {
+        label: "Slider",
+        categories: ALL_CTRLS | NATIVE_CTRLS,
+        create: createSliderPage,
+    },
+    {
+        label: "Spin",
+        categories: ALL_CTRLS | NATIVE_CTRLS | EDITABLE_CTRLS,
+        create: createSpinBtnPage,
+    },
+    {
+        label: "Static",
+        categories: ALL_CTRLS | NATIVE_CTRLS,
+        create: createStaticPage,
+    },
+    {
+        label: "StaticBitmap",
+        categories: ALL_CTRLS,
+        create: createStatBmpPage,
+    },
+    {
+        label: "Text",
+        categories: ALL_CTRLS | NATIVE_CTRLS | EDITABLE_CTRLS,
+        create: createTextPage,
+    },
+    {
+        label: "TimePicker",
+        categories: ALL_CTRLS | NATIVE_CTRLS | PICKER_CTRLS,
+        create: createTimePickerPage,
+    },
+    {
+        label: "ToggleButton",
+        categories: ALL_CTRLS | NATIVE_CTRLS,
+        create: createTogglePage,
+    },
+];

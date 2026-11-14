@@ -2,6 +2,12 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxBitmap } from "./wxBitmap_gen.ts";
+import { wxBitmapBundle } from "./wxBitmapBundle_gen.ts";
+import { wxIcon } from "./wxIcon_gen.ts";
+import { wxIconBundle } from "./wxIconBundle_gen.ts";
+import { wxLog } from "./wxLog_gen.ts";
+import { wxSize } from "./wxSize_gen.ts";
 
 export function Null_AcceleratorTable(): Pointer {
     return lib.symbols.Null_AcceleratorTable();
@@ -391,6 +397,22 @@ export function wxGetStockHelpString(id: number, client: number): Pointer {
     return lib.symbols.wxGetStockHelpString(id, client);
 }
 
+export function wxPersistentRegisterAndRestore(frame: Pointer, name: Pointer): boolean {
+    return (lib.symbols.wxPersistentRegisterAndRestore(frame, name) as number) !== 0;
+}
+
+export function wxPersistentRegisterAndRestoreNoName(frame: Pointer): boolean {
+    return (lib.symbols.wxPersistentRegisterAndRestoreNoName(frame) as number) !== 0;
+}
+
+export function wxPersistentRegisterAndRestoreTreebook(book: Pointer, name: Pointer): boolean {
+    return (lib.symbols.wxPersistentRegisterAndRestoreTreebook(book, name) as number) !== 0;
+}
+
+export function wxPersistentRegisterAndRestoreTreebookNoName(book: Pointer): boolean {
+    return (lib.symbols.wxPersistentRegisterAndRestoreTreebookNoName(book) as number) !== 0;
+}
+
 export function LogError(message: Pointer): void {
     lib.symbols.LogError(message);
 }
@@ -407,12 +429,20 @@ export function LogMessage(message: Pointer): void {
     lib.symbols.LogMessage(message);
 }
 
+export function LogInfo(message: Pointer): void {
+    lib.symbols.LogInfo(message);
+}
+
 export function LogVerbose(message: Pointer): void {
     lib.symbols.LogVerbose(message);
 }
 
 export function LogStatus(message: Pointer): void {
     lib.symbols.LogStatus(message);
+}
+
+export function LogStatusWindow(frame: Pointer, message: Pointer): void {
+    lib.symbols.LogStatusWindow(frame, message);
 }
 
 export function LogSysError(message: Pointer): void {
@@ -427,12 +457,274 @@ export function LogTrace(mask: Pointer, message: Pointer): void {
     lib.symbols.LogTrace(mask, message);
 }
 
+export function wxCheckDynamicCast(obj: Pointer, class_info: Pointer): Pointer {
+    return lib.symbols.wxCheckDynamicCast(obj, class_info);
+}
+
+export function wxCheckCast(obj: Pointer, class_info: Pointer): Pointer {
+    return lib.symbols.wxCheckCast(obj, class_info);
+}
+
+export function wxGetApp(): Pointer {
+    return lib.symbols.wxGetApp();
+}
+
+export function wxInitAllImageHandlers(): void {
+    lib.symbols.wxInitAllImageHandlers();
+}
+
+export function wxUnusedVar(value: Pointer): void {
+    lib.symbols.wxUnusedVar(value);
+}
+
+export function wxGetSingleChoiceIndex(message: Pointer, caption: Pointer, choices: Pointer, count: number, parent: Pointer): number {
+    return lib.symbols.wxGetSingleChoiceIndex(message, caption, choices, count, parent);
+}
+
+export function wxGetSingleChoiceIndexEx(message: Pointer, caption: Pointer, n: number, choices: Pointer, parent: Pointer, x: number, y: number, centre: boolean, width: number, height: number, initialSelection: number): number {
+    return lib.symbols.wxGetSingleChoiceIndexEx(message, caption, n, choices, parent, x, y, centre ? 1 : 0, width, height, initialSelection);
+}
+
+export function wxBeginBusyCursor(): void {
+    lib.symbols.wxBeginBusyCursor();
+}
+
+export function wxEndBusyCursor(): void {
+    lib.symbols.wxEndBusyCursor();
+}
+
+export function wxJoin(array: Pointer, separator: number): Pointer {
+    return lib.symbols.wxJoin(array, separator);
+}
+
+export function wxAtoi(str: Pointer): number {
+    return lib.symbols.wxAtoi(str);
+}
+
+export function wxGetDisplaySize(): Pointer {
+    return lib.symbols.wxGetDisplaySize();
+}
+
+export function wxGetTopLevelParent(window: Pointer): Pointer {
+    return lib.symbols.wxGetTopLevelParent(window);
+}
+
+export function wxIsprint(character: number): boolean {
+    return (lib.symbols.wxIsprint(character) as number) !== 0;
+}
+
+export function wxRound(value: number): number {
+    return lib.symbols.wxRound(value);
+}
+
+export function wxWakeUpIdle(): void {
+    lib.symbols.wxWakeUpIdle();
+}
+
+export function wxBell(): void {
+    lib.symbols.wxBell();
+}
+
+export function wxDegToRad(degrees: number): number {
+    return lib.symbols.wxDegToRad(degrees);
+}
+
+export function wxFgets(buffer: Pointer, size: number, stream: Pointer): Pointer {
+    return lib.symbols.wxFgets(buffer, size, stream);
+}
+
+export function wxGetCwd(): Pointer {
+    return lib.symbols.wxGetCwd();
+}
+
+export function wxIsMainThread(): boolean {
+    return (lib.symbols.wxIsMainThread() as number) !== 0;
+}
+
+export function wxNewEventType(): number {
+    return lib.symbols.wxNewEventType();
+}
+
+export function wxQueueEvent(dest: Pointer, event: Pointer): void {
+    lib.symbols.wxQueueEvent(dest, event);
+}
+
+export function wxSetCursor(cursors: Pointer): void {
+    lib.symbols.wxSetCursor(cursors);
+}
+
+export function wxSplit(str: Pointer, separator: number): Pointer {
+    return lib.symbols.wxSplit(str, separator);
+}
+
+export function wxStrcmp(first: Pointer, second: Pointer): number {
+    return lib.symbols.wxStrcmp(first, second);
+}
+
+export function wxSwap(first: Pointer, second: Pointer, size: bigint): void {
+    lib.symbols.wxSwap(first, second, size);
+}
+
+export function wxUIntToPtr(value: bigint): Pointer {
+    return lib.symbols.wxUIntToPtr(value);
+}
+
+export function wxCreateFileTipProvider(filename: Pointer, current_tip: number): Pointer {
+    return lib.symbols.wxCreateFileTipProvider(filename, current_tip);
+}
+
+export function wxDirSelector(message: Pointer, default_path: Pointer, style: bigint, x: number, y: number, parent: Pointer): Pointer {
+    return lib.symbols.wxDirSelector(message, default_path, style, x, y, parent);
+}
+
+export function wxFileExists(filename: Pointer): boolean {
+    return (lib.symbols.wxFileExists(filename) as number) !== 0;
+}
+
+export function wxFindFocusDescendant(ancestor: Pointer): Pointer {
+    return lib.symbols.wxFindFocusDescendant(ancestor);
+}
+
+export function wxGetBatteryState(): number {
+    return lib.symbols.wxGetBatteryState();
+}
+
+export function wxGetClientDisplayRect(): Pointer {
+    return lib.symbols.wxGetClientDisplayRect();
+}
+
+export function wxGetLocalTime(): bigint {
+    return lib.symbols.wxGetLocalTime() as bigint;
+}
+
+export function wxGetPowerType(): number {
+    return lib.symbols.wxGetPowerType();
+}
+
+export function wxGetSelectedChoices(selections: Pointer, choices: Pointer, count: number, message: Pointer, caption: Pointer, parent: Pointer): number {
+    return lib.symbols.wxGetSelectedChoices(selections, choices, count, message, caption, parent);
+}
+
+export function wxGetSelectedChoicesEx(selections: Pointer, message: Pointer, caption: Pointer, n: number, choices: Pointer, parent: Pointer, x: number, y: number, centre: boolean, width: number, height: number): number {
+    return lib.symbols.wxGetSelectedChoicesEx(selections, message, caption, n, choices, parent, x, y, centre ? 1 : 0, width, height);
+}
+
+export function wxGetSingleChoice(message: Pointer, caption: Pointer, choices: Pointer, count: number, parent: Pointer): Pointer {
+    return lib.symbols.wxGetSingleChoice(message, caption, choices, count, parent);
+}
+
+export function wxGetSingleChoiceData(message: Pointer, caption: Pointer, choices: Pointer, count: number, client_data: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxGetSingleChoiceData(message, caption, choices, count, client_data, parent);
+}
+
+export function wxGetSingleChoiceDataEx(message: Pointer, caption: Pointer, n: number, choices: Pointer, client_data: Pointer, parent: Pointer, x: number, y: number, centre: boolean, width: number, height: number, initialSelection: number): Pointer {
+    return lib.symbols.wxGetSingleChoiceDataEx(message, caption, n, choices, client_data, parent, x, y, centre ? 1 : 0, width, height, initialSelection);
+}
+
+export function wxGetTranslation(str: Pointer): Pointer {
+    return lib.symbols.wxGetTranslation(str);
+}
+
+export function wxGetZlibVersionInfo(): Pointer {
+    return lib.symbols.wxGetZlibVersionInfo();
+}
+
+export function wxGet_wxConvLibc(): Pointer {
+    return lib.symbols.wxGet_wxConvLibc();
+}
+
+export function wxGet_wxConvLocal(): Pointer {
+    return lib.symbols.wxGet_wxConvLocal();
+}
+
+export function wxGet_wxConvUTF8(): Pointer {
+    return lib.symbols.wxGet_wxConvUTF8();
+}
+
+export function wxIsalnum(character: number): boolean {
+    return (lib.symbols.wxIsalnum(character) as number) !== 0;
+}
+
+export function wxIsdigit(character: number): boolean {
+    return (lib.symbols.wxIsdigit(character) as number) !== 0;
+}
+
+export function wxIslower(character: number): boolean {
+    return (lib.symbols.wxIslower(character) as number) !== 0;
+}
+
+export function wxMakeFloatingPointValidator(value: Pointer, style: number): Pointer {
+    return lib.symbols.wxMakeFloatingPointValidator(value, style);
+}
+
+export function wxMutexGuiEnter(): void {
+    lib.symbols.wxMutexGuiEnter();
+}
+
+export function wxMutexGuiLeave(): void {
+    lib.symbols.wxMutexGuiLeave();
+}
+
+export function wxPlatformIs(platform: number): boolean {
+    return (lib.symbols.wxPlatformIs(platform) as number) !== 0;
+}
+
+export function wxPointRefFromVariant(variant: Pointer): Pointer {
+    return lib.symbols.wxPointRefFromVariant(variant);
+}
+
+export function wxPostEvent(dest: Pointer, event: Pointer): void {
+    lib.symbols.wxPostEvent(dest, event);
+}
+
+export function wxPtrToUInt(pointer: Pointer): bigint {
+    return lib.symbols.wxPtrToUInt(pointer) as bigint;
+}
+
+export function wxPuts(str: Pointer): number {
+    return lib.symbols.wxPuts(str);
+}
+
+export function wxRemoveFile(file: Pointer): boolean {
+    return (lib.symbols.wxRemoveFile(file) as number) !== 0;
+}
+
+export function wxRenameFile(old_path: Pointer, new_path: Pointer, overwrite: boolean): boolean {
+    return (lib.symbols.wxRenameFile(old_path, new_path, overwrite ? 1 : 0) as number) !== 0;
+}
+
+export function wxShowTip(parent: Pointer, tip_provider: Pointer): boolean {
+    return (lib.symbols.wxShowTip(parent, tip_provider) as number) !== 0;
+}
+
+export function wxSizeRefFromVariant(variant: Pointer): Pointer {
+    return lib.symbols.wxSizeRefFromVariant(variant);
+}
+
+export function wxStrdup(str: Pointer): Pointer {
+    return lib.symbols.wxStrdup(str);
+}
+
+export function wxStrtod(nptr: Pointer): number {
+    return lib.symbols.wxStrtod(nptr);
+}
+
+export function wxStrtol(nptr: Pointer, base: number): bigint {
+    return lib.symbols.wxStrtol(nptr, base) as bigint;
+}
+
 export function kwxBeginBusyCursor(): void {
     lib.symbols.kwxBeginBusyCursor();
 }
 
 export function kwxBell(): void {
     lib.symbols.kwxBell();
+}
+
+export function kwxBitmapFromBase64(base64: Pointer, len: bigint): wxBitmap | null {
+    const rawPtr = lib.symbols.kwxBitmapFromBase64(base64, len);
+    if (rawPtr === null) return null;
+    return new wxBitmap(rawPtr);
 }
 
 export function kwxEndBusyCursor(): void {
@@ -485,6 +777,10 @@ export function kwxSetPixelRowRGB(buffer: Pointer, width: number, x: number, y: 
 
 export function kwxSetPixelRowRGBA(buffer: Pointer, width: number, x: number, y: number, rgba0: number, rgba1: number, count: number): void {
     lib.symbols.kwxSetPixelRowRGBA(buffer, width, x, y, rgba0, rgba1, count);
+}
+
+export function kwxSvgStringFromBase64(base64: Pointer, len: bigint): Pointer {
+    return lib.symbols.kwxSvgStringFromBase64(base64, len);
 }
 
 export function kwxSystemSettingsGetColour(systemColour: number): Pointer {
@@ -543,6 +839,10 @@ export function wxGetColourFromUser(parent: Pointer, colInit: Pointer, colour: P
     lib.symbols.wxGetColourFromUser(parent, colInit, colour);
 }
 
+export function wxGetColourFromUserEx(parent: Pointer, colInit: Pointer, caption: Pointer, colour: Pointer): void {
+    lib.symbols.wxGetColourFromUserEx(parent, colInit, caption, colour);
+}
+
 export function wxGetFontFromUser(parent: Pointer, fontInit: Pointer, font: Pointer): void {
     lib.symbols.wxGetFontFromUser(parent, fontInit, font);
 }
@@ -559,6 +859,14 @@ export function wxGetTextFromUser(message: Pointer, caption: Pointer, defaultTex
     return lib.symbols.wxGetTextFromUser(message, caption, defaultText, parent, x, y, center, buffer);
 }
 
+export function wxGetPasswordFromUserEx(message: Pointer, caption: Pointer, defaultText: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxGetPasswordFromUserEx(message, caption, defaultText, parent);
+}
+
+export function wxGetTextFromUserEx(message: Pointer, caption: Pointer, defaultText: Pointer, parent: Pointer, x: number, y: number, center: number): Pointer {
+    return lib.symbols.wxGetTextFromUserEx(message, caption, defaultText, parent, x, y, center);
+}
+
 export function wxIsDefined(name: Pointer): number {
     return lib.symbols.wxIsDefined(name);
 }
@@ -571,6 +879,70 @@ export function wxVersionString(): Pointer {
     return lib.symbols.wxVersionString();
 }
 
+export function kwxConsoleInitialize(argc: number, argv: Pointer): number {
+    return lib.symbols.kwxConsoleInitialize(argc, argv);
+}
+
+export function kwxConsoleRun(): number {
+    return lib.symbols.kwxConsoleRun();
+}
+
+export function kwxConsoleExitMainLoop(): void {
+    lib.symbols.kwxConsoleExitMainLoop();
+}
+
+export function kwxConsoleShutdown(): void {
+    lib.symbols.kwxConsoleShutdown();
+}
+
+export function kwxConsoleIsInitialized(): number {
+    return lib.symbols.kwxConsoleIsInitialized();
+}
+
+export function kwxConsoleGetApp(): Pointer {
+    return lib.symbols.kwxConsoleGetApp();
+}
+
+export function kwxConsoleProcessPendingEvents(): void {
+    lib.symbols.kwxConsoleProcessPendingEvents();
+}
+
+export function kwxConsoleYield(): number {
+    return lib.symbols.kwxConsoleYield();
+}
+
+export function wxPrintf(text: Pointer): number {
+    return lib.symbols.wxPrintf(text);
+}
+
+export function kwxMessageOutputUseStderr(): void {
+    lib.symbols.kwxMessageOutputUseStderr();
+}
+
+export function kwxMessageOutputUseStdout(): void {
+    lib.symbols.kwxMessageOutputUseStdout();
+}
+
+export function kwxMessageOutputReset(): void {
+    lib.symbols.kwxMessageOutputReset();
+}
+
+export function wxBase64EncodeBuffer(source: Pointer, src_length: bigint): Pointer {
+    return lib.symbols.wxBase64EncodeBuffer(source, src_length);
+}
+
+export function wxBase64DecodeBuffer(text: Pointer, mode: number, decoded_length: Pointer): Pointer {
+    return lib.symbols.wxBase64DecodeBuffer(text, mode, decoded_length);
+}
+
+export function wxBase64EncodedSizeOf(src_length: bigint): bigint {
+    return lib.symbols.wxBase64EncodedSizeOf(src_length) as bigint;
+}
+
+export function wxBase64DecodedSizeOf(encoded_length: bigint): bigint {
+    return lib.symbols.wxBase64DecodedSizeOf(encoded_length) as bigint;
+}
+
 export function PushProvider(provider: Pointer): void {
     lib.symbols.PushProvider(provider);
 }
@@ -579,16 +951,16 @@ export function RemoveProvider(provider: Pointer): boolean {
     return (lib.symbols.RemoveProvider(provider) as number) !== 0;
 }
 
-export function expCP_DEFAULT_STYLE(): number {
-    return lib.symbols.expCP_DEFAULT_STYLE();
-}
-
-export function expCP_NO_TLW_RESIZE(): number {
-    return lib.symbols.expCP_NO_TLW_RESIZE();
-}
-
 export function kwxMessageBox(message: Pointer, caption: Pointer, style: number, parent: Pointer, x: number, y: number): number {
     return lib.symbols.kwxMessageBox(message, caption, style, parent, x, y);
+}
+
+export function expNB_DEFAULT(): number {
+    return lib.symbols.expNB_DEFAULT();
+}
+
+export function expNB_NOPAGETHEME(): number {
+    return lib.symbols.expNB_NOPAGETHEME();
 }
 
 export function expNB_TOP(): number {
@@ -605,6 +977,10 @@ export function expNB_LEFT(): number {
 
 export function expNB_RIGHT(): number {
     return lib.symbols.expNB_RIGHT();
+}
+
+export function expBK_DEFAULT(): number {
+    return lib.symbols.expBK_DEFAULT();
 }
 
 export function expBK_HITTEST_NOWHERE(): number {
@@ -625,6 +1001,10 @@ export function expBK_HITTEST_ONITEM(): number {
 
 export function expBK_HITTEST_ONPAGE(): number {
     return lib.symbols.expBK_HITTEST_ONPAGE();
+}
+
+export function GTKAllowDiagnosticsControl(): void {
+    lib.symbols.GTKAllowDiagnosticsControl();
 }
 
 export function expCHB_DEFAULT(): number {
@@ -675,10 +1055,6 @@ export function expTBK_HORZ_LAYOUT(): number {
     return lib.symbols.expTBK_HORZ_LAYOUT();
 }
 
-export function expPGMAN_DEFAULT_STYLE(): number {
-    return lib.symbols.expPGMAN_DEFAULT_STYLE();
-}
-
 export function expPROPSHEET_DEFAULT(): number {
     return lib.symbols.expPROPSHEET_DEFAULT();
 }
@@ -711,8 +1087,12 @@ export function expPROPSHEET_SHRINKTOFIT(): number {
     return lib.symbols.expPROPSHEET_SHRINKTOFIT();
 }
 
-export function expTL_SINGLE(): number {
-    return lib.symbols.expTL_SINGLE();
+export function kwxGetMousePositionPoint(): Pointer {
+    return lib.symbols.kwxGetMousePositionPoint();
+}
+
+export function kwxSetActiveLogTarget(pLogger: Pointer): Pointer {
+    return lib.symbols.kwxSetActiveLogTarget(pLogger);
 }
 
 export function expTL_MULTIPLE(): number {
@@ -729,10 +1109,6 @@ export function expTL_3STATE(): number {
 
 export function expTL_USER_3STATE(): number {
     return lib.symbols.expTL_USER_3STATE();
-}
-
-export function expTL_NO_HEADER(): number {
-    return lib.symbols.expTL_NO_HEADER();
 }
 
 export function expTL_DEFAULT_STYLE(): number {
@@ -765,14 +1141,6 @@ export function expWEBVIEW_ZOOM_TYPE_LAYOUT(): number {
 
 export function expWEBVIEW_ZOOM_TYPE_TEXT(): number {
     return lib.symbols.expWEBVIEW_ZOOM_TYPE_TEXT();
-}
-
-export function expWEBVIEW_RELOAD_DEFAULT(): number {
-    return lib.symbols.expWEBVIEW_RELOAD_DEFAULT();
-}
-
-export function expWEBVIEW_RELOAD_NO_CACHE(): number {
-    return lib.symbols.expWEBVIEW_RELOAD_NO_CACHE();
 }
 
 export function expWEBVIEW_FIND_WRAP(): number {
@@ -831,15 +1199,1183 @@ export function expWEBVIEW_NAV_ERR_OTHER(): number {
     return lib.symbols.expWEBVIEW_NAV_ERR_OTHER();
 }
 
-export function expWEBVIEW_NAV_ACTION_NONE(): number {
-    return lib.symbols.expWEBVIEW_NAV_ACTION_NONE();
-}
-
 export function expWEBVIEW_NAV_ACTION_USER(): number {
     return lib.symbols.expWEBVIEW_NAV_ACTION_USER();
 }
 
-export function expWEBVIEW_NAV_ACTION_OTHER(): number {
-    return lib.symbols.expWEBVIEW_NAV_ACTION_OTHER();
+export function wxAccessible_NotifyEvent(eventType: number, win: Pointer, objectType: number, objectId: number): number {
+    return lib.symbols.wxAccessible_NotifyEvent(eventType, win, objectType, objectId);
+}
+
+export function wxWindow_NewControlId(count: number): number {
+    return lib.symbols.wxWindow_NewControlId(count);
+}
+
+export function wxWindow_FindWindowById(winid: bigint, parent: Pointer): Pointer {
+    return lib.symbols.wxWindow_FindWindowById(winid, parent);
+}
+
+export function wxWindow_FindWindowByName(name: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxWindow_FindWindowByName(name, parent);
+}
+
+export function wxWindow_UnreserveControlId(id: number, count: number): void {
+    lib.symbols.wxWindow_UnreserveControlId(id, count);
+}
+
+export function wxBitmap_NewFromPNGData(data: Pointer, size: bigint): Pointer {
+    return lib.symbols.wxBitmap_NewFromPNGData(data, size);
+}
+
+export function wxBitmap_AddHandler(handler: Pointer): void {
+    lib.symbols.wxBitmap_AddHandler(handler);
+}
+
+export function wxBitmap_CleanUpHandlers(): void {
+    lib.symbols.wxBitmap_CleanUpHandlers();
+}
+
+export function wxBitmap_FindHandlerByName(name: Pointer): Pointer {
+    return lib.symbols.wxBitmap_FindHandlerByName(name);
+}
+
+export function wxBitmap_FindHandlerByType(type_: number): Pointer {
+    return lib.symbols.wxBitmap_FindHandlerByType(type_);
+}
+
+export function wxBitmap_InitStandardHandlers(): void {
+    lib.symbols.wxBitmap_InitStandardHandlers();
+}
+
+export function wxBitmap_InsertHandler(handler: Pointer): void {
+    lib.symbols.wxBitmap_InsertHandler(handler);
+}
+
+export function wxBitmap_RemoveHandler(name: Pointer): boolean {
+    return (lib.symbols.wxBitmap_RemoveHandler(name) as number) !== 0;
+}
+
+export function wxClassInfo_FindClass(name: Pointer): Pointer {
+    return lib.symbols.wxClassInfo_FindClass(name);
+}
+
+export function wxColour_MakeDisabled(r: Pointer, g: Pointer, b: Pointer, brightness: number): void {
+    lib.symbols.wxColour_MakeDisabled(r, g, b, brightness);
+}
+
+export function wxColour_ValidName(name: Pointer): boolean {
+    return (lib.symbols.wxColour_ValidName(name) as number) !== 0;
+}
+
+export function wxComboCtrl_GetFeatures(): number {
+    return lib.symbols.wxComboCtrl_GetFeatures();
+}
+
+export function wxConfigBase_Get(): Pointer {
+    return lib.symbols.wxConfigBase_Get();
+}
+
+export function wxConfigBase_DontCreateOnDemand(): void {
+    lib.symbols.wxConfigBase_DontCreateOnDemand();
+}
+
+export function wxDateTime_GetFirstWeekDay(first_week_day: Pointer): boolean {
+    return (lib.symbols.wxDateTime_GetFirstWeekDay(first_week_day) as number) !== 0;
+}
+
+export function wxDateTime_GetEnglishMonthName(month: number, flags: number): Pointer {
+    return lib.symbols.wxDateTime_GetEnglishMonthName(month, flags);
+}
+
+export function wxDateTime_GetEnglishWeekDayName(weekday: number, flags: number): Pointer {
+    return lib.symbols.wxDateTime_GetEnglishWeekDayName(weekday, flags);
+}
+
+export function wxDateTime_ConvertYearToBC(year: number): number {
+    return lib.symbols.wxDateTime_ConvertYearToBC(year);
+}
+
+export function wxDateTime_GetAmString(): Pointer {
+    return lib.symbols.wxDateTime_GetAmString();
+}
+
+export function wxDateTime_GetBeginDST(year: number, country: number, dateTime: Pointer): void {
+    lib.symbols.wxDateTime_GetBeginDST(year, country, dateTime);
+}
+
+export function wxDateTime_GetCentury(year: number): number {
+    return lib.symbols.wxDateTime_GetCentury(year);
+}
+
+export function wxDateTime_GetCountry(): number {
+    return lib.symbols.wxDateTime_GetCountry();
+}
+
+export function wxDateTime_GetCurrentMonth(cal: number): number {
+    return lib.symbols.wxDateTime_GetCurrentMonth(cal);
+}
+
+export function wxDateTime_GetCurrentYear(cal: number): number {
+    return lib.symbols.wxDateTime_GetCurrentYear(cal);
+}
+
+export function wxDateTime_GetEndDST(year: number, country: number, dateTime: Pointer): void {
+    lib.symbols.wxDateTime_GetEndDST(year, country, dateTime);
+}
+
+export function wxDateTime_GetMonthName(month: number, flags: number): Pointer {
+    return lib.symbols.wxDateTime_GetMonthName(month, flags);
+}
+
+export function wxDateTime_GetNumberOfDays(year: number, cal: number): number {
+    return lib.symbols.wxDateTime_GetNumberOfDays(year, cal);
+}
+
+export function wxDateTime_GetNumberOfDaysMonth(month: number, year: number, cal: number): number {
+    return lib.symbols.wxDateTime_GetNumberOfDaysMonth(month, year, cal);
+}
+
+export function wxDateTime_GetPmString(): Pointer {
+    return lib.symbols.wxDateTime_GetPmString();
+}
+
+export function wxDateTime_GetTimeNow(): number {
+    return lib.symbols.wxDateTime_GetTimeNow();
+}
+
+export function wxDateTime_GetWeekDayName(weekday: number, flags: number): Pointer {
+    return lib.symbols.wxDateTime_GetWeekDayName(weekday, flags);
+}
+
+export function wxDateTime_IsDSTApplicable(year: number, country: number): boolean {
+    return (lib.symbols.wxDateTime_IsDSTApplicable(year, country) as number) !== 0;
+}
+
+export function wxDateTime_IsLeapYear(year: number, cal: number): boolean {
+    return (lib.symbols.wxDateTime_IsLeapYear(year, cal) as number) !== 0;
+}
+
+export function wxDateTime_IsWestEuropeanCountry(country: number): boolean {
+    return (lib.symbols.wxDateTime_IsWestEuropeanCountry(country) as number) !== 0;
+}
+
+export function wxDateTime_SetCountry(country: number): void {
+    lib.symbols.wxDateTime_SetCountry(country);
+}
+
+export function wxDateTime_wxDateTime(hi_long: number, lo_long: number): Pointer {
+    return lib.symbols.wxDateTime_wxDateTime(hi_long, lo_long);
+}
+
+export function wxDisplay_GetCount(): number {
+    return lib.symbols.wxDisplay_GetCount();
+}
+
+export function wxDisplay_GetFromPoint(x: number, y: number): number {
+    return lib.symbols.wxDisplay_GetFromPoint(x, y);
+}
+
+export function wxDisplay_GetFromWindow(win: Pointer): number {
+    return lib.symbols.wxDisplay_GetFromWindow(win);
+}
+
+export function wxEvent_NewEventType(): number {
+    return lib.symbols.wxEvent_NewEventType();
+}
+
+export function wxEvtHandler_AddFilter(filter: Pointer): void {
+    lib.symbols.wxEvtHandler_AddFilter(filter);
+}
+
+export function wxEvtHandler_RemoveFilter(filter: Pointer): void {
+    lib.symbols.wxEvtHandler_RemoveFilter(filter);
+}
+
+export function wxFileConfig_GetGlobalFileName(file_name: Pointer): Pointer {
+    return lib.symbols.wxFileConfig_GetGlobalFileName(file_name);
+}
+
+export function wxFileConfig_GetLocalFileName(file_name: Pointer, style: number): Pointer {
+    return lib.symbols.wxFileConfig_GetLocalFileName(file_name, style);
+}
+
+export function wxGLCanvas_IsDisplaySupported(attributes: Pointer): boolean {
+    return (lib.symbols.wxGLCanvas_IsDisplaySupported(attributes) as number) !== 0;
+}
+
+export function wxGLCanvas_IsExtensionSupported(extension: Pointer): boolean {
+    return (lib.symbols.wxGLCanvas_IsExtensionSupported(extension) as number) !== 0;
+}
+
+export function wxImage_SetDefaultLoadFlags(flags: number): void {
+    lib.symbols.wxImage_SetDefaultLoadFlags(flags);
+}
+
+export function wxImage_GetDefaultLoadFlags(): number {
+    return lib.symbols.wxImage_GetDefaultLoadFlags();
+}
+
+export function wxImage_GetImageCount(name: Pointer, type_: number): number {
+    return lib.symbols.wxImage_GetImageCount(name, type_);
+}
+
+export function wxImage_AddHandler(handler: Pointer): void {
+    lib.symbols.wxImage_AddHandler(handler);
+}
+
+export function wxImage_InsertHandler(handler: Pointer): void {
+    lib.symbols.wxImage_InsertHandler(handler);
+}
+
+export function wxImage_RemoveHandler(name: Pointer): boolean {
+    return (lib.symbols.wxImage_RemoveHandler(name) as number) !== 0;
+}
+
+export function wxImage_FindHandlerByName(name: Pointer): Pointer {
+    return lib.symbols.wxImage_FindHandlerByName(name);
+}
+
+export function wxImage_FindHandlerByExtension(extension: Pointer, imageType: number): Pointer {
+    return lib.symbols.wxImage_FindHandlerByExtension(extension, imageType);
+}
+
+export function wxImage_FindHandlerByType(imageType: number): Pointer {
+    return lib.symbols.wxImage_FindHandlerByType(imageType);
+}
+
+export function wxImage_FindHandlerMime(mimetype: Pointer): Pointer {
+    return lib.symbols.wxImage_FindHandlerMime(mimetype);
+}
+
+export function wxImage_GetImageExtWildcard(): Pointer {
+    return lib.symbols.wxImage_GetImageExtWildcard();
+}
+
+export function wxImage_CleanUpHandlers(): void {
+    lib.symbols.wxImage_CleanUpHandlers();
+}
+
+export function wxImage_InitStandardHandlers(): void {
+    lib.symbols.wxImage_InitStandardHandlers();
+}
+
+export function wxImage_CanRead(name: Pointer): boolean {
+    return (lib.symbols.wxImage_CanRead(name) as number) !== 0;
+}
+
+export function wxMenu_LockAccels(locked: boolean): void {
+    lib.symbols.wxMenu_LockAccels(locked ? 1 : 0);
+}
+
+export function wxMenuItem_GetLabelText(text: Pointer): Pointer {
+    return lib.symbols.wxMenuItem_GetLabelText(text);
+}
+
+export function wxNotificationMessage_MSWUseToasts(shortcutPath: Pointer, appId: Pointer): boolean {
+    return (lib.symbols.wxNotificationMessage_MSWUseToasts(shortcutPath, appId) as number) !== 0;
+}
+
+export function wxNotificationMessage_UseTaskBarIcon(icon: Pointer): boolean {
+    return (lib.symbols.wxNotificationMessage_UseTaskBarIcon(icon) as number) !== 0;
+}
+
+export function wxSocketBase_Initialize(): boolean {
+    return (lib.symbols.wxSocketBase_Initialize() as number) !== 0;
+}
+
+export function wxSocketBase_Shutdown(): void {
+    lib.symbols.wxSocketBase_Shutdown();
+}
+
+export function wxSocketBase_IsInitialized(): boolean {
+    return (lib.symbols.wxSocketBase_IsInitialized() as number) !== 0;
+}
+
+export function wxToolTip_Enable(flag: boolean): void {
+    lib.symbols.wxToolTip_Enable(flag ? 1 : 0);
+}
+
+export function wxToolTip_SetAutoPop(milliseconds: bigint): void {
+    lib.symbols.wxToolTip_SetAutoPop(milliseconds);
+}
+
+export function wxToolTip_SetDelay(milliseconds: bigint): void {
+    lib.symbols.wxToolTip_SetDelay(milliseconds);
+}
+
+export function wxToolTip_SetMaxWidth(width: number): void {
+    lib.symbols.wxToolTip_SetMaxWidth(width);
+}
+
+export function wxToolTip_SetReshow(milliseconds: bigint): void {
+    lib.symbols.wxToolTip_SetReshow(milliseconds);
+}
+
+export function wxXmlResource_GetStyledTextCtrl(win: Pointer, strId: Pointer): Pointer {
+    return lib.symbols.wxXmlResource_GetStyledTextCtrl(win, strId);
+}
+
+export function wxXmlResource_Get(): Pointer {
+    return lib.symbols.wxXmlResource_Get();
+}
+
+export function wxPlatformInfo_Get(): Pointer {
+    return lib.symbols.wxPlatformInfo_Get();
+}
+
+export function wxPlatformInfo_GetCurrent(): Pointer {
+    return lib.symbols.wxPlatformInfo_GetCurrent();
+}
+
+export function wxPlatformInfo_GetOperatingSystemIdFromName(name: Pointer): number {
+    return lib.symbols.wxPlatformInfo_GetOperatingSystemIdFromName(name);
+}
+
+export function wxPlatformInfo_GetPortIdFromName(port_name: Pointer): number {
+    return lib.symbols.wxPlatformInfo_GetPortIdFromName(port_name);
+}
+
+export function wxPlatformInfo_GetBitnessFromName(bitness: Pointer): number {
+    return lib.symbols.wxPlatformInfo_GetBitnessFromName(bitness);
+}
+
+export function wxPlatformInfo_GetEndiannessFromName(endianness: Pointer): number {
+    return lib.symbols.wxPlatformInfo_GetEndiannessFromName(endianness);
+}
+
+export function wxPlatformInfo_GetOperatingSystemFamilyNameFromId(os_id: number): Pointer {
+    return lib.symbols.wxPlatformInfo_GetOperatingSystemFamilyNameFromId(os_id);
+}
+
+export function wxPlatformInfo_GetOperatingSystemIdNameFromId(os_id: number): Pointer {
+    return lib.symbols.wxPlatformInfo_GetOperatingSystemIdNameFromId(os_id);
+}
+
+export function wxPlatformInfo_GetPortIdNameFromValues(port_id: number, using_universal: boolean): Pointer {
+    return lib.symbols.wxPlatformInfo_GetPortIdNameFromValues(port_id, using_universal ? 1 : 0);
+}
+
+export function wxPlatformInfo_GetPortIdShortNameFromValues(port_id: number, using_universal: boolean): Pointer {
+    return lib.symbols.wxPlatformInfo_GetPortIdShortNameFromValues(port_id, using_universal ? 1 : 0);
+}
+
+export function wxPlatformInfo_GetBitnessNameFromValue(bitness: number): Pointer {
+    return lib.symbols.wxPlatformInfo_GetBitnessNameFromValue(bitness);
+}
+
+export function wxPlatformInfo_GetEndiannessNameFromValue(endianness: number): Pointer {
+    return lib.symbols.wxPlatformInfo_GetEndiannessNameFromValue(endianness);
+}
+
+export function wxPlatformInfo_GetOperatingSystemDirectory(): Pointer {
+    return lib.symbols.wxPlatformInfo_GetOperatingSystemDirectory();
+}
+
+export function wxSecretValue_WipeString(str: Pointer): void {
+    lib.symbols.wxSecretValue_WipeString(str);
+}
+
+export function wxSecretStore_GetDefault(): Pointer {
+    return lib.symbols.wxSecretStore_GetDefault();
+}
+
+export function wxFileSystem_AddHandler(handler: Pointer): void {
+    lib.symbols.wxFileSystem_AddHandler(handler);
+}
+
+export function wxFileName_SplitPath(fullpath: Pointer, volume: Pointer, path: Pointer, name: Pointer, ext: Pointer, hasExt: Pointer, format: number): void {
+    lib.symbols.wxFileName_SplitPath(fullpath, volume, path, name, ext, hasExt, format);
+}
+
+export function wxFileName_DirName(dir: Pointer, format: number): Pointer {
+    return lib.symbols.wxFileName_DirName(dir, format);
+}
+
+export function wxFileName_FileName(file: Pointer, format: number): Pointer {
+    return lib.symbols.wxFileName_FileName(file, format);
+}
+
+export function wxFileName_URLToFileName(url: Pointer): Pointer {
+    return lib.symbols.wxFileName_URLToFileName(url);
+}
+
+export function wxFileName_MakeSafeRelativePath(path: Pointer, format: number): Pointer {
+    return lib.symbols.wxFileName_MakeSafeRelativePath(path, format);
+}
+
+export function wxFileName_FileExistsForPath(file: Pointer): boolean {
+    return (lib.symbols.wxFileName_FileExistsForPath(file) as number) !== 0;
+}
+
+export function wxFileName_DirExistsForPath(dir: Pointer): boolean {
+    return (lib.symbols.wxFileName_DirExistsForPath(dir) as number) !== 0;
+}
+
+export function wxFileName_ExistsForPath(path: Pointer, flags: number): boolean {
+    return (lib.symbols.wxFileName_ExistsForPath(path, flags) as number) !== 0;
+}
+
+export function wxFileName_IsFileReadableForPath(file: Pointer): boolean {
+    return (lib.symbols.wxFileName_IsFileReadableForPath(file) as number) !== 0;
+}
+
+export function wxFileName_IsFileWritableForPath(file: Pointer): boolean {
+    return (lib.symbols.wxFileName_IsFileWritableForPath(file) as number) !== 0;
+}
+
+export function wxFileName_IsFileExecutableForPath(file: Pointer): boolean {
+    return (lib.symbols.wxFileName_IsFileExecutableForPath(file) as number) !== 0;
+}
+
+export function wxFileName_IsDirReadableForPath(dir: Pointer): boolean {
+    return (lib.symbols.wxFileName_IsDirReadableForPath(dir) as number) !== 0;
+}
+
+export function wxFileName_IsDirWritableForPath(dir: Pointer): boolean {
+    return (lib.symbols.wxFileName_IsDirWritableForPath(dir) as number) !== 0;
+}
+
+export function wxFileName_MkdirForPath(dir: Pointer, perm: number, flags: number): boolean {
+    return (lib.symbols.wxFileName_MkdirForPath(dir, perm, flags) as number) !== 0;
+}
+
+export function wxFileName_RmdirForPath(dir: Pointer, flags: number): boolean {
+    return (lib.symbols.wxFileName_RmdirForPath(dir, flags) as number) !== 0;
+}
+
+export function wxFileName_SetCwdForPath(cwd: Pointer): boolean {
+    return (lib.symbols.wxFileName_SetCwdForPath(cwd) as number) !== 0;
+}
+
+export function wxFileName_GetCwd(volume: Pointer): Pointer {
+    return lib.symbols.wxFileName_GetCwd(volume);
+}
+
+export function wxFileName_GetHomeDir(): Pointer {
+    return lib.symbols.wxFileName_GetHomeDir();
+}
+
+export function wxFileName_GetTempDir(): Pointer {
+    return lib.symbols.wxFileName_GetTempDir();
+}
+
+export function wxFileName_GetTempFileName(prefix: Pointer): Pointer {
+    return lib.symbols.wxFileName_GetTempFileName(prefix);
+}
+
+export function wxFileName_GetForbiddenChars(format: number): Pointer {
+    return lib.symbols.wxFileName_GetForbiddenChars(format);
+}
+
+export function wxFileName_StripExtension(full_name: Pointer): Pointer {
+    return lib.symbols.wxFileName_StripExtension(full_name);
+}
+
+export function wxFileName_IsCaseSensitive(format: number): boolean {
+    return (lib.symbols.wxFileName_IsCaseSensitive(format) as number) !== 0;
+}
+
+export function wxDir_GetAllFiles(dir_name: Pointer, files: Pointer, spec: Pointer, flags: number, capacity: number): bigint {
+    return lib.symbols.wxDir_GetAllFiles(dir_name, files, spec, flags, capacity) as bigint;
+}
+
+export function wxDir_FindFirst(dir_name: Pointer, spec: Pointer, flags: number): Pointer {
+    return lib.symbols.wxDir_FindFirst(dir_name, spec, flags);
+}
+
+export function wxDir_GetTotalSize(dir_name: Pointer): number {
+    return lib.symbols.wxDir_GetTotalSize(dir_name);
+}
+
+export function wxDir_Exists(dir: Pointer): boolean {
+    return (lib.symbols.wxDir_Exists(dir) as number) !== 0;
+}
+
+export function wxDir_Make(dir: Pointer, perm: number, flags: number): boolean {
+    return (lib.symbols.wxDir_Make(dir, perm, flags) as number) !== 0;
+}
+
+export function wxDir_Remove(dir: Pointer, flags: number): boolean {
+    return (lib.symbols.wxDir_Remove(dir, flags) as number) !== 0;
+}
+
+export function wxStandardPaths_Get(): Pointer {
+    return lib.symbols.wxStandardPaths_Get();
+}
+
+export function wxStandardPaths_MSWGetShellDir(csidl: number): Pointer {
+    return lib.symbols.wxStandardPaths_MSWGetShellDir(csidl);
+}
+
+export function wxPersistenceManager_Get(): Pointer {
+    return lib.symbols.wxPersistenceManager_Get();
+}
+
+export function wxEventFilter_SetResult(result: number): void {
+    lib.symbols.wxEventFilter_SetResult(result);
+}
+
+export function wxLocale_GetSystemLanguage(): number {
+    return lib.symbols.wxLocale_GetSystemLanguage();
+}
+
+export function wxLocale_GetSystemEncoding(): number {
+    return lib.symbols.wxLocale_GetSystemEncoding();
+}
+
+export function wxLocale_GetSystemEncodingName(): Pointer {
+    return lib.symbols.wxLocale_GetSystemEncodingName();
+}
+
+export function wxLocale_GetInfo(index: number, category: number): Pointer {
+    return lib.symbols.wxLocale_GetInfo(index, category);
+}
+
+export function wxLocale_GetOSInfo(index: number, category: number): Pointer {
+    return lib.symbols.wxLocale_GetOSInfo(index, category);
+}
+
+export function wxLocale_IsAvailable(language: number): boolean {
+    return (lib.symbols.wxLocale_IsAvailable(language) as number) !== 0;
+}
+
+export function wxLocale_GetLanguageName(language: number): Pointer {
+    return lib.symbols.wxLocale_GetLanguageName(language);
+}
+
+export function wxLocale_GetLanguageCanonicalName(language: number): Pointer {
+    return lib.symbols.wxLocale_GetLanguageCanonicalName(language);
+}
+
+export function wxUILocale_FromTag(tag: Pointer): Pointer {
+    return lib.symbols.wxUILocale_FromTag(tag);
+}
+
+export function wxUILocale_GetLanguageInfo(lang: number): Pointer {
+    return lib.symbols.wxUILocale_GetLanguageInfo(lang);
+}
+
+export function wxUILocale_GetCurrent(): Pointer {
+    return lib.symbols.wxUILocale_GetCurrent();
+}
+
+export function wxUILocale_UseLocaleName(locale_name: Pointer): boolean {
+    return (lib.symbols.wxUILocale_UseLocaleName(locale_name) as number) !== 0;
+}
+
+export function wxUILocale_GetSystemLocaleTag(): Pointer {
+    return lib.symbols.wxUILocale_GetSystemLocaleTag();
+}
+
+export function wxUILocale_GetSystemLanguage(): number {
+    return lib.symbols.wxUILocale_GetSystemLanguage();
+}
+
+export function wxUILocale_GetSystemLocale(): number {
+    return lib.symbols.wxUILocale_GetSystemLocale();
+}
+
+export function wxUILocale_GetLanguageName(language: number): Pointer {
+    return lib.symbols.wxUILocale_GetLanguageName(language);
+}
+
+export function wxUILocale_GetLanguageCanonicalName(language: number): Pointer {
+    return lib.symbols.wxUILocale_GetLanguageCanonicalName(language);
+}
+
+export function wxUILocale_GetInfo(index: number, category: number): Pointer {
+    return lib.symbols.wxUILocale_GetInfo(index, category);
+}
+
+export function wxUILocale_IsSet(): boolean {
+    return (lib.symbols.wxUILocale_IsSet() as number) !== 0;
+}
+
+export function wxUILocale_UseDefault(): boolean {
+    return (lib.symbols.wxUILocale_UseDefault() as number) !== 0;
+}
+
+export function wxTranslations_Get(): Pointer {
+    return lib.symbols.wxTranslations_Get();
+}
+
+export function wxTranslations_Set(translations: Pointer): void {
+    lib.symbols.wxTranslations_Set(translations);
+}
+
+export function wxTranslations_GetUntranslatedString(text: Pointer): Pointer {
+    return lib.symbols.wxTranslations_GetUntranslatedString(text);
+}
+
+export function wxNumberFormatter_ToStringLong(value: bigint, style: number): Pointer {
+    return lib.symbols.wxNumberFormatter_ToStringLong(value, style);
+}
+
+export function wxNumberFormatter_ToString(val: bigint, style: number): Pointer {
+    return lib.symbols.wxNumberFormatter_ToString(val, style);
+}
+
+export function wxNumberFormatter_Format(format: Pointer, value: number): Pointer {
+    return lib.symbols.wxNumberFormatter_Format(format, value);
+}
+
+export function wxNumberFormatter_FromStringLong(text: Pointer, value: Pointer): boolean {
+    return (lib.symbols.wxNumberFormatter_FromStringLong(text, value) as number) !== 0;
+}
+
+export function wxNumberFormatter_FromStringDouble(text: Pointer, value: Pointer): boolean {
+    return (lib.symbols.wxNumberFormatter_FromStringDouble(text, value) as number) !== 0;
+}
+
+export function wxNumberFormatter_RemoveTrailingZeroes(text: Pointer): void {
+    lib.symbols.wxNumberFormatter_RemoveTrailingZeroes(text);
+}
+
+export function wxNumberFormatter_RemoveCurrencySymbolOrCode(text: Pointer, style: number): Pointer {
+    return lib.symbols.wxNumberFormatter_RemoveCurrencySymbolOrCode(text, style);
+}
+
+export function wxNumberFormatter_GetDecimalSeparator(): Pointer {
+    return lib.symbols.wxNumberFormatter_GetDecimalSeparator();
+}
+
+export function wxNumberFormatter_GetThousandsSeparator(): Pointer {
+    return lib.symbols.wxNumberFormatter_GetThousandsSeparator();
+}
+
+export function wxNumberFormatter_ToStringDouble(value: number, precision: number, style: number): Pointer {
+    return lib.symbols.wxNumberFormatter_ToStringDouble(value, precision, style);
+}
+
+export function wxNumberFormatter_ToStringLongLong(value: bigint, style: number): Pointer {
+    return lib.symbols.wxNumberFormatter_ToStringLongLong(value, style);
+}
+
+export function wxVariant_GetColourPropertyValue(variant: Pointer): Pointer {
+    return lib.symbols.wxVariant_GetColourPropertyValue(variant);
+}
+
+export function wxTaskBarButton_New(parent: Pointer): Pointer {
+    return lib.symbols.wxTaskBarButton_New(parent);
+}
+
+export function wxTextFile_Translate(text: Pointer, line_type: number): Pointer {
+    return lib.symbols.wxTextFile_Translate(text, line_type);
+}
+
+export function wxTextFile_GetEol(line_type: number): Pointer {
+    return lib.symbols.wxTextFile_GetEol(line_type);
+}
+
+export function wxFilterClassFactory_Find(protocol: Pointer, type_: number): Pointer {
+    return lib.symbols.wxFilterClassFactory_Find(protocol, type_);
+}
+
+export function wxFilterClassFactory_GetFirst(): Pointer {
+    return lib.symbols.wxFilterClassFactory_GetFirst();
+}
+
+export function wxArchiveClassFactory_Find(protocol: Pointer, type_: number): Pointer {
+    return lib.symbols.wxArchiveClassFactory_Find(protocol, type_);
+}
+
+export function wxArchiveClassFactory_GetFirst(): Pointer {
+    return lib.symbols.wxArchiveClassFactory_GetFirst();
+}
+
+export function wxZlibInputStream_CanHandleGZip(): boolean {
+    return (lib.symbols.wxZlibInputStream_CanHandleGZip() as number) !== 0;
+}
+
+export function wxZlibOutputStream_CanHandleGZip(): boolean {
+    return (lib.symbols.wxZlibOutputStream_CanHandleGZip() as number) !== 0;
+}
+
+export function wxTarInputStream_GetMaxExtendedHeaderSize(): number {
+    return lib.symbols.wxTarInputStream_GetMaxExtendedHeaderSize();
+}
+
+export function wxTarInputStream_SetMaxExtendedHeaderSize(size: number): void {
+    lib.symbols.wxTarInputStream_SetMaxExtendedHeaderSize(size);
+}
+
+export function wxPreferencesEditor_ShouldApplyChangesImmediately(): boolean {
+    return (lib.symbols.wxPreferencesEditor_ShouldApplyChangesImmediately() as number) !== 0;
+}
+
+export function wxPreferencesEditor_ShownModally(): boolean {
+    return (lib.symbols.wxPreferencesEditor_ShownModally() as number) !== 0;
+}
+
+export function wxLog_SetThreadActiveTarget(logger: Pointer): Pointer {
+    return lib.symbols.wxLog_SetThreadActiveTarget(logger);
+}
+
+export function wxLog_GetActiveTarget(): Pointer {
+    return lib.symbols.wxLog_GetActiveTarget();
+}
+
+export function wxLog_SetActiveTarget(pLogger: Pointer): wxLog | null {
+    const rawPtr = lib.symbols.wxLog_SetActiveTarget(pLogger);
+    if (rawPtr === null) return null;
+    return new wxLog(rawPtr);
+}
+
+export function wxLog_EnableLogging(enable: boolean): boolean {
+    return (lib.symbols.wxLog_EnableLogging(enable ? 1 : 0) as number) !== 0;
+}
+
+export function wxLog_IsEnabled(): boolean {
+    return (lib.symbols.wxLog_IsEnabled() as number) !== 0;
+}
+
+export function wxLog_SetLogLevel(level: number): void {
+    lib.symbols.wxLog_SetLogLevel(level);
+}
+
+export function wxLog_GetLogLevel(): number {
+    return lib.symbols.wxLog_GetLogLevel();
+}
+
+export function wxLog_DisableTimestamp(): void {
+    lib.symbols.wxLog_DisableTimestamp();
+}
+
+export function wxLog_GetComponentLevel(component: Pointer): number {
+    return lib.symbols.wxLog_GetComponentLevel(component);
+}
+
+export function wxLog_SetComponentLevel(component: Pointer, level: number): void {
+    lib.symbols.wxLog_SetComponentLevel(component, level);
+}
+
+export function wxLog_IsLevelEnabled(level: number, component: Pointer): boolean {
+    return (lib.symbols.wxLog_IsLevelEnabled(level, component) as number) !== 0;
+}
+
+export function wxSizer_GetDefaultBorder(): number {
+    return lib.symbols.wxSizer_GetDefaultBorder();
+}
+
+export function wxFont_AdjustToSymbolicSize(size: number, base: number): number {
+    return lib.symbols.wxFont_AdjustToSymbolicSize(size, base);
+}
+
+export function wxFont_ConvertFromLegacyWeightIfNecessary(weight: number): number {
+    return lib.symbols.wxFont_ConvertFromLegacyWeightIfNecessary(weight);
+}
+
+export function wxFont_GetNumericWeightOf(weight: number): number {
+    return lib.symbols.wxFont_GetNumericWeightOf(weight);
+}
+
+export function wxFont_AddPrivateFont(filename: Pointer): boolean {
+    return (lib.symbols.wxFont_AddPrivateFont(filename) as number) !== 0;
+}
+
+export function wxControl_FindAccelIndex(label: Pointer): number {
+    return lib.symbols.wxControl_FindAccelIndex(label);
+}
+
+export function wxControl_RemoveMnemonics(str: Pointer): Pointer {
+    return lib.symbols.wxControl_RemoveMnemonics(str);
+}
+
+export function wxControl_Ellipsize(label: Pointer, dc: Pointer, mode: number, max_width: number, flags: number): Pointer {
+    return lib.symbols.wxControl_Ellipsize(label, dc, mode, max_width, flags);
+}
+
+export function wxControl_EscapeMnemonics(str: Pointer): Pointer {
+    return lib.symbols.wxControl_EscapeMnemonics(str);
+}
+
+export function wxDialog_IsLayoutAdaptationEnabled(): boolean {
+    return (lib.symbols.wxDialog_IsLayoutAdaptationEnabled() as number) !== 0;
+}
+
+export function wxDialog_EnableLayoutAdaptation(enable: boolean): void {
+    lib.symbols.wxDialog_EnableLayoutAdaptation(enable ? 1 : 0);
+}
+
+export function wxTopLevelWindow_GetDefaultSize(): Pointer {
+    return lib.symbols.wxTopLevelWindow_GetDefaultSize();
+}
+
+export function wxURL_SetDefaultProxy(proxy_url: Pointer): void {
+    lib.symbols.wxURL_SetDefaultProxy(proxy_url);
+}
+
+export function wxGUIEventLoop_GetActive(): Pointer {
+    return lib.symbols.wxGUIEventLoop_GetActive();
+}
+
+export function wxProcess_Kill(pid: number, sig: number, flags: number, rc: Pointer): number {
+    return lib.symbols.wxProcess_Kill(pid, sig, flags, rc);
+}
+
+export function wxProcess_Exists(pid: number): boolean {
+    return (lib.symbols.wxProcess_Exists(pid) as number) !== 0;
+}
+
+export function wxProcess_Open(cmd: Pointer, flags: number): Pointer {
+    return lib.symbols.wxProcess_Open(cmd, flags);
+}
+
+export function wxPropertyGridInterface_RegisterAdditionalEditors(): void {
+    lib.symbols.wxPropertyGridInterface_RegisterAdditionalEditors();
+}
+
+export function wxPropertyGridInterface_GetEditorByName(name: Pointer): Pointer {
+    return lib.symbols.wxPropertyGridInterface_GetEditorByName(name);
+}
+
+export function wxPropertyGridInterface_InitAllTypeHandlers(): void {
+    lib.symbols.wxPropertyGridInterface_InitAllTypeHandlers();
+}
+
+export function wxPropertyGridInterface_SetBoolChoices(trueChoice: Pointer, falseChoice: Pointer): void {
+    lib.symbols.wxPropertyGridInterface_SetBoolChoices(trueChoice, falseChoice);
+}
+
+export function wxPropertyGrid_RegisterEditorClass(editor: Pointer, noDefCheck: boolean): Pointer {
+    return lib.symbols.wxPropertyGrid_RegisterEditorClass(editor, noDefCheck ? 1 : 0);
+}
+
+export function wxFileProperty_GetClassValidator(): Pointer {
+    return lib.symbols.wxFileProperty_GetClassValidator();
+}
+
+export function wxURI_Unescape(escaped_uri: Pointer): Pointer {
+    return lib.symbols.wxURI_Unescape(escaped_uri);
+}
+
+export function wxWebView_New(parent: Pointer, id: number, url: Pointer, x: number, y: number, width: number, height: number, backend: Pointer, style: number): Pointer {
+    return lib.symbols.wxWebView_New(parent, id, url, x, y, width, height, backend, style);
+}
+
+export function wxWebView_NewConfiguration(backend: Pointer): Pointer {
+    return lib.symbols.wxWebView_NewConfiguration(backend);
+}
+
+export function wxWebView_IsBackendAvailable(backend: Pointer): boolean {
+    return (lib.symbols.wxWebView_IsBackendAvailable(backend) as number) !== 0;
+}
+
+export function wxRichTextBuffer_AddHandler(handler: Pointer): void {
+    lib.symbols.wxRichTextBuffer_AddHandler(handler);
+}
+
+export function wxRichTextBuffer_AddFieldType(fieldType: Pointer): void {
+    lib.symbols.wxRichTextBuffer_AddFieldType(fieldType);
+}
+
+export function wxRichTextBuffer_RemoveFieldType(name: Pointer): boolean {
+    return (lib.symbols.wxRichTextBuffer_RemoveFieldType(name) as number) !== 0;
+}
+
+export function wxRichTextBuffer_FindFieldType(name: Pointer): Pointer {
+    return lib.symbols.wxRichTextBuffer_FindFieldType(name);
+}
+
+export function wxRichTextBuffer_AddDrawingHandler(handler: Pointer): void {
+    lib.symbols.wxRichTextBuffer_AddDrawingHandler(handler);
+}
+
+export function wxRichTextBuffer_InsertDrawingHandler(handler: Pointer): void {
+    lib.symbols.wxRichTextBuffer_InsertDrawingHandler(handler);
+}
+
+export function wxRichTextBuffer_RemoveDrawingHandler(name: Pointer): boolean {
+    return (lib.symbols.wxRichTextBuffer_RemoveDrawingHandler(name) as number) !== 0;
+}
+
+export function wxRichTextBuffer_FindDrawingHandler(name: Pointer): Pointer {
+    return lib.symbols.wxRichTextBuffer_FindDrawingHandler(name);
+}
+
+export function wxRichTextBuffer_GetExtWildcard(combine: boolean, save: boolean, types: Pointer): Pointer {
+    return lib.symbols.wxRichTextBuffer_GetExtWildcard(combine ? 1 : 0, save ? 1 : 0, types);
+}
+
+export function wxArtProvider_GetBitmap(id: Pointer, client: Pointer, width: number, height: number): wxBitmap | null {
+    const rawPtr = lib.symbols.wxArtProvider_GetBitmap(id, client, width, height);
+    if (rawPtr === null) return null;
+    return new wxBitmap(rawPtr);
+}
+
+export function wxArtProvider_Pop(): boolean {
+    return (lib.symbols.wxArtProvider_Pop() as number) !== 0;
+}
+
+export function wxArtProvider_Push(provider: Pointer): void {
+    lib.symbols.wxArtProvider_Push(provider);
+}
+
+export function wxArtProvider_GetBitmapBundle(id: Pointer, client: Pointer, width: number, height: number): wxBitmapBundle | null {
+    const rawPtr = lib.symbols.wxArtProvider_GetBitmapBundle(id, client, width, height);
+    if (rawPtr === null) return null;
+    return new wxBitmapBundle(rawPtr);
+}
+
+export function wxArtProvider_GetIcon(id: Pointer, client: Pointer, width: number, height: number): wxIcon | null {
+    const rawPtr = lib.symbols.wxArtProvider_GetIcon(id, client, width, height);
+    if (rawPtr === null) return null;
+    return new wxIcon(rawPtr);
+}
+
+export function wxArtProvider_GetIconBundle(id: Pointer, client: Pointer): wxIconBundle | null {
+    const rawPtr = lib.symbols.wxArtProvider_GetIconBundle(id, client);
+    if (rawPtr === null) return null;
+    return new wxIconBundle(rawPtr);
+}
+
+export function wxArtProvider_GetNativeSizeHint(client: Pointer, window: Pointer): wxSize | null {
+    const rawPtr = lib.symbols.wxArtProvider_GetNativeSizeHint(client, window);
+    if (rawPtr === null) return null;
+    return new wxSize(rawPtr);
+}
+
+export function wxArtProvider_GetSizeHint(client: Pointer, window: Pointer): wxSize | null {
+    const rawPtr = lib.symbols.wxArtProvider_GetSizeHint(client, window);
+    if (rawPtr === null) return null;
+    return new wxSize(rawPtr);
+}
+
+export function wxArtProvider_HasNativeProvider(): boolean {
+    return (lib.symbols.wxArtProvider_HasNativeProvider() as number) !== 0;
+}
+
+export function wxArtProvider_PushBack(provider: Pointer): void {
+    lib.symbols.wxArtProvider_PushBack(provider);
+}
+
+export function wxArtProvider_DeleteProvider(provider: Pointer): boolean {
+    return (lib.symbols.wxArtProvider_DeleteProvider(provider) as number) !== 0;
+}
+
+export function wxSystemOptions_SetOption(name: Pointer, value: Pointer): void {
+    lib.symbols.wxSystemOptions_SetOption(name, value);
+}
+
+export function wxSystemOptions_SetOptionInt(name: Pointer, value: number): void {
+    lib.symbols.wxSystemOptions_SetOptionInt(name, value);
+}
+
+export function wxSystemOptions_GetOption(name: Pointer): Pointer {
+    return lib.symbols.wxSystemOptions_GetOption(name);
+}
+
+export function wxSystemOptions_GetOptionInt(name: Pointer): number {
+    return lib.symbols.wxSystemOptions_GetOptionInt(name);
+}
+
+export function wxSystemOptions_HasOption(name: Pointer): boolean {
+    return (lib.symbols.wxSystemOptions_HasOption(name) as number) !== 0;
+}
+
+export function wxSystemOptions_IsFalse(name: Pointer): boolean {
+    return (lib.symbols.wxSystemOptions_IsFalse(name) as number) !== 0;
+}
+
+export function wxThread_GetCPUCount(): number {
+    return lib.symbols.wxThread_GetCPUCount();
+}
+
+export function wxThread_GetCurrentId(): number {
+    return lib.symbols.wxThread_GetCurrentId();
+}
+
+export function wxThread_GetMainId(): number {
+    return lib.symbols.wxThread_GetMainId();
+}
+
+export function wxThread_Sleep(milliseconds: bigint): void {
+    lib.symbols.wxThread_Sleep(milliseconds);
+}
+
+export function kwxLog_GetActiveTarget(): Pointer {
+    return lib.symbols.kwxLog_GetActiveTarget();
+}
+
+export function wxAnimationCtrl_GetCompatibleAnimation(anim: Pointer): void {
+    lib.symbols.wxAnimationCtrl_GetCompatibleAnimation(anim);
+}
+
+export function wxApp_GetApp(): Pointer {
+    return lib.symbols.wxApp_GetApp();
+}
+
+export function wxApp_GetComCtl32Version(): number {
+    return lib.symbols.wxApp_GetComCtl32Version();
+}
+
+export function wxAuiManager_AlwaysUsesLiveResize(window: Pointer): boolean {
+    return (lib.symbols.wxAuiManager_AlwaysUsesLiveResize(window) as number) !== 0;
+}
+
+export function wxAuiManager_GetManager(window: Pointer): Pointer {
+    return lib.symbols.wxAuiManager_GetManager(window);
+}
+
+export function wxBitmapBundle_FromResources(name: Pointer): wxBitmapBundle | null {
+    const rawPtr = lib.symbols.wxBitmapBundle_FromResources(name);
+    if (rawPtr === null) return null;
+    return new wxBitmapBundle(rawPtr);
+}
+
+export function wxBitmapBundle_FromBitmaps(bitmaps: Pointer): wxBitmapBundle | null {
+    const rawPtr = lib.symbols.wxBitmapBundle_FromBitmaps(bitmaps);
+    if (rawPtr === null) return null;
+    return new wxBitmapBundle(rawPtr);
+}
+
+export function wxBitmapBundle_FromSVGFile(file: Pointer, width: number, height: number): wxBitmapBundle | null {
+    const rawPtr = lib.symbols.wxBitmapBundle_FromSVGFile(file, width, height);
+    if (rawPtr === null) return null;
+    return new wxBitmapBundle(rawPtr);
+}
+
+export function wxCaret_GetBlinkTime(): number {
+    return lib.symbols.wxCaret_GetBlinkTime();
+}
+
+export function wxCaret_SetBlinkTime(milliseconds: number): void {
+    lib.symbols.wxCaret_SetBlinkTime(milliseconds);
+}
+
+export function wxCommandProcessor_wxCommandProcessor(maxCommands: number): Pointer {
+    return lib.symbols.wxCommandProcessor_wxCommandProcessor(maxCommands);
+}
+
+export function wxConnectionBase_IsTextFormat(format: number): boolean {
+    return (lib.symbols.wxConnectionBase_IsTextFormat(format) as number) !== 0;
+}
+
+export function wxDocManager_GetDocumentManager(): Pointer {
+    return lib.symbols.wxDocManager_GetDocumentManager();
+}
+
+export function wxFontMapper_Get(): Pointer {
+    return lib.symbols.wxFontMapper_Get();
+}
+
+export function wxFontMapper_GetEncoding(n: bigint): number {
+    return lib.symbols.wxFontMapper_GetEncoding(n);
+}
+
+export function wxFontMapper_GetEncodingDescription(encoding: number): Pointer {
+    return lib.symbols.wxFontMapper_GetEncodingDescription(encoding);
+}
+
+export function wxFontMapper_GetEncodingName(encoding: number): Pointer {
+    return lib.symbols.wxFontMapper_GetEncodingName(encoding);
+}
+
+export function wxFontMapper_GetSupportedEncodingsCount(): bigint {
+    return lib.symbols.wxFontMapper_GetSupportedEncodingsCount() as bigint;
+}
+
+export function wxHelpProvider_Get(): Pointer {
+    return lib.symbols.wxHelpProvider_Get();
+}
+
+export function wxMemoryFSHandler_AddFile(filename: Pointer, textdata: Pointer): void {
+    lib.symbols.wxMemoryFSHandler_AddFile(filename, textdata);
+}
+
+export function wxMemoryFSHandler_AddFileBinary(filename: Pointer, binarydata: Pointer, size: bigint): void {
+    lib.symbols.wxMemoryFSHandler_AddFileBinary(filename, binarydata, size);
+}
+
+export function wxMemoryFSHandler_AddFileWithMimeType(filename: Pointer, textdata: Pointer, mimetype: Pointer): void {
+    lib.symbols.wxMemoryFSHandler_AddFileWithMimeType(filename, textdata, mimetype);
+}
+
+export function wxMemoryFSHandler_AddFileWithMimeTypeBinary(filename: Pointer, binarydata: Pointer, size: bigint, mimetype: Pointer): void {
+    lib.symbols.wxMemoryFSHandler_AddFileWithMimeTypeBinary(filename, binarydata, size, mimetype);
+}
+
+export function wxMemoryFSHandler_AddFileImage(filename: Pointer, image: Pointer, type_: number): void {
+    lib.symbols.wxMemoryFSHandler_AddFileImage(filename, image, type_);
+}
+
+export function wxMemoryFSHandler_AddFileBitmap(filename: Pointer, bitmap: Pointer, type_: number): void {
+    lib.symbols.wxMemoryFSHandler_AddFileBitmap(filename, bitmap, type_);
+}
+
+export function wxMemoryFSHandler_RemoveFile(filename: Pointer): void {
+    lib.symbols.wxMemoryFSHandler_RemoveFile(filename);
+}
+
+export function wxVariantVector_Add(vec: Pointer, value: Pointer): void {
+    lib.symbols.wxVariantVector_Add(vec, value);
+}
+
+export function wxVariantVector_AddString(vec: Pointer, value: Pointer): void {
+    lib.symbols.wxVariantVector_AddString(vec, value);
+}
+
+export function wxVariantVector_AddLong(vec: Pointer, value: bigint): void {
+    lib.symbols.wxVariantVector_AddLong(vec, value);
+}
+
+export function wxVariantVector_AddBool(vec: Pointer, value: boolean): void {
+    lib.symbols.wxVariantVector_AddBool(vec, value ? 1 : 0);
+}
+
+export function wxVariantVector_GetCount(vec: Pointer): bigint {
+    return lib.symbols.wxVariantVector_GetCount(vec) as bigint;
+}
+
+export function wxVariantVector_Clear(vec: Pointer): void {
+    lib.symbols.wxVariantVector_Clear(vec);
+}
+
+export function wxQuantize_Quantize(src: Pointer, dest: Pointer, desiredNoColours: number, flags: number): boolean {
+    return (lib.symbols.wxQuantize_Quantize(src, dest, desiredNoColours, flags) as number) !== 0;
+}
+
+export function wxSizerFlags_GetDefaultBorderFractional(): number {
+    return lib.symbols.wxSizerFlags_GetDefaultBorderFractional();
+}
+
+export function wxSizerFlags_DisableConsistencyChecks(): void {
+    lib.symbols.wxSizerFlags_DisableConsistencyChecks();
+}
+
+export function wxSystemSettings_GetColour(index: number, ref: Pointer): void {
+    lib.symbols.wxSystemSettings_GetColour(index, ref);
+}
+
+export function wxSystemSettings_GetAppearance(): Pointer {
+    return lib.symbols.wxSystemSettings_GetAppearance();
+}
+
+export function wxSystemSettings_GetFont(index: number, ref: Pointer): void {
+    lib.symbols.wxSystemSettings_GetFont(index, ref);
+}
+
+export function wxSystemSettings_GetMetric(index: number): number {
+    return lib.symbols.wxSystemSettings_GetMetric(index);
+}
+
+export function wxSystemSettings_GetScreenType(): number {
+    return lib.symbols.wxSystemSettings_GetScreenType();
+}
+
+export function wxSystemSettings_SelectLightDark(colForLight: Pointer, colForDark: Pointer): Pointer {
+    return lib.symbols.wxSystemSettings_SelectLightDark(colForLight, colForDark);
+}
+
+export function wxValidator_IsSilent(): boolean {
+    return (lib.symbols.wxValidator_IsSilent() as number) !== 0;
+}
+
+export function wxValidator_SuppressBellOnError(doIt: boolean): void {
+    lib.symbols.wxValidator_SuppressBellOnError(doIt ? 1 : 0);
+}
+
+export function wxWizard_Chain(first: Pointer, second: Pointer): void {
+    lib.symbols.wxWizard_Chain(first, second);
 }
 

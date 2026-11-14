@@ -1,0 +1,1230 @@
+// wizard.kwxts — kwxTypeScript port of wxSamples/src/wizard/wizard.cpp
+//
+// The wxWizard sample: a small frame whose File menu launches the same
+// "Absolutely Useless Wizard" modally (with and without a page-area sizer) and
+// modeless, plus two Options check items that change how the wizard is built.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\wizard\wizard.kwxts
+//
+// Port notes:
+//   * MyWizard::SetExtraStyle(wxWIZARD_EX_HELPBUTTON) is applied *between* the
+//     default constructor and Create() in C++. wxWizard_CreateDefault() and
+//     wxWizard_Create2() expose that two-step construction, so the extra style
+//     is set before DoCreateControls() runs and the wizard has its Help button.
+//   * wxValidationPage overrides TransferDataFromWindow(). The out-parameter
+//     hook wxWizardPage::SetOnTransferDataFromWindowOut() supplies the bool
+//     result: the callback writes 0 to veto the page change (wxWizard calls
+//     TransferDataFromWindow() from OnBackOrNext(), including for Finish),
+//     exactly like returning false from the C++ override.
+//   * wxCheckboxPage derives from wxWizardPage and overrides GetPrev()/GetNext()
+//     to skip a page at run time. createKwxWizardPage() builds the same helper
+//     class, and SetOnGetPrevOut()/SetOnGetNextOut() provide the page pointers
+//     through out parameters, so both virtuals behave like the C++ overrides.
+//     wxWizardPageSimple::Chain() is *not* used for that page: the wxWizard_Chain
+//     binding casts both arguments to wxWizardPageSimple*, and the helper page
+//     is a plain wxWizardPage. SetNext() plus the GetPrev out hook give the same
+//     chain without the invalid cast.
+//   * sample.xpm (wxICON(sample)) is converted to sample.svg and loaded at run
+//     time instead of being compiled in as a resource.
+//   * The wizard and the validation page take wxBitmapBundle pointers, so
+//     wiztest.svg and wiztest2.svg are handed over exactly as the C++ code
+//     does. Only the sample icon is rasterised, because wxIcon needs a bitmap.
+
+declare const __dirname: string;
+
+import {
+    ALL,
+    DEFAULT_DIALOG_STYLE,
+    DEFAULT_FRAME_STYLE,
+    DIALOG_ADAPTATION_MODE_ENABLED,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    EVT_WIZARD_CANCEL,
+    EVT_WIZARD_FINISHED,
+    EVT_WIZARD_PAGE_CHANGING,
+    ICON_INFORMATION,
+    ICON_QUESTION,
+    ICON_WARNING,
+    ID_ABOUT,
+    ID_ANY,
+    ID_EXIT,
+    ID_HIGHEST,
+    OK,
+    RA_SPECIFY_COLS,
+    RESIZE_BORDER,
+    STB_DEFAULT_STYLE,
+    TE_MULTILINE,
+    VERTICAL,
+    WIZARD_EX_HELPBUTTON,
+    WIZARD_VALIGN_CENTRE,
+    YES,
+    YES_NO,
+    createKwxWizardPage,
+    createWxBoxSizer,
+    createWxCheckBox,
+    createWxCheckListBox,
+    createWxClosure,
+    createWxFrame,
+    createWxIconDefault,
+    createWxMenu,
+    createWxMenuBar,
+    createWxRadioBox,
+    createWxSizerFlags,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    createWxWizardDefault,
+    createWxWizardPageSimple,
+    exitMainLoop,
+    initialize,
+    kwxMessageBox,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wrapWxBitmapBundle,
+    wrapWxkwxWizardPage,
+    wrapWxRect,
+    wxBitmapBundle_FromSVGFile,
+    wxGetClientDisplayRect,
+    wxWizardEvent,
+    wxBitmapBundle,
+    wxCheckBox,
+    wxClosure,
+    wxCommandEvent,
+    wxFrame,
+    wxMenu,
+    wxMenuBar,
+    wxRadioBox,
+    wxSizer,
+    wxSizerFlags,
+    wxWizard,
+    wxWizardPage,
+    wxWizardPageSimple,
+} from "kwx";
+import { arrayBufferView, Callback, exit, Pointer, pointerOf } from "kwx/platform";
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+// enum { Wizard_About = wxID_ABOUT, Wizard_Quit = wxID_EXIT,
+//        Wizard_RunModal = wxID_HIGHEST, Wizard_RunNoSizer, Wizard_RunModeless,
+//        Wizard_LargeWizard, Wizard_ExpandBitmap };
+const WIZARD_ABOUT = ID_ABOUT;
+const WIZARD_QUIT = ID_EXIT;
+const WIZARD_RUN_MODAL = ID_HIGHEST;
+const WIZARD_RUN_NO_SIZER = ID_HIGHEST + 1;
+const WIZARD_RUN_MODELESS = ID_HIGHEST + 2;
+const WIZARD_LARGE_WIZARD = ID_HIGHEST + 3;
+const WIZARD_EXPAND_BITMAP = ID_HIGHEST + 4;
+
+// wxRadioboxPage::Forward / Backward / Both / Neither
+const RADIO_FORWARD = 0;
+const RADIO_BACKWARD = 1;
+const RADIO_BOTH = 2;
+
+const RADIO_CHOICES: string[] = ["forward", "backward", "both", "neither"];
+
+// wxCheckboxPage's checklist box contents (aszChoices).
+const CHECK_LIST_CHOICES: string[] = [
+    "Zeroth", "First", "Second", "Third", "Fourth",
+    "Fifth", "Sixth", "Seventh", "Eighth", "Nineth",
+];
+
+// wxSize(116, 260) passed to both FromSVGFile() calls.
+const PAGE_BITMAP_WIDTH = 116;
+const PAGE_BITMAP_HEIGHT = 260;
+
+// wxCheckboxPage: wxSize textSize = wxSize(150, 200);
+const TEXT_WIDTH = 150;
+const TEXT_HEIGHT = 200;
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+/** Absolute path of an asset shipped next to this module. */
+function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** Creates a wxString for the duration of `fn` and releases it afterwards. */
+function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** wxMessageBox(message, caption, style, parent) — returns the dialog result. */
+function showMessage(
+    message: string, caption: string, style: number, parent: Pointer | null,
+): number
+{
+    let result = 0;
+    withString(message, (messagePtr) =>
+    {
+        withString(caption, (captionPtr) =>
+        {
+            result = kwxMessageBox(messagePtr, captionPtr, style, parent, -1, -1);
+        });
+    });
+    return result;
+}
+
+/** `sizer->Add(window, wxSizerFlags()...)`. */
+function addWithFlags(
+    sizer: wxSizer, window: Pointer, configure: (flags: wxSizerFlags) => void,
+): void
+{
+    const flags = createWxSizerFlags(0);
+    if (!flags)
+    {
+        sizer.AddWindow(window, 0, ALL, 0, null);
+        return;
+    }
+    configure(flags);
+    sizer.AddWindowFlags(window, flags.ptr);
+    flags.Delete();
+}
+
+/**
+ * Builds the `char**` array expected by wxRadioBox_Create and
+ * wxCheckListBox_Create. The buffers stay reachable through `keep` until the
+ * native constructor has copied the strings.
+ */
+interface PackedStrings
+{
+    ptr: Pointer;
+    keep: Array<Uint8Array | BigUint64Array>;
+}
+
+function packStrings(items: string[]): PackedStrings
+{
+    const keep: Array<Uint8Array | BigUint64Array> = [];
+    const pointers = new BigUint64Array(items.length);
+
+    for (let index = 0; index < items.length; index++)
+    {
+        const bytes = new TextEncoder().encode(items[index] + "\0");
+        keep.push(bytes);
+        const address = pointerOf(bytes);
+        pointers[index] = address === null ? 0n : address;
+    }
+    keep.push(pointers);
+
+    return { ptr: pointerOf(pointers), keep };
+}
+
+// ---------------------------------------------------------------------------
+// Per-instance context tables
+//
+// The callback pool is fixed at 64 slots and a wizard is rebuilt for every menu
+// command, so each handler exists once and identifies its page through the
+// wxClosure's data pointer (the callback's second argument), which points at a
+// small Int32Array holding an index into a module-level table.
+// ---------------------------------------------------------------------------
+
+const contextBuffers: Int32Array[] = [];
+
+/**
+ * Every wxClosure created for a binding, kept referenced for the whole run.
+ * The native wxCallback holds its own reference, but keeping the wrappers here
+ * makes the lifetime explicit and guarantees nothing is collected early.
+ */
+const retainedClosures: wxClosure[] = [];
+
+/** Creates a wxClosure and retains it for the event loop's lifetime. */
+function newClosure(fun: Pointer, data: Pointer): wxClosure | null
+{
+    const closure = createWxClosure(fun, data);
+    if (closure)
+    {
+        retainedClosures.push(closure);
+    }
+    return closure;
+}
+
+function contextPointer(index: number): Pointer
+{
+    const buffer = new Int32Array([index]);
+    contextBuffers.push(buffer);
+    return pointerOf(buffer);
+}
+
+function contextIndex(data: Pointer): number
+{
+    if (data === null)
+    {
+        return -1;
+    }
+    return new Int32Array(arrayBufferView(data, 4))[0];
+}
+
+/**
+ * Writes the page pointer through a wxWizardPage GetPrev()/GetNext() out
+ * parameter. A null page means "first" (GetPrev) or "last" (GetNext) page.
+ */
+function writeOutPointer(out: Pointer, value: Pointer): void
+{
+    if (out === null)
+    {
+        return;
+    }
+    new BigUint64Array(arrayBufferView(out, 8))[0] = value === null ? 0n : value;
+}
+
+/** Writes the transfer result through a TransferDataFromWindow() out parameter. */
+function writeOutInt32(out: Pointer, value: number): void
+{
+    if (out === null)
+    {
+        return;
+    }
+    new Int32Array(arrayBufferView(out, 4))[0] = value;
+}
+
+/** What a page's wizard-event handlers must do. */
+type PageKind = "validation" | "radio" | "checkbox";
+
+interface PageContext
+{
+    kind: PageKind;
+    /** The page that owns the handlers, used as the message box parent. */
+    page: wxWizardPage | null;
+    checkbox: wxCheckBox | null;
+    radio: wxRadioBox | null;
+    /** Chain neighbours used by the GetPrev()/GetNext() out hooks. */
+    prevPage: wxWizardPageSimple | null;
+    nextPage: wxWizardPageSimple | null;
+}
+
+const pageContexts: PageContext[] = [];
+
+function registerContext(context: PageContext): Pointer
+{
+    const index = pageContexts.length;
+    pageContexts.push(context);
+    return contextPointer(index);
+}
+
+function contextAt(data: Pointer): PageContext | null
+{
+    const index = contextIndex(data);
+    return index < 0 ? null : (pageContexts[index] ?? null);
+}
+
+// ---------------------------------------------------------------------------
+// Wizard artwork (wiztest.svg / wiztest2.svg) and the sample icon
+//
+// Both bundles are created once and reused: the wizard and page constructors
+// copy the bundle, so the same artwork is handed to every wizard instance.
+// ---------------------------------------------------------------------------
+
+let wizardBundle: wxBitmapBundle | null = null;
+let validationBundle: wxBitmapBundle | null = null;
+let iconBundle: wxBitmapBundle | null = null;
+
+function loadBundle(name: string, width: number, height: number): wxBitmapBundle | null
+{
+    const path = samplePath(name);
+    const raw = withString(path, (ptr) => wxBitmapBundle_FromSVGFile(ptr, width, height));
+    if (raw === null)
+    {
+        console.error(`wizard: failed to load ${name}`);
+        return null;
+    }
+    return wrapWxBitmapBundle(raw);
+}
+
+function getWizardBundle(): wxBitmapBundle | null
+{
+    if (!wizardBundle)
+    {
+        wizardBundle = loadBundle("wiztest.svg", PAGE_BITMAP_WIDTH, PAGE_BITMAP_HEIGHT);
+    }
+    return wizardBundle;
+}
+
+function getValidationBundle(): wxBitmapBundle | null
+{
+    if (!validationBundle)
+    {
+        validationBundle = loadBundle("wiztest2.svg", PAGE_BITMAP_WIDTH, PAGE_BITMAP_HEIGHT);
+    }
+    return validationBundle;
+}
+
+function getIconBundle(): wxBitmapBundle | null
+{
+    if (!iconBundle)
+    {
+        iconBundle = loadBundle("sample.svg", 32, 32);
+    }
+    return iconBundle;
+}
+
+/** MyWizard::SetIcon(wxICON(sample)) — sample.xpm converted to sample.svg. */
+function applyWizardIcon(wizard: wxWizard): void
+{
+    const bundle = getIconBundle();
+    const bitmap = bundle ? bundle.GetBitmap(32, 32) : null;
+    if (!bitmap)
+    {
+        return;
+    }
+
+    const icon = createWxIconDefault();
+    if (icon)
+    {
+        icon.CopyFromBitmap(bitmap.ptr);
+        wizard.SetIcon(icon.ptr);
+        icon.Delete();
+    }
+    bitmap.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// Wizard pages
+// ---------------------------------------------------------------------------
+
+/**
+ * wxValidationPage::TransferDataFromWindow(): returns false (and shows the
+ * warning) while the checkbox is clear. The out hook is initialized to 1, so
+ * only the rejection writes to it.
+ */
+function onValidationTransfer(context: PageContext, resultOut: Pointer): void
+{
+    if (!context.checkbox || context.checkbox.GetValue())
+    {
+        return;
+    }
+
+    showMessage(
+        "Check the checkbox first!", "No way",
+        ICON_WARNING | OK, context.page ? context.page.ptr : null,
+    );
+    writeOutInt32(resultOut, 0);
+}
+
+/** The bitmapped validation page (wxValidationPage); returns null on failure. */
+function createValidationPage(
+    wizard: wxWizard,
+    prevPage: wxWizardPageSimple,
+): wxWizardPage | null
+{
+    const context: PageContext = {
+        kind: "validation", page: null, checkbox: null, radio: null,
+        prevPage, nextPage: null,
+    };
+    const data = registerContext(context);
+
+    // wxWizardPageSimple(parent) + m_bitmap = FromSVGFile("wiztest2.svg", ...)
+    const raw = createKwxWizardPage(data);
+    if (raw === null)
+    {
+        return null;
+    }
+    const page = wrapWxkwxWizardPage(raw);
+    const bundle = getValidationBundle();
+    if (!page.Create2(wizard.ptr, bundle ? bundle.ptr : null))
+    {
+        return null;
+    }
+
+    const checkbox = withString("&Check me", (ptr) =>
+        createWxCheckBox(page.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+    if (!checkbox)
+    {
+        page.Destroy();
+        return null;
+    }
+
+    const mainSizer = createWxBoxSizer(VERTICAL);
+    if (!mainSizer)
+    {
+        page.Destroy();
+        return null;
+    }
+
+    // wxSizerFlags().Border()
+    const label = withString(
+        "You need to check the checkbox\n" +
+        "below before going to the next page\n",
+        (ptr) => createWxStaticText(page.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0),
+    );
+    if (label)
+    {
+        addWithFlags(mainSizer, label.ptr, (flags) => flags.Border(ALL));
+    }
+
+    // mainSizer->Add(m_checkbox, 0, wxALL, 5)
+    mainSizer.AddWindow(checkbox.ptr, 0, ALL, 5, null);
+    page.SetSizerAndFit(mainSizer.ptr, true);
+
+    context.page = page;
+    context.checkbox = checkbox;
+
+    // The C++ override of TransferDataFromWindow(); GetNext() stays null
+    // because this is the last page, and GetPrev() points at page 3.
+    page.SetOnTransferDataFromWindowOut(transferFromWindowCallback().pointer);
+    page.SetOnGetPrevOut(pageGetPrevCallback().pointer);
+
+    return page;
+}
+
+/** wxRadioboxPage::OnWizardPageChanging() */
+function onRadioPageChanging(context: PageContext, eventPtr: Pointer): void
+{
+    const radio = context.radio;
+    if (!radio)
+    {
+        return;
+    }
+
+    const event = new wxWizardEvent(eventPtr);
+    const selection = radio.GetSelection();
+
+    if (selection === RADIO_BOTH)
+    {
+        return;
+    }
+    if (event.GetDirection() !== 0 && selection === RADIO_FORWARD)
+    {
+        return;
+    }
+    if (event.GetDirection() === 0 && selection === RADIO_BACKWARD)
+    {
+        return;
+    }
+
+    showMessage(
+        "You can't go there", "Not allowed", ICON_WARNING | OK, context.page.ptr,
+    );
+    event.Veto();
+}
+
+/** wxRadioboxPage::OnWizardCancel() */
+function onRadioPageCancel(context: PageContext, eventPtr: Pointer): void
+{
+    const result = showMessage(
+        "Do you really want to cancel?", "Question", ICON_QUESTION | YES_NO,
+        context.page.ptr,
+    );
+    if (result !== YES)
+    {
+        // not confirmed
+        new wxWizardEvent(eventPtr).Veto();
+    }
+}
+
+/** The "Allow to proceed" page. */
+function createRadioPage(wizard: wxWizard): wxWizardPageSimple | null
+{
+    const page = createWxWizardPageSimple(wizard.ptr, null, null, null);
+    if (!page)
+    {
+        return null;
+    }
+
+    const packed = packStrings(RADIO_CHOICES);
+    const radio = withString("Allow to proceed:", (ptr) =>
+        createWxRadioBox(
+            page.ptr, ID_ANY, ptr, -1, -1, -1, -1,
+            RADIO_CHOICES.length, packed.ptr, 1, RA_SPECIFY_COLS,
+        ));
+    void packed.keep;
+    if (!radio)
+    {
+        page.Destroy();
+        return null;
+    }
+    radio.SetSelection(RADIO_BOTH);
+
+    const mainSizer = createWxBoxSizer(VERTICAL);
+    if (!mainSizer)
+    {
+        page.Destroy();
+        return null;
+    }
+    // mainSizer->Add(m_radio, 0, wxALL, 5)
+    mainSizer.AddWindow(radio.ptr, 0, ALL, 5, null);
+    page.SetSizerAndFit(mainSizer.ptr, true);
+
+    const data = registerContext({
+        kind: "radio", page, checkbox: null, radio, prevPage: null, nextPage: null,
+    });
+
+    const changingClosure = newClosure(pageChangingCallback().pointer, data);
+    if (changingClosure)
+    {
+        page.Bind(ID_ANY, ID_ANY, EVT_WIZARD_PAGE_CHANGING, changingClosure.ptr);
+    }
+    const cancelClosure = newClosure(pageCancelCallback().pointer, data);
+    if (cancelClosure)
+    {
+        page.Bind(ID_ANY, ID_ANY, EVT_WIZARD_CANCEL, cancelClosure.ptr);
+    }
+
+    return page;
+}
+
+/**
+ * wxCheckboxPage::GetNext(): m_checkbox->GetValue() ? m_next->GetNext() : m_next
+ *
+ * The out hook is queried whenever the wizard needs the next page, so the page
+ * order follows the checkbox state exactly like the C++ override.
+ */
+function onCheckboxGetNext(context: PageContext, pageOut: Pointer): void
+{
+    if (!context.checkbox || !context.nextPage)
+    {
+        return;
+    }
+
+    if (context.checkbox.GetValue())
+    {
+        // m_next->GetNext() — skip page 3 entirely.
+        const after = context.nextPage.GetNext();
+        writeOutPointer(pageOut, after ? after.ptr : null);
+        return;
+    }
+
+    writeOutPointer(pageOut, context.nextPage.ptr);
+}
+
+/** The dynamic page-order page (wxCheckboxPage). */
+function createCheckboxPage(
+    wizard: wxWizard,
+    prevPage: wxWizardPageSimple,
+    nextPage: wxWizardPageSimple,
+): wxWizardPage | null
+{
+    const context: PageContext = {
+        kind: "checkbox", page: null, checkbox: null, radio: null,
+        prevPage, nextPage,
+    };
+    const data = registerContext(context);
+
+    // wxCheckboxPage(this, m_page1, page3) : wxWizardPage(parent)
+    const raw = createKwxWizardPage(data);
+    if (raw === null)
+    {
+        return null;
+    }
+    const page = wrapWxkwxWizardPage(raw);
+    if (!page.Create2(wizard.ptr, null))
+    {
+        return null;
+    }
+
+    const mainSizer = createWxBoxSizer(VERTICAL);
+    if (!mainSizer)
+    {
+        page.Destroy();
+        return null;
+    }
+
+    const label = withString(
+        "Try checking the box below and\nthen going back and clearing it",
+        (ptr) => createWxStaticText(page.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0),
+    );
+    if (label)
+    {
+        mainSizer.AddWindow(label.ptr, 0, ALL, 5, null);
+    }
+
+    const checkbox = withString("&Skip the next page", (ptr) =>
+        createWxCheckBox(page.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+    if (!checkbox)
+    {
+        page.Destroy();
+        return null;
+    }
+    mainSizer.AddWindow(checkbox.ptr, 0, ALL, 5, null);
+
+    const packed = packStrings(CHECK_LIST_CHOICES);
+    const checklistbox = createWxCheckListBox(
+        page.ptr, ID_ANY, -1, -1, 100, 100,
+        CHECK_LIST_CHOICES.length, packed.ptr, 0,
+    );
+    void packed.keep;
+    if (checklistbox)
+    {
+        mainSizer.AddWindow(checklistbox.ptr, 0, ALL, 5, null);
+    }
+
+    // wxSize textSize = wxSize(150, 200); the height grows when the
+    // "Scroll Wizard Pages" option is checked.
+    let textHeight = TEXT_HEIGHT;
+    const frame = topFrame;
+    const menuBar = frame ? frame.GetMenuBar() : null;
+    if (menuBar && menuBar.IsChecked(WIZARD_LARGE_WIZARD))
+    {
+        // wxGetClientDisplayRect().GetHeight() - 200
+        const rectPtr = wxGetClientDisplayRect();
+        if (rectPtr !== null)
+        {
+            const rect = wrapWxRect(rectPtr);
+            textHeight = rect.GetHeight() - 200;
+            rect.DeleteItem(rectPtr);
+        }
+    }
+
+    const textCtrl = withString("", (ptr) =>
+        createWxTextCtrl(
+            page.ptr, ID_ANY, ptr, -1, -1, TEXT_WIDTH, textHeight,
+            BigInt(TE_MULTILINE),
+        ));
+    if (textCtrl)
+    {
+        // mainSizer->Add(textCtrl, wxSizerFlags().Expand().Border())
+        addWithFlags(mainSizer, textCtrl.ptr, (flags) =>
+        {
+            flags.Expand();
+            flags.Border(ALL);
+        });
+    }
+
+    page.SetSizerAndFit(mainSizer.ptr, true);
+
+    context.page = page;
+    context.checkbox = checkbox;
+
+    // The C++ overrides of GetPrev()/GetNext().
+    page.SetOnGetPrevOut(pageGetPrevCallback().pointer);
+    page.SetOnGetNextOut(checkboxGetNextCallback().pointer);
+
+    return page;
+}
+
+// ---------------------------------------------------------------------------
+// MyWizard
+// ---------------------------------------------------------------------------
+
+/**
+ * wxWizard's own event table handles wxEVT_WIZARD_CANCEL and
+ * wxEVT_WIZARD_FINISHED: it propagates them to the parent frame (a command
+ * event does not cross the wxWS_EX_BLOCK_EVENTS dialog boundary otherwise) and
+ * destroys a modeless wizard whose event is still allowed. The frame-level
+ * handlers installed by connectEvents() are what the C++ MyFrame event table
+ * entries observe.
+ */
+interface WizardState
+{
+    wizard: wxWizard;
+    page1: wxWizardPageSimple;
+}
+
+/** MyWizard::MyWizard(wxFrame* frame, bool useSizer) */
+function createWizard(frame: wxFrame, useSizer: boolean): WizardState | null
+{
+    const menuBar = frame.GetMenuBar();
+
+    // C++: wxWizard wizard;
+    //      wizard.SetExtraStyle(wxWIZARD_EX_HELPBUTTON);
+    //      wizard.Create(frame, wxID_ANY, "Absolutely Useless Wizard",
+    //                    wxBitmapBundle::FromSVGFile("wiztest.svg", wxSize(116, 260)),
+    //                    wxDefaultPosition, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+    const wizard = createWxWizardDefault();
+    if (!wizard)
+    {
+        return null;
+    }
+
+    // The extra style has to be applied before Create(), which runs
+    // DoCreateControls() and builds the button row.
+    wizard.SetExtraStyle(BigInt(WIZARD_EX_HELPBUTTON));
+
+    const bundle = getWizardBundle();
+    const created = withString("Absolutely Useless Wizard", (titlePtr) =>
+        wizard.Create2(
+            frame.ptr, ID_ANY, titlePtr, bundle ? bundle.ptr : null,
+            -1, -1, BigInt(DEFAULT_DIALOG_STYLE | RESIZE_BORDER),
+        ));
+    if (!created)
+    {
+        wizard.Destroy();
+        return null;
+    }
+
+    applyWizardIcon(wizard);
+
+    // Allow the bitmap to be expanded to fit the page height.
+    if (menuBar && menuBar.IsChecked(WIZARD_EXPAND_BITMAP))
+    {
+        wizard.SetBitmapPlacement(WIZARD_VALIGN_CENTRE);
+    }
+
+    // Enable scrolling adaptation.
+    if (menuBar && menuBar.IsChecked(WIZARD_LARGE_WIZARD))
+    {
+        wizard.SetLayoutAdaptationMode(DIALOG_ADAPTATION_MODE_ENABLED);
+    }
+
+    // a wizard page may be either an object of predefined class...
+    // m_page1 = new wxWizardPageSimple(this)
+    const page1 = createWxWizardPageSimple(wizard.ptr, null, null, null);
+    if (!page1)
+    {
+        wizard.Destroy();
+        return null;
+    }
+
+    // new wxStaticText(m_page1, wxID_ANY, "...", wxPoint(5, 5))
+    withString(
+        "This wizard doesn't help you\nto do anything at all.\n" +
+        "\n" +
+        "The next pages will present you\nwith more useless controls.",
+        (ptr) => createWxStaticText(page1.ptr, ID_ANY, ptr, 5, 5, -1, -1, 0),
+    );
+
+    // ... or a derived class
+    const page3 = createRadioPage(wizard);
+    const page4 = page3 ? createValidationPage(wizard, page3) : null;
+    if (!page3 || !page4)
+    {
+        wizard.Destroy();
+        return null;
+    }
+
+    // page3->Chain(page4): SetNext() plus the GetPrev out hook on page 4. The
+    // wxWizard_Chain binding casts both operands to wxWizardPageSimple*, which
+    // page 4 (a plain wxWizardPage helper) is not.
+    page3.SetNext(page4.ptr);
+
+    // this page is not a wxWizardPageSimple, so we use SetNext/Prev to insert
+    // it into the chain of pages
+    const page2 = createCheckboxPage(wizard, page1, page3);
+    if (!page2)
+    {
+        wizard.Destroy();
+        return null;
+    }
+    page1.SetNext(page2.ptr);
+    page3.SetPrev(page2.ptr);
+
+    if (useSizer)
+    {
+        // allow the wizard to size itself around the pages
+        const pageAreaSizer = wizard.GetPageAreaSizer();
+        if (pageAreaSizer)
+        {
+            pageAreaSizer.AddWindow(page1.ptr, 0, 0, 0, null);
+        }
+    }
+
+    return { wizard, page1 };
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame
+// ---------------------------------------------------------------------------
+
+interface FrameState
+{
+    frame: wxFrame;
+}
+
+/** Modeless wizards stay referenced until wxWizard destroys them itself. */
+const modelessWizards: wxWizard[] = [];
+
+/** The top-level frame, read by wxCheckboxPage to inspect the Options menu. */
+let topFrame: wxFrame | null = null;
+
+function newMenu(): wxMenu
+{
+    const title = createWxString("");
+    const menu = createWxMenu(title.ptr, 0n)!;
+    title.Delete();
+    return menu;
+}
+
+function appendItem(menu: wxMenu, id: number, label: string, help: string | null): void
+{
+    withString(label, (labelPtr) =>
+    {
+        if (help === null)
+        {
+            menu.Append(id, labelPtr, null, false);
+        }
+        else
+        {
+            withString(help, (helpPtr) =>
+            {
+                menu.Append(id, labelPtr, helpPtr, false);
+            });
+        }
+    });
+}
+
+function appendCheckItem(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (ptr) => menu.AppendCheckItem(id, ptr, null));
+}
+
+function buildMenuBar(): wxMenuBar | null
+{
+    const menuBar = createWxMenuBar(0);
+    if (!menuBar)
+    {
+        return null;
+    }
+
+    // wxMenu *menuFile = new wxMenu;
+    const menuFile = newMenu();
+    appendItem(menuFile, WIZARD_RUN_MODAL, "&Run wizard modal...\tCtrl-R", null);
+    appendItem(menuFile, WIZARD_RUN_NO_SIZER, "Run wizard &without sizer...", null);
+    appendItem(menuFile, WIZARD_RUN_MODELESS, "Run wizard &modeless...", null);
+    menuFile.AppendSeparator();
+    appendItem(menuFile, WIZARD_QUIT, "E&xit\tAlt-X", "Quit this program");
+    withString("&File", (ptr) => menuBar.Append(menuFile.ptr, ptr));
+
+    const menuOptions = newMenu();
+    appendCheckItem(menuOptions, WIZARD_LARGE_WIZARD, "&Scroll Wizard Pages");
+    appendCheckItem(menuOptions, WIZARD_EXPAND_BITMAP, "Si&ze Bitmap To Page");
+    withString("&Options", (ptr) => menuBar.Append(menuOptions.ptr, ptr));
+
+    const helpMenu = newMenu();
+    appendItem(helpMenu, WIZARD_ABOUT, "&About\tF1", "Show about dialog");
+    withString("&Help", (ptr) => menuBar.Append(helpMenu.ptr, ptr));
+
+    return menuBar;
+}
+
+/** MyFrame::MyFrame(title) — wxSize(250, 150), wxDefaultPosition. */
+function createMainFrame(): FrameState | null
+{
+    const frame = withString("wxWizard Sample", (ptr) =>
+        createWxFrame(null, ID_ANY, ptr, -1, -1, 250, 150, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    const menuBar = buildMenuBar();
+    if (menuBar)
+    {
+        frame.SetMenuBar(menuBar.ptr);
+    }
+
+    // also create status bar which we use in OnWizardCancel
+    // (CreateStatusBar() defaults: number 1, wxSTB_DEFAULT_STYLE, winid 0)
+    frame.CreateStatusBar(1, STB_DEFAULT_STYLE, 0);
+
+    return { frame };
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame event handlers
+// ---------------------------------------------------------------------------
+
+/** MyFrame::OnQuit — Close(true), which the close handler turns into a stop. */
+function onQuit(frame: wxFrame): void
+{
+    frame.Close(true);
+}
+
+/** MyFrame::OnAbout */
+function onAbout(frame: wxFrame): void
+{
+    showMessage(
+        "Demo of wxWizard class\n" +
+        "(c) 1999, 2000 Vadim Zeitlin",
+        "About wxWizard sample", OK | ICON_INFORMATION, frame.ptr,
+    );
+}
+
+/** MyFrame::OnRunWizard / OnRunWizardNoSizer */
+function onRunWizard(frame: wxFrame, useSizer: boolean): void
+{
+    const state = createWizard(frame, useSizer);
+    if (!state)
+    {
+        console.error("wizard: failed to create the wizard");
+        return;
+    }
+
+    state.wizard.RunWizard(state.page1.ptr);
+    // MyWizard is a stack object in C++; release the native dialog now.
+    state.wizard.Destroy();
+}
+
+/** MyFrame::OnRunWizardModeless */
+function onRunWizardModeless(frame: wxFrame): void
+{
+    const state = createWizard(frame, true);
+    if (!state)
+    {
+        console.error("wizard: failed to create the modeless wizard");
+        return;
+    }
+
+    state.wizard.ShowPage(state.page1.ptr, true);
+    state.wizard.Show(true);
+    modelessWizards.push(state.wizard);
+}
+
+/** MyFrame::OnWizardFinished */
+function onWizardFinished(): void
+{
+    showMessage("The wizard finished successfully.", "Wizard notification", OK, null);
+}
+
+/** MyFrame::OnWizardCancel */
+function onWizardCancel(): void
+{
+    showMessage("The wizard was cancelled.", "Wizard notification", OK, null);
+}
+
+// ---------------------------------------------------------------------------
+// Callbacks (one per distinct handler; the 64-slot pool is never exceeded)
+// ---------------------------------------------------------------------------
+
+let commandCallback: Callback | null = null;
+let closeHandler: Callback | null = null;
+let wizardCancelHandler: Callback | null = null;
+let wizardFinishedHandler: Callback | null = null;
+let pageChanging: Callback | null = null;
+let pageCancel: Callback | null = null;
+let pageGetPrev: Callback | null = null;
+let checkboxGetNext: Callback | null = null;
+let transferFromWindow: Callback | null = null;
+
+/** Allocates a handler that drops the teardown sweep (null event). */
+function newEventHandler(
+    handler: (data: Pointer, eventPtr: Pointer) => void,
+): Callback
+{
+    return new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return; // teardown sweep: wxClosure invokes handlers with null
+            }
+            handler(data, eventPtr);
+        },
+    );
+}
+
+/** wxEVT_WIZARD_PAGE_CHANGING for wxRadioboxPage. */
+function pageChangingCallback(): Callback
+{
+    if (!pageChanging)
+    {
+        pageChanging = newEventHandler((data, eventPtr) =>
+        {
+            const context = contextAt(data);
+            if (context && context.kind === "radio")
+            {
+                onRadioPageChanging(context, eventPtr);
+            }
+        });
+    }
+    return pageChanging;
+}
+
+/** wxRadioboxPage's wxEVT_WIZARD_CANCEL. */
+function pageCancelCallback(): Callback
+{
+    if (!pageCancel)
+    {
+        pageCancel = newEventHandler((data, eventPtr) =>
+        {
+            const context = contextAt(data);
+            if (context)
+            {
+                onRadioPageCancel(context, eventPtr);
+            }
+        });
+    }
+    return pageCancel;
+}
+
+/**
+ * Allocates a wxWizardPage out hook. The kwxWizardPage helper calls the native
+ * thunk with (m_object, out) through the three-pointer callback signature; the
+ * unused third argument is ignored here.
+ */
+function newOutHookHandler(
+    handler: (context: PageContext, out: Pointer) => void,
+): Callback
+{
+    return new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (data, out) =>
+        {
+            const context = contextAt(data);
+            if (context)
+            {
+                handler(context, out);
+            }
+        },
+    );
+}
+
+/** wxCheckboxPage/wxValidationPage GetPrev(): the fixed previous page. */
+function pageGetPrevCallback(): Callback
+{
+    if (!pageGetPrev)
+    {
+        pageGetPrev = newOutHookHandler((context, pageOut) =>
+        {
+            writeOutPointer(pageOut, context.prevPage ? context.prevPage.ptr : null);
+        });
+    }
+    return pageGetPrev;
+}
+
+/** wxCheckboxPage's GetNext() out hook. */
+function checkboxGetNextCallback(): Callback
+{
+    if (!checkboxGetNext)
+    {
+        checkboxGetNext = newOutHookHandler(onCheckboxGetNext);
+    }
+    return checkboxGetNext;
+}
+
+/** wxValidationPage's TransferDataFromWindow() out hook. */
+function transferFromWindowCallback(): Callback
+{
+    if (!transferFromWindow)
+    {
+        transferFromWindow = newOutHookHandler(onValidationTransfer);
+    }
+    return transferFromWindow;
+}
+
+/** Installs the frame-level handlers (MyFrame's event table). */
+function connectEvents(state: FrameState): void
+{
+    const frame = state.frame;
+
+    // EVT_CLOSE_WINDOW — stop the loop instead of closing from a handler.
+    closeHandler = newEventHandler(() => exitMainLoop());
+    const closeClosure = newClosure(closeHandler.pointer, null);
+    if (closeClosure)
+    {
+        frame.Bind(ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr);
+    }
+
+    // EVT_MENU for every command id of the frame's menu tree.
+    commandCallback = newEventHandler((_data, eventPtr) =>
+    {
+        const event = new wxCommandEvent(eventPtr);
+        switch (event.GetId())
+        {
+            case WIZARD_QUIT:
+                onQuit(frame);
+                break;
+            case WIZARD_ABOUT:
+                onAbout(frame);
+                break;
+            case WIZARD_RUN_MODAL:
+                onRunWizard(frame, true);
+                break;
+            case WIZARD_RUN_NO_SIZER:
+                onRunWizard(frame, false);
+                break;
+            case WIZARD_RUN_MODELESS:
+                onRunWizardModeless(frame);
+                break;
+            default:
+                break;
+        }
+    });
+    const menuClosure = newClosure(commandCallback.pointer, null);
+    if (menuClosure)
+    {
+        for (const id of [
+            WIZARD_QUIT, WIZARD_ABOUT, WIZARD_RUN_MODAL,
+            WIZARD_RUN_NO_SIZER, WIZARD_RUN_MODELESS,
+        ])
+        {
+            frame.Bind(id, id, EVT_MENU, menuClosure.ptr);
+        }
+    }
+
+    // EVT_WIZARD_CANCEL / EVT_WIZARD_FINISHED (wxID_ANY on the frame).
+    wizardCancelHandler = newEventHandler(() => onWizardCancel());
+    const cancelClosure = newClosure(wizardCancelHandler.pointer, null);
+    if (cancelClosure)
+    {
+        frame.Bind(ID_ANY, ID_ANY, EVT_WIZARD_CANCEL, cancelClosure.ptr);
+    }
+
+    wizardFinishedHandler = newEventHandler(() => onWizardFinished());
+    const finishedClosure = newClosure(wizardFinishedHandler.pointer, null);
+    if (finishedClosure)
+    {
+        frame.Bind(ID_ANY, ID_ANY, EVT_WIZARD_FINISHED, finishedClosure.ptr);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// wxApp::OnInit / wxIMPLEMENT_APP
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("wxWizard Sample");
+
+    const state = createMainFrame();
+    if (!state)
+    {
+        console.error("wizard: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+    topFrame = state.frame;
+
+    connectEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    for (const callback of [
+        closeHandler, commandCallback, wizardCancelHandler, wizardFinishedHandler,
+        pageChanging, pageCancel, pageGetPrev, checkboxGetNext, transferFromWindow,
+    ])
+    {
+        if (callback)
+        {
+            callback.close();
+        }
+    }
+    closeHandler = null;
+    commandCallback = null;
+    wizardCancelHandler = null;
+    wizardFinishedHandler = null;
+    pageChanging = null;
+    pageCancel = null;
+    pageGetPrev = null;
+    checkboxGetNext = null;
+    transferFromWindow = null;
+
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

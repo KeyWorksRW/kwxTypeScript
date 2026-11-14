@@ -1,0 +1,229 @@
+// fontpicker.kwxts — port of wxSamples/src/widgets/fontpicker.cpp
+//
+// wxFontPickerCtrl does not derive from wxWindow in the bindings, so the
+// wrapper is passed to the sizer helpers through wrapWxWindow().
+
+import {
+    ALIGN_CENTRE,
+    createWxBoxSizer,
+    createWxButton,
+    createWxFontPickerCtrl,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_FONTPICKER_CHANGED,
+    EXPAND,
+    FONTSTYLE_NORMAL,
+    FNTP_DEFAULT_STYLE,
+    FNTP_FONTDESC_AS_LABEL,
+    FNTP_USEFONT_FOR_LABEL,
+    FNTP_USE_TEXTCTRL,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    readAndDeleteWxString,
+    SWISS_FONT,
+    VERTICAL,
+    wxCheckBox,
+    wxFontPickerCtrl,
+    wxFontPickerEvent,
+    wxSizer,
+    wxWindow,
+    wrapWxWindow,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import {
+    addSizer,
+    addStretchSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    logMessage,
+    makeStaticBoxSizer,
+    tripleBorder,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+const PICKER_PAGE_RESET = ID_HIGHEST;
+const PICKER_PAGE_FONT = PICKER_PAGE_RESET + 1;
+
+export class FontPickerPage extends WidgetsPage
+{
+    private fontPicker: wxFontPickerCtrl | null = null;
+
+    private chkFontTextCtrl: wxCheckBox | null = null;
+    private chkFontDescAsLabel: wxCheckBox | null = null;
+    private chkFontUseFontForLabel: wxCheckBox | null = null;
+    private sizer: wxSizer | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/fontpicker");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.fontPicker ? wrapWxWindow(this.fontPicker.ptr) : null;
+    }
+
+    override createContent(): void
+    {
+        // left pane
+        const leftSizer = createWxBoxSizer(VERTICAL)!;
+        const styleSizer = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&FontPicker style");
+
+        this.chkFontTextCtrl = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "With textctrl", ID_ANY, styleSizer.box.ptr);
+        this.chkFontDescAsLabel = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "Font desc as btn label", ID_ANY, styleSizer.box.ptr);
+        this.chkFontUseFontForLabel = this.createCheckBoxAndAddToSizer(
+            styleSizer.sizer, "Use font for label", ID_ANY, styleSizer.box.ptr);
+        addSizer(leftSizer, styleSizer.sizer, 0, EXPAND, border());
+
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(this.page.ptr, PICKER_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(leftSizer, resetButton, 0, ALIGN_CENTRE, tripleBorder());
+
+        this.reset();
+
+        // create pickers
+        this.createPicker();
+
+        // right pane
+        const sizer = createWxBoxSizer(VERTICAL)!;
+        addStretchSpacer(sizer);
+        const picker = this.fontPicker as wxFontPickerCtrl | null;
+        if (picker)
+        {
+            addWin(sizer, wrapWxWindow(picker.ptr), 0,
+                ALIGN_CENTRE, border());
+        }
+        addStretchSpacer(sizer);
+        this.sizer = sizer;
+
+        // global pane
+        const globalSizer = createWxBoxSizer(HORIZONTAL)!;
+        addSizer(globalSizer, leftSizer, 0, EXPAND, border());
+        addSizer(globalSizer, sizer, 1, EXPAND, border());
+
+        this.page.SetSizer(globalSizer.ptr, false);
+
+        bindEvent(this.page, PICKER_PAGE_RESET, PICKER_PAGE_RESET, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.reset();
+                this.recreatePicker();
+            });
+
+        bindEvent(this.page, PICKER_PAGE_FONT, PICKER_PAGE_FONT,
+            EVT_FONTPICKER_CHANGED, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const event = new wxFontPickerEvent(eventPtr, true);
+                const font = event.GetFont();
+                if (!font)
+                {
+                    return;
+                }
+
+                const faceName = font.GetFaceName();
+                const name = faceName
+                    ? readAndDeleteWxString(faceName.ptr)
+                    : "";
+                const style = font.GetStyle() === FONTSTYLE_NORMAL
+                    ? "regular"
+                    : "italic";
+                logMessage(`The font changed to '${name}' with size `
+                    + `${font.GetPointSize()}, style ${style}, weight `
+                    + `${font.GetNumericWeight()} !`);
+            });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreatePicker();
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.recreatePicker();
+    }
+
+    /** Called only once, at first construction. */
+    private createPicker(): void
+    {
+        let style = attrs.defaultFlags;
+
+        if (this.chkFontTextCtrl?.GetValue())
+        {
+            style |= FNTP_USE_TEXTCTRL;
+        }
+        if (this.chkFontUseFontForLabel?.GetValue())
+        {
+            style |= FNTP_USEFONT_FOR_LABEL;
+        }
+        if (this.chkFontDescAsLabel?.GetValue())
+        {
+            style |= FNTP_FONTDESC_AS_LABEL;
+        }
+
+        this.fontPicker = createWxFontPickerCtrl(
+            this.page.ptr, PICKER_PAGE_FONT, SWISS_FONT,
+            -1, -1, -1, -1, BigInt(style));
+
+        if (this.fontPicker)
+        {
+            this.notifyWidgetRecreation(wrapWxWindow(this.fontPicker.ptr));
+        }
+    }
+
+    /** Called to recreate an existing control. */
+    private recreatePicker(): void
+    {
+        if (this.sizer)
+        {
+            this.sizer.Detach(1);
+        }
+
+        // wxFontPickerCtrl is not a wxWindow wrapper and has no Delete(), so
+        // the owned window is destroyed through a plain wxWindow view.
+        if (this.fontPicker)
+        {
+            wrapWxWindow(this.fontPicker.ptr).Destroy();
+            this.fontPicker = null;
+        }
+
+        this.createPicker();
+
+        const picker = this.fontPicker as wxFontPickerCtrl | null;
+        if (this.sizer && picker)
+        {
+            this.sizer.InsertWindow(1, picker.ptr, 0,
+                ALIGN_CENTRE, border(), null);
+            this.sizer.Layout();
+        }
+    }
+
+    /** Restore the checkboxes state to the initial values. */
+    private reset(): void
+    {
+        // wxFNTP_DEFAULT_STYLE == FNTP_FONTDESC_AS_LABEL | FNTP_USEFONT_FOR_LABEL
+        this.chkFontTextCtrl?.SetValue(
+            (FNTP_DEFAULT_STYLE & FNTP_USE_TEXTCTRL) !== 0);
+        this.chkFontUseFontForLabel?.SetValue(
+            (FNTP_DEFAULT_STYLE & FNTP_USEFONT_FOR_LABEL) !== 0);
+        this.chkFontDescAsLabel?.SetValue(
+            (FNTP_DEFAULT_STYLE & FNTP_FONTDESC_AS_LABEL) !== 0);
+    }
+}
+
+export function createFontPickerPage(parent: Pointer): WidgetsPage
+{
+    return new FontPickerPage(parent);
+}

@@ -1,0 +1,1370 @@
+// calendar.kwxts — kwxTypeScript port of wxSamples/src/calendar/calendar.cpp.
+//
+// A faithful port of the wxCalendarCtrl sample: the frame, its full menu tree,
+// the splitter with the calendar panel and the log text control, every event
+// handler, and the two modal picker dialogs.
+//
+// Every feature of the C++ original is implemented: the native/generic
+// calendar switch, calendar marking, the date range limits, the custom date
+// attributes and both picker dialogs.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\calendar\calendar.kwxts
+
+declare const __dirname: string;
+
+import {
+    ALIGN_CENTER,
+    ALL,
+    BLUE,
+    CAL_BORDER_ROUND,
+    CAL_BORDER_SQUARE,
+    CAL_HITTEST_DAY,
+    CAL_HITTEST_DECMONTH,
+    CAL_HITTEST_HEADER,
+    CAL_HITTEST_INCMONTH,
+    CAL_HITTEST_NOWHERE,
+    CAL_HITTEST_SURROUNDING_WEEK,
+    CAL_MONDAY_FIRST,
+    CAL_SEQUENTIAL_MONTH_SELECTION,
+    CAL_SHOW_HOLIDAYS,
+    CAL_SHOW_SURROUNDING_WEEKS,
+    CAL_SHOW_WEEK_NUMBERS,
+    CAL_SUNDAY_FIRST,
+    DEFAULT_FRAME_STYLE,
+    DP_ALLOWNONE,
+    DP_DEFAULT,
+    DP_DROPDOWN,
+    DP_SHOWCENTURY,
+    EVT_CALENDAR_DOUBLECLICKED,
+    EVT_CALENDAR_PAGE_CHANGED,
+    EVT_CALENDAR_SEL_CHANGED,
+    EVT_CALENDAR_WEEKDAY_CLICKED,
+    EVT_CALENDAR_WEEK_CLICKED,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    EVT_RIGHT_DOWN,
+    EVT_UPDATE_UI,
+    EXPAND,
+    GREEN,
+    HORIZONTAL,
+    ICON_INFORMATION,
+    ID_ABOUT,
+    ID_ANY,
+    ID_CLEAR,
+    ID_EXIT,
+    LIGHT_GREY,
+    Null_Colour,
+    Null_Font,
+    OK,
+    RED,
+    SIZE_AUTO,
+    SP_NOBORDER,
+    SYS_SCREEN_X,
+    SYS_SCREEN_Y,
+    TE_MULTILINE,
+    TE_READONLY,
+    TAB_TRAVERSAL,
+    VERTICAL,
+    createWxBoxSizer,
+    createWxCalendarCtrl,
+    createWxCalendarDateAttr,
+    createWxClosure,
+    createWxDateSpanFromMonths,
+    createWxFrame,
+    createWxGenericCalendarCtrl,
+    createWxIconDefault,
+    createWxLogTextCtrl,
+    createWxMenu,
+    createWxMenuBar,
+    createWxPanel,
+    createWxSplitterWindow,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    exitMainLoop,
+    initialize,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wrapWxBitmapBundle,
+    wrapWxCalendarEvent,
+    wrapWxCommandEvent,
+    wrapWxMouseEvent,
+    wrapWxUpdateUIEvent,
+    wxBitmapBundle_FromSVGFile,
+    wxDateTime_GetBeginDST,
+    wxLog_SetActiveTarget,
+    wxSystemSettings_GetMetric,
+    wxUILocale_UseDefault,
+} from "kwx";
+import type {
+    wxBitmapBundle,
+    wxCalendarCtrlBase,
+    wxCalendarEvent,
+    wxClosure,
+    wxCommandEvent,
+    wxDateTime,
+    wxFrame,
+    wxLogTextCtrl,
+    wxMenu,
+    wxMenuBar,
+    wxPanel,
+    wxSizer,
+    wxSplitterWindow,
+    wxStaticText,
+    wxTextCtrl,
+    wxUpdateUIEvent,
+} from "kwx";
+import { Callback, exit, platform, pointerOf } from "kwx/platform";
+import type { Pointer } from "kwx/platform";
+
+import {
+    addWindowWithFlags,
+    formatISODate,
+    formatISOTime,
+    getCalendarDate,
+    getCalendarEventDate,
+    logMessage,
+    logStatus,
+    logWarning,
+    monthName,
+    newDateTime,
+    showMessage,
+    today,
+    weekDayName,
+    withString,
+} from "./shared.kwxts";
+import { showDateDialog, showTimeDialog } from "./dialogs.kwxts";
+
+// ---------------------------------------------------------------------------
+// Menu/control IDs (calendar.cpp enum)
+// ---------------------------------------------------------------------------
+
+const Calendar_File_About = ID_ABOUT;
+const Calendar_File_ClearLog = ID_CLEAR;
+const Calendar_File_Quit = ID_EXIT;
+
+const Calendar_Cal_Generic = 200;
+const Calendar_Cal_AutoWeekday = 201;
+const Calendar_Cal_Sunday = 202;
+const Calendar_Cal_Monday = 203;
+const Calendar_Cal_Holidays = 204;
+const Calendar_Cal_Special = 205;
+const Calendar_Cal_Month = 206;
+const Calendar_Cal_LimitDates = 207;
+const Calendar_Cal_SeqMonth = 208;
+const Calendar_Cal_SurroundWeeks = 209;
+const Calendar_Cal_WeekNumbers = 210;
+const Calendar_Cal_SetDate = 211;
+const Calendar_Cal_Today = 212;
+const Calendar_Cal_BeginDST = 213;
+const Calendar_Cal_Resizable = 214;
+
+const Calendar_DatePicker_AskDate = 300;
+const Calendar_DatePicker_ShowCentury = 301;
+const Calendar_DatePicker_DropDown = 302;
+const Calendar_DatePicker_AllowNone = 303;
+const Calendar_DatePicker_StartWithNone = 304;
+
+const Calendar_TimePicker_AskTime = 400;
+
+const Calendar_CalCtrl = 1000;
+
+// wxHAS_NATIVE_CALENDARCTRL: wxCalendarCtrl is native on MSW and GTK, and the
+// generic implementation is used everywhere else (see the wxCalendarCtrl docs).
+const HAS_NATIVE_CALENDARCTRL = platform === "windows" || platform === "linux";
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+
+interface PanelState
+{
+    panel: wxPanel;
+    dateLabel: wxStaticText;
+    calendar: wxCalendarCtrlBase;
+    sizer: wxSizer;
+}
+
+interface FrameState
+{
+    frame: wxFrame;
+    menuBar: wxMenuBar;
+    splitter: wxSplitterWindow;
+    panel: PanelState;
+    logWin: wxTextCtrl;
+    logger: wxLogTextCtrl | null;
+    logOld: Pointer;
+    usingGeneric: boolean;
+
+    /** Bundle backing the frame icon (it must outlive the icon). */
+    iconBundle: wxBitmapBundle | null;
+
+    /** static wxDateTime s_dateLast in MyPanel::OnCalendar(). */
+    dateLast: wxDateTime;
+
+    /** wxEVT_RIGHT_DOWN handler bound to the current calendar instance. */
+    rightDownClosure: wxClosure | null;
+    rightDownCallback: Callback | null;
+
+    callbacks: Callback[];
+    closures: wxClosure[];
+}
+
+// ---------------------------------------------------------------------------
+// Menu construction
+// ---------------------------------------------------------------------------
+
+function newMenu(): wxMenu
+{
+    const title = createWxString("");
+    const menu = createWxMenu(title.ptr, 0n)!;
+    title.Delete();
+    return menu;
+}
+
+function appendItem(menu: wxMenu, id: number, label: string, help: string | null): void
+{
+    withString(label, (labelPtr) =>
+    {
+        if (help === null)
+        {
+            menu.Append(id, labelPtr, null, false);
+        }
+        else
+        {
+            withString(help, (helpPtr) =>
+            {
+                menu.Append(id, labelPtr, helpPtr, false);
+            });
+        }
+    });
+}
+
+function appendCheckItem(menu: wxMenu, id: number, label: string, help: string | null): void
+{
+    withString(label, (labelPtr) =>
+    {
+        if (help === null)
+        {
+            menu.AppendCheckItem(id, labelPtr, null);
+        }
+        else
+        {
+            withString(help, (helpPtr) =>
+            {
+                menu.AppendCheckItem(id, labelPtr, helpPtr);
+            });
+        }
+    });
+}
+
+function appendRadioItem(menu: wxMenu, id: number, label: string, help: string | null): void
+{
+    withString(label, (labelPtr) =>
+    {
+        if (help === null)
+        {
+            menu.AppendRadioItem(id, labelPtr, null);
+        }
+        else
+        {
+            withString(help, (helpPtr) =>
+            {
+                menu.AppendRadioItem(id, labelPtr, helpPtr);
+            });
+        }
+    });
+}
+
+function buildMenuBar(): wxMenuBar | null
+{
+    const menuBar = createWxMenuBar(0);
+    if (!menuBar)
+    {
+        return null;
+    }
+
+    // ---- File -------------------------------------------------------------
+    const menuFile = newMenu();
+    appendItem(menuFile, Calendar_File_About, "&About\tCtrl-A", "Show about dialog");
+    menuFile.AppendSeparator();
+    appendItem(menuFile, Calendar_File_ClearLog, "&Clear log\tCtrl-L", null);
+    menuFile.AppendSeparator();
+    appendItem(menuFile, Calendar_File_Quit, "E&xit\tAlt-X", "Quit this program");
+    withString("&File", (ptr) => menuBar.Append(menuFile.ptr, ptr));
+
+    // ---- Calendar ---------------------------------------------------------
+    const menuCal = newMenu();
+    // #ifdef wxHAS_NATIVE_CALENDARCTRL
+    if (HAS_NATIVE_CALENDARCTRL)
+    {
+        appendCheckItem(menuCal, Calendar_Cal_Generic,
+            "Use &generic version\tCtrl-G", "Toggle between native and generic control");
+        menuCal.AppendSeparator();
+    }
+    appendRadioItem(menuCal, Calendar_Cal_AutoWeekday,
+        "Automatic &first weekday\tCtrl-V", null);
+    appendRadioItem(menuCal, Calendar_Cal_Sunday,
+        "Sunday &first weekday\tCtrl-Z", null);
+    appendRadioItem(menuCal, Calendar_Cal_Monday,
+        "Monday &first weekday\tCtrl-F", null);
+    appendCheckItem(menuCal, Calendar_Cal_Holidays,
+        "Show &holidays\tCtrl-H", "Toggle highlighting the holidays");
+    appendCheckItem(menuCal, Calendar_Cal_Special,
+        "Highlight &special dates\tCtrl-S", "Test custom highlighting");
+    appendCheckItem(menuCal, Calendar_Cal_SurroundWeeks,
+        "Show s&urrounding weeks\tCtrl-W",
+        "Show the neighbouring weeks in the prev/next month");
+    appendCheckItem(menuCal, Calendar_Cal_WeekNumbers,
+        "Show &week numbers", "Toggle week numbers");
+    menuCal.AppendSeparator();
+    appendCheckItem(menuCal, Calendar_Cal_SeqMonth,
+        "Toggle month selector st&yle\tCtrl-Y",
+        "Use another style for the calendar controls");
+    appendCheckItem(menuCal, Calendar_Cal_Month,
+        "&Month can be changed\tCtrl-M",
+        "Allow changing the month in the calendar");
+    appendCheckItem(menuCal, Calendar_Cal_LimitDates,
+        "Toggle date ra&nge\tCtrl-N", "Limit the valid dates");
+    menuCal.AppendSeparator();
+    appendItem(menuCal, Calendar_Cal_SetDate,
+        "Call &SetDate(2005-12-24)", "Set date to 2005-12-24.");
+    appendItem(menuCal, Calendar_Cal_Today,
+        "Call &Today()", "Set to the current date.");
+    appendItem(menuCal, Calendar_Cal_BeginDST,
+        "Call SetDate(GetBeginDST())", null);
+    menuCal.AppendSeparator();
+    appendCheckItem(menuCal, Calendar_Cal_Resizable, "Make &resizable\tCtrl-R", null);
+    withString("&Calendar", (ptr) => menuBar.Append(menuCal.ptr, ptr));
+
+    // ---- Date picker ------------------------------------------------------
+    const menuDate = newMenu();
+    appendCheckItem(menuDate, Calendar_DatePicker_ShowCentury,
+        "Al&ways show century", null);
+    appendCheckItem(menuDate, Calendar_DatePicker_DropDown,
+        "Use &drop down control", null);
+    appendCheckItem(menuDate, Calendar_DatePicker_AllowNone,
+        "Allow &no date", null);
+    appendCheckItem(menuDate, Calendar_DatePicker_StartWithNone,
+        "Start &with no date", null);
+    menuDate.AppendSeparator();
+    appendItem(menuDate, Calendar_DatePicker_AskDate,
+        "&Choose date...\tCtrl-D", "Show dialog with wxDatePickerCtrl");
+    withString("&Date picker", (ptr) => menuBar.Append(menuDate.ptr, ptr));
+
+    // ---- Time picker ------------------------------------------------------
+    const menuTime = newMenu();
+    appendItem(menuTime, Calendar_TimePicker_AskTime,
+        "&Choose time...\tCtrl-T", "Show dialog with wxTimePickerCtrl");
+    withString("&Time picker", (ptr) => menuBar.Append(menuTime.ptr, ptr));
+
+    menuBar.Check(Calendar_Cal_AutoWeekday, true);
+    menuBar.Check(Calendar_Cal_Sunday, false);
+    menuBar.Check(Calendar_Cal_Monday, false);
+    menuBar.Check(Calendar_Cal_Holidays, true);
+    menuBar.Check(Calendar_Cal_Month, true);
+    menuBar.Check(Calendar_Cal_LimitDates, false);
+    menuBar.Check(Calendar_DatePicker_ShowCentury, true);
+
+    return menuBar;
+}
+
+// ---------------------------------------------------------------------------
+// Calendar panel (MyPanel)
+// ---------------------------------------------------------------------------
+
+function createCalendarControl(
+    parent: wxPanel,
+    date: wxDateTime,
+    style: number,
+    usingGeneric: boolean,
+): wxCalendarCtrlBase | null
+{
+    if (usingGeneric)
+    {
+        return createWxGenericCalendarCtrl(
+            parent.ptr, Calendar_CalCtrl, date.ptr, -1, -1, -1, -1, style,
+        );
+    }
+
+    return createWxCalendarCtrl(
+        parent.ptr, Calendar_CalCtrl, date.ptr, -1, -1, -1, -1, style,
+    );
+}
+
+function createPanel(
+    parent: wxSplitterWindow,
+    usingGeneric: boolean,
+): PanelState | null
+{
+    const panel = createWxPanel(
+        parent.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL,
+    );
+    if (!panel)
+    {
+        return null;
+    }
+
+    const todayDate = today();
+    const initialLabel = `Selected date: ${formatISODate(todayDate)}`;
+    todayDate.Delete();
+
+    const dateLabel = withString(initialLabel, (textPtr) =>
+        createWxStaticText(panel.ptr, ID_ANY, textPtr, -1, -1, -1, -1, 0));
+    if (!dateLabel)
+    {
+        panel.Destroy();
+        return null;
+    }
+
+    const invalidDate = newDateTime();
+    const calendar = createCalendarControl(
+        panel, invalidDate, CAL_SHOW_HOLIDAYS, usingGeneric,
+    );
+    invalidDate.Delete();
+    if (!calendar)
+    {
+        panel.Destroy();
+        return null;
+    }
+
+    // adjust to vertical/horizontal display
+    const horizontal =
+        wxSystemSettings_GetMetric(SYS_SCREEN_X) >
+        wxSystemSettings_GetMetric(SYS_SCREEN_Y);
+
+    const sizer = createWxBoxSizer(horizontal ? HORIZONTAL : VERTICAL);
+    if (!sizer)
+    {
+        panel.Destroy();
+        return null;
+    }
+
+    // m_sizer->Add(m_date, wxSizerFlags().Center().DoubleBorder());
+    addWindowWithFlags(sizer, dateLabel.ptr, 0, (flags) =>
+    {
+        flags.Center();
+        flags.DoubleBorder(ALL);
+    });
+    // m_sizer->Add(m_calendar, wxSizerFlags().Center());
+    addWindowWithFlags(sizer, calendar.ptr, 0, (flags) =>
+    {
+        flags.Center();
+    });
+
+    panel.SetSizer(sizer.ptr, true);
+    sizer.SetSizeHints(panel.ptr);
+
+    return { panel, dateLabel, calendar, sizer };
+}
+
+// ---------------------------------------------------------------------------
+// Frame (MyFrame)
+// ---------------------------------------------------------------------------
+
+function setSampleIcon(frame: wxFrame): wxBitmapBundle | null
+{
+    // SetIcon(wxICON(sample)): the original sample.xpm is shipped as an
+    // equivalent 32x32 SVG and loaded through a wxBitmapBundle, whose bitmap is
+    // copied into a wxIcon by wxTopLevelWindow::SetIcon(). The bundle must stay
+    // alive for as long as the icon is used, so it is returned to the caller.
+    const iconPath = createWxString(__dirname + "/sample.svg");
+    const iconBundle = wrapWxBitmapBundle(
+        wxBitmapBundle_FromSVGFile(iconPath.ptr, 32, 32),
+    );
+    iconPath.Delete();
+
+    if (!iconBundle.ptr)
+    {
+        return null;
+    }
+
+    const bitmap = iconBundle.GetBitmap(32, 32);
+    if (bitmap)
+    {
+        const icon = createWxIconDefault();
+        if (icon)
+        {
+            icon.CopyFromBitmap(bitmap.ptr);
+            frame.SetIcon(icon.ptr);
+            icon.Delete();
+        }
+    }
+
+    return iconBundle;
+}
+
+function createCalendarFrame(): FrameState | null
+{
+    const title = createWxString("Calendar wxWidgets sample");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+    if (!frame)
+    {
+        return null;
+    }
+
+    const iconBundle = setSampleIcon(frame);
+
+    const menuBar = buildMenuBar();
+    if (!menuBar)
+    {
+        iconBundle?.Delete();
+        frame.Destroy();
+        return null;
+    }
+    frame.SetMenuBar(menuBar.ptr);
+
+    const splitter = createWxSplitterWindow(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, SP_NOBORDER,
+    );
+    if (!splitter)
+    {
+        iconBundle?.Delete();
+        frame.Destroy();
+        return null;
+    }
+
+    const panelState = createPanel(splitter, !HAS_NATIVE_CALENDARCTRL);
+    if (!panelState)
+    {
+        iconBundle?.Delete();
+        frame.Destroy();
+        return null;
+    }
+
+    const empty = createWxString("");
+    const logWin = createWxTextCtrl(
+        splitter.ptr, ID_ANY, empty.ptr, -1, -1, -1, -1,
+        BigInt(TE_READONLY | TE_MULTILINE),
+    );
+    empty.Delete();
+    if (!logWin)
+    {
+        iconBundle?.Delete();
+        frame.Destroy();
+        return null;
+    }
+
+    splitter.SplitHorizontally(panelState.panel.ptr, logWin.ptr, 0);
+    splitter.SetMinimumPaneSize(20);
+
+    // wxLog::SetActiveTarget(new wxLogTextCtrl(m_logWindow))
+    const logger = createWxLogTextCtrl(logWin.ptr);
+    const previousTarget = logger ? wxLog_SetActiveTarget(logger.ptr) : null;
+    const logOld = previousTarget ? previousTarget.ptr : null;
+
+    frame.SetSize(
+        -1, -1,
+        frame.FromDIP(460),
+        frame.FromDIP(340),
+        SIZE_AUTO,
+    );
+
+    return {
+        frame,
+        menuBar,
+        splitter,
+        panel: panelState,
+        logWin,
+        logger,
+        logOld,
+        usingGeneric: !HAS_NATIVE_CALENDARCTRL,
+        iconBundle,
+        dateLast: newDateTime(),
+        rightDownClosure: null,
+        rightDownCallback: null,
+        callbacks: [],
+        closures: [],
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Calendar style helpers (MyPanel::ToggleCalStyle/RecreateCalendar)
+// ---------------------------------------------------------------------------
+
+function createCalendarWithStyle(
+    state: FrameState,
+    style: number,
+): wxCalendarCtrlBase | null
+{
+    const date = getCalendarDate(state.panel.calendar);
+    const calendar = createCalendarControl(
+        state.panel.panel, date, style, state.usingGeneric,
+    );
+    date.Delete();
+    return calendar;
+}
+
+// calendar->Bind(wxEVT_RIGHT_DOWN, &MyFrame::OnCalRClick, frame)
+//
+// Every calendar instance gets its own Callback/wxClosure pair: kwxFFI cannot
+// reuse a closure for a window created after the window that owned the closure
+// was destroyed (doing so corrupts the heap).
+function bindRightDown(state: FrameState): void
+{
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            onCalendarRightClick(state, eventPtr);
+        },
+    );
+    const closure = createWxClosure(callback.pointer, null)!;
+
+    // calendar->Bind(wxEVT_RIGHT_DOWN, ...) uses wxID_ANY, unlike EVT_CALENDAR.
+    state.panel.calendar.Bind(
+        ID_ANY, ID_ANY, EVT_RIGHT_DOWN, closure.ptr,
+    );
+
+    state.rightDownCallback = callback;
+    state.rightDownClosure = closure;
+    state.callbacks.push(callback);
+    state.closures.push(closure);
+}
+
+function recreateCalendar(state: FrameState, style: number): void
+{
+    const calendar = createCalendarWithStyle(state, style);
+    if (!calendar)
+    {
+        return;
+    }
+
+    // Detach the handler from the calendar that is about to be destroyed.
+    if (state.rightDownClosure)
+    {
+        state.panel.calendar.UnbindClosure(
+            ID_ANY, ID_ANY, EVT_RIGHT_DOWN, state.rightDownClosure.ptr,
+        );
+    }
+
+    // m_sizer->Replace(m_calendar, calendar); delete m_calendar;
+    state.panel.sizer.ReplaceWindow(state.panel.calendar.ptr, calendar.ptr, false);
+    state.panel.calendar.Delete();
+    state.panel.calendar = calendar;
+
+    // Release the handler of the destroyed calendar: a wxClosure that has been
+    // bound to a destroyed window cannot be bound to another window again, so
+    // each calendar instance owns its own Callback/wxClosure pair.
+    if (state.rightDownCallback)
+    {
+        const index = state.callbacks.indexOf(state.rightDownCallback);
+        if (index !== -1)
+        {
+            state.callbacks.splice(index, 1);
+        }
+        state.rightDownCallback.close();
+        state.rightDownCallback = null;
+        state.rightDownClosure = null;
+    }
+
+    // calendar->Bind(wxEVT_RIGHT_DOWN, ...) on the new instance.
+    bindRightDown(state);
+
+    state.panel.sizer.Layout();
+}
+
+function toggleCalStyle(state: FrameState, on: boolean, flag: number): void
+{
+    let style = Number(state.panel.calendar.GetWindowStyle());
+    if (on)
+    {
+        style |= flag;
+    }
+    else
+    {
+        style &= ~flag;
+    }
+
+    if (flag === CAL_SEQUENTIAL_MONTH_SELECTION || flag === CAL_SHOW_WEEK_NUMBERS)
+    {
+        // changing this style requires recreating the control
+        recreateCalendar(state, style);
+    }
+    else
+    {
+        state.panel.calendar.SetWindowStyle(BigInt(style));
+        state.panel.calendar.Refresh(true);
+    }
+}
+
+// MyPanel::ToggleUseGeneric()
+function toggleUseGeneric(state: FrameState): void
+{
+    const style = Number(state.panel.calendar.GetWindowStyle());
+    state.usingGeneric = !state.usingGeneric;
+    recreateCalendar(state, style);
+}
+
+// ---------------------------------------------------------------------------
+// MyPanel::HighlightSpecial / LimitDateRange
+// ---------------------------------------------------------------------------
+
+function highlightSpecial(state: FrameState, on: boolean): void
+{
+    const calendar = state.panel.calendar;
+    if (on)
+    {
+        // attrRedCircle = new wxCalendarDateAttr(wxCAL_BORDER_ROUND, *wxRED)
+        const attrRedCircle = createWxCalendarDateAttr(
+            Null_Colour(), Null_Colour(), RED, Null_Font(), CAL_BORDER_ROUND,
+        );
+        // attrGreenSquare = new wxCalendarDateAttr(wxCAL_BORDER_SQUARE, *wxGREEN)
+        const attrGreenSquare = createWxCalendarDateAttr(
+            Null_Colour(), Null_Colour(), GREEN, Null_Font(), CAL_BORDER_SQUARE,
+        );
+        // attrHeaderLike = new wxCalendarDateAttr(*wxBLUE, *wxLIGHT_GREY)
+        const attrHeaderLike = createWxCalendarDateAttr(
+            BLUE, LIGHT_GREY, Null_Colour(), Null_Font(), 0,
+        );
+
+        // wxCalendarCtrl takes ownership of the attribute objects; do not
+        // call Delete() on these wrappers.
+        if (attrRedCircle)
+        {
+            calendar.SetAttr(17, attrRedCircle.ptr);
+        }
+        if (attrGreenSquare)
+        {
+            calendar.SetAttr(29, attrGreenSquare.ptr);
+        }
+        if (attrHeaderLike)
+        {
+            calendar.SetAttr(13, attrHeaderLike.ptr);
+        }
+    }
+    else
+    {
+        calendar.ResetAttr(17);
+        calendar.ResetAttr(29);
+        calendar.ResetAttr(13);
+    }
+
+    calendar.Refresh(true);
+}
+
+// Toggle a restricted date range to the six months centered on today's date.
+function limitDateRange(state: FrameState, on: boolean): void
+{
+    const calendar = state.panel.calendar;
+
+    if (on)
+    {
+        // limit the choice of date to 3 months around today
+        const diff = createWxDateSpanFromMonths(3);
+        if (!diff)
+        {
+            logWarning("Date range not supported.");
+            calendar.Refresh(true);
+            return;
+        }
+
+        const now = today();
+        const lower = newDateTime();
+        const upper = newDateTime();
+        now.SubtractDate(diff.ptr, lower.ptr);
+        now.AddDate(diff.ptr, upper.ptr);
+
+        const limited = calendar.SetDateRange(lower.ptr, upper.ptr);
+
+        lower.Delete();
+        upper.Delete();
+        now.Delete();
+        diff.Delete();
+
+        if (limited)
+        {
+            logStatus("Date range limited to 3 months around today.");
+
+            const firstValid = newDateTime();
+            const lastValid = newDateTime();
+            if (calendar.GetDateRange(firstValid.ptr, lastValid.ptr))
+            {
+                logMessage(
+                    `First valid date: ${formatISODate(firstValid)}, ` +
+                    `last valid date: ${formatISODate(lastValid)}`,
+                );
+            }
+            else
+            {
+                logWarning("Failed to get back the valid dates range.");
+            }
+            firstValid.Delete();
+            lastValid.Delete();
+        }
+        else
+        {
+            logWarning("Date range not supported.");
+        }
+    }
+    else
+    {
+        // Remove the date restrictions (no arguments == wxDefaultDateTime).
+        if (calendar.SetDateRange(null, null))
+        {
+            logStatus("Date choice is unlimited now.");
+        }
+        else
+        {
+            logWarning("Date range not supported.");
+        }
+    }
+
+    calendar.Refresh(true);
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame menu handlers
+// ---------------------------------------------------------------------------
+
+function handleMenuEvent(state: FrameState, event: wxCommandEvent): void
+{
+    const id = event.GetId();
+
+    switch (id)
+    {
+        case Calendar_File_About:
+            showMessage(
+                state.frame.ptr,
+                "wxCalendarCtrl sample\n(c) 2000--2008 Vadim Zeitlin",
+                "About Calendar",
+                OK | ICON_INFORMATION,
+            );
+            break;
+
+        case Calendar_File_ClearLog:
+            state.logWin.Clear();
+            break;
+
+        case Calendar_File_Quit:
+            state.frame.Close(true);
+            break;
+
+        case Calendar_TimePicker_AskTime:
+            askTime(state);
+            break;
+
+        case Calendar_DatePicker_AskDate:
+            askDate(state);
+            break;
+
+        case Calendar_Cal_Generic:
+            toggleUseGeneric(state);
+            break;
+
+        case Calendar_Cal_AutoWeekday:
+            toggleCalStyle(state, false, CAL_SUNDAY_FIRST);
+            toggleCalStyle(state, false, CAL_MONDAY_FIRST);
+            break;
+
+        case Calendar_Cal_Sunday:
+            toggleCalStyle(state, false, CAL_MONDAY_FIRST);
+            toggleCalStyle(state, event.IsChecked(), CAL_SUNDAY_FIRST);
+            break;
+
+        case Calendar_Cal_Monday:
+            toggleCalStyle(state, false, CAL_SUNDAY_FIRST);
+            toggleCalStyle(state, event.IsChecked(), CAL_MONDAY_FIRST);
+            break;
+
+        case Calendar_Cal_Holidays:
+            state.panel.calendar.EnableHolidayDisplay(event.IsChecked() ? 1 : 0);
+            break;
+
+        case Calendar_Cal_Special:
+            highlightSpecial(state, state.menuBar.IsChecked(id));
+            break;
+
+        case Calendar_Cal_Month:
+            state.panel.calendar.EnableMonthChange(event.IsChecked());
+            break;
+
+        case Calendar_Cal_LimitDates:
+            limitDateRange(state, state.menuBar.IsChecked(id));
+            break;
+
+        case Calendar_Cal_SeqMonth:
+            toggleCalStyle(state, event.IsChecked(), CAL_SEQUENTIAL_MONTH_SELECTION);
+            break;
+
+        case Calendar_Cal_SurroundWeeks:
+            toggleCalStyle(state, event.IsChecked(), CAL_SHOW_SURROUNDING_WEEKS);
+            break;
+
+        case Calendar_Cal_WeekNumbers:
+            toggleCalStyle(state, event.IsChecked(), CAL_SHOW_WEEK_NUMBERS);
+            break;
+
+        case Calendar_Cal_SetDate:
+            setPanelDate(state, 24, 11 /* Dec */, 2005, 22, 0, 0);
+            break;
+
+        case Calendar_Cal_Today:
+        {
+            const now = today();
+            state.panel.calendar.SetDate(now.ptr);
+            now.Delete();
+            break;
+        }
+
+        case Calendar_Cal_BeginDST:
+        {
+            const current = getCalendarDate(state.panel.calendar);
+            const year = current.GetYear(0);
+            // Country_Default == 1 (see wx/datetime.h).
+            wxDateTime_GetBeginDST(year, 1, current.ptr);
+            state.panel.calendar.SetDate(current.ptr);
+            current.Delete();
+            break;
+        }
+
+        case Calendar_Cal_Resizable:
+            toggleResizable(state, event.IsChecked());
+            break;
+    }
+}
+
+function setPanelDate(
+    state: FrameState,
+    day: number,
+    month: number,
+    year: number,
+    hour: number,
+    minute: number,
+    second: number,
+): void
+{
+    const date = newDateTime();
+    date.Set(day, month, year, hour, minute, second, 0);
+    state.panel.calendar.SetDate(date.ptr);
+    date.Delete();
+}
+
+function toggleResizable(state: FrameState, on: boolean): void
+{
+    const sizer = state.panel.panel.GetSizer();
+    if (!sizer)
+    {
+        return;
+    }
+
+    // C++: sizer->GetItem(m_panel->GetCal()). Looking the item up by window
+    // keeps working after RecreateCalendar() replaces the control.
+    const item = sizer.GetItemWindow(state.panel.calendar.ptr, false);
+    if (!item)
+    {
+        return;
+    }
+
+    if (on)
+    {
+        item.SetProportion(1);
+        item.SetFlag(EXPAND);
+    }
+    else
+    {
+        item.SetProportion(0);
+        item.SetFlag(ALIGN_CENTER);
+    }
+
+    sizer.Layout();
+}
+
+// ---------------------------------------------------------------------------
+// EVT_UPDATE_UI handlers
+// ---------------------------------------------------------------------------
+
+function handleUpdateUI(state: FrameState, event: wxUpdateUIEvent): void
+{
+    switch (event.GetId())
+    {
+        case Calendar_DatePicker_StartWithNone:
+            event.Enable(state.menuBar.IsChecked(Calendar_DatePicker_AllowNone));
+            break;
+
+        case Calendar_Cal_SeqMonth:
+        case Calendar_Cal_Special:
+        case Calendar_Cal_SurroundWeeks:
+            // OnUpdateUIGenericOnly()
+            event.Enable(state.usingGeneric);
+            break;
+
+        case Calendar_Cal_AutoWeekday:
+        case Calendar_Cal_Sunday:
+        case Calendar_Cal_Monday:
+        case Calendar_Cal_Holidays:
+            // #ifdef __WXGTK__ ... OnUpdateUIGenericOnly()
+            if (platform === "linux")
+            {
+                event.Enable(state.usingGeneric);
+            }
+            break;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Date/time dialogs (MyFrame::OnAskDate / OnAskTime)
+// ---------------------------------------------------------------------------
+
+function askDate(state: FrameState): void
+{
+    const calendarDate = getCalendarDate(state.panel.calendar);
+
+    let style = DP_DEFAULT;
+    if (state.menuBar.IsChecked(Calendar_DatePicker_ShowCentury))
+    {
+        style |= DP_SHOWCENTURY;
+    }
+    if (state.menuBar.IsChecked(Calendar_DatePicker_DropDown))
+    {
+        style |= DP_DROPDOWN;
+    }
+
+    let start = calendarDate;
+    let noDate: wxDateTime | null = null;
+    if (state.menuBar.IsChecked(Calendar_DatePicker_AllowNone))
+    {
+        style |= DP_ALLOWNONE;
+
+        if (state.menuBar.IsChecked(Calendar_DatePicker_StartWithNone))
+        {
+            noDate = newDateTime(); // wxDefaultDateTime
+            start = noDate;
+        }
+    }
+
+    const result = showDateDialog(state.frame.ptr, start, style);
+
+    if (noDate)
+    {
+        noDate.Delete();
+    }
+    calendarDate.Delete();
+
+    if (!result)
+    {
+        return; // dialog cancelled
+    }
+
+    if (result.IsValid())
+    {
+        const currentToday = today();
+        const sameDay =
+            result.GetDay(0) === currentToday.GetDay(0) &&
+            result.GetMonth(0) === currentToday.GetMonth(0);
+        currentToday.Delete();
+
+        if (sameDay)
+        {
+            showMessage(null, "Happy birthday!", "Calendar Sample", OK);
+        }
+
+        state.panel.calendar.SetDate(result.ptr);
+        logStatus("Changed the date to your input");
+    }
+    else
+    {
+        logStatus("No date entered");
+    }
+
+    result.Delete();
+}
+
+function askTime(state: FrameState): void
+{
+    const result = showTimeDialog(state.frame.ptr);
+    if (!result)
+    {
+        return; // dialog cancelled
+    }
+
+    logMessage(`You entered ${formatISOTime(result)}`);
+    result.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// MyPanel event handlers
+// ---------------------------------------------------------------------------
+
+function handleCalendarEvent(state: FrameState, event: wxCalendarEvent): void
+{
+    switch (event.GetEventType())
+    {
+        case EVT_CALENDAR_DOUBLECLICKED:
+            onCalendar(state, event);
+            break;
+        case EVT_CALENDAR_PAGE_CHANGED:
+            onCalendarMonthChange(state, event);
+            break;
+        case EVT_CALENDAR_SEL_CHANGED:
+            onCalendarSelectionChanged(state, event);
+            break;
+        case EVT_CALENDAR_WEEKDAY_CLICKED:
+            logMessage(`Clicked on ${weekDayName(event.GetWeekDay())}`);
+            break;
+        case EVT_CALENDAR_WEEK_CLICKED:
+        {
+            const date = getCalendarEventDate(event);
+            // Monday_First == 1, Local == 0 (wx/datetime.h)
+            logMessage(`Clicked on week ${date.GetWeekOfYear(1, 0)}`);
+            date.Delete();
+            break;
+        }
+    }
+}
+
+function onCalendar(state: FrameState, event: wxCalendarEvent): void
+{
+    // clicking the same date twice unmarks it (convenient for testing)
+    const date = getCalendarEventDate(event);
+    const mark = !state.dateLast.IsValid() || !date.IsEqualTo(state.dateLast.ptr);
+
+    // static wxDateTime s_dateLast = event.GetDate();
+    state.dateLast.Delete();
+    state.dateLast = date;
+
+    state.panel.calendar.Mark(date.GetDay(0), mark);
+    logMessage(
+        `Selected (and ${mark ? "" : "un"}marked) ${formatISODate(date)} ` +
+        "from calendar.",
+    );
+}
+
+function onCalendarSelectionChanged(state: FrameState, event: wxCalendarEvent): void
+{
+    const date = getCalendarEventDate(event);
+    const text = `Selected date: ${formatISODate(date)}`;
+
+    withString(text, (ptr) => state.panel.dateLabel.SetLabel(ptr));
+    logStatus(text);
+
+    date.Delete();
+}
+
+function onCalendarMonthChange(state: FrameState, event: wxCalendarEvent): void
+{
+    void state;
+    const date = getCalendarEventDate(event);
+    logStatus(
+        `Calendar month changed to ${monthName(date.GetMonth(0))} ` +
+        `${date.GetYear(0)}`,
+    );
+    date.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame::OnCalRClick()
+// ---------------------------------------------------------------------------
+
+function onCalendarRightClick(state: FrameState, eventPtr: Pointer): void
+{
+    if (!eventPtr)
+    {
+        return;
+    }
+
+    const mouse = wrapWxMouseEvent(eventPtr);
+    const x = mouse.GetX();
+    const y = mouse.GetY();
+
+    const date = newDateTime();
+    const weekDay = new Int32Array(1);
+
+    const hit = state.panel.calendar.HitTest(
+        x, y, date.ptr, pointerOf(weekDay),
+    );
+
+    let message = `Point (${x}, ${y}) is `;
+    switch (hit)
+    {
+        case CAL_HITTEST_HEADER:
+            message += `over ${weekDayName(weekDay[0])}`;
+            break;
+
+        case CAL_HITTEST_DAY:
+            message += `over ${formatISODate(date)}`;
+            break;
+
+        case CAL_HITTEST_INCMONTH:
+            message += "over next month button";
+            break;
+
+        case CAL_HITTEST_DECMONTH:
+            message += "over previous month button";
+            break;
+
+        case CAL_HITTEST_SURROUNDING_WEEK:
+            message += "over a day from another month";
+            break;
+
+        case CAL_HITTEST_NOWHERE:
+        default:
+            // calendar.cpp has a wxFAIL_MSG("unexpected") with
+            // wxFALLTHROUGH into the NOWHERE case.
+            message += "nowhere";
+            break;
+    }
+
+    date.Delete();
+    logMessage(message);
+}
+
+// ---------------------------------------------------------------------------
+// Event connections
+// ---------------------------------------------------------------------------
+
+function connectEvents(state: FrameState): void
+{
+    // EVT_CLOSE_WINDOW: stop the loop instead of closing from inside a handler.
+    const closeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            exitMainLoop();
+        },
+    );
+    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
+    state.frame.Bind(
+        ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr,
+    );
+    state.callbacks.push(closeCallback);
+    state.closures.push(closeClosure);
+
+    // EVT_MENU for the whole menu tree.
+    const menuCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            handleMenuEvent(state, wrapWxCommandEvent(eventPtr));
+        },
+    );
+    const menuClosure = createWxClosure(menuCallback.pointer, null)!;
+    state.frame.Bind(
+        ID_ANY, ID_ANY, EVT_MENU, menuClosure.ptr,
+    );
+    state.callbacks.push(menuCallback);
+    state.closures.push(menuClosure);
+
+    // EVT_UPDATE_UI for every menu entry; the handler filters by id.
+    const updateUICallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            handleUpdateUI(state, wrapWxUpdateUIEvent(eventPtr));
+        },
+    );
+    const updateUIClosure = createWxClosure(updateUICallback.pointer, null)!;
+    state.frame.Bind(
+        ID_ANY, ID_ANY, EVT_UPDATE_UI, updateUIClosure.ptr,
+    );
+    state.callbacks.push(updateUICallback);
+    state.closures.push(updateUIClosure);
+
+    // MyPanel's event table. Calendar/date events are command events, so they
+    // propagate from the control to the panel even after RecreateCalendar().
+    const calendarCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            handleCalendarEvent(state, wrapWxCalendarEvent(eventPtr));
+        },
+    );
+    const calendarClosure = createWxClosure(calendarCallback.pointer, null)!;
+    for (const type of [
+        EVT_CALENDAR_DOUBLECLICKED,
+        EVT_CALENDAR_PAGE_CHANGED,
+        EVT_CALENDAR_SEL_CHANGED,
+        EVT_CALENDAR_WEEKDAY_CLICKED,
+        EVT_CALENDAR_WEEK_CLICKED,
+    ])
+    {
+        state.panel.panel.Bind(
+            Calendar_CalCtrl,
+            Calendar_CalCtrl,
+            type,
+            calendarClosure.ptr,
+        );
+    }
+    state.callbacks.push(calendarCallback);
+    state.closures.push(calendarClosure);
+
+    // calendar->Bind(wxEVT_RIGHT_DOWN, &MyFrame::OnCalRClick, frame)
+    bindRightDown(state);
+}
+
+// ---------------------------------------------------------------------------
+// wxApp::OnInit / wxIMPLEMENT_APP
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    // wxUILocale::UseDefault() — affects the language and first week day used
+    // by the calendar, so it must run before the controls are created.
+    wxUILocale_UseDefault();
+
+    setAppName("Calendar wxWidgets sample");
+
+    const state = createCalendarFrame();
+    if (!state)
+    {
+        console.error("calendar: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    connectEvents(state);
+
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    // ~MyFrame(): restore the previous log target, then delete the logger.
+    if (state.logger)
+    {
+        wxLog_SetActiveTarget(state.logOld);
+        state.logger.Delete();
+    }
+
+    state.dateLast.Delete();
+    state.iconBundle?.Delete();
+
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

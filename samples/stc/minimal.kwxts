@@ -1,0 +1,357 @@
+// minimal.kwxts — the "Minimal editor" window (stctest.cpp, MinimalEditor).
+//
+// The C++ class derives from wxStyledTextCtrl to override SetFont() and to add
+// an XML lexer setup; here creation is a function over a state object, and the
+// two event-table entries become Bind calls.
+
+import {
+    createWxBoxSizer,
+    createWxColourByName,
+    createWxColourRGB,
+    createWxFont,
+    createWxFontDefault,
+    createWxFrame,
+    createWxStyledTextCtrl,
+    DEFAULT_FRAME_STYLE,
+    EVT_STC_CHANGE,
+    EVT_STC_MARGINCLICK,
+    FONTFAMILY_TELETYPE,
+    FONTENCODING_DEFAULT,
+    FONTSTYLE_NORMAL,
+    FONTWEIGHT_NORMAL,
+    HORIZONTAL,
+    ID_ANY,
+    LogDebug,
+    wxColour,
+    wxEvent,
+    wxFrame,
+    wxStyledTextCtrl,
+    wxStyledTextEvent,
+    wxSystemSettings_SelectLightDark,
+    wrapWxStyledTextCtrl,
+    wrapWxWindow,
+} from "kwx";
+import { Callback, Pointer } from "kwx/platform";
+import { addWindow, bindPointer, newCallback, withString } from "./runtime.kwxts";
+import {
+    wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED,
+    wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED,
+    wxSTC_FOLDLEVELHEADERFLAG,
+    wxSTC_H_ATTRIBUTE,
+    wxSTC_H_ATTRIBUTEUNKNOWN,
+    wxSTC_H_CDATA,
+    wxSTC_H_COMMENT,
+    wxSTC_H_ENTITY,
+    wxSTC_H_OTHER,
+    wxSTC_H_TAG,
+    wxSTC_H_TAGEND,
+    wxSTC_H_TAGUNKNOWN,
+    wxSTC_H_XMLEND,
+    wxSTC_H_XMLSTART,
+    wxSTC_LEX_XML,
+    wxSTC_MARK_BOXMINUS,
+    wxSTC_MARK_BOXMINUSCONNECTED,
+    wxSTC_MARK_BOXPLUS,
+    wxSTC_MARK_BOXPLUSCONNECTED,
+    wxSTC_MARK_LCORNER,
+    wxSTC_MARK_TCORNER,
+    wxSTC_MARK_VLINE,
+    wxSTC_MARKNUM_FOLDER,
+    wxSTC_MARKNUM_FOLDEREND,
+    wxSTC_MARKNUM_FOLDERMIDTAIL,
+    wxSTC_MARKNUM_FOLDEROPEN,
+    wxSTC_MARKNUM_FOLDEROPENMID,
+    wxSTC_MARKNUM_FOLDERSUB,
+    wxSTC_MARKNUM_FOLDERTAIL,
+    wxSTC_MASK_FOLDERS,
+    wxSTC_MARGIN_NUMBER,
+    wxSTC_STYLE_DEFAULT,
+    wxSTC_WRAPVISUALFLAG_END,
+    wxSTC_WRAP_WORD,
+} from "./stc_consts.kwxts";
+
+/** MinimalEditor's private enum: margin_id_lineno, margin_id_fold. */
+const MARGIN_ID_LINENO = 0;
+const MARGIN_ID_FOLD = 1;
+
+interface MinimalState
+{
+    readonly ctrl: wxStyledTextCtrl;
+}
+
+/** The live MinimalEditor controls, keyed by their pointer. */
+const minimalStates = new Map<string, MinimalState>();
+
+function rgbOf(colour: wxColour | null): number[]
+{
+    if (!colour)
+    {
+        return [0, 0, 0];
+    }
+    return [colour.Red(), colour.Green(), colour.Blue()];
+}
+
+function colourNamed(name: string): wxColour | null
+{
+    return withString(name, (value) => createWxColourByName(value));
+}
+
+function colourRGB(red: number, green: number, blue: number): wxColour | null
+{
+    return createWxColourRGB(red, green, blue, 255);
+}
+
+/** wxSystemSettings::SelectLightDark(light, dark) as RGB components. */
+function selectLightDark(light: wxColour | null, dark: wxColour | null): number[] | null
+{
+    if (!light || !dark)
+    {
+        if (light) light.Delete();
+        if (dark) dark.Delete();
+        return null;
+    }
+    const raw = wxSystemSettings_SelectLightDark(light.ptr, dark.ptr);
+    const selected = raw ? new wxColour(raw) : null;
+    const rgb = rgbOf(selected);
+    if (selected) selected.Delete();
+    light.Delete();
+    dark.Delete();
+    return rgb;
+}
+
+function setStyleForeground(ctrl: wxStyledTextCtrl, style: number, rgb: number[] | null): void
+{
+    if (rgb)
+    {
+        ctrl.StyleSetForeground(ctrl.ptr, style, rgb[0], rgb[1], rgb[2]);
+    }
+}
+
+/** MinimalEditor::SetLexerXml() */
+function setLexerXml(state: MinimalState): void
+{
+    const ctrl = state.ctrl;
+    const colTag = selectLightDark(colourRGB(0, 0, 255), colourRGB(0, 255, 255));
+    const colAttr = selectLightDark(colourRGB(255, 0, 0), colourNamed("PINK"));
+
+    ctrl.SetLexer(ctrl.ptr, wxSTC_LEX_XML);
+
+    // Ensure the correct default background is used for all styles.
+    ctrl.StyleClearAll(ctrl.ptr);
+
+    setStyleForeground(ctrl, wxSTC_H_TAG, colTag);
+    setStyleForeground(ctrl, wxSTC_H_TAGUNKNOWN, colTag);
+    setStyleForeground(ctrl, wxSTC_H_ATTRIBUTE, colAttr);
+    setStyleForeground(ctrl, wxSTC_H_ATTRIBUTEUNKNOWN, colAttr);
+    ctrl.StyleSetBold(ctrl.ptr, wxSTC_H_ATTRIBUTEUNKNOWN, true);
+    setStyleForeground(ctrl, wxSTC_H_OTHER, colTag);
+    setStyleForeground(ctrl, wxSTC_H_COMMENT, selectLightDark(colourNamed("GREY"), colourNamed("GREY")));
+    setStyleForeground(ctrl, wxSTC_H_ENTITY, colAttr);
+    ctrl.StyleSetBold(ctrl.ptr, wxSTC_H_ENTITY, true);
+    setStyleForeground(ctrl, wxSTC_H_TAGEND, colTag);
+    setStyleForeground(ctrl, wxSTC_H_XMLSTART, colTag);
+    setStyleForeground(ctrl, wxSTC_H_XMLEND, colTag);
+    setStyleForeground(ctrl, wxSTC_H_CDATA, colAttr);
+}
+
+/** wxFontInfo(size).Family(wxFONTFAMILY_TELETYPE) at the control's own size. */
+function createTeletypeFont(control: Pointer)
+{
+    let pointSize = 0;
+    const probe = createWxFontDefault();
+    if (probe)
+    {
+        // wxWindow::GetFont(ref): reads the window's current font.
+        wrapWxWindow(control).GetFont(probe.ptr);
+        pointSize = probe.GetPointSize();
+        probe.Delete();
+    }
+    if (pointSize <= 0)
+    {
+        pointSize = 10;
+    }
+    return withString("", (face) =>
+        createWxFont(
+            pointSize, FONTFAMILY_TELETYPE, FONTSTYLE_NORMAL, FONTWEIGHT_NORMAL,
+            false, face, FONTENCODING_DEFAULT));
+}
+
+function setProperty(ctrl: wxStyledTextCtrl, key: string, value: string): void
+{
+    withString(key, (property) =>
+        withString(value, (setting) => ctrl.SetProperty(ctrl.ptr, property, setting)));
+}
+
+function markerDefine(
+    ctrl: wxStyledTextCtrl, number: number, symbol: number, foreground: number[], background: number[],
+): void
+{
+    ctrl.MarkerDefine(
+        ctrl.ptr, number, symbol,
+        foreground[0], foreground[1], foreground[2],
+        background[0], background[1], background[2]);
+}
+
+/** MinimalEditor::MinimalEditor(parent, id) */
+function createMinimalEditor(parent: Pointer): MinimalState | null
+{
+    const raw = withString("", (text) =>
+        createWxStyledTextCtrl(parent, ID_ANY, text, -1, -1, -1, -1, 0));
+    if (!raw)
+    {
+        return null;
+    }
+
+    const state: MinimalState = { ctrl: wrapWxStyledTextCtrl(raw) };
+    minimalStates.set(String(raw), state);
+    const ctrl = state.ctrl;
+
+    setLexerXml(state);
+
+    setProperty(ctrl, "fold", "1");
+    setProperty(ctrl, "fold.comment", "1");
+    setProperty(ctrl, "fold.compact", "1");
+    setProperty(ctrl, "fold.preprocessor", "1");
+    setProperty(ctrl, "fold.html", "1");
+    setProperty(ctrl, "fold.html.preprocessor", "1");
+
+    ctrl.SetMarginType(ctrl.ptr, MARGIN_ID_LINENO, wxSTC_MARGIN_NUMBER);
+    ctrl.SetMarginWidth(ctrl.ptr, MARGIN_ID_LINENO, 32);
+
+    // We intentionally invert foreground and background colours here.
+    const colFg = rgbOf(ctrl.StyleGetForeground(wxSTC_STYLE_DEFAULT));
+    const colBg = rgbOf(ctrl.StyleGetBackground(wxSTC_STYLE_DEFAULT));
+    markerDefine(ctrl, wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS, colBg, colFg);
+    markerDefine(ctrl, wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_BOXMINUS, colBg, colFg);
+    markerDefine(ctrl, wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_VLINE, colBg, colFg);
+    markerDefine(ctrl, wxSTC_MARKNUM_FOLDEREND, wxSTC_MARK_BOXPLUSCONNECTED, colBg, colFg);
+    markerDefine(ctrl, wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUSCONNECTED, colBg, colFg);
+    markerDefine(ctrl, wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_TCORNER, colBg, colFg);
+    markerDefine(ctrl, wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_LCORNER, colBg, colFg);
+
+    ctrl.SetMarginMask(ctrl.ptr, MARGIN_ID_FOLD, wxSTC_MASK_FOLDERS);
+    ctrl.SetMarginWidth(ctrl.ptr, MARGIN_ID_FOLD, 32);
+    ctrl.SetMarginSensitive(ctrl.ptr, MARGIN_ID_FOLD, true);
+
+    ctrl.SetFoldFlags(ctrl.ptr,
+        wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED | wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED);
+
+    ctrl.SetTabWidth(ctrl.ptr, 4);
+    ctrl.SetUseTabs(ctrl.ptr, false);
+    ctrl.SetWrapMode(ctrl.ptr, wxSTC_WRAP_WORD);
+    ctrl.SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
+
+    // MinimalEditor::SetFont() override: apply the font to the default style,
+    // then let wxStyledTextCtrl::SetFont() apply it to the control.
+    const font = createTeletypeFont(raw);
+    if (font)
+    {
+        ctrl.StyleSetFont(ctrl.ptr, wxSTC_STYLE_DEFAULT, font.ptr);
+        wrapWxWindow(raw).SetFont(font.ptr);
+        font.Delete();
+    }
+
+    bindMinimalEditorEvents(state);
+    return state;
+}
+
+// ---------------------------------------------------------------------------
+// events: EVT_STC_MARGINCLICK / EVT_STC_CHANGE
+// ---------------------------------------------------------------------------
+
+let marginClickCallback: Callback | null = null;
+let textChangeCallback: Callback | null = null;
+
+function stateFor(data: Pointer): MinimalState | null
+{
+    return data === null ? null : minimalStates.get(String(data)) ?? null;
+}
+
+/** MinimalEditor::OnText() — wxLogDebug("Modified"); event.Skip(); */
+function logModified(): void
+{
+    withString("Modified", (text) => LogDebug(text));
+}
+
+function bindMinimalEditorEvents(state: MinimalState): void
+{
+    const ptr = state.ctrl.ptr;
+
+    if (!marginClickCallback)
+    {
+        marginClickCallback = newCallback((_fun, data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const target = stateFor(data);
+            if (!target)
+            {
+                return;
+            }
+            const event = new wxStyledTextEvent(eventPtr);
+            if (event.GetMargin(event.ptr) === MARGIN_ID_FOLD)
+            {
+                const lineClick = target.ctrl.LineFromPosition(
+                    target.ctrl.ptr, event.GetPosition(event.ptr));
+                const levelClick = target.ctrl.GetFoldLevel(target.ctrl.ptr, lineClick);
+                if ((levelClick & wxSTC_FOLDLEVELHEADERFLAG) > 0)
+                {
+                    target.ctrl.ToggleFold(target.ctrl.ptr, lineClick);
+                }
+            }
+        });
+    }
+    bindPointer(ptr, ID_ANY, ID_ANY, EVT_STC_MARGINCLICK, marginClickCallback, ptr);
+
+    if (!textChangeCallback)
+    {
+        textChangeCallback = newCallback((_fun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            logModified();
+            new wxEvent(eventPtr).Skip(true);
+        });
+    }
+    bindPointer(ptr, ID_ANY, ID_ANY, EVT_STC_CHANGE, textChangeCallback, ptr);
+}
+
+/** App::MinimalEditor() — creates and shows the MinimalEditorFrame. */
+export function createMinimalEditorFrame(): wxFrame | null
+{
+    const frame = withString("Minimal Editor", (title) =>
+        createWxFrame(null, ID_ANY, title, -1, -1, -1, -1, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        return null;
+    }
+
+    const state = createMinimalEditor(frame.ptr);
+    if (!state)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    const sizer = createWxBoxSizer(HORIZONTAL);
+    if (sizer)
+    {
+        addWindow(sizer, state.ctrl.ptr, 1, (flags) => flags.Expand());
+        frame.SetSizer(sizer.ptr, true);
+    }
+
+    withString(
+        "<xml>\n" +
+        "   <text>\n" +
+        "      This is xml with syntax highlighting, line numbers, folding, word wrap and context menu\n" +
+        "   </text>\n" +
+        "</xml>",
+        (text) => state.ctrl.SetText(state.ctrl.ptr, text));
+
+    frame.Show();
+    return frame;
+}

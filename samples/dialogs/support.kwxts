@@ -1,0 +1,394 @@
+// support.kwxts — shared helpers for the "dialogs" sample port.
+//
+// Contains:
+//   * the menu id enumeration from dialogs.h,
+//   * wxString / buffer helpers (the kwxFFI calling conventions),
+//   * a single event-router class used to keep the number of native callbacks
+//     well below the 64-slot limit,
+//   * sizer helpers that mirror the wxSizerFlags combinations used by the
+//     C++ sample.
+
+import {
+    createWxArrayString,
+    createWxClosure,
+    createWxColourEmpty,
+    createWxSizerFlags,
+    createWxString,
+    ID_HIGHEST,
+    lib,
+    readAndDeleteWxString,
+    readWxString,
+    wxClosure,
+    wxColour,
+    wxControl,
+    wxGetStockLabel,
+    wxSizer,
+    wxSizerFlags,
+    wxString,
+    wxWindow,
+    wxArrayString,
+    wrapWxColour,
+    wrapWxWindow,
+} from "kwx";
+import { Callback, Pointer, pointerOf, readCString } from "kwx/platform";
+
+//-----------------------------------------------------------------------------
+// Menu ids (enum in dialogs.h, starting at wxID_HIGHEST)
+//-----------------------------------------------------------------------------
+
+export const DIALOGS_CHOOSE_COLOUR = ID_HIGHEST;
+export const DIALOGS_CHOOSE_COLOUR_ALPHA = DIALOGS_CHOOSE_COLOUR + 1;
+export const DIALOGS_GET_COLOUR = DIALOGS_CHOOSE_COLOUR_ALPHA + 1;
+export const DIALOGS_CHOOSE_COLOUR_GENERIC = DIALOGS_GET_COLOUR + 1;
+export const DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA = DIALOGS_CHOOSE_COLOUR_GENERIC + 1;
+export const DIALOGS_CHOOSE_FONT = DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA + 1;
+export const DIALOGS_CHOOSE_FONT_GENERIC = DIALOGS_CHOOSE_FONT + 1;
+export const DIALOGS_MESSAGE_BOX = DIALOGS_CHOOSE_FONT_GENERIC + 1;
+export const DIALOGS_MESSAGE_BOX_WINDOW_MODAL = DIALOGS_MESSAGE_BOX + 1;
+export const DIALOGS_MESSAGE_DIALOG = DIALOGS_MESSAGE_BOX_WINDOW_MODAL + 1;
+export const DIALOGS_MESSAGE_DIALOG_WINDOW_MODAL = DIALOGS_MESSAGE_DIALOG + 1;
+export const DIALOGS_MESSAGE_BOX_WXINFO = DIALOGS_MESSAGE_DIALOG_WINDOW_MODAL + 1;
+export const DIALOGS_RICH_MESSAGE_DIALOG = DIALOGS_MESSAGE_BOX_WXINFO + 1;
+export const DIALOGS_SINGLE_CHOICE = DIALOGS_RICH_MESSAGE_DIALOG + 1;
+export const DIALOGS_SINGLE_CHOICE_DATA = DIALOGS_SINGLE_CHOICE + 1;
+export const DIALOGS_MULTI_CHOICE = DIALOGS_SINGLE_CHOICE_DATA + 1;
+export const DIALOGS_REARRANGE = DIALOGS_MULTI_CHOICE + 1;
+export const DIALOGS_ADDREMOVE = DIALOGS_REARRANGE + 1;
+export const DIALOGS_LINE_ENTRY = DIALOGS_ADDREMOVE + 1;
+export const DIALOGS_TEXT_ENTRY = DIALOGS_LINE_ENTRY + 1;
+export const DIALOGS_PASSWORD_ENTRY = DIALOGS_TEXT_ENTRY + 1;
+export const DIALOGS_CREDENTIAL_ENTRY = DIALOGS_PASSWORD_ENTRY + 1;
+export const DIALOGS_FILE_OPEN = DIALOGS_CREDENTIAL_ENTRY + 1;
+export const DIALOGS_FILE_OPEN2 = DIALOGS_FILE_OPEN + 1;
+export const DIALOGS_FILES_OPEN = DIALOGS_FILE_OPEN2 + 1;
+export const DIALOGS_FILES_OPEN_WINDOW_MODAL = DIALOGS_FILES_OPEN + 1;
+export const DIALOGS_FILE_SAVE = DIALOGS_FILES_OPEN_WINDOW_MODAL + 1;
+export const DIALOGS_FILE_SAVE_WINDOW_MODAL = DIALOGS_FILE_SAVE + 1;
+export const DIALOGS_FILE_OPEN_GENERIC = DIALOGS_FILE_SAVE_WINDOW_MODAL + 1;
+export const DIALOGS_FILES_OPEN_GENERIC = DIALOGS_FILE_OPEN_GENERIC + 1;
+export const DIALOGS_FILE_SAVE_GENERIC = DIALOGS_FILES_OPEN_GENERIC + 1;
+export const DIALOGS_FILE_USE_CUSTOMIZER = DIALOGS_FILE_SAVE_GENERIC + 1;
+export const DIALOGS_FILE_USE_EXTRA_CONTROL_CREATOR = DIALOGS_FILE_USE_CUSTOMIZER + 1;
+export const DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES = DIALOGS_FILE_USE_EXTRA_CONTROL_CREATOR + 1;
+export const DIALOGS_DIR_CHOOSE = DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES + 1;
+export const DIALOGS_DIR_CHOOSE_WINDOW_MODAL = DIALOGS_DIR_CHOOSE + 1;
+export const DIALOGS_DIRNEW_CHOOSE = DIALOGS_DIR_CHOOSE_WINDOW_MODAL + 1;
+export const DIALOGS_DIRMULTIPLE_CHOOSE = DIALOGS_DIRNEW_CHOOSE + 1;
+export const DIALOGS_GENERIC_DIR_CHOOSE = DIALOGS_DIRMULTIPLE_CHOOSE + 1;
+export const DIALOGS_TIP = DIALOGS_GENERIC_DIR_CHOOSE + 1;
+export const DIALOGS_NUM_ENTRY = DIALOGS_TIP + 1;
+export const DIALOGS_LOG_DIALOG = DIALOGS_NUM_ENTRY + 1;
+export const DIALOGS_INFOBAR_SIMPLE = DIALOGS_LOG_DIALOG + 1;
+export const DIALOGS_INFOBAR_ADVANCED = DIALOGS_INFOBAR_SIMPLE + 1;
+export const DIALOGS_MODAL = DIALOGS_INFOBAR_ADVANCED + 1;
+export const DIALOGS_MODELESS = DIALOGS_MODAL + 1;
+export const DIALOGS_CENTRE_SCREEN = DIALOGS_MODELESS + 1;
+export const DIALOGS_CENTRE_PARENT = DIALOGS_CENTRE_SCREEN + 1;
+export const DIALOGS_MINIFRAME = DIALOGS_CENTRE_PARENT + 1;
+export const DIALOGS_ONTOP = DIALOGS_MINIFRAME + 1;
+export const DIALOGS_MODELESS_BTN = DIALOGS_ONTOP + 1;
+export const DIALOGS_PROGRESS = DIALOGS_MODELESS_BTN + 1;
+export const DIALOGS_PROGRESS_GENERIC = DIALOGS_PROGRESS + 1;
+export const DIALOGS_APP_PROGRESS = DIALOGS_PROGRESS_GENERIC + 1;
+export const DIALOGS_ABOUTDLG_SIMPLE = DIALOGS_APP_PROGRESS + 1;
+export const DIALOGS_ABOUTDLG_FANCY = DIALOGS_ABOUTDLG_SIMPLE + 1;
+export const DIALOGS_ABOUTDLG_FULL = DIALOGS_ABOUTDLG_FANCY + 1;
+export const DIALOGS_ABOUTDLG_CUSTOM = DIALOGS_ABOUTDLG_FULL + 1;
+export const DIALOGS_BUSYINFO = DIALOGS_ABOUTDLG_CUSTOM + 1;
+export const DIALOGS_BUSYINFO_RICH = DIALOGS_BUSYINFO + 1;
+export const DIALOGS_FIND = DIALOGS_BUSYINFO_RICH + 1;
+export const DIALOGS_REPLACE = DIALOGS_FIND + 1;
+export const DIALOGS_REQUEST = DIALOGS_REPLACE + 1;
+export const DIALOGS_NOTIFY_MSG = DIALOGS_REQUEST + 1;
+export const DIALOGS_SHOW_TIP = DIALOGS_NOTIFY_MSG + 1;
+export const DIALOGS_RICHTIP_DIALOG = DIALOGS_SHOW_TIP + 1;
+export const DIALOGS_PROPERTY_SHEET = DIALOGS_RICHTIP_DIALOG + 1;
+export const DIALOGS_PROPERTY_SHEET_TOOLBOOK = DIALOGS_PROPERTY_SHEET + 1;
+export const DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK = DIALOGS_PROPERTY_SHEET_TOOLBOOK + 1;
+export const DIALOGS_STANDARD_BUTTON_SIZER_DIALOG = DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK + 1;
+export const DIALOGS_TEST_DEFAULT_ACTION = DIALOGS_STANDARD_BUTTON_SIZER_DIALOG + 1;
+export const DIALOGS_MODAL_HOOK = DIALOGS_TEST_DEFAULT_ACTION + 1;
+export const DIALOGS_SIMULATE_UNSAVED = DIALOGS_MODAL_HOOK + 1;
+export const DIALOGS_USE_WRAPPER_FUNCTIONS = DIALOGS_SIMULATE_UNSAVED + 1;
+
+//-----------------------------------------------------------------------------
+// wxString helpers
+//-----------------------------------------------------------------------------
+
+/** Calls fn with a temporary wxString and always releases it. */
+export function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value: wxString = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** Calls fn with several temporary wxStrings and always releases them. */
+export function withStrings<T>(values: string[], fn: (ptrs: Pointer[]) => T): T
+{
+    const created: wxString[] = [];
+    for (const value of values) created.push(createWxString(value));
+    try
+    {
+        return fn(created.map((value) => value.ptr));
+    }
+    finally
+    {
+        for (const value of created) value.Delete();
+    }
+}
+
+/** wxControl::SetLabelText() with a temporary wxString. */
+export function setLabelText(control: wxControl, text: string): void
+{
+    withString(text, (ptr) => { control.SetLabelText(ptr); });
+}
+
+/** wxControl::SetLabel() with a temporary wxString. */
+export function setLabel(window: wxWindow, text: string): void
+{
+    withString(text, (ptr) => { window.SetLabel(ptr); });
+}
+
+/** Reads a wxString* owned by the caller (a getter result). */
+export function takeString(ptr: Pointer): string
+{
+    return readAndDeleteWxString(ptr);
+}
+
+/**
+ * Reads any wxString getter result: current bindings return a `wxString`
+ * wrapper for string-returning methods and a raw `Pointer` for free
+ * functions. Both are consumed with readAndDeleteWxString().
+ */
+export function takeText(value: wxString | Pointer | null): string
+{
+    if (!value) return "";
+    const ptr = typeof value === "object" ? value.ptr : value;
+    return readAndDeleteWxString(ptr);
+}
+
+/** wxGetStockLabel(id, 0), used where C++ passes a stock id as a label. */
+export function stockLabel(id: number): string
+{
+    const label = wxGetStockLabel(id, 0n);
+    return label ? readAndDeleteWxString(label) : "";
+}
+
+/**
+ * Fills a caller-owned wxString created with createWxString("").
+ * Used where kwxFFI writes into a wxString* out-parameter.
+ */
+export function readOwnedString(value: wxString): string
+{
+    const text = readWxString(value.ptr);
+    value.Delete();
+    return text;
+}
+
+//-----------------------------------------------------------------------------
+// Native array helpers
+//-----------------------------------------------------------------------------
+
+/**
+ * Builds the `char**` array expected by the kwxFFI string-array parameters.
+ * The returned `keep` array must stay reachable until the native call returns.
+ */
+export function charPtrArray(items: string[]): { ptr: Pointer; keep: (Uint8Array | BigUint64Array)[] }
+{
+    const keep: (Uint8Array | BigUint64Array)[] = [];
+    const pointers = new BigUint64Array(items.length);
+    // `ptr` is the address of `pointers`, not of the encoded strings. Keep the
+    // array itself reachable too, otherwise QuickJS frees it when this function
+    // returns and every caller is left with a dangling `char**`.
+    keep.push(pointers);
+
+    for (let i = 0; i < items.length; i++)
+    {
+        const bytes = new TextEncoder().encode(items[i] + "\0");
+        keep.push(bytes);
+        const address = pointerOf(bytes);
+        pointers[i] = address === null ? 0n : address;
+    }
+
+    return { ptr: pointerOf(pointers), keep };
+}
+
+/**
+ * Reads the `char**` array filled by a kwxFFI TArrayStringOutVoid parameter.
+ * The native side stores strdup()ed strings, so the buffer has to be allocated
+ * large enough for the maximum number of returned items before the call.
+ */
+export function readStringArray(count: number, pointers: BigUint64Array): string[]
+{
+    const result: string[] = [];
+    const limit = Math.min(count, pointers.length);
+    for (let i = 0; i < limit; i++)
+    {
+        const address = pointers[i];
+        result.push(address === 0n ? "" : readCString(address));
+    }
+    return result;
+}
+
+/** Creates a wxArrayString from a list of JS strings. */
+export function createArrayString(items: string[]): wxArrayString | null
+{
+    const array = createWxArrayString();
+    if (!array) return null;
+    for (const item of items)
+    {
+        const value = createWxString(item);
+        array.Add(value.ptr);
+        value.Delete();
+    }
+    return array;
+}
+
+//-----------------------------------------------------------------------------
+// Event routing
+//-----------------------------------------------------------------------------
+
+export type EventSink = (tag: number, eventPtr: Pointer) => void;
+
+/**
+ * One native callback shared by every connection made through this router.
+ *
+ * The native closure thunk is `void (*)(void*, void*, void*)` and receives
+ * (function pointer, closure data, event). The closure data is used as a small
+ * integer tag so a single callback can serve many handlers, keeping the fixed
+ * 64-slot callback pool far from exhaustion.
+ */
+export class EventRouter
+{
+    private readonly callback: Callback;
+    private readonly closures: wxClosure[] = [];
+    private readonly sink: EventSink;
+
+    constructor(sink: EventSink)
+    {
+        this.sink = sink;
+        this.callback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_closureFun, data, eventPtr) =>
+            {
+                // The closure destructor invokes the callback once with a null
+                // event during teardown.
+                if (!eventPtr) return;
+                const tag = data === null ? 0 : Number(data);
+                this.sink(tag, eventPtr);
+            });
+    }
+
+    /** wxEvtHandler::Connect(first, last, type) using this router's callback. */
+    connect(target: Pointer, first: number, last: number, type: number, tag = 0): void
+    {
+        const closure = createWxClosure(
+            this.callback.pointer, tag === 0 ? null : BigInt(tag));
+        if (!closure) return;
+        this.closures.push(closure);
+        lib.symbols.wxEvtHandler_Connect(target, first, last, type, closure.ptr);
+    }
+
+    close(): void
+    {
+        this.callback.close();
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Sizer helpers (mirror wxSizerFlags combinations)
+//-----------------------------------------------------------------------------
+
+export function addWin(
+    sizer: wxSizer, window: Pointer, proportion = 0,
+    setup?: (flags: wxSizerFlags) => void): void
+{
+    if (!setup)
+    {
+        sizer.AddWindow(window, proportion, 0, 0, null);
+        return;
+    }
+    const flags = createWxSizerFlags(proportion);
+    if (!flags)
+    {
+        sizer.AddWindow(window, proportion, 0, 0, null);
+        return;
+    }
+    setup(flags);
+    sizer.AddWindowFlags(window, flags.ptr);
+    flags.Delete();
+}
+
+export function addChild(
+    sizer: wxSizer, child: Pointer, proportion = 0,
+    setup?: (flags: wxSizerFlags) => void): void
+{
+    if (!setup)
+    {
+        sizer.AddSizer(child, proportion, 0, 0, null);
+        return;
+    }
+    const flags = createWxSizerFlags(proportion);
+    if (!flags)
+    {
+        sizer.AddSizer(child, proportion, 0, 0, null);
+        return;
+    }
+    setup(flags);
+    sizer.AddSizerFlags(child, flags.ptr);
+    flags.Delete();
+}
+
+//-----------------------------------------------------------------------------
+// Child lookup
+//-----------------------------------------------------------------------------
+
+/** wxWindow::FindWindow(long id): finds a descendant window by its id. */
+export function findChildById(parent: Pointer, id: number): Pointer
+{
+    const found = wrapWxWindow(parent).FindWindowByIdSelf(id);
+    return found ? found.ptr : null;
+}
+
+//-----------------------------------------------------------------------------
+// Colour helpers
+//-----------------------------------------------------------------------------
+
+
+/** wxWindow::GetBackgroundColour() via its by-reference binding. */
+export function backgroundColour(window: wxWindow): wxColour | null
+{
+    const colour = createWxColourEmpty();
+    if (!colour) return null;
+    window.GetBackgroundColour(colour.ptr);
+    return colour;
+}
+
+/** wxWindow::GetForegroundColour() via its by-reference binding. */
+export function foregroundColour(window: wxWindow): wxColour | null
+{
+    const colour = createWxColourEmpty();
+    if (!colour) return null;
+    window.GetForegroundColour(colour.ptr);
+    return colour;
+}
+
+/** Compares two wxColour pointers component-wise (wxColour::operator==). */
+export function coloursEqual(a: Pointer, b: Pointer): boolean
+{
+    if (a === b) return true;
+    if (!a || !b) return false;
+    const first = wrapWxColour(a);
+    const second = wrapWxColour(b);
+    return first.Red() === second.Red()
+        && first.Green() === second.Green()
+        && first.Blue() === second.Blue()
+        && first.Alpha() === second.Alpha();
+}

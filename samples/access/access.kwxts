@@ -1,0 +1,490 @@
+// access.kwxts — kwxTypeScript port of wxSamples/src/access/accesstest.cpp
+//
+// The wxWidgets accessibility sample: a 450x340 frame titled
+// "AccessTest wxWidgets App" created at (50, 50), a File menu
+// (Query / separator / "E&xit\tAlt-X") and a Help menu ("&About"), and a
+// horizontal splitter whose sash sits at 150: a four-item list box on top and a
+// multiline log text control below.
+//
+//   File > Query   clears the log and enumerates the frame's MSAA hierarchy.
+//   Help > About   shows the version message box.
+//   File > Exit    closes the frame.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\access\access.kwxts
+//
+// PORTED EXACTLY
+//   * frame title/position/size/style, icon (sample.xpm), File/Help menu tree,
+//     menu IDs (1, 2, wxID_ABOUT), labels, accelerator text, help strings and
+//     order;
+//   * wxSplitterWindow(wxID_ANY) with its default wxSP_3D style,
+//     SplitHorizontally(listBox, textCtrl, 150), the four list box items
+//     ("Cabbages", "Kings", "Sealing wax", "Strings"), the wxTE_MULTILINE text
+//     control, and both SetHelpText() strings;
+//   * SetAccessible(new FrameAccessible(this)) and
+//     SetAccessible(new SplitterWindowAccessible(splitter)) as far as the
+//     runtime allows: a native accessible object is created with
+//     wxAccessible_Create() and installed with wxWindow::SetAccessible(), and
+//     the two GetName() answers for wxACC_SELF ("Julian's Frame" /
+//     "Splitter window") are installed as the accessible name, which wxWidgets
+//     consults before GetName() for CHILDID_SELF only
+//     (src/msw/ole/access.cpp get_accName);
+//   * listBox->CreateAccessible() and m_textCtrl->CreateAccessible()
+//     (wxWindow::CreateAccessible() is exported from the current kwxFFI);
+//   * MyFrame::Log() semantics (CR and LF flattened to spaces, insertion point
+//     moved to the end, trailing newline appended);
+//   * the event table (EVT_MENU for Quit/Query/About on the frame);
+//   * MyApp::OnInit(): wxHelpProvider::Set(new wxSimpleHelpProvider()).
+//
+// NOT PORTED — see the KWXTS SAMPLE REPORT for the blocking gaps
+//   1. MyFrame::OnQuery (accesstest.cpp:399-474) walks the accessible tree with
+//      AccessibleObjectFromWindow(), AccessibleChildren(),
+//      IAccessible::get_accName / get_accRole / get_accChildCount /
+//      get_accChild, GetRoleText() and SysFreeString(). kwxFFI exports none of
+//      the OLE accessibility API, so the enumeration cannot be performed. The
+//      handler keeps the original's own failure branch — Log("Could not get
+//      object.") and return — which is exactly what the C++ code does when the
+//      first call fails. Nothing is fabricated: no synthetic hierarchy is
+//      printed.
+//   2. The wxAccStatus-returning overrides of FrameAccessible and
+//      SplitterWindowAccessible cannot be registered. wxAccessible_SetOn* are
+//      bound, but every native hook returns an int status (and the string hooks
+//      write a buffer pointer through an out-parameter), while the runtime's
+//      JavaScript thunk is fixed at void(void*, void*, void*). Registering a JS
+//      callback there would return an undefined status value, so no hook is
+//      registered. Consequently the splitter's sash child (child count 3, name
+//      "Sash", role wxROLE_SYSTEM_GRIP, state
+//      wxACC_STATE_SYSTEM_UNAVAILABLE, value = sash position, plus the
+//      HitTest/GetLocation/Navigate/GetDescription/GetHelpText/Select
+//      overrides) is not exposed.
+//
+// Substitution (asset): SetIcon(wxICON(sample)) uses the sample.xpm artwork
+// shipped next to this module, loaded through wxIcon::Load(), instead of the
+// icon compiled into the C++ executable.
+
+declare const __dirname: string;
+
+import {
+    BITMAP_TYPE_XPM,
+    createWxAccessible,
+    createWxClosure,
+    createWxFrame,
+    createWxIconLoad,
+    createWxListBox,
+    createWxMenu,
+    createWxMenuBar,
+    createWxSimpleHelpProvider,
+    createWxSplitterWindow,
+    createWxString,
+    createWxTextCtrl,
+    DEFAULT_FRAME_STYLE,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    exitMainLoop,
+    ICON_INFORMATION,
+    ID_ABOUT,
+    ID_ANY,
+    initAllImageHandlers,
+    initialize,
+    kwxMessageBox,
+    lib,
+    OK,
+    readAndDeleteWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    SP_3D,
+    TE_MULTILINE,
+    wxClosure,
+    wxFrame,
+    wxListBox,
+    wxSplitterWindow,
+    wxTextCtrl,
+    wxVersionString,
+} from "kwx";
+import { Callback, exit, Pointer } from "kwx/platform";
+
+// ---------------------------------------------------------------------------
+// IDs — enum { AccessTest_Quit = 1, AccessTest_Query, AccessTest_About = wxID_ABOUT }
+// ---------------------------------------------------------------------------
+
+const ACCESS_TEST_QUIT = 1;
+const ACCESS_TEST_QUERY = 2;
+const ACCESS_TEST_ABOUT = ID_ABOUT;
+
+/** The four items appended to the list box, in order. */
+const LIST_ITEMS: readonly string[] = ["Cabbages", "Kings", "Sealing wax", "Strings"];
+
+const LIST_HELP_TEXT =
+    "This is a sample wxWidgets listbox, with a number of items in it.";
+const TEXT_HELP_TEXT = "This is a sample wxWidgets multiline text control.";
+
+const ABOUT_MESSAGE_HEADER = "This is the About dialog of the AccessTest sample.\n";
+const ABOUT_CAPTION = "About AccessTest";
+
+/** FrameAccessible::GetName(wxACC_SELF) and SplitterWindowAccessible's answer. */
+const FRAME_ACCESSIBLE_NAME = "Julian's Frame";
+const SPLITTER_ACCESSIBLE_NAME = "Splitter window";
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** Call fn with a temporary wxString and release it on every path. */
+function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/**
+ * SetAccessible(new <AccessibleSubclass>(win)) — the closest faithful form.
+ *
+ * The custom wxAccStatus overrides cannot be registered (see the header), but
+ * the ownership model and the CHILDID_SELF name are reproduced: a native
+ * wxAccessible is created through wxAccessible_Create(), installed on the
+ * window (which then owns and deletes it), and the name the C++ subclass
+ * returns for wxACC_SELF is installed as the accessible name, which wxWidgets
+ * consults before GetName() for CHILDID_SELF only.
+ */
+function installAccessible(win: wxFrame | wxSplitterWindow, name: string): void
+{
+    const accessible = createWxAccessible(win.ptr, null);
+    if (accessible)
+    {
+        // wxWindowBase::SetAccessible() takes ownership; never Delete() it.
+        win.SetAccessible(accessible.ptr);
+    }
+    withString(name, (text) => win.SetAccessibleName(text));
+}
+
+interface AccessFrameState
+{
+    readonly frame: wxFrame;
+    readonly splitter: wxSplitterWindow;
+    readonly listBox: wxListBox;
+    readonly textCtrl: wxTextCtrl;
+    readonly callbacks: Callback[];
+    readonly closures: wxClosure[];
+}
+
+/**
+ * MyFrame::Log — replace CR and LF with spaces, move the insertion point to the
+ * end, then append the flattened text plus a newline.
+ */
+function logText(state: AccessFrameState, text: string): void
+{
+    const flattened = text.replace(/[\r\n]/g, " ");
+    withString(flattened + "\n", (line) =>
+    {
+        state.textCtrl.SetInsertionPointEnd();
+        state.textCtrl.WriteText(line);
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Window construction
+// ---------------------------------------------------------------------------
+
+/** MyFrame constructor — frame, icon, File/Help menus, splitter and children. */
+function createAccessFrame(): AccessFrameState | null
+{
+    // MyFrame("AccessTest wxWidgets App", wxPoint(50, 50), wxSize(450, 340),
+    //         wxDEFAULT_FRAME_STYLE)
+    const title = createWxString("AccessTest wxWidgets App");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, 50, 50, 450, 340, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+
+    if (!frame)
+    {
+        return null;
+    }
+
+    // SetAccessible(new FrameAccessible(this));
+    installAccessible(frame, FRAME_ACCESSIBLE_NAME);
+
+    // SetIcon(wxICON(sample)) — the C++ executable embeds the icon as a Win32
+    // resource; here the same XPM artwork is loaded at run time.
+    const iconPath = createWxString(samplePath("sample.xpm"));
+    const icon = createWxIconLoad(iconPath.ptr, BigInt(BITMAP_TYPE_XPM), -1, -1);
+    iconPath.Delete();
+    if (icon)
+    {
+        if (icon.IsOk())
+        {
+            frame.SetIcon(icon.ptr);
+        }
+        icon.Delete();
+    }
+
+    // --- menu bar ---
+    const noTitle = createWxString("");
+    const fileMenu = createWxMenu(noTitle.ptr, 0n);
+    const helpMenu = createWxMenu(noTitle.ptr, 0n);
+    noTitle.Delete();
+
+    if (fileMenu && helpMenu)
+    {
+        // helpMenu->Append(AccessTest_About, "&About", "Show about dialog");
+        withString("&About", (label) =>
+        {
+            withString("Show about dialog", (help) =>
+            {
+                helpMenu.Append(ACCESS_TEST_ABOUT, label, help, false);
+            });
+        });
+
+        // menuFile->Append(AccessTest_Query, "Query", "Query the window hierarchy");
+        withString("Query", (label) =>
+        {
+            withString("Query the window hierarchy", (help) =>
+            {
+                fileMenu.Append(ACCESS_TEST_QUERY, label, help, false);
+            });
+        });
+
+        // menuFile->AppendSeparator();
+        fileMenu.AppendSeparator();
+
+        // menuFile->Append(AccessTest_Quit, "E&xit\tAlt-X", "Quit this program");
+        withString("E&xit\tAlt-X", (label) =>
+        {
+            withString("Quit this program", (help) =>
+            {
+                fileMenu.Append(ACCESS_TEST_QUIT, label, help, false);
+            });
+        });
+
+        // menuBar->Append(menuFile, "&File"); menuBar->Append(helpMenu, "&Help");
+        // SetMenuBar(menuBar);
+        const menuBar = createWxMenuBar(0);
+        if (menuBar)
+        {
+            withString("&File", (text) => menuBar.Append(fileMenu.ptr, text));
+            withString("&Help", (text) => menuBar.Append(helpMenu.ptr, text));
+            frame.SetMenuBar(menuBar.ptr);
+        }
+    }
+
+    // CreateStatusBar(2) / SetStatusText("Welcome to wxWidgets!") are compiled
+    // out of the original (inside `#if 0 // wxUSE_STATUSBAR`).
+
+    // wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY);
+    // The C++ constructor default style is wxSP_3D.
+    const splitter = createWxSplitterWindow(frame.ptr, ID_ANY, -1, -1, -1, -1, SP_3D);
+    if (!splitter)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // splitter->SetAccessible(new SplitterWindowAccessible(splitter));
+    installAccessible(splitter, SPLITTER_ACCESSIBLE_NAME);
+
+    // wxListBox* listBox = new wxListBox(splitter, wxID_ANY);
+    const listBox = createWxListBox(splitter.ptr, ID_ANY, -1, -1, -1, -1, 0, null, 0);
+    if (!listBox)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    for (const item of LIST_ITEMS)
+    {
+        withString(item, (text) => listBox.Append(text));
+    }
+
+    // listBox->CreateAccessible();
+    listBox.CreateAccessible();
+    withString(LIST_HELP_TEXT, (help) => listBox.SetHelpText(help));
+
+    // m_textCtrl = new wxTextCtrl(splitter, wxID_ANY, "", wxDefaultPosition,
+    //                             wxDefaultSize, wxTE_MULTILINE);
+    const textCtrl = withString("", (value) => createWxTextCtrl(
+        splitter.ptr, ID_ANY, value, -1, -1, -1, -1, BigInt(TE_MULTILINE),
+    ));
+    if (!textCtrl)
+    {
+        frame.Destroy();
+        return null;
+    }
+
+    // m_textCtrl->CreateAccessible();
+    textCtrl.CreateAccessible();
+    withString(TEXT_HELP_TEXT, (help) => textCtrl.SetHelpText(help));
+
+    // splitter->SplitHorizontally(listBox, m_textCtrl, 150);
+    splitter.SplitHorizontally(listBox.ptr, textCtrl.ptr, 150);
+
+    // The wxScrolledWindow block (accesstest.cpp:375-378) is inside `#if 0`.
+
+    return {
+        frame,
+        splitter,
+        listBox,
+        textCtrl,
+        callbacks: [],
+        closures: [],
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Event handlers
+// ---------------------------------------------------------------------------
+
+/** MyFrame::OnQuit — Close(true); the close handler ends the event loop. */
+function quitFrame(state: AccessFrameState): void
+{
+    state.frame.Close(true);
+}
+
+/** MyFrame::OnAbout — wxMessageBox(msg, "About AccessTest", wxOK|wxICON_INFORMATION, this). */
+function showAbout(state: AccessFrameState): void
+{
+    // wxVERSION_STRING — wxVersionString() hands ownership to the caller.
+    const version = readAndDeleteWxString(wxVersionString());
+    const message = ABOUT_MESSAGE_HEADER + "Welcome to " + version;
+
+    withString(message, (text) =>
+    {
+        withString(ABOUT_CAPTION, (caption) =>
+        {
+            kwxMessageBox(
+                text, caption, OK | ICON_INFORMATION, state.frame.ptr, -1, -1,
+            );
+        });
+    });
+}
+
+/**
+ * MyFrame::OnQuery — clears the log, then walks the frame's IAccessible tree.
+ *
+ * The walk needs the Windows OLE accessibility API (AccessibleObjectFromWindow,
+ * AccessibleChildren, IAccessible::get_accName/get_accRole/get_accChildCount/
+ * get_accChild, GetRoleText, SysFreeString), none of which kwxFFI exports, so
+ * AccessibleObjectFromWindow() cannot be called at all. The handler therefore
+ * takes the original's own failure branch — Log("Could not get object.") and
+ * return — rather than printing an invented hierarchy.
+ */
+function queryAccessibility(state: AccessFrameState): void
+{
+    // m_textCtrl->Clear();
+    state.textCtrl.Clear();
+
+    // if (S_OK != AccessibleObjectFromWindow(...)) { Log("Could not get object."); return; }
+    logText(state, "Could not get object.");
+}
+
+/** The event table: EVT_MENU(AccessTest_Quit / AccessTest_Query / AccessTest_About). */
+function connectAccessEvents(state: AccessFrameState): void
+{
+    const connect = (id: number, handler: () => void): void =>
+    {
+        const callback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_closureFun, _data, eventPtr) =>
+            {
+                if (!eventPtr)
+                {
+                    return;
+                }
+                handler();
+            },
+        );
+        const closure = createWxClosure(callback.pointer, null)!;
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, id, id, EVT_MENU, closure.ptr,
+        );
+        state.callbacks.push(callback);
+        state.closures.push(closure);
+    };
+
+    connect(ACCESS_TEST_QUIT, () => quitFrame(state));
+    connect(ACCESS_TEST_QUERY, () => queryAccessibility(state));
+    connect(ACCESS_TEST_ABOUT, () => showAbout(state));
+
+    // The C++ sample has no EVT_CLOSE_WINDOW entry: OnQuit calls Close(true) and
+    // the last top-level window ends the program. End the loop explicitly.
+    const closeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            exitMainLoop();
+        },
+    );
+    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(
+        state.frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr,
+    );
+    state.callbacks.push(closeCallback);
+    state.closures.push(closeClosure);
+}
+
+// ---------------------------------------------------------------------------
+// Application bootstrap
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("access");
+
+    // wxHelpProvider::Set(new wxSimpleHelpProvider());
+    // wxHelpProvider::Set() takes ownership of the provider; do not delete it.
+    const helpProvider = createWxSimpleHelpProvider();
+    if (helpProvider)
+    {
+        helpProvider.Set();
+    }
+
+    // Needed before createWxIconLoad() reads sample.xpm.
+    initAllImageHandlers();
+
+    const state = createAccessFrame();
+    if (!state)
+    {
+        console.error("access: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    connectAccessEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

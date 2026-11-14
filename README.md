@@ -195,6 +195,25 @@ bin\Release\kwxts.exe examples\demo.ts
 The build regenerates the embedded binding bundle from `wx/` and `src/`, so no
 extra step is needed after kwxgen updates the corpus.
 
+## GUI regression tests
+
+`tests/gui/` compares a ported sample against its C++ original pixel by pixel,
+using [wxShot](https://github.com/KeyWorksRW/wxShot). Both binaries are launched
+on the same machine, captured and compared live, so no baseline image is
+committed.
+
+```powershell
+c:\rwCode\wxShot\bin\Release\wxshot.exe test `
+    --manifest tests\gui\samples.json --mode reference `
+    --reference-root ..\..\wxSamples\bin\Release --only about
+```
+
+See [tests/gui/README.md](tests/gui/README.md) for the artifact layout, the
+thresholds and the baseline policy. The agent-facing workflow — how to read a
+`compose.png`, classify a difference and triage a failure — is the
+`gui-comparison` guide in `rwKeyCode`
+(`instructions/gui-comparison.md`).
+
 ## License
 
 Apache License 2.0 — see [LICENSE](LICENSE) for details.

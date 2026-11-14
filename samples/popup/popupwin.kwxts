@@ -1,0 +1,665 @@
+// popupwin.kwxts — SimpleTransientPopup (popup.cpp:58-253)
+//
+// A wxPopupTransientWindow holding a scrolled panel with a static text, a
+// button, a spin control, a text control and the "<- Test Mouse ->" label
+// whose background follows the mouse. The class logs every popup lifecycle
+// hook through wxLogMessage, exactly like the C++ original.
+
+import {
+    ALL,
+    BORDER_NONE,
+    EVT_AUX1_DCLICK,
+    EVT_AUX1_DOWN,
+    EVT_AUX1_UP,
+    EVT_AUX2_DCLICK,
+    EVT_AUX2_DOWN,
+    EVT_AUX2_UP,
+    EVT_BUTTON,
+    EVT_ENTER_WINDOW,
+    EVT_KILL_FOCUS,
+    EVT_LEAVE_WINDOW,
+    EVT_LEFT_DCLICK,
+    EVT_LEFT_DOWN,
+    EVT_LEFT_UP,
+    EVT_MAGNIFY,
+    EVT_MIDDLE_DCLICK,
+    EVT_MIDDLE_DOWN,
+    EVT_MIDDLE_UP,
+    EVT_MOTION,
+    EVT_MOUSEWHEEL,
+    EVT_RIGHT_DCLICK,
+    EVT_RIGHT_DOWN,
+    EVT_RIGHT_UP,
+    EVT_SET_FOCUS,
+    EVT_SHOW,
+    EVT_SIZE,
+    EVT_SPINCTRL,
+    HSCROLL,
+    ID_ANY,
+    LIGHT_GREY,
+    SIZE_USE_EXISTING,
+    SP_ARROW_KEYS,
+    SYS_COLOUR_HIGHLIGHT,
+    TAB_TRAVERSAL,
+    VERTICAL,
+    VSCROLL,
+    createWxButton,
+    createWxClosure,
+    createWxColourEmpty,
+    createWxColourRGB,
+    createWxPanel,
+    createWxPopupTransientWindow,
+    createWxScrolledWindow,
+    createWxSpinCtrl,
+    createWxStaticText,
+    createWxTextCtrl,
+    lib,
+    readAndDeleteWxString,
+    wrapWxButton,
+    wrapWxRect,
+    wxButton,
+    wxClosure,
+    wxColour,
+    wxCommandEvent,
+    wxEvent,
+    wxMouseEvent,
+    wxPopupTransientWindow,
+    wxRect,
+    wxScrolledWindow,
+    wxShowEvent,
+    wxSize,
+    wxSpinCtrl,
+    wxSpinEvent,
+    wxStaticText,
+    wxTextCtrl,
+    wxSystemSettings_GetColour,
+    wxSystemSettings_SelectLightDark,
+} from "kwx";
+import { Callback, Pointer } from "kwx/platform";
+import {
+    LivePopup,
+    MINIMAL_POPUP_BUTTON,
+    MINIMAL_POPUP_SPINCTRL,
+    addWithFlags,
+    clearLivePopups,
+    fmtPointer,
+    logMessage,
+    newBoxSizer,
+    popupOwningWindow,
+    registerLivePopup,
+    unregisterLivePopup,
+    withString,
+} from "./support.kwxts";
+
+/**
+ * wxPU_CONTAINS_CONTROLS (include/wx/popupwin.h:23). kwx_constants does not
+ * export this popup style, so its documented value is spelled out here.
+ */
+const PU_CONTAINS_CONTROLS = 0x0001;
+
+/** wxBORDER_NONE | wxPU_CONTAINS_CONTROLS (popup.cpp:107-109). */
+const POPUP_STYLE = BORDER_NONE | PU_CONTAINS_CONTROLS;
+
+const POPUP_TEXT =
+    "wxPopupTransientWindow is a\n" +
+    "wxPopupWindow which disappears\n" +
+    "automatically when the user\n" +
+    "clicks the mouse outside it or if it\n" +
+    "(or its first child) loses focus in \n" +
+    "any other way.";
+
+const POPUP_BUTTON_TEXT = "Press Me";
+const POPUP_BUTTON_PRESSED_TEXT = "Pressed";
+const POPUP_SPIN_TEXT = "Hello";
+const POPUP_EDIT_TEXT = "Try to type here";
+const MOUSE_TEXT = "<- Test Mouse ->";
+
+/** The wxPopupTransientWindow virtual methods the C++ class overrides. */
+export interface PopupState extends LivePopup
+{
+    readonly popupPtr: Pointer;
+    readonly popup: wxPopupTransientWindow;
+    readonly panel: wxScrolledWindow;
+    readonly text: wxStaticText;
+    readonly button: wxButton;
+    readonly spinCtrl: wxSpinCtrl;
+    readonly textCtrl: wxTextCtrl;
+    readonly mouseText: wxStaticText;
+}
+
+// ---------------------------------------------------------------------------
+// Colours
+// ---------------------------------------------------------------------------
+
+/** wxSystemSettings::SelectLightDark(*wxLIGHT_GREY, wxColour(90, 90, 90)) */
+function selectLightDark(): wxColour | null
+{
+    const dark = createWxColourRGB(90, 90, 90, 255);
+    if (!dark)
+    {
+        return null;
+    }
+
+    const rawPtr = wxSystemSettings_SelectLightDark(LIGHT_GREY, dark.ptr);
+    dark.Delete();
+    return rawPtr ? new wxColour(rawPtr) : null;
+}
+
+/** wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT) */
+function systemHighlight(): wxColour | null
+{
+    const colour = createWxColourEmpty();
+    if (!colour)
+    {
+        return null;
+    }
+
+    wxSystemSettings_GetColour(SYS_COLOUR_HIGHLIGHT, colour.ptr);
+    return colour;
+}
+
+/**
+ * wxColour::operator==.
+ *
+ * The binding has no comparison operator, so the colour channels are compared
+ * directly; invalid colours only compare equal to other invalid colours.
+ */
+function sameColour(left: wxColour, right: wxColour): boolean
+{
+    if (left.IsOk() !== right.IsOk())
+    {
+        return false;
+    }
+    if (!left.IsOk())
+    {
+        return true;
+    }
+
+    return left.Red() === right.Red() &&
+        left.Green() === right.Green() &&
+        left.Blue() === right.Blue() &&
+        left.Alpha() === right.Alpha();
+}
+
+// ---------------------------------------------------------------------------
+// Small helpers over FFI calls that hand back an owned object
+// ---------------------------------------------------------------------------
+
+/**
+ * wxWindow::GetRect() — the FFI allocates a wxRect, so the wrapper is handed to
+ * `fn` and the native copy is released afterwards. wxRect.generate has no
+ * Delete(), so the raw symbol is used for the release.
+ */
+function withWindowRect(
+    windowPtr: Pointer,
+    fn: (rect: wxRect) => void,
+): void
+{
+    const rawPtr = lib.symbols.wxWindow_GetRect(windowPtr);
+    if (!rawPtr)
+    {
+        return;
+    }
+
+    try
+    {
+        fn(wrapWxRect(rawPtr));
+    }
+    finally
+    {
+        lib.symbols.wxRect_Delete(rawPtr);
+    }
+}
+
+/** event.GetEventObject() as a raw pointer. */
+function eventObject(eventPtr: Pointer): Pointer
+{
+    if (!eventPtr)
+    {
+        return null;
+    }
+    return new wxEvent(eventPtr).GetEventObject()?.ptr ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// Event closures
+//
+// Every SimpleTransientPopup binds the same closures: the popup is replaced
+// (deleted and recreated) on every button press, and the handler resolves the
+// popup instance from the event object instead of from a per-instance closure.
+// ---------------------------------------------------------------------------
+
+interface Hook
+{
+    readonly callback: Callback;
+    readonly closure: wxClosure;
+}
+
+interface PopupHooks
+{
+    readonly panelMotion: Hook;
+    readonly popupMouse: Hook;
+    readonly show: Hook;
+    readonly size: Hook;
+    readonly setFocus: Hook;
+    readonly killFocus: Hook;
+    readonly button: Hook;
+    readonly spinCtrl: Hook;
+}
+
+let popupEventHooks: PopupHooks | null = null;
+
+function makeHook(
+    handler: (closureFun: Pointer, data: Pointer, event: Pointer) => void,
+): Hook
+{
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        handler,
+    );
+    const closure = createWxClosure(callback.pointer, null)!;
+    return { callback, closure };
+}
+
+/** SimpleTransientPopup::OnSize — log and pass the event on. */
+function handleSize(eventPtr: Pointer): void
+{
+    logMessage(`${fmtPointer(eventObject(eventPtr))} SimpleTransientPopup::OnSize`);
+    new wxEvent(eventPtr).Skip(true);
+}
+
+/** SimpleTransientPopup::OnSetFocus — log and pass the event on. */
+function handleSetFocus(eventPtr: Pointer): void
+{
+    logMessage(`${fmtPointer(eventObject(eventPtr))} SimpleTransientPopup::OnSetFocus`);
+    new wxEvent(eventPtr).Skip(true);
+}
+
+/** SimpleTransientPopup::OnKillFocus — log and pass the event on. */
+function handleKillFocus(eventPtr: Pointer): void
+{
+    logMessage(`${fmtPointer(eventObject(eventPtr))} SimpleTransientPopup::OnKillFocus`);
+    new wxEvent(eventPtr).Skip(true);
+}
+
+/**
+ * SimpleTransientPopup::Show(bool) — logged through wxEVT_SHOW.
+ *
+ * The C++ class overrides Show() to log and then call the base implementation;
+ * the base implementation must still run, so the log is emitted from the
+ * wxEVT_SHOW the base Show() generates.
+ *
+ * DismissAndNotify() hides the popup and then calls OnDismiss(), so the
+ * OnDismiss() line is emitted right after the Show(0) line, keeping the
+ * original message order.
+ */
+function handleShow(eventPtr: Pointer): void
+{
+    const event = new wxShowEvent(eventPtr);
+    const owner = fmtPointer(eventObject(eventPtr));
+    const shown = event.IsShown();
+
+    logMessage(`${owner} SimpleTransientPopup::Show ${shown ? 1 : 0}`);
+    if (!shown)
+    {
+        logMessage(`${owner} SimpleTransientPopup::OnDismiss`);
+    }
+
+    event.Skip(true);
+}
+
+/** SimpleTransientPopup::OnMouse (popup.cpp:213-233). */
+function handleMouse(eventPtr: Pointer): void
+{
+    const event = new wxMouseEvent(eventPtr);
+    const objectPtr = eventObject(eventPtr);
+    const owner = popupOwningWindow<PopupState>(objectPtr);
+
+    let colour = selectLightDark();
+
+    if (owner)
+    {
+        withWindowRect(owner.mouseText.ptr, (rect) => {
+            rect.SetX(-100000);
+            rect.SetWidth(1000000);
+
+            if (rect.Contains(event.GetX(), event.GetY()))
+            {
+                if (colour)
+                {
+                    colour.Delete();
+                }
+                colour = systemHighlight();
+                logMessage(
+                    `${fmtPointer(objectPtr)} SimpleTransientPopup::OnMouse ` +
+                    `pos(${event.GetX()}, ${event.GetY()})`,
+                );
+            }
+        });
+    }
+
+    if (owner && colour)
+    {
+        const current = createWxColourEmpty();
+        if (current)
+        {
+            owner.mouseText.GetBackgroundColour(current.ptr);
+            if (!sameColour(colour, current))
+            {
+                owner.mouseText.SetBackgroundColour(colour.ptr);
+                owner.mouseText.Refresh(true);
+            }
+            current.Delete();
+        }
+    }
+
+    if (colour)
+    {
+        colour.Delete();
+    }
+
+    event.Skip(true);
+}
+
+/** SimpleTransientPopup::OnButton (popup.cpp:235-246). */
+function handleButton(eventPtr: Pointer): void
+{
+    const event = new wxCommandEvent(eventPtr);
+    const objectPtr = event.GetEventObject()?.ptr ?? null;
+    const owner = popupOwningWindow<PopupState>(objectPtr);
+
+    logMessage(
+        `${fmtPointer(owner ? owner.popupPtr : null)} SimpleTransientPopup::OnButton ` +
+        `ID ${event.GetId()}`,
+    );
+
+    if (objectPtr)
+    {
+        const button = wrapWxButton(objectPtr);
+        const label = button.GetLabel();
+        const text = label ? readAndDeleteWxString(label.ptr) : "";
+
+        if (text === POPUP_BUTTON_TEXT)
+        {
+            withString(POPUP_BUTTON_PRESSED_TEXT, (ptr) => button.SetLabel(ptr));
+        }
+        else
+        {
+            withString(POPUP_BUTTON_TEXT, (ptr) => button.SetLabel(ptr));
+        }
+    }
+
+    event.Skip(true);
+}
+
+/** SimpleTransientPopup::OnSpinCtrl (popup.cpp:248-253). */
+function handleSpinCtrl(eventPtr: Pointer): void
+{
+    const event = new wxSpinEvent(eventPtr);
+    const owner = popupOwningWindow<PopupState>(event.GetEventObject()?.ptr ?? null);
+
+    logMessage(
+        `${fmtPointer(owner ? owner.popupPtr : null)} SimpleTransientPopup::OnSpinCtrl ` +
+        `ID ${event.GetId()} Value ${event.GetInt()}`,
+    );
+
+    event.Skip(true);
+}
+
+function createHooks(): PopupHooks
+{
+    return {
+        panelMotion: makeHook((_fun, _data, eventPtr) => {
+            if (!eventPtr) return;
+            handleMouse(eventPtr);
+        }),
+        popupMouse: makeHook((_fun, _data, eventPtr) => {
+            if (!eventPtr) return;
+            handleMouse(eventPtr);
+        }),
+        show: makeHook((_fun, _data, eventPtr) => {
+            if (!eventPtr) return;
+            handleShow(eventPtr);
+        }),
+        size: makeHook((_fun, _data, eventPtr) => {
+            if (!eventPtr) return;
+            handleSize(eventPtr);
+        }),
+        setFocus: makeHook((_fun, _data, eventPtr) => {
+            if (!eventPtr) return;
+            handleSetFocus(eventPtr);
+        }),
+        killFocus: makeHook((_fun, _data, eventPtr) => {
+            if (!eventPtr) return;
+            handleKillFocus(eventPtr);
+        }),
+        button: makeHook((_fun, _data, eventPtr) => {
+            if (!eventPtr) return;
+            handleButton(eventPtr);
+        }),
+        spinCtrl: makeHook((_fun, _data, eventPtr) => {
+            if (!eventPtr) return;
+            handleSpinCtrl(eventPtr);
+        }),
+    };
+}
+
+function popupHooks(): PopupHooks
+{
+    if (!popupEventHooks)
+    {
+        popupEventHooks = createHooks();
+    }
+    return popupEventHooks;
+}
+
+/** Release the popup event closures; called after the main loop has exited. */
+export function releasePopupHooks(): void
+{
+    clearLivePopups();
+
+    if (!popupEventHooks)
+    {
+        return;
+    }
+
+    const hooks = popupEventHooks;
+    popupEventHooks = null;
+    hooks.panelMotion.callback.close();
+    hooks.popupMouse.callback.close();
+    hooks.show.callback.close();
+    hooks.size.callback.close();
+    hooks.setFocus.callback.close();
+    hooks.killFocus.callback.close();
+    hooks.button.callback.close();
+    hooks.spinCtrl.callback.close();
+}
+
+/** mouse events covered by the C++ EVT_MOUSE_EVENTS() table macro. */
+const MOUSE_EVENT_TYPES: number[] = [
+    EVT_LEFT_DOWN,
+    EVT_LEFT_UP,
+    EVT_LEFT_DCLICK,
+    EVT_MIDDLE_DOWN,
+    EVT_MIDDLE_UP,
+    EVT_MIDDLE_DCLICK,
+    EVT_RIGHT_DOWN,
+    EVT_RIGHT_UP,
+    EVT_RIGHT_DCLICK,
+    EVT_AUX1_DOWN,
+    EVT_AUX1_UP,
+    EVT_AUX1_DCLICK,
+    EVT_AUX2_DOWN,
+    EVT_AUX2_UP,
+    EVT_AUX2_DCLICK,
+    EVT_MOTION,
+    EVT_LEAVE_WINDOW,
+    EVT_ENTER_WINDOW,
+    EVT_MOUSEWHEEL,
+    EVT_MAGNIFY,
+];
+
+function bind(popup: wxPopupTransientWindow, id: number, eventType: number,
+              hook: Hook): void
+{
+    lib.symbols.wxEvtHandler_Bind(popup.ptr, id, id, eventType, hook.closure.ptr);
+}
+
+/**
+ * SimpleTransientPopup constructor (popup.cpp:106-166).
+ *
+ * `scrolled` selects the variant that keeps a fixed 300x300 client size with
+ * scrollbars (the second button) instead of fitting the panel to its content.
+ */
+export function createSimpleTransientPopup(
+    parent: Pointer,
+    scrolled: boolean,
+): PopupState | null
+{
+    const rawPopup = createWxPopupTransientWindow(parent, POPUP_STYLE);
+    if (!rawPopup)
+    {
+        return null;
+    }
+
+    const popup = new wxPopupTransientWindow(rawPopup);
+    const hooks = popupHooks();
+
+    // EVT_SIZE / EVT_SET_FOCUS / EVT_KILL_FOCUS from the C++ event table, plus
+    // wxEVT_SHOW standing in for the Show() override. They are installed
+    // before the children are created so the size events generated while the
+    // client size is set below are logged, as they are in the C++ build.
+    bind(popup, ID_ANY, EVT_SIZE, hooks.size);
+    bind(popup, ID_ANY, EVT_SET_FOCUS, hooks.setFocus);
+    bind(popup, ID_ANY, EVT_KILL_FOCUS, hooks.killFocus);
+    bind(popup, ID_ANY, EVT_SHOW, hooks.show);
+
+    const background = selectLightDark();
+    const panel = createWxScrolledWindow(
+        popup.ptr, ID_ANY, -1, -1, -1, -1, HSCROLL | VSCROLL,
+    );
+    if (!panel)
+    {
+        popup.Delete();
+        return null;
+    }
+
+    if (background)
+    {
+        panel.SetBackgroundColour(background.ptr);
+    }
+
+    const text = withString(POPUP_TEXT, (ptr) =>
+        createWxStaticText(panel.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+    const button = withString(POPUP_BUTTON_TEXT, (ptr) =>
+        createWxButton(panel.ptr, MINIMAL_POPUP_BUTTON, ptr, -1, -1, -1, -1, 0));
+    const spinCtrl = withString(POPUP_SPIN_TEXT, (ptr) => createWxSpinCtrl(
+        panel.ptr, MINIMAL_POPUP_SPINCTRL, ptr, -1, -1, -1, -1,
+        BigInt(SP_ARROW_KEYS), 0, 100, 0,
+    ));
+    const textCtrl = withString(POPUP_EDIT_TEXT, (ptr) =>
+        createWxTextCtrl(panel.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0n));
+    const mouseText = withString(MOUSE_TEXT, (ptr) =>
+        createWxStaticText(panel.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0));
+
+    if (!text || !button || !spinCtrl || !textCtrl || !mouseText)
+    {
+        if (background)
+        {
+            background.Delete();
+        }
+        popup.Delete();
+        return null;
+    }
+
+    const topSizer = newBoxSizer(VERTICAL);
+    addWithFlags(topSizer, text.ptr, (flags) => flags.Border(ALL));
+    addWithFlags(topSizer, button.ptr, (flags) => flags.Border(ALL));
+    addWithFlags(topSizer, spinCtrl.ptr, (flags) => flags.Border(ALL));
+    addWithFlags(topSizer, textCtrl.ptr, (flags) => {
+        flags.Expand();
+        flags.Border(ALL);
+    });
+    addWithFlags(topSizer, mouseText.ptr, (flags) => {
+        flags.Center();
+        flags.Border(ALL);
+    });
+
+    if (scrolled)
+    {
+        // Add a big window to ensure that scrollbars are shown when we set the
+        // panel size to a lesser size below.
+        const bigPanel = createWxPanel(
+            panel.ptr, ID_ANY, -1, -1, 600, 900, TAB_TRAVERSAL,
+        );
+        if (bigPanel)
+        {
+            topSizer.AddWindow(bigPanel.ptr, 0, 0, 0, null);
+        }
+    }
+
+    panel.SetSizer(topSizer.ptr, true);
+
+    if (scrolled)
+    {
+        // Fixed size so the scrollbars are shown, then actually enable them.
+        panel.SetSize(-1, -1, 300, 300, SIZE_USE_EXISTING);
+        panel.SetScrollRate(10, 10);
+    }
+    else
+    {
+        // Use the fitting size for the panel if we don't need scrollbars.
+        topSizer.Fit(panel.ptr);
+    }
+
+    const rawSize = lib.symbols.wxWindow_GetSize(panel.ptr);
+    if (rawSize)
+    {
+        const size = new wxSize(rawSize);
+        popup.SetClientSize(size.GetWidth(), size.GetHeight());
+        size.Delete();
+    }
+
+    if (background)
+    {
+        background.Delete();
+    }
+
+    const state: PopupState = {
+        popupPtr: popup.ptr,
+        popup,
+        panel,
+        text,
+        button,
+        spinCtrl,
+        textCtrl,
+        mouseText,
+    };
+
+    // m_panel->Bind(wxEVT_MOTION, ...) plus the popup's EVT_MOUSE_EVENTS table
+    // entries, EVT_BUTTON and EVT_SPINCTRL.
+    lib.symbols.wxEvtHandler_Bind(
+        panel.ptr, ID_ANY, ID_ANY, EVT_MOTION, hooks.panelMotion.closure.ptr,
+    );
+    for (const eventType of MOUSE_EVENT_TYPES)
+    {
+        bind(popup, ID_ANY, eventType, hooks.popupMouse);
+    }
+    bind(popup, MINIMAL_POPUP_BUTTON, EVT_BUTTON, hooks.button);
+    bind(popup, MINIMAL_POPUP_SPINCTRL, EVT_SPINCTRL, hooks.spinCtrl);
+
+    registerLivePopup(state);
+    return state;
+}
+
+/** delete m_simplePopup / delete m_scrolledPopup */
+export function destroySimpleTransientPopup(state: PopupState | null): void
+{
+    if (!state)
+    {
+        return;
+    }
+
+    unregisterLivePopup(state);
+    state.popup.Delete();
+}

@@ -1,0 +1,2021 @@
+// menu.kwxts — kwxTypeScript port of wxSamples/src/menu/menu.cpp
+//
+// The sample exercises wxMenu / wxMenuBar / wxMenuItem: a frame with a menu bar
+// ("File", "Menubar", "Menu", "Test", "Help"), a read-only log text control that
+// reports every menu command, a popup menu on right click and a small dialog
+// that repeats the popup-menu part.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\menu\menu.kwxts
+//
+// Icon: the C++ sample calls SetIcon(wxICON(sample)). On Windows that resolves
+// to the "sample" icon resource compiled into the executable; on the other ports
+// it expands to the sample_xpm[] array from ../sample.xpm. This port loads the
+// same artwork as sample.svg (a pixel-for-pixel conversion of ../sample.xpm).
+
+declare const __dirname: string;
+
+import {
+    ART_DELETE,
+    ART_MENU,
+    ART_QUIT,
+    DEFAULT_DIALOG_STYLE,
+    DEFAULT_FRAME_STYLE,
+    EVT_CLOSE_WINDOW,
+    EVT_CONTEXT_MENU,
+    EVT_MENU,
+    EVT_MENU_CLOSE,
+    EVT_MENU_HIGHLIGHT,
+    EVT_MENU_OPEN,
+    EVT_SIZE,
+    EVT_UPDATE_UI,
+    ICON_INFORMATION,
+    ID_ABOUT,
+    ID_ADD,
+    ID_ANY,
+    ID_APPLY,
+    ID_BACKWARD,
+    ID_BOLD,
+    ID_BOTTOM,
+    ID_CANCEL,
+    ID_CDROM,
+    ID_CLEAR,
+    ID_CLOSE,
+    ID_CONVERT,
+    ID_COPY,
+    ID_CUT,
+    ID_DELETE,
+    ID_DOWN,
+    ID_EXECUTE,
+    ID_EXIT,
+    ID_FILE1,
+    ID_FILE2,
+    ID_FILE3,
+    ID_FIND,
+    ID_FIRST,
+    ID_FLOPPY,
+    ID_FORWARD,
+    ID_HARDDISK,
+    ID_HELP,
+    ID_HOME,
+    ID_INDENT,
+    ID_INDEX,
+    ID_INFO,
+    ID_ITALIC,
+    ID_JUMP_TO,
+    ID_JUSTIFY_CENTER,
+    ID_JUSTIFY_FILL,
+    ID_JUSTIFY_LEFT,
+    ID_JUSTIFY_RIGHT,
+    ID_LAST,
+    ID_NETWORK,
+    ID_NEW,
+    ID_NO,
+    ID_NONE,
+    ID_OK,
+    ID_OPEN,
+    ID_PASTE,
+    ID_PREFERENCES,
+    ID_PREVIEW,
+    ID_PRINT,
+    ID_PROPERTIES,
+    ID_REDO,
+    ID_REFRESH,
+    ID_REMOVE,
+    ID_REPLACE,
+    ID_REVERT_TO_SAVED,
+    ID_SAVE,
+    ID_SAVEAS,
+    ID_SELECT_COLOR,
+    ID_SELECT_FONT,
+    ID_SORT_ASCENDING,
+    ID_SORT_DESCENDING,
+    ID_SPELL_CHECK,
+    ID_STOP,
+    ID_STRIKETHROUGH,
+    ID_TOP,
+    ID_UNDELETE,
+    ID_UNDERLINE,
+    ID_UNDO,
+    ID_UNINDENT,
+    ID_UP,
+    ID_YES,
+    ID_ZOOM_100,
+    ID_ZOOM_FIT,
+    ID_ZOOM_IN,
+    ID_ZOOM_OUT,
+    ITEM_CHECK,
+    ITEM_NORMAL,
+    MB_DOCKABLE,
+    NOT_FOUND,
+    OK,
+    PATH_NATIVE,
+    SIZE_AUTO,
+    STB_DEFAULT_STYLE,
+    TE_MULTILINE,
+    createWxClosure,
+    createWxDialog,
+    createWxFileHistory,
+    createWxFrame,
+    createWxIconDefault,
+    createWxLogNull,
+    createWxLogTextCtrl,
+    createWxMenu,
+    createWxMenuBar,
+    createWxMenuItemEx,
+    createWxMenuItemSeparator,
+    createWxTextCtrl,
+    createWxFileNameFromPath,
+    createWxFileNameWithExt,
+    createWxString,
+    exitMainLoop,
+    initialize,
+    readAndDeleteWxString,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    wxArtProvider_GetBitmap,
+    wxBitmapBundle_FromSVGFile,
+    wxCommandEvent,
+    wxContextMenuEvent,
+    wxGetKeyState,
+    wxLog_DisableTimestamp,
+    wxLog_SetActiveTarget,
+    wxMenuEvent,
+    wxUpdateUIEvent,
+    wrapWxBitmapBundle,
+    wrapWxMenu,
+} from "kwx";
+import type {
+    wxBitmapBundle,
+    wxClosure,
+    wxDialog,
+    wxFileHistory,
+    wxFrame,
+    wxLog,
+    wxMenu,
+    wxMenuBar,
+    wxMenuItem,
+    wxTextCtrl,
+} from "kwx";
+import { Callback, exit, platform, pointerOf, Pointer } from "kwx/platform";
+
+import {
+    getTextFromUser,
+    logError,
+    logMessage,
+    logStatus,
+    logWarning,
+    messageBox,
+    samplePath,
+    withString,
+} from "./support.kwxts";
+
+// ---------------------------------------------------------------------------
+// Constants (menu.cpp:267-336)
+//
+//   Menu_File_Quit            = wxID_EXIT
+//   Menu_File_ClearLog        = 100
+//   Menu_File_ShowDialog      = 101
+//   Menu_MenuBar_*            = 200..
+//   Menu_Menu_*               = 300..
+//   Menu_Test_*               = 400..
+//   Menu_SubMenu(_*)          = 450..
+//   Menu_Dummy_*              = 500..504
+//   Menu_Help_About           = wxID_ABOUT
+//   Menu_Popup_*              = 2000..
+// ---------------------------------------------------------------------------
+
+const Menu_File_Quit = ID_EXIT;
+const Menu_File_ClearLog = 100;
+const Menu_File_ShowDialog = 101;
+
+const Menu_MenuBar_Toggle = 200;
+const Menu_MenuBar_Append = 201;
+const Menu_MenuBar_Insert = 202;
+const Menu_MenuBar_Delete = 203;
+const Menu_MenuBar_Enable = 204;
+const Menu_MenuBar_GetLabel = 205;
+const Menu_MenuBar_SetLabel = 206;
+const Menu_MenuBar_FindMenu = 207;
+
+const Menu_Menu_Append = 300;
+const Menu_Menu_AppendSub = 301;
+const Menu_Menu_Insert = 302;
+const Menu_Menu_Delete = 303;
+const Menu_Menu_DeleteSub = 304;
+const Menu_Menu_Enable = 305;
+const Menu_Menu_Check = 306;
+const Menu_Menu_GetLabel = 307;
+const Menu_Menu_SetLabel = 308;
+const Menu_Menu_GetInfo = 309;
+const Menu_Menu_FindItem = 310;
+const Menu_Menu_FileHistory1 = 311;
+const Menu_Menu_FileHistory2 = 312;
+const Menu_Menu_FileHistory3 = 313;
+
+const Menu_Test_Normal = 400;
+const Menu_Test_Check = 401;
+const Menu_Test_Radio1 = 402;
+const Menu_Test_Radio2 = 403;
+const Menu_Test_Radio3 = 404;
+
+const Menu_SubMenu = 450;
+const Menu_SubMenu_Normal = 451;
+const Menu_SubMenu_Check = 452;
+const Menu_SubMenu_Radio1 = 453;
+const Menu_SubMenu_Radio2 = 454;
+const Menu_SubMenu_Radio3 = 455;
+
+const Menu_Dummy_First = 500;
+const Menu_Dummy_Second = 501;
+const Menu_Dummy_Third = 502;
+const Menu_Dummy_Fourth = 503;
+const Menu_Dummy_Last = 504;
+
+const Menu_Help_About = ID_ABOUT;
+
+const Menu_Popup_ToBeDeleted = 2000;
+const Menu_Popup_ToBeGreyed = 2001;
+const Menu_Popup_ToBeChecked = 2002;
+const Menu_Popup_Submenu = 2003;
+const Menu_PopupChoice = 2004;
+
+/**
+ * WXK_SHIFT, from wx/defs.h. The key codes are not exported by kwx_constants,
+ * so the one value this sample needs is spelled out here.
+ */
+const WXK_SHIFT = 306;
+
+// ---------------------------------------------------------------------------
+// Frame state
+// ---------------------------------------------------------------------------
+
+/** MyFrame's member fields, plus the callback/closure bookkeeping. */
+interface MenuFrameState
+{
+    readonly frame: wxFrame;
+    readonly menuBar: wxMenuBar;
+    /** m_textctrl — the wxTextCtrl used for logging. */
+    readonly textCtrl: wxTextCtrl | null;
+    /** m_fileHistory / m_fileHistoryMenu */
+    readonly fileHistory: wxFileHistory | null;
+    readonly fileHistoryMenu: wxMenu | null;
+    readonly callbacks: Callback[];
+    readonly closures: wxClosure[];
+    readonly dialogEvents: DialogEvents | null;
+    /** m_logOld — the log target replaced by the wxLogTextCtrl. */
+    logOld: wxLog | null;
+    /** m_menu — the menu currently detached from the menubar (may be null). */
+    menu: wxMenu | null;
+    /** m_countDummy — how many dummy menus have been created. */
+    countDummy: number;
+}
+
+/** The four closures MyDialog's event table needs, created once. */
+interface DialogEvents
+{
+    readonly callbacks: Callback[];
+    readonly closures: wxClosure[];
+    readonly contextMenu: wxClosure;
+    readonly menuOpen: wxClosure;
+    readonly menuClose: wxClosure;
+    readonly menuHighlight: wxClosure;
+}
+
+// ---------------------------------------------------------------------------
+// Menu construction helpers
+// ---------------------------------------------------------------------------
+
+/** wxMenu(style = 0) with an empty title; only allocation can fail. */
+function plainMenu(): wxMenu
+{
+    const menu = withString("", (ptr) => createWxMenu(ptr, 0n));
+    if (!menu)
+    {
+        throw new Error("menu: failed to allocate a wxMenu");
+    }
+    return menu;
+}
+
+/** menu->Append(id, text, help) */
+function appendItem(menu: wxMenu, id: number, text: string, help = ""): void
+{
+    withString(text, (textPtr) =>
+        withString(help, (helpPtr) => { menu.Append(id, textPtr, helpPtr, false); }));
+}
+
+/** menu->Append(id, text, help, true) — a wxITEM_CHECK item. */
+function appendCheckable(menu: wxMenu, id: number, text: string, help = ""): void
+{
+    withString(text, (textPtr) =>
+        withString(help, (helpPtr) => { menu.Append(id, textPtr, helpPtr, true); }));
+}
+
+/** menu->AppendCheckItem(id, text, help) */
+function appendCheckItem(menu: wxMenu, id: number, text: string, help = ""): void
+{
+    withString(text, (textPtr) =>
+        withString(help, (helpPtr) => { menu.AppendCheckItem(id, textPtr, helpPtr); }));
+}
+
+/** menu->AppendRadioItem(id, text, help) */
+function appendRadioItem(menu: wxMenu, id: number, text: string, help = ""): void
+{
+    withString(text, (textPtr) =>
+        withString(help, (helpPtr) => { menu.AppendRadioItem(id, textPtr, helpPtr); }));
+}
+
+/** menu->Append(id, text, submenu, help) */
+function appendSubItem(
+    menu: wxMenu,
+    id: number,
+    text: string,
+    submenu: wxMenu,
+    help = "",
+): void
+{
+    withString(text, (textPtr) =>
+        withString(help, (helpPtr) => { menu.AppendSub(id, textPtr, submenu.ptr, helpPtr); }));
+}
+
+/** menu->AppendSubMenu(submenu, text, help) — wxID_ANY is generated. */
+function appendSubMenu(menu: wxMenu, submenu: wxMenu, text: string, help = ""): void
+{
+    withString(text, (textPtr) =>
+        withString(help, (helpPtr) => { menu.AppendSubMenu(submenu.ptr, textPtr, helpPtr); }));
+}
+
+// ---------------------------------------------------------------------------
+// Frame helpers (MyFrame::CreateDummyMenu / GetLastMenuItem / LogMenuEvent)
+// ---------------------------------------------------------------------------
+
+/** MyFrame::CreateDummyMenu — the new menu, plus its title when asked for. */
+function createDummyMenu(state: MenuFrameState, wantTitle: boolean): { menu: wxMenu; title: string }
+{
+    const menu = plainMenu();
+    appendItem(menu, Menu_Dummy_First, "&First item\tCtrl-F1");
+    menu.AppendSeparator();
+    appendCheckItem(menu, Menu_Dummy_Second, "&Second item\tCtrl-F2");
+
+    let title = "";
+    if (wantTitle)
+    {
+        state.countDummy += 1;
+        title = `Dummy menu &${state.countDummy}`;
+    }
+
+    return { menu, title };
+}
+
+/** wxMenuBar *menubar = GetMenuBar(); menu = menubar->GetMenu(menubar->FindMenu("Test")); */
+function getTestMenu(state: MenuFrameState): wxMenu | null
+{
+    const index = withString("Test", (ptr) => state.menuBar.FindMenu(ptr));
+    if (index === NOT_FOUND)
+    {
+        return null;
+    }
+    return state.menuBar.GetMenu(index);
+}
+
+/** MyFrame::GetLastMenuItem */
+function getLastMenuItem(state: MenuFrameState): wxMenuItem | null
+{
+    const menu = getTestMenu(state);
+    if (!menu)
+    {
+        // wxCHECK_MSG(menu, nullptr, "no 'Test' menu?")
+        logError("no 'Test' menu?");
+        return null;
+    }
+
+    const count = Number(menu.GetMenuItemCount());
+    if (count === 0)
+    {
+        logWarning("No last item in the 'Test' menu!");
+        return null;
+    }
+
+    return menu.FindItemByPosition(BigInt(count - 1));
+}
+
+/** MyFrame::LogMenuEvent — every menu command is logged first (MyEvtHandler). */
+function logMenuEvent(state: MenuFrameState, event: wxCommandEvent): void
+{
+    const id = event.GetId();
+    let msg = `Menu command ${id}`;
+
+    // catch all checkable menubar items and also the check item from the popup
+    // menu
+    const item = state.menuBar.FindItem(id);
+    if ((item !== null && item.IsCheckable()) || id === Menu_Popup_ToBeChecked)
+    {
+        msg += ` (the item is currently ${event.IsChecked() ? "" : "not "}checked)`;
+    }
+
+    logMessage(msg);
+}
+
+// ---------------------------------------------------------------------------
+// Menu command handlers (menu.cpp:810-1214)
+// ---------------------------------------------------------------------------
+
+/** MyFrame::OnShowDialog */
+function showTestDialog(state: MenuFrameState): void
+{
+    const dialog = withString("Test Dialog", (ptr) =>
+        createWxDialog(state.frame.ptr, ID_ANY, ptr, -1, -1, -1, -1, DEFAULT_DIALOG_STYLE));
+    if (!dialog)
+    {
+        return;
+    }
+
+    const textCtrl = withString("", (ptr) =>
+        createWxTextCtrl(dialog.ptr, ID_ANY, ptr, -1, -1, -1, -1, BigInt(TE_MULTILINE)));
+    if (textCtrl)
+    {
+        textCtrl.SetEditable(false);
+        withString(
+            "Dialogs do not have menus, but popup menus should function the same\n\n" +
+            "Right click this text ctrl to test popup menus.\n",
+            (ptr) => { textCtrl.AppendText(ptr); });
+    }
+
+    activeDialogTextCtrl = textCtrl;
+    activeDialog = dialog;
+
+    // MyDialog's event table.
+    const events = state.dialogEvents;
+    if (events)
+    {
+        dialog.Bind(ID_ANY, ID_ANY, EVT_CONTEXT_MENU, events.contextMenu.ptr);
+        dialog.Bind(ID_ANY, ID_ANY, EVT_MENU_OPEN, events.menuOpen.ptr);
+        dialog.Bind(ID_ANY, ID_ANY, EVT_MENU_CLOSE, events.menuClose.ptr);
+        dialog.Bind(ID_ANY, ID_ANY, EVT_MENU_HIGHLIGHT, events.menuHighlight.ptr);
+    }
+
+    dialog.ShowModal();
+
+    if (events)
+    {
+        dialog.UnbindClosure(ID_ANY, ID_ANY, EVT_CONTEXT_MENU, events.contextMenu.ptr);
+        dialog.UnbindClosure(ID_ANY, ID_ANY, EVT_MENU_OPEN, events.menuOpen.ptr);
+        dialog.UnbindClosure(ID_ANY, ID_ANY, EVT_MENU_CLOSE, events.menuClose.ptr);
+        dialog.UnbindClosure(ID_ANY, ID_ANY, EVT_MENU_HIGHLIGHT, events.menuHighlight.ptr);
+    }
+
+    activeDialogTextCtrl = null;
+    activeDialog = null;
+
+    // The C++ dialog is a stack object, destroyed when ShowModal() returns.
+    dialog.Destroy();
+}
+
+/** MyFrame::OnAbout */
+function showAbout(state: MenuFrameState): void
+{
+    messageBox(
+        state.frame.ptr,
+        "wxWidgets menu sample\n(c) 1999-2001 Vadim Zeitlin",
+        "About wxWidgets menu sample",
+        OK | ICON_INFORMATION,
+    );
+}
+
+/** MyFrame::OnDeleteMenu — delete the last menu, keeping the first 4. */
+function onDeleteMenu(state: MenuFrameState): void
+{
+    const menuBar = state.menuBar;
+    const count = menuBar.GetMenuCount();
+    if (count === 4)
+    {
+        // don't let delete the first 4 menus
+        logError("Can't delete any more menus");
+        return;
+    }
+
+    const removed = menuBar.Remove(count - 1);
+    if (removed)
+    {
+        // delete mbar->Remove(count - 1)
+        removed.DeletePointer();
+    }
+}
+
+/** MyFrame::OnInsertMenu — insert a dummy menu before the 'Help' menu. */
+function onInsertMenu(state: MenuFrameState): void
+{
+    const dummy = createDummyMenu(state, true);
+    withString(dummy.title, (ptr) => { state.menuBar.Insert(4, dummy.menu.ptr, ptr); });
+}
+
+/** MyFrame::OnAppendMenu */
+function onAppendMenu(state: MenuFrameState): void
+{
+    const dummy = createDummyMenu(state, true);
+    withString(dummy.title, (ptr) => { state.menuBar.Append(dummy.menu.ptr, ptr); });
+}
+
+/** MyFrame::OnToggleMenu — hide or restore the first menu. */
+function onToggleMenu(state: MenuFrameState): void
+{
+    const menuBar = state.menuBar;
+    if (!state.menu)
+    {
+        // hide the menu
+        state.menu = menuBar.Remove(0);
+    }
+    else
+    {
+        // restore it
+        withString("&File", (ptr) => { menuBar.Insert(0, state.menu!.ptr, ptr); });
+        state.menu = null;
+    }
+}
+
+/** MyFrame::OnEnableMenu */
+function onEnableMenu(state: MenuFrameState, event: wxCommandEvent): void
+{
+    const count = state.menuBar.GetMenuCount();
+    state.menuBar.EnableTop(count - 1, event.IsChecked());
+}
+
+/** MyFrame::OnGetLabelMenu */
+function onGetLabelMenu(state: MenuFrameState): void
+{
+    const count = state.menuBar.GetMenuCount();
+    if (!count)
+    {
+        logError("no last menu?");
+        return;
+    }
+
+    const label = state.menuBar.GetMenuLabel(count - 1);
+    const text = label ? readAndDeleteWxString(label.ptr) : "";
+    logMessage(`The label of the last menu item is '${text}'`);
+}
+
+/** MyFrame::OnSetLabelMenu */
+function onSetLabelMenu(state: MenuFrameState): void
+{
+    const count = state.menuBar.GetMenuCount();
+    if (!count)
+    {
+        logError("no last menu?");
+        return;
+    }
+
+    const current = state.menuBar.GetMenuLabel(count - 1);
+    const defaultText = current ? readAndDeleteWxString(current.ptr) : "";
+
+    const label = getTextFromUser(
+        "Enter new label: ", "Change last menu text", defaultText, state.frame.ptr);
+
+    if (label.length > 0)
+    {
+        withString(label, (ptr) => { state.menuBar.SetMenuLabel(count - 1, ptr); });
+    }
+}
+
+/** MyFrame::OnFindMenu */
+function onFindMenu(state: MenuFrameState): void
+{
+    const count = state.menuBar.GetMenuCount();
+    if (!count)
+    {
+        logError("no last menu?");
+        return;
+    }
+
+    const label = getTextFromUser(
+        "Enter label to search for: ", "Find menu", "", state.frame.ptr);
+
+    if (label.length === 0)
+    {
+        return;
+    }
+
+    const index = withString(label, (ptr) => state.menuBar.FindMenu(ptr));
+    if (index === NOT_FOUND)
+    {
+        logWarning(`No menu with label '${label}'`);
+    }
+    else
+    {
+        logMessage(`Menu ${index} has label '${label}'`);
+    }
+}
+
+/** MyFrame::OnDummy — EVT_MENU_RANGE(Menu_Dummy_First, Menu_Dummy_Last). */
+function onDummy(id: number): void
+{
+    logMessage(`Dummy item #${id - Menu_Dummy_First + 1}`);
+}
+
+/** MyFrame::OnAppendMenuItem */
+function onAppendMenuItem(state: MenuFrameState): void
+{
+    const menu = getTestMenu(state);
+    if (!menu)
+    {
+        logError("no 'Test' menu?");
+        return;
+    }
+
+    menu.AppendSeparator();
+    appendCheckable(menu, Menu_Dummy_Third, "&Third dummy item\tCtrl-F3", "Checkable item");
+}
+
+/** MyFrame::OnAppendSubMenu */
+function onAppendSubMenu(state: MenuFrameState): void
+{
+    const menu = getTestMenu(state);
+    if (!menu)
+    {
+        logError("no 'Test' menu?");
+        return;
+    }
+
+    const dummy = createDummyMenu(state, false);
+    appendSubItem(menu, Menu_Dummy_Last, "&Dummy sub menu", dummy.menu, "Dummy sub menu help");
+}
+
+/** MyFrame::OnDeleteMenuItem — destroy the last item of the 'Test' menu. */
+function onDeleteMenuItem(state: MenuFrameState): void
+{
+    const menu = getTestMenu(state);
+    if (!menu)
+    {
+        logError("no 'Test' menu?");
+        return;
+    }
+
+    const count = Number(menu.GetMenuItemCount());
+    if (!count)
+    {
+        logWarning("No items to delete!");
+        return;
+    }
+
+    const last = menu.FindItemByPosition(BigInt(count - 1));
+    if (last)
+    {
+        // menu->Destroy(menu->GetMenuItems().Item(count - 1)->GetData())
+        menu.DestroyByItem(last.ptr);
+    }
+}
+
+/** MyFrame::OnDeleteSubMenu — destroy the last submenu of the 'Test' menu. */
+function onDeleteSubMenu(state: MenuFrameState): void
+{
+    const menu = getTestMenu(state);
+    if (!menu)
+    {
+        logError("no 'Test' menu?");
+        return;
+    }
+
+    const count = Number(menu.GetMenuItemCount());
+    for (let n = count - 1; n >= 0; --n)
+    {
+        const item = menu.FindItemByPosition(BigInt(n));
+        if (item && item.IsSubMenu())
+        {
+            menu.DestroyByItem(item.ptr);
+            return;
+        }
+    }
+
+    logWarning("No submenu to delete!");
+}
+
+/** MyFrame::OnInsertMenuItem */
+function onInsertMenuItem(state: MenuFrameState): void
+{
+    const menu = getTestMenu(state);
+    if (!menu)
+    {
+        logError("no 'Test' menu?");
+        return;
+    }
+
+    const item = withString("Fourth dummy item\tCtrl-F4", (textPtr) =>
+        withString("", (helpPtr) =>
+            createWxMenuItemEx(Menu_Dummy_Fourth, textPtr, helpPtr, ITEM_NORMAL, null)));
+    if (item)
+    {
+        menu.InsertItem(0n, item.ptr);
+    }
+
+    // menu->Insert(1, wxMenuItem::New(menu, wxID_SEPARATOR));
+    const separator = createWxMenuItemSeparator();
+    if (separator)
+    {
+        menu.InsertItem(1n, separator.ptr);
+    }
+}
+
+/** MyFrame::OnEnableMenuItem */
+function onEnableMenuItem(state: MenuFrameState): void
+{
+    const item = getLastMenuItem(state);
+    if (item)
+    {
+        item.Enable(!item.IsEnabled());
+    }
+}
+
+/** MyFrame::OnCheckMenuItem */
+function onCheckMenuItem(state: MenuFrameState): void
+{
+    const item = getLastMenuItem(state);
+    if (item && item.IsCheckable())
+    {
+        item.Toggle();
+    }
+}
+
+/** MyFrame::OnUpdateCheckMenuItemUI */
+function onUpdateCheckMenuItemUI(state: MenuFrameState, event: wxUpdateUIEvent): void
+{
+    // wxLogNull nolog;
+    const logNull = createWxLogNull();
+    try
+    {
+        const item = getLastMenuItem(state);
+        event.Enable(item !== null && item.IsCheckable());
+    }
+    finally
+    {
+        logNull?.Delete();
+    }
+}
+
+/** MyFrame::OnGetLabelMenuItem */
+function onGetLabelMenuItem(state: MenuFrameState): void
+{
+    const item = getLastMenuItem(state);
+    if (!item)
+    {
+        return;
+    }
+
+    const label = item.GetItemLabel();
+    if (label)
+    {
+        const text = readAndDeleteWxString(label.ptr);
+        logMessage(`The label of the last menu item is '${text}'`);
+    }
+}
+
+/** MyFrame::OnSetLabelMenuItem */
+function onSetLabelMenuItem(state: MenuFrameState): void
+{
+    const item = getLastMenuItem(state);
+    if (!item)
+    {
+        return;
+    }
+
+    const current = item.GetItemLabel();
+    const defaultText = current ? readAndDeleteWxString(current.ptr) : "";
+
+    let label = getTextFromUser(
+        "Enter new label: ", "Change last menu item text", defaultText, state.frame.ptr);
+
+    // label.Replace("\\t", "\t")
+    label = label.split("\\t").join("\t");
+
+    if (label.length > 0)
+    {
+        withString(label, (ptr) => { item.SetItemLabel(ptr); });
+    }
+}
+
+/**
+ * The accelerator part of a menu item, formatted the way
+ * MyFrame::OnGetMenuItemInfo() prints it.
+ *
+ * GAP: wxMenuItem::GetAccel() is not exposed by kwxFFI (wxMenuItem only binds
+ * Check, Enable, SetBitmaps, GetHelp, GetId, GetItemLabelText, GetMenu,
+ * GetSubMenu, GetItemLabel, Is*, Set*, Toggle, SetBitmap and GetBitmap), so the
+ * accelerator is read from the "\tAccel" suffix of the item label — the same
+ * text wx builds its wxAcceleratorEntry from. Returns null when the item has no
+ * accelerator, or when the key is not one of F1..F12 / an alphanumeric key (the
+ * C++ code calls wxFAIL_MSG() in that case).
+ */
+function acceleratorInfo(label: string): string | null
+{
+    const tab = label.indexOf("\t");
+    if (tab < 0)
+    {
+        return null;
+    }
+
+    const parts = label.substring(tab + 1).trim().split("-");
+    const key = parts.pop() ?? "";
+
+    let text = "";
+    if (parts.indexOf("Alt") >= 0)
+    {
+        text += "Alt-";
+    }
+    if (parts.indexOf("Ctrl") >= 0)
+    {
+        text += "Ctrl-";
+    }
+    if (parts.indexOf("Shift") >= 0)
+    {
+        text += "Shift-";
+    }
+
+    if (/^F([1-9]|1[0-2])$/.test(key))
+    {
+        // WXK_F1..WXK_F12 print as 'F' << (code - WXK_F1 + 1)
+        text += key;
+    }
+    else if (key.length === 1 && /[A-Za-z0-9]/.test(key))
+    {
+        text += key;
+    }
+    else
+    {
+        return null;
+    }
+
+    return text;
+}
+
+/** MyFrame::OnGetMenuItemInfo */
+function onGetMenuItemInfo(state: MenuFrameState): void
+{
+    const item = getLastMenuItem(state);
+    if (!item)
+    {
+        return;
+    }
+
+    let msg = `The item is ${item.IsEnabled() ? "enabled" : "disabled"}\n`;
+
+    if (item.IsCheckable())
+    {
+        msg += `It is checkable and ${item.IsChecked() ? "" : "un"}checked\n`;
+    }
+
+    const label = item.GetItemLabel();
+    const labelText = label ? readAndDeleteWxString(label.ptr) : "";
+    const accelerator = acceleratorInfo(labelText);
+    if (accelerator !== null)
+    {
+        msg += `Its accelerator is ${accelerator}`;
+    }
+    else
+    {
+        msg += "It doesn't have an accelerator";
+    }
+
+    logMessage(msg);
+}
+
+/** MyFrame::OnFindMenuItem */
+function onFindMenuItem(state: MenuFrameState): void
+{
+    const menuBar = state.menuBar;
+    const count = menuBar.GetMenuCount();
+    if (!count)
+    {
+        logError("no last menu?");
+        return;
+    }
+
+    const label = getTextFromUser(
+        "Enter label to search for: ", "Find menu item", "", state.frame.ptr);
+
+    if (label.length === 0)
+    {
+        return;
+    }
+
+    let menuIndex = 0;
+    let index = NOT_FOUND;
+    for (; menuIndex < count && index === NOT_FOUND; ++menuIndex)
+    {
+        const menu = menuBar.GetMenu(menuIndex);
+        const title = menu ? menu.GetTitle() : null;
+        const titleText = title ? readAndDeleteWxString(title.ptr) : "";
+        index = withString(titleText, (titlePtr) =>
+            withString(label, (labelPtr) => menuBar.FindMenuItem(titlePtr, labelPtr)));
+    }
+
+    if (index === NOT_FOUND)
+    {
+        logWarning(`No menu item with label '${label}'`);
+    }
+    else
+    {
+        logMessage(`Menu item ${index} in menu ${menuIndex} has label '${label}'`);
+    }
+}
+
+/** MyFrame::OnTestNormal */
+function onTestNormal(): void
+{
+    logMessage("Normal item selected");
+}
+
+/** MyFrame::OnTestCheck */
+function onTestCheck(event: wxCommandEvent): void
+{
+    logMessage(`Check item ${event.IsChecked() ? "" : "un"}checked`);
+}
+
+/** MyFrame::OnTestRadio */
+function onTestRadio(id: number): void
+{
+    logMessage(`Radio item ${id - Menu_Test_Radio1 + 1} selected`);
+}
+
+/** MyFrame::OnFileHistoryMenuItem */
+function onFileHistoryMenuItem(state: MenuFrameState, id: number): void
+{
+    const history = state.fileHistory;
+    if (!history)
+    {
+        return;
+    }
+
+    const index = id - ID_FILE1;
+    const file = history.GetHistoryFile(index);
+    const fname = file ? readAndDeleteWxString(file.ptr) : "";
+
+    messageBox(
+        state.frame.ptr,
+        `Selected file ${fname}`,
+        "File history activated",
+        OK | ICON_INFORMATION,
+    );
+
+    withString(fname, (ptr) => { history.AddFileToHistory(ptr); });
+}
+
+/**
+ * MyFrame::OnFileHistoryStyleItem — wxFileHistory::SetMenuPathStyle().
+ *
+ * GAP: kwxFFI does not bind wxFileHistory::SetMenuPathStyle() (only
+ * AddFileToHistory, AddFilesToMenu, GetCount, GetHistoryFile, GetMaxFiles,
+ * GetMenus, Load, RemoveFileFromHistory, RemoveMenu, Save and UseMenu are
+ * available), so selecting one of the three radio items cannot change how the
+ * history menu labels are rendered. The items, their ids and the radio
+ * behaviour are preserved; this is the place the call belongs once the symbol
+ * exists.
+ */
+function onFileHistoryStyleItem(id: number): void
+{
+    switch (id)
+    {
+        case Menu_Menu_FileHistory1: // wxFH_PATH_SHOW_IF_DIFFERENT
+        case Menu_Menu_FileHistory2: // wxFH_PATH_SHOW_NEVER
+        case Menu_Menu_FileHistory3: // wxFH_PATH_SHOW_ALWAYS
+            break;
+    }
+}
+
+/**
+ * MyEvtHandler::OnMenuEvent + the whole EVT_MENU(...) table of MyFrame.
+ *
+ * The C++ sample pushes a wxEvtHandler that logs every menu command and then
+ * calls event.Skip(), so the frame's own event table still runs. A script
+ * cannot derive from wxEvtHandler, so the two handlers are folded into a single
+ * wxID_ANY EVT_MENU binding: the log entry is written first (exactly as
+ * MyEvtHandler does), then the command the frame's table would have executed is
+ * dispatched by id.
+ */
+function dispatchMenuCommand(state: MenuFrameState, event: wxCommandEvent): void
+{
+    logMenuEvent(state, event);
+
+    const id = event.GetId();
+    switch (id)
+    {
+        case Menu_File_Quit:
+            // MyFrame::OnQuit — Close(true)
+            state.frame.Close(true);
+            break;
+
+        case Menu_File_ClearLog:
+            // MyFrame::OnClearLog
+            state.textCtrl?.Clear();
+            break;
+
+        case Menu_File_ShowDialog:
+            showTestDialog(state);
+            break;
+
+        case Menu_Help_About:
+            showAbout(state);
+            break;
+
+        case Menu_MenuBar_Toggle:
+            onToggleMenu(state);
+            break;
+        case Menu_MenuBar_Append:
+            onAppendMenu(state);
+            break;
+        case Menu_MenuBar_Insert:
+            onInsertMenu(state);
+            break;
+        case Menu_MenuBar_Delete:
+            onDeleteMenu(state);
+            break;
+        case Menu_MenuBar_Enable:
+            onEnableMenu(state, event);
+            break;
+        case Menu_MenuBar_GetLabel:
+            onGetLabelMenu(state);
+            break;
+        case Menu_MenuBar_SetLabel:
+            onSetLabelMenu(state);
+            break;
+        case Menu_MenuBar_FindMenu:
+            onFindMenu(state);
+            break;
+
+        case Menu_Menu_Append:
+            onAppendMenuItem(state);
+            break;
+        case Menu_Menu_AppendSub:
+            onAppendSubMenu(state);
+            break;
+        case Menu_Menu_Insert:
+            onInsertMenuItem(state);
+            break;
+        case Menu_Menu_Delete:
+            onDeleteMenuItem(state);
+            break;
+        case Menu_Menu_DeleteSub:
+            onDeleteSubMenu(state);
+            break;
+        case Menu_Menu_Enable:
+            onEnableMenuItem(state);
+            break;
+        case Menu_Menu_Check:
+            onCheckMenuItem(state);
+            break;
+        case Menu_Menu_GetLabel:
+            onGetLabelMenuItem(state);
+            break;
+        case Menu_Menu_SetLabel:
+            onSetLabelMenuItem(state);
+            break;
+        case Menu_Menu_GetInfo:
+            onGetMenuItemInfo(state);
+            break;
+        case Menu_Menu_FindItem:
+            onFindMenuItem(state);
+            break;
+
+        case Menu_Test_Normal:
+            onTestNormal();
+            break;
+        case Menu_Test_Check:
+            onTestCheck(event);
+            break;
+        case Menu_Test_Radio1:
+        case Menu_Test_Radio2:
+        case Menu_Test_Radio3:
+            onTestRadio(id);
+            break;
+
+        // EVT_MENU(wxID_FILE1..wxID_FILE3, MyFrame::OnFileHistoryMenuItem)
+        case ID_FILE1:
+        case ID_FILE2:
+        case ID_FILE3:
+            onFileHistoryMenuItem(state, id);
+            break;
+
+        // EVT_MENU(Menu_Menu_FileHistory1..3, MyFrame::OnFileHistoryStyleItem)
+        case Menu_Menu_FileHistory1:
+        case Menu_Menu_FileHistory2:
+        case Menu_Menu_FileHistory3:
+            onFileHistoryStyleItem(id);
+            break;
+
+        // EVT_MENU_RANGE(Menu_Dummy_First, Menu_Dummy_Last, MyFrame::OnDummy)
+        case Menu_Dummy_First:
+        case Menu_Dummy_Second:
+        case Menu_Dummy_Third:
+        case Menu_Dummy_Fourth:
+        case Menu_Dummy_Last:
+            onDummy(id);
+            break;
+
+        default:
+            // Stock items and the auto-numbered "Check item with bitmaps"
+            // entries have no command handler in the C++ sample either.
+            break;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Popup menus (MyFrame::ShowContextMenu, MyDialog::ShowContextMenu)
+// ---------------------------------------------------------------------------
+
+/** MyFrame::ShowContextMenu */
+function showFrameContextMenu(state: MenuFrameState, x: number, y: number): void
+{
+    const menu = plainMenu();
+
+    if (wxGetKeyState(WXK_SHIFT))
+    {
+        // when Shift is pressed, demonstrate the use of a simple function
+        // returning the id of the item selected in the popup menu
+        withString("Choose one of:", (ptr) => { menu.SetTitle(ptr); });
+
+        const choices = ["Apple", "Banana", "Cherry"];
+        for (let n = 0; n < choices.length; ++n)
+        {
+            appendItem(menu, Menu_PopupChoice + n, choices[n]);
+        }
+
+        const rc = state.frame.GetPopupMenuSelectionFromUser(menu.ptr, x, y);
+        if (rc === ID_NONE)
+        {
+            logMessage("No selection");
+        }
+        else
+        {
+            logMessage(`You have selected "${choices[rc - Menu_PopupChoice]}"`);
+        }
+
+        menu.Delete();
+        return;
+    }
+
+    // normal case, shift not pressed
+    appendItem(menu, Menu_Help_About, "&About");
+
+    const dummy = createDummyMenu(state, false);
+    appendSubItem(menu, Menu_Popup_Submenu, "&Submenu", dummy.menu);
+
+    appendItem(menu, Menu_Popup_ToBeDeleted, "To be &deleted");
+    appendCheckItem(menu, Menu_Popup_ToBeChecked, "To be &checked");
+    appendItem(
+        menu, Menu_Popup_ToBeGreyed, "To be &greyed",
+        "This menu item should be initially greyed out");
+    menu.AppendSeparator();
+
+    appendItem(menu, Menu_File_Quit, "E&xit");
+    const quitItem = menu.FindItem(Menu_File_Quit);
+    if (quitItem)
+    {
+        // ->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_QUIT, wxART_MENU))
+        const bitmap = wxArtProvider_GetBitmap(ART_QUIT, ART_MENU, -1, -1);
+        if (bitmap)
+        {
+            quitItem.SetBitmap(bitmap.ptr);
+            bitmap.Delete();
+        }
+    }
+
+    menu.DeleteById(Menu_Popup_ToBeDeleted);
+    menu.Check(Menu_Popup_ToBeChecked, true);
+    menu.Enable(Menu_Popup_ToBeGreyed, false);
+
+    state.frame.PopupMenu(menu.ptr, x, y);
+
+    menu.Delete();
+}
+
+/** MyDialog::ShowContextMenu */
+function showDialogContextMenu(dialog: wxDialog, x: number, y: number): void
+{
+    const menu = plainMenu();
+
+    appendItem(menu, Menu_Help_About, "&About");
+    appendItem(menu, Menu_Popup_ToBeDeleted, "To be &deleted");
+    appendCheckItem(menu, Menu_Popup_ToBeChecked, "To be &checked");
+    appendItem(
+        menu, Menu_Popup_ToBeGreyed, "To be &greyed",
+        "This menu item should be initially greyed out");
+    menu.AppendSeparator();
+    appendItem(menu, Menu_File_Quit, "E&xit");
+
+    menu.DeleteById(Menu_Popup_ToBeDeleted);
+    menu.Check(Menu_Popup_ToBeChecked, true);
+    menu.Enable(Menu_Popup_ToBeGreyed, false);
+
+    dialog.PopupMenu(menu.ptr, x, y);
+    menu.Delete();
+}
+
+/** MyFrame::OnContextMenu / MyDialog::OnContextMenu position handling. */
+function contextMenuPosition(
+    window: wxFrame | wxDialog,
+    event: wxContextMenuEvent,
+): { x: number; y: number }
+{
+    // wxContextMenuEvent::GetPosition() takes two int out-parameters.
+    const xBuffer = new Int32Array(1);
+    const yBuffer = new Int32Array(1);
+    event.GetPosition(pointerOf(xBuffer), pointerOf(yBuffer));
+
+    // screen coordinates
+    const screenX = xBuffer[0];
+    const screenY = yBuffer[0];
+
+    if (screenX === -1 && screenY === -1)
+    {
+        // from the keyboard
+        const size = window.GetSize();
+        const width = size ? size.GetWidth() : 0;
+        const height = size ? size.GetHeight() : 0;
+        return { x: Math.floor(width / 2), y: Math.floor(height / 2) };
+    }
+
+    const client = window.ScreenToClient(screenX, screenY);
+    if (!client)
+    {
+        return { x: screenX, y: screenY };
+    }
+    return { x: client.GetX(), y: client.GetY() };
+}
+
+// ---------------------------------------------------------------------------
+// Menu open / close / highlight logging
+// ---------------------------------------------------------------------------
+
+/** MyFrame::LogMenuOpenCloseOrHighlight */
+function logMenuOpenCloseOrHighlight(
+    state: MenuFrameState,
+    event: wxMenuEvent,
+    what: string,
+): void
+{
+    let msg = `A ${event.IsPopup() ? "popup " : ""}menu has been ${what}`;
+
+    if (event.GetEventType() === EVT_MENU_HIGHLIGHT)
+    {
+        msg += ` (id=${event.GetId()} in `;
+    }
+    else
+    {
+        msg += " (";
+    }
+
+    const menuPtr = event.GetMenu();
+    if (menuPtr)
+    {
+        const title = wrapWxMenu(menuPtr).GetTitle();
+        const titleText = title ? readAndDeleteWxString(title.ptr) : "";
+        msg += `menu with title "${titleText}")`;
+    }
+    else
+    {
+        msg += "no menu provided)";
+    }
+
+    msg += ".";
+    logStatus(state.frame.ptr, msg);
+}
+
+/** MyDialog::LogMenuOpenCloseOrHighlight — appends to the dialog's text ctrl. */
+function appendDialogMenuLog(event: wxMenuEvent, what: string): void
+{
+    let msg = `A ${event.IsPopup() ? "popup " : ""}menu has been ${what}`;
+    if (event.GetEventType() === EVT_MENU_HIGHLIGHT)
+    {
+        msg += ` (id=${event.GetId()})`;
+    }
+    msg += ".\n";
+
+    const textCtrl = activeDialogTextCtrl;
+    if (textCtrl)
+    {
+        withString(msg, (ptr) => { textCtrl.AppendText(ptr); });
+    }
+}
+
+/** Text control of the currently open dialog (MyDialog::m_textctrl). */
+let activeDialogTextCtrl: wxTextCtrl | null = null;
+/** The dialog currently shown by MyFrame::OnShowDialog (modal, may be null). */
+let activeDialog: wxDialog | null = null;
+
+// ---------------------------------------------------------------------------
+// Update UI handlers
+// ---------------------------------------------------------------------------
+
+/** MyFrame::OnUpdateSubMenuNormal */
+function onUpdateSubMenuNormal(event: wxUpdateUIEvent): void
+{
+    event.Enable(false);
+}
+
+/** MyFrame::OnUpdateSubMenuCheck */
+function onUpdateSubMenuCheck(event: wxUpdateUIEvent): void
+{
+    event.Enable(true);
+}
+
+/** MyFrame::OnUpdateSubMenuRadio */
+function onUpdateSubMenuRadio(event: wxUpdateUIEvent): void
+{
+    const which = event.GetId() - Menu_SubMenu_Radio1 + 1;
+    event.Check(which === 2);
+}
+
+/** MyFrame::OnClearLogUpdateUI */
+function onClearLogUpdateUI(state: MenuFrameState, event: wxUpdateUIEvent): void
+{
+    // if we only enable this item when the log window is empty, we never see
+    // it in the disable state as a message is logged whenever the menu is
+    // opened, so we disable it if there is not "much" text in the window
+    event.Enable((state.textCtrl?.GetNumberOfLines() ?? 0) > 5);
+}
+
+/** MyFrame::OnSize — leave a band below for popup menu testing. */
+function onSize(state: MenuFrameState): void
+{
+    if (!state.textCtrl)
+    {
+        return;
+    }
+
+    // The binding hands back a wxSize owned by the shim; only its values are
+    // used here.
+    const size = state.frame.GetClientSize();
+    if (!size)
+    {
+        return;
+    }
+
+    const width = size.GetWidth();
+    const height = size.GetHeight();
+    state.textCtrl.SetSize(0, 0, width, Math.floor((3 * height) / 4), SIZE_AUTO);
+}
+
+// ---------------------------------------------------------------------------
+// Menu bar construction (MyFrame::MyFrame)
+// ---------------------------------------------------------------------------
+
+/** The stock items of the "&Standard items demo" submenu, in source order. */
+const STOCK_MENU_IDS: number[] = [
+    ID_ADD, ID_APPLY, ID_BACKWARD, ID_BOLD, ID_BOTTOM, ID_CANCEL, ID_CDROM,
+    ID_CLEAR, ID_CLOSE, ID_CONVERT, ID_COPY, ID_CUT, ID_DELETE, ID_DOWN,
+    ID_EXECUTE, ID_EXIT, ID_FIND, ID_FIRST, ID_FLOPPY, ID_FORWARD, ID_HARDDISK,
+    ID_HELP, ID_HOME, ID_INDENT, ID_INDEX, ID_INFO, ID_ITALIC, ID_JUMP_TO,
+    ID_JUSTIFY_CENTER, ID_JUSTIFY_FILL, ID_JUSTIFY_LEFT, ID_JUSTIFY_RIGHT,
+    ID_LAST, ID_NETWORK, ID_NEW, ID_NO, ID_OK, ID_OPEN, ID_PASTE,
+    ID_PREFERENCES, ID_PREVIEW, ID_PRINT, ID_PROPERTIES, ID_REDO, ID_REFRESH,
+    ID_REMOVE, ID_REPLACE, ID_REVERT_TO_SAVED, ID_SAVE, ID_SAVEAS,
+    ID_SELECT_COLOR, ID_SELECT_FONT, ID_SORT_ASCENDING, ID_SORT_DESCENDING,
+    ID_SPELL_CHECK, ID_STOP, ID_STRIKETHROUGH, ID_TOP, ID_UNDELETE, ID_UNDERLINE,
+    ID_UNDO, ID_UNINDENT, ID_UP, ID_YES, ID_ZOOM_100, ID_ZOOM_FIT, ID_ZOOM_IN,
+    ID_ZOOM_OUT,
+];
+
+/** Builds the menu bar and returns it; throws only on allocation failure. */
+function buildMenuBar(
+    fileHistory: wxFileHistory | null,
+    fileHistoryMenu: wxMenu | null,
+): wxMenuBar
+{
+    // --- File -------------------------------------------------------------
+    const fileMenu = plainMenu();
+
+    const stockSubMenu = plainMenu();
+    for (const id of STOCK_MENU_IDS)
+    {
+        // stockSubMenu->Append(wxID_ADD) — an empty label means "use the stock
+        // label and accelerator"
+        appendItem(stockSubMenu, id, "");
+    }
+    appendSubMenu(fileMenu, stockSubMenu, "&Standard items demo");
+
+    // wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
+    //                                   "Clear &log\tCtrl-L");
+    // item->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_DELETE, wxART_MENU));
+    appendItem(fileMenu, Menu_File_ClearLog, "Clear &log\tCtrl-L");
+    const clearLogItem = fileMenu.FindItem(Menu_File_ClearLog);
+    if (clearLogItem)
+    {
+        const bitmap = wxArtProvider_GetBitmap(ART_DELETE, ART_MENU, -1, -1);
+        if (bitmap)
+        {
+            clearLogItem.SetBitmap(bitmap.ptr);
+            bitmap.Delete();
+        }
+    }
+    fileMenu.AppendSeparator();
+
+    appendItem(fileMenu, Menu_File_ShowDialog, "Show &Dialog\tCtrl-D", "Show a dialog");
+    fileMenu.AppendSeparator();
+
+    if (fileHistory && fileHistoryMenu)
+    {
+        appendSubMenu(fileMenu, fileHistoryMenu, "Sample file history");
+    }
+
+    appendItem(fileMenu, Menu_File_Quit, "E&xit\tAlt-X", "Quit menu sample");
+
+    // --- Menubar ----------------------------------------------------------
+    const menuBarMenu = plainMenu();
+    appendItem(
+        menuBarMenu, Menu_MenuBar_Append, "&Append menu\tCtrl-A",
+        "Append a menu to the menubar");
+    appendItem(
+        menuBarMenu, Menu_MenuBar_Insert, "&Insert menu\tCtrl-I",
+        "Insert a menu into the menubar");
+    appendItem(
+        menuBarMenu, Menu_MenuBar_Delete, "&Delete menu\tCtrl-D",
+        "Delete the last menu from the menubar");
+    appendCheckable(
+        menuBarMenu, Menu_MenuBar_Toggle, "&Toggle menu\tCtrl-T",
+        "Toggle the first menu in the menubar");
+    menuBarMenu.AppendSeparator();
+    appendCheckable(
+        menuBarMenu, Menu_MenuBar_Enable, "&Enable menu\tCtrl-E",
+        "Enable or disable the last menu");
+    menuBarMenu.AppendSeparator();
+    appendItem(
+        menuBarMenu, Menu_MenuBar_GetLabel, "&Get menu label\tCtrl-G",
+        "Get the label of the last menu");
+    appendItem(
+        menuBarMenu, Menu_MenuBar_SetLabel, "&Set menu label\tCtrl-S",
+        "Change the label of the last menu");
+    menuBarMenu.AppendSeparator();
+    appendItem(
+        menuBarMenu, Menu_MenuBar_FindMenu, "&Find menu from label\tCtrl-F",
+        "Find a menu by searching for its label");
+
+    const subMenu = plainMenu();
+    appendItem(subMenu, Menu_SubMenu_Normal, "&Normal submenu item", "Disabled submenu item");
+    appendCheckItem(subMenu, Menu_SubMenu_Check, "&Check submenu item", "Check submenu item");
+    appendRadioItem(subMenu, Menu_SubMenu_Radio1, "Radio item &1", "Radio item");
+    appendRadioItem(subMenu, Menu_SubMenu_Radio2, "Radio item &2", "Radio item");
+    appendRadioItem(subMenu, Menu_SubMenu_Radio3, "Radio item &3", "Radio item");
+
+    appendSubItem(menuBarMenu, Menu_SubMenu, "Submenu", subMenu);
+
+    // --- Menu -------------------------------------------------------------
+    const menuMenu = plainMenu();
+    appendItem(
+        menuMenu, Menu_Menu_Append, "&Append menu item\tAlt-A",
+        "Append a menu item to the 'Test' menu");
+    appendItem(
+        menuMenu, Menu_Menu_AppendSub, "&Append sub menu\tAlt-S",
+        "Append a sub menu to the 'Test' menu");
+    appendItem(
+        menuMenu, Menu_Menu_Insert, "&Insert menu item\tAlt-I",
+        "Insert a menu item in head of the 'Test' menu");
+    appendItem(
+        menuMenu, Menu_Menu_Delete, "&Delete menu item\tAlt-D",
+        "Delete the last menu item from the 'Test' menu");
+    appendItem(
+        menuMenu, Menu_Menu_DeleteSub, "Delete last &submenu\tAlt-K",
+        "Delete the last submenu from the 'Test' menu");
+    menuMenu.AppendSeparator();
+    appendCheckable(
+        menuMenu, Menu_Menu_Enable, "&Enable menu item\tAlt-E",
+        "Enable or disable the last menu item");
+    appendCheckable(
+        menuMenu, Menu_Menu_Check, "&Check menu item\tAlt-C",
+        "Check or uncheck the last menu item");
+
+    // Show the effect of Break(). As wxMSW is the only port in which calling
+    // it actually does something, insert a separator under the other platforms.
+    if (platform === "windows")
+    {
+        menuMenu.Break();
+    }
+    else
+    {
+        menuMenu.AppendSeparator();
+    }
+
+    appendItem(
+        menuMenu, Menu_Menu_GetInfo, "Get menu item inf&o\tAlt-O",
+        "Show the state of the last menu item");
+    appendItem(
+        menuMenu, Menu_Menu_SetLabel, "Set menu item label\tAlt-L",
+        "Set the label of a menu item");
+    menuMenu.AppendSeparator();
+    appendItem(
+        menuMenu, Menu_Menu_FindItem, "Find menu item from label",
+        "Find a menu item by searching for its label");
+
+    const historyStyleMenu = plainMenu();
+    appendRadioItem(historyStyleMenu, Menu_Menu_FileHistory1, "Hide current path");
+    appendRadioItem(historyStyleMenu, Menu_Menu_FileHistory2, "Hide all paths");
+    appendRadioItem(historyStyleMenu, Menu_Menu_FileHistory3, "Show all paths");
+
+    menuMenu.AppendSeparator();
+    appendSubMenu(menuMenu, historyStyleMenu, "Select file history menu style");
+
+    // --- Test -------------------------------------------------------------
+    const testMenu = plainMenu();
+    appendItem(testMenu, Menu_Test_Normal, "&Normal item");
+    testMenu.AppendSeparator();
+    appendCheckItem(testMenu, Menu_Test_Check, "&Check item");
+
+    appendCheckItemWithBitmaps(testMenu);
+
+    testMenu.AppendSeparator();
+    appendRadioItem(testMenu, Menu_Test_Radio1, "Radio item &1");
+    appendRadioItem(testMenu, Menu_Test_Radio2, "Radio item &2");
+    appendRadioItem(testMenu, Menu_Test_Radio3, "Radio item &3");
+
+    // --- Help -------------------------------------------------------------
+    const helpMenu = plainMenu();
+    appendItem(helpMenu, Menu_Help_About, "&About\tF1", "About menu sample");
+
+    const menuBar = createWxMenuBar(MB_DOCKABLE);
+    if (!menuBar)
+    {
+        throw new Error("menu: failed to allocate the wxMenuBar");
+    }
+
+    withString("&File", (ptr) => { menuBar.Append(fileMenu.ptr, ptr); });
+    withString("Menu&bar", (ptr) => { menuBar.Append(menuBarMenu.ptr, ptr); });
+    withString("&Menu", (ptr) => { menuBar.Append(menuMenu.ptr, ptr); });
+    withString("&Test", (ptr) => { menuBar.Append(testMenu.ptr, ptr); });
+    withString("&Help", (ptr) => { menuBar.Append(helpMenu.ptr, ptr); });
+
+    // these items should be initially checked
+    menuBar.Check(Menu_MenuBar_Toggle, true);
+    menuBar.Check(Menu_MenuBar_Enable, true);
+    menuBar.Check(Menu_Menu_Enable, true);
+    menuBar.Check(Menu_Menu_Check, false);
+
+    return menuBar;
+}
+
+/**
+ * The __WXMSW__ + wxUSE_IMAGE block of MyFrame's constructor: three check items
+ * that carry explicit checked/unchecked bitmaps.
+ *
+ * wxMenuItem::SetBitmaps() is bound against the wxBitmapBundle overload (the
+ * kwxFFI implementation dereferences both arguments as wxBitmapBundle*), so the
+ * two 8x8 marker bitmaps of the C++ sample — wxBitmap(8, 8) and
+ * wxBitmap(wxImage(8, 8).Clear(0xff)) — are supplied as two equivalent 8x8 SVGs
+ * loaded through wxBitmapBundle::FromSVGFile().
+ */
+function appendCheckItemWithBitmaps(testMenu: wxMenu): void
+{
+    if (platform !== "windows")
+    {
+        return;
+    }
+
+    // wxBitmap bmpUnchecked(8, 8);
+    // wxImage imageChecked(8, 8); imageChecked.Clear(0xff);
+    // wxBitmap bmpChecked(imageChecked);
+    const bmpUnchecked = svgBundle("menu_unchecked.svg", 8, 8);
+    const bmpChecked = svgBundle("menu_checked.svg", 8, 8);
+    if (!bmpUnchecked || !bmpChecked)
+    {
+        return;
+    }
+
+    const addItem = (text: string, initiallyChecked: boolean): void =>
+    {
+        const item = withString(text, (textPtr) =>
+            withString("", (helpPtr) =>
+                createWxMenuItemEx(ID_ANY, textPtr, helpPtr, ITEM_CHECK, null)));
+        if (!item)
+        {
+            return;
+        }
+
+        testMenu.AppendItem(item.ptr);
+        if (initiallyChecked)
+        {
+            item.Check(true);
+        }
+        // SetBitmaps(bmpChecked, bmpUnchecked) — the bundles are copied into the
+        // menu item, and svgBundle() keeps the source bundle alive anyway.
+        item.SetBitmaps(bmpChecked.ptr, bmpUnchecked.ptr);
+    };
+
+    // wxMenuItem *checkedBitmapItem = new wxMenuItem(testMenu, wxID_ANY,
+    //     "Check item with bitmaps", "", wxITEM_CHECK);
+    // checkedBitmapItem->SetBitmaps(bmpChecked, bmpUnchecked);
+    // testMenu->Append(checkedBitmapItem);
+    addItem("Check item with bitmaps", false);
+
+    // ... "Check item with bitmaps set afterwards"
+    addItem("Check item with bitmaps set afterwards", false);
+
+    // ... "Check item with bitmaps set afterwards (initially checked)"
+    addItem("Check item with bitmaps set afterwards (initially checked)", true);
+}
+
+/** SVG bundles that must outlive every window that uses them. */
+const keptBundles: wxBitmapBundle[] = [];
+
+/** wxBitmapBundle::FromSVGFile() for the sample's SVG assets. */
+function svgBundle(name: string, width: number, height: number): wxBitmapBundle | null
+{
+    const raw = withString(samplePath(name), (ptr) =>
+        wxBitmapBundle_FromSVGFile(ptr, width, height));
+    if (!raw)
+    {
+        return null;
+    }
+
+    // wrapWxBitmapBundle() marks the wrapper borrowed, so the bundle is released
+    // with the process; it stays referenced here for the whole run.
+    const bundle = wrapWxBitmapBundle(raw);
+    keptBundles.push(bundle);
+    return bundle;
+}
+
+// ---------------------------------------------------------------------------
+// Frame creation (MyFrame::MyFrame)
+// ---------------------------------------------------------------------------
+
+/** SetIcon(wxICON(sample)) from the converted 32x32 sample.svg artwork. */
+function setSampleIcon(frame: wxFrame): void
+{
+    const bundle = svgBundle("sample.svg", 32, 32);
+    if (!bundle)
+    {
+        return;
+    }
+
+    const bitmap = bundle.GetBitmap(32, 32);
+    if (bitmap)
+    {
+        const icon = createWxIconDefault();
+        if (icon)
+        {
+            // wxTopLevelWindow::SetIcon copies the icon.
+            icon.CopyFromBitmap(bitmap.ptr);
+            frame.SetIcon(icon.ptr);
+            icon.Delete();
+        }
+        bitmap.Delete();
+    }
+}
+
+/** MyFrame's constructor. */
+function createMenuFrame(): MenuFrameState
+{
+    const frame = withString("wxWidgets menu sample", (ptr) =>
+        createWxFrame(null, ID_ANY, ptr, -1, -1, -1, -1, DEFAULT_FRAME_STYLE));
+    if (!frame)
+    {
+        throw new Error("menu: failed to create the main frame");
+    }
+
+    setSampleIcon(frame);
+
+    // CreateStatusBar()
+    frame.CreateStatusBar(1, STB_DEFAULT_STYLE, 0);
+
+    // m_fileHistory / m_fileHistoryMenu
+    let fileHistory: wxFileHistory | null = null;
+    let fileHistoryMenu: wxMenu | null = null;
+
+    fileHistoryMenu = plainMenu();
+    fileHistory = createWxFileHistory(9);
+    if (fileHistory)
+    {
+        fileHistory.UseMenu(fileHistoryMenu.ptr);
+
+        // m_fileHistory->AddFileToHistory(wxFileName("...").GetAbsolutePath())
+        addHistoryFile(fileHistory, { name: "menu.cpp" });
+        addHistoryFile(fileHistory, { name: "Makefile.in" });
+        addHistoryFile(fileHistory, { path: "minimal", name: "minimal", ext: "cpp" });
+    }
+
+    const menuBar = buildMenuBar(fileHistory, fileHistoryMenu);
+
+    // associate the menu bar with the frame
+    frame.SetMenuBar(menuBar.ptr);
+
+    // create the log text window
+    const textCtrl = withString("", (ptr) =>
+        createWxTextCtrl(frame.ptr, ID_ANY, ptr, -1, -1, -1, -1, BigInt(TE_MULTILINE)));
+    if (textCtrl)
+    {
+        textCtrl.SetEditable(false);
+    }
+
+    let logOld: wxLog | null = null;
+    if (textCtrl)
+    {
+        wxLog_DisableTimestamp();
+        const logTextCtrl = createWxLogTextCtrl(textCtrl.ptr);
+        if (logTextCtrl)
+        {
+            logOld = wxLog_SetActiveTarget(logTextCtrl.ptr);
+        }
+    }
+
+    const state: MenuFrameState = {
+        frame,
+        menuBar,
+        textCtrl,
+        fileHistory,
+        fileHistoryMenu,
+        callbacks: [],
+        closures: [],
+        dialogEvents: createDialogEvents(),
+        logOld,
+        menu: null,
+        countDummy: 0,
+    };
+
+    logMessage(
+        "Brief explanations: the commands in the \"Menu\" menu " +
+        "append/insert/delete items to/from the \"Test\" menu.\n" +
+        "The commands in the \"Menubar\" menu work with the " +
+        "menubar itself.\n\n" +
+        "Right click the band below to test popup menus.\n");
+
+    return state;
+}
+
+/**
+ * wxFileHistory::AddFileToHistory(wxFileName(...).GetAbsolutePath()).
+ * The subset of wxFileName's constructor used by the sample is reproduced here:
+ * a bare name, or a path + name + extension.
+ */
+function addHistoryFile(
+    history: wxFileHistory,
+    file: { path?: string; name: string; ext?: string },
+): void
+{
+    const name = createWxString(file.name);
+    const absolute = (() =>
+    {
+        if (file.path === undefined && file.ext === undefined)
+        {
+            // wxFileName("menu.cpp")
+            const fileName = createWxFileNameFromPath(name.ptr, PATH_NATIVE);
+            if (!fileName)
+            {
+                return null;
+            }
+            const result = fileName.GetAbsolutePath(null, PATH_NATIVE);
+            fileName.Delete();
+            return result;
+        }
+
+        const path = createWxString(file.path ?? "");
+        const ext = createWxString(file.ext ?? "");
+        const fileName = createWxFileNameWithExt(path.ptr, name.ptr, ext.ptr, PATH_NATIVE);
+        path.Delete();
+        ext.Delete();
+        if (!fileName)
+        {
+            return null;
+        }
+        const result = fileName.GetAbsolutePath(null, PATH_NATIVE);
+        fileName.Delete();
+        return result;
+    })();
+
+    name.Delete();
+
+    if (!absolute)
+    {
+        return;
+    }
+
+    // GetAbsolutePath() hands back an owned wxString.
+    const text = readAndDeleteWxString(absolute.ptr);
+    withString(text, (ptr) => { history.AddFileToHistory(ptr); });
+}
+
+// ---------------------------------------------------------------------------
+// Event wiring
+// ---------------------------------------------------------------------------
+
+/** Creates MyDialog's four closures once, so reopening the dialog is free. */
+function createDialogEvents(): DialogEvents | null
+{
+    const callbacks: Callback[] = [];
+
+    const make = (handler: (eventPtr: Pointer) => void): wxClosure | null =>
+    {
+        const callback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_closureFun, _data, eventPtr) =>
+            {
+                // wxClosure invokes every handler with a null event at teardown.
+                if (!eventPtr)
+                {
+                    return;
+                }
+                handler(eventPtr);
+            },
+        );
+        callbacks.push(callback);
+        return createWxClosure(callback.pointer, null);
+    };
+
+    const contextMenu = make((eventPtr) =>
+    {
+        const event = new wxContextMenuEvent(eventPtr, true);
+        const dialog = activeDialog;
+        if (dialog)
+        {
+            const position = contextMenuPosition(dialog, event);
+            showDialogContextMenu(dialog, position.x, position.y);
+        }
+    });
+    const menuOpen = make((eventPtr) =>
+    {
+        const event = new wxMenuEvent(eventPtr, true);
+        appendDialogMenuLog(event, "opened");
+        event.Skip(true);
+    });
+    const menuClose = make((eventPtr) =>
+    {
+        const event = new wxMenuEvent(eventPtr, true);
+        appendDialogMenuLog(event, "closed");
+        event.Skip(true);
+    });
+    const menuHighlight = make((eventPtr) =>
+    {
+        const event = new wxMenuEvent(eventPtr, true);
+        appendDialogMenuLog(event, "highlighted");
+        event.Skip(true);
+    });
+
+    if (!contextMenu || !menuOpen || !menuClose || !menuHighlight)
+    {
+        return null;
+    }
+
+    return {
+        callbacks,
+        closures: [contextMenu, menuOpen, menuClose, menuHighlight],
+        contextMenu,
+        menuOpen,
+        menuClose,
+        menuHighlight,
+    };
+}
+
+/** Connects MyFrame's event table (menu commands, update UI, size, close). */
+function connectFrameEvents(state: MenuFrameState): void
+{
+    const bind = (
+        first: number,
+        last: number,
+        eventType: number,
+        handler: (eventPtr: Pointer) => void,
+    ): void =>
+    {
+        const callback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_closureFun, _data, eventPtr) =>
+            {
+                // wxClosure invokes every handler with a null event at teardown.
+                if (!eventPtr)
+                {
+                    return;
+                }
+                handler(eventPtr);
+            },
+        );
+        const closure = createWxClosure(callback.pointer, null);
+        if (!closure)
+        {
+            callback.close();
+            return;
+        }
+        state.frame.Bind(first, last, eventType, closure.ptr);
+        state.callbacks.push(callback);
+        state.closures.push(closure);
+    };
+
+    // EVT_MENU(wxID_ANY) of the pushed MyEvtHandler plus every EVT_MENU(id)
+    // entry of MyFrame's table; see dispatchMenuCommand().
+    bind(ID_ANY, ID_ANY, EVT_MENU,
+        (eventPtr) => { dispatchMenuCommand(state, new wxCommandEvent(eventPtr, true)); });
+
+    // EVT_UPDATE_UI(Menu_File_ClearLog, MyFrame::OnClearLogUpdateUI)
+    bind(Menu_File_ClearLog, Menu_File_ClearLog, EVT_UPDATE_UI,
+        (eventPtr) => { onClearLogUpdateUI(state, new wxUpdateUIEvent(eventPtr, true)); });
+
+    // EVT_UPDATE_UI(Menu_SubMenu_Normal, MyFrame::OnUpdateSubMenuNormal)
+    bind(Menu_SubMenu_Normal, Menu_SubMenu_Normal, EVT_UPDATE_UI,
+        (eventPtr) => { onUpdateSubMenuNormal(new wxUpdateUIEvent(eventPtr, true)); });
+
+    // EVT_UPDATE_UI(Menu_SubMenu_Check, MyFrame::OnUpdateSubMenuCheck)
+    bind(Menu_SubMenu_Check, Menu_SubMenu_Check, EVT_UPDATE_UI,
+        (eventPtr) => { onUpdateSubMenuCheck(new wxUpdateUIEvent(eventPtr, true)); });
+
+    // EVT_UPDATE_UI(Menu_SubMenu_Radio1..3, MyFrame::OnUpdateSubMenuRadio)
+    bind(Menu_SubMenu_Radio1, Menu_SubMenu_Radio3, EVT_UPDATE_UI,
+        (eventPtr) => { onUpdateSubMenuRadio(new wxUpdateUIEvent(eventPtr, true)); });
+
+    // EVT_UPDATE_UI(Menu_Menu_Check, MyFrame::OnUpdateCheckMenuItemUI)
+    bind(Menu_Menu_Check, Menu_Menu_Check, EVT_UPDATE_UI,
+        (eventPtr) => { onUpdateCheckMenuItemUI(state, new wxUpdateUIEvent(eventPtr, true)); });
+
+    // EVT_CONTEXT_MENU(MyFrame::OnContextMenu)
+    bind(ID_ANY, ID_ANY, EVT_CONTEXT_MENU, (eventPtr) =>
+    {
+        const event = new wxContextMenuEvent(eventPtr, true);
+        const position = contextMenuPosition(state.frame, event);
+        showFrameContextMenu(state, position.x, position.y);
+    });
+
+    // EVT_MENU_OPEN / EVT_MENU_CLOSE / EVT_MENU_HIGHLIGHT_ALL
+    bind(ID_ANY, ID_ANY, EVT_MENU_OPEN, (eventPtr) =>
+    {
+        logMenuOpenCloseOrHighlight(state, new wxMenuEvent(eventPtr, true), "opened");
+        new wxMenuEvent(eventPtr, true).Skip(true);
+    });
+    bind(ID_ANY, ID_ANY, EVT_MENU_CLOSE, (eventPtr) =>
+    {
+        logMenuOpenCloseOrHighlight(state, new wxMenuEvent(eventPtr, true), "closed");
+        new wxMenuEvent(eventPtr, true).Skip(true);
+    });
+    bind(ID_ANY, ID_ANY, EVT_MENU_HIGHLIGHT, (eventPtr) =>
+    {
+        logMenuOpenCloseOrHighlight(state, new wxMenuEvent(eventPtr, true), "highlighted");
+        new wxMenuEvent(eventPtr, true).Skip(true);
+    });
+
+    // EVT_SIZE(MyFrame::OnSize)
+    bind(ID_ANY, ID_ANY, EVT_SIZE, () => { onSize(state); });
+
+    // The C++ frame has no close handler; ending the loop here is the
+    // kwxTypeScript equivalent of the last top-level window being destroyed.
+    bind(ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, () => { exitMainLoop(); });
+}
+
+/** Releases everything MyFrame's destructor and MyApp's exit release. */
+function cleanup(state: MenuFrameState): void
+{
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+    for (const callback of state.dialogEvents?.callbacks ?? [])
+    {
+        callback.close();
+    }
+
+    // delete m_fileHistory; delete m_menu;
+    state.fileHistory?.Delete();
+    state.menu?.DeletePointer();
+
+    // restore the old logger: delete wxLog::SetActiveTarget(m_logOld)
+    if (state.logOld)
+    {
+        const current = wxLog_SetActiveTarget(state.logOld.ptr);
+        current?.Delete();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// MyApp::OnInit
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("menu");
+
+    let state: MenuFrameState;
+    try
+    {
+        state = createMenuFrame();
+    }
+    catch (error)
+    {
+        console.error(String(error));
+        shutdown();
+        return 1;
+    }
+
+    connectFrameEvents(state);
+
+    state.frame.Show();
+    withString("Welcome to wxWidgets menu sample", (ptr) =>
+    {
+        state.frame.SetStatusText(ptr, 0);
+    });
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    cleanup(state);
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

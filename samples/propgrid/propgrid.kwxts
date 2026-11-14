@@ -1,0 +1,2732 @@
+// propgrid.kwxts — kwxTypeScript port of wxSamples/src/propgrid/propgrid.cpp
+//
+// The frame, menu tree, status bar, log window, panel, buttons, all three
+// property-grid pages, the XRC frame, the popup, the minimal sample, the custom
+// multi-button editor (kwxPGTextCtrlEditor) and the custom page
+// (kwxPropertyGridPage) are reproduced.  wxPropertyGridInterface is a mixin on
+// the grid/manager/page wrappers, so Insert/DeleteProperty/ReplaceProperty/
+// SetPropertyCell/SetPropertyImage/SetPropertyMaxLength/read-only/hide/
+// save-restore/Get-SetPropertyValues are called directly on those objects.
+//
+// Property classes that have no binding at all (wxSystemColourProperty,
+// wxCursorProperty, wxPGChoices choice colours/bitmaps, wxFontDataProperty,
+// wxDirsProperty, wxArrayDoubleProperty, wxVectorProperty, wxTriangleProperty,
+// wxSizeProperty, wxPointProperty, MyColourProperty, SingleChoiceProperty) use
+// the closest bound equivalent and are listed in the port report.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\propgrid\propgrid.kwxts
+
+import {
+    ALL,
+    ALIGN_CENTRE,
+    ART_FOLDER,
+    ART_OTHER,
+    ALIGN_RIGHT,
+    BORDER_NONE,
+    BOTH,
+    BOTTOM,
+    CANCEL,
+    CAPTION,
+    CHOICEDLG_STYLE,
+    CLOSE_BOX,
+    createWxArrayInt,
+    createWxArrayStringProperty,
+    createWxBoolProperty,
+    createWxBoxSizer,
+    createWxButton,
+    createWxClosure,
+    createWxColourEmpty,
+    createWxColourProperty,
+    createWxColourRGB,
+    createKwxPGTextCtrlEditor,
+    createKwxPropertyGridPage,
+    createWxDialog,
+    createWxFlagsProperty,
+    createWxFontDefault,
+    createWxFontProperty,
+    createWxFrame,
+    createWxIconDefault,
+    createWxIntProperty,
+    createWxLogWindow,
+    createWxMenu,
+    createWxMenuBar,
+    createWxMultiChoiceDialog,
+    createWxNumberEntryDialog,
+    createWxPanel,
+    createWxPGCell,
+    createWxPGMultiButton,
+    createWxPopupWindow,
+    createWxPropertyCategory,
+    createWxPropertyGrid,
+    createWxPropertyGridManager,
+    createWxPropertyGridXmlHandler,
+    createWxScrolledWindow,
+    createWxSize,
+    createWxString,
+    createWxStringProperty,
+    createWxTextCtrl,
+    createWxVariant,
+    DEFAULT_DIALOG_STYLE,
+    DEFAULT_FRAME_STYLE,
+    EVT_BUTTON,
+    EVT_CLOSE_WINDOW,
+    EVT_CONTEXT_MENU,
+    EVT_IDLE,
+    EVT_KEY_DOWN,
+    EVT_KEY_UP,
+    EVT_MENU,
+    EVT_MOVE,
+    EVT_PG_CHANGED,
+    EVT_PG_CHANGING,
+    EVT_PG_COL_BEGIN_DRAG,
+    EVT_PG_COL_DRAGGING,
+    EVT_PG_COL_END_DRAG,
+    EVT_PG_DOUBLE_CLICK,
+    EVT_PG_HIGHLIGHTED,
+    EVT_PG_ITEM_COLLAPSED,
+    EVT_PG_ITEM_EXPANDED,
+    EVT_PG_LABEL_EDIT_BEGIN,
+    EVT_PG_LABEL_EDIT_ENDING,
+    EVT_PG_PAGE_CHANGED,
+    EVT_PG_RIGHT_CLICK,
+    EVT_PG_SELECTED,
+    EVT_SIZE,
+    EVT_TEXT,
+    EVT_TEXT_ENTER,
+    EVT_UPDATE_UI,
+    exitMainLoop,
+    EXPAND,
+    HORIZONTAL,
+    HSCROLL,
+    ICON_INFORMATION,
+    ID_ANY,
+    ID_CANCEL,
+    ID_HIGHEST,
+    ID_OK,
+    initialize,
+    initAllImageHandlers,
+    LEFT,
+    LIGHT_GREY,
+    MAXIMIZE_BOX,
+    MENU_TEAROFF,
+    MINIMIZE_BOX,
+    NO,
+    OK,
+    PG_AUTO_SORT,
+    PG_BOLD_MODIFIED,
+    PG_DESCRIPTION,
+    PG_EX_ALWAYS_ALLOW_FOCUS,
+    PG_EX_AUTO_UNSPECIFIED_VALUES,
+    PG_EX_ENABLE_TLP_TRACKING,
+    PG_EX_HELP_AS_TOOLTIPS,
+    PG_EX_HIDE_PAGE_BUTTONS,
+    PG_EX_INIT_NOCAT,
+    PG_EX_MODE_BUTTONS,
+    PG_EX_MULTIPLE_SELECTION,
+    PG_EX_NATIVE_DOUBLE_BUFFERING,
+    PG_EX_NO_FLAT_TOOLBAR,
+    PG_EX_NO_TOOLBAR_DIVIDER,
+    PG_EX_TOOLBAR_SEPARATOR,
+    PG_EX_WRITEONLY_BUILTIN_ATTRIBUTES,
+    PG_HIDE_CATEGORIES,
+    PG_HIDE_MARGIN,
+    PG_ITERATE_DEFAULT,
+    PG_LABEL,
+    PG_LIMITED_EDITING,
+    PG_NO_INTERNAL_BORDER,
+    PG_SPLITTER_AUTO_CENTER,
+    PG_STATIC_LAYOUT,
+    PG_STATIC_SPLITTER,
+    PG_TOOLBAR,
+    PG_TOOLTIPS,
+    RESIZE_BORDER,
+    RIGHT,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    SIZE_USE_EXISTING,
+    STB_DEFAULT_STYLE,
+    SYSTEM_MENU,
+    TAB_TRAVERSAL,
+    TE_MULTILINE,
+    TE_READONLY,
+    VERTICAL,
+    VSCROLL,
+    WANTS_CHARS,
+    WHITE,
+    YES_NO,
+    kwxGetMousePosition,
+    wrapWxBitmapBundle,
+    wrapWxPropertyGrid,
+    wrapWxWindow,
+    wrapWxXmlResource,
+    wxArtProvider_GetBitmapBundle,
+    wxColourPropertyValue,
+    wxBitmapBundle_FromSVGFile,
+    wxCommandEvent,
+    wxColour,
+    wxEvent,
+    wxFont,
+    wxGetColourFromUser,
+    wxGetLocalTime,
+    wxGetNumberFromUser,
+    wxPlatformInfo,
+    wxPlatformInfo_Get,
+    wxPropertyGridInterface_GetEditorByName,
+    wxPropertyGridInterface_RegisterAdditionalEditors,
+    wxPropertyGrid_RegisterEditorClass,
+    wxVariant_GetColourPropertyValue,
+    wxXmlResource_Get,
+    wxPoint,
+    wxPopupWindow,
+    wxPropertyGridEvent,
+    wxVersionString,
+} from "kwx";
+import type {
+    kwxPGTextCtrlEditor,
+    kwxPropertyGridPage,
+    wxBitmapBundle,
+    wxBoxSizer,
+    wxClosure,
+    wxEvtHandler,
+    wxFrame,
+    wxLogWindow,
+    wxMenu,
+    wxMenuItem,
+    wxPanel,
+    wxPGCell,
+    wxPGMultiButton,
+    wxPGProperty,
+    wxPropertyGrid,
+    wxPropertyGridManager,
+    wxPropertyGridPage,
+    wxScrolledWindow,
+    wxVariant,
+} from "kwx";
+import { Callback, exit, platform, Pointer } from "kwx/platform";
+
+import {
+    appendCheckItem,
+    appendMenu,
+    appendRadioItem,
+    attrString,
+    charPtrArray,
+    createArrayString,
+    findPage,
+    findProperty,
+    getUserText,
+    intArray,
+    ID_ABOUT,
+    ID_APPENDCAT,
+    ID_APPENDPROP,
+    ID_BOOL_CHECKBOX,
+    ID_CATCOLOURS,
+    ID_CHANGEFLAGSITEMS,
+    ID_CLEARMODIF,
+    ID_COLLAPSE,
+    ID_COLLAPSEALL,
+    ID_COLOURSCHEME1,
+    ID_COLOURSCHEME2,
+    ID_COLOURSCHEME3,
+    ID_COLOURSCHEME4,
+    ID_DELETE,
+    ID_DELETEALL,
+    ID_DELETER,
+    ID_DUMPLIST,
+    ID_ENABLE,
+    ID_ENABLECOMMONVALUES,
+    ID_ENABLELABELEDITING,
+    ID_FITCOLUMNS,
+    ID_FREEZE,
+    ID_GETVALUES,
+    ID_HIDE,
+    ID_INSERTCAT,
+    ID_INSERTPAGE,
+    ID_INSERTPROP,
+    ID_ITERATE1,
+    ID_ITERATE2,
+    ID_ITERATE3,
+    ID_ITERATE4,
+    ID_ONEXTENDEDKEYNAV,
+    ID_POPULATE1,
+    ID_POPULATE2,
+    ID_POPUPGRID,
+    ID_QUIT,
+    ID_REMOVEPAGE,
+    ID_RESTORESTATE,
+    ID_RUNMINIMAL,
+    ID_SAVESTATE,
+    ID_SELECTSTYLE,
+    ID_SETBGCOLOUR,
+    ID_SETBGCOLOURRECUR,
+    ID_SETCOLUMNS,
+    ID_SETPGDISABLED,
+    ID_SETPROPERTYVALUE,
+    ID_SETREADONLY,
+    ID_SETSPINCTRLEDITOR,
+    ID_SETVALUES,
+    ID_SETVALUES2,
+    ID_SETVIRTWIDTH,
+    ID_SHOWHEADER,
+    ID_SHOWPOPUP,
+    ID_STATICLAYOUT,
+    ID_TESTDELETECHOICE,
+    ID_TESTINSERTCHOICE,
+    ID_TESTREPLACE,
+    ID_TESTXRC,
+    ID_UNSPECIFY,
+    ID_VETOCOLDRAG,
+    logDebug,
+    logError,
+    logMessage,
+    logVerbose,
+    messageBox,
+    PG_ACTION_NEXT_PROPERTY,
+    PG_ALL_STATES,
+    PG_DONT_RECURSE,
+    PG_INC_ATTRIBUTES,
+    PG_KEEP_STRUCTURE,
+    PG_RECURSE,
+    PG_VFB_MARK_CELL,
+    PG_VFB_SHOW_MESSAGEBOX,
+    PGID,
+    propLabel,
+    propName,
+    setValueLong,
+    setValueString,
+    takeText,
+    variantBool,
+    variantLong,
+    variantString,
+    walkAll,
+    walkAllPages,
+    walkCategories,
+    walkVisible,
+    WXK_DOWN,
+    WXK_RETURN,
+    WXK_UP,
+    withString,
+    withStrings,
+} from "./support.kwxts";
+
+import {
+    populateExamples,
+    populateLibraryConfig,
+    populateStandardItems,
+} from "./pages.kwxts";
+
+declare const __dirname: string;
+
+//-----------------------------------------------------------------------------
+// Event plumbing
+//-----------------------------------------------------------------------------
+
+interface BoundHandler
+{
+    callback: Callback;
+    // Kept referenced until after run() returns.
+    closure: wxClosure;
+}
+
+const boundHandlers: BoundHandler[] = [];
+
+// Callbacks installed on the native PropertyGrid extension hooks.
+const extraCallbacks: Callback[] = [];
+
+// The wxPGMultiButton created by the custom editor's CreateControls().
+let multiButtonButtons: wxPGMultiButton | null = null;
+
+// wxXmlResource handler registration is done only once.
+let xrcInitialized = false;
+
+// The custom (Examples) page hooks are shared between grid replacements so the
+// fixed native callback pool is never exhausted by repeated style changes.
+let pageState: AppState | null = null;
+let pageHandlingCallback: Callback | null = null;
+const pageByToken = new Map<number, kwxPropertyGridPage>();
+let nextPageToken = 1;
+
+interface SharedPageHandler
+{
+    callback: Callback;
+    closure: wxClosure;
+    type: number;
+}
+
+let pageEventHandlers: SharedPageHandler[] | null = null;
+
+function bindEvent(
+    target: wxEvtHandler,
+    first: number,
+    last: number,
+    type: number,
+    handler: (eventPtr: Pointer) => void,
+): void
+{
+    // The runtime callback pool has 64 fixed slots; keep headroom for the
+    // repeated "Run Minimal Sample" invocations.
+    if (boundHandlers.length >= 60)
+    {
+        console.error("propgrid: native callback pool full, event not bound");
+        return;
+    }
+
+    const callback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr) return;
+            handler(eventPtr);
+        },
+    );
+
+    const closure = createWxClosure(callback.pointer, null);
+    if (!closure)
+    {
+        callback.close();
+        return;
+    }
+
+    target.Bind(first, last, type, closure.ptr);
+    boundHandlers.push({ callback, closure });
+}
+
+//-----------------------------------------------------------------------------
+// Application state
+//-----------------------------------------------------------------------------
+
+interface AppState
+{
+    frame: wxFrame;
+    panel: wxPanel;
+    topSizer: wxBoxSizer | null;
+    btnSizer: wxBoxSizer | null;
+    manager: wxPropertyGridManager | null;
+    grid: wxPropertyGrid | null;
+    logWindow: wxLogWindow | null;
+    menuTry: wxMenu;
+    menuTools1: wxMenu;
+    menuTools2: wxMenu;
+    itemEnable: wxMenuItem | null;
+    itemCatColours: wxMenuItem | null;
+    hasHeader: boolean;
+    labelEditingEnabled: boolean;
+    multiButtonEditor: kwxPGTextCtrlEditor | null;
+    storedValues: wxVariant | null;
+    savedState: string;
+    popup: wxPopupWindow | null;
+    popupPanel: wxScrolledWindow | null;
+    popupGrid: wxPropertyGrid | null;
+    popupSizer: wxBoxSizer | null;
+}
+
+interface MenuSet
+{
+    menuTry: wxMenu;
+    menuTools1: wxMenu;
+    menuTools2: wxMenu;
+    itemEnable: wxMenuItem | null;
+    itemCatColours: wxMenuItem | null;
+}
+
+//-----------------------------------------------------------------------------
+// Grid creation
+//-----------------------------------------------------------------------------
+
+const DEFAULT_PG_STYLE = PG_BOLD_MODIFIED
+    | PG_SPLITTER_AUTO_CENTER
+    | PG_AUTO_SORT
+    | PG_TOOLBAR
+    | PG_DESCRIPTION;
+
+function defaultExtraStyle(): number
+{
+    // wxALWAYS_NATIVE_DOUBLE_BUFFER is 0 on MSW, 1 elsewhere.
+    const nativeBuffer = platform !== "windows" ? PG_EX_NATIVE_DOUBLE_BUFFERING : 0;
+    return nativeBuffer | PG_EX_MODE_BUTTONS | PG_EX_MULTIPLE_SELECTION;
+}
+
+function populateGrid(state: AppState): void
+{
+    const manager = state.manager;
+    const grid = state.grid;
+    if (!manager || !grid) return;
+
+    const title = takeText(state.frame.GetTitle());
+    const frameStyle = Number(state.frame.GetWindowStyle());
+
+    withString("Standard Items", (label) => manager.AddPage(label, null));
+    manager.SelectPage(0);
+    let page = manager.GetPage(0);
+    if (page) populateStandardItems(page, grid, title, frameStyle);
+
+    withString("wxWidgets Library Config", (label) => manager.AddPage(label, null));
+    manager.SelectPage(1);
+    page = manager.GetPage(1);
+    if (page) populateLibraryConfig(page, grid, manager);
+
+    // Use a custom page (wxMyPropertyGridPage) to test the custom
+    // wxPropertyGridPage feature.
+    withString("Examples", (label) =>
+    {
+        const token = nextPageToken++;
+        const custom = createKwxPropertyGridPage(BigInt(token));
+        if (custom)
+        {
+            pageByToken.set(token, custom);
+            if (!pageHandlingCallback)
+            {
+                pageHandlingCallback = new Callback(
+                    { parameters: ["pointer"], result: "void" },
+                    (_f, _d, objectPtr) =>
+                    {
+                        if (!objectPtr) return;
+                        pageByToken.get(Number(objectPtr))
+                            ?.SetIsHandlingAllEventsResult(false);
+                    },
+                );
+                extraCallbacks.push(pageHandlingCallback);
+            }
+            custom.SetOnIsHandlingAllEvents(pageHandlingCallback.pointer);
+
+            withString("IntProperty", (text) =>
+            {
+                const prop = createWxIntProperty(text, PG_LABEL, 12345678);
+                if (prop) custom.Append(prop.ptr);
+            });
+
+            manager.AddPageObject(label, null, custom.ptr);
+            bindCustomPageEvents(state, custom);
+        }
+        else
+        {
+            const plain = manager.AddPage(label, null);
+            if (plain)
+            {
+                withString("IntProperty", (text) =>
+                {
+                    const prop = createWxIntProperty(text, PG_LABEL, 12345678);
+                    if (prop) plain.Append(prop.ptr);
+                });
+            }
+        }
+    });
+
+    manager.SelectPage(2);
+    page = manager.GetPage(2);
+    if (page) populateExamples(page, state.multiButtonEditor?.ptr ?? null);
+
+    // Initialize the Size/Position substitutes with the frame geometry, as the
+    // C++ wxSizeProperty / wxPointProperty constructors do.
+    const frameSize = state.frame.GetSize();
+    const framePos = state.frame.GetPosition();
+    if (frameSize)
+    {
+        const sizeWidth = findProperty(manager, "Size.Width");
+        const sizeHeight = findProperty(manager, "Size.Height");
+        if (sizeWidth) setValueLong(grid, sizeWidth, frameSize.GetWidth());
+        if (sizeHeight) setValueLong(grid, sizeHeight, frameSize.GetHeight());
+    }
+    if (framePos)
+    {
+        const pointX = findProperty(manager, "Position.X");
+        const pointY = findProperty(manager, "Position.Y");
+        if (pointX) setValueLong(grid, pointX, framePos.GetX());
+        if (pointY) setValueLong(grid, pointY, framePos.GetY());
+    }
+
+    // The C++ sample leaves the first page selected.
+    manager.SelectPage(0);
+}
+
+function createGrid(state: AppState, style = -1, extraStyle = -1): void
+{
+    if (style < 0) style = DEFAULT_PG_STYLE;
+    if (extraStyle < 0) extraStyle = defaultExtraStyle();
+
+    const manager = createWxPropertyGridManager(
+        state.panel.ptr, PGID, -1, -1, -1, -1, style);
+    if (!manager) return;
+
+    state.manager = manager;
+    state.grid = manager.GetGrid();
+    const grid = state.grid;
+    if (!grid) return;
+
+    manager.SetExtraStyle(BigInt(extraStyle));
+
+    // This is the default validation failure behaviour.
+    manager.SetValidationFailureBehavior(PG_VFB_MARK_CELL | PG_VFB_SHOW_MESSAGEBOX);
+
+    grid.SetVerticalSpacing(2);
+
+    const cell: wxPGCell | null = createWxPGCell();
+    if (cell)
+    {
+        withString("Unspecified", (ptr) => cell.SetText(ptr));
+        cell.SetFgCol(LIGHT_GREY);
+        grid.SetUnspecifiedValueAppearance(cell.ptr);
+        cell.Delete();
+    }
+
+    populateGrid(state);
+
+    grid.MakeColumnEditable(0, state.labelEditingEnabled);
+    manager.ShowHeader(state.hasHeader);
+    if (state.hasHeader)
+    {
+        withString("Units", (ptr) => manager.SetColumnTitle(2, ptr));
+    }
+}
+
+function replaceGrid(state: AppState, style: number, extraStyle: number): void
+{
+    const old = state.manager;
+    pageByToken.clear();
+    createGrid(state, style, extraStyle);
+
+    // wxSizer exposes Replace(index, ...) only, not Replace(window, window).
+    // Rebuilding the two top-level items is equivalent here.
+    if (state.topSizer)
+    {
+        state.topSizer.Clear(false);
+        if (state.manager)
+            state.topSizer.AddWindow(state.manager.ptr, 1, EXPAND, 0, null);
+        if (state.btnSizer)
+            state.topSizer.AddSizer(state.btnSizer.ptr, 0, EXPAND | ALL, 5, null);
+    }
+
+    if (old) old.Destroy();
+    state.manager?.SetFocus();
+    state.panel.Layout();
+}
+
+//-----------------------------------------------------------------------------
+// Menu construction
+//-----------------------------------------------------------------------------
+
+function createMenus(
+    frame: wxFrame, hasHeader: boolean, labelEditingEnabled: boolean,
+): MenuSet
+{
+    const menuFile = withString("", (ptr) => createWxMenu(ptr, BigInt(MENU_TEAROFF)))!;
+    const menuTry = withString("", (ptr) => createWxMenu(ptr, 0n))!;
+    const menuTools1 = withString("", (ptr) => createWxMenu(ptr, 0n))!;
+    const menuTools2 = withString("", (ptr) => createWxMenu(ptr, 0n))!;
+    const menuHelp = withString("", (ptr) => createWxMenu(ptr, 0n))!;
+
+    appendMenu(menuHelp, ID_ABOUT, "&About", "Show about dialog");
+
+    appendMenu(menuTools1, ID_APPENDPROP, "Append New Property");
+    appendMenu(menuTools1, ID_APPENDCAT, "Append New Category\tCtrl-S");
+    menuTools1.AppendSeparator();
+    appendMenu(menuTools1, ID_INSERTPROP, "Insert New Property\tCtrl-I");
+    appendMenu(menuTools1, ID_INSERTCAT, "Insert New Category\tCtrl-W");
+    menuTools1.AppendSeparator();
+    appendMenu(menuTools1, ID_DELETE, "Delete Selected");
+    appendMenu(menuTools1, ID_DELETER, "Delete Random");
+    appendMenu(menuTools1, ID_DELETEALL, "Delete All");
+    menuTools1.AppendSeparator();
+    appendMenu(menuTools1, ID_SETBGCOLOUR, "Set Bg Colour");
+    appendMenu(menuTools1, ID_SETBGCOLOURRECUR, "Set Bg Colour (Recursively)");
+    appendMenu(menuTools1, ID_UNSPECIFY, "Set Value to Unspecified");
+    menuTools1.AppendSeparator();
+    appendMenu(menuTools1, ID_ENABLE, "Enable", "Toggles item's enabled state.");
+    menuTools1.Enable(ID_ENABLE, false);
+    appendMenu(menuTools1, ID_HIDE, "Hide", "Hides a property");
+    appendMenu(menuTools1, ID_SETREADONLY, "Set as Read-Only", "Set property as read-only");
+
+    appendMenu(menuTools2, ID_ITERATE1, "Iterate Over Properties");
+    appendMenu(menuTools2, ID_ITERATE2, "Iterate Over Visible Items");
+    appendMenu(menuTools2, ID_ITERATE3, "Reverse Iterate Over Properties");
+    appendMenu(menuTools2, ID_ITERATE4, "Iterate Over Categories");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_ONEXTENDEDKEYNAV, "Extend Keyboard Navigation",
+        "This will set Enter to navigate to next property, "
+        + "and allows arrow keys to navigate even when in editor control.");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_SETPROPERTYVALUE, "Set Property Value");
+    appendMenu(menuTools2, ID_CLEARMODIF, "Clear Modified Status",
+        "Clears wxPG_MODIFIED flag from all properties.");
+    menuTools2.AppendSeparator();
+    appendCheckItem(menuTools2, ID_FREEZE, "Freeze",
+        "Disables painting, auto-sorting, etc.");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_DUMPLIST, "Display Values as wxVariant List",
+        "Tests GetAllValues method and wxVariant conversion.");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_GETVALUES, "Get Property Values", "Stores all property values.");
+    appendMenu(menuTools2, ID_SETVALUES, "Set Property Values",
+        "Reverts property values to those last stored.");
+    appendMenu(menuTools2, ID_SETVALUES2, "Set Property Values 2",
+        "Adds property values that should not initially be as items (so new items are created).");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_SAVESTATE, "Save Editable State");
+    appendMenu(menuTools2, ID_RESTORESTATE, "Restore Editable State");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_ENABLECOMMONVALUES, "Enable Common Value",
+        "Enable values that are common to all properties, for selected property.");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_COLLAPSE, "Collapse Selected");
+    appendMenu(menuTools2, ID_COLLAPSEALL, "Collapse All");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_INSERTPAGE, "Add Page");
+    appendMenu(menuTools2, ID_REMOVEPAGE, "Remove Page");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_FITCOLUMNS, "Fit Columns");
+    appendCheckItem(menuTools2, ID_VETOCOLDRAG, "Veto Column Dragging");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_CHANGEFLAGSITEMS, "Change Children of FlagsProp");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_TESTINSERTCHOICE, "Test InsertPropertyChoice");
+    appendMenu(menuTools2, ID_TESTDELETECHOICE, "Test DeletePropertyChoice");
+    menuTools2.AppendSeparator();
+    appendMenu(menuTools2, ID_SETSPINCTRLEDITOR, "Use SpinCtrl Editor");
+    appendMenu(menuTools2, ID_TESTREPLACE, "Test ReplaceProperty");
+
+    appendMenu(menuTry, ID_SELECTSTYLE, "Set Window Style",
+        "Select window style flags used by the grid.");
+    appendCheckItem(menuTry, ID_ENABLELABELEDITING, "Enable label editing",
+        "This calls wxPropertyGrid::MakeColumnEditable(0)");
+    menuTry.Check(ID_ENABLELABELEDITING, labelEditingEnabled);
+    appendCheckItem(menuTry, ID_SHOWHEADER, "Enable header",
+        "This calls wxPropertyGridManager::ShowHeader()");
+    menuTry.Check(ID_SHOWHEADER, hasHeader);
+    menuTry.AppendSeparator();
+    appendRadioItem(menuTry, ID_COLOURSCHEME1, "Standard Colour Scheme");
+    appendRadioItem(menuTry, ID_COLOURSCHEME2, "White Colour Scheme");
+    appendRadioItem(menuTry, ID_COLOURSCHEME3, ".NET Colour Scheme");
+    appendRadioItem(menuTry, ID_COLOURSCHEME4, "Cream Colour Scheme");
+    menuTry.AppendSeparator();
+    appendCheckItem(menuTry, ID_CATCOLOURS, "Category Specific Colours",
+        "Switches between category-specific cell colours and default scheme "
+        + "(actually done using SetPropertyTextColour and SetPropertyBackgroundColour).");
+    menuTry.AppendSeparator();
+    appendCheckItem(menuTry, ID_STATICLAYOUT, "Static Layout",
+        "Switches between user-modifiable and static layouts.");
+    appendCheckItem(menuTry, ID_BOOL_CHECKBOX, "Render Boolean values as checkboxes",
+        "Renders Boolean values as checkboxes");
+    appendMenu(menuTry, ID_SETCOLUMNS, "Set Number of Columns");
+    appendMenu(menuTry, ID_SETVIRTWIDTH, "Set Virtual Width");
+    appendCheckItem(menuTry, ID_SETPGDISABLED, "Disable Grid");
+
+    appendMenu(menuFile, ID_RUNMINIMAL, "Run Minimal Sample");
+    appendMenu(menuFile, ID_TESTXRC, "Load from XRC\tCtrl-R");
+    menuFile.AppendSeparator();
+    appendMenu(menuFile, ID_QUIT, "E&xit\tAlt-X", "Quit this program");
+
+    const menuBar = createWxMenuBar(0);
+    if (menuBar)
+    {
+        withString("&File", (ptr) => menuBar.Append(menuFile.ptr, ptr));
+        withString("&Try These!", (ptr) => menuBar.Append(menuTry.ptr, ptr));
+        withString("&Basic", (ptr) => menuBar.Append(menuTools1.ptr, ptr));
+        withString("&Advanced", (ptr) => menuBar.Append(menuTools2.ptr, ptr));
+        withString("&Help", (ptr) => menuBar.Append(menuHelp.ptr, ptr));
+        frame.SetMenuBar(menuBar.ptr);
+    }
+
+    return {
+        menuTry,
+        menuTools1,
+        menuTools2,
+        itemEnable: menuTools1.FindItem(ID_ENABLE),
+        itemCatColours: menuTry.FindItem(ID_CATCOLOURS),
+    };
+}
+
+//-----------------------------------------------------------------------------
+// Icon and frame
+//-----------------------------------------------------------------------------
+
+let iconBundle: wxBitmapBundle | null = null;
+
+function applyIcon(frame: wxFrame): void
+{
+    const path = createWxString(__dirname + "/sample.svg");
+    try
+    {
+        const raw = wxBitmapBundle_FromSVGFile(path.ptr, 32, 32);
+        if (!raw) return;
+        iconBundle = wrapWxBitmapBundle(raw);
+        const bitmap = iconBundle.GetBitmap(32, 32);
+        if (!bitmap) return;
+        const icon = createWxIconDefault();
+        if (!icon) return;
+        icon.CopyFromBitmap(bitmap.ptr);
+        frame.SetIcon(icon.ptr);
+        icon.Delete();
+        bitmap.Delete();
+    }
+    finally
+    {
+        path.Delete();
+    }
+}
+
+function createMainFrame(): AppState | null
+{
+    const title = createWxString("wxPropertyGrid Sample");
+    let frame: wxFrame | null = null;
+    try
+    {
+        frame = createWxFrame(
+            null, ID_ANY, title.ptr, -1, -1, -1, -1,
+            MINIMIZE_BOX | MAXIMIZE_BOX | RESIZE_BORDER | SYSTEM_MENU
+            | CAPTION | TAB_TRAVERSAL | CLOSE_BOX);
+    }
+    finally
+    {
+        title.Delete();
+    }
+    if (!frame) return null;
+
+    applyIcon(frame);
+    frame.SetClientSize(frame.FromDIP(600), frame.FromDIP(800));
+    frame.Centre(BOTH);
+
+    const panel = createWxPanel(frame.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (!panel) return null;
+
+    const menus = createMenus(frame, false, false);
+
+    frame.CreateStatusBar(1, STB_DEFAULT_STYLE, ID_ANY);
+    withString("", (ptr) => frame!.SetStatusText(ptr, 0));
+
+
+    // Register all additional editors (SpinCtrl etc.).
+    wxPropertyGridInterface_RegisterAdditionalEditors();
+
+    // Register the sample multi-button editor (wxSampleMultiButtonEditor).
+    const multiEditor = createKwxPGTextCtrlEditor(null);
+    if (multiEditor)
+    {
+        const createControls = new Callback(
+            {
+                parameters: ["pointer", "pointer", "pointer", "i32", "i32", "i32", "i32", "pointer"],
+                result: "void",
+            },
+            (_f, _d, gridPtr, _propPtr, x, y, width, height, primaryPtr) =>
+            {
+                if (!gridPtr) return;
+                const px = Number(x);
+                const py = Number(y);
+                const editorWidth = Number(width);
+                const editorHeight = Number(height);
+                const buttons = createWxPGMultiButton(gridPtr, editorWidth, editorHeight);
+                if (!buttons) return;
+
+                withString("...", (ptr) => buttons.Add(ptr, -1));
+                withString("A", (ptr) => buttons.Add(ptr, -1));
+
+                const folder = wxArtProvider_GetBitmapBundle(
+                    ART_FOLDER, ART_OTHER, -1, -1);
+                if (folder)
+                {
+                    buttons.AddBitmap(folder.ptr, -1);
+                    folder.Delete();
+                }
+
+                buttons.Finalize(gridPtr, px, py);
+
+                if (primaryPtr)
+                {
+                    const primarySize = buttons.GetPrimarySize();
+                    if (primarySize)
+                    {
+                        wrapWxWindow(primaryPtr).SetSize(
+                            px, py, primarySize.GetWidth(), primarySize.GetHeight(), 0);
+                        primarySize.Delete();
+                    }
+                }
+
+                multiButtonButtons = buttons;
+                multiEditor.SetCreateControlsResult(buttons.ptr);
+            },
+        );
+        extraCallbacks.push(createControls);
+        multiEditor.SetOnCreateControls(createControls.pointer);
+
+        const onEvent = new Callback(
+            {
+                parameters: ["pointer", "pointer", "pointer", "pointer", "pointer"],
+                result: "void",
+            },
+            (_f, _d, gridPtr, _propPtr, _ctrlPtr, eventPtr) =>
+            {
+                if (!gridPtr || !eventPtr) return;
+                const event = new wxEvent(eventPtr);
+
+                if (event.GetEventType() === EVT_BUTTON)
+                {
+                    const buttons = multiButtonButtons;
+                    if (buttons)
+                    {
+                        const id = event.GetId();
+                        if (id === buttons.GetButtonId(0)) logDebug("First button pressed");
+                        else if (id === buttons.GetButtonId(1)) messageBox("Second button pressed");
+                        else if (id === buttons.GetButtonId(2)) messageBox("Third button pressed");
+                    }
+                    multiEditor.SetOnEventResult(false);
+                    return;
+                }
+
+                // Match wxPGTextCtrlEditor::OnTextCtrlEvent().
+                const isEnter = event.GetEventType() === EVT_TEXT_ENTER;
+                const modified = isEnter
+                    && wrapWxPropertyGrid(gridPtr).IsEditorsValueModified();
+                multiEditor.SetOnEventResult(modified);
+            },
+        );
+        extraCallbacks.push(onEvent);
+        multiEditor.SetOnOnEvent(onEvent.pointer);
+
+        wxPropertyGrid_RegisterEditorClass(multiEditor.ptr, false);
+    }
+
+    const state: AppState = {
+        frame,
+        panel,
+        topSizer: null,
+        btnSizer: null,
+        manager: null,
+        grid: null,
+        logWindow: null,
+        menuTry: menus.menuTry,
+        menuTools1: menus.menuTools1,
+        menuTools2: menus.menuTools2,
+        itemEnable: menus.itemEnable,
+        itemCatColours: menus.itemCatColours,
+        hasHeader: false,
+        labelEditingEnabled: false,
+        multiButtonEditor: multiEditor,
+        storedValues: null,
+        savedState: "",
+        popup: null,
+        popupPanel: null,
+        popupGrid: null,
+        popupSizer: null,
+    };
+
+    createGrid(state);
+    if (!state.manager) return null;
+
+    const topSizer = createWxBoxSizer(VERTICAL);
+    if (!topSizer) return null;
+    state.topSizer = topSizer;
+    topSizer.AddWindow(state.manager.ptr, 1, EXPAND, 0, null);
+
+    const btnSizer = createWxBoxSizer(HORIZONTAL);
+    if (!btnSizer) return null;
+    state.btnSizer = btnSizer;
+
+    withString("Should be able to move here with Tab", (ptr) =>
+    {
+        const button = createWxButton(panel.ptr, ID_ANY, ptr, -1, -1, -1, -1, 0);
+        if (button) btnSizer.AddWindow(button.ptr, 1, ALL, 10, null);
+    });
+    withString("Show Popup", (ptr) =>
+    {
+        const button = createWxButton(panel.ptr, ID_SHOWPOPUP, ptr, -1, -1, -1, -1, 0);
+        if (button) btnSizer.AddWindow(button.ptr, 1, ALL, 10, null);
+    });
+
+    topSizer.AddSizer(btnSizer.ptr, 0, EXPAND | ALL, 5, null);
+    panel.SetSizer(topSizer.ptr, true);
+    topSizer.SetSizeHints(panel.ptr);
+    panel.Layout();
+
+    const logWindow = withString("Log Messages", (ptr) =>
+        createWxLogWindow(frame!.ptr, ptr, false, true));
+    if (logWindow)
+    {
+        state.logWindow = logWindow;
+        const logFrame = logWindow.GetFrame();
+        const pos = frame.GetPosition();
+        const size = frame.GetSize();
+        if (logFrame && pos && size)
+            logFrame.Move(pos.GetX() + size.GetWidth() + 10, pos.GetY(), -1);
+        logWindow.Show(true);
+    }
+
+    bindFrameEvents(state);
+    return state;
+}
+
+//-----------------------------------------------------------------------------
+// Small property helpers
+//-----------------------------------------------------------------------------
+
+
+function setStatus(state: AppState, text: string): void
+{
+    withString(text, (ptr) => state.frame.SetStatusText(ptr, 0));
+}
+
+function selectedProperty(state: AppState): wxPGProperty | null
+{
+    return state.grid ? state.grid.GetSelection() : null;
+}
+
+function setLongByName(state: AppState, name: string, value: number): void
+{
+    if (!state.manager || !state.grid) return;
+    const prop = findProperty(state.manager, name);
+    if (prop) setValueLong(state.grid, prop, value);
+}
+
+//-----------------------------------------------------------------------------
+// Menu handlers
+//-----------------------------------------------------------------------------
+
+function onAbout(state: AppState): void
+{
+    let toolkit = "";
+    const piPtr = wxPlatformInfo_Get();
+    if (piPtr)
+    {
+        const pi = new wxPlatformInfo(piPtr);
+        toolkit = `${takeText(pi.GetPortIdName())} `
+            + `${pi.GetToolkitMajorVersion()}.`
+            + `${pi.GetToolkitMinorVersion()}.`
+            + `${pi.GetToolkitMicroVersion()}`;
+        pi.Delete();
+    }
+
+    const version = takeText(wxVersionString());
+    // The C++ sample gates these on wxUSE_UNICODE_UTF8 and __WXDEBUG__; this
+    // build is UTF-8 and release, so the literal matches propgrid.cpp.
+    const msg = "wxPropertyGrid Sample <utf-8> <release>\n\n"
+        + "Programmed by Jaakko Salli\n\n"
+        + `Using ${version} (${toolkit})\n\n`;
+
+    messageBox(msg, "About", OK | ICON_INFORMATION, state.frame.ptr);
+}
+
+function onColourScheme(state: AppState, id: number): void
+{
+    const manager = state.manager;
+    const grid = state.grid;
+    if (!manager || !grid) return;
+
+    if (id === ID_COLOURSCHEME1)
+    {
+        grid.ResetColours();
+        return;
+    }
+
+    const grey1 = createWxColourRGB(212, 208, 200, 255);
+    const grey3 = createWxColourRGB(113, 111, 100, 255);
+
+    try
+    {
+        manager.Freeze();
+        if (id === ID_COLOURSCHEME2)
+        {
+            grid.SetMarginColour(WHITE);
+            grid.SetCaptionBackgroundColour(WHITE);
+            grid.SetCellBackgroundColour(WHITE);
+            if (grey3) grid.SetCellTextColour(grey3.ptr);
+            if (grey1) grid.SetLineColour(grey1.ptr);
+        }
+        else if (id === ID_COLOURSCHEME3)
+        {
+            const grey2 = createWxColourRGB(236, 233, 216, 255);
+            try
+            {
+                if (grey1)
+                {
+                    grid.SetMarginColour(grey1.ptr);
+                    grid.SetCaptionBackgroundColour(grey1.ptr);
+                }
+                if (grey2) grid.SetLineColour(grey2.ptr);
+            }
+            finally
+            {
+                if (grey2) grey2.Delete();
+            }
+        }
+        else if (id === ID_COLOURSCHEME4)
+        {
+            const grey2 = createWxColourRGB(241, 239, 226, 255);
+            try
+            {
+                grid.SetMarginColour(WHITE);
+                grid.SetCaptionBackgroundColour(WHITE);
+                if (grey2) grid.SetCellBackgroundColour(grey2.ptr);
+                if (grey3) grid.SetCellTextColour(grey3.ptr);
+                if (grey1) grid.SetLineColour(grey1.ptr);
+            }
+            finally
+            {
+                if (grey2) grey2.Delete();
+            }
+        }
+    }
+    finally
+    {
+        manager.Thaw();
+        if (grey1) grey1.Delete();
+        if (grey3) grey3.Delete();
+    }
+}
+
+function onIterate(state: AppState, id: number): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+    const page = manager.GetCurrentPage();
+    const root = page ? page.GetRoot() : null;
+    if (!root) return;
+
+    const list: wxPGProperty[] = [];
+    const collect = (prop: wxPGProperty) => { list.push(prop); };
+
+    if (id === ID_ITERATE2) walkVisible(root, collect);
+    else if (id === ID_ITERATE4) walkCategories(root, collect);
+    else walkAll(root, collect);
+
+    if (id === ID_ITERATE3) list.reverse();
+
+    for (const prop of list)
+    {
+        const label = propLabel(prop);
+        const classInfo = prop.GetClassInfo();
+        const className = classInfo ? takeText(classInfo.GetClassNameEx()) : "";
+        const valueType = takeText(prop.GetValueType());
+        const msg = `"${label}" class = ${className}, valuetype = ${valueType}`;
+        const result = messageBox(msg, "Iterating... (press CANCEL to end)",
+            OK | CANCEL, state.frame.ptr);
+        if (result === CANCEL) break;
+    }
+}
+
+function onCollapseAll(state: AppState): void
+{
+    const manager = state.manager;
+    const grid = state.grid;
+    if (!manager || !grid) return;
+    const page = manager.GetCurrentPage();
+    const root = page ? page.GetRoot() : null;
+    if (!root) return;
+    walkAll(root, (prop) => prop.SetExpanded(false));
+    grid.Refresh(false);
+}
+
+function onDumpList(state: AppState): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+
+    // wxPropertyGridInterface::GetPropertyValues() is bound, but its wxVariant
+    // list cannot be indexed (wxVariant has no item accessor), so the same
+    // name/type/value information is collected from the property tree.
+    let text = "This only tests that wxVariant related routines do not crash.\n";
+    let index = 0;
+    walkAllPages(manager, (prop) =>
+    {
+        if (prop.IsCategory()) return;
+        const name = propName(prop);
+        const type = takeText(prop.GetValueType());
+        const value = takeText(prop.GetValueAsString());
+        text += `${index}: name="${name}"  type="${type}"  value="${value}"\n`;
+        index++;
+    });
+
+    const dialog = withString("", (ptr) =>
+        createWxDialog(state.frame.ptr, ID_ANY, ptr, -1, -1, -1, -1,
+            DEFAULT_DIALOG_STYLE | RESIZE_BORDER));
+    if (!dialog) return;
+
+    withString("wxVariant Test", (ptr) => dialog.SetTitle(ptr));
+
+    const topSizer = createWxBoxSizer(VERTICAL);
+    const rowSizer = createWxBoxSizer(HORIZONTAL);
+    if (!topSizer || !rowSizer)
+    {
+        dialog.Destroy();
+        return;
+    }
+
+    const editor = withString(text, (ptr) =>
+        createWxTextCtrl(dialog.ptr, ID_ANY, ptr, -1, -1, -1, -1,
+            BigInt(TE_MULTILINE | TE_READONLY)));
+    if (editor) rowSizer.AddWindow(editor.ptr, 1, EXPAND | ALL, 8, null);
+    topSizer.AddSizer(rowSizer.ptr, 1, EXPAND, 0, null);
+
+    const buttonRow = createWxBoxSizer(HORIZONTAL);
+    if (buttonRow)
+    {
+        withString("Ok", (ptr) =>
+        {
+            const button = createWxButton(dialog.ptr, ID_OK, ptr, -1, -1, -1, -1, 0);
+            if (button)
+            {
+                buttonRow.AddWindow(button.ptr, 0,
+                    ALIGN_CENTRE | BOTTOM | LEFT | RIGHT, 8, null);
+            }
+        });
+        topSizer.AddSizer(buttonRow.ptr, 0, ALIGN_RIGHT, 0, null);
+    }
+
+    dialog.SetSizer(topSizer.ptr, true);
+    topSizer.SetSizeHints(dialog.ptr);
+    dialog.SetSize(-1, -1, 400, 300, SIZE_USE_EXISTING);
+    dialog.Centre(BOTH);
+    dialog.ShowModal();
+    dialog.Destroy();
+}
+
+function chooseFlags(
+    state: AppState,
+    current: number,
+    defs: [string, number][],
+    message: string,
+    caption: string,
+): number | null
+{
+    const array = createArrayString(defs.map((entry) => entry[0]));
+    const selections = createWxArrayInt();
+    if (!array || !selections)
+    {
+        if (array) array.Delete();
+        if (selections) selections.Delete();
+        return null;
+    }
+
+    const values = defs.map((entry) => entry[1]);
+    for (let i = 0; i < defs.length; i++)
+    {
+        if ((current & values[i]) === values[i]) selections.Add(i);
+    }
+
+    const dialog = withStrings([message, caption], (ptrs) =>
+        createWxMultiChoiceDialog(state.frame.ptr, ptrs[0], ptrs[1],
+            defs.length, array.ptr, BigInt(CHOICEDLG_STYLE), -1, -1));
+    if (!dialog)
+    {
+        array.Delete();
+        selections.Delete();
+        return null;
+    }
+
+    dialog.SetSelections(selections.ptr);
+    if (dialog.ShowModal() === ID_CANCEL)
+    {
+        dialog.Destroy();
+        array.Delete();
+        selections.Delete();
+        return null;
+    }
+
+    selections.Clear();
+    dialog.GetSelections(selections.ptr);
+
+    let flags = 0;
+    const count = selections.GetCount();
+    for (let i = 0; i < count; i++)
+    {
+        const index = selections.Item(i);
+        if (index >= 0 && index < values.length) flags |= values[index];
+    }
+
+    dialog.Destroy();
+    array.Delete();
+    selections.Delete();
+    return flags;
+}
+
+function onSelectStyle(state: AppState): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+
+    const styleDefs: [string, number][] = [
+        ["wxPG_HIDE_CATEGORIES", PG_HIDE_CATEGORIES],
+        ["wxPG_AUTO_SORT", PG_AUTO_SORT],
+        ["wxPG_BOLD_MODIFIED", PG_BOLD_MODIFIED],
+        ["wxPG_SPLITTER_AUTO_CENTER", PG_SPLITTER_AUTO_CENTER],
+        ["wxPG_TOOLTIPS", PG_TOOLTIPS],
+        ["wxPG_STATIC_SPLITTER", PG_STATIC_SPLITTER],
+        ["wxPG_HIDE_MARGIN", PG_HIDE_MARGIN],
+        ["wxPG_LIMITED_EDITING", PG_LIMITED_EDITING],
+        ["wxPG_TOOLBAR", PG_TOOLBAR],
+        ["wxPG_DESCRIPTION", PG_DESCRIPTION],
+        ["wxPG_NO_INTERNAL_BORDER", PG_NO_INTERNAL_BORDER],
+    ];
+
+    const style = chooseFlags(state, Number(manager.GetWindowStyle()), styleDefs,
+        "Select window styles to use", "wxPropertyGrid Window Style");
+    if (style === null) return;
+
+    const extraDefs: [string, number][] = [
+        ["wxPG_EX_INIT_NOCAT", PG_EX_INIT_NOCAT],
+        ["wxPG_EX_NO_FLAT_TOOLBAR", PG_EX_NO_FLAT_TOOLBAR],
+        ["wxPG_EX_MODE_BUTTONS", PG_EX_MODE_BUTTONS],
+        ["wxPG_EX_HELP_AS_TOOLTIPS", PG_EX_HELP_AS_TOOLTIPS],
+        ["wxPG_EX_NATIVE_DOUBLE_BUFFERING", PG_EX_NATIVE_DOUBLE_BUFFERING],
+        ["wxPG_EX_AUTO_UNSPECIFIED_VALUES", PG_EX_AUTO_UNSPECIFIED_VALUES],
+        ["wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES", PG_EX_WRITEONLY_BUILTIN_ATTRIBUTES],
+        ["wxPG_EX_HIDE_PAGE_BUTTONS", PG_EX_HIDE_PAGE_BUTTONS],
+        ["wxPG_EX_MULTIPLE_SELECTION", PG_EX_MULTIPLE_SELECTION],
+        ["wxPG_EX_ENABLE_TLP_TRACKING", PG_EX_ENABLE_TLP_TRACKING],
+        ["wxPG_EX_NO_TOOLBAR_DIVIDER", PG_EX_NO_TOOLBAR_DIVIDER],
+        ["wxPG_EX_TOOLBAR_SEPARATOR", PG_EX_TOOLBAR_SEPARATOR],
+        ["wxPG_EX_ALWAYS_ALLOW_FOCUS", PG_EX_ALWAYS_ALLOW_FOCUS],
+    ];
+
+    const extraStyle = chooseFlags(state, Number(manager.GetExtraStyle()), extraDefs,
+        "Select extra window styles to use", "wxPropertyGrid Extra Style");
+    if (extraStyle === null) return;
+
+    replaceGrid(state, style, extraStyle);
+}
+
+function onSetColumns(state: AppState): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+
+    const message = createWxString("Enter number of columns (2-20).");
+    const prompt = createWxString("Columns:");
+    const caption = createWxString("Change Columns");
+    try
+    {
+        const value = wxGetNumberFromUser(
+            message.ptr, prompt.ptr, caption.ptr,
+            BigInt(manager.GetColumnCount(-1)), 2n, 20n,
+            state.frame.ptr, -1, -1);
+        if (value >= 2n) manager.SetColumnCount(Number(value), -1);
+    }
+    finally
+    {
+        message.Delete();
+        prompt.Delete();
+        caption.Delete();
+    }
+}
+
+function onSetVirtualWidth(state: AppState): void
+{
+    const manager = state.manager;
+    const grid = state.grid;
+    if (!manager || !grid) return;
+
+    const page = manager.GetCurrentPage();
+    const pageState = page ? page.GetStatePtr() : null;
+    const oldWidth = pageState ? pageState.GetVirtualWidth() : -1;
+
+    const message = createWxString("Enter virtual width (-1-2000).");
+    const prompt = createWxString("Width:");
+    const caption = createWxString("Change Virtual Width");
+    let newWidth = oldWidth;
+    try
+    {
+        const dialog = createWxNumberEntryDialog(state.frame.ptr,
+            message.ptr, prompt.ptr, caption.ptr, BigInt(oldWidth), -1n, 2000n, -1, -1);
+        if (dialog)
+        {
+            if (dialog.ShowModal() === ID_OK) newWidth = Number(dialog.GetValue());
+            dialog.Destroy();
+        }
+    }
+    finally
+    {
+        message.Delete();
+        prompt.Delete();
+        caption.Delete();
+    }
+
+    if (newWidth !== oldWidth) grid.SetVirtualWidth(newWidth);
+}
+
+function onChangeFlagsItems(state: AppState): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+    const prop = findProperty(manager, "Window Styles");
+    if (!prop) return;
+
+    while (prop.GetChildCount() > 0) prop.DeleteChoice(prop.GetChildCount() - 1);
+
+    const choices: [string, number][] = [
+        ["Fast", 0x1], ["Powerful", 0x2], ["Safe", 0x4], ["Sleek", 0x8],
+    ];
+    for (const [label, value] of choices)
+    {
+        const text = createWxString(label);
+        prop.AddChoice(text.ptr, value);
+        text.Delete();
+    }
+}
+
+function onEnableDisable(state: AppState): void
+{
+    const manager = state.manager;
+    const prop = selectedProperty(state);
+    if (!manager || !prop) return;
+
+    if (manager.IsPropertyEnabled(prop.ptr))
+    {
+        manager.DisableProperty(prop.ptr);
+        withString("Enable", (ptr) => state.itemEnable?.SetItemLabel(ptr));
+    }
+    else
+    {
+        manager.EnableProperty(prop.ptr, true);
+        withString("Disable", (ptr) => state.itemEnable?.SetItemLabel(ptr));
+    }
+}
+
+function onInsertProp(state: AppState, category: boolean): void
+{
+    const manager = state.manager;
+    const grid = state.grid;
+    if (!manager || !grid) return;
+
+    const root = grid.GetRoot();
+    if (root && !root.HasAnyChild())
+    {
+        messageBox("No items to relate - first add some with Append.");
+        return;
+    }
+
+    const selected = selectedProperty(state);
+    if (!selected)
+    {
+        messageBox("First select a property - new one will be inserted right before that.");
+        return;
+    }
+
+    const parent = manager.GetPropertyParent(selected.ptr);
+    if (!parent) return;
+    const index = selected.GetIndexInParent();
+
+    const label = uniqueLabel(state, category ? "Category" : "Property");
+    withString(label, (ptr) =>
+    {
+        if (category)
+        {
+            const prop = createWxPropertyCategory(ptr);
+            if (prop) manager.Insert2(parent.ptr, index, prop.ptr);
+        }
+        else
+        {
+            const empty = createWxString("");
+            try
+            {
+                const prop = createWxStringProperty(ptr, PG_LABEL, empty.ptr);
+                if (prop) manager.Insert2(parent.ptr, index, prop.ptr);
+            }
+            finally
+            {
+                empty.Delete();
+            }
+        }
+    });
+}
+
+function uniqueLabel(state: AppState, base: string): string
+{
+    // Mirrors GenerateUniquePropertyLabel(), which uses GetPropertyByLabel().
+    const manager = state.manager;
+    if (!manager) return base;
+
+    const exists = (text: string): boolean =>
+        withString(text, (ptr) => manager.GetPropertyByLabel(ptr) !== null);
+
+    let label = base;
+    let count = -1;
+    while (exists(label))
+    {
+        count++;
+        label = `${base}${count}`;
+    }
+    return label;
+}
+
+function onAppendProp(state: AppState, category: boolean): void
+{
+    const grid = state.grid;
+    if (!grid) return;
+
+    const label = uniqueLabel(state, category ? "Category" : "Property");
+    withString(label, (ptr) =>
+    {
+        if (category)
+        {
+            const prop = createWxPropertyCategory(ptr);
+            if (prop) grid.Append(prop.ptr);
+        }
+        else
+        {
+            const empty = createWxString("");
+            try
+            {
+                const prop = createWxStringProperty(ptr, PG_LABEL, empty.ptr);
+                if (prop) grid.Append(prop.ptr);
+            }
+            finally
+            {
+                empty.Delete();
+            }
+        }
+    });
+    grid.Refresh(false);
+}
+
+function onSetPropertyValue(state: AppState): void
+{
+    const grid = state.grid;
+    const prop = selectedProperty(state);
+    if (!grid || !prop) return;
+
+    const value = getUserText("Enter new value:", "Input text", "", null, -1, -1, true);
+    setValueString(grid, prop, value);
+}
+
+function onInsertDeleteChoice(state: AppState, insert: boolean): void
+{
+    const prop = selectedProperty(state);
+    if (prop && prop.GetChildCount() > 0)
+    {
+        const position = Math.floor(prop.GetChildCount() / 2);
+        if (insert)
+        {
+            const text = createWxString("New Choice");
+            prop.InsertChoice(text.ptr, position, -1);
+            text.Delete();
+        }
+        else
+        {
+            prop.DeleteChoice(position);
+        }
+        return;
+    }
+    messageBox("First select a property with some choices.");
+}
+
+//-----------------------------------------------------------------------------
+// Popup (PropertyGridPopup)
+//-----------------------------------------------------------------------------
+
+function makePopupString(label: string, value: string): wxPGProperty | null
+{
+    return withStrings([label, value], (ptrs) =>
+        createWxStringProperty(ptrs[0], PG_LABEL, ptrs[1]));
+}
+
+function makePopupColour(label: string, colour: Pointer): wxPGProperty | null
+{
+    return withString(label, (ptr) => createWxColourProperty(ptr, PG_LABEL, colour));
+}
+
+function makePopupArray(label: string, values: string[]): wxPGProperty | null
+{
+    const array = charPtrArray(values);
+    return withString(label, (ptr) =>
+        createWxArrayStringProperty(ptr, PG_LABEL, values.length, array.ptr));
+}
+
+function makePopupFont(label: string): wxPGProperty | null
+{
+    const font = createWxFontDefault();
+    if (!font) return null;
+    try
+    {
+        return withString(label, (ptr) => createWxFontProperty(ptr, PG_LABEL, font.ptr));
+    }
+    finally
+    {
+        font.Delete();
+    }
+}
+
+function fitPopup(state: AppState): void
+{
+    const grid = state.popupGrid;
+    const panel = state.popupPanel;
+    const popup = state.popup;
+    const sizer = state.popupSizer;
+    if (!grid || !panel || !popup || !sizer) return;
+
+    const root = grid.GetRoot();
+    const last = grid.GetLastItem(PG_ITERATE_DEFAULT);
+    const first = root ? root.Item(0) : null;
+    let height = 0;
+    if (root && first && last)
+    {
+        const rect = grid.GetPropertyRect(first.ptr, last.ptr);
+        if (rect) height = rect.GetHeight();
+    }
+    height += 2 * grid.GetVerticalSpacing();
+
+    let width = 0;
+    for (let column = 0; column < grid.GetColumnCount() - 1; column++)
+    {
+        const position = grid.GetSplitterPosition(column);
+        width += position > 0 ? position : 0;
+    }
+    width += grid.GetMarginWidth();
+    if (width <= 0) width = 400;
+
+    grid.SetMinSize(Math.max(100, width), Math.max(100, height));
+    grid.ResetColumnSizes(true);
+    sizer.Fit(panel.ptr);
+    sizer.Fit(popup.ptr);
+}
+
+function onShowPopup(state: AppState): void
+{
+    if (state.popup)
+    {
+        state.popup.Destroy();
+        state.popup = null;
+        state.popupPanel = null;
+        state.popupGrid = null;
+        state.popupSizer = null;
+        return;
+    }
+
+    const popupPtr = createWxPopupWindow(state.frame.ptr, BORDER_NONE | WANTS_CHARS);
+    if (!popupPtr) return;
+
+    // createWxPopupWindow returns a Pointer; wrap it with the generated class.
+    const popup = new wxPopupWindow(popupPtr, true);
+    state.popup = popup;
+
+    const panel = createWxScrolledWindow(popupPtr, ID_ANY, -1, -1, 200, 200,
+        HSCROLL | VSCROLL);
+    if (!panel) return;
+    state.popupPanel = panel;
+
+    const grid = createWxPropertyGrid(panel.ptr, ID_POPUPGRID, -1, -1, 400, 400,
+        PG_SPLITTER_AUTO_CENTER);
+    if (!grid) return;
+    state.popupGrid = grid;
+    grid.SetColumnCount(3);
+
+    const prop = makePopupString("test_name", "test_value");
+    if (prop)
+    {
+        grid.Append(prop.ptr);
+        attrString(prop, "Units", "type");
+
+        const sub1 = makePopupString("sub_name1", "sub_value1");
+        if (sub1)
+        {
+            prop.AppendChild(sub1.ptr);
+            const white = createWxColourRGB(255, 255, 255, 255);
+            if (white)
+            {
+                const cellColour = makePopupColour("Cell Colour", white.ptr);
+                if (cellColour) sub1.AppendChild(cellColour.ptr);
+                white.Delete();
+            }
+        }
+
+        const sub2 = makePopupString("sub_name2", "sub_value2");
+        if (sub2)
+        {
+            prop.AppendChild(sub2.ptr);
+            const child21 = makePopupString("sub_name21", "sub_value21");
+            if (child21) sub2.AppendChild(child21.ptr);
+            const child22 = makePopupString("sub_name22", "sub_value22");
+            if (child22) sub2.AppendChild(child22.ptr);
+            const child23 = makePopupString("sub_name23", "sub_value23");
+            if (child23) sub2.AppendChild(child23.ptr);
+            sub2.SetExpanded(false);
+        }
+
+        const arrayDouble = makePopupArray("ArrayDoubleProperty",
+            ["-1", "-0.5", "0", "0.5", "1"]);
+        if (arrayDouble) prop.AppendChild(arrayDouble.ptr);
+
+        const font = makePopupFont("Font");
+        if (font) prop.AppendChild(font.ptr);
+    }
+
+    const sizer = createWxBoxSizer(VERTICAL);
+    if (!sizer) return;
+    state.popupSizer = sizer;
+    sizer.AddWindow(grid.ptr, 0, EXPAND, 0, null);
+    panel.SetAutoLayout(true);
+    panel.SetSizer(sizer.ptr, true);
+
+    fitPopup(state);
+
+    const point = kwxGetMousePosition();
+    if (point)
+    {
+        const position = new wxPoint(point);
+        popup.Position(position.GetX(), position.GetY(), 0, 0);
+        position.Delete();
+    }
+
+    popup.Show();
+
+    bindEvent(popup, ID_POPUPGRID, ID_POPUPGRID, EVT_PG_ITEM_COLLAPSED, () =>
+    {
+        logMessage("OnCollapse");
+        fitPopup(state);
+    });
+    bindEvent(popup, ID_POPUPGRID, ID_POPUPGRID, EVT_PG_ITEM_EXPANDED, () =>
+    {
+        logMessage("OnExpand");
+        fitPopup(state);
+    });
+}
+
+//-----------------------------------------------------------------------------
+// Minimal sample (propgrid_minimal.cpp)
+//-----------------------------------------------------------------------------
+
+function showMinimalFrame(parent: Pointer): void
+{
+    const title = createWxString("PropertyGrid Test");
+    let frame: wxFrame | null = null;
+    try
+    {
+        frame = createWxFrame(parent, ID_ANY, title.ptr, -1, -1, -1, -1,
+            DEFAULT_FRAME_STYLE);
+    }
+    finally
+    {
+        title.Delete();
+    }
+    if (!frame) return;
+
+    const menu = withString("", (ptr) => createWxMenu(ptr, 0n));
+    const menuBar = createWxMenuBar(0);
+    if (menu && menuBar)
+    {
+        appendMenu(menu, ID_HIGHEST, "Action");
+        withString("Action", (ptr) => menuBar.Append(menu.ptr, ptr));
+        frame.SetMenuBar(menuBar.ptr);
+    }
+
+    const grid = createWxPropertyGrid(frame.ptr, ID_ANY, -1, -1, 400, 400,
+        PG_SPLITTER_AUTO_CENTER | PG_BOLD_MODIFIED);
+    if (grid)
+    {
+        withString("String Property", (label) =>
+        {
+            const empty = createWxString("");
+            try
+            {
+                const prop = createWxStringProperty(label, PG_LABEL, empty.ptr);
+                if (prop) grid.Append(prop.ptr);
+            }
+            finally
+            {
+                empty.Delete();
+            }
+        });
+        withString("Int Property", (label) =>
+        {
+            const prop = createWxIntProperty(label, PG_LABEL, 0);
+            if (prop) grid.Append(prop.ptr);
+        });
+        withString("Bool Property", (label) =>
+        {
+            const prop = createWxBoolProperty(label, PG_LABEL, false);
+            if (prop) grid.Append(prop.ptr);
+        });
+    }
+
+    frame.SetClientSize(frame.FromDIP(400), frame.FromDIP(300));
+
+    bindEvent(frame, ID_HIGHEST, ID_HIGHEST, EVT_MENU, () => { /* empty */ });
+    bindEvent(frame, ID_ANY, ID_ANY, EVT_PG_CHANGED, (eventPtr) =>
+    {
+        const event = new wxPropertyGridEvent(eventPtr);
+        const prop = event.GetProperty();
+        if (prop)
+        {
+            logVerbose("OnPropertyGridChange(" + propName(prop)
+                + ", value=" + takeText(prop.GetValueAsString()) + ")");
+        }
+        else
+        {
+            logVerbose("OnPropertyGridChange(nullptr)");
+        }
+    });
+    bindEvent(frame, ID_ANY, ID_ANY, EVT_PG_CHANGING, (eventPtr) =>
+    {
+        const event = new wxPropertyGridEvent(eventPtr);
+        const prop = event.GetProperty();
+        if (prop) logVerbose("OnPropertyGridChanging(" + propName(prop) + ")");
+    });
+
+    frame.Show();
+}
+
+//-----------------------------------------------------------------------------
+// Events of the custom (Examples) page.  In the C++ sample these come from
+// wxMyPropertyGridPage's event table.  The handlers are shared by every page
+// instance so repeated grid replacements do not consume new callback slots.
+function bindCustomPageEvents(state: AppState, page: kwxPropertyGridPage): void
+{
+    pageState = state;
+
+    if (!pageEventHandlers)
+    {
+        const make = (
+            type: number,
+            handler: (eventPtr: Pointer) => void,
+        ): SharedPageHandler =>
+        {
+            const callback = new Callback(
+                { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+                (_f, _d, eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    handler(eventPtr);
+                },
+            );
+            const closure = createWxClosure(callback.pointer, null);
+            extraCallbacks.push(callback);
+            return { callback, closure: closure!, type };
+        };
+
+        pageEventHandlers = [
+            make(EVT_PG_SELECTED, (eventPtr) =>
+            {
+                const event = new wxPropertyGridEvent(eventPtr);
+                const prop = event.GetProperty();
+                if (!prop) return;
+                const current = pageState?.manager?.GetCurrentPage() ?? null;
+                const selected = current ? current.IsPropertySelected(prop.ptr) : false;
+                logDebug(`wxMyPropertyGridPage::OnPropertySelect('${propName(prop)}' is `
+                    + `${selected ? "selected" : "unselected"}`);
+            }),
+            make(EVT_PG_CHANGING, (eventPtr) =>
+            {
+                const event = new wxPropertyGridEvent(eventPtr);
+                const prop = event.GetProperty();
+                if (!prop) return;
+                const value = event.GetValue();
+                logVerbose(`wxMyPropertyGridPage::OnPropertyChanging('${propName(prop)}', to value '`
+                    + `${value ? takeText(value.GetString()) : ""}')`);
+            }),
+            make(EVT_PG_CHANGED, (eventPtr) =>
+            {
+                const event = new wxPropertyGridEvent(eventPtr);
+                const prop = event.GetProperty();
+                if (!prop) return;
+                logVerbose(`wxMyPropertyGridPage::OnPropertyChange('${propName(prop)}', to value '`
+                    + `${takeText(prop.GetDisplayedString())}')`);
+            }),
+            make(EVT_PG_PAGE_CHANGED, () =>
+            {
+                logDebug("wxMyPropertyGridPage::OnPageChange()");
+            }),
+        ];
+    }
+
+    for (const handler of pageEventHandlers)
+    {
+        page.Bind(ID_ANY, ID_ANY, handler.type, handler.closure.ptr);
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Frame event bindings
+//-----------------------------------------------------------------------------
+
+function bindFrameEvents(state: AppState): void
+{
+    bindEvent(state.frame, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, () =>
+    {
+        exitMainLoop();
+    });
+
+    bindEvent(state.frame, ID_ANY, ID_ANY, EVT_MENU, (eventPtr) =>
+    {
+        const event = new wxCommandEvent(eventPtr);
+        handleMenu(state, event.GetId(), event.IsChecked());
+    });
+
+    bindEvent(state.frame, ID_ANY, ID_ANY, EVT_IDLE, (eventPtr) =>
+    {
+        new wxEvent(eventPtr).Skip(true);
+    });
+
+    bindEvent(state.frame, ID_ANY, ID_ANY, EVT_MOVE, (eventPtr) =>
+    {
+        onMove(state);
+        new wxEvent(eventPtr).Skip(true);
+    });
+
+    bindEvent(state.frame, ID_ANY, ID_ANY, EVT_SIZE, (eventPtr) =>
+    {
+        onResize(state);
+        new wxEvent(eventPtr).Skip(true);
+    });
+
+    bindEvent(state.frame, ID_ANY, ID_ANY, EVT_CONTEXT_MENU, () =>
+    {
+        // FormMain::OnContextMenu() only logs in debug builds and does not Skip.
+    });
+
+    bindEvent(state.frame, PGID, PGID, EVT_PG_SELECTED, (eventPtr) =>
+    {
+        onPropertyGridSelect(state, new wxPropertyGridEvent(eventPtr));
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_CHANGED, (eventPtr) =>
+    {
+        onPropertyGridChange(state, new wxPropertyGridEvent(eventPtr));
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_CHANGING, (eventPtr) =>
+    {
+        onPropertyGridChanging(state, new wxPropertyGridEvent(eventPtr));
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_HIGHLIGHTED, () => { /* empty */ });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_RIGHT_CLICK, (eventPtr) =>
+    {
+        onPropertyGridClick(state, new wxPropertyGridEvent(eventPtr), true);
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_DOUBLE_CLICK, (eventPtr) =>
+    {
+        onPropertyGridClick(state, new wxPropertyGridEvent(eventPtr), false);
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_PAGE_CHANGED, () =>
+    {
+        onPageChange(state);
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_LABEL_EDIT_BEGIN, (eventPtr) =>
+    {
+        onLabelEdit(new wxPropertyGridEvent(eventPtr), true);
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_LABEL_EDIT_ENDING, (eventPtr) =>
+    {
+        onLabelEdit(new wxPropertyGridEvent(eventPtr), false);
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_ITEM_COLLAPSED, () =>
+    {
+        logMessage("Item was Collapsed");
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_ITEM_EXPANDED, () =>
+    {
+        logMessage("Item was Expanded");
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_COL_BEGIN_DRAG, (eventPtr) =>
+    {
+        const event = new wxPropertyGridEvent(eventPtr);
+        if (state.menuTools2.IsChecked(ID_VETOCOLDRAG))
+        {
+            logMessage(`Splitter ${event.GetColumn()} resize was vetoed`);
+            event.Veto();
+        }
+        else
+        {
+            logDebug(`Splitter ${event.GetColumn()} resize began`);
+        }
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_COL_DRAGGING, () => { /* empty */ });
+    bindEvent(state.frame, PGID, PGID, EVT_PG_COL_END_DRAG, (eventPtr) =>
+    {
+        logDebug(`Splitter ${new wxPropertyGridEvent(eventPtr).GetColumn()} resize ended`);
+    });
+
+    bindEvent(state.frame, PGID, PGID, EVT_BUTTON, () =>
+    {
+        onGridButton(state);
+    });
+    bindEvent(state.frame, ID_SHOWPOPUP, ID_SHOWPOPUP, EVT_BUTTON, () =>
+    {
+        onShowPopup(state);
+    });
+    bindEvent(state.frame, PGID, PGID, EVT_TEXT, (eventPtr) =>
+    {
+        new wxEvent(eventPtr).Skip(true);
+    });
+    bindEvent(state.frame, ID_ANY, ID_ANY, EVT_KEY_DOWN, () => { /* empty */ });
+    bindEvent(state.frame, ID_ANY, ID_ANY, EVT_KEY_UP, () => { /* empty */ });
+    bindEvent(state.frame, ID_CATCOLOURS, ID_CATCOLOURS, EVT_UPDATE_UI, () =>
+    {
+        onCatColoursUpdateUI(state);
+    });
+}
+
+//-----------------------------------------------------------------------------
+// Property-grid event handlers
+//-----------------------------------------------------------------------------
+
+function onPropertyGridSelect(state: AppState, event: wxPropertyGridEvent): void
+{
+    const prop = event.GetProperty();
+    if (prop)
+    {
+        state.itemEnable?.Enable(true);
+        withString(prop.IsEnabled() ? "Disable" : "Enable",
+            (ptr) => state.itemEnable?.SetItemLabel(ptr));
+        setStatus(state, "Selected: " + propLabel(prop));
+    }
+    else
+    {
+        state.itemEnable?.Enable(false);
+    }
+}
+
+function onPropertyGridChanging(state: AppState, event: wxPropertyGridEvent): void
+{
+    const prop = event.GetProperty();
+    if (!prop) return;
+    const name = propName(prop);
+    if (name === "Font")
+    {
+        const value = event.GetValue();
+        const type = value ? takeText(value.GetType()) : "";
+        const result = messageBox(
+            `'${name}' is about to change (to variant of type '${type}')\n\nAllow or deny?`,
+            "Testing wxEVT_PG_CHANGING", YES_NO, state.manager?.ptr ?? null);
+        if (result === NO)
+        {
+            if (event.CanVeto()) event.Veto();
+            // Gap: wxPropertyGridEvent::SetValidationFailureBehavior() is not
+            // bound (only the grid-level interface method is), so the cell would
+            // still be marked. The veto itself is reproduced.
+        }
+    }
+}
+
+function onPropertyGridChange(state: AppState, event: wxPropertyGridEvent): void
+{
+    const prop = event.GetProperty();
+    if (!prop) return;
+    const name = propName(prop);
+    const value = event.GetValue();
+    if (!value || value.IsNull()) return;
+
+    const frame = state.frame;
+    if (name === "X")
+        frame.SetSize(Number(value.GetLong()), -1, -1, -1, SIZE_USE_EXISTING);
+    else if (name === "Y")
+        frame.SetSize(-1, Number(value.GetLong()), -1, -1, SIZE_USE_EXISTING);
+    else if (name === "Width")
+        frame.SetSize(-1, -1, Number(value.GetLong()), -1, SIZE_USE_EXISTING);
+    else if (name === "Height")
+        frame.SetSize(-1, -1, -1, Number(value.GetLong()), SIZE_USE_EXISTING);
+    else if (name === "Label")
+    {
+        const text = takeText(value.GetString());
+        withString(text, (ptr) => frame.SetTitle(ptr));
+    }
+    else if (name === "Font")
+    {
+        const obj = value.GetWxObjectPtr();
+        if (obj)
+        {
+            const font = new wxFont(obj.ptr, true);
+            state.grid?.SetFont(font.ptr);
+        }
+    }
+    else if (name === "Margin Colour" || name === "Cell Colour"
+        || name === "Line Colour" || name === "Cell Text Colour")
+    {
+        const cpvPtr = wxVariant_GetColourPropertyValue(value.ptr);
+        if (!cpvPtr) return;
+        const cpv = new wxColourPropertyValue(cpvPtr);
+        const colour = cpv.GetColour();
+        if (colour)
+        {
+            const owned = new wxColour(colour.ptr);
+            const grid = state.grid;
+            if (grid)
+            {
+                if (name === "Margin Colour") grid.SetMarginColour(owned.ptr);
+                else if (name === "Cell Colour") grid.SetCellBackgroundColour(owned.ptr);
+                else if (name === "Line Colour") grid.SetLineColour(owned.ptr);
+                else grid.SetCellTextColour(owned.ptr);
+            }
+            owned.Delete();
+        }
+        cpv.Delete();
+    }
+}
+
+function onPropertyGridClick(
+    state: AppState, event: wxPropertyGridEvent, right: boolean,
+): void
+{
+    const prop = event.GetProperty();
+    if (!prop)
+    {
+        setStatus(state, "");
+        return;
+    }
+    const prefix = right ? "Right-clicked: " : "Double-clicked: ";
+    setStatus(state, prefix + propLabel(prop) + ", name=" + propName(prop));
+}
+
+function onPageChange(state: AppState): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+    const pageName = takeText(manager.GetPageName(manager.GetSelectedPage()));
+    setStatus(state, "Page Changed: " + pageName);
+}
+
+function onLabelEdit(event: wxPropertyGridEvent, begin: boolean): void
+{
+    const prop = event.GetProperty();
+    if (!prop) return;
+    const label = propLabel(prop);
+    if (begin) logMessage(`wxPG_EVT_LABEL_EDIT_BEGIN(${label})`);
+    else logMessage(`wxPG_EVT_LABEL_EDIT_ENDING(${label})`);
+}
+
+function onGridButton(state: AppState): void
+{
+    const prop = selectedProperty(state);
+    if (!prop)
+    {
+        messageBox("SHOULD NOT HAPPEN!!!");
+        return;
+    }
+    setStatus(state, "Button clicked: " + propLabel(prop) + ", name=" + propName(prop));
+}
+
+function onCatColoursUpdateUI(state: AppState): void
+{
+    const grid = state.grid;
+    if (!grid) return;
+    const check = (name: string): boolean =>
+        withString(name, (ptr) => grid.GetPropertyByName(ptr) !== null);
+    const checkable = check("Appearance")
+        && check("PositionCategory")
+        && check("Environment")
+        && check("More Examples");
+    state.itemCatColours?.SetCheckable(checkable);
+}
+
+function onMove(state: AppState): void
+{
+    if (!state.manager) return;
+    const pos = state.frame.GetPosition();
+    if (!pos) return;
+    setLongByName(state, "X", pos.GetX());
+    setLongByName(state, "Y", pos.GetY());
+    // "Position" is a wxPointProperty in the C++ sample; it is substituted.
+}
+
+function onResize(state: AppState): void
+{
+    if (!state.manager || !state.grid) return;
+    const size = state.frame.GetSize();
+    if (!size) return;
+
+    for (const name of ["Width", "Height"])
+    {
+        const prop = findProperty(state.manager, name);
+        if (!prop || prop.IsValueUnspecified()) continue;
+        setValueLong(state.grid, prop, name === "Width" ? size.GetWidth() : size.GetHeight());
+    }
+    // "Size" is a wxSizeProperty in the C++ sample; it is substituted.
+}
+
+//-----------------------------------------------------------------------------
+// Property operations (Basic / Advanced menu)
+//-----------------------------------------------------------------------------
+
+function onSetReadOnly(state: AppState): void
+{
+    const prop = selectedProperty(state);
+    if (!prop)
+    {
+        messageBox("First select a property.");
+        return;
+    }
+    state.manager?.SetPropertyReadOnly(prop.ptr, true, PG_RECURSE);
+}
+
+function onHide(state: AppState): void
+{
+    const prop = selectedProperty(state);
+    if (!prop)
+    {
+        messageBox("First select a property.");
+        return;
+    }
+    state.manager?.HideProperty(prop.ptr, true, PG_RECURSE);
+}
+
+function onClearModifiedStatus(state: AppState): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+    manager.ClearModifiedStatus();
+    manager.Refresh(false);
+}
+
+function onDeleteProperty(state: AppState, random: boolean): void
+{
+    const manager = state.manager;
+    const grid = state.grid;
+    if (!manager || !grid) return;
+
+    if (!random)
+    {
+        const prop = selectedProperty(state);
+        if (!prop)
+        {
+            messageBox("First select a property.");
+            return;
+        }
+        manager.DeleteProperty(prop.ptr);
+        return;
+    }
+
+    // Delete a random non-category property.
+    let prop = grid.GetRoot();
+    for (;;)
+    {
+        if (!prop || !prop.HasAnyChild()) break;
+        const index = Math.floor(Math.random() * prop.GetChildCount());
+        prop = prop.Item(index);
+        if (prop && !prop.IsCategory())
+        {
+            const label = propLabel(prop);
+            manager.DeleteProperty(prop.ptr);
+            logMessage("Property deleted: " + label);
+            break;
+        }
+    }
+}
+
+function onSetPropertyBackgroundColour(state: AppState, recurse: boolean): void
+{
+    const grid = state.grid;
+    const prop = selectedProperty(state);
+    if (!grid) return;
+    if (!prop)
+    {
+        messageBox("First select a property.");
+        return;
+    }
+
+    const initial = createWxColourRGB(255, 255, 255, 255);
+    const chosen = createWxColourEmpty();
+    if (!initial || !chosen)
+    {
+        initial?.Delete();
+        chosen?.Delete();
+        return;
+    }
+
+    wxGetColourFromUser(state.frame.ptr, initial.ptr, chosen.ptr);
+    if (chosen.IsOk())
+    {
+        grid.SetPropertyBackgroundColour(prop.ptr, chosen.ptr,
+            recurse ? PG_RECURSE : PG_DONT_RECURSE);
+    }
+    chosen.Delete();
+    initial.Delete();
+}
+
+function onCatColours(state: AppState, checked: boolean): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+    const grid = manager.GetGrid();
+    if (!grid) return;
+
+    // The C++ sample checks and colours only properties on the current page.
+    const find = (name: string): wxPGProperty | null =>
+        withString(name, (ptr) => grid.GetPropertyByName(ptr));
+
+    for (const name of ["Appearance", "PositionCategory", "Environment", "More Examples"])
+    {
+        if (!find(name))
+        {
+            messageBox("First switch to 'Standard Items' page!");
+            return;
+        }
+    }
+
+    const setText = (name: string, r: number, g: number, b: number, flags: number): void =>
+    {
+        const prop = find(name);
+        if (!prop) return;
+        const colour = createWxColourRGB(r, g, b, 255);
+        if (!colour) return;
+        grid.SetPropertyTextColour(prop.ptr, colour.ptr, flags);
+        colour.Delete();
+    };
+    const setBackground = (name: string, r: number, g: number, b: number): void =>
+    {
+        const prop = find(name);
+        if (!prop) return;
+        const colour = createWxColourRGB(r, g, b, 255);
+        if (!colour) return;
+        grid.SetPropertyBackgroundColour(prop.ptr, colour.ptr, PG_RECURSE);
+        colour.Delete();
+    };
+    const reset = (name: string, flags: number): void =>
+    {
+        const prop = find(name);
+        if (prop) grid.SetPropertyColoursToDefault(prop.ptr, flags);
+    };
+
+    manager.Freeze();
+    if (checked)
+    {
+        setText("Appearance", 255, 0, 0, PG_DONT_RECURSE);
+        setBackground("Appearance", 255, 255, 183);
+        setText("Appearance", 255, 0, 183, PG_RECURSE);
+        setText("PositionCategory", 0, 255, 0, PG_DONT_RECURSE);
+        setBackground("PositionCategory", 255, 226, 190);
+        setText("PositionCategory", 255, 0, 190, PG_RECURSE);
+        setText("Environment", 0, 0, 255, PG_DONT_RECURSE);
+        setBackground("Environment", 208, 240, 175);
+        setText("Environment", 255, 255, 255, PG_RECURSE);
+        setBackground("More Examples", 172, 237, 255);
+        setText("More Examples", 172, 0, 255, PG_RECURSE);
+    }
+    else
+    {
+        // SetPropertyColoursToDefault() defaults to DontRecurse in wxWidgets.
+        reset("Appearance", PG_DONT_RECURSE);
+        reset("Appearance", PG_RECURSE);
+        reset("PositionCategory", PG_DONT_RECURSE);
+        reset("PositionCategory", PG_RECURSE);
+        reset("Environment", PG_DONT_RECURSE);
+        reset("Environment", PG_RECURSE);
+        reset("More Examples", PG_RECURSE);
+    }
+    manager.Thaw();
+    manager.Refresh(false);
+}
+
+function onSetSpinCtrlEditor(state: AppState): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+    const prop = selectedProperty(state);
+    if (prop)
+    {
+        // wxPGEditor_SpinCtrl, resolved the way SetPropertyEditor(id, name) does.
+        withString("SpinCtrl", (ptr) =>
+        {
+            const editor = wxPropertyGridInterface_GetEditorByName(ptr);
+            if (editor) manager.SetPropertyEditor(prop.ptr, editor);
+        });
+    }
+    else
+    {
+        messageBox("First select a property");
+    }
+}
+
+function onTestReplace(state: AppState): void
+{
+    const manager = state.manager;
+    const grid = state.grid;
+    if (!manager || !grid) return;
+
+    const prop = selectedProperty(state);
+    if (!prop)
+    {
+        messageBox("First select a property");
+        return;
+    }
+
+    let name = "ReplaceFlagsProperty";
+    let index = 0;
+    while (findProperty(manager, name))
+    {
+        name = `ReplaceFlagsProperty ${++index}`;
+    }
+
+    const value = Number(wxGetLocalTime() % 15n) + 1;
+    const labels = ["Flag 0", "Flag 1", "Flag 2", "Flag 3"];
+    const values = [0x0001, 0x0002, 0x0004, 0x0008];
+    const labelArray = charPtrArray(labels);
+    const valueArray = intArray(values);
+    const replacement = withString(name, (ptr) => createWxFlagsProperty(
+        ptr, PG_LABEL, labels.length, labelArray.ptr, values.length, valueArray.ptr, value));
+    if (!replacement) return;
+
+    const newId = manager.ReplaceProperty(prop.ptr, replacement.ptr);
+    if (!newId) return;
+
+    withString("UseCheckbox", (key) =>
+    {
+        const flag = variantBool(true);
+        if (!flag) return;
+        manager.SetPropertyAttribute(newId.ptr, key, flag.ptr, PG_RECURSE);
+        flag.Delete();
+    });
+    grid.SelectProperty(newId.ptr, false);
+}
+
+function onGetValues(state: AppState): void
+{
+    const grid = state.grid;
+    if (!grid) return;
+    const root = grid.GetRoot();
+    state.storedValues?.Delete();
+    state.storedValues = withString("Test", (ptr) => grid.GetPropertyValues(
+        ptr, root ? root.ptr : null, PG_KEEP_STRUCTURE | PG_INC_ATTRIBUTES));
+}
+
+function onSetValues(state: AppState): void
+{
+    const grid = state.grid;
+    if (!grid) return;
+    const stored = state.storedValues;
+    if (stored && withString("list", (ptr) => stored.IsType(ptr)))
+    {
+        grid.SetPropertyValues(stored.ptr, null);
+        return;
+    }
+    messageBox("First use Get Property Values.");
+}
+
+function onSetValues2(state: AppState): void
+{
+    const grid = state.grid;
+    if (!grid) return;
+
+    const list = createWxVariant();
+    if (!list) return;
+    try
+    {
+        list.NullList();
+
+        const longValue = variantLong(1234);
+        if (longValue)
+        {
+            withString("VariantLong", (ptr) => longValue.SetName(ptr));
+            list.Append(longValue.ptr);
+            longValue.Delete();
+        }
+
+        const boolValue = variantBool(true);
+        if (boolValue)
+        {
+            withString("VariantBool", (ptr) => boolValue.SetName(ptr));
+            list.Append(boolValue.ptr);
+            boolValue.Delete();
+        }
+
+        const stringValue = variantString("Test Text");
+        if (stringValue)
+        {
+            withString("VariantString", (ptr) => stringValue.SetName(ptr));
+            list.Append(stringValue.ptr);
+            stringValue.Delete();
+        }
+
+        grid.SetPropertyValues(list.ptr, null);
+    }
+    finally
+    {
+        list.Delete();
+    }
+}
+
+function onSaveState(state: AppState): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+    state.savedState = takeText(manager.SaveEditableState(PG_ALL_STATES));
+    logDebug(`Saved editable state string: "${state.savedState}"`);
+}
+
+function onRestoreState(state: AppState): void
+{
+    const manager = state.manager;
+    if (!manager) return;
+    withString(state.savedState, (ptr) =>
+        manager.RestoreEditableState(ptr, PG_ALL_STATES));
+}
+
+function onTestXRC(state: AppState): void
+{
+    const xmlPtr = wxXmlResource_Get();
+    if (!xmlPtr)
+    {
+        messageBox("Sorry, XRC support is not available in this build.");
+        return;
+    }
+
+    const xml = wrapWxXmlResource(xmlPtr);
+    if (!xrcInitialized)
+    {
+        xrcInitialized = true;
+        xml.InitAllHandlers();
+        // This needs to be done in addition to initializing the standard handlers.
+        const handler = createWxPropertyGridXmlHandler();
+        if (handler) xml.AddHandler(handler.ptr);
+    }
+
+    if (!withString(__dirname + "/propgrid.xrc", (ptr) => xml.Load(ptr)))
+    {
+        logError("XRC file couldn't be loaded.");
+        return;
+    }
+
+    const frame = withString("propgrid", (ptr) => xml.LoadFrame(state.frame.ptr, ptr));
+    if (!frame)
+    {
+        logError("Property grid frame couldn't be loaded from XRC");
+        return;
+    }
+    frame.Show();
+}
+
+//-----------------------------------------------------------------------------
+// Menu dispatcher
+//-----------------------------------------------------------------------------
+
+function handleMenu(state: AppState, id: number, checked: boolean): void
+{
+    switch (id)
+    {
+        case ID_ABOUT: onAbout(state); break;
+        case ID_QUIT: state.frame.Close(false); break;
+
+        case ID_APPENDPROP: onAppendProp(state, false); break;
+        case ID_APPENDCAT: onAppendProp(state, true); break;
+        case ID_INSERTPROP: onInsertProp(state, false); break;
+        case ID_INSERTCAT: onInsertProp(state, true); break;
+
+        case ID_DELETE: onDeleteProperty(state, false); break;
+        case ID_DELETER: onDeleteProperty(state, true); break;
+        case ID_DELETEALL: state.grid?.Clear(); break;
+
+        case ID_ENABLE: onEnableDisable(state); break;
+        case ID_SETREADONLY: onSetReadOnly(state); break;
+        case ID_HIDE: onHide(state); break;
+        case ID_BOOL_CHECKBOX:
+            if (state.manager)
+            {
+                withString("UseCheckbox", (key) =>
+                {
+                    const value = variantBool(checked);
+                    if (!value) return;
+                    state.manager!.SetPropertyAttributeAll(key, value.ptr);
+                    value.Delete();
+                });
+            }
+            break;
+
+        case ID_UNSPECIFY:
+        {
+            const prop = selectedProperty(state);
+            if (prop && state.grid)
+            {
+                state.grid.SetPropertyValueUnspecified(prop.ptr);
+                prop.RefreshEditor();
+            }
+            break;
+        }
+
+        case ID_ITERATE1:
+        case ID_ITERATE2:
+        case ID_ITERATE3:
+        case ID_ITERATE4:
+            onIterate(state, id);
+            break;
+
+        case ID_CLEARMODIF: onClearModifiedStatus(state); break;
+
+        case ID_FREEZE:
+            if (state.manager)
+            {
+                if (checked)
+                {
+                    if (!state.manager.IsFrozen()) state.manager.Freeze();
+                }
+                else if (state.manager.IsFrozen())
+                {
+                    state.manager.Thaw();
+                    state.manager.Refresh(false);
+                }
+            }
+            break;
+
+        case ID_DUMPLIST: onDumpList(state); break;
+        case ID_COLOURSCHEME1:
+        case ID_COLOURSCHEME2:
+        case ID_COLOURSCHEME3:
+        case ID_COLOURSCHEME4:
+            onColourScheme(state, id);
+            break;
+        case ID_CATCOLOURS: onCatColours(state, checked); break;
+        case ID_SETBGCOLOUR: onSetPropertyBackgroundColour(state, false); break;
+        case ID_SETBGCOLOURRECUR: onSetPropertyBackgroundColour(state, true); break;
+
+        case ID_STATICLAYOUT:
+            if (state.manager)
+            {
+                let style = Number(state.manager.GetWindowStyle());
+                if (checked) style |= PG_STATIC_LAYOUT;
+                else style &= ~PG_STATIC_LAYOUT;
+                state.manager.SetWindowStyleFlag(BigInt(style));
+            }
+            break;
+
+        case ID_POPULATE1:
+        case ID_POPULATE2:
+        {
+            const manager = state.manager;
+            const grid = state.grid;
+            if (!manager || !grid) break;
+            grid.Clear();
+            grid.Freeze();
+            if (id === ID_POPULATE1)
+            {
+                const page = findPage(manager, "Standard Items");
+                if (page)
+                {
+                    populateStandardItems(page, grid, takeText(state.frame.GetTitle()),
+                        Number(state.frame.GetWindowStyle()));
+                }
+            }
+            else
+            {
+                const page = findPage(manager, "wxWidgets Library Config");
+                if (page) populateLibraryConfig(page, grid, manager);
+            }
+            grid.Thaw();
+            break;
+        }
+
+        case ID_COLLAPSE:
+        {
+            const prop = selectedProperty(state);
+            if (prop) state.manager?.Collapse(prop.ptr);
+            break;
+        }
+        case ID_COLLAPSEALL: onCollapseAll(state); break;
+
+        case ID_GETVALUES: onGetValues(state); break;
+        case ID_SETVALUES: onSetValues(state); break;
+        case ID_SETVALUES2: onSetValues2(state); break;
+
+        case ID_FITCOLUMNS: onFitColumns(state); break;
+        case ID_CHANGEFLAGSITEMS: onChangeFlagsItems(state); break;
+        case ID_TESTINSERTCHOICE: onInsertDeleteChoice(state, true); break;
+        case ID_TESTDELETECHOICE: onInsertDeleteChoice(state, false); break;
+        case ID_INSERTPAGE:
+            if (state.manager)
+                withString("New Page", (ptr) => state.manager!.AddPage(ptr, null));
+            break;
+        case ID_REMOVEPAGE:
+            if (state.manager) state.manager.RemovePage(state.manager.GetSelectedPage());
+            break;
+        case ID_SETSPINCTRLEDITOR: onSetSpinCtrlEditor(state); break;
+        case ID_SETPROPERTYVALUE: onSetPropertyValue(state); break;
+        case ID_TESTREPLACE: onTestReplace(state); break;
+        case ID_SETCOLUMNS: onSetColumns(state); break;
+        case ID_SETVIRTWIDTH: onSetVirtualWidth(state); break;
+        case ID_SETPGDISABLED:
+            if (state.manager) state.manager.Enable(!checked);
+            break;
+        case ID_TESTXRC: onTestXRC(state); break;
+        case ID_ENABLECOMMONVALUES:
+        {
+            const prop = selectedProperty(state);
+            if (prop) prop.EnableCommonValue(true);
+            else messageBox("First select a property");
+            break;
+        }
+        case ID_SELECTSTYLE: onSelectStyle(state); break;
+        case ID_SAVESTATE: onSaveState(state); break;
+        case ID_RESTORESTATE: onRestoreState(state); break;
+        case ID_RUNMINIMAL: showMinimalFrame(state.frame.ptr); break;
+        case ID_ENABLELABELEDITING:
+            state.labelEditingEnabled = checked;
+            state.grid?.MakeColumnEditable(0, state.labelEditingEnabled);
+            break;
+        case ID_VETOCOLDRAG:
+            // The check state is queried in the drag handler.
+            break;
+        case ID_SHOWHEADER:
+            state.hasHeader = checked;
+            if (state.manager)
+            {
+                state.manager.ShowHeader(state.hasHeader);
+                if (state.hasHeader)
+                    withString("Units", (ptr) => state.manager?.SetColumnTitle(2, ptr));
+            }
+            break;
+        case ID_ONEXTENDEDKEYNAV:
+            if (state.grid)
+            {
+                state.grid.AddActionTrigger(PG_ACTION_NEXT_PROPERTY, WXK_RETURN, 0);
+                state.grid.DedicateKey(WXK_RETURN);
+                state.grid.DedicateKey(WXK_UP);
+                state.grid.DedicateKey(WXK_DOWN);
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+function onFitColumns(state: AppState): void
+{
+    const manager = state.manager;
+    const grid = state.grid;
+    if (!manager || !grid) return;
+    const page = manager.GetCurrentPage();
+    if (!page) return;
+
+    manager.SetWindowStyleFlag(manager.GetWindowStyle()
+        & ~BigInt(PG_SPLITTER_AUTO_CENTER));
+
+    const oldGridSize = grid.GetClientSize();
+    const oldFrameSize = state.frame.GetSize();
+    if (!oldGridSize || !oldFrameSize) return;
+
+    state.frame.SetSize(-1, -1, 1000, oldFrameSize.GetHeight(), SIZE_USE_EXISTING);
+    const newSize = page.FitColumns();
+    if (!newSize) return;
+
+    const dx = oldFrameSize.GetWidth() - oldGridSize.GetWidth();
+    const dy = oldFrameSize.GetHeight() - oldGridSize.GetHeight();
+    newSize.IncBy(dx, dy);
+    state.frame.SetSize(-1, -1, newSize.GetWidth(), newSize.GetHeight(), SIZE_USE_EXISTING);
+}
+
+//-----------------------------------------------------------------------------
+// Entry point
+//-----------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("wxPropertyGrid Sample");
+    initAllImageHandlers();
+
+    const state = createMainFrame();
+    if (!state)
+    {
+        shutdown();
+        return 1;
+    }
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    state.storedValues?.Delete();
+    for (const handler of boundHandlers) handler.callback.close();
+    for (const callback of extraCallbacks) callback.close();
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

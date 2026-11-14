@@ -1,0 +1,309 @@
+// statbmp.kwxts — port of wxSamples/src/widgets/statbmp.cpp
+//
+// The native and generic wxStaticBitmap implementations, their scale modes and
+// the wxPathList lookup for the test image are all used as in the C++ sample.
+
+import {
+    ALIGN_CENTRE,
+    ALL,
+    ART_MISSING_IMAGE,
+    ART_OTHER,
+    createWxBitmapFromImage,
+    createWxBoxSizer,
+    createWxFilePickerCtrl,
+    createWxFileNameFromPath,
+    createWxGenericStaticBitmap,
+    createWxImageFromFile,
+    createWxPathList,
+    createWxRadioBox,
+    createWxStaticBitmap,
+    EVT_FILEPICKER_CHANGED,
+    EVT_LEFT_DOWN,
+    EVT_RADIOBOX,
+    EXPAND,
+    FLP_DEFAULT_STYLE,
+    HORIZONTAL,
+    ID_ANY,
+    PATH_NATIVE,
+    RA_SPECIFY_COLS,
+    readAndDeleteWxString,
+    VERTICAL,
+    wxArtProvider_GetBitmap,
+    wxBitmap,
+    wxFilePickerCtrl,
+    wxGenericStaticBitmap,
+    wxInitAllImageHandlers,
+    wxRadioBox,
+    wxSizer,
+    wxStaticBitmap,
+    wxWindow,
+    wrapWxWindow,
+} from "kwx";
+import { Pointer, pointerOf } from "kwx/platform";
+
+import {
+    addSizer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    logError,
+    logMessage,
+    makeStaticBoxSizer,
+    StaticBoxSizerParts,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+/**
+ * Builds the `char**` array expected by wxRadioBox_Create.  The returned
+ * buffers must stay reachable until the native call returns.
+ */
+function makeRadioBox(
+    parent: Pointer,
+    caption: string,
+    items: string[],
+    dimension: number,
+    style: number,
+): wxRadioBox
+{
+    const buffers: Uint8Array[] = [];
+    const pointers = new BigUint64Array(items.length);
+
+    for (let index = 0; index < items.length; index++)
+    {
+        const bytes = new TextEncoder().encode(items[index] + "\0");
+        buffers.push(bytes);
+        const address = pointerOf(bytes);
+        pointers[index] = address === null ? 0n : address;
+    }
+
+    const choices = pointerOf(pointers);
+
+    const box = withString(caption, (ptr) =>
+        createWxRadioBox(
+            parent, ID_ANY, ptr, -1, -1, -1, -1,
+            items.length, choices, dimension, style,
+        ));
+
+    // Keep the string buffers alive until the constructor has copied them.
+    void buffers;
+    return box!;
+}
+
+export class StatBmpPage extends WidgetsPage
+{
+    private statBmp: wxStaticBitmap | wxGenericStaticBitmap | null = null;
+    private filePicker: wxFilePickerCtrl | null = null;
+    private radio: wxRadioBox | null = null;
+    private scaleRadio: wxRadioBox | null = null;
+    private sbsizer: StaticBoxSizerParts | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/statbmp");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.statBmp;
+    }
+
+    override createContent(): void
+    {
+        const radio = makeRadioBox(
+            this.page.ptr, "Implementation", ["native", "generic"],
+            0, RA_SPECIFY_COLS);
+        this.radio = radio;
+
+        const scaleRadio = makeRadioBox(
+            this.page.ptr, "Scale Mode",
+            ["None", "Fill", "Aspect Fit", "Aspect Fill"],
+            0, RA_SPECIFY_COLS);
+        this.scaleRadio = scaleRadio;
+
+        // wxString testImage; wxPathList pathlist; pathlist.FindValidPath()
+        let testImage = "";
+        const pathList = createWxPathList();
+        if (pathList)
+        {
+            for (const directory of [".", "..", "../image", "../../../samples/image"])
+            {
+                withString(directory, (ptr) => pathList.Add(ptr));
+            }
+
+            const found = withString("toucan.png", (ptr) =>
+                pathList.FindValidPath(ptr));
+            const foundPath = found ? readAndDeleteWxString(found.ptr) : "";
+            if (foundPath)
+            {
+                const fileName = withString(foundPath, (ptr) =>
+                    createWxFileNameFromPath(ptr, PATH_NATIVE));
+                if (fileName)
+                {
+                    if (fileName.FileExists())
+                    {
+                        const fullPath = fileName.GetFullPath(PATH_NATIVE);
+                        testImage = fullPath
+                            ? readAndDeleteWxString(fullPath.ptr)
+                            : foundPath;
+                    }
+                    fileName.Delete();
+                }
+            }
+            pathList.Delete();
+        }
+
+        this.filePicker = withString(testImage, (ptr) =>
+            createWxFilePickerCtrl(
+                this.page.ptr, ID_ANY, -1, -1, -1, -1,
+                ptr, null, null, BigInt(FLP_DEFAULT_STYLE)));
+
+        const sbsizer = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "wxStaticBitmap inside");
+        this.sbsizer = sbsizer;
+
+        // leftsizer->Add(m_radio, Expand().Border()) and the other two items.
+        const leftSizer = createWxBoxSizer(VERTICAL)!;
+        addWin(leftSizer, radio, 0, EXPAND, border());
+        addWin(leftSizer, scaleRadio, 0, EXPAND, border());
+        if (this.filePicker)
+        {
+            addWin(leftSizer, wrapWxWindow(this.filePicker.ptr), 0, EXPAND, border());
+        }
+
+        const topSizer = createWxBoxSizer(HORIZONTAL)!;
+        addSizer(topSizer, leftSizer, 0, ALL, border());
+        addSizer(topSizer, sbsizer.sizer, 0, ALIGN_CENTRE, 0);
+
+        this.page.SetSizer(topSizer.ptr, false);
+
+        wxInitAllImageHandlers();
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_FILEPICKER_CHANGED, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateWidget();
+        });
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_RADIOBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateWidget();
+        });
+
+        this.statBmp = null;
+        this.recreateWidget();
+    }
+
+    override recreateWidget(): void
+    {
+        const sbsizer = this.sbsizer;
+        if (!sbsizer)
+        {
+            return;
+        }
+
+        // wxDELETE(m_statbmp)
+        sbsizer.sizer.Clear(true /* delete windows */);
+
+        let bitmap: wxBitmap | null = null;
+
+        const pathValue = this.filePicker ? this.filePicker.GetPath() : null;
+        const filePath = pathValue ? readAndDeleteWxString(pathValue.ptr) : "";
+        if (filePath)
+        {
+            const image = withString(filePath, (ptr) => createWxImageFromFile(ptr));
+            if (image)
+            {
+                if (image.IsOk())
+                {
+                    bitmap = createWxBitmapFromImage(image.ptr, -1);
+                }
+                else
+                {
+                    logMessage(`Reading image from file '${filePath}' failed.`);
+                }
+                image.Delete();
+            }
+        }
+
+        if (!bitmap)
+        {
+            // Show at least something.
+            bitmap = wxArtProvider_GetBitmap(ART_MISSING_IMAGE, ART_OTHER, -1, -1);
+        }
+
+        if (!bitmap)
+        {
+            // wxStaticBitmap_Create() dereferences the bitmap unconditionally.
+            return;
+        }
+
+        const useGeneric = this.radio ? this.radio.GetSelection() !== 0 : false;
+
+        const created: wxStaticBitmap | wxGenericStaticBitmap | null = useGeneric
+            ? createWxGenericStaticBitmap(
+                sbsizer.box.ptr, ID_ANY, bitmap.ptr,
+                -1, -1, -1, -1, attrs.defaultFlags)
+            : createWxStaticBitmap(
+                sbsizer.box.ptr, ID_ANY, bitmap.ptr,
+                -1, -1, -1, -1, attrs.defaultFlags);
+        this.statBmp = created;
+
+        if (!created)
+        {
+            bitmap.Delete();
+            return;
+        }
+
+        this.notifyWidgetRecreation(created);
+
+        const scaleMode = this.scaleRadio ? this.scaleRadio.GetSelection() : 0;
+        created.SetScaleMode(scaleMode);
+        if (created.GetScaleMode() !== scaleMode)
+        {
+            logError("Scale mode not supported by current implementation");
+        }
+
+        const topSizer: wxSizer | null = this.page.GetSizer();
+        if (topSizer)
+        {
+            const sbsizerItem = topSizer.GetItemSizer(sbsizer.sizer.ptr, true);
+            if (sbsizerItem)
+            {
+                if (scaleMode === 0)
+                {
+                    sbsizerItem.SetProportion(0);
+                    sbsizerItem.SetFlag(ALIGN_CENTRE);
+                }
+                else
+                {
+                    sbsizerItem.SetProportion(1);
+                    sbsizerItem.SetFlag(EXPAND);
+                }
+            }
+        }
+
+        addWin(sbsizer.sizer, created, 1, EXPAND, 0);
+        if (topSizer)
+        {
+            topSizer.Layout();
+        }
+
+        bindEvent(created, ID_ANY, ID_ANY, EVT_LEFT_DOWN, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            logMessage("wxStaticBitmap clicked.");
+        });
+
+        // Needed when switching implementations/bitmaps on some platforms.
+        created.Refresh(true);
+
+        bitmap.Delete();
+    }
+}
+
+export function createStatBmpPage(parent: Pointer): WidgetsPage
+{
+    return new StatBmpPage(parent);
+}

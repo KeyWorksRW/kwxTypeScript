@@ -1,0 +1,793 @@
+// fontpanel.kwxts — FontPanel and FontCanvas from wxSamples/src/font/font.cpp
+//
+// FontPanel holds the font-attribute controls; FontCanvas paints the character
+// table. Both are plain composed helpers: every control is created with a
+// createWx* factory and owned by its parent window.
+//
+// wxFontInfo is not bound, so FontPanel::GetFontInfo() is reproduced with the
+// legacy wxFont(int, family, style, weight, underlined, face, encoding)
+// constructor followed by SetFractionalPointSize() and SetNumericWeight().
+// The legacy constructor converts its weight through GetNumericWeightOf(),
+// which asserts on non-multiples of 100, so a normal weight is passed there
+// and the exact numeric weight is applied through the setter.
+
+import {
+    ALIGN_CENTER_HORIZONTAL,
+    ALIGN_CENTER_VERTICAL,
+    BOTTOM,
+    EXPAND,
+    FONTFAMILY_DECORATIVE,
+    FONTFAMILY_DEFAULT,
+    FONTFAMILY_MODERN,
+    FONTFAMILY_ROMAN,
+    FONTFAMILY_SCRIPT,
+    FONTFAMILY_SWISS,
+    FONTFAMILY_TELETYPE,
+    FONTENCODING_DEFAULT,
+    FONTSTYLE_ITALIC,
+    FONTSTYLE_NORMAL,
+    FONTSTYLE_SLANT,
+    FONTWEIGHT_BOLD,
+    FONTWEIGHT_EXTRAHEAVY,
+    FONTWEIGHT_EXTRABOLD,
+    FONTWEIGHT_EXTRALIGHT,
+    FONTWEIGHT_HEAVY,
+    FONTWEIGHT_LIGHT,
+    FONTWEIGHT_MAX,
+    FONTWEIGHT_MEDIUM,
+    FONTWEIGHT_NORMAL,
+    FONTWEIGHT_SEMIBOLD,
+    FONTWEIGHT_THIN,
+    LEFT,
+    ID_ANY,
+    ID_APPLY,
+    NORMAL_FONT,
+    SP_ARROW_KEYS,
+    TAB_TRAVERSAL,
+    TE_PROCESS_ENTER,
+    TOP,
+    VERTICAL,
+    WHITE_BRUSH,
+    createWxBoxSizer,
+    createWxButton,
+    createWxCheckBox,
+    createWxChoice,
+    createWxClientDC,
+    createWxColourFromUnsignedInt,
+    createWxFont,
+    createWxFontDefault,
+    createWxFlexGridSizer,
+    createWxPaintDC,
+    createWxPanel,
+    createWxSpinCtrl,
+    createWxSpinCtrlDouble,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    lib,
+    readWxString,
+    wxChoice,
+    wxCheckBox,
+    wxColour,
+    wxFont,
+    wxPanel,
+    wxPen,
+    wxSpinCtrl,
+    wxSpinCtrlDouble,
+    wxStaticText,
+    wxString,
+    wxTextCtrl,
+    wxWindow,
+} from "kwx";
+import { pointerOf, Pointer } from "kwx/platform";
+
+/** FontPanel::Family, in the same consecutive order. */
+const FAMILY_DEFAULT = 0;
+const FAMILY_DECORATIVE = 1;
+const FAMILY_ROMAN = 2;
+const FAMILY_SCRIPT = 3;
+const FAMILY_SWISS = 4;
+const FAMILY_MODERN = 5;
+const FAMILY_TELETYPE = 6;
+
+/** FontPanel::Style. */
+const STYLE_NORMAL = 0;
+const STYLE_ITALIC = 1;
+const STYLE_SLANT = 2;
+
+/** FontPanel::Weight. */
+const WEIGHT_THIN = 0;
+const WEIGHT_EXTRALIGHT = 1;
+const WEIGHT_LIGHT = 2;
+const WEIGHT_NORMAL = 3;
+const WEIGHT_MEDIUM = 4;
+const WEIGHT_SEMIBOLD = 5;
+const WEIGHT_BOLD = 6;
+const WEIGHT_EXTRABOLD = 7;
+const WEIGHT_HEAVY = 8;
+const WEIGHT_EXTRAHEAVY = 9;
+
+/** Must be in sync with the Family enum, as in the original. */
+const FAMILY_NAMES: readonly string[] = [
+    "Default",
+    "Decorative",
+    "Roman",
+    "Script",
+    "Swiss",
+    "Modern",
+    "Teletype",
+];
+
+/** Must be in sync with the Style enum. */
+const STYLE_NAMES: readonly string[] = ["Normal", "Italic", "Slant"];
+
+/** Must be in sync with the Weight enum. */
+const WEIGHT_NAMES: readonly string[] = [
+    "Thin",
+    "Extra light",
+    "Light",
+    "Normal",
+    "Medium",
+    "Semi-bold",
+    "Bold",
+    "Extra bold",
+    "Heavy",
+    "Extra heavy",
+];
+
+/** wxFontFamily values indexed by FontPanel::Family. */
+const FAMILY_VALUES: readonly number[] = [
+    FONTFAMILY_DEFAULT,
+    FONTFAMILY_DECORATIVE,
+    FONTFAMILY_ROMAN,
+    FONTFAMILY_SCRIPT,
+    FONTFAMILY_SWISS,
+    FONTFAMILY_MODERN,
+    FONTFAMILY_TELETYPE,
+];
+
+export interface FontPanelState
+{
+    readonly panel: wxPanel;
+    readonly faceName: wxTextCtrl;
+    readonly choiceFamily: wxChoice;
+    readonly spinPointSize: wxSpinCtrlDouble;
+    readonly choiceStyle: wxChoice;
+    readonly choiceWeight: wxChoice;
+    readonly spinWeight: wxSpinCtrl;
+    readonly checkUnderlined: wxCheckBox;
+    readonly checkStrikethrough: wxCheckBox;
+    readonly checkFixedWidth: wxCheckBox;
+    readonly labelInfo: wxStaticText;
+
+    /** Updated by the face-name / family handlers. */
+    useFamily: boolean;
+    /** Updated by the weight-choice / weight-spin handlers. */
+    useNumericWeight: boolean;
+}
+
+// ---------------------------------------------------------------------------
+// String helpers
+// ---------------------------------------------------------------------------
+
+/** Call fn with a temporary wxString and release it on every path. */
+export function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/**
+ * Read a wxString returned by a generated getter.
+ *
+ * The generated bindings wrap getter results in *borrowed* wxString objects
+ * (`new wxString(rawPtr, true)`), so `Delete()` on them is a no-op and the
+ * buffer is owned by wxWidgets. Handing such a wrapper to
+ * readAndDeleteWxString() would delete an unowned pointer, so read through the
+ * pointer instead and leave ownership alone.
+ */
+export function readString(value: wxString | null): string
+{
+    return value ? readWxString(value.ptr) : "";
+}
+
+/**
+ * Copy a wxFont. The binding has no copy constructor, but
+ * SetNativeFontInfo(GetNativeFontInfoDesc()) is the documented round-trip and
+ * reproduces every attribute wxWidgets serializes.
+ *
+ * Returns an owned font; the caller must call Delete().
+ */
+export function cloneFont(font: wxFont): wxFont | null
+{
+    const copy = createWxFontDefault();
+    if (!copy)
+    {
+        return null;
+    }
+
+    const desc = readString(font.GetNativeFontInfoDesc());
+    const ok = withString(desc, (ptr) => copy.SetNativeFontInfo(ptr));
+    if (!ok || !fontIsOk(copy))
+    {
+        copy.Delete();
+        return null;
+    }
+
+    return copy;
+}
+
+/** Copy a wxColour. Returns an owned colour; the caller must call Delete(). */
+export function cloneColour(colour: wxColour): wxColour | null
+{
+    if (!colour.IsOk())
+    {
+        return null;
+    }
+
+    return createWxColourFromUnsignedInt(colour.GetUnsignedInt());
+}
+
+// ---------------------------------------------------------------------------
+// Boolean accessors
+//
+// kwxFFI declares these functions as returning bool, while the generated
+// declarations read them as i32. On x64 the callee only defines the low byte
+// of the return register, so `(value !== 0)` can report a false positive for
+// false. Masking the low byte is the ABI-correct test for a C++ bool.
+// ---------------------------------------------------------------------------
+
+export function fontIsOk(font: wxFont): boolean
+{
+    return ((lib.symbols.wxFont_IsOk(font.ptr) as number) & 0xff) !== 0;
+}
+
+export function fontUnderlined(font: wxFont): boolean
+{
+    return (font.GetUnderlined() & 0xff) !== 0;
+}
+
+export function fontStrikethrough(font: wxFont): boolean
+{
+    return ((lib.symbols.wxFont_GetStrikethrough(font.ptr) as number) & 0xff) !== 0;
+}
+
+export function fontFixedWidth(font: wxFont): boolean
+{
+    return ((lib.symbols.wxFont_IsFixedWidth(font.ptr) as number) & 0xff) !== 0;
+}
+
+// ---------------------------------------------------------------------------
+// FontPanel
+// ---------------------------------------------------------------------------
+
+function createLabel(parent: Pointer, text: string): wxStaticText | null
+{
+    const value = createWxString(text);
+    const label = createWxStaticText(
+        parent, ID_ANY, value.ptr, -1, -1, -1, -1, 0,
+    );
+    value.Delete();
+    return label;
+}
+
+function appendChoiceItem(choice: wxChoice, text: string): void
+{
+    withString(text, (ptr) => choice.Append(ptr));
+}
+
+/** GetTextExtent(text).x for a window. */
+function windowTextWidth(window: wxWindow, text: string): number
+{
+    const x = new Int32Array(1);
+    const y = new Int32Array(1);
+    const value = createWxString(text);
+    window.GetTextExtent(value.ptr, pointerOf(x), pointerOf(y), null, null, null);
+    value.Delete();
+    return x[0];
+}
+
+/**
+ * FontPanel::FontPanel(wxWindow* parent).
+ *
+ * border is wxSizerFlags::GetDefaultBorder(); doubleBorder is the rounded
+ * wxSizerFlags::DoubleBorder() size, exactly as computed by wxWidgets.
+ */
+export function createFontPanel(
+    parent: Pointer,
+    border: number,
+    doubleBorder: number,
+): FontPanelState | null
+{
+    // wxPanel(parent) uses wxTAB_TRAVERSAL.
+    const panel = createWxPanel(parent, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL);
+    if (!panel)
+    {
+        return null;
+    }
+
+    const empty = createWxString("");
+
+    // m_textFaceName = new wxTextCtrl(..., wxTE_PROCESS_ENTER);
+    const faceName = createWxTextCtrl(
+        panel.ptr, ID_ANY, empty.ptr, -1, -1, -1, -1,
+        BigInt(TE_PROCESS_ENTER),
+    );
+
+    // m_choiceFamily = new wxChoice(..., familiesNames);
+    // wxChoice's item-array constructor needs a char**; appending one by one
+    // produces the same list in the same order.
+    const choiceFamily = createWxChoice(
+        panel.ptr, ID_ANY, -1, -1, -1, -1, 0, null, 0,
+    );
+
+    // m_spinPointSize = new wxSpinCtrlDouble(..., wxSP_ARROW_KEYS,
+    //                                        1.0, 100.0, 10.0, 0.1);
+    const spinPointSize = createWxSpinCtrlDouble(
+        panel.ptr, ID_ANY, empty.ptr, -1, -1, -1, -1,
+        SP_ARROW_KEYS, 1.0, 100.0, 10.0, 0.1,
+    );
+
+    // m_choiceStyle = new wxChoice(..., stylesNames);
+    const choiceStyle = createWxChoice(
+        panel.ptr, ID_ANY, -1, -1, -1, -1, 0, null, 0,
+    );
+
+    // m_choiceWeight = new wxChoice(..., weightsNames);
+    const choiceWeight = createWxChoice(
+        panel.ptr, ID_ANY, -1, -1, -1, -1, 0, null, 0,
+    );
+
+    // m_spinWeight = new wxSpinCtrl(..., wxSP_ARROW_KEYS, 1, wxFONTWEIGHT_MAX);
+    const spinWeight = createWxSpinCtrl(
+        panel.ptr, ID_ANY, empty.ptr, -1, -1, -1, -1,
+        BigInt(SP_ARROW_KEYS), 1, FONTWEIGHT_MAX, 0,
+    );
+
+    // m_checkUnderlined / m_checkStrikethrough / m_checkFixedWidth (empty labels)
+    const checkUnderlined = createWxCheckBox(
+        panel.ptr, ID_ANY, empty.ptr, -1, -1, -1, -1, 0,
+    );
+    const checkStrikethrough = createWxCheckBox(
+        panel.ptr, ID_ANY, empty.ptr, -1, -1, -1, -1, 0,
+    );
+    const checkFixedWidth = createWxCheckBox(
+        panel.ptr, ID_ANY, empty.ptr, -1, -1, -1, -1, 0,
+    );
+
+    // m_labelInfo = new wxStaticText(this, wxID_ANY, "\n\n\n");
+    const labelInfo = createLabel(panel.ptr, "\n\n\n");
+
+    empty.Delete();
+
+    if (!faceName || !choiceFamily || !spinPointSize || !choiceStyle ||
+        !choiceWeight || !spinWeight || !checkUnderlined ||
+        !checkStrikethrough || !checkFixedWidth || !labelInfo)
+    {
+        return null;
+    }
+
+    for (const name of FAMILY_NAMES)
+    {
+        appendChoiceItem(choiceFamily, name);
+    }
+    for (const name of STYLE_NAMES)
+    {
+        appendChoiceItem(choiceStyle, name);
+    }
+    for (const name of WEIGHT_NAMES)
+    {
+        appendChoiceItem(choiceWeight, name);
+    }
+
+    // m_spinPointSize->SetInitialSize(
+    //     m_spinPointSize->GetSizeFromTextSize(GetTextExtent("999.9").x));
+    {
+        const width = new Int32Array(1);
+        const height = new Int32Array(1);
+        const textWidth = windowTextWidth(panel, "999.9");
+        spinPointSize.GetSizeFromTextSize(
+            textWidth, -1, pointerOf(width), pointerOf(height),
+        );
+        spinPointSize.SetInitialSize(width[0], height[0]);
+    }
+
+    // m_spinWeight->SetInitialSize(
+    //     m_spinWeight->GetSizeFromTextSize(GetTextExtent("9999").x));
+    {
+        const width = new Int32Array(1);
+        const height = new Int32Array(1);
+        const textWidth = windowTextWidth(panel, "9999");
+        spinWeight.GetSizeFromTextSize(
+            textWidth, -1, pointerOf(width), pointerOf(height),
+        );
+        spinWeight.SetInitialSize(width[0], height[0]);
+    }
+
+    // m_checkFixedWidth->Disable(); // Can't be changed by the user.
+    checkFixedWidth.Disable();
+
+    const state: FontPanelState = {
+        panel,
+        faceName,
+        choiceFamily,
+        spinPointSize,
+        choiceStyle,
+        choiceWeight,
+        spinWeight,
+        checkUnderlined,
+        checkStrikethrough,
+        checkFixedWidth,
+        labelInfo,
+        useFamily: false,
+        useNumericWeight: false,
+    };
+
+    // wxFlexGridSizer(7, wxSize(border, border))
+    const sizer = createWxFlexGridSizer(0, 7, border, border);
+    const sizerTop = createWxBoxSizer(VERTICAL);
+    if (!sizer || !sizerTop)
+    {
+        return null;
+    }
+
+    // flagsLabel = wxSizerFlags().CentreVertical()
+    const flagsLabel = ALIGN_CENTER_VERTICAL;
+    // flagsValue = wxSizerFlags().Expand().CentreVertical()
+    const flagsValue = EXPAND | ALIGN_CENTER_VERTICAL;
+
+    const addLabel = (text: string, flags: number, borderSize: number): void =>
+    {
+        const label = createLabel(panel.ptr, text);
+        if (label)
+        {
+            sizer.AddWindow(label.ptr, 0, flags, borderSize, null);
+        }
+    };
+
+    // Columns: label, control, gap, label, control, label, control.
+    addLabel("Face &name:", flagsLabel, 0);
+    sizer.AddWindow(faceName.ptr, 0, flagsValue, 0, null);
+    sizer.AddSpacer(2 * border);
+
+    addLabel("&Family:", flagsLabel, 0);
+    sizer.AddWindow(choiceFamily.ptr, 0, flagsValue, 0, null);
+    // wxSizerFlags().DoubleBorder(wxLEFT).CentreVertical()
+    addLabel("&Point size:", LEFT | ALIGN_CENTER_VERTICAL, doubleBorder);
+    sizer.AddWindow(spinPointSize.ptr, 0, flagsValue, 0, null);
+
+    addLabel("&Style:", flagsLabel, 0);
+    sizer.AddWindow(choiceStyle.ptr, 0, flagsValue, 0, null);
+    sizer.AddSpacer(0);
+
+    addLabel("&Weight:", flagsLabel, 0);
+    sizer.AddWindow(choiceWeight.ptr, 0, flagsValue, 0, null);
+    addLabel("or &raw value:", flagsLabel, 0);
+    sizer.AddWindow(spinWeight.ptr, 0, flagsValue, 0, null);
+
+    addLabel("&Underlined:", flagsLabel, 0);
+    sizer.AddWindow(checkUnderlined.ptr, 0, flagsValue, 0, null);
+    sizer.AddSpacer(0);
+
+    addLabel("&Strike through:", flagsLabel, 0);
+    sizer.AddWindow(checkStrikethrough.ptr, 0, flagsValue, 0, null);
+    addLabel("Fixed width:", flagsLabel, 0);
+    sizer.AddWindow(checkFixedWidth.ptr, 0, flagsValue, 0, null);
+
+    // sizerTop->Add(sizer, wxSizerFlags().Expand().Border(wxBOTTOM));
+    sizerTop.AddSizer(sizer.ptr, 0, EXPAND | BOTTOM, border, null);
+
+    // sizerTop->Add(new wxButton(this, wxID_APPLY, "&Apply changes"),
+    //               wxSizerFlags().Border(wxBOTTOM).Centre());
+    const applyText = createWxString("&Apply changes");
+    const applyButton = createWxButton(
+        panel.ptr, ID_APPLY, applyText.ptr, -1, -1, -1, -1, 0,
+    );
+    applyText.Delete();
+    if (!applyButton)
+    {
+        return null;
+    }
+
+    // Centre() == Align(wxALIGN_CENTRE) == horizontal | vertical centring.
+    sizerTop.AddWindow(
+        applyButton.ptr,
+        0,
+        BOTTOM | ALIGN_CENTER_HORIZONTAL | ALIGN_CENTER_VERTICAL,
+        border,
+        null,
+    );
+
+    // sizerTop->Add(m_labelInfo, wxSizerFlags().Expand().Border(wxTOP));
+    sizerTop.AddWindow(labelInfo.ptr, 0, EXPAND | TOP, border, null);
+
+    panel.SetSizer(sizerTop.ptr, true);
+
+    // ShowFont(*wxNORMAL_FONT);
+    showFont(state, new wxFont(NORMAL_FONT, true));
+
+    return state;
+}
+
+/** FontPanel::ShowFont(const wxFont& font) { m_font = font; DoUpdate(); } */
+export function showFont(state: FontPanelState, font: wxFont): void
+{
+    // m_textFaceName->ChangeValue(m_font.GetFaceName());
+    const faceName = readString(font.GetFaceName());
+    withString(faceName, (ptr) => state.faceName.ChangeValue(ptr));
+
+    let family = FAMILY_DEFAULT;
+    switch (font.GetFamily())
+    {
+        case FONTFAMILY_DECORATIVE: family = FAMILY_DECORATIVE; break;
+        case FONTFAMILY_ROMAN: family = FAMILY_ROMAN; break;
+        case FONTFAMILY_SCRIPT: family = FAMILY_SCRIPT; break;
+        case FONTFAMILY_SWISS: family = FAMILY_SWISS; break;
+        case FONTFAMILY_MODERN: family = FAMILY_MODERN; break;
+        case FONTFAMILY_TELETYPE: family = FAMILY_TELETYPE; break;
+
+        case FONTFAMILY_DEFAULT:
+        default:
+            break;
+    }
+    state.choiceFamily.SetSelection(family);
+
+    state.spinPointSize.SetValue(font.GetFractionalPointSize());
+
+    let style = STYLE_NORMAL;
+    switch (font.GetStyle())
+    {
+        case FONTSTYLE_ITALIC: style = STYLE_ITALIC; break;
+        case FONTSTYLE_SLANT: style = STYLE_SLANT; break;
+
+        case FONTSTYLE_NORMAL:
+        default:
+            break;
+    }
+    state.choiceStyle.SetSelection(style);
+
+    let weight = WEIGHT_NORMAL;
+    switch (font.GetWeight())
+    {
+        case FONTWEIGHT_THIN: weight = WEIGHT_THIN; break;
+        case FONTWEIGHT_EXTRALIGHT: weight = WEIGHT_EXTRALIGHT; break;
+        case FONTWEIGHT_LIGHT: weight = WEIGHT_LIGHT; break;
+        case FONTWEIGHT_MEDIUM: weight = WEIGHT_MEDIUM; break;
+        case FONTWEIGHT_SEMIBOLD: weight = WEIGHT_SEMIBOLD; break;
+        case FONTWEIGHT_BOLD: weight = WEIGHT_BOLD; break;
+        case FONTWEIGHT_EXTRABOLD: weight = WEIGHT_EXTRABOLD; break;
+        case FONTWEIGHT_HEAVY: weight = WEIGHT_HEAVY; break;
+        case FONTWEIGHT_EXTRAHEAVY: weight = WEIGHT_EXTRAHEAVY; break;
+
+        case FONTWEIGHT_NORMAL:
+        default:
+            break;
+    }
+    state.choiceWeight.SetSelection(weight);
+    state.spinWeight.SetValue(font.GetNumericWeight());
+
+    state.checkUnderlined.SetValue(fontUnderlined(font));
+    state.checkStrikethrough.SetValue(fontStrikethrough(font));
+    state.checkFixedWidth.SetValue(fontFixedWidth(font));
+
+    // const wxSize pixelSize = m_font.GetPixelSize();
+    // GetPixelSize() already returns a borrowed wxSize wrapper; read it
+    // directly instead of wrapping the pointer a second time.
+    let pixelWidth = 0;
+    let pixelHeight = 0;
+    const pixelSize = font.GetPixelSize();
+    if (pixelSize)
+    {
+        pixelWidth = pixelSize.GetWidth();
+        pixelHeight = pixelSize.GetHeight();
+    }
+
+    // wxClientDC dc(this); dc.SetFont(m_font);
+    let charWidth = 0;
+    let charHeight = 0;
+    const dc = createWxClientDC(state.panel.ptr);
+    if (dc)
+    {
+        dc.SetFont(font.ptr);
+        charWidth = dc.GetCharWidth();
+        charHeight = dc.GetCharHeight();
+        dc.Delete();
+    }
+
+    const info =
+        `Font info string: ${readString(font.GetNativeFontInfoDesc())}\n` +
+        `Size in pixels: ${pixelWidth}*${pixelHeight}, ` +
+        `average char size: ${charWidth}*${charHeight}`;
+    withString(info, (ptr) => state.labelInfo.SetLabelText(ptr));
+}
+
+/**
+ * FontPanel::GetFontInfo() const, returned as a constructed wxFont.
+ *
+ * wxFontInfo(m_spinPointSize->GetValue()) with the same Family/FaceName,
+ * Style, Weight and Underlined/Strikethrough settings is expressed with the
+ * legacy wxFont constructor plus SetFractionalPointSize() and
+ * SetNumericWeight(), which gives the same native font without the debug-only
+ * multiple-of-100 assertion in wxFontBase::GetNumericWeightOf().
+ *
+ * Returns an owned font; the caller must call Delete().
+ */
+export function makeFont(state: FontPanelState): wxFont | null
+{
+    const pointSize = state.spinPointSize.GetValue();
+
+    let family = FONTFAMILY_DEFAULT;
+    let faceName = "";
+    if (state.useFamily)
+    {
+        const selection = state.choiceFamily.GetSelection();
+        if (selection >= 0 && selection < FAMILY_VALUES.length)
+        {
+            family = FAMILY_VALUES[selection];
+        }
+    }
+    else
+    {
+        faceName = readString(state.faceName.GetValue());
+    }
+
+    let style = FONTSTYLE_NORMAL;
+    switch (state.choiceStyle.GetSelection())
+    {
+        case STYLE_ITALIC: style = FONTSTYLE_ITALIC; break;
+        case STYLE_SLANT: style = FONTSTYLE_SLANT; break;
+
+        case STYLE_NORMAL:
+        default:
+            break;
+    }
+
+    const weight = state.useNumericWeight
+        ? state.spinWeight.GetValue()
+        : (state.choiceWeight.GetSelection() + 1) * 100;
+
+    const underlined = state.checkUnderlined.GetValue();
+
+    const font = withString(faceName, (facePtr) =>
+        createWxFont(
+            Math.round(pointSize),
+            family,
+            style,
+            // 100 is wxFONTWEIGHT_NORMAL. The exact numeric weight is applied
+            // below: the legacy constructor converts its wxFontWeight argument
+            // through GetNumericWeightOf(), which asserts on values that are not
+            // multiples of 100 in debug builds.
+            100,
+            underlined,
+            facePtr,
+            FONTENCODING_DEFAULT,
+        ));
+    if (!font)
+    {
+        return null;
+    }
+
+    // wxFontInfo keeps the fractional size and the numeric weight; the legacy
+    // constructor only takes an int size and a legacy weight enum, so restore
+    // the exact values.
+    font.SetFractionalPointSize(pointSize);
+    font.SetNumericWeight(weight);
+
+    if (state.checkStrikethrough.GetValue())
+    {
+        font.SetStrikethrough(true);
+    }
+
+    return font;
+}
+
+// ---------------------------------------------------------------------------
+// FontCanvas
+// ---------------------------------------------------------------------------
+
+/**
+ * FontCanvas::OnPaint().
+ *
+ * The C++ handler ignores the wxPaintEvent, so no event wrapper is needed;
+ * the caller still guards against the null teardown event before calling this.
+ */
+export function paintFontCanvas(
+    canvas: wxWindow,
+    font: wxFont,
+    colour: wxColour,
+    pen: wxPen,
+): void
+{
+    const dc = createWxPaintDC(canvas.ptr);
+    if (!dc)
+    {
+        return;
+    }
+
+    canvas.PrepareDC(dc.ptr);
+
+    // set background
+    dc.SetBackground(WHITE_BRUSH);
+    dc.Clear();
+    dc.SetFont(font.ptr);
+
+    // the current text origin
+    let x = 5;
+    let y = 5;
+
+    // prepare to draw the font
+    dc.SetTextForeground(colour.ptr);
+
+    // the size of one cell (normally biggest char + small margin)
+    const textWidth = new Int32Array(1);
+    const textHeight = new Int32Array(1);
+
+    const letterW = createWxString("W");
+    dc.GetTextExtent(
+        letterW.ptr,
+        pointerOf(textWidth),
+        pointerOf(textHeight),
+        null,
+        null,
+        null,
+    );
+    letterW.Delete();
+
+    const maxCharWidth = textWidth[0];
+    const maxCharHeight = textHeight[0];
+    const w = maxCharWidth + 5;
+    const h = maxCharHeight + 4;
+
+    // print all font symbols from 32 to 256 in 7 rows of 32 chars each
+    for (let i = 0; i < 7; i++)
+    {
+        for (let j = 0; j < 32; j++)
+        {
+            const code = 32 * (i + 1) + j;
+            const chr = createWxString(String.fromCharCode(code));
+            dc.GetTextExtent(
+                chr.ptr,
+                pointerOf(textWidth),
+                pointerOf(textHeight),
+                null,
+                null,
+                null,
+            );
+            const charWidth = textWidth[0];
+            const charHeight = textHeight[0];
+
+            dc.DrawText(
+                chr.ptr,
+                x + w * j + Math.trunc((maxCharWidth - charWidth) / 2) + 1,
+                y + h * i + Math.trunc((maxCharHeight - charHeight) / 2),
+            );
+            chr.Delete();
+        }
+    }
+
+    // draw the lines between them
+    dc.SetPen(pen.ptr);
+
+    // horizontal
+    for (let l = 0; l < 8; l++)
+    {
+        const yl = y + h * l - 2;
+        dc.DrawLine(x - 2, yl, x + 32 * w - 1, yl);
+    }
+
+    // and vertical
+    for (let l = 0; l < 33; l++)
+    {
+        const xl = x + w * l - 2;
+        dc.DrawLine(xl, y - 2, xl, y + 7 * h - 1);
+    }
+
+    dc.Delete();
+}

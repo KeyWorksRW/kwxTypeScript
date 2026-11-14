@@ -1,0 +1,1010 @@
+// caret.kwxts — kwxTypeScript port of wxSamples/src/caret/caret.cpp
+//
+// The wxCaret wxWidgets sample: a frame titled "Caret wxWidgets sample" holding a
+// wxScrolledWindow canvas on which you can type. A blinking caret marks the
+// insertion point; arrow keys / Home / End move it, printable characters are
+// stored in a text grid and drawn on the next paint. The File menu can change the
+// caret blink time, resize the font (and therefore the caret), move the caret to
+// (10, 10) and show an About box. A two-pane status bar shows a welcome message
+// and the panel size in characters.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\caret\caret.kwxts
+//
+// Direct binding correspondence (no workarounds left):
+//   * wxCaretSuspend cs(this) at caret.cpp:411 → createWxCaretSuspend(canvas.ptr)
+//     in paintCanvas(), released with Delete() after the wxPaintDC, which mirrors
+//     the C++ declaration order (dc destroyed before cs).
+//   * CallAfter(...) at caret.cpp:500 → MyCanvas::OnScroll builds a fresh
+//     wxClosure over the canvas callback and calls wxEvtHandler::CallAfter on the
+//     canvas. kwxFFI's implementation IncRef()s the closure before queueing and
+//     Invoke()s + DecRef()s it inside the queued callable, so the native side owns
+//     that closure: the wrapper is never Delete()d from here.
+//   * EVT_SCROLLWIN is a macro that expands to eight connections (TOP, BOTTOM,
+//     LINEUP, LINEDOWN, PAGEUP, PAGEDOWN, THUMBTRACK, THUMBRELEASE); all eight are
+//     connected to the same handler, as in the original.
+
+import {
+    BORDER_SUNKEN,
+    BITMAP_TYPE_XPM,
+    createWxCaret,
+    createWxCaretSuspend,
+    createWxClientDC,
+    createWxClosure,
+    createWxColourEmpty,
+    createWxFontFromInfo,
+    createWxFontInfo,
+    createWxFrame,
+    createWxIconLoad,
+    createWxMenu,
+    createWxMenuBar,
+    createWxPaintDC,
+    createWxScrolledWindow,
+    createWxString,
+    DEFAULT_FRAME_STYLE,
+    EVT_CHAR,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    EVT_PAINT,
+    EVT_SCROLLWIN_BOTTOM,
+    EVT_SCROLLWIN_LINEDOWN,
+    EVT_SCROLLWIN_LINEUP,
+    EVT_SCROLLWIN_PAGEDOWN,
+    EVT_SCROLLWIN_PAGEUP,
+    EVT_SCROLLWIN_THUMBRELEASE,
+    EVT_SCROLLWIN_THUMBTRACK,
+    EVT_SCROLLWIN_TOP,
+    EVT_SIZE,
+    exitMainLoop,
+    FONTFAMILY_TELETYPE,
+    ICON_INFORMATION,
+    ID_ANY,
+    initAllImageHandlers,
+    initialize,
+    K_DOWN,
+    K_END,
+    K_HOME,
+    K_LEFT,
+    K_RETURN,
+    K_RIGHT,
+    K_UP,
+    kwxMessageBox,
+    lib,
+    LogStatus,
+    LogStatusWindow,
+    OK,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    STB_DEFAULT_STYLE,
+    SYS_COLOUR_WINDOW,
+    wxCaret_GetBlinkTime,
+    wxCaret_SetBlinkTime,
+    wxFrame,
+    wxGetNumberFromUser,
+    wxIsprint,
+    wxKeyEvent,
+    wxFont,
+    wxMenu,
+    wxScrolledWindow,
+    wxSystemSettings_GetColour,
+} from "kwx";
+import { Callback, exit, platform, Pointer } from "kwx/platform";
+
+declare const __dirname: string;
+
+// ---------------------------------------------------------------------------
+// IDs
+//
+// enum
+// {
+//     Caret_Quit = 1, Caret_About, Caret_SetBlinkTime, Caret_SetFontSize,
+//     Caret_Move,
+//     Caret_Text = 1000     // no control uses it in this sample
+// };
+// ---------------------------------------------------------------------------
+
+const CARET_QUIT = 1;
+const CARET_ABOUT = 2;
+const CARET_SET_BLINK_TIME = 3;
+const CARET_SET_FONT_SIZE = 4;
+const CARET_MOVE = 5;
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** Call fn with a temporary wxString and release it on every path. */
+function withString(text: string, fn: (ptr: Pointer) => void): void
+{
+    const value = createWxString(text);
+    try
+    {
+        fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** Compose several temporary wxStrings and run fn with their pointers. */
+function withStrings<T>(texts: string[], fn: (ptrs: Pointer[]) => T): T
+{
+    const values = texts.map((text) => createWxString(text));
+    try
+    {
+        return fn(values.map((value) => value.ptr));
+    }
+    finally
+    {
+        for (const value of values)
+        {
+            value.Delete();
+        }
+    }
+}
+
+/**
+ * kwxFFI's LogStatus() passes the whole wxString as the printf-style format
+ * (wxLogStatus(*message)), so a literal '%' would be reinterpreted. Doubling it
+ * keeps the visible text identical. Neither message in this sample contains a
+ * '%', so the emitted text is unchanged either way.
+ */
+function escapeFormat(text: string): string
+{
+    return text.replace(/%/g, "%%");
+}
+
+/** wxLogStatus(message) */
+function logStatus(text: string): void
+{
+    withString(escapeFormat(text), (ptr) => LogStatus(ptr));
+}
+
+/** wxLogStatus(frame, message) */
+function logStatusWindow(frame: wxFrame, text: string): void
+{
+    withString(escapeFormat(text), (ptr) => LogStatusWindow(frame.ptr, ptr));
+}
+
+// ---------------------------------------------------------------------------
+// MyCanvas state (the C++ member fields)
+// ---------------------------------------------------------------------------
+
+interface CanvasState
+{
+    readonly frame: wxFrame;
+    readonly canvas: wxScrolledWindow;
+
+    /** wxFont m_font — replaced by SetFontSize() (the old font is released). */
+    font: wxFont | null;
+
+    /** the margin around the text (looks nicer) */
+    xMargin: number;
+    yMargin: number;
+
+    /** size (in pixels) of one character */
+    widthChar: number;
+    heightChar: number;
+
+    /** position (in text coords) of the caret */
+    xCaret: number;
+    yCaret: number;
+
+    /** the size (in text coords) of the window */
+    xChars: number;
+    yChars: number;
+
+    /** the text (wxChar *m_text, calloc'd as m_xChars * m_yChars cells) */
+    text: string[];
+
+    /**
+     * Handler body of the lambda passed to CallAfter() in OnScroll. One fixed
+     * native callback backs every deferred closure, since CallAfter() takes a
+     * fresh wxClosure per call.
+     */
+    afterCallback: Callback | null;
+
+    readonly callbacks: Callback[];
+}
+
+/** CharAt(x, y) — one cell of the text grid. */
+function charAt(state: CanvasState, x: number, y: number): string
+{
+    return state.text[x + state.xChars * y] ?? "";
+}
+
+function setCharAt(state: CanvasState, x: number, y: number, ch: string): void
+{
+    state.text[x + state.xChars * y] = ch;
+}
+
+// --- caret movement (the inline MyCanvas methods) --------------------------
+
+function home(state: CanvasState): void
+{
+    state.xCaret = 0;
+}
+
+function end(state: CanvasState): void
+{
+    state.xCaret = state.xChars - 1;
+}
+
+function firstLine(state: CanvasState): void
+{
+    state.yCaret = 0;
+}
+
+function lastLine(state: CanvasState): void
+{
+    state.yCaret = state.yChars - 1;
+}
+
+/** if ( !m_xCaret-- ) { End(); PrevLine(); } */
+function prevChar(state: CanvasState): void
+{
+    if (state.xCaret-- === 0)
+    {
+        end(state);
+        prevLine(state);
+    }
+}
+
+/** if ( ++m_xCaret == m_xChars ) { Home(); NextLine(); } */
+function nextChar(state: CanvasState): void
+{
+    if (++state.xCaret === state.xChars)
+    {
+        home(state);
+        nextLine(state);
+    }
+}
+
+/** if ( !m_yCaret-- ) LastLine(); */
+function prevLine(state: CanvasState): void
+{
+    if (state.yCaret-- === 0)
+    {
+        lastLine(state);
+    }
+}
+
+/** if ( ++m_yCaret == m_yChars ) FirstLine(); */
+function nextLine(state: CanvasState): void
+{
+    if (++state.yCaret === state.yChars)
+    {
+        firstLine(state);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// MyCanvas::CreateCaret / SetFontSize / MoveCaret / DoMoveCaret / ChangeSize
+// ---------------------------------------------------------------------------
+
+/** wxCaret *caret = new wxCaret(this, m_widthChar, m_heightChar); SetCaret(caret); */
+function createCaret(state: CanvasState): void
+{
+    const caret = createWxCaret(state.canvas.ptr, state.widthChar, state.heightChar);
+    if (!caret)
+    {
+        return;
+    }
+
+    // wxWindowBase::SetCaret() takes ownership (and deletes the previous caret),
+    // so this program never calls Delete() on the caret wrapper.
+    state.canvas.SetCaret(caret.ptr);
+
+    caret.Move(state.xMargin, state.yMargin);
+    caret.Show();
+}
+
+/** MyCanvas::SetFontSize(int fontSize) */
+function setFontSize(state: CanvasState, fontSize: number): void
+{
+    // m_font = wxFont(wxFontInfo(fontSize).Family(wxFONTFAMILY_TELETYPE));
+    const info = createWxFontInfo(fontSize);
+    if (!info)
+    {
+        return;
+    }
+    info.SetFamily(FONTFAMILY_TELETYPE);
+    const font = createWxFontFromInfo(info.ptr);
+    info.Delete();
+    if (!font)
+    {
+        return;
+    }
+
+    state.font?.Delete();
+    state.font = font;
+
+    // wxClientDC dc(this); dc.SetFont(m_font);
+    //   m_heightChar = dc.GetCharHeight(); m_widthChar = dc.GetCharWidth();
+    const dc = createWxClientDC(state.canvas.ptr);
+    if (!dc)
+    {
+        // No DC means no metrics; the C++ code always has a valid one here.
+        return;
+    }
+    dc.SetFont(font.ptr);
+    state.heightChar = dc.GetCharHeight();
+    state.widthChar = dc.GetCharWidth();
+    dc.Delete();
+
+    const caret = state.canvas.GetCaret();
+    if (caret && state.widthChar > 0 && state.heightChar > 0)
+    {
+        caret.SetSize(state.widthChar, state.heightChar);
+
+        changeSize(state);
+    }
+}
+
+/** MyCanvas::MoveCaret(int x, int y) */
+function moveCaret(state: CanvasState, x: number, y: number): void
+{
+    state.xCaret = x;
+    state.yCaret = y;
+
+    doMoveCaret(state);
+}
+
+/** MyCanvas::DoMoveCaret() */
+function doMoveCaret(state: CanvasState): void
+{
+    logStatus(`Caret is at (${state.xCaret}, ${state.yCaret})`);
+
+    const caret = state.canvas.GetCaret();
+    if (!caret)
+    {
+        return;
+    }
+
+    caret.Move(
+        state.xMargin + state.xCaret * state.widthChar,
+        state.yMargin + state.yCaret * state.heightChar,
+    );
+}
+
+/** MyCanvas::ChangeSize() */
+function changeSize(state: CanvasState): void
+{
+    const size = state.canvas.GetClientSize();
+    const clientWidth = size ? size.GetWidth() : 0;
+    const clientHeight = size ? size.GetHeight() : 0;
+
+    // C++ integer division; every operand is positive here.
+    state.xChars = Math.trunc((clientWidth - 2 * state.xMargin) / state.widthChar);
+    state.yChars = Math.trunc((clientHeight - 2 * state.yMargin) / state.heightChar);
+    if (!state.xChars)
+    {
+        state.xChars = 1;
+    }
+    if (!state.yChars)
+    {
+        state.yChars = 1;
+    }
+
+    // free(m_text); m_text = calloc(m_xChars * m_yChars, sizeof(wxChar));
+    state.text = new Array<string>(state.xChars * state.yChars).fill("");
+
+    // Make the client area scrollable.
+    state.canvas.SetScrollbars(
+        state.widthChar,
+        state.heightChar,
+        state.xChars + 10,
+        state.yChars + 10,
+        0,
+        0,
+        false,
+    );
+
+    // wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
+    // if ( frame && frame->GetStatusBar() )
+    //     frame->SetStatusText(msg.Printf("Panel size is (%d, %d)", ...), 1);
+    if (state.frame.GetStatusBar())
+    {
+        const message = `Panel size is (${state.xChars}, ${state.yChars})`;
+        withString(message, (ptr) => state.frame.SetStatusText(ptr, 1));
+    }
+}
+
+// ---------------------------------------------------------------------------
+// MyCanvas::OnPaint
+//
+//     wxCaretSuspend cs(this);
+//     wxPaintDC dc( this );
+//     PrepareDC( dc );
+//     dc.Clear();
+//     dc.SetFont( m_font );
+//     ... draw the text grid ...
+// ---------------------------------------------------------------------------
+
+function paintCanvas(state: CanvasState): void
+{
+    // wxCaretSuspend cs(this): hides the caret if it is visible and restores it
+    // when the object is deleted, exactly like the C++ RAII object.
+    const suspend = createWxCaretSuspend(state.canvas.ptr);
+
+    const dc = createWxPaintDC(state.canvas.ptr);
+    if (dc)
+    {
+        state.canvas.PrepareDC(dc.ptr);
+        dc.Clear();
+
+        if (state.font)
+        {
+            dc.SetFont(state.font.ptr);
+        }
+
+        // #if defined(__WXOSX__) || defined(__WXQT__) draws every character
+        // separately; the other platforms accumulate one string per row.
+        const drawPerChar = platform === "darwin";
+
+        for (let y = 0; y < state.yChars; y++)
+        {
+            let line = "";
+
+            for (let x = 0; x < state.xChars; x++)
+            {
+                let ch = charAt(state, x, y);
+                if (!ch)
+                {
+                    ch = " ";
+                }
+
+                if (drawPerChar)
+                {
+                    withString(ch, (ptr) =>
+                        dc.DrawText(
+                            ptr,
+                            state.xMargin + x * state.widthChar,
+                            state.yMargin + y * state.heightChar,
+                        ));
+                }
+                else
+                {
+                    line += ch;
+                }
+            }
+
+            if (line.length > 0)
+            {
+                withString(line, (ptr) =>
+                    dc.DrawText(ptr, state.xMargin, state.yMargin + y * state.heightChar));
+            }
+        }
+
+        dc.Delete();
+    }
+
+    // ~wxCaretSuspend(): runs after ~wxPaintDC, as in the C++ scope.
+    suspend?.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// MyCanvas::OnSize / OnChar / OnScroll
+// ---------------------------------------------------------------------------
+
+function onCanvasSize(state: CanvasState, eventPtr: Pointer): void
+{
+    if (!eventPtr)
+    {
+        return;
+    }
+
+    changeSize(state);
+
+    lib.symbols.wxEvent_Skip(eventPtr, 1);
+}
+
+function onCanvasChar(state: CanvasState, eventPtr: Pointer): void
+{
+    if (!eventPtr)
+    {
+        return;
+    }
+
+    const event = new wxKeyEvent(eventPtr);
+
+    switch (event.GetKeyCode())
+    {
+        case K_LEFT:
+            prevChar(state);
+            break;
+
+        case K_RIGHT:
+            nextChar(state);
+            break;
+
+        case K_UP:
+            prevLine(state);
+            break;
+
+        case K_DOWN:
+            nextLine(state);
+            break;
+
+        case K_HOME:
+            home(state);
+            break;
+
+        case K_END:
+            end(state);
+            break;
+
+        case K_RETURN:
+            home(state);
+            nextLine(state);
+            break;
+
+        default:
+            if (!event.AltDown() && wxIsprint(event.GetKeyCode()))
+            {
+                const ch = String.fromCharCode(event.GetKeyCode());
+                setCharAt(state, state.xCaret, state.yCaret, ch);
+
+                // wxRect rect(x, y, m_widthChar, m_heightChar);
+                // RefreshRect(rect, false /* don't erase background */);
+                state.canvas.RefreshRect(
+                    false,
+                    state.xMargin + state.xCaret * state.widthChar,
+                    state.yMargin + state.yCaret * state.heightChar,
+                    state.widthChar,
+                    state.heightChar,
+                );
+
+                nextChar(state);
+            }
+            else
+            {
+                event.Skip(true);
+            }
+    }
+
+    doMoveCaret(state);
+}
+
+/**
+ * MyCanvas::OnScroll — the caret position is refreshed after the scroll has been
+ * applied, using wxEvtHandler::CallAfter() with a wxClosure.
+ */
+function onCanvasScroll(state: CanvasState, eventPtr: Pointer): void
+{
+    if (!eventPtr)
+    {
+        return;
+    }
+
+    // CallAfter(lambda) — kwxFFI's CallAfter() takes ownership of the closure:
+    // it IncRef()s before queueing and Invoke()s + DecRef()s inside the queued
+    // callable, so a fresh closure is required per event and must not be
+    // Delete()d here.
+    const body = state.afterCallback;
+    if (body)
+    {
+        const closure = createWxClosure(body.pointer, null);
+        if (closure)
+        {
+            state.canvas.CallAfter(closure.ptr);
+        }
+    }
+
+    lib.symbols.wxEvent_Skip(eventPtr, 1);
+}
+
+/** The body of the CallAfter() lambda in OnScroll. */
+function trackCaretAfterScroll(state: CanvasState): void
+{
+    const caret = state.canvas.GetCaret();
+    if (!caret)
+    {
+        return;
+    }
+
+    const pos = caret.GetPosition();
+    if (!pos)
+    {
+        return;
+    }
+
+    state.xCaret = Math.trunc((pos.GetX() - state.xMargin) / state.widthChar);
+    state.yCaret = Math.trunc((pos.GetY() - state.yMargin) / state.heightChar);
+    logStatus(`Caret is at (${state.xCaret}, ${state.yCaret})`);
+}
+
+// ---------------------------------------------------------------------------
+// Frame
+// ---------------------------------------------------------------------------
+
+interface CaretFrameState
+{
+    readonly frame: wxFrame;
+    readonly canvas: CanvasState;
+    readonly callbacks: Callback[];
+}
+
+/** menu->Append(id, label, help) with the C++ empty help-string semantics. */
+function appendMenuItem(menu: wxMenu, id: number, label: string, help: string): void
+{
+    if (help.length === 0)
+    {
+        withString(label, (labelPtr) => menu.Append(id, labelPtr, null, false));
+        return;
+    }
+
+    withString(label, (labelPtr) =>
+    {
+        withString(help, (helpPtr) => menu.Append(id, labelPtr, helpPtr, false));
+    });
+}
+
+/** MyFrame::MyFrame() plus the MyCanvas constructor. */
+function createCaretFrame(): CaretFrameState | null
+{
+    const title = createWxString("Caret wxWidgets sample");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, 50, 50, 450, 340, DEFAULT_FRAME_STYLE,
+    );
+    title.Delete();
+
+    if (!frame)
+    {
+        return null;
+    }
+
+    // SetIcon(wxICON(sample)) — the icon ships as sample.xpm next to this file.
+    const iconPath = createWxString(samplePath("sample.xpm"));
+    const icon = createWxIconLoad(iconPath.ptr, BigInt(BITMAP_TYPE_XPM), -1, -1);
+    iconPath.Delete();
+    if (icon)
+    {
+        if (icon.IsOk())
+        {
+            // wxTopLevelWindow::SetIcon copies the icon.
+            frame.SetIcon(icon.ptr);
+        }
+        icon.Delete();
+    }
+
+    // wxMenu *menuFile = new wxMenu;
+    const menuTitle = createWxString("");
+    const menuFile = createWxMenu(menuTitle.ptr, 0n);
+    menuTitle.Delete();
+
+    if (menuFile)
+    {
+        appendMenuItem(menuFile, CARET_SET_BLINK_TIME, "&Blink time...\tCtrl-B", "");
+        appendMenuItem(menuFile, CARET_SET_FONT_SIZE, "&Font size...\tCtrl-S", "");
+        appendMenuItem(menuFile, CARET_MOVE, "&Move caret\tCtrl-C", "");
+        menuFile.AppendSeparator();
+        appendMenuItem(menuFile, CARET_ABOUT, "&About\tCtrl-A", "Show about dialog");
+        menuFile.AppendSeparator();
+        appendMenuItem(menuFile, CARET_QUIT, "E&xit\tAlt-X", "Quit this program");
+
+        const menuBar = createWxMenuBar(0);
+        if (menuBar)
+        {
+            withString("&File", (label) => menuBar.Append(menuFile.ptr, label));
+            frame.SetMenuBar(menuBar.ptr);
+        }
+    }
+
+    // MyCanvas(parent): wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition,
+    //                                 wxDefaultSize, wxSUNKEN_BORDER)
+    const canvas = createWxScrolledWindow(
+        frame.ptr, ID_ANY, -1, -1, -1, -1, BORDER_SUNKEN,
+    );
+    if (!canvas)
+    {
+        return null;
+    }
+
+    const canvasState: CanvasState = {
+        frame,
+        canvas,
+        font: null,
+        xMargin: 5,
+        yMargin: 5,
+        widthChar: 0,
+        heightChar: 0,
+        xCaret: 0,
+        yCaret: 0,
+        xChars: 0,
+        yChars: 0,
+        text: [],
+        afterCallback: null,
+        callbacks: [],
+    };
+
+    // SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    const colour = createWxColourEmpty();
+    if (colour)
+    {
+        wxSystemSettings_GetColour(SYS_COLOUR_WINDOW, colour.ptr);
+        canvas.SetBackgroundColour(colour.ptr);
+        colour.Delete();
+    }
+
+    // SetFontSize(12);
+    setFontSize(canvasState, 12);
+
+    // m_xCaret = m_yCaret = m_xChars = m_yChars = 0;
+    canvasState.xCaret = 0;
+    canvasState.yCaret = 0;
+    canvasState.xChars = 0;
+    canvasState.yChars = 0;
+
+    // m_xMargin = m_yMargin = 5;
+    canvasState.xMargin = 5;
+    canvasState.yMargin = 5;
+
+    // CreateCaret();
+    createCaret(canvasState);
+
+    // CreateStatusBar(2); SetStatusText("Welcome to wxWidgets!");
+    frame.CreateStatusBar(2, STB_DEFAULT_STYLE, ID_ANY);
+    withString("Welcome to wxWidgets!", (ptr) => frame.SetStatusText(ptr, 0));
+
+    return { frame, canvas: canvasState, callbacks: [] };
+}
+
+// ---------------------------------------------------------------------------
+// Event tables
+// ---------------------------------------------------------------------------
+
+function connectFrameEvents(state: CaretFrameState): void
+{
+    /** MyFrame::OnQuit — Close(true) */
+    const onQuit = (): void =>
+    {
+        state.frame.Close(true);
+    };
+
+    /** MyFrame::OnAbout */
+    const onAbout = (): void =>
+    {
+        withStrings(
+            ["The caret wxWidgets sample.\n(c) 1999 Vadim Zeitlin", "About Caret"],
+            (ptrs) =>
+            {
+                kwxMessageBox(
+                    ptrs[0], ptrs[1], OK | ICON_INFORMATION, state.frame.ptr, -1, -1,
+                );
+            },
+        );
+    };
+
+    /** MyFrame::OnCaretMove */
+    const onCaretMove = (): void =>
+    {
+        moveCaret(state.canvas, 10, 10);
+    };
+
+    /** MyFrame::OnSetBlinkTime */
+    const onSetBlinkTime = (): void =>
+    {
+        const result = withStrings(
+            [
+                "The caret blink time is the time between two blinks",
+                "Time in milliseconds:",
+                "wxCaret sample",
+            ],
+            (ptrs) => wxGetNumberFromUser(
+                ptrs[0], ptrs[1], ptrs[2],
+                BigInt(wxCaret_GetBlinkTime()), 0n, 10000n, state.frame.ptr, -1, -1,
+            ));
+
+        if (result !== -1n)
+        {
+            wxCaret_SetBlinkTime(Number(result));
+            createCaret(state.canvas);
+            logStatusWindow(state.frame, `Blink time set to ${result} milliseconds.`);
+        }
+    };
+
+    /** MyFrame::OnSetFontSize */
+    const onSetFontSize = (): void =>
+    {
+        const result = withStrings(
+            [
+                "The font size also determines the caret size so\n" +
+                "this demonstrates resizing the caret.",
+                "Font size (in points):",
+                "wxCaret sample",
+            ],
+            (ptrs) => wxGetNumberFromUser(
+                ptrs[0], ptrs[1], ptrs[2], 12n, 1n, 100n, state.frame.ptr, -1, -1,
+            ));
+
+        if (result !== -1n)
+        {
+            setFontSize(state.canvas, Number(result));
+        }
+    };
+
+    const handlers: Array<[number, () => void]> = [
+        [CARET_QUIT, onQuit],
+        [CARET_ABOUT, onAbout],
+        [CARET_SET_BLINK_TIME, onSetBlinkTime],
+        [CARET_SET_FONT_SIZE, onSetFontSize],
+        [CARET_MOVE, onCaretMove],
+    ];
+
+    for (const [id, handler] of handlers)
+    {
+        const callback = new Callback(
+            { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+            (_closureFun, _data, eventPtr) =>
+            {
+                if (!eventPtr)
+                {
+                    return;
+                }
+                handler();
+            },
+        );
+        const closure = createWxClosure(callback.pointer, null)!;
+        lib.symbols.wxEvtHandler_Connect(state.frame.ptr, id, id, EVT_MENU, closure.ptr);
+        state.callbacks.push(callback);
+    }
+
+    // Not in the C++ event table: the canonical bootstrap ends the main loop
+    // rather than destroying the frame from inside a close handler.
+    const closeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            exitMainLoop();
+        },
+    );
+    const closeClosure = createWxClosure(closeCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(
+        state.frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr,
+    );
+    state.callbacks.push(closeCallback);
+}
+
+function connectCanvasEvents(state: CaretFrameState): void
+{
+    const canvas = state.canvas;
+    const target = canvas.canvas.ptr;
+
+    // EVT_PAINT(MyCanvas::OnPaint)
+    const paintCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            paintCanvas(canvas);
+        },
+    );
+    const paintClosure = createWxClosure(paintCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(target, ID_ANY, ID_ANY, EVT_PAINT, paintClosure.ptr);
+
+    // EVT_SIZE(MyCanvas::OnSize)
+    const sizeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) => onCanvasSize(canvas, eventPtr),
+    );
+    const sizeClosure = createWxClosure(sizeCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(target, ID_ANY, ID_ANY, EVT_SIZE, sizeClosure.ptr);
+
+    // EVT_CHAR(MyCanvas::OnChar)
+    const charCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) => onCanvasChar(canvas, eventPtr),
+    );
+    const charClosure = createWxClosure(charCallback.pointer, null)!;
+    lib.symbols.wxEvtHandler_Connect(target, ID_ANY, ID_ANY, EVT_CHAR, charClosure.ptr);
+
+    // EVT_SCROLLWIN(MyCanvas::OnScroll) — eight individual connections, matching
+    // the macro expansion in wx/event.h.
+    const scrollCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) => onCanvasScroll(canvas, eventPtr),
+    );
+
+    const scrollEvents = [
+        EVT_SCROLLWIN_TOP,
+        EVT_SCROLLWIN_BOTTOM,
+        EVT_SCROLLWIN_LINEUP,
+        EVT_SCROLLWIN_LINEDOWN,
+        EVT_SCROLLWIN_PAGEUP,
+        EVT_SCROLLWIN_PAGEDOWN,
+        EVT_SCROLLWIN_THUMBTRACK,
+        EVT_SCROLLWIN_THUMBRELEASE,
+    ];
+
+    for (const eventType of scrollEvents)
+    {
+        const closure = createWxClosure(scrollCallback.pointer, null)!;
+        lib.symbols.wxEvtHandler_Connect(target, ID_ANY, ID_ANY, eventType, closure.ptr);
+    }
+
+    // The deferred body of OnScroll's CallAfter() lambda. Kept alive for the
+    // whole event loop because native closures may still reference it.
+    const afterCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            trackCaretAfterScroll(canvas);
+        },
+    );
+    canvas.afterCallback = afterCallback;
+
+    canvas.callbacks.push(
+        paintCallback, sizeCallback, charCallback, scrollCallback, afterCallback,
+    );
+}
+
+// ---------------------------------------------------------------------------
+// Bootstrap (MyApp::OnInit)
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("caret");
+
+    // Needed before createWxIconLoad() reads sample.xpm.
+    initAllImageHandlers();
+
+    const state = createCaretFrame();
+    if (!state)
+    {
+        console.error("caret: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    connectFrameEvents(state);
+    connectCanvasEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    // MyCanvas::~MyCanvas() — the canvas (and its caret) belong to the frame;
+    // the font is the only object this program owns directly.
+    state.canvas.font?.Delete();
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+    for (const callback of state.canvas.callbacks)
+    {
+        callback.close();
+    }
+
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

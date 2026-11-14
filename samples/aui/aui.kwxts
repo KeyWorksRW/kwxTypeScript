@@ -1,0 +1,4054 @@
+// aui.kwxts — kwxTypeScript port of wxSamples/src/aui/auidemo.cpp
+//
+// wxAUI demo/test application: a frame managed by wxAuiManager with five
+// toolbars, ten docked/floating panes, a splittable wxAuiNotebook, and menus
+// that exercise the manager, notebook and dock-art options.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\aui\aui.kwxts
+//
+// The wxAuiManager::GetPane()/GetAllPanes().Item() bindings return borrowed
+// pointers to the manager's own wxAuiPaneInfo objects, so panes are mutated in
+// place exactly like the C++ sample does.  Layout save/load (wxAuiSerializer /
+// wxAuiDeserializer) lives in layoutxml.kwxts.  The one structural
+// substitution is wxSizeReportCtrl: it derives from wxControl in C++, which
+// cannot be subclassed from a script, so it is a borderless wxPanel with the
+// same paint/size handlers.
+
+import {
+    ALIGN_CENTRE,
+    ALL,
+    ART_CUT,
+    ART_ERROR,
+    ART_FOLDER,
+    ART_INFORMATION,
+    ART_MENU,
+    ART_MISSING_IMAGE,
+    ART_NORMAL_FILE,
+    ART_OTHER,
+    ART_PASTE,
+    ART_QUESTION,
+    ART_WARNING,
+    AUI_DOCKART_CAPTION_SIZE,
+    AUI_DOCKART_GRADIENT_TYPE,
+    AUI_DOCKART_PANE_BORDER_SIZE,
+    AUI_DOCKART_SASH_SIZE,
+    AUI_GRADIENT_HORIZONTAL,
+    AUI_GRADIENT_NONE,
+    AUI_GRADIENT_VERTICAL,
+    AUI_MGR_ALLOW_ACTIVE_PANE,
+    AUI_MGR_ALLOW_FLOATING,
+    AUI_MGR_HINT_FADE,
+    AUI_MGR_LIVE_RESIZE,
+    AUI_MGR_RECTANGLE_HINT,
+    AUI_MGR_TRANSPARENT_DRAG,
+    AUI_MGR_TRANSPARENT_HINT,
+    AUI_MGR_VENETIAN_BLINDS_HINT,
+    AUI_MIN_DOCK_BOTH,
+    AUI_MIN_DOCK_ICONS,
+    AUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT,
+    AUI_MIN_DOCK_TEXT,
+    AUI_NB_BOTTOM,
+    AUI_NB_CLOSE_BUTTON,
+    AUI_NB_CLOSE_ON_ACTIVE_TAB,
+    AUI_NB_CLOSE_ON_ALL_TABS,
+    AUI_NB_DEFAULT_STYLE,
+    AUI_NB_MULTILINE,
+    AUI_NB_PIN_ON_ACTIVE_TAB,
+    AUI_NB_SCROLL_BUTTONS,
+    AUI_NB_TAB_EXTERNAL_MOVE,
+    AUI_NB_TAB_FIXED_WIDTH,
+    AUI_NB_TAB_MOVE,
+    AUI_NB_TAB_SPLIT,
+    AUI_NB_TOP,
+    AUI_NB_UNPIN_ON_ALL_PINNED,
+    AUI_NB_WINDOWLIST_BUTTON,
+    AUI_TB_DEFAULT_STYLE,
+    AUI_TB_HORIZONTAL,
+    AUI_TB_HORZ_TEXT,
+    AUI_TB_OVERFLOW,
+    AUI_TB_TEXT,
+    AUI_TB_VERTICAL,
+    BITMAP_TYPE_XPM,
+    BORDER_NONE,
+    BORDER_SUNKEN,
+    BOTTOM,
+    CANCEL,
+    createWxAuiDefaultTabArt,
+    createWxAuiFlatTabArt,
+    createWxAuiGenericTabArt,
+    createWxAuiManager,
+    createWxAuiNativeTabArt,
+    createWxAuiNotebook,
+    createWxAuiPaneInfoDefault,
+    createWxAuiSimpleTabArt,
+    createWxAuiToolBar,
+    createWxAuiToolBarItemArray,
+    createWxAuiToolBarItemDefault,
+    createWxBoxSizer,
+    createWxButton,
+    createWxBitmapBundleArray,
+    createWxChoice,
+    createWxClosure,
+    createWxFlexGridSizer,
+    createWxFrame,
+    createWxGrid,
+    createWxHtmlWindow,
+    createWxIconLoad,
+    createWxMenu,
+    createWxMenuBar,
+    createWxMenuItemEx,
+    createWxPaintDC,
+    createWxPanel,
+    createWxSize,
+    createWxSpinCtrl,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    createWxTextDataObject,
+    createWxTextEntryDialog,
+    createWxTreeCtrl2,
+    TheClipboard,
+    DEFAULT_FRAME_STYLE,
+    EVT_AUI_PANE_CLOSE,
+    EVT_AUINOTEBOOK_ALLOW_DND,
+    EVT_AUINOTEBOOK_BG_DCLICK,
+    EVT_AUINOTEBOOK_PAGE_CHANGING,
+    EVT_AUINOTEBOOK_PAGE_CLOSE,
+    EVT_AUINOTEBOOK_PAGE_CLOSED,
+    EVT_AUINOTEBOOK_TAB_RIGHT_DOWN,
+    EVT_AUITOOLBAR_TOOL_DROPDOWN,
+    EVT_CLOSE_WINDOW,
+    EVT_ERASE_BACKGROUND,
+    EVT_MENU,
+    EVT_PAINT,
+    EVT_SIZE,
+    EVT_UPDATE_UI,
+    EXPAND,
+    exitMainLoop,
+    HORIZONTAL,
+    ICON_INFORMATION,
+    ICON_QUESTION,
+    ID_ABOUT,
+    ID_ANY,
+    ID_EXIT,
+    ID_HIGHEST,
+    ID_OK,
+    initAllImageHandlers,
+    initialize,
+    ITEM_CHECK,
+    ITEM_NORMAL,
+    ITEM_RADIO,
+    ITEM_SEPARATOR,
+    kwxGetMousePosition,
+    kwxMessageBox,
+    LEFT,
+    lib,
+    LIGHT_GREY_PEN,
+    LogError,
+    LogMessage,
+    LogWarning,
+    NORMAL_FONT,
+    NOT_FOUND,
+    Null_Bitmap,
+    OK,
+    readAndDeleteWxString,
+    RIGHT,
+    run,
+    setAppName,
+    setTopWindow,
+    shutdown,
+    SIZE_AUTO,
+    SP_ARROW_KEYS,
+    STB_DEFAULT_STYLE,
+    TAB_TRAVERSAL,
+    TE_MULTILINE,
+    TOP,
+    TR_DEFAULT_STYLE,
+    VERTICAL,
+    WANTS_CHARS,
+    WHITE_BRUSH,
+    WHITE_PEN,
+    wrapWxClipboard,
+    wrapWxArrayInt,
+    wrapWxAuiManager,
+    wrapWxAuiNotebook,
+    wrapWxAuiPaneInfoArray,
+    wrapWxAuiToolBar,
+    wrapWxMenuBar,
+    wrapWxStatusBar,
+    wrapWxWindow,
+    wxArtProvider_GetBitmap,
+    wxArtProvider_GetBitmapBundle,
+    wxAuiManager_AlwaysUsesLiveResize,
+    wxAuiManagerEvent,
+    wxAuiNotebookEvent,
+    wxAuiPaneInfo,
+    wxAuiDockArt,
+    wxAuiToolBar,
+    wxAuiToolBarEvent,
+    wxBitmap,
+    wxBitmapBundle,
+    wxBitmapButton,
+    wxBoxSizer,
+    wxChoice,
+    wxClosure,
+    wxCommandEvent,
+    wxDC,
+    wxEvent,
+    wxFrame,
+    wxHtmlWindow,
+    wxMenu,
+    wxMenuBar,
+    wxMenuItem,
+    wxPanel,
+    wxPoint,
+    wxRect,
+    wxSize,
+    wxSpinCtrl,
+    wxStaticText,
+    wxTextCtrl,
+    wxTreeCtrl,
+    wxUpdateUIEvent,
+    YES,
+    YES_NO,
+} from "kwx";
+import { Callback, exit, platform, Pointer, pointerOf } from "kwx/platform";
+import {
+    loadManagerLayout,
+    loadNotebookLayout,
+    reportLayoutError,
+    saveManagerLayout,
+    saveNotebookLayout,
+} from "./layoutxml.kwxts";
+import {
+    connectSettingsEvents,
+    createSettingsPanel,
+    SettingsPanelState,
+} from "./settings.kwxts";
+
+//---------------------------------------------------------------------------
+// Ids (MyFrame's private enum)
+//---------------------------------------------------------------------------
+
+const ID_CreateTree = ID_HIGHEST;
+const ID_CreateGrid = ID_HIGHEST + 1;
+const ID_CreateText = ID_HIGHEST + 2;
+const ID_CreateHTML = ID_HIGHEST + 3;
+const ID_CreateNotebook = ID_HIGHEST + 4;
+const ID_CreateSizeReport = ID_HIGHEST + 5;
+const ID_GridContent = ID_HIGHEST + 6;
+const ID_TextContent = ID_HIGHEST + 7;
+const ID_TreeContent = ID_HIGHEST + 8;
+const ID_HTMLContent = ID_HIGHEST + 9;
+const ID_NotebookContent = ID_HIGHEST + 10;
+const ID_SizeReportContent = ID_HIGHEST + 11;
+const ID_CreatePerspective = ID_HIGHEST + 12;
+const ID_CopyLayout = ID_HIGHEST + 13;
+const ID_PasteLayout = ID_HIGHEST + 14;
+const ID_EditNotebookLayout = ID_HIGHEST + 15;
+const ID_AllowFloating = ID_HIGHEST + 16;
+const ID_AllowActivePane = ID_HIGHEST + 17;
+const ID_TransparentHint = ID_HIGHEST + 18;
+const ID_VenetianBlindsHint = ID_HIGHEST + 19;
+const ID_RectangleHint = ID_HIGHEST + 20;
+const ID_NoHint = ID_HIGHEST + 21;
+const ID_HintFade = ID_HIGHEST + 22;
+const ID_TransparentDrag = ID_HIGHEST + 23;
+const ID_NoGradient = ID_HIGHEST + 24;
+const ID_VerticalGradient = ID_HIGHEST + 25;
+const ID_HorizontalGradient = ID_HIGHEST + 26;
+const ID_LiveUpdate = ID_HIGHEST + 27;
+const ID_AllowToolbarResizing = ID_HIGHEST + 28;
+const ID_ShowTextForMinPanes = ID_HIGHEST + 29;
+const ID_ShowIconsForMinPanes = ID_HIGHEST + 30;
+const ID_ShowBothForMinPanes = ID_HIGHEST + 31;
+const ID_RotateMinPanesIcons = ID_HIGHEST + 32;
+const ID_Settings = ID_HIGHEST + 33;
+const ID_CustomizeToolbar = ID_HIGHEST + 34;
+const ID_DropDownToolbarItem = ID_HIGHEST + 35;
+const ID_NotebookNoCloseButton = ID_HIGHEST + 36;
+const ID_NotebookCloseButton = ID_HIGHEST + 37;
+const ID_NotebookCloseButtonAll = ID_HIGHEST + 38;
+const ID_NotebookCloseButtonActive = ID_HIGHEST + 39;
+const ID_NotebookAllowTabMove = ID_HIGHEST + 40;
+const ID_NotebookAllowTabExternalMove = ID_HIGHEST + 41;
+const ID_NotebookAllowTabSplit = ID_HIGHEST + 42;
+const ID_NotebookWindowList = ID_HIGHEST + 43;
+const ID_NotebookScrollButtons = ID_HIGHEST + 44;
+const ID_NotebookTabFixedWidth = ID_HIGHEST + 45;
+const ID_NotebookTabPin = ID_HIGHEST + 46;
+const ID_NotebookTabUnpin = ID_HIGHEST + 47;
+const ID_NotebookMultiLine = ID_HIGHEST + 48;
+const ID_NotebookNextTab = ID_HIGHEST + 49;
+const ID_NotebookPrevTab = ID_HIGHEST + 50;
+const ID_NotebookArtDefault = ID_HIGHEST + 51;
+const ID_NotebookArtFlat = ID_HIGHEST + 52;
+// #ifdef wxHAS_NATIVE_TABART (MSW and macOS only)
+const HAS_NATIVE_TABART = platform !== "linux";
+const ID_NotebookArtNative = ID_HIGHEST + 53;
+const ID_NotebookArtGloss = ID_HIGHEST + 54;
+const ID_NotebookArtSimple = ID_HIGHEST + 55;
+const ID_NotebookAlignTop = ID_HIGHEST + 56;
+const ID_NotebookAlignBottom = ID_HIGHEST + 57;
+const ID_NotebookSplit = ID_HIGHEST + 58;
+const ID_NotebookUnsplit = ID_HIGHEST + 59;
+const ID_NotebookNewTab = ID_HIGHEST + 60;
+const ID_NotebookDeleteTab = ID_HIGHEST + 61;
+const ID_NotebookNormalTab = ID_HIGHEST + 62;
+const ID_NotebookPinTab = ID_HIGHEST + 63;
+const ID_NotebookLockTab = ID_HIGHEST + 64;
+
+const ID_SampleItem = ID_HIGHEST + 65;
+
+const ID_FirstPerspective = ID_CreatePerspective + 1000;
+
+// MyFrame::TabArt (declared in auidemo.cpp:215-224)
+const TABART_DEFAULT = 0;
+const TABART_NATIVE = 1;
+const TABART_FLAT = 2;
+const TABART_GLOSS = 3;
+const TABART_SIMPLE = 4;
+
+// wxAuiTabKind values (wxAuiNotebook::SetPageKind / GetPageKind)
+const AUI_TAB_KIND_NORMAL = 0;
+const AUI_TAB_KIND_PINNED = 1;
+const AUI_TAB_KIND_LOCKED = 2;
+
+// wxHtmlWindow::wxHW_DEFAULT_STYLE == wxHW_SCROLLBAR_AUTO (not exposed as a
+// named constant by the binding).
+const HW_DEFAULT_STYLE = 0x0004;
+
+// wxGrid::wxGridSelectCells (first value of wxGridSelectionModes)
+const GRID_SELECT_CELLS = 0;
+
+//---------------------------------------------------------------------------
+// State
+//---------------------------------------------------------------------------
+
+interface FrameState
+{
+    readonly frame: wxFrame;
+    mgr: wxAuiManager;
+    menuBar: wxMenuBar;
+    perspectivesMenu: wxMenu;
+    statusBar: Pointer;
+    /** wxWindow::FromDIP() bound to the frame. */
+    dip(value: number): number;
+    /** MyFrame::GetDockArt() */
+    dockArt(): wxAuiDockArt;
+
+    /** m_perspectives */
+    perspectives: string[];
+    /** m_notebookStyle */
+    notebookStyle: number;
+    /** m_notebookTheme */
+    notebookTheme: number;
+    /** The live "notebook_content" window. */
+    notebook: wxAuiNotebook | null;
+    /** Every wxAuiNotebook created by this frame (content and floating). */
+    readonly notebooks: wxAuiNotebook[];
+    /** The "Welcome to wxAUI" pages (compared instead of IsKindOf()). */
+    readonly welcomePages: Pointer[];
+
+    /** Pane name -> managed window, used by updatePane(). */
+    readonly panes: Map<string, Pointer>;
+
+    settings: SettingsPanelState | null;
+
+    /** MyFrame::GetStartPosition() accumulator. */
+    startPos: number;
+    /** MyFrame::CreateTextCtrl() numbering. */
+    textCtrlNumber: number;
+
+    /** wxSizeReportCtrl windows (the C++ class is replaced by a wxPanel). */
+    sizeReports: Pointer[];
+    pendingSizeReports: Pointer[];
+
+    /** Shared closures for the size-report painters (EVT_PAINT/SIZE/ERASE). */
+    sizeReportPaint: wxClosure | null;
+    sizeReportSize: wxClosure | null;
+    sizeReportErase: wxClosure | null;
+
+    readonly callbacks: Callback[];
+    readonly closures: wxClosure[];
+    /** Objects that must outlive the frame but are not parent-owned. */
+    readonly owned: any[];
+}
+
+function withString(text: string, fn: (ptr: Pointer) => void): void
+{
+    const value = createWxString(text);
+    try
+    {
+        fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+function logMessage(message: string): void
+{
+    withString(message, (text) => LogMessage(text));
+}
+
+function logError(message: string): void
+{
+    withString(message, (text) => LogError(text));
+}
+
+function logWarning(message: string): void
+{
+    withString(message, (text) => LogWarning(text));
+}
+
+/** wxMessageBox(message, caption, style, parent) */
+function messageBox(
+    message: string,
+    caption: string,
+    style: number,
+    parent: Pointer,
+): number
+{
+    const messageText = createWxString(message);
+    const captionText = createWxString(caption);
+    try
+    {
+        return kwxMessageBox(
+            messageText.ptr, captionText.ptr, style, parent, -1, -1,
+        );
+    }
+    finally
+    {
+        messageText.Delete();
+        captionText.Delete();
+    }
+}
+
+//---------------------------------------------------------------------------
+// wxString helpers for wxAuiPaneInfo / wxAuiToolBar arguments
+//---------------------------------------------------------------------------
+
+function paneName(info: wxAuiPaneInfo, name: string): void
+{
+    withString(name, (ptr) => info.Name(ptr));
+}
+
+function paneCaption(info: wxAuiPaneInfo, caption: string): void
+{
+    withString(caption, (ptr) => info.Caption(ptr));
+}
+
+/**
+ * Adds a pane the way `m_mgr.AddPane(window, wxAuiPaneInfo()...)` does, and
+ * remembers the window so that updatePane() can find it later.
+ *
+ * wxAuiManager::AddPane() copies the pane info, so the temporary wrapper is
+ * released again and only the manager's own copy survives.
+ */
+function addPane(
+    state: FrameState,
+    window: Pointer | null,
+    name: string | null,
+    caption: string | null,
+    configure: (info: wxAuiPaneInfo) => void,
+): boolean
+{
+    if (!window)
+    {
+        return false;
+    }
+
+    const info = createWxAuiPaneInfoDefault();
+    if (!info)
+    {
+        return false;
+    }
+
+    if (name !== null)
+    {
+        paneName(info, name);
+    }
+    if (caption !== null)
+    {
+        paneCaption(info, caption);
+    }
+
+    configure(info);
+
+    const added = state.mgr.AddPaneByPaneInfo(window, info.ptr);
+    info.Delete();
+
+    if (added && name !== null)
+    {
+        state.panes.set(name, window);
+    }
+    return added;
+}
+
+/** Module-level reference to addPane() for helpers that shadow the name. */
+const addPaneToManager = addPane;
+
+/**
+ * `m_mgr.GetPane(name)`: the binding returns a borrowed pointer to the
+ * manager's own wxAuiPaneInfo, so the result can be mutated in place exactly
+ * like the C++ reference returned by the original call.
+ */
+function getPane(state: FrameState, name: string): wxAuiPaneInfo | null
+{
+    return withStringReturn(name, (ptr) => state.mgr.GetPaneByName(ptr));
+}
+
+/** Replaces `m_mgr.GetPane(name). ...` mutation. */
+function updatePane(
+    state: FrameState,
+    name: string,
+    mutate: (info: wxAuiPaneInfo) => void,
+): void
+{
+    const info = getPane(state, name);
+    if (info)
+    {
+        mutate(info);
+    }
+}
+
+/** Calls fn with a temporary wxString and returns its result. */
+function withStringReturn<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+//---------------------------------------------------------------------------
+// Bitmap helpers (the wxAUI shims take wxBitmap/wxBitmapBundle pointers)
+//---------------------------------------------------------------------------
+
+function artBitmap(
+    state: FrameState,
+    artId: Pointer,
+    width: number,
+    height: number,
+): wxBitmap | null
+{
+    const ptr = wxArtProvider_GetBitmap(artId, ART_OTHER, width, height);
+    if (!ptr)
+    {
+        return null;
+    }
+    const bitmap = new wxBitmap(ptr);
+    state.owned.push(bitmap);
+    return bitmap;
+}
+
+function artBundle(
+    state: FrameState,
+    artId: Pointer,
+    client: Pointer,
+    width: number,
+    height: number,
+): wxBitmapBundle | null
+{
+    const ptr = wxArtProvider_GetBitmapBundle(artId, client, width, height);
+    if (!ptr)
+    {
+        return null;
+    }
+    const bundle = new wxBitmapBundle(ptr);
+    state.owned.push(bundle);
+    return bundle;
+}
+
+//---------------------------------------------------------------------------
+// wxSizeReportCtrl replacement
+//---------------------------------------------------------------------------
+
+/**
+ * wxSizeReportCtrl derives from wxControl in the C++ sample and only needs a
+ * paintable window; wxPanel (wxNO_BORDER) provides the same behaviour because
+ * wxControl cannot be subclassed from a script.
+ */
+function createSizeReportCtrl(
+    state: FrameState,
+    parent: Pointer,
+    width: number,
+    height: number,
+): wxPanel | null
+{
+    const panel = createWxPanel(
+        parent, ID_ANY, -1, -1, width, height, BORDER_NONE,
+    );
+    if (!panel)
+    {
+        return null;
+    }
+
+    state.sizeReports.push(panel.ptr);
+    registerSizeReportEvents(state, panel.ptr);
+    return panel;
+}
+
+/** Connects EVT_PAINT/EVT_SIZE/EVT_ERASE_BACKGROUND for one reporter. */
+function registerSizeReportEvents(state: FrameState, window: Pointer): void
+{
+    const paint = state.sizeReportPaint;
+    const size = state.sizeReportSize;
+    const erase = state.sizeReportErase;
+
+    if (!paint || !size || !erase)
+    {
+        state.pendingSizeReports.push(window);
+        return;
+    }
+
+    lib.symbols.wxEvtHandler_Connect(
+        window, ID_ANY, ID_ANY, EVT_PAINT, paint.ptr);
+    lib.symbols.wxEvtHandler_Connect(
+        window, ID_ANY, ID_ANY, EVT_SIZE, size.ptr);
+    lib.symbols.wxEvtHandler_Connect(
+        window, ID_ANY, ID_ANY, EVT_ERASE_BACKGROUND, erase.ptr);
+}
+
+//---------------------------------------------------------------------------
+// Control factories (MyFrame::Create*)
+//---------------------------------------------------------------------------
+
+/** MyFrame::CreateTextCtrl() */
+function createTextCtrl(
+    state: FrameState,
+    text: string | null,
+): wxTextCtrl | null
+{
+    let label: string;
+    if (text !== null && text !== "")
+    {
+        label = text;
+    }
+    else
+    {
+        state.textCtrlNumber += 1;
+        label = "This is text box " + state.textCtrlNumber;
+    }
+
+    let control: wxTextCtrl | null = null;
+    withString(label, (ptr) =>
+    {
+        control = createWxTextCtrl(
+            state.frame.ptr, ID_ANY, ptr, 0, 0,
+            state.dip(150), state.dip(90),
+            BigInt(BORDER_NONE | TE_MULTILINE),
+        );
+    });
+    return control;
+}
+
+/** MyFrame::CreateGrid() */
+function createGrid(state: FrameState): wxGrid | null
+{
+    const grid = createWxGrid(
+        state.frame.ptr, ID_ANY, 0, 0,
+        state.dip(150), state.dip(250),
+        BORDER_NONE | WANTS_CHARS,
+    );
+    if (!grid)
+    {
+        return null;
+    }
+
+    grid.CreateGrid(50, 20, GRID_SELECT_CELLS);
+    return grid;
+}
+
+/** MyFrame::CreateTreeCtrl() */
+function createTreeCtrl(state: FrameState): wxTreeCtrl | null
+{
+    const tree = createWxTreeCtrl2(
+        state.frame.ptr, ID_ANY, 0, 0,
+        state.dip(160), state.dip(250),
+        TR_DEFAULT_STYLE | BORDER_NONE,
+    );
+    if (!tree)
+    {
+        return null;
+    }
+
+    // wxVector<wxBitmapBundle> images; images.push_back(...);
+    // tree->SetImages(images);
+    const images = createWxBitmapBundleArray();
+    if (images)
+    {
+        const folder = artBundle(state, ART_FOLDER, ART_OTHER, 16, 16);
+        if (folder)
+        {
+            images.Add(folder.ptr);
+        }
+        const file = artBundle(state, ART_NORMAL_FILE, ART_OTHER, 16, 16);
+        if (file)
+        {
+            images.Add(file.ptr);
+        }
+
+        // wxTreeCtrl::SetImages() copies the bundles into the control.
+        tree.SetImages(images.ptr);
+        state.owned.push(images);
+    }
+
+    // wxTreeItemId is a single pointer, so an 8-byte buffer is enough.
+    const rootId = new BigInt64Array(2);
+    withString("wxAUI Project", (ptr) =>
+    {
+        tree.AddRoot(ptr, 0, -1, null, pointerOf(rootId));
+    });
+
+    const items: BigInt64Array[] = [];
+    for (let index = 1; index <= 5; ++index)
+    {
+        const buffer = new BigInt64Array(2);
+        withString("Item " + index, (ptr) =>
+        {
+            tree.AppendItem(pointerOf(rootId), ptr, 0, -1, null, pointerOf(buffer));
+        });
+        items.push(buffer);
+    }
+
+    for (const item of items)
+    {
+        for (let index = 1; index <= 5; ++index)
+        {
+            const buffer = new BigInt64Array(2);
+            withString("Subitem " + index, (ptr) =>
+            {
+                tree.AppendItem(pointerOf(item), ptr, 1, -1, null, pointerOf(buffer));
+            });
+        }
+    }
+
+    tree.Expand(pointerOf(rootId));
+    return tree;
+}
+
+/** MyFrame::CreateHTMLCtrl() */
+function createHtmlCtrl(state: FrameState, parent: Pointer | null): wxHtmlWindow | null
+{
+    const owner = parent === null ? state.frame.ptr : parent;
+
+    let control: wxHtmlWindow | null = null;
+    withString("htmlWindow", (name) =>
+    {
+        control = createWxHtmlWindow(
+            owner, ID_ANY, -1, -1,
+            state.dip(400), state.dip(300),
+            BigInt(HW_DEFAULT_STYLE), name,
+        );
+    });
+
+    if (!control)
+    {
+        return null;
+    }
+
+    withString(getIntroText(), (html) =>
+    {
+        (control as wxHtmlWindow).SetPage(html);
+    });
+
+    return control;
+}
+
+/** MyFrame::CreateSizeReportCtrl() */
+function createSizeReport(
+    state: FrameState,
+    width: number,
+    height: number,
+): wxPanel | null
+{
+    return createSizeReportCtrl(state, state.frame.ptr, width, height);
+}
+
+//---------------------------------------------------------------------------
+// MyFrame::CreateNotebook()
+//---------------------------------------------------------------------------
+
+function createNotebook(state: FrameState): wxAuiNotebook | null
+{
+    // create the notebook off-window to avoid flicker
+    let clientWidth = 0;
+    let clientHeight = 0;
+    const clientSizePtr = state.frame.GetClientSize();
+    if (clientSizePtr)
+    {
+        const clientSize = new wxSize(clientSizePtr);
+        clientWidth = clientSize.GetWidth();
+        clientHeight = clientSize.GetHeight();
+        clientSize.Delete();
+    }
+
+    const ctrl = createWxAuiNotebook(
+        state.frame.ptr, ID_ANY, clientWidth, clientHeight,
+        state.dip(430), state.dip(200), BigInt(state.notebookStyle),
+    );
+    if (!ctrl)
+    {
+        return null;
+    }
+
+    ctrl.Freeze();
+
+    const pageBmp = artBitmap(state, ART_NORMAL_FILE, 16, 16);
+
+    // 1. welcome page
+    const welcome = createHtmlCtrl(state, ctrl.ptr);
+    if (welcome)
+    {
+        state.welcomePages.push(welcome.ptr);
+        withString("Welcome to wxAUI", (caption) =>
+        {
+            ctrl.AddPageWithBitmap(
+                welcome.ptr, caption, false,
+                pageBmp ? pageBmp.ptr : Null_Bitmap(),
+            );
+        });
+        ctrl.SetPageKind(0, AUI_TAB_KIND_LOCKED);
+        withString(
+            "Note that this page is locked and can't be moved or closed",
+            (tip) => ctrl.SetPageToolTip(0, tip),
+        );
+    }
+
+    // 2. panel page with a text control and a spin control
+    const panel = createWxPanel(
+        ctrl.ptr, ID_ANY, -1, -1, -1, -1, TAB_TRAVERSAL,
+    );
+    if (panel)
+    {
+        const flex = createWxFlexGridSizer(4, 2, 0, 0);
+        if (flex)
+        {
+            flex.AddGrowableRow(BigInt(0), 0);
+            flex.AddGrowableRow(BigInt(3), 0);
+            flex.AddGrowableCol(BigInt(1), 0);
+
+            const border = state.dip(5);
+            flex.Add(border, border, 0, 0, 0, null);
+
+            let label = createStaticText(state, panel.ptr, "wxTextCtrl:");
+            if (label)
+            {
+                flex.AddWindow(label.ptr, 0, ALIGN_CENTRE | ALL, border, null);
+            }
+
+            let entry: wxTextCtrl | null = null;
+            withString("", (ptr) =>
+            {
+                entry = createWxTextCtrl(
+                    panel.ptr, -1, ptr, -1, -1, state.dip(100), -1, 0n,
+                );
+            });
+            if (entry)
+            {
+                flex.AddWindow(
+                    (entry as wxTextCtrl).ptr, 1, ALIGN_CENTRE | ALL, border, null);
+            }
+
+            label = createStaticText(state, panel.ptr, "wxSpinCtrl:");
+            if (label)
+            {
+                flex.AddWindow(label.ptr, 0, ALIGN_CENTRE | ALL, border, null);
+            }
+
+            let spin: wxSpinCtrl | null = null;
+            withString("5", (ptr) =>
+            {
+                spin = createWxSpinCtrl(
+                    panel.ptr, -1, ptr, -1, -1, -1, -1,
+                    BigInt(SP_ARROW_KEYS), 5, 50, 5,
+                );
+            });
+            if (spin)
+            {
+                flex.AddWindow(
+                    (spin as wxSpinCtrl).ptr, 0, ALIGN_CENTRE | ALL, border, null);
+            }
+
+            flex.Add(border, border, 0, 0, 0, null);
+            flex.Add(border, border, 0, 0, 0, null);
+
+            panel.SetSizer(flex.ptr, true);
+        }
+
+        withString("wxPanel", (caption) =>
+        {
+            ctrl.AddPageWithBitmap(
+                panel.ptr, caption, false,
+                pageBmp ? pageBmp.ptr : Null_Bitmap(),
+            );
+        });
+    }
+
+    // 3. "wxTextCtrl 1"
+    addNotebookTextPage(state, ctrl, "Some text", "wxTextCtrl 1", pageBmp, false);
+    // 4. "wxTextCtrl 2" (added with select = false, like the C++ call)
+    addNotebookTextPage(state, ctrl, "Some more text", "wxTextCtrl 2", null, false);
+    // 5. "wxTextCtrl 4"
+    addNotebookTextPage(state, ctrl, "Some more text", "wxTextCtrl 4", null, false);
+
+    // 6. inserted page
+    const inserted = createNotebookTextControl(state, ctrl.ptr, "Page inserted before another one");
+    if (inserted)
+    {
+        withString("wxTextCtrl 3", (caption) =>
+        {
+            ctrl.InsertPage(4, inserted.ptr, caption, false, -1);
+        });
+    }
+
+    // 7. "wxTextCtrl 5"
+    addNotebookTextPage(state, ctrl, "Some more text", "wxTextCtrl 5", null, false);
+    // 8. "wxTextCtrl 6"
+    addNotebookTextPage(state, ctrl, "Some more text", "wxTextCtrl 6", null, false);
+    // 9. "wxTextCtrl 7 (longer title)"
+    addNotebookTextPage(
+        state, ctrl, "Some more text", "wxTextCtrl 7 (longer title)", null, false);
+    withString(
+        "wxTextCtrl 7: and the tooltip message can be even longer!",
+        (tip) => ctrl.SetPageToolTip(ctrl.GetPageCount() - 1, tip),
+    );
+    // 10. "wxTextCtrl 8"
+    addNotebookTextPage(state, ctrl, "Some more text", "wxTextCtrl 8", null, false);
+
+    ctrl.Thaw();
+    state.notebooks.push(ctrl);
+    return ctrl;
+}
+
+function createStaticText(
+    state: FrameState,
+    parent: Pointer,
+    text: string,
+): wxStaticText | null
+{
+    let control: wxStaticText | null = null;
+    withString(text, (ptr) =>
+    {
+        control = createWxStaticText(parent, -1, ptr, -1, -1, -1, -1, 0);
+    });
+    return control;
+}
+
+function createNotebookTextControl(
+    state: FrameState,
+    parent: Pointer,
+    text: string,
+): wxTextCtrl | null
+{
+    let control: wxTextCtrl | null = null;
+    withString(text, (ptr) =>
+    {
+        control = createWxTextCtrl(
+            parent, ID_ANY, ptr, -1, -1, -1, -1,
+            BigInt(TE_MULTILINE | BORDER_NONE),
+        );
+    });
+    return control;
+}
+
+function addNotebookTextPage(
+    state: FrameState,
+    book: wxAuiNotebook,
+    text: string,
+    caption: string,
+    bitmap: wxBitmap | null,
+    select: boolean,
+): void
+{
+    const page = createNotebookTextControl(state, book.ptr, text);
+    if (!page)
+    {
+        return;
+    }
+
+    withString(caption, (label) =>
+    {
+        if (bitmap)
+        {
+            book.AddPageWithBitmap(page.ptr, label, select, bitmap.ptr);
+        }
+        else
+        {
+            book.AddPage(page.ptr, label, select, -1);
+        }
+    });
+}
+
+//---------------------------------------------------------------------------
+// MyFrame::GetIntroText()
+//---------------------------------------------------------------------------
+
+function getIntroText(): string
+{
+    return "<html><body>" +
+        "<h3>Welcome to wxAUI</h3>" +
+        "<br/><b>Overview</b><br/>" +
+        "<p>wxAUI is an Advanced User Interface library for the wxWidgets toolkit " +
+        "that allows developers to create high-quality, cross-platform user " +
+        "interfaces quickly and easily.</p>" +
+        "<p><b>Features</b></p>" +
+        "<p>With wxAUI, developers can create application frameworks with:</p>" +
+        "<ul>" +
+        "<li>Native, dockable floating frames</li>" +
+        "<li>Perspective saving and loading</li>" +
+        "<li>Native toolbars incorporating real-time, &quot;spring-loaded&quot; dragging</li>" +
+        "<li>Customizable floating/docking behaviour</li>" +
+        "<li>Completely customizable look-and-feel</li>" +
+        "<li>Optional transparent window effects (while dragging or docking)</li>" +
+        "<li>Splittable notebook control</li>" +
+        "</ul>" +
+        "<p><b>What's new in 0.9.4?</b></p>" +
+        "<p>wxAUI 0.9.4, which is bundled with wxWidgets, adds the following features:" +
+        "<ul>" +
+        "<li>New wxAuiToolBar class, a toolbar control which integrates more " +
+        "cleanly with wxAuiFrameManager.</li>" +
+        "<li>Lots of bug fixes</li>" +
+        "</ul>" +
+        "<p><b>What's new in 0.9.3?</b></p>" +
+        "<p>wxAUI 0.9.3, which is now bundled with wxWidgets, adds the following features:" +
+        "<ul>" +
+        "<li>New wxAuiNotebook class, a dynamic splittable notebook control</li>" +
+        "<li>New wxAuiMDI* classes, a tab-based MDI and drop-in replacement for classic MDI</li>" +
+        "<li>Maximize/Restore buttons implemented</li>" +
+        "<li>Better hinting with wxGTK</li>" +
+        "<li>Class rename.  'wxAui' is now the standard class prefix for all wxAUI classes</li>" +
+        "<li>Lots of bug fixes</li>" +
+        "</ul>" +
+        "<p><b>What's new in 0.9.2?</b></p>" +
+        "<p>The following features/fixes have been added since the last version of wxAUI:</p>" +
+        "<ul>" +
+        "<li>Support for wxMac</li>" +
+        "<li>Updates for wxWidgets 2.6.3</li>" +
+        "<li>Fix to pass more unused events through</li>" +
+        "<li>Fix to allow floating windows to receive idle events</li>" +
+        "<li>Fix for minimizing/maximizing problem with transparent hint pane</li>" +
+        "<li>Fix to not paint empty hint rectangles</li>" +
+        "<li>Fix for 64-bit compilation</li>" +
+        "</ul>" +
+        "<p><b>What changed in 0.9.1?</b></p>" +
+        "<p>The following features/fixes were added in wxAUI 0.9.1:</p>" +
+        "<ul>" +
+        "<li>Support for MDI frames</li>" +
+        "<li>Gradient captions option</li>" +
+        "<li>Active/Inactive panes option</li>" +
+        "<li>Fix for screen artifacts/paint problems</li>" +
+        "<li>Fix for hiding/showing floated window problem</li>" +
+        "<li>Fix for floating pane sizing problem</li>" +
+        "<li>Fix for drop position problem when dragging around center pane margins</li>" +
+        "<li>LF-only text file formatting for source code</li>" +
+        "</ul>" +
+        "<p>See README.txt for more information.</p>" +
+        "</body></html>";
+}
+
+//---------------------------------------------------------------------------
+// MyFrame::GetStartPosition()
+//---------------------------------------------------------------------------
+
+function getStartPosition(state: FrameState): { x: number; y: number }
+{
+    state.startPos += state.dip(20);
+
+    const pointPtr = state.frame.ClientToScreen(0, 0);
+    if (!pointPtr)
+    {
+        return { x: state.startPos, y: state.startPos };
+    }
+
+    const point = new wxPoint(pointPtr);
+    const x = point.GetX() + state.startPos;
+    const y = point.GetY() + state.startPos;
+    point.Delete();
+    return { x, y };
+}
+
+//---------------------------------------------------------------------------
+// Menu bar construction (MyFrame::MyFrame)
+//---------------------------------------------------------------------------
+
+/** `new wxMenu` (the empty title is dereferenced by the binding). */
+function createEmptyMenu(): wxMenu | null
+{
+    let menu: wxMenu | null = null;
+    withString("", (title) =>
+    {
+        menu = createWxMenu(title, 0n);
+    });
+    return menu;
+}
+
+function appendItem(
+    menu: wxMenu,
+    id: number,
+    label: string,
+    help: string | null,
+    checkable: boolean,
+): void
+{
+    const text = createWxString(label);
+    let helpString: wxString | null = null;
+    if (help !== null)
+    {
+        helpString = createWxString(help);
+    }
+
+    try
+    {
+        menu.Append(id, text.ptr, helpString ? helpString.ptr : null, checkable);
+    }
+    finally
+    {
+        text.Delete();
+        if (helpString)
+        {
+            helpString.Delete();
+        }
+    }
+}
+
+function appendRadioItem(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (text) => menu.AppendRadioItem(id, text, null));
+}
+
+function appendCheckItem(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (text) => menu.AppendCheckItem(id, text, null));
+}
+
+function buildMenuBar(state: FrameState): boolean
+{
+    const menuBar = createWxMenuBar(0);
+    if (!menuBar)
+    {
+        return false;
+    }
+
+    const fileMenu = createEmptyMenu();
+    const viewMenu = createEmptyMenu();
+    const optionsMenu = createEmptyMenu();
+    const minPanesMenu = createEmptyMenu();
+    const notebookMenu = createEmptyMenu();
+    const perspectivesMenu = createEmptyMenu();
+    const helpMenu = createEmptyMenu();
+
+    if (!fileMenu || !viewMenu || !optionsMenu || !minPanesMenu ||
+        !notebookMenu || !perspectivesMenu || !helpMenu)
+    {
+        return false;
+    }
+
+    // fileMenu->Append(wxID_EXIT)
+    appendItem(fileMenu, ID_EXIT, "E&xit", null, false);
+
+    appendItem(viewMenu, ID_CreateText, "Create Text Control", null, false);
+    appendItem(viewMenu, ID_CreateHTML, "Create HTML Control", null, false);
+    appendItem(viewMenu, ID_CreateTree, "Create Tree", null, false);
+    appendItem(viewMenu, ID_CreateGrid, "Create Grid", null, false);
+    appendItem(viewMenu, ID_CreateNotebook, "Create Notebook", null, false);
+    appendItem(viewMenu, ID_CreateSizeReport, "Create Size Reporter", null, false);
+    viewMenu.AppendSeparator();
+    appendItem(viewMenu, ID_GridContent, "Use a Grid for the Content Pane", null, false);
+    appendItem(viewMenu, ID_TextContent, "Use a Text Control for the Content Pane", null, false);
+    appendItem(viewMenu, ID_HTMLContent, "Use an HTML Control for the Content Pane", null, false);
+    appendItem(viewMenu, ID_TreeContent, "Use a Tree Control for the Content Pane", null, false);
+    appendItem(viewMenu, ID_NotebookContent, "Use a wxAuiNotebook control for the Content Pane", null, false);
+    appendItem(viewMenu, ID_SizeReportContent, "Use a Size Reporter for the Content Pane", null, false);
+
+    appendRadioItem(optionsMenu, ID_TransparentHint, "Transparent Hint");
+    appendRadioItem(optionsMenu, ID_VenetianBlindsHint, "Venetian Blinds Hint");
+    appendRadioItem(optionsMenu, ID_RectangleHint, "Rectangle Hint");
+    appendRadioItem(optionsMenu, ID_NoHint, "No Hint");
+    optionsMenu.AppendSeparator();
+    appendCheckItem(optionsMenu, ID_HintFade, "Hint Fade-in");
+    appendCheckItem(optionsMenu, ID_AllowFloating, "Allow Floating");
+    appendCheckItem(optionsMenu, ID_TransparentDrag, "Transparent Drag");
+    appendCheckItem(optionsMenu, ID_AllowActivePane, "Allow Active Pane");
+    // Only show "live resize" toggle if it's actually functional.
+    if (wxAuiManager_AlwaysUsesLiveResize(state.frame.ptr) === 0)
+    {
+        appendCheckItem(optionsMenu, ID_LiveUpdate, "Live Resize Update");
+    }
+    optionsMenu.AppendSeparator();
+    appendRadioItem(optionsMenu, ID_NoGradient, "No Caption Gradient");
+    appendRadioItem(optionsMenu, ID_VerticalGradient, "Vertical Caption Gradient");
+    appendRadioItem(optionsMenu, ID_HorizontalGradient, "Horizontal Caption Gradient");
+    optionsMenu.AppendSeparator();
+    appendCheckItem(optionsMenu, ID_AllowToolbarResizing, "Allow Toolbar Resizing");
+
+    appendRadioItem(minPanesMenu, ID_ShowTextForMinPanes, "Show &text");
+    appendRadioItem(minPanesMenu, ID_ShowIconsForMinPanes, "Show &icons");
+    appendRadioItem(minPanesMenu, ID_ShowBothForMinPanes, "Show &both");
+    minPanesMenu.Check(ID_ShowBothForMinPanes, true);
+    minPanesMenu.AppendSeparator();
+    appendCheckItem(minPanesMenu, ID_RotateMinPanesIcons, "&Rotate icons");
+    withString("&Minimized Panes Options", (label) =>
+    {
+        withString("", (help) => optionsMenu.AppendSubMenu(minPanesMenu.ptr, label, help));
+    });
+
+    optionsMenu.AppendSeparator();
+    appendItem(optionsMenu, ID_Settings, "Settings Pane", null, false);
+
+    appendRadioItem(notebookMenu, ID_NotebookArtDefault, "Default Theme");
+    appendRadioItem(notebookMenu, ID_NotebookArtFlat, "Flat Theme");
+    if (HAS_NATIVE_TABART)
+    {
+        appendRadioItem(notebookMenu, ID_NotebookArtNative, "Native-like Theme");
+    }
+    appendRadioItem(notebookMenu, ID_NotebookArtGloss, "Glossy Theme");
+    appendRadioItem(notebookMenu, ID_NotebookArtSimple, "Simple Theme");
+    notebookMenu.AppendSeparator();
+    appendRadioItem(notebookMenu, ID_NotebookNoCloseButton, "No Close Button");
+    appendRadioItem(notebookMenu, ID_NotebookCloseButton, "Close Button at Right");
+    appendRadioItem(notebookMenu, ID_NotebookCloseButtonAll, "Close Button on All Tabs");
+    appendRadioItem(notebookMenu, ID_NotebookCloseButtonActive, "Close Button on Active Tab");
+    notebookMenu.AppendSeparator();
+    appendRadioItem(notebookMenu, ID_NotebookAlignTop, "Tab Top Alignment");
+    appendRadioItem(notebookMenu, ID_NotebookAlignBottom, "Tab Bottom Alignment");
+    notebookMenu.AppendSeparator();
+    appendCheckItem(notebookMenu, ID_NotebookAllowTabMove, "Allow Tab Move");
+    appendCheckItem(notebookMenu, ID_NotebookAllowTabExternalMove, "Allow External Tab Move");
+    appendCheckItem(notebookMenu, ID_NotebookAllowTabSplit, "Allow Notebook Split");
+    appendCheckItem(notebookMenu, ID_NotebookScrollButtons, "Scroll Buttons Visible");
+    appendCheckItem(notebookMenu, ID_NotebookWindowList, "Window List Button Visible");
+    appendCheckItem(notebookMenu, ID_NotebookTabFixedWidth, "Fixed-width Tabs");
+    appendCheckItem(notebookMenu, ID_NotebookTabPin, "Show &Pin Button");
+    appendCheckItem(notebookMenu, ID_NotebookTabUnpin, "Show &Unpin Buttons");
+    appendCheckItem(notebookMenu, ID_NotebookMultiLine, "Tabs on &Multiple Lines");
+    notebookMenu.AppendSeparator();
+    appendItem(notebookMenu, ID_NotebookNextTab, "Switch to next tab\tCtrl-F6", null, false);
+    appendItem(notebookMenu, ID_NotebookPrevTab, "Switch to previous tab\tShift-Ctrl-F6", null, false);
+    notebookMenu.AppendSeparator();
+    appendItem(notebookMenu, ID_NotebookSplit, "&Split Notebook", null, false);
+    appendItem(notebookMenu, ID_NotebookUnsplit, "&Unsplit Notebook", null, false);
+    appendItem(notebookMenu, ID_NotebookNewTab, "Add a &New Tab", null, false);
+    appendItem(notebookMenu, ID_NotebookDeleteTab, "&Delete Last Tab", null, false);
+    notebookMenu.AppendSeparator();
+    appendRadioItem(notebookMenu, ID_NotebookNormalTab, "Make Current Tab Normal\tCtrl-0");
+    appendRadioItem(notebookMenu, ID_NotebookPinTab, "Pin Current Tab\tCtrl-1");
+    appendRadioItem(notebookMenu, ID_NotebookLockTab, "Lock Current Tab\tCtrl-2");
+
+    appendItem(perspectivesMenu, ID_CreatePerspective, "Create Perspective", null, false);
+    appendItem(perspectivesMenu, ID_CopyLayout,
+        "Copy Layout to Clipboard as XML\tCtrl-C", null, false);
+    appendItem(perspectivesMenu, ID_PasteLayout,
+        "Paste XML Layout from Clipboard\tCtrl-V", null, false);
+    perspectivesMenu.AppendSeparator();
+    appendItem(perspectivesMenu, ID_EditNotebookLayout, "Edit &Notebook Layout...", null, false);
+    perspectivesMenu.AppendSeparator();
+    appendItem(perspectivesMenu, ID_FirstPerspective + 0, "Default Startup", null, false);
+    appendItem(perspectivesMenu, ID_FirstPerspective + 1, "All Panes", null, false);
+
+    appendItem(helpMenu, ID_ABOUT, "&About", null, false);
+
+    withString("&File", (label) => menuBar.Append(fileMenu.ptr, label));
+    withString("&View", (label) => menuBar.Append(viewMenu.ptr, label));
+    withString("&Perspectives", (label) => menuBar.Append(perspectivesMenu.ptr, label));
+    withString("&Options", (label) => menuBar.Append(optionsMenu.ptr, label));
+    withString("&Notebook", (label) => menuBar.Append(notebookMenu.ptr, label));
+    withString("&Help", (label) => menuBar.Append(helpMenu.ptr, label));
+
+    state.frame.SetMenuBar(menuBar.ptr);
+
+    state.menuBar = menuBar;
+    state.perspectivesMenu = perspectivesMenu;
+    return true;
+}
+
+//---------------------------------------------------------------------------
+// Toolbars
+//---------------------------------------------------------------------------
+
+function addToolByLabel(
+    state: FrameState,
+    toolbar: wxAuiToolBar,
+    id: number,
+    label: string,
+    artId: Pointer,
+    shortHelp: string,
+    kind: number,
+    bitmapSize: number = -1,
+): void
+{
+    const bitmap = artBitmap(state, artId, bitmapSize, bitmapSize);
+    if (!bitmap)
+    {
+        return;
+    }
+
+    const labelText = createWxString(label);
+    const helpText = createWxString(shortHelp);
+    try
+    {
+        toolbar.AddToolByLabel(id, labelText.ptr, bitmap.ptr, helpText.ptr, kind);
+    }
+    finally
+    {
+        labelText.Delete();
+        helpText.Delete();
+    }
+}
+
+function addToolFull(
+    state: FrameState,
+    toolbar: wxAuiToolBar,
+    id: number,
+    label: string,
+    artId: Pointer,
+    shortHelp: string,
+    longHelp: string,
+): void
+{
+    const bitmap = artBitmap(state, artId, -1, -1);
+    if (!bitmap)
+    {
+        return;
+    }
+
+    const labelText = createWxString(label);
+    const shortText = createWxString(shortHelp);
+    const longText = createWxString(longHelp);
+    try
+    {
+        toolbar.AddTool(
+            id, labelText.ptr, bitmap.ptr, Null_Bitmap(),
+            ITEM_NORMAL, shortText.ptr, longText.ptr, null,
+        );
+    }
+    finally
+    {
+        labelText.Delete();
+        shortText.Delete();
+        longText.Delete();
+    }
+}
+
+function createToolbar(state: FrameState, style: number): wxAuiToolBar | null
+{
+    return createWxAuiToolBar(
+        state.frame.ptr, ID_ANY, -1, -1, -1, -1, BigInt(style),
+    );
+}
+
+/**
+ * wxAuiToolBar::SetCustomOverflowItems() takes two wxAuiToolBarItemArray values.
+ * The C++ sample prepends nothing and appends a separator plus the
+ * "Customize..." entry bound to ID_CustomizeToolbar.
+ */
+function setOverflowItems(toolbar: wxAuiToolBar): void
+{
+    const prepend = createWxAuiToolBarItemArray();
+    const append = createWxAuiToolBarItemArray();
+    if (!prepend || !append)
+    {
+        return;
+    }
+
+    const item = createWxAuiToolBarItemDefault();
+    if (item)
+    {
+        // wxAuiToolBarItem item; item.SetKind(wxITEM_SEPARATOR);
+        item.SetKind(ITEM_SEPARATOR);
+        append.Add(item.ptr);
+
+        // item.SetKind(wxITEM_NORMAL); item.SetId/SetLabel(...)
+        item.SetKind(ITEM_NORMAL);
+        item.SetId(ID_CustomizeToolbar);
+        withString("Customize...", (label) => item.SetLabel(label));
+        append.Add(item.ptr);
+
+        // The array stores copies, so the temporary item can be released.
+        item.Delete();
+    }
+
+    toolbar.SetCustomOverflowItems(prepend.ptr, append.ptr);
+    prepend.Delete();
+    append.Delete();
+}
+
+function createToolbars(state: FrameState): boolean
+{
+    // Local helper: adds the pane to the manager immediately (see createPanes).
+    const addPane = (
+        _state: FrameState,
+        window: Pointer | null,
+        name: string,
+        caption: string | null,
+        configure: (info: wxAuiPaneInfo) => void,
+        _toolbar: boolean = false,
+    ): boolean => addPaneToManager(state, window, name, caption, configure);
+
+    // toolbar 1
+    const tb1 = createToolbar(state, AUI_TB_DEFAULT_STYLE | AUI_TB_OVERFLOW);
+    if (!tb1)
+    {
+        return false;
+    }
+    addToolByLabel(state, tb1, ID_SampleItem + 1, "Test", ART_ERROR, "", ITEM_NORMAL);
+    tb1.AddSeparator();
+    addToolByLabel(state, tb1, ID_SampleItem + 2, "Test", ART_QUESTION, "", ITEM_NORMAL);
+    addToolByLabel(state, tb1, ID_SampleItem + 3, "Test", ART_INFORMATION, "", ITEM_NORMAL);
+    addToolByLabel(state, tb1, ID_SampleItem + 4, "Test", ART_WARNING, "", ITEM_NORMAL);
+    addToolByLabel(state, tb1, ID_SampleItem + 5, "Test", ART_MISSING_IMAGE, "", ITEM_NORMAL);
+    setOverflowItems(tb1);
+    tb1.Realize();
+
+    // toolbar 2
+    const tb2 = createToolbar(
+        state, AUI_TB_DEFAULT_STYLE | AUI_TB_OVERFLOW | AUI_TB_HORIZONTAL);
+    if (!tb2)
+    {
+        return false;
+    }
+    for (const offset of [6, 7, 8, 9])
+    {
+        addToolByLabel(state, tb2, ID_SampleItem + offset, offset === 6 ? "Disabled" : "Test",
+            ART_QUESTION, "", ITEM_NORMAL, 16);
+    }
+    tb2.AddSeparator();
+    addToolByLabel(state, tb2, ID_SampleItem + 10, "Test", ART_QUESTION, "", ITEM_NORMAL, 16);
+    addToolByLabel(state, tb2, ID_SampleItem + 11, "Test", ART_QUESTION, "", ITEM_NORMAL, 16);
+    tb2.AddSeparator();
+    for (const offset of [12, 13, 14, 15])
+    {
+        addToolByLabel(state, tb2, ID_SampleItem + offset, "Test", ART_QUESTION, "", ITEM_NORMAL, 16);
+    }
+    setOverflowItems(tb2);
+    tb2.EnableTool(ID_SampleItem + 6, false);
+    tb2.Realize();
+
+    // toolbar 3
+    const tb3 = createToolbar(state, AUI_TB_DEFAULT_STYLE | AUI_TB_OVERFLOW);
+    if (!tb3)
+    {
+        return false;
+    }
+    for (let index = 1; index <= 4; ++index)
+    {
+        addToolByLabel(state, tb3, ID_SampleItem + 15 + index, "Check " + index,
+            ART_FOLDER, "Check " + index, ITEM_CHECK, 16);
+    }
+    tb3.AddSeparator();
+    for (let index = 1; index <= 3; ++index)
+    {
+        addToolByLabel(state, tb3, ID_SampleItem + 19 + index, "Radio " + index,
+            ART_FOLDER, "Radio " + index, ITEM_RADIO, 16);
+    }
+    tb3.AddSeparator();
+    for (let index = 1; index <= 3; ++index)
+    {
+        addToolByLabel(state, tb3, ID_SampleItem + 22 + index,
+            "Radio " + index + " (Group 2)", ART_FOLDER,
+            "Radio " + index + " (Group 2)", ITEM_RADIO, 16);
+    }
+    setOverflowItems(tb3);
+    tb3.Realize();
+
+    // toolbar 4
+    const tb4 = createToolbar(
+        state,
+        AUI_TB_DEFAULT_STYLE | AUI_TB_OVERFLOW | AUI_TB_TEXT | AUI_TB_HORZ_TEXT,
+    );
+    if (!tb4)
+    {
+        return false;
+    }
+    addToolByLabel(state, tb4, ID_DropDownToolbarItem, "Item 1", ART_NORMAL_FILE, "", ITEM_NORMAL, 16);
+    addToolByLabel(state, tb4, ID_SampleItem + 23, "Item 2", ART_NORMAL_FILE, "", ITEM_NORMAL, 16);
+    tb4.SetToolSticky(ID_SampleItem + 23, true);
+    addToolByLabel(state, tb4, ID_SampleItem + 24, "Disabled", ART_NORMAL_FILE, "", ITEM_NORMAL, 16);
+    tb4.EnableTool(ID_SampleItem + 24, false); // Just to show disabled items look
+    addToolByLabel(state, tb4, ID_SampleItem + 25, "Item 4", ART_NORMAL_FILE, "", ITEM_NORMAL, 16);
+    tb4.AddSeparator();
+    for (let index = 5; index <= 8; ++index)
+    {
+        addToolByLabel(state, tb4, ID_SampleItem + 21 + index, "Item " + index,
+            ART_NORMAL_FILE, "", ITEM_NORMAL, 16);
+    }
+    tb4.SetToolDropDown(ID_DropDownToolbarItem, true);
+    setOverflowItems(tb4);
+
+    const chooseLabel = createStaticText(state, tb4.ptr, "Choose wisely: ");
+    if (chooseLabel)
+    {
+        withString("", (label) => tb4.AddControl(chooseLabel.ptr, label));
+    }
+
+    const choice = createWxChoice(
+        tb4.ptr, ID_SampleItem + 35, -1, -1, -1, -1, 0, null, 0);
+    if (choice)
+    {
+        withString("Good choice", (text) => choice.AppendString(text));
+        withString("Better choice", (text) => choice.AppendString(text));
+        withString("", (label) => tb4.AddControl(choice.ptr, label));
+    }
+    tb4.Realize();
+
+    // toolbar 5
+    const tb5 = createToolbar(
+        state, AUI_TB_DEFAULT_STYLE | AUI_TB_OVERFLOW | AUI_TB_VERTICAL);
+    if (!tb5)
+    {
+        return false;
+    }
+    addToolByLabel(state, tb5, ID_SampleItem + 30, "Test", ART_ERROR, "", ITEM_NORMAL);
+    tb5.AddSeparator();
+    addToolByLabel(state, tb5, ID_SampleItem + 31, "Test", ART_QUESTION, "", ITEM_NORMAL);
+    addToolByLabel(state, tb5, ID_SampleItem + 32, "Test", ART_INFORMATION, "", ITEM_NORMAL);
+    addToolByLabel(state, tb5, ID_SampleItem + 33, "Test", ART_WARNING, "", ITEM_NORMAL);
+    addToolFull(state, tb5, ID_SampleItem + 34, "Test with help", ART_MISSING_IMAGE,
+        "Short Help", "This is long help on the status bar");
+    setOverflowItems(tb5);
+    tb5.Realize();
+
+    // register the panes
+    addPane(state, tb1.ptr, "horz_tb", "Big Toolbar", (info) =>
+    {
+        info.ToolbarPane();
+        info.Top();
+    }, true);
+
+    addPane(state, tb2.ptr, "question_icon_tb", "Toolbar 2 (Horizontal)", (info) =>
+    {
+        info.ToolbarPane();
+        info.Top();
+        info.Row(1);
+    }, true);
+
+    addPane(state, tb3.ptr, "folder_icon_tb", "Toolbar 3", (info) =>
+    {
+        info.ToolbarPane();
+        info.Top();
+        info.Row(1);
+        info.Position(1);
+    }, true);
+
+    addPane(state, tb4.ptr, "bookmark_tb", "Sample Bookmark Toolbar", (info) =>
+    {
+        info.ToolbarPane();
+        info.Top();
+        info.Row(2);
+    }, true);
+
+    addPane(state, tb5.ptr, "vert_tb", "Sample Vertical Toolbar", (info) =>
+    {
+        info.ToolbarPane();
+        info.Left();
+        info.GripperTop(true);
+    }, true);
+
+    let testButton: wxButton | null = null;
+    withString("Test Button", (label) =>
+    {
+        testButton = createWxButton(
+            state.frame.ptr, ID_ANY, label, -1, -1, -1, -1, 0);
+    });
+    if (testButton)
+    {
+        addPane(state, (testButton as wxButton).ptr, "button_tb", null, (info) =>
+        {
+            info.ToolbarPane();
+            info.Top();
+            info.Row(2);
+            info.Position(1);
+            info.LeftDockable(false);
+            info.RightDockable(false);
+        }, true);
+    }
+
+    return true;
+}
+
+//---------------------------------------------------------------------------
+// Pane construction
+//---------------------------------------------------------------------------
+
+function createPanes(state: FrameState): boolean
+{
+    // Local helper: adds the pane to the manager immediately, in the same order
+    // as the C++ constructor, so the saved perspectives keep that order.
+    const addPane = (
+        _state: FrameState,
+        window: Pointer | null,
+        name: string,
+        caption: string | null,
+        configure: (info: wxAuiPaneInfo) => void,
+        _toolbar: boolean = false,
+    ): boolean => addPaneToManager(state, window, name, caption, configure);
+
+    // add a bunch of panes
+    const top = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, top ? top.ptr : null!, "top", "Pane Caption", (info) =>
+    {
+        info.Top();
+    });
+
+    const withClose = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, withClose ? withClose.ptr : null!, "with_close",
+        "Client Size Reporter", (info) =>
+    {
+        info.Bottom();
+        info.Position(1);
+        info.CloseButton(true);
+        info.MaximizeButton(true);
+    });
+
+    const withCloseMax = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, withCloseMax ? withCloseMax.ptr : null!,
+        "with_close_and_maximize", "Client Size Reporter", (info) =>
+    {
+        info.Bottom();
+        info.CloseButton(true);
+        info.MaximizeButton(true);
+    });
+
+    const left = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, left ? left.ptr : null!, "left", "Pane Caption", (info) =>
+    {
+        info.Left();
+    });
+
+    const right = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, right ? right.ptr : null!, "right", "No Close Button", (info) =>
+    {
+        info.Right();
+        info.CloseButton(false);
+    });
+
+    const row1 = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, row1 ? row1.ptr : null!, "row_1", "Client Size Reporter", (info) =>
+    {
+        info.Right();
+        info.Row(1);
+        info.CloseButton(true);
+        info.MaximizeButton(true);
+    });
+
+    const layer1 = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, layer1 ? layer1.ptr : null!, "layer_1",
+        "Float Client Size 111x222", (info) =>
+    {
+        info.MinSize(state.dip(11), state.dip(22));
+        withSize(111, 222, (size) => info.FloatingClientSize(size));
+        info.Left();
+        info.Layer(1);
+        info.CloseButton(true);
+        info.MaximizeButton(true);
+    });
+
+    const tree = createTreeCtrl(state);
+    const treeIconMin = artBundle(state, ART_CUT, ART_MENU, -1, -1);
+    addPane(state, tree ? tree.ptr : null!, "tree", "Tree Pane", (info) =>
+    {
+        info.Left();
+        info.Layer(1);
+        info.Position(1);
+        info.CloseButton(true);
+        info.MaximizeButton(true);
+        info.MinimizeButton(true);
+        if (treeIconMin)
+        {
+            info.IconMin(treeIconMin.ptr);
+        }
+    });
+
+    const minSize = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, minSize ? minSize.ptr : null!, "minsize_200x100",
+        "Min Size 200x100", (info) =>
+    {
+        info.BestSize(state.dip(200), state.dip(100));
+        info.MinSize(state.dip(200), state.dip(100));
+        info.Bottom();
+        info.Layer(1);
+        info.CloseButton(true);
+        info.MaximizeButton(true);
+    });
+
+    const textPane = createTextCtrl(state, "This pane will prompt the user before hiding.");
+    const iconSize = (state.dockArt().GetMetricForWindow(
+        AUI_DOCKART_CAPTION_SIZE, state.frame.ptr) & ~1);
+    const textIcon = artBitmap(state, ART_WARNING, iconSize, iconSize);
+    const textIconMin = artBundle(state, ART_PASTE, ART_MENU, -1, -1);
+    addPane(state, textPane ? textPane.ptr : null!, "text",
+        "Text Pane with Hide Prompt", (info) =>
+    {
+        info.Bottom();
+        info.Layer(1);
+        info.Position(1);
+        info.MaximizeButton(true);
+        info.MinimizeButton(true);
+        if (textIcon)
+        {
+            info.Icon(textIcon.ptr);
+        }
+        if (textIconMin)
+        {
+            info.IconMin(textIconMin.ptr);
+        }
+    });
+
+    const fixed = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, fixed ? fixed.ptr : null!, "fixed", "Fixed Pane", (info) =>
+    {
+        info.Bottom();
+        info.Layer(1);
+        info.Position(2);
+        info.Fixed();
+    });
+
+    const settings = createSettingsPanel(state.frame.ptr, {
+        framePtr: state.frame.ptr,
+        dip: (value: number) => state.dip(value),
+        getDockArt: () => state.dockArt(),
+        doUpdate: () => state.mgr.Update(),
+    });
+    state.settings = settings;
+    if (settings)
+    {
+        connectSettingsEvents(settings, {
+            framePtr: state.frame.ptr,
+            dip: (value: number) => state.dip(value),
+            getDockArt: () => state.dockArt(),
+            doUpdate: () => state.mgr.Update(),
+        }, state.callbacks, state.closures);
+    }
+    addPane(state, settings ? settings.panel.ptr : null!, "settings",
+        "Dock Manager Settings", (info) =>
+    {
+        info.Dockable(false);
+        info.Float();
+        info.Hide();
+    });
+
+    // create some center panes
+    const gridContent = createGrid(state);
+    addPane(state, gridContent ? gridContent.ptr : null!, "grid_content", null, (info) =>
+    {
+        info.CenterPane();
+        info.Hide();
+    });
+
+    const treeContent = createTreeCtrl(state);
+    addPane(state, treeContent ? treeContent.ptr : null!, "tree_content", null, (info) =>
+    {
+        info.CenterPane();
+        info.Hide();
+    });
+
+    const sizeReportContent = createSizeReport(state, state.dip(80), state.dip(80));
+    addPane(state, sizeReportContent ? sizeReportContent.ptr : null!,
+        "sizereport_content", null, (info) =>
+    {
+        info.CenterPane();
+        info.Hide();
+    });
+
+    const textContent = createTextCtrl(state, null);
+    addPane(state, textContent ? textContent.ptr : null!, "text_content", null, (info) =>
+    {
+        info.CenterPane();
+        info.Hide();
+    });
+
+    const htmlContent = createHtmlCtrl(state, null);
+    addPane(state, htmlContent ? htmlContent.ptr : null!, "html_content", null, (info) =>
+    {
+        info.CenterPane();
+        info.Hide();
+    });
+
+    const notebook = createNotebook(state);
+    state.notebook = notebook;
+    addPane(state, notebook ? notebook.ptr : null!, "notebook_content", null, (info) =>
+    {
+        info.CenterPane();
+        info.PaneBorder(false);
+    });
+
+    return notebook !== null;
+}
+
+/** Calls fn with a temporary wxSize. */
+function withSize(width: number, height: number, fn: (ptr: Pointer) => void): void
+{
+    const size = createWxSize(width, height);
+    if (!size)
+    {
+        return;
+    }
+    try
+    {
+        fn(size.ptr);
+    }
+    finally
+    {
+        size.Delete();
+    }
+}
+
+/**
+ * The C++ constructor's perspective block (auidemo.cpp:1130-1150):
+ *
+ *   wxString perspectiveAll = m_mgr.SavePerspective();
+ *   for (auto& pane : m_mgr.GetAllPanes()) if (!pane.IsToolbar()) pane.Hide();
+ *   ... hide "horz_tb"/"button_tb", show tree/text/notebook ...
+ *   wxString perspectiveDefault = m_mgr.SavePerspective();
+ *   m_perspectives.Add(perspectiveDefault);  m_perspectives.Add(perspectiveAll);
+ *
+ * The panes are mutated in place; the startup layout is simply left applied.
+ */
+function buildPerspectives(state: FrameState): void
+{
+    const allPtr = state.mgr.SavePerspective();
+    const allPerspective = allPtr ? readAndDeleteWxString(allPtr) : "";
+
+    const panesPtr = state.mgr.GetAllPanes();
+    if (panesPtr)
+    {
+        const panes = wrapWxAuiPaneInfoArray(panesPtr);
+        const count = panes.GetCount();
+        for (let index = 0; index < count; ++index)
+        {
+            const pane = panes.Item(index);
+            if (pane && !pane.IsToolbar())
+            {
+                pane.Hide();
+            }
+        }
+    }
+
+    updatePane(state, "horz_tb", (info) => info.Hide());
+    updatePane(state, "button_tb", (info) => info.Hide());
+
+    updatePane(state, "tree", (info) =>
+    {
+        info.Show(true);
+        info.Left();
+        info.Layer(0);
+        info.Row(0);
+        info.Position(0);
+    });
+
+    updatePane(state, "text", (info) =>
+    {
+        info.Show(true);
+        info.Bottom();
+        info.Layer(0);
+        info.Row(0);
+        info.Position(0);
+    });
+
+    updatePane(state, "notebook_content", (info) => info.Show(true));
+
+    const defaultPtr = state.mgr.SavePerspective();
+    const defaultPerspective = defaultPtr ? readAndDeleteWxString(defaultPtr) : "";
+
+    state.perspectives.push(defaultPerspective);
+    state.perspectives.push(allPerspective);
+}
+
+//---------------------------------------------------------------------------
+// Frame construction (MyFrame::MyFrame)
+//---------------------------------------------------------------------------
+
+function createAuiFrame(): FrameState | null
+{
+    const title = createWxString("wxAUI Sample Application");
+    const frame = createWxFrame(
+        null, ID_ANY, title.ptr, -1, -1,
+        // wxWindow::FromDIP(wxSize(800, 600), nullptr) is applied after
+        // creation because the frame itself is the DIP reference window.
+        -1, -1,
+        DEFAULT_FRAME_STYLE | BORDER_SUNKEN,
+    );
+    title.Delete();
+
+    if (!frame)
+    {
+        return null;
+    }
+
+    // SetSize(FromDIP(wxSize(800, 600)))
+    frame.SetSize(-1, -1, frame.FromDIP(800), frame.FromDIP(600), SIZE_AUTO);
+
+    const state: FrameState = {
+        frame,
+        mgr: null!,
+        menuBar: null!,
+        perspectivesMenu: null!,
+        statusBar: null,
+        dip: (value: number) => frame.FromDIP(value),
+        dockArt: () => state.mgr.GetArtProvider()!,
+
+        perspectives: [],
+        notebookStyle: 0,
+        notebookTheme: TABART_DEFAULT,
+        notebook: null,
+        notebooks: [],
+        welcomePages: [],
+        panes: new Map<string, Pointer>(),
+        settings: null,
+        startPos: 0,
+        textCtrlNumber: 0,
+        sizeReports: [],
+        pendingSizeReports: [],
+        callbacks: [],
+        closures: [],
+        owned: [],
+        sizeReportPaint: null,
+        sizeReportSize: null,
+        sizeReportErase: null,
+    };
+
+    // tell wxAuiManager to manage this frame
+    // wxAUI_MGR_DEFAULT = ALLOW_FLOATING | TRANSPARENT_HINT | LIVE_RESIZE
+    const manager = createWxAuiManager(
+        frame.ptr,
+        AUI_MGR_ALLOW_FLOATING | AUI_MGR_TRANSPARENT_HINT | AUI_MGR_LIVE_RESIZE,
+    );
+    if (!manager)
+    {
+        return null;
+    }
+    state.mgr = manager;
+
+    // allow minimizing panes to docks on the left and right sides of the window
+    manager.AllowDocksForMinPanes(LEFT | RIGHT);
+
+    // set frame icon (the C++ sample uses the compiled-in sample_xpm)
+    const iconPath = createWxString(samplePath("sample.xpm"));
+    const icon = createWxIconLoad(iconPath.ptr, BigInt(BITMAP_TYPE_XPM), -1, -1);
+    iconPath.Delete();
+    if (icon)
+    {
+        if (icon.IsOk())
+        {
+            frame.SetIcon(icon.ptr);
+        }
+        icon.Delete();
+    }
+
+    // set up default notebook style
+    state.notebookStyle = AUI_NB_DEFAULT_STYLE |
+        AUI_NB_TAB_EXTERNAL_MOVE |
+        AUI_NB_PIN_ON_ACTIVE_TAB |
+        AUI_NB_UNPIN_ON_ALL_PINNED |
+        BORDER_NONE;
+
+    if (!buildMenuBar(state))
+    {
+        return null;
+    }
+
+    const statusBar = frame.CreateStatusBar(1, STB_DEFAULT_STYLE, ID_ANY);
+    if (statusBar)
+    {
+        state.statusBar = statusBar.ptr;
+        withString("Ready", (text) => wrapWxStatusBar(statusBar.ptr).SetStatusText(text, 0));
+    }
+
+    // min size for the frame itself isn't completely done, so hard code it
+    frame.SetMinSize(frame.FromDIP(400), frame.FromDIP(300));
+
+    if (!createPanes(state))
+    {
+        return null;
+    }
+
+    if (!createToolbars(state))
+    {
+        return null;
+    }
+
+    // make some default perspectives
+    buildPerspectives(state);
+
+    // "commit" all changes made to wxAuiManager
+    manager.Update();
+
+    return state;
+}
+
+//---------------------------------------------------------------------------
+// Paint handler for the size reporters
+//---------------------------------------------------------------------------
+
+/** wxSizeReportCtrl::OnPaint() */
+function paintSizeReport(state: FrameState, eventPtr: Pointer): void
+{
+    // wxPaintEvent is not bound; the event object is read from wxEvent.
+    const windowPtr = lib.symbols.wxEvent_GetEventObject(eventPtr);
+    if (!windowPtr)
+    {
+        return;
+    }
+
+    const dc = createWxPaintDC(windowPtr);
+    if (!dc)
+    {
+        return;
+    }
+
+    const window = wrapWxWindow(windowPtr);
+
+    let clientWidth = 0;
+    let clientHeight = 0;
+    const sizePtr = window.GetClientSize();
+    if (sizePtr)
+    {
+        const size = new wxSize(sizePtr);
+        clientWidth = size.GetWidth();
+        clientHeight = size.GetHeight();
+        size.Delete();
+    }
+
+    let text = "Size: " + clientWidth + " x " + clientHeight;
+
+    dc.SetFont(NORMAL_FONT);
+    let extent = measureText(dc, text);
+    const lineHeight = extent.h + window.FromDIP(3);
+
+    dc.SetBrush(WHITE_BRUSH);
+    dc.SetPen(WHITE_PEN);
+    dc.DrawRectangle(0, 0, clientWidth, clientHeight);
+    dc.SetPen(LIGHT_GREY_PEN);
+    dc.DrawLine(0, 0, clientWidth, clientHeight);
+    dc.DrawLine(0, clientHeight, clientWidth, 0);
+
+    const baseY = Math.trunc((clientHeight - lineHeight * 5) / 2);
+    drawLine(dc, text, clientWidth, baseY);
+
+    const pane = state.mgr.GetPaneByWindow(windowPtr);
+    if (pane)
+    {
+        const layer = pane.GetDockLayer();
+        const direction = pane.GetDockDirection();
+        const row = pane.GetDockRow();
+        const position = pane.GetDockPos();
+        const proportion = pane.GetDockProportion();
+
+        const lines = [
+            "Layer: " + layer,
+            "Dock: " + direction + " Row: " + row,
+            "Position: " + position,
+            "Proportion: " + proportion,
+        ];
+
+        for (let index = 0; index < lines.length; ++index)
+        {
+            drawLine(dc, lines[index], clientWidth, baseY + lineHeight * (index + 1));
+        }
+    }
+
+    dc.Delete();
+}
+
+function measureText(dc: wxDC, text: string): { w: number; h: number }
+{
+    const extentPtr = withStringReturn(text, (ptr) => dc.GetTextExtentSize(ptr));
+    if (!extentPtr)
+    {
+        return { w: 0, h: 0 };
+    }
+
+    const extent = new wxSize(extentPtr);
+    const result = { w: extent.GetWidth(), h: extent.GetHeight() };
+    // GetTextExtentSize() allocates the wxSize it returns.
+    lib.symbols.wxSize_Delete(extentPtr);
+    return result;
+}
+
+function drawLine(dc: wxDC, text: string, clientWidth: number, y: number): void
+{
+    const extent = measureText(dc, text);
+    withString(text, (ptr) =>
+    {
+        dc.DrawText(ptr, Math.trunc((clientWidth - extent.w) / 2), y);
+    });
+}
+
+//---------------------------------------------------------------------------
+// Event handlers
+//---------------------------------------------------------------------------
+
+/** MyFrame::OnSettings() */
+function onSettings(state: FrameState): void
+{
+    // wxAuiPaneInfo& floatingPane = m_mgr.GetPane("settings").Float().Show();
+    // if (floatingPane.floating_pos == wxDefaultPosition)
+    //     floatingPane.FloatingPosition(GetStartPosition());
+    updatePane(state, "settings", (info) =>
+    {
+        info.Float();
+        info.Show(true);
+
+        const position = info.GetFloatingPos();
+        const isDefault = !position ||
+            (position.GetX() === -1 && position.GetY() === -1);
+        if (isDefault)
+        {
+            const start = getStartPosition(state);
+            info.FloatingPosition(start.x, start.y);
+        }
+    });
+
+    state.mgr.Update();
+}
+
+/** MyFrame::OnCustomizeToolbar() */
+function onCustomizeToolbar(state: FrameState): void
+{
+    messageBox("Customize Toolbar clicked", "", OK, state.frame.ptr);
+}
+
+/** MyFrame::OnGradient() */
+function onGradient(state: FrameState, id: number): void
+{
+    let gradient = 0;
+
+    switch (id)
+    {
+        case ID_NoGradient:
+            gradient = AUI_GRADIENT_NONE;
+            break;
+        case ID_VerticalGradient:
+            gradient = AUI_GRADIENT_VERTICAL;
+            break;
+        case ID_HorizontalGradient:
+            gradient = AUI_GRADIENT_HORIZONTAL;
+            break;
+        default:
+            break;
+    }
+
+    state.dockArt().SetMetric(AUI_DOCKART_GRADIENT_TYPE, gradient);
+    state.mgr.Update();
+}
+
+// Panes whose window is a wxAuiToolBar (MyFrame::OnToolbarResizing() skips the
+// "button_tb" pane because its window is a plain wxButton).
+const TOOLBAR_PANES = [
+    "horz_tb", "question_icon_tb", "folder_icon_tb",
+    "bookmark_tb", "vert_tb",
+];
+
+/**
+ * Calls fn for every managed pane whose window is a wxAuiNotebook, replacing
+ * the C++ `wxDynamicCast(pane.window, wxAuiNotebook)` loops.
+ */
+function forEachNotebookPane(
+    state: FrameState,
+    fn: (book: wxAuiNotebook) => void,
+): void
+{
+    const panesPtr = state.mgr.GetAllPanes();
+    if (!panesPtr)
+    {
+        return;
+    }
+
+    const panes = wrapWxAuiPaneInfoArray(panesPtr);
+    const count = panes.GetCount();
+    for (let index = 0; index < count; ++index)
+    {
+        const pane = panes.Item(index);
+        if (!pane)
+        {
+            continue;
+        }
+
+        const window = pane.GetWindow();
+        if (!window)
+        {
+            continue;
+        }
+
+        for (const book of state.notebooks)
+        {
+            if (book.ptr === window.ptr)
+            {
+                fn(book);
+                break;
+            }
+        }
+    }
+}
+
+/** MyFrame::OnToolbarResizing() */
+function onToolbarResizing(state: FrameState): void
+{
+    for (const name of TOOLBAR_PANES)
+    {
+        updatePane(state, name, (info) =>
+        {
+            info.Resizable(!info.IsResizable());
+        });
+    }
+
+    state.mgr.Update();
+}
+
+/** MyFrame::OnMinPanesStyle() */
+function onMinPanesStyle(state: FrameState): void
+{
+    const menuBar = wrapWxMenuBar(state.menuBar.ptr);
+
+    let style = 0;
+    if (menuBar.IsChecked(ID_ShowTextForMinPanes))
+    {
+        style |= AUI_MIN_DOCK_TEXT;
+    }
+    else if (menuBar.IsChecked(ID_ShowIconsForMinPanes))
+    {
+        style |= AUI_MIN_DOCK_ICONS;
+    }
+    else if (menuBar.IsChecked(ID_ShowBothForMinPanes))
+    {
+        style |= AUI_MIN_DOCK_BOTH;
+    }
+
+    if ((style & AUI_MIN_DOCK_ICONS) !== 0)
+    {
+        if (menuBar.IsChecked(ID_RotateMinPanesIcons))
+        {
+            style |= AUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT;
+        }
+    }
+
+    state.mgr.SetDocksForMinPanesStyle(style);
+}
+
+/** MyFrame::OnManagerFlag() */
+function onManagerFlag(state: FrameState, id: number): void
+{
+    // #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXGTK__)
+    if (platform !== "windows" && platform !== "darwin" && platform !== "linux")
+    {
+        if (id === ID_TransparentDrag ||
+            id === ID_TransparentHint ||
+            id === ID_HintFade)
+        {
+            messageBox(
+                "This option is presently only available on wxGTK, wxMSW and wxMac",
+                "", OK, state.frame.ptr,
+            );
+            return;
+        }
+    }
+
+    if (id === ID_TransparentHint ||
+        id === ID_VenetianBlindsHint ||
+        id === ID_RectangleHint ||
+        id === ID_NoHint)
+    {
+        let flags = state.mgr.GetFlags();
+        flags &= ~AUI_MGR_TRANSPARENT_HINT;
+        flags &= ~AUI_MGR_VENETIAN_BLINDS_HINT;
+        flags &= ~AUI_MGR_RECTANGLE_HINT;
+        state.mgr.SetFlags(flags);
+    }
+
+    let flag = 0;
+    switch (id)
+    {
+        case ID_AllowFloating:
+            flag = AUI_MGR_ALLOW_FLOATING;
+            break;
+        case ID_TransparentDrag:
+            flag = AUI_MGR_TRANSPARENT_DRAG;
+            break;
+        case ID_HintFade:
+            flag = AUI_MGR_HINT_FADE;
+            break;
+        case ID_AllowActivePane:
+            flag = AUI_MGR_ALLOW_ACTIVE_PANE;
+            break;
+        case ID_TransparentHint:
+            flag = AUI_MGR_TRANSPARENT_HINT;
+            break;
+        case ID_VenetianBlindsHint:
+            flag = AUI_MGR_VENETIAN_BLINDS_HINT;
+            break;
+        case ID_RectangleHint:
+            flag = AUI_MGR_RECTANGLE_HINT;
+            break;
+        case ID_LiveUpdate:
+            flag = AUI_MGR_LIVE_RESIZE;
+            break;
+        default:
+            break;
+    }
+
+    if (flag !== 0)
+    {
+        state.mgr.SetFlags(state.mgr.GetFlags() ^ flag);
+
+        // Propagate the flags to the notebooks too.
+        // for (auto& pane : m_mgr.GetAllPanes())
+        //     if (auto* nb = wxDynamicCast(pane.window, wxAuiNotebook))
+        //         nb->SetManagerFlags(m_mgr.GetFlags());
+        forEachNotebookPane(state, (book) =>
+        {
+            book.SetManagerFlags(state.mgr.GetFlags());
+        });
+    }
+
+    state.mgr.Update();
+}
+
+/** MyFrame::OnNotebookFlag() */
+function onNotebookFlag(state: FrameState, id: number): void
+{
+    if (id === ID_NotebookNoCloseButton ||
+        id === ID_NotebookCloseButton ||
+        id === ID_NotebookCloseButtonAll ||
+        id === ID_NotebookCloseButtonActive)
+    {
+        state.notebookStyle &= ~(AUI_NB_CLOSE_BUTTON |
+            AUI_NB_CLOSE_ON_ACTIVE_TAB |
+            AUI_NB_CLOSE_ON_ALL_TABS);
+
+        switch (id)
+        {
+            case ID_NotebookNoCloseButton:
+                break;
+            case ID_NotebookCloseButton:
+                state.notebookStyle |= AUI_NB_CLOSE_BUTTON;
+                break;
+            case ID_NotebookCloseButtonAll:
+                state.notebookStyle |= AUI_NB_CLOSE_ON_ALL_TABS;
+                break;
+            case ID_NotebookCloseButtonActive:
+                state.notebookStyle |= AUI_NB_CLOSE_ON_ACTIVE_TAB;
+                break;
+        }
+    }
+
+    if (id === ID_NotebookAllowTabMove)
+    {
+        state.notebookStyle ^= AUI_NB_TAB_MOVE;
+    }
+    if (id === ID_NotebookAllowTabExternalMove)
+    {
+        state.notebookStyle ^= AUI_NB_TAB_EXTERNAL_MOVE;
+    }
+    else if (id === ID_NotebookAllowTabSplit)
+    {
+        state.notebookStyle ^= AUI_NB_TAB_SPLIT;
+    }
+    else if (id === ID_NotebookWindowList)
+    {
+        state.notebookStyle ^= AUI_NB_WINDOWLIST_BUTTON;
+    }
+    else if (id === ID_NotebookScrollButtons)
+    {
+        state.notebookStyle ^= AUI_NB_SCROLL_BUTTONS;
+    }
+    else if (id === ID_NotebookTabFixedWidth)
+    {
+        state.notebookStyle ^= AUI_NB_TAB_FIXED_WIDTH;
+    }
+    else if (id === ID_NotebookTabPin)
+    {
+        state.notebookStyle ^= AUI_NB_PIN_ON_ACTIVE_TAB;
+    }
+    else if (id === ID_NotebookTabUnpin)
+    {
+        state.notebookStyle ^= AUI_NB_UNPIN_ON_ALL_PINNED;
+    }
+    else if (id === ID_NotebookMultiLine)
+    {
+        state.notebookStyle ^= AUI_NB_MULTILINE;
+    }
+
+    // If we've turned on pin or unpin buttons, check that it's compatible with
+    // the currently used tab art.
+    if ((state.notebookStyle & (AUI_NB_PIN_ON_ACTIVE_TAB |
+        AUI_NB_UNPIN_ON_ALL_PINNED)) !== 0)
+    {
+        if (state.notebookTheme === TABART_SIMPLE)
+        {
+            logError("Pin icons not supported by the currently used theme.");
+            state.notebookStyle &= ~(AUI_NB_PIN_ON_ACTIVE_TAB |
+                AUI_NB_UNPIN_ON_ALL_PINNED);
+        }
+    }
+
+    // The C++ loop applies the change to every managed wxAuiNotebook pane.
+    forEachNotebookPane(state, (book) =>
+    {
+        switch (id)
+        {
+            case ID_NotebookArtDefault:
+            {
+                state.notebookTheme = TABART_DEFAULT;
+                const created = createWxAuiDefaultTabArt();
+                if (created)
+                {
+                    // SetArtProvider() takes ownership of the tab art.
+                    book.SetArtProvider(created.ptr);
+                }
+                break;
+            }
+
+            case ID_NotebookArtFlat:
+            {
+                state.notebookTheme = TABART_FLAT;
+                const created = createWxAuiFlatTabArt();
+                if (created)
+                {
+                    book.SetArtProvider(created.ptr);
+                }
+                break;
+            }
+
+            case ID_NotebookArtNative:
+            {
+                if (!HAS_NATIVE_TABART)
+                {
+                    break;
+                }
+                state.notebookTheme = TABART_NATIVE;
+                const created = createWxAuiNativeTabArt();
+                if (created)
+                {
+                    book.SetArtProvider(created.ptr);
+                }
+                break;
+            }
+
+            case ID_NotebookArtGloss:
+            {
+                state.notebookTheme = TABART_GLOSS;
+                const created = createWxAuiGenericTabArt();
+                if (created)
+                {
+                    book.SetArtProvider(created.ptr);
+                }
+                break;
+            }
+
+            case ID_NotebookArtSimple:
+            {
+                if ((state.notebookStyle & (AUI_NB_PIN_ON_ACTIVE_TAB |
+                    AUI_NB_UNPIN_ON_ALL_PINNED)) !== 0)
+                {
+                    // wxAuiSimpleTabArt doesn't have any support for pin or
+                    // unpin icons.
+                    logError("Simple theme does not support pinned tabs.");
+                }
+                else
+                {
+                    state.notebookTheme = TABART_SIMPLE;
+                    const created = createWxAuiSimpleTabArt();
+                    if (created)
+                    {
+                        book.SetArtProvider(created.ptr);
+                    }
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        book.SetWindowStyleFlag(BigInt(state.notebookStyle));
+        book.Refresh(true);
+    });
+}
+
+/** MyFrame::OnUpdateUI() */
+function onUpdateUI(state: FrameState, event: wxUpdateUIEvent): void
+{
+    const flags = state.mgr.GetFlags();
+    const art = state.dockArt();
+
+    switch (event.GetId())
+    {
+        case ID_NoGradient:
+            event.Check(art.GetMetric(AUI_DOCKART_GRADIENT_TYPE) === AUI_GRADIENT_NONE);
+            break;
+        case ID_VerticalGradient:
+            event.Check(art.GetMetric(AUI_DOCKART_GRADIENT_TYPE) === AUI_GRADIENT_VERTICAL);
+            break;
+        case ID_HorizontalGradient:
+            event.Check(art.GetMetric(AUI_DOCKART_GRADIENT_TYPE) === AUI_GRADIENT_HORIZONTAL);
+            break;
+        case ID_AllowToolbarResizing:
+        {
+            // The C++ loop checks the first pane whose window is a wxAuiToolBar
+            // (the "button_tb" pane holds a plain wxButton and is skipped).
+            const toolbarWindows: Pointer[] = [];
+            for (const name of TOOLBAR_PANES)
+            {
+                const window = state.panes.get(name);
+                if (window)
+                {
+                    toolbarWindows.push(window);
+                }
+            }
+
+            const panesPtr = state.mgr.GetAllPanes();
+            if (panesPtr)
+            {
+                const panes = wrapWxAuiPaneInfoArray(panesPtr);
+                const count = panes.GetCount();
+                for (let index = 0; index < count; ++index)
+                {
+                    const item = panes.Item(index);
+                    if (!item)
+                    {
+                        continue;
+                    }
+
+                    const window = item.GetWindow();
+                    if (window && toolbarWindows.indexOf(window.ptr) >= 0)
+                    {
+                        event.Check(item.IsResizable());
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+        case ID_AllowFloating:
+            event.Check((flags & AUI_MGR_ALLOW_FLOATING) !== 0);
+            break;
+        case ID_TransparentDrag:
+            event.Check((flags & AUI_MGR_TRANSPARENT_DRAG) !== 0);
+            break;
+        case ID_TransparentHint:
+            event.Check((flags & AUI_MGR_TRANSPARENT_HINT) !== 0);
+            break;
+        case ID_LiveUpdate:
+            event.Check((flags & AUI_MGR_LIVE_RESIZE) !== 0);
+            break;
+        case ID_VenetianBlindsHint:
+            event.Check((flags & AUI_MGR_VENETIAN_BLINDS_HINT) !== 0);
+            break;
+        case ID_RectangleHint:
+            event.Check((flags & AUI_MGR_RECTANGLE_HINT) !== 0);
+            break;
+        case ID_NoHint:
+            event.Check(((AUI_MGR_TRANSPARENT_HINT |
+                AUI_MGR_VENETIAN_BLINDS_HINT |
+                AUI_MGR_RECTANGLE_HINT) & flags) === 0);
+            break;
+        case ID_HintFade:
+            event.Check((flags & AUI_MGR_HINT_FADE) !== 0);
+            break;
+
+        case ID_NotebookNoCloseButton:
+            event.Check((state.notebookStyle &
+                (AUI_NB_CLOSE_BUTTON | AUI_NB_CLOSE_ON_ALL_TABS |
+                    AUI_NB_CLOSE_ON_ACTIVE_TAB)) === 0);
+            break;
+        case ID_NotebookCloseButton:
+            event.Check((state.notebookStyle & AUI_NB_CLOSE_BUTTON) !== 0);
+            break;
+        case ID_NotebookCloseButtonAll:
+            event.Check((state.notebookStyle & AUI_NB_CLOSE_ON_ALL_TABS) !== 0);
+            break;
+        case ID_NotebookCloseButtonActive:
+            event.Check((state.notebookStyle & AUI_NB_CLOSE_ON_ACTIVE_TAB) !== 0);
+            break;
+        case ID_NotebookAllowTabSplit:
+            event.Check((state.notebookStyle & AUI_NB_TAB_SPLIT) !== 0);
+            break;
+        case ID_NotebookAllowTabMove:
+            event.Check((state.notebookStyle & AUI_NB_TAB_MOVE) !== 0);
+            break;
+        case ID_NotebookAllowTabExternalMove:
+            event.Check((state.notebookStyle & AUI_NB_TAB_EXTERNAL_MOVE) !== 0);
+            break;
+        case ID_NotebookScrollButtons:
+            event.Check((state.notebookStyle & AUI_NB_SCROLL_BUTTONS) !== 0);
+            break;
+        case ID_NotebookWindowList:
+            event.Check((state.notebookStyle & AUI_NB_WINDOWLIST_BUTTON) !== 0);
+            break;
+        case ID_NotebookTabFixedWidth:
+            event.Check((state.notebookStyle & AUI_NB_TAB_FIXED_WIDTH) !== 0);
+            break;
+        case ID_NotebookTabPin:
+            event.Check((state.notebookStyle & AUI_NB_PIN_ON_ACTIVE_TAB) !== 0);
+            break;
+        case ID_NotebookTabUnpin:
+            event.Check((state.notebookStyle & AUI_NB_UNPIN_ON_ALL_PINNED) !== 0);
+            break;
+        case ID_NotebookMultiLine:
+            event.Check((state.notebookStyle & AUI_NB_MULTILINE) !== 0);
+            break;
+        case ID_NotebookArtDefault:
+            event.Check(state.notebookTheme === TABART_DEFAULT);
+            break;
+        case ID_NotebookArtFlat:
+            event.Check(state.notebookTheme === TABART_FLAT);
+            break;
+        case ID_NotebookArtNative:
+            event.Check(state.notebookTheme === TABART_NATIVE);
+            break;
+        case ID_NotebookArtGloss:
+            event.Check(state.notebookTheme === TABART_GLOSS);
+            break;
+        case ID_NotebookArtSimple:
+            event.Check(state.notebookTheme === TABART_SIMPLE);
+            break;
+        default:
+            break;
+    }
+}
+
+/** MyFrame::OnUpdateTabKindUI() */
+function onUpdateTabKindUI(state: FrameState, event: wxUpdateUIEvent): void
+{
+    const book = state.notebook;
+    if (!book)
+    {
+        event.Enable(false);
+        return;
+    }
+
+    const selection = book.GetSelection();
+    if (selection === NOT_FOUND)
+    {
+        event.Enable(false);
+        return;
+    }
+
+    const kind = book.GetPageKind(selection);
+    event.Check(kind === event.GetId() - ID_NotebookNormalTab);
+}
+
+/** MyFrame::OnNotebookSetTabKind() */
+function onNotebookSetTabKind(state: FrameState, id: number): void
+{
+    const book = state.notebook;
+    if (!book)
+    {
+        return;
+    }
+
+    const selection = book.GetSelection();
+    if (selection === NOT_FOUND)
+    {
+        return;
+    }
+
+    book.SetPageKind(selection, id - ID_NotebookNormalTab);
+}
+
+/** MyFrame::OnNotebookNextOrPrev() */
+function onNotebookNextOrPrev(state: FrameState, id: number): void
+{
+    const book = state.notebook;
+    if (!book)
+    {
+        return;
+    }
+    book.AdvanceSelection(id === ID_NotebookNextTab);
+}
+
+/** MyFrame::OnNotebookSplit() */
+function onNotebookSplit(state: FrameState): void
+{
+    const book = state.notebook;
+    if (!book || book.GetPageCount() < 3)
+    {
+        logWarning("Not enough pages to split.");
+        return;
+    }
+
+    book.Split(0, RIGHT);
+    book.Split(1, RIGHT);
+    book.Split(2, BOTTOM);
+}
+
+/** MyFrame::OnNotebookUnsplit() */
+function onNotebookUnsplit(state: FrameState): void
+{
+    const book = state.notebook;
+    if (!book)
+    {
+        return;
+    }
+    book.UnsplitAll();
+}
+
+/** MyFrame::OnNotebookNewTab() */
+function onNotebookNewTab(state: FrameState): void
+{
+    const book = state.notebook;
+    if (!book)
+    {
+        return;
+    }
+
+    const page = createNotebookTextControl(state, book.ptr, "New Tab");
+    if (!page)
+    {
+        return;
+    }
+
+    withString("Tab " + (book.GetPageCount() + 1), (label) =>
+    {
+        book.AddPage(page.ptr, label, true, -1);
+    });
+}
+
+/** MyFrame::OnNotebookDeleteTab() */
+function onNotebookDeleteTab(state: FrameState): void
+{
+    const book = state.notebook;
+    if (!book)
+    {
+        return;
+    }
+
+    const numPages = book.GetPageCount();
+    if (numPages === 0)
+    {
+        logWarning("No pages to delete.");
+        return;
+    }
+
+    book.DeletePage(numPages - 1);
+}
+
+/** MyFrame::OnPaneClose() */
+function onPaneClose(state: FrameState, event: wxAuiManagerEvent): void
+{
+    // if (evt.pane->name == "text")
+    const pane = event.GetPane();
+    const window = pane ? pane.GetWindow() : null;
+    const textPane = state.panes.get("text");
+
+    if (window && textPane && window.ptr === textPane)
+    {
+        const result = messageBox(
+            "Are you sure you want to close/hide this pane?",
+            "wxAUI", YES_NO, state.frame.ptr,
+        );
+        if (result !== YES)
+        {
+            event.Veto(true);
+        }
+    }
+}
+
+/** MyFrame::OnCreatePerspective() */
+function onCreatePerspective(state: FrameState): void
+{
+    const message = createWxString("Enter a name for the new perspective:");
+    const caption = createWxString("wxAUI Test");
+    const empty = createWxString("");
+
+    let dialog: wxTextEntryDialog | null = null;
+    try
+    {
+        dialog = createWxTextEntryDialog(
+            state.frame.ptr, message.ptr, caption.ptr, empty.ptr,
+            BigInt(OK | CANCEL), -1, -1, -1, -1,
+        );
+    }
+    finally
+    {
+        message.Delete();
+        caption.Delete();
+        empty.Delete();
+    }
+
+    if (!dialog)
+    {
+        return;
+    }
+
+    withString(
+        "Perspective " + (state.perspectives.length + 1),
+        (value) => (dialog as wxTextEntryDialog).SetValue(value),
+    );
+
+    if (dialog.ShowModal() !== ID_OK)
+    {
+        dialog.Delete();
+        return;
+    }
+
+    if (state.perspectives.length === 0)
+    {
+        state.perspectivesMenu.AppendSeparator();
+    }
+
+    let name = "";
+    const valuePtr = dialog.GetValue();
+    if (valuePtr)
+    {
+        name = readAndDeleteWxString(valuePtr);
+    }
+
+    appendItem(
+        state.perspectivesMenu,
+        ID_FirstPerspective + state.perspectives.length,
+        name, null, false,
+    );
+
+    const savedPtr = state.mgr.SavePerspective();
+    if (savedPtr)
+    {
+        state.perspectives.push(readAndDeleteWxString(savedPtr));
+    }
+
+    dialog.Delete();
+}
+
+/** MyFrame::OnRestorePerspective() */
+function onRestorePerspective(state: FrameState, id: number): void
+{
+    const index = id - ID_FirstPerspective;
+    if (index < 0 || index >= state.perspectives.length)
+    {
+        return;
+    }
+
+    withString(state.perspectives[index], (ptr) =>
+    {
+        state.mgr.LoadPerspective(ptr, true);
+    });
+}
+
+/**
+ * MyFrame::OnCopyLayout().
+ *
+ *   MyXmlSerializer ser; m_mgr.SaveLayout(ser);
+ *   wxClipboardLocker clipLock;
+ *   wxTheClipboard->SetData(new wxTextDataObject(ser.GetXML()));
+ */
+function onCopyLayout(state: FrameState): void
+{
+    const xml = saveManagerLayout(state.mgr.ptr);
+    if (xml === "")
+    {
+        return;
+    }
+
+    const clipboard = wrapWxClipboard(TheClipboard);
+    clipboard.Open();
+
+    const text = createWxString(xml);
+    const data = createWxTextDataObject(text.ptr);
+    text.Delete();
+
+    if (data)
+    {
+        // wxClipboard::SetData() takes ownership of the data object.
+        clipboard.SetData(data.ptr);
+    }
+
+    clipboard.Close();
+}
+
+/**
+ * MyFrame::OnPasteLayout().
+ *
+ *   wxClipboardLocker clipLock; wxTextDataObject data;
+ *   if (!wxTheClipboard->GetData(data)) { wxLogError(...); return; }
+ *   MyXmlDeserializer deser(m_mgr, data.GetText()); m_mgr.LoadLayout(deser);
+ */
+function onPasteLayout(state: FrameState): void
+{
+    const clipboard = wrapWxClipboard(TheClipboard);
+    clipboard.Open();
+
+    const empty = createWxString("");
+    const data = createWxTextDataObject(empty.ptr);
+    empty.Delete();
+
+    let received = false;
+    if (data)
+    {
+        received = clipboard.GetData(data.ptr);
+    }
+
+    clipboard.Close();
+
+    if (!data || !received)
+    {
+        logError("Failed to get XML data from clipboard.");
+        return;
+    }
+
+    const text = data.GetText();
+    const xml = text ? readAndDeleteWxString(text.ptr) : "";
+    data.Delete();
+
+    const error = loadManagerLayout(state.mgr.ptr, xml);
+    if (error !== "")
+    {
+        reportLayoutError("Failed to load layout: ", error);
+    }
+}
+
+/** MyFrame::OnEditNotebookLayout() */
+function onEditNotebookLayout(state: FrameState): void
+{
+    const book = state.notebook;
+    if (!book)
+    {
+        return;
+    }
+
+    const xml = saveNotebookLayout(state.mgr.ptr, book.ptr, "notebook");
+
+    const message = createWxString(
+        "Current notebook layout (edit and press OK to apply):");
+    const caption = createWxString("wxAUI Sample");
+    const value = createWxString(xml);
+
+    let dialog: wxTextEntryDialog | null = null;
+    try
+    {
+        dialog = createWxTextEntryDialog(
+            state.frame.ptr, message.ptr, caption.ptr, value.ptr,
+            BigInt(OK | CANCEL | TE_MULTILINE), -1, -1, -1, -1,
+        );
+    }
+    finally
+    {
+        message.Delete();
+        caption.Delete();
+        value.Delete();
+    }
+
+    if (!dialog)
+    {
+        return;
+    }
+
+    if (dialog.ShowModal() !== ID_OK)
+    {
+        dialog.Delete();
+        return;
+    }
+
+    const editedPtr = dialog.GetValue();
+    const edited = editedPtr ? readAndDeleteWxString(editedPtr) : "";
+    dialog.Delete();
+
+    const error = loadNotebookLayout(
+        state.mgr.ptr, book.ptr, "notebook", edited);
+    if (error !== "")
+    {
+        reportLayoutError("Failed to load notebook layout: ", error);
+    }
+}
+
+/** MyFrame::OnNotebookPageClose() */
+function onNotebookPageClose(state: FrameState, event: wxAuiNotebookEvent): void
+{
+    const bookPtr = event.GetEventObject();
+    if (!bookPtr)
+    {
+        return;
+    }
+
+    const book = wrapWxAuiNotebook(bookPtr);
+    const page = book.GetPage(event.GetSelection());
+
+    // if (ctrl->GetPage(evt.GetSelection())->IsKindOf(CLASSINFO(wxHtmlWindow)))
+    if (page && state.welcomePages.indexOf(page.ptr) >= 0)
+    {
+        const result = messageBox(
+            "Are you sure you want to close/hide this notebook page?",
+            "wxAUI", YES_NO, state.frame.ptr,
+        );
+        if (result !== YES)
+        {
+            event.Veto();
+        }
+    }
+}
+
+/** MyFrame::OnNotebookPageClosed() */
+function onNotebookPageClosed(state: FrameState, event: wxAuiNotebookEvent): void
+{
+    // selection should always be a valid index
+    event.Skip(true);
+}
+
+/** MyFrame::OnNotebookPageChanging() */
+function onNotebookPageChanging(state: FrameState, event: wxAuiNotebookEvent): void
+{
+    if (event.GetOldSelection() === 3)
+    {
+        const result = messageBox(
+            "Are you sure you want to leave this page?\n" +
+            "(This demonstrates veto-ing)",
+            "wxAUI", ICON_QUESTION | YES_NO, state.frame.ptr,
+        );
+        if (result !== YES)
+        {
+            event.Veto();
+        }
+    }
+}
+
+/** MyFrame::OnNotebookTabRightClick() */
+function onNotebookTabRightClick(state: FrameState, event: wxAuiNotebookEvent): void
+{
+    const pointPtr = kwxGetMousePosition();
+    if (!pointPtr)
+    {
+        return;
+    }
+
+    const point = new wxPoint(pointPtr);
+    const screenX = point.GetX();
+    const screenY = point.GetY();
+    point.Delete();
+
+    const book = state.notebook;
+    if (!book)
+    {
+        return;
+    }
+
+    let clientX = screenX;
+    let clientY = screenY;
+    const clientPtr = book.ScreenToClient(screenX, screenY);
+    if (clientPtr)
+    {
+        const client = new wxPoint(clientPtr);
+        clientX = client.GetX();
+        clientY = client.GetY();
+        client.Delete();
+    }
+
+    const page = event.GetSelection();
+
+    // wxAuiNotebook::HitTest() has an FFI entry but no generated wrapper.
+    const flags = new BigInt64Array(1);
+    const pageUnderMouse = lib.symbols.wxAuiNotebook_HitTest(
+        book.ptr, clientX, clientY, pointerOf(flags)) as number;
+
+    if (pageUnderMouse !== page)
+    {
+        logWarning("Unexpected mismatch: page under mouse is " + pageUnderMouse +
+            " (position " + book.GetPagePosition(pageUnderMouse) + ")");
+    }
+
+    logMessage(
+        "Right click on page " + page + " (tab position " +
+        book.GetPagePosition(page) + ")",
+    );
+}
+
+/** Reads a wxArrayInt returned by a native getter and releases it. */
+function takeIntArray(ptr: Pointer): number[]
+{
+    if (!ptr)
+    {
+        return [];
+    }
+
+    const array = wrapWxArrayInt(ptr);
+    const values: number[] = [];
+    for (let index = 0; index < array.GetCount(); ++index)
+    {
+        values.push(array.Item(index));
+    }
+
+    lib.symbols.wxArrayInt_Delete(ptr);
+    return values;
+}
+
+/** MyFrame::OnNotebookTabBackgroundDClick() */
+function onNotebookTabBackgroundDClick(
+    state: FrameState,
+    event: wxAuiNotebookEvent,
+): void
+{
+    const book = state.notebook;
+    if (!book)
+    {
+        return;
+    }
+
+    // Show notebook pages in per-tab visual page order.
+    const selection = book.GetSelection();
+
+    let pages = "Notebook contains the following pages:\n";
+
+    const tabControlsPtr = book.GetAllTabCtrls();
+    const tabControlCount = tabControlsPtr ? tabControlsPtr.GetCount() : 0;
+    let tab = 0;
+
+    for (let index = 0; index < tabControlCount; ++index)
+    {
+        const tabCtrl = tabControlsPtr ? tabControlsPtr.Item(index) : null;
+        const tabCtrlPtr = tabCtrl ? tabCtrl.ptr : null;
+
+        if (tabControlCount > 1)
+        {
+            tab += 1;
+            pages += "\nTab " + tab;
+
+            const extras: string[] = [];
+            if (tabCtrlPtr === book.GetMainTabCtrl())
+            {
+                extras.push("main");
+            }
+            if (tabCtrlPtr === book.GetActiveTabCtrl())
+            {
+                extras.push("active");
+            }
+
+            if (extras.length > 0)
+            {
+                pages += " (" + extras.join(",") + ")";
+            }
+
+            pages += ":\n";
+        }
+
+        let pos = 0;
+        const pageIndices = takeIntArray(book.GetPagesInDisplayOrder(tabCtrlPtr));
+        for (const pageIndex of pageIndices)
+        {
+            let kind = "   ";
+            switch (book.GetPageKind(pageIndex))
+            {
+                case AUI_TAB_KIND_NORMAL:
+                    kind = "   "; // Don't show anything for normal tabs.
+                    break;
+                case AUI_TAB_KIND_PINNED:
+                    kind = "\u{1F4CC}"; // U+1F4CC
+                    break;
+                case AUI_TAB_KIND_LOCKED:
+                    kind = "\u{1F512}"; // U+1F512
+                    break;
+                default:
+                    break;
+            }
+
+            const textPtr = book.GetPageText(pageIndex);
+            const text = textPtr ? readAndDeleteWxString(textPtr) : "";
+
+            pages += (pageIndex === selection ? "*" : "  ") + kind + pos +
+                ". " + text + "\n";
+            pos += 1;
+        }
+    }
+
+    // GetAllTabCtrls() allocates the array it returns.
+    if (tabControlsPtr)
+    {
+        lib.symbols.wxAuiTabCtrlArray_Delete(tabControlsPtr.ptr);
+    }
+
+    pages += "\n* selected";
+
+    messageBox(pages, "wxAUI", OK | ICON_INFORMATION, state.frame.ptr);
+}
+
+/** MyFrame::OnChangeContentPane() */
+const CONTENT_PANES: Array<{ name: string; id: number }> = [
+    { name: "grid_content", id: ID_GridContent },
+    { name: "text_content", id: ID_TextContent },
+    { name: "tree_content", id: ID_TreeContent },
+    { name: "sizereport_content", id: ID_SizeReportContent },
+    { name: "html_content", id: ID_HTMLContent },
+    { name: "notebook_content", id: ID_NotebookContent },
+];
+
+function onChangeContentPane(state: FrameState, id: number): void
+{
+    for (const entry of CONTENT_PANES)
+    {
+        updatePane(state, entry.name, (info) => info.Show(entry.id === id));
+    }
+
+    state.mgr.Update();
+}
+
+/** MyFrame::OnTabAlignment() */
+function onTabAlignment(state: FrameState, id: number): void
+{
+    forEachNotebookPane(state, (book) =>
+    {
+        let style = Number(book.GetWindowStyleFlag());
+        style &= ~(AUI_NB_TOP | AUI_NB_BOTTOM);
+        if (id === ID_NotebookAlignTop)
+        {
+            style |= AUI_NB_TOP;
+        }
+        else if (id === ID_NotebookAlignBottom)
+        {
+            style |= AUI_NB_BOTTOM;
+        }
+        book.SetWindowStyleFlag(BigInt(style));
+        book.Refresh(true);
+    });
+}
+
+/** MyFrame::OnDropDownToolbarItem() */
+function onDropDownToolbarItem(state: FrameState, event: wxAuiToolBarEvent): void
+{
+    if (!event.IsDropDownClicked())
+    {
+        return;
+    }
+
+    const toolbarPtr = event.GetEventObject();
+    if (!toolbarPtr)
+    {
+        return;
+    }
+
+    const toolbar = wrapWxAuiToolBar(toolbarPtr);
+    const toolId = event.GetId();
+
+    toolbar.SetToolSticky(toolId, true);
+
+    const menu = createEmptyMenu();
+    if (!menu)
+    {
+        return;
+    }
+
+    const bmpPtr = wxArtProvider_GetBitmap(
+        ART_QUESTION, ART_OTHER, state.dip(16), state.dip(16));
+
+    for (let index = 1; index <= 4; ++index)
+    {
+        const id = 10000 + index;
+        let item: wxMenuItem | null = null;
+        withString("Drop Down Item " + index, (label) =>
+        {
+            withString("", (help) =>
+            {
+                item = createWxMenuItemEx(id, label, help, ITEM_NORMAL, null);
+            });
+        });
+
+        if (item)
+        {
+            if (bmpPtr)
+            {
+                (item as wxMenuItem).SetBitmap(bmpPtr);
+            }
+            menu.AppendItem((item as wxMenuItem).ptr);
+        }
+    }
+
+    // line up our menu with the button
+    let x = 0;
+    let y = 0;
+    const rectPtr = toolbar.GetToolRect(toolId);
+    if (rectPtr)
+    {
+        const rect = new wxRect(rectPtr);
+        const bottomLeftPtr = rect.GetBottomLeft();
+        if (bottomLeftPtr)
+        {
+            const bottomLeft = new wxPoint(bottomLeftPtr);
+            const screenPtr = toolbar.ClientToScreen(
+                bottomLeft.GetX(), bottomLeft.GetY());
+            bottomLeft.Delete();
+
+            if (screenPtr)
+            {
+                const screen = new wxPoint(screenPtr);
+                const clientPtr = state.frame.ScreenToClient(
+                    screen.GetX(), screen.GetY());
+                screen.Delete();
+
+                if (clientPtr)
+                {
+                    const client = new wxPoint(clientPtr);
+                    x = client.GetX();
+                    y = client.GetY();
+                    client.Delete();
+                }
+            }
+        }
+        rect.DeleteItem(rect.ptr);
+    }
+
+    state.frame.PopupMenu(menu.ptr, x, y);
+
+    // make sure the button is "un-stuck"
+    toolbar.SetToolSticky(toolId, false);
+
+    // wxArtProvider::GetBitmap() allocates the bitmap; the menu items hold
+    // their own copies, so it can be released once the popup is done.
+    if (bmpPtr)
+    {
+        lib.symbols.wxBitmap_Delete(bmpPtr);
+    }
+}
+
+/** MyFrame::OnCreateTree() */
+function onCreateTree(state: FrameState): void
+{
+    const tree = createTreeCtrl(state);
+    if (!tree)
+    {
+        return;
+    }
+
+    const start = getStartPosition(state);
+    addPane(state, tree.ptr, null, "Tree Control", (info) =>
+    {
+        info.Float();
+        info.FloatingPosition(start.x, start.y);
+        info.FloatingSize(state.dip(150), state.dip(300));
+    });
+    state.mgr.Update();
+}
+
+/** MyFrame::OnCreateGrid() */
+function onCreateGrid(state: FrameState): void
+{
+    const grid = createGrid(state);
+    if (!grid)
+    {
+        return;
+    }
+
+    const start = getStartPosition(state);
+    addPane(state, grid.ptr, null, "Grid", (info) =>
+    {
+        info.Float();
+        info.FloatingPosition(start.x, start.y);
+        info.FloatingSize(state.dip(300), state.dip(200));
+    });
+    state.mgr.Update();
+}
+
+/** MyFrame::OnCreateHTML() */
+function onCreateHTML(state: FrameState): void
+{
+    const html = createHtmlCtrl(state, null);
+    if (!html)
+    {
+        return;
+    }
+
+    const start = getStartPosition(state);
+    addPane(state, html.ptr, null, "HTML Control", (info) =>
+    {
+        info.Float();
+        info.FloatingPosition(start.x, start.y);
+        info.FloatingSize(state.dip(300), state.dip(200));
+    });
+    state.mgr.Update();
+}
+
+/** MyFrame::OnCreateNotebook() */
+function onCreateNotebook(state: FrameState): void
+{
+    const notebook = createNotebook(state);
+    if (!notebook)
+    {
+        return;
+    }
+
+    const start = getStartPosition(state);
+    addPane(state, notebook.ptr, null, "Notebook", (info) =>
+    {
+        info.Float();
+        info.FloatingPosition(start.x, start.y);
+        info.CloseButton(true);
+        info.MaximizeButton(true);
+    });
+    state.mgr.Update();
+}
+
+/** MyFrame::OnCreateText() */
+function onCreateText(state: FrameState): void
+{
+    const text = createTextCtrl(state, null);
+    if (!text)
+    {
+        return;
+    }
+
+    const start = getStartPosition(state);
+    addPane(state, text.ptr, null, "Text Control", (info) =>
+    {
+        info.Float();
+        info.FloatingPosition(start.x, start.y);
+    });
+    state.mgr.Update();
+}
+
+/** MyFrame::OnCreateSizeReport() */
+function onCreateSizeReport(state: FrameState): void
+{
+    const report = createSizeReport(state, state.dip(80), state.dip(80));
+    if (!report)
+    {
+        return;
+    }
+
+    const start = getStartPosition(state);
+    addPane(state, report.ptr, null, "Client Size Reporter", (info) =>
+    {
+        info.Float();
+        info.FloatingPosition(start.x, start.y);
+        info.CloseButton(true);
+        info.MaximizeButton(true);
+    });
+    state.mgr.Update();
+}
+
+/** MyFrame::OnAbout() */
+function onAbout(state: FrameState): void
+{
+    messageBox(
+        "wxAUI Demo\nAn advanced window management library for wxWidgets" +
+        "\n(c) Copyright 2005-2006, Kirix Corporation",
+        "About wxAUI Demo", OK, state.frame.ptr,
+    );
+}
+
+//---------------------------------------------------------------------------
+// Event connections (wxBEGIN_EVENT_TABLE ... wxEND_EVENT_TABLE)
+//---------------------------------------------------------------------------
+
+const MENU_IDS = [
+    ID_CreateTree, ID_CreateGrid, ID_CreateText, ID_CreateHTML,
+    ID_CreateSizeReport, ID_CreateNotebook,
+    ID_CreatePerspective, ID_CopyLayout, ID_PasteLayout,
+    ID_EditNotebookLayout,
+    ID_AllowFloating, ID_TransparentHint, ID_VenetianBlindsHint,
+    ID_RectangleHint, ID_NoHint, ID_HintFade, ID_TransparentDrag,
+    ID_LiveUpdate, ID_AllowActivePane,
+    ID_NotebookTabFixedWidth, ID_NotebookTabPin, ID_NotebookTabUnpin,
+    ID_NotebookMultiLine, ID_NotebookNoCloseButton, ID_NotebookCloseButton,
+    ID_NotebookCloseButtonAll, ID_NotebookCloseButtonActive,
+    ID_NotebookAllowTabMove, ID_NotebookAllowTabExternalMove,
+    ID_NotebookAllowTabSplit, ID_NotebookScrollButtons, ID_NotebookWindowList,
+    ID_NotebookArtDefault, ID_NotebookArtFlat,
+    ...(HAS_NATIVE_TABART ? [ID_NotebookArtNative] : []),
+    ID_NotebookArtGloss, ID_NotebookArtSimple,
+    ID_NotebookNextTab, ID_NotebookPrevTab,
+    ID_NotebookAlignTop, ID_NotebookAlignBottom,
+    ID_NotebookSplit, ID_NotebookUnsplit, ID_NotebookNewTab,
+    ID_NotebookDeleteTab,
+    ID_NotebookNormalTab, ID_NotebookPinTab, ID_NotebookLockTab,
+    ID_NoGradient, ID_VerticalGradient, ID_HorizontalGradient,
+    ID_AllowToolbarResizing,
+    ID_ShowTextForMinPanes, ID_ShowIconsForMinPanes, ID_ShowBothForMinPanes,
+    ID_RotateMinPanesIcons,
+    ID_Settings, ID_CustomizeToolbar,
+    ID_GridContent, ID_TreeContent, ID_TextContent, ID_SizeReportContent,
+    ID_HTMLContent, ID_NotebookContent,
+    ID_EXIT, ID_ABOUT,
+];
+
+const UPDATE_UI_IDS = [
+    ID_NotebookTabFixedWidth, ID_NotebookTabPin, ID_NotebookTabUnpin,
+    ID_NotebookMultiLine, ID_NotebookNoCloseButton, ID_NotebookCloseButton,
+    ID_NotebookCloseButtonAll, ID_NotebookCloseButtonActive,
+    ID_NotebookAllowTabMove, ID_NotebookAllowTabExternalMove,
+    ID_NotebookAllowTabSplit, ID_NotebookScrollButtons, ID_NotebookWindowList,
+    ID_AllowFloating, ID_TransparentHint, ID_VenetianBlindsHint,
+    ID_RectangleHint, ID_NoHint, ID_HintFade, ID_TransparentDrag,
+    ID_LiveUpdate, ID_NoGradient, ID_VerticalGradient, ID_HorizontalGradient,
+    ID_AllowToolbarResizing,
+    ID_NotebookArtDefault, ID_NotebookArtFlat,
+    ...(HAS_NATIVE_TABART ? [ID_NotebookArtNative] : []),
+    ID_NotebookArtGloss, ID_NotebookArtSimple,
+];
+
+function onMenuCommand(state: FrameState, id: number): void
+{
+    switch (id)
+    {
+        case ID_CreateTree:
+            onCreateTree(state);
+            break;
+        case ID_CreateGrid:
+            onCreateGrid(state);
+            break;
+        case ID_CreateText:
+            onCreateText(state);
+            break;
+        case ID_CreateHTML:
+            onCreateHTML(state);
+            break;
+        case ID_CreateSizeReport:
+            onCreateSizeReport(state);
+            break;
+        case ID_CreateNotebook:
+            onCreateNotebook(state);
+            break;
+        case ID_CreatePerspective:
+            onCreatePerspective(state);
+            break;
+        case ID_CopyLayout:
+            onCopyLayout(state);
+            break;
+        case ID_PasteLayout:
+            onPasteLayout(state);
+            break;
+        case ID_EditNotebookLayout:
+            onEditNotebookLayout(state);
+            break;
+
+        case ID_AllowFloating:
+        case ID_TransparentHint:
+        case ID_VenetianBlindsHint:
+        case ID_RectangleHint:
+        case ID_NoHint:
+        case ID_HintFade:
+        case ID_TransparentDrag:
+        case ID_LiveUpdate:
+        case ID_AllowActivePane:
+            onManagerFlag(state, id);
+            break;
+
+        case ID_NotebookTabFixedWidth:
+        case ID_NotebookTabPin:
+        case ID_NotebookTabUnpin:
+        case ID_NotebookMultiLine:
+        case ID_NotebookNoCloseButton:
+        case ID_NotebookCloseButton:
+        case ID_NotebookCloseButtonAll:
+        case ID_NotebookCloseButtonActive:
+        case ID_NotebookAllowTabMove:
+        case ID_NotebookAllowTabExternalMove:
+        case ID_NotebookAllowTabSplit:
+        case ID_NotebookScrollButtons:
+        case ID_NotebookWindowList:
+        case ID_NotebookArtDefault:
+        case ID_NotebookArtFlat:
+        case ID_NotebookArtNative:
+        case ID_NotebookArtGloss:
+        case ID_NotebookArtSimple:
+            onNotebookFlag(state, id);
+            break;
+
+        case ID_NotebookNextTab:
+        case ID_NotebookPrevTab:
+            onNotebookNextOrPrev(state, id);
+            break;
+
+        case ID_NotebookAlignTop:
+        case ID_NotebookAlignBottom:
+            onTabAlignment(state, id);
+            break;
+
+        case ID_NotebookSplit:
+            onNotebookSplit(state);
+            break;
+        case ID_NotebookUnsplit:
+            onNotebookUnsplit(state);
+            break;
+        case ID_NotebookNewTab:
+            onNotebookNewTab(state);
+            break;
+        case ID_NotebookDeleteTab:
+            onNotebookDeleteTab(state);
+            break;
+
+        case ID_NotebookNormalTab:
+        case ID_NotebookPinTab:
+        case ID_NotebookLockTab:
+            onNotebookSetTabKind(state, id);
+            break;
+
+        case ID_NoGradient:
+        case ID_VerticalGradient:
+        case ID_HorizontalGradient:
+            onGradient(state, id);
+            break;
+
+        case ID_AllowToolbarResizing:
+            onToolbarResizing(state);
+            break;
+
+        case ID_ShowTextForMinPanes:
+        case ID_ShowIconsForMinPanes:
+        case ID_ShowBothForMinPanes:
+        case ID_RotateMinPanesIcons:
+            onMinPanesStyle(state);
+            break;
+
+        case ID_Settings:
+            onSettings(state);
+            break;
+
+        case ID_CustomizeToolbar:
+            onCustomizeToolbar(state);
+            break;
+
+        case ID_GridContent:
+        case ID_TreeContent:
+        case ID_TextContent:
+        case ID_SizeReportContent:
+        case ID_HTMLContent:
+        case ID_NotebookContent:
+            onChangeContentPane(state, id);
+            break;
+
+        case ID_EXIT:
+            state.frame.Close(true);
+            break;
+
+        case ID_ABOUT:
+            onAbout(state);
+            break;
+
+        default:
+            if (id >= ID_FirstPerspective &&
+                id <= ID_FirstPerspective + 1000)
+            {
+                onRestorePerspective(state, id);
+            }
+            break;
+    }
+}
+
+function connectEvents(state: FrameState): void
+{
+    // shared closures for the size reporters (created before any are needed)
+    const reportPaintCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            paintSizeReport(state, eventPtr);
+        },
+    );
+    state.callbacks.push(reportPaintCallback);
+
+    const reportSizeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const event = new wxEvent(eventPtr);
+            const windowPtr = event.GetEventObject();
+            if (windowPtr)
+            {
+                wrapWxWindow(windowPtr).Refresh(true);
+            }
+        },
+    );
+    state.callbacks.push(reportSizeCallback);
+
+    const reportEraseCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, _eventPtr) =>
+        {
+            // intentionally empty
+        },
+    );
+    state.callbacks.push(reportEraseCallback);
+
+    const paintClosure = createWxClosure(reportPaintCallback.pointer, null);
+    const sizeClosure = createWxClosure(reportSizeCallback.pointer, null);
+    const eraseClosure = createWxClosure(reportEraseCallback.pointer, null);
+    if (paintClosure && sizeClosure && eraseClosure)
+    {
+        state.closures.push(paintClosure, sizeClosure, eraseClosure);
+        state.sizeReportPaint = paintClosure;
+        state.sizeReportSize = sizeClosure;
+        state.sizeReportErase = eraseClosure;
+    }
+
+    for (const window of state.pendingSizeReports)
+    {
+        registerSizeReportEvents(state, window);
+    }
+    state.pendingSizeReports.length = 0;
+
+    // EVT_MENU / EVT_MENU_RANGE
+    const menuCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const event = new wxCommandEvent(eventPtr);
+            onMenuCommand(state, event.GetId());
+        },
+    );
+    state.callbacks.push(menuCallback);
+
+    const menuClosure = createWxClosure(menuCallback.pointer, null);
+    if (menuClosure)
+    {
+        state.closures.push(menuClosure);
+        for (const id of MENU_IDS)
+        {
+            lib.symbols.wxEvtHandler_Connect(
+                state.frame.ptr, id, id, EVT_MENU, menuClosure.ptr);
+        }
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, ID_FirstPerspective, ID_FirstPerspective + 1000,
+            EVT_MENU, menuClosure.ptr);
+    }
+
+    // EVT_UPDATE_UI
+    const updateUICallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onUpdateUI(state, new wxUpdateUIEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(updateUICallback);
+
+    const updateUIClosure = createWxClosure(updateUICallback.pointer, null);
+    if (updateUIClosure)
+    {
+        state.closures.push(updateUIClosure);
+        for (const id of UPDATE_UI_IDS)
+        {
+            lib.symbols.wxEvtHandler_Connect(
+                state.frame.ptr, id, id, EVT_UPDATE_UI, updateUIClosure.ptr);
+        }
+    }
+
+    // EVT_UPDATE_UI(ID_NotebookNormalTab..ID_NotebookLockTab) -> OnUpdateTabKindUI
+    const tabKindCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onUpdateTabKindUI(state, new wxUpdateUIEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(tabKindCallback);
+
+    const tabKindClosure = createWxClosure(tabKindCallback.pointer, null);
+    if (tabKindClosure)
+    {
+        state.closures.push(tabKindClosure);
+        for (const id of [ID_NotebookNormalTab, ID_NotebookPinTab, ID_NotebookLockTab])
+        {
+            lib.symbols.wxEvtHandler_Connect(
+                state.frame.ptr, id, id, EVT_UPDATE_UI, tabKindClosure.ptr);
+        }
+    }
+
+    // EVT_UPDATE_UI(ID_RotateMinPanesIcons) -> OnUpdateUIRotateMinPanes
+    const rotateCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            const event = new wxUpdateUIEvent(eventPtr);
+            const menuBar = wrapWxMenuBar(state.menuBar.ptr);
+            // Rotating icons doesn't make sense if only text is shown.
+            event.Enable(!menuBar.IsChecked(ID_ShowTextForMinPanes));
+        },
+    );
+    state.callbacks.push(rotateCallback);
+
+    const rotateClosure = createWxClosure(rotateCallback.pointer, null);
+    if (rotateClosure)
+    {
+        state.closures.push(rotateClosure);
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, ID_RotateMinPanesIcons, ID_RotateMinPanesIcons,
+            EVT_UPDATE_UI, rotateClosure.ptr);
+    }
+
+    // EVT_ERASE_BACKGROUND / EVT_SIZE on the frame: both just Skip()
+    const eraseCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            new wxEvent(eventPtr).Skip(true);
+        },
+    );
+    state.callbacks.push(eraseCallback);
+
+    const sizeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            new wxEvent(eventPtr).Skip(true);
+        },
+    );
+    state.callbacks.push(sizeCallback);
+
+    const frameEraseClosure = createWxClosure(eraseCallback.pointer, null);
+    const frameSizeClosure = createWxClosure(sizeCallback.pointer, null);
+    if (frameEraseClosure && frameSizeClosure)
+    {
+        state.closures.push(frameEraseClosure, frameSizeClosure);
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, ID_ANY, ID_ANY, EVT_ERASE_BACKGROUND,
+            frameEraseClosure.ptr);
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, ID_ANY, ID_ANY, EVT_SIZE, frameSizeClosure.ptr);
+    }
+
+    // EVT_AUI_PANE_CLOSE
+    const paneCloseCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onPaneClose(state, new wxAuiManagerEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(paneCloseCallback);
+
+    const paneCloseClosure = createWxClosure(paneCloseCallback.pointer, null);
+    if (paneCloseClosure)
+    {
+        state.closures.push(paneCloseClosure);
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, ID_ANY, ID_ANY, EVT_AUI_PANE_CLOSE,
+            paneCloseClosure.ptr);
+    }
+
+    // EVT_AUITOOLBAR_TOOL_DROPDOWN(ID_DropDownToolbarItem)
+    const dropdownCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onDropDownToolbarItem(state, new wxAuiToolBarEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(dropdownCallback);
+
+    const dropdownClosure = createWxClosure(dropdownCallback.pointer, null);
+    if (dropdownClosure)
+    {
+        state.closures.push(dropdownClosure);
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, ID_DropDownToolbarItem, ID_DropDownToolbarItem,
+            EVT_AUITOOLBAR_TOOL_DROPDOWN, dropdownClosure.ptr);
+    }
+
+    // EVT_AUINOTEBOOK_* handlers (all with wxID_ANY)
+    const allowDndCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            // for the purpose of this test application, explicitly
+            // allow all notebook drag and drop events
+            new wxAuiNotebookEvent(eventPtr).Allow();
+        },
+    );
+    state.callbacks.push(allowDndCallback);
+
+    const pageCloseCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onNotebookPageClose(state, new wxAuiNotebookEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(pageCloseCallback);
+
+    const pageClosedCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onNotebookPageClosed(state, new wxAuiNotebookEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(pageClosedCallback);
+
+    const pageChangingCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onNotebookPageChanging(state, new wxAuiNotebookEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(pageChangingCallback);
+
+    const tabRightCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onNotebookTabRightClick(state, new wxAuiNotebookEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(tabRightCallback);
+
+    const bgDClickCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, eventPtr) =>
+        {
+            if (!eventPtr)
+            {
+                return;
+            }
+            onNotebookTabBackgroundDClick(state, new wxAuiNotebookEvent(eventPtr));
+        },
+    );
+    state.callbacks.push(bgDClickCallback);
+
+    const notebookConnections: Array<[Callback, number]> = [
+        [allowDndCallback, EVT_AUINOTEBOOK_ALLOW_DND],
+        [pageCloseCallback, EVT_AUINOTEBOOK_PAGE_CLOSE],
+        [pageClosedCallback, EVT_AUINOTEBOOK_PAGE_CLOSED],
+        [pageChangingCallback, EVT_AUINOTEBOOK_PAGE_CHANGING],
+        [tabRightCallback, EVT_AUINOTEBOOK_TAB_RIGHT_DOWN],
+        [bgDClickCallback, EVT_AUINOTEBOOK_BG_DCLICK],
+    ];
+
+    for (const entry of notebookConnections)
+    {
+        const closure = createWxClosure(entry[0].pointer, null);
+        if (closure)
+        {
+            state.closures.push(closure);
+            lib.symbols.wxEvtHandler_Connect(
+                state.frame.ptr, ID_ANY, ID_ANY, entry[1], closure.ptr);
+        }
+    }
+
+    // EVT_CLOSE_WINDOW: end the event loop instead of destroying the frame
+    const closeCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_closureFun, _data, _eventPtr) =>
+        {
+            exitMainLoop();
+        },
+    );
+    state.callbacks.push(closeCallback);
+
+    const closeClosure = createWxClosure(closeCallback.pointer, null);
+    if (closeClosure)
+    {
+        state.closures.push(closeClosure);
+        lib.symbols.wxEvtHandler_Connect(
+            state.frame.ptr, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, closeClosure.ptr);
+    }
+}
+
+//---------------------------------------------------------------------------
+// Asset path
+//---------------------------------------------------------------------------
+
+declare const __dirname: string;
+
+function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+//---------------------------------------------------------------------------
+// wxApp::OnInit / wxIMPLEMENT_APP
+//---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("aui");
+
+    // The C++ sample uses the compiled-in sample_xpm icon; this port loads the
+    // same artwork from disk, so the XPM handler must be registered first.
+    initAllImageHandlers();
+
+    const state = createAuiFrame();
+    if (!state)
+    {
+        console.error("aui: failed to create the main frame");
+        shutdown();
+        return 1;
+    }
+
+    connectEvents(state);
+
+    state.frame.Show();
+    setTopWindow(state.frame.ptr);
+
+    const exitCode = run();
+
+    for (const callback of state.callbacks)
+    {
+        callback.close();
+    }
+
+    shutdown();
+    return exitCode;
+}
+
+exit(main());

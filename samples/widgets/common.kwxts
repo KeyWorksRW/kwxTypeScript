@@ -1,0 +1,772 @@
+// common.kwxts — shared infrastructure for the wxWidgets "widgets" sample port.
+//
+// The C++ sample defines WidgetsPage (a wxScrolledWindow with lazy content,
+// attribute application and recreation notification helpers), a global
+// WidgetAttributes block and a log target that redirects wxLog messages into a
+// list box.  Those pieces are reproduced here so every page module only has to
+// implement its own controls and event handlers.
+//
+// Event callbacks: the runtime has a fixed pool of 64 native callback slots,
+// while this sample installs well over a hundred handlers.  A single native
+// callback therefore dispatches every Bound event; each wxClosure carries a
+// small integer id as its user data, which selects the JavaScript handler from
+// a map.  This keeps the number of native callbacks at three or four.
+
+declare const __dirname: string;
+
+import {
+    ALIGN_CENTRE_VERTICAL,
+    ALL,
+    CLIP_CHILDREN,
+    createKwxLog,
+    createWxBitmapBundleArray,
+    createWxBoxSizer,
+    createWxButton,
+    createWxCheckBox,
+    createWxClosure,
+    createWxScrolledWindow,
+    createWxSizerFlags,
+    createWxStaticBox,
+    createWxStaticBoxSizer,
+    createWxStaticText,
+    createWxString,
+    createWxTextCtrl,
+    EVT_CONTEXT_MENU,
+    EVT_ENTER_WINDOW,
+    EVT_KILL_FOCUS,
+    EVT_LEAVE_WINDOW,
+    EVT_SET_FOCUS,
+    HORIZONTAL,
+    ID_ANY,
+    Layout_Default,
+    LEFT,
+    LogError as LogErrorNative,
+    LogMessage as LogMessageNative,
+    readAndDeleteWxString,
+    readWxString,
+    RIGHT,
+    TAB_TRAVERSAL,
+    TE_PROCESS_ENTER,
+    WINDOW_VARIANT_NORMAL,
+    wxBitmapBundle,
+    wxBitmapBundle_FromSVGFile,
+    wxBitmapBundleArray,
+    wxCheckBox,
+    wxClosure,
+    wxColour,
+    wxContextMenuEvent,
+    wxEvent,
+    wxFont,
+    kwxLog,
+    wxListBox,
+    wxLog,
+    wxLog_GetActiveTarget,
+    wxLog_SetActiveTarget,
+    wxScrolledWindow,
+    wxSizer,
+    wxStaticBox,
+    wxStaticBoxSizer,
+    wxTextCtrl,
+    wxTextEntry,
+    wxWindow,
+    wrapWxBitmapBundle,
+} from "kwx";
+import { arrayBufferView, Callback, pointerOf, Pointer } from "kwx/platform";
+
+// ---------------------------------------------------------------------------
+// Strings and logging
+// ---------------------------------------------------------------------------
+
+/** Call fn with a temporary wxString and release it on every path. */
+export function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/** Call fn with one temporary wxString per text, all released afterwards. */
+export function withStrings<T>(texts: string[], fn: (ptrs: Pointer[]) => T): T
+{
+    const values = texts.map((text) => createWxString(text));
+    try
+    {
+        return fn(values.map((value) => value.ptr));
+    }
+    finally
+    {
+        for (const value of values)
+        {
+            value.Delete();
+        }
+    }
+}
+
+/**
+ * wxLogMessage(const wxString&): kwxFFI calls the non-formatting overload, so
+ * the text (including any '%' it contains) is logged verbatim.
+ */
+export function logMessage(text: string): void
+{
+    withString(text, (ptr) => LogMessageNative(ptr));
+}
+
+/** wxLogError(const wxString&). */
+export function logError(text: string): void
+{
+    withString(text, (ptr) => LogErrorNative(ptr));
+}
+
+// ---------------------------------------------------------------------------
+// Assets
+// ---------------------------------------------------------------------------
+
+/** Absolute path of an asset shipped beside the sample modules. */
+export function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+// ---------------------------------------------------------------------------
+// Event dispatch
+// ---------------------------------------------------------------------------
+
+export type EventHandler = (eventPtr: Pointer) => void;
+
+interface BindTarget
+{
+    Bind(first: number, last: number, type_: number, closure: Pointer): number;
+}
+
+let dispatchCallback: Callback | null = null;
+let nextHandlerId = 1;
+const handlers = new Map<number, EventHandler>();
+const handlerData: Uint32Array[] = [];
+const boundClosures: wxClosure[] = [];
+const extraCallbacks: Callback[] = [];
+
+/** Installs the single dispatching native callback.  Call after initialize(). */
+export function initEventDispatch(): void
+{
+    if (dispatchCallback)
+    {
+        return;
+    }
+
+    dispatchCallback = new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_fun, dataPtr, eventPtr) =>
+        {
+            if (!dataPtr || !eventPtr)
+            {
+                return;
+            }
+            const id = new Uint32Array(arrayBufferView(dataPtr, 4))[0];
+            const handler = handlers.get(id);
+            if (handler)
+            {
+                handler(eventPtr);
+            }
+        },
+    );
+}
+
+/** Bind an event to a JavaScript handler through the shared dispatcher. */
+export function bindEvent(
+    target: BindTarget,
+    first: number,
+    last: number,
+    eventType: number,
+    handler: EventHandler,
+): void
+{
+    if (!dispatchCallback)
+    {
+        throw new Error("bindEvent() called before initEventDispatch()");
+    }
+
+    const id = nextHandlerId++;
+    handlers.set(id, handler);
+
+    const data = new Uint32Array([id]);
+    handlerData.push(data);
+
+    const closure = createWxClosure(dispatchCallback.pointer, pointerOf(data));
+    if (!closure)
+    {
+        throw new Error("failed to create event closure");
+    }
+    boundClosures.push(closure);
+
+    target.Bind(first, last, eventType, closure.ptr);
+}
+
+/** Registers a standalone native callback that must stay alive for the run. */
+export function keepCallback(callback: Callback): Callback
+{
+    extraCallbacks.push(callback);
+    return callback;
+}
+
+/** Releases every native callback.  Call after run() returns. */
+export function shutdownEventDispatch(): void
+{
+    for (const callback of extraCallbacks)
+    {
+        callback.close();
+    }
+    extraCallbacks.length = 0;
+
+    if (dispatchCallback)
+    {
+        dispatchCallback.close();
+        dispatchCallback = null;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Widget attributes (WidgetAttributes + WidgetsPage::GetAttrs())
+// ---------------------------------------------------------------------------
+
+export interface WidgetAttributes
+{
+    tooltip: string;
+    font: wxFont | null;
+    colFg: wxColour | null;
+    colBg: wxColour | null;
+    colPageBg: wxColour | null;
+    enabled: boolean;
+    show: boolean;
+    dir: number;
+    variant: number;
+    cursor: Pointer;
+    defaultFlags: number;
+}
+
+export const attrs: WidgetAttributes = {
+    tooltip: "This is a tooltip",
+    font: null,
+    colFg: null,
+    colBg: null,
+    colPageBg: null,
+    enabled: true,
+    show: true,
+    dir: Layout_Default,
+    variant: WINDOW_VARIANT_NORMAL,
+    cursor: null,
+    defaultFlags: 0, // wxBORDER_DEFAULT
+};
+
+// ---------------------------------------------------------------------------
+// Sizer flag helpers (mirror wxSizerFlags defaults)
+// ---------------------------------------------------------------------------
+
+let s_borderPx = 5;
+
+/** Computes the DPI-aware wxSizerFlags default border. */
+export function initMetrics(): void
+{
+    const flags = createWxSizerFlags(0);
+    if (!flags)
+    {
+        return;
+    }
+    flags.Border(ALL);
+    s_borderPx = flags.GetBorderInPixels();
+    flags.Delete();
+}
+
+/** wxSizerFlags default border. */
+export function border(): number
+{
+    return s_borderPx;
+}
+
+/** wxSizerFlags().DoubleBorder() size. */
+export function doubleBorder(): number
+{
+    return s_borderPx * 2;
+}
+
+/** wxSizerFlags().TripleBorder() size. */
+export function tripleBorder(): number
+{
+    return s_borderPx * 3;
+}
+
+/**
+ * wxSizerFlags semantics: a non-zero border from Border()/DoubleBorder()/
+ * TripleBorder() applies to all sides unless the call names a side explicitly
+ * (Border(wxRIGHT), DoubleBorder(wxALL & ~wxLEFT), ...).  Callers express the
+ * former as `addWin(sizer, win, 0, EXPAND, border())`, so imply wxALL here.
+ */
+function withBorderSides(flags: number, borderPixels: number): number
+{
+    if (borderPixels > 0 && (flags & ALL) === 0)
+    {
+        return flags | ALL;
+    }
+    return flags;
+}
+
+/** wxSizer::Add(window, options, flags, border) */
+export function addWin(
+    sizer: wxSizer,
+    window: wxWindow,
+    proportion = 0,
+    flags = 0,
+    borderPixels = 0,
+): void
+{
+    sizer.AddWindow(window.ptr, proportion,
+        withBorderSides(flags, borderPixels), borderPixels, null);
+}
+
+/** wxSizer::Add(sizer, options, flags, border) */
+export function addSizer(
+    sizer: wxSizer,
+    child: wxSizer,
+    proportion = 0,
+    flags = 0,
+    borderPixels = 0,
+): void
+{
+    sizer.AddSizer(child.ptr, proportion,
+        withBorderSides(flags, borderPixels), borderPixels, null);
+}
+
+export function addSpacer(sizer: wxSizer, size: number): void
+{
+    sizer.AddSpacer(size);
+}
+
+export function addStretchSpacer(sizer: wxSizer, proportion = 1): void
+{
+    sizer.AddStretchSpacer(proportion);
+}
+
+export interface StaticBoxSizerParts
+{
+    sizer: wxStaticBoxSizer;
+    box: wxStaticBox;
+}
+
+/**
+ * wxStaticBoxSizer(orient, parent, label): the bindings create the static box
+ * separately, so this helper composes both objects and returns them.
+ */
+export function makeStaticBoxSizer(
+    parent: Pointer,
+    orient: number,
+    label: string,
+): StaticBoxSizerParts
+{
+    const box = withString(label, (ptr) =>
+        createWxStaticBox(parent, ID_ANY, ptr, -1, -1, -1, -1, 0))!;
+    const sizer = createWxStaticBoxSizer(box.ptr, orient)!;
+    return { sizer, box };
+}
+
+// ---------------------------------------------------------------------------
+// Page images
+// ---------------------------------------------------------------------------
+
+/** Bitmap bundles pushed by each page constructor, in construction order. */
+export const pageBundles: wxBitmapBundle[] = [];
+
+function pageBundle(relativeName: string): wxBitmapBundle
+{
+    const path = createWxString(samplePath(relativeName + ".svg"));
+    // The C++ helper forces a 16x16 default size, scaling the 32x32 artwork.
+    const bundlePtr = wxBitmapBundle_FromSVGFile(path.ptr, 16, 16);
+    path.Delete();
+    if (!bundlePtr)
+    {
+        throw new Error("failed to load page icon " + relativeName);
+    }
+    return wrapWxBitmapBundle(bundlePtr);
+}
+
+/**
+ * Builds the wxBitmapBundleArray consumed by wxBookCtrlBase::SetImages().
+ * Index 0 is the sample icon used by the category parent pages, exactly like
+ * the imageList in InitBook(); page bundles start at index 1.
+ */
+export function createPageImageArray(): wxBitmapBundleArray | null
+{
+    const images = createWxBitmapBundleArray();
+    if (!images)
+    {
+        return null;
+    }
+
+    const sample = pageBundle("sample");
+    images.Add(sample.ptr);
+
+    for (const bundle of pageBundles)
+    {
+        images.Add(bundle.ptr);
+    }
+    return images;
+}
+
+// ---------------------------------------------------------------------------
+// Widget class name and generic widget events
+// ---------------------------------------------------------------------------
+
+/** w->GetClassInfo()->GetClassName() */
+export function windowClassName(window: wxWindow): string
+{
+    const info = window.GetClassInfo();
+    if (!info)
+    {
+        return "wxWindow";
+    }
+    const name = info.GetClassNameEx();
+    return name ? readAndDeleteWxString(name.ptr) : "wxWindow";
+}
+
+/**
+ * WidgetsApp::ConnectToWidgetEvents(): log focus and mouse enter/leave events.
+ */
+export function connectToWidgetEvents(window: wxWindow): void
+{
+    const describe = (): string => windowClassName(window);
+
+    bindEvent(window, ID_ANY, ID_ANY, EVT_SET_FOCUS, (eventPtr) =>
+    {
+        if (!eventPtr) return;
+        if (isUsingLogWindow())
+        {
+            logMessage(`Widget '${describe()}' got focus`);
+        }
+        new wxEvent(eventPtr, true).Skip(true);
+    });
+
+    bindEvent(window, ID_ANY, ID_ANY, EVT_KILL_FOCUS, (eventPtr) =>
+    {
+        if (!eventPtr) return;
+        if (isUsingLogWindow())
+        {
+            logMessage(`Widget '${describe()}' lost focus`);
+        }
+        new wxEvent(eventPtr, true).Skip(true);
+    });
+
+    bindEvent(window, ID_ANY, ID_ANY, EVT_ENTER_WINDOW, (eventPtr) =>
+    {
+        if (!eventPtr) return;
+        logMessage(`Mouse entered into '${describe()}'`);
+        new wxEvent(eventPtr, true).Skip(true);
+    });
+
+    bindEvent(window, ID_ANY, ID_ANY, EVT_LEAVE_WINDOW, (eventPtr) =>
+    {
+        if (!eventPtr) return;
+        logMessage(`Mouse left '${describe()}'`);
+        new wxEvent(eventPtr, true).Skip(true);
+    });
+
+    bindEvent(window, ID_ANY, ID_ANY, EVT_CONTEXT_MENU, (eventPtr) =>
+    {
+        if (!eventPtr) return;
+        const event = new wxContextMenuEvent(eventPtr, true);
+        const x = new Int32Array(1);
+        const y = new Int32Array(1);
+        event.GetPosition(pointerOf(x), pointerOf(y));
+        logMessage(`Context menu event for '${describe()}' at ${x[0]}x${y[0]}`);
+        new wxEvent(eventPtr, true).Skip(true);
+    });
+}
+
+/** True once the list-box log target is active (WidgetsApp::IsUsingLogWindow). */
+let logWindowActive = false;
+export function isUsingLogWindow(): boolean
+{
+    return logWindowActive;
+}
+
+// ---------------------------------------------------------------------------
+// Log window (LboxLogger)
+// ---------------------------------------------------------------------------
+
+export interface LogWindowState
+{
+    readonly listbox: wxListBox;
+    readonly logger: kwxLog;
+    readonly callback: Callback;
+    readonly oldTarget: Pointer;
+}
+
+const LOG_TRACE = 8;
+
+/**
+ * LboxLogger: redirect log messages to the list box, forwarding trace messages
+ * to the previously installed target.
+ */
+export function installLogWindow(listbox: wxListBox): LogWindowState
+{
+    const oldTarget = wxLog_GetActiveTarget();
+
+    const callback = keepCallback(new Callback(
+        { parameters: ["pointer", "pointer", "pointer"], result: "void" },
+        (_object, levelPtr, msgPtr) =>
+        {
+            if (!msgPtr)
+            {
+                return;
+            }
+            const level = levelPtr ? Number(levelPtr as unknown as bigint) : 0;
+            if (level === LOG_TRACE)
+            {
+                if (oldTarget)
+                {
+                    new wxLog(oldTarget, true).LogTextAtLevel(level, msgPtr);
+                }
+                return;
+            }
+
+            withString(readWxString(msgPtr), (ptr) => listbox.Append(ptr));
+            listbox.SetFirstItem(listbox.GetCount() - 1);
+        },
+    ));
+
+    const logger = createKwxLog(null, callback.pointer)!;
+    logger.SetOnDoLogTextAtLevel(callback.pointer);
+    wxLog_SetActiveTarget(logger.ptr);
+
+    logWindowActive = true;
+
+    return { listbox, logger, callback, oldTarget };
+}
+
+/** Restores the previous log target and releases the logger. */
+export function restoreLogWindow(state: LogWindowState): void
+{
+    logWindowActive = false;
+    wxLog_SetActiveTarget(state.oldTarget);
+    state.logger.Delete();
+}
+
+// ---------------------------------------------------------------------------
+// WidgetsPage
+// ---------------------------------------------------------------------------
+
+export class WidgetsPage
+{
+    /** The wxScrolledWindow that is added to the treebook as a sub-page. */
+    readonly page: wxScrolledWindow;
+
+    /** Index of this page's bitmap in pageBundles / the book image list. */
+    readonly imageIndex: number;
+
+    /** True once CreateContent() has run. */
+    contentCreated = false;
+
+    /** WidgetsPage::m_notifyRecreate */
+    protected notifyRecreate = false;
+
+    constructor(parent: Pointer, iconName: string)
+    {
+        this.page = createWxScrolledWindow(
+            parent, ID_ANY, -1, -1, -1, -1, CLIP_CHILDREN | TAB_TRAVERSAL,
+        )!;
+        // +1: image list index 0 is the sample icon (see createPageImageArray).
+        this.imageIndex = pageBundles.length + 1;
+        pageBundles.push(pageBundle(iconName));
+    }
+
+    /** The control shown by this page. */
+    getWidget(): wxWindow | null
+    {
+        return null;
+    }
+
+    /** The text entry interface of the widget, when it has one. */
+    getTextEntry(): wxTextEntry | null
+    {
+        return null;
+    }
+
+    /** All widgets that receive the attribute settings. */
+    getWidgets(): wxWindow[]
+    {
+        const widget = this.getWidget();
+        return widget ? [widget] : [];
+    }
+
+    /** Lazy creation of the content. */
+    createContent(): void
+    {
+    }
+
+    /** Recreation after the border flags changed. */
+    recreateWidget(): void
+    {
+    }
+
+    enableRecreationNotifications(): void
+    {
+        this.notifyRecreate = true;
+    }
+
+    /** WidgetsPage::SetUpWidget() */
+    setUpWidget(): void
+    {
+        for (const widget of this.getWidgets())
+        {
+            if (!widget)
+            {
+                continue;
+            }
+
+            withString(attrs.tooltip, (ptr) => widget.SetToolTip(ptr));
+
+            if (attrs.font && attrs.font.IsOk())
+            {
+                widget.SetFont(attrs.font.ptr);
+            }
+            if (attrs.colFg && attrs.colFg.IsOk())
+            {
+                widget.SetForegroundColour(attrs.colFg.ptr);
+            }
+            if (attrs.colBg && attrs.colBg.IsOk())
+            {
+                widget.SetBackgroundColour(attrs.colBg.ptr);
+            }
+            if (attrs.dir !== Layout_Default)
+            {
+                widget.SetLayoutDirection(attrs.dir);
+            }
+
+            widget.Enable(attrs.enabled);
+            if (attrs.show)
+            {
+                widget.Show();
+            }
+            else
+            {
+                widget.Hide();
+            }
+
+            if (attrs.cursor)
+            {
+                widget.SetCursor(attrs.cursor);
+            }
+
+            widget.SetWindowVariant(attrs.variant);
+            widget.Refresh(true);
+        }
+
+        if (attrs.colPageBg && attrs.colPageBg.IsOk())
+        {
+            this.page.SetBackgroundColour(attrs.colPageBg.ptr);
+            this.page.Refresh(true);
+        }
+    }
+
+    /** WidgetsPage::NotifyWidgetRecreation() */
+    notifyWidgetRecreation(widget: wxWindow): void
+    {
+        if (!this.notifyRecreate)
+        {
+            return;
+        }
+        this.setUpWidget();
+        connectToWidgetEvents(widget);
+    }
+
+    // -- page helpers (WidgetsPage protected methods) ------------------------
+
+    /**
+     * CreateSizerWithText(): horizontal sizer with the control and a text
+     * control with wxTE_PROCESS_ENTER.
+     */
+    createSizerWithText(
+        control: wxWindow,
+        id: number = ID_ANY,
+        setText?: (text: wxTextCtrl) => void,
+    ): wxSizer
+    {
+        const row = createWxBoxSizer(HORIZONTAL)!;
+        const parent = control.GetParent();
+        const text = withString("", (ptr) =>
+            createWxTextCtrl(
+                parent ? parent.ptr : null, id, ptr,
+                -1, -1, -1, -1, BigInt(TE_PROCESS_ENTER),
+            ))!;
+
+        addWin(row, control, 0, ALIGN_CENTRE_VERTICAL, 0);
+        addWin(row, text, 1, ALIGN_CENTRE_VERTICAL | RIGHT, border());
+
+        if (setText)
+        {
+            setText(text);
+        }
+
+        return row;
+    }
+
+    /** CreateSizerWithTextAndLabel() */
+    createSizerWithTextAndLabel(
+        label: string,
+        id: number = ID_ANY,
+        setText?: (text: wxTextCtrl) => void,
+        statBoxParent: Pointer = null,
+    ): wxSizer
+    {
+        const staticText = withString(label, (ptr) =>
+            createWxStaticText(
+                statBoxParent ? statBoxParent : this.page.ptr,
+                ID_ANY, ptr, -1, -1, -1, -1, 0,
+            ))!;
+        return this.createSizerWithText(staticText, id, setText);
+    }
+
+    /** CreateSizerWithTextAndButton() */
+    createSizerWithTextAndButton(
+        idBtn: number,
+        label: string,
+        id: number = ID_ANY,
+        setText?: (text: wxTextCtrl) => void,
+        statBoxParent: Pointer = null,
+    ): wxSizer
+    {
+        const button = withString(label, (ptr) =>
+            createWxButton(
+                statBoxParent ? statBoxParent : this.page.ptr,
+                idBtn, ptr, -1, -1, -1, -1, 0,
+            ))!;
+        return this.createSizerWithText(button, id, setText);
+    }
+
+    /** CreateCheckBoxAndAddToSizer() */
+    createCheckBoxAndAddToSizer(
+        sizer: wxSizer,
+        label: string,
+        id: number = ID_ANY,
+        statBoxParent: Pointer = null,
+    ): wxCheckBox
+    {
+        const checkbox = withString(label, (ptr) =>
+            createWxCheckBox(
+                statBoxParent ? statBoxParent : this.page.ptr,
+                id, ptr, -1, -1, -1, -1, 0,
+            ))!;
+        addWin(sizer, checkbox, 0, LEFT | RIGHT, border());
+        addSpacer(sizer, this.page.FromDIP(2));
+        return checkbox;
+    }
+
+    /** FromDIP() relative to the page window. */
+    dip(value: number): number
+    {
+        return this.page.FromDIP(value);
+    }
+}

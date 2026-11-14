@@ -1,0 +1,113 @@
+// support.kwxts — string, logging and dialog helpers for the "menu" port of
+// wxSamples/src/menu/menu.cpp.
+//
+// These mirror the small free functions the C++ sample calls: wxString
+// lifetime handling, wxLogMessage()/wxLogWarning()/wxLogError()/wxLogStatus(),
+// wxMessageBox() and wxGetTextFromUser().
+
+declare const __dirname: string;
+
+import {
+    LogError,
+    LogMessage,
+    LogStatusWindow,
+    LogWarning,
+    createWxString,
+    kwxMessageBox,
+    readAndDeleteWxString,
+    wxGetTextFromUserEx,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+/** Absolute path of an asset shipped next to this module. */
+export function samplePath(name: string): string
+{
+    return __dirname.replace(/\\/g, "/") + "/" + name;
+}
+
+/** Run fn with a temporary wxString and release it on every path. */
+export function withString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const value = createWxString(text);
+    try
+    {
+        return fn(value.ptr);
+    }
+    finally
+    {
+        value.Delete();
+    }
+}
+
+/**
+ * kwxFFI's LogMessage()/LogWarning()/LogError() pass the wxString to the
+ * wxWidgets vararg overloads, which treat it as a printf-style format, so a '%'
+ * inside user text (a menu label may contain one) has to be doubled; the
+ * visible output is unchanged.
+ */
+function escapeFormat(text: string): string
+{
+    return text.replace(/%/g, "%%");
+}
+
+/** wxLogMessage(message) */
+export function logMessage(text: string): void
+{
+    withString(escapeFormat(text), (ptr) => { LogMessage(ptr); });
+}
+
+/** wxLogWarning(message) */
+export function logWarning(text: string): void
+{
+    withString(escapeFormat(text), (ptr) => { LogWarning(ptr); });
+}
+
+/** wxLogError(message) */
+export function logError(text: string): void
+{
+    withString(escapeFormat(text), (ptr) => { LogError(ptr); });
+}
+
+/** wxLogStatus(frame, message) — LogStatusWindow() uses a "%s" format itself. */
+export function logStatus(frame: Pointer, text: string): void
+{
+    withString(text, (ptr) => { LogStatusWindow(frame, ptr); });
+}
+
+/** wxMessageBox(message, caption, style, parent) */
+export function messageBox(
+    parent: Pointer,
+    messageText: string,
+    caption: string,
+    style: number,
+): number
+{
+    return withString(messageText, (msg) =>
+        withString(caption, (cap) => kwxMessageBox(msg, cap, style, parent, -1, -1)));
+}
+
+/**
+ * wxGetTextFromUser(message, caption, defaultText, parent).
+ *
+ * The binding exposes the wxString-returning wxGetTextFromUserEx(); the UTF-8
+ * argument buffers stay referenced until the native call returns.
+ */
+export function getTextFromUser(
+    messageText: string,
+    caption: string,
+    defaultValue: string,
+    parent: Pointer,
+): string
+{
+    const result = withString(messageText, (msg) =>
+        withString(caption, (cap) =>
+            withString(defaultValue, (def) =>
+                wxGetTextFromUserEx(msg, cap, def, parent, -1, -1, 1))));
+
+    if (!result)
+    {
+        return "";
+    }
+
+    return readAndDeleteWxString(result);
+}

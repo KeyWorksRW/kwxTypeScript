@@ -1,0 +1,832 @@
+// notebook.kwxts — port of wxSamples/src/widgets/notebook.cpp
+//
+// notebook.cpp implements one shared BookWidgetsPage base class and three page
+// classes (Notebook, Listbook and Choicebook).  The base class is reproduced
+// here as a private local class; the three factories stay distinct.
+//
+// Binding notes:
+//  * wxBookCtrlBase is a wxWindow, so no wrapWxWindow() is needed.
+//  * Page change events are bound on each newly created book control, which is
+//    where the C++ event tables would resolve them.
+//  * The C++ comment about SetImageList(nullptr) crashing under MSW is kept:
+//    the image list is only deleted, never detached.
+
+import {
+    ALIGN_CENTRE_HORIZONTAL,
+    ALL,
+    ART_ERROR,
+    ART_INFORMATION,
+    ART_OTHER,
+    ART_QUESTION,
+    ART_WARNING,
+    BK_BOTTOM,
+    BK_LEFT,
+    BK_RIGHT,
+    BK_TOP,
+    createWxBoxSizer,
+    createWxButton,
+    createWxCheckBox,
+    createWxChoicebook,
+    createWxImageList,
+    createWxListbook,
+    createWxNotebook,
+    createWxRadioBox,
+    createWxTextCtrl,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_CHOICEBOOK_PAGE_CHANGED,
+    EVT_CHOICEBOOK_PAGE_CHANGING,
+    EVT_LISTBOOK_PAGE_CHANGED,
+    EVT_LISTBOOK_PAGE_CHANGING,
+    EVT_NOTEBOOK_PAGE_CHANGED,
+    EVT_NOTEBOOK_PAGE_CHANGING,
+    EVT_RADIOBOX,
+    EVT_UPDATE_UI,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    LEFT,
+    RA_SPECIFY_COLS,
+    readAndDeleteWxString,
+    RIGHT,
+    VERTICAL,
+    wxArtProvider_GetIcon,
+    wxBookCtrlBase,
+    wxBookCtrlEvent,
+    wxCheckBox,
+    wxImageList,
+    wxRadioBox,
+    wxSizer,
+    wxTextCtrl,
+    wxUpdateUIEvent,
+    wxWindow,
+} from "kwx";
+import { Pointer, pointerOf } from "kwx/platform";
+
+import {
+    addSizer,
+    addSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    doubleBorder,
+    logMessage,
+    makeStaticBoxSizer,
+    tripleBorder,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+// Control ids (enum starting at wxID_HIGHEST).
+const BOOK_PAGE_RESET = ID_HIGHEST;
+const BOOK_PAGE_SELECT_PAGE = BOOK_PAGE_RESET + 1;
+const BOOK_PAGE_ADD_PAGE = BOOK_PAGE_SELECT_PAGE + 1;
+const BOOK_PAGE_INSERT_PAGE = BOOK_PAGE_ADD_PAGE + 1;
+const BOOK_PAGE_REMOVE_PAGE = BOOK_PAGE_INSERT_PAGE + 1;
+const BOOK_PAGE_DELETE_ALL = BOOK_PAGE_REMOVE_PAGE + 1;
+const BOOK_PAGE_INSERT_TEXT = BOOK_PAGE_DELETE_ALL + 1;
+const BOOK_PAGE_REMOVE_TEXT = BOOK_PAGE_INSERT_TEXT + 1;
+const BOOK_PAGE_SELECT_TEXT = BOOK_PAGE_REMOVE_TEXT + 1;
+const BOOK_PAGE_NUM_PAGES_TEXT = BOOK_PAGE_SELECT_TEXT + 1;
+const BOOK_PAGE_CUR_SELECT_TEXT = BOOK_PAGE_NUM_PAGES_TEXT + 1;
+const BOOK_PAGE_BOOK = BOOK_PAGE_CUR_SELECT_TEXT + 1;
+
+// Orient enum.
+const ORIENT_TOP = 0;
+const ORIENT_BOTTOM = 1;
+const ORIENT_LEFT = 2;
+const ORIENT_RIGHT = 3;
+
+/** Art ids of the four dummy page images, in wxImageList order. */
+const BOOK_PAGE_ART_IDS: Pointer[] = [
+    ART_INFORMATION,
+    ART_QUESTION,
+    ART_WARNING,
+    ART_ERROR,
+];
+
+/**
+ * Builds the `char**` array expected by wxRadioBox_Create.  The returned
+ * buffers must stay reachable until the native call returns.
+ */
+function makeRadioBox(
+    parent: Pointer,
+    caption: string,
+    items: string[],
+    dimension: number,
+    style: number,
+): wxRadioBox
+{
+    const buffers: Uint8Array[] = [];
+    const pointers = new BigUint64Array(items.length);
+
+    for (let index = 0; index < items.length; index++)
+    {
+        const bytes = new TextEncoder().encode(items[index] + "\0");
+        buffers.push(bytes);
+        const address = pointerOf(bytes);
+        pointers[index] = address === null ? 0n : address;
+    }
+
+    const choices = pointerOf(pointers);
+
+    const box = withString(caption, (ptr) =>
+        createWxRadioBox(
+            parent, ID_ANY, ptr, -1, -1, -1, -1,
+            items.length, choices, dimension, style,
+        ));
+
+    // Keep the string buffers alive until the constructor has copied them.
+    void buffers;
+    return box!;
+}
+
+/** BookWidgetsPage: the logic shared by the notebook, listbook and choicebook. */
+class BookWidgetsPage extends WidgetsPage
+{
+    private chkImages: wxCheckBox | null = null;
+    private radioOrient: wxRadioBox | null = null;
+
+    private textInsert: wxTextCtrl | null = null;
+    private textRemove: wxTextCtrl | null = null;
+    private textSelect: wxTextCtrl | null = null;
+
+    private textNumPages: wxTextCtrl | null = null;
+    private textCurrentSelection: wxTextCtrl | null = null;
+
+    protected book: wxBookCtrlBase | null = null;
+    private sizerBook: wxSizer | null = null;
+    private imageList: wxImageList | null = null;
+
+    constructor(parent: Pointer, iconName: string)
+    {
+        super(parent, iconName);
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.book;
+    }
+
+    override createContent(): void
+    {
+        const topSizer = createWxBoxSizer(HORIZONTAL)!;
+
+        // left pane
+        const sizerLeft = makeStaticBoxSizer(this.page.ptr, VERTICAL, "&Set style");
+
+        // must be in sync with the Orient enum
+        const chkImages = withString("Show &images", (ptr) =>
+            createWxCheckBox(sizerLeft.box.ptr, ID_ANY, ptr,
+                -1, -1, -1, -1, 0))!;
+        this.chkImages = chkImages;
+
+        const radioOrient = makeRadioBox(
+            sizerLeft.box.ptr, "&Tab orientation",
+            ["&top", "&bottom", "&left", "&right"], 1, RA_SPECIFY_COLS);
+        this.radioOrient = radioOrient;
+
+        addWin(sizerLeft.sizer, chkImages, 0, ALL, border());
+        addSpacer(sizerLeft.sizer, this.dip(15));
+        addWin(sizerLeft.sizer, radioOrient, 0, ALL, border());
+
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(sizerLeft.box.ptr, BOOK_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerLeft.sizer, resetButton, 0,
+            ALIGN_CENTRE_HORIZONTAL | ALL, tripleBorder());
+
+        // middle pane
+        const sizerMiddle = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&Contents");
+
+        const numPagesRow = this.createSizerWithTextAndLabel(
+            "Number of pages: ", BOOK_PAGE_NUM_PAGES_TEXT,
+            (text) =>
+            {
+                text.SetEditable(false);
+                this.textNumPages = text;
+            },
+            sizerMiddle.box.ptr);
+        addSizer(sizerMiddle.sizer, numPagesRow, 0, EXPAND | ALL, border());
+
+        const currentRow = this.createSizerWithTextAndLabel(
+            "Current selection: ", BOOK_PAGE_CUR_SELECT_TEXT,
+            (text) =>
+            {
+                text.SetEditable(false);
+                this.textCurrentSelection = text;
+            },
+            sizerMiddle.box.ptr);
+        addSizer(sizerMiddle.sizer, currentRow, 0, EXPAND | ALL, border());
+
+        const selectButton = withString("&Select page", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, BOOK_PAGE_SELECT_PAGE, ptr,
+                -1, -1, -1, -1, 0))!;
+        const selectRow = this.createSizerWithText(
+            selectButton, BOOK_PAGE_SELECT_TEXT, (text) =>
+            {
+                this.textSelect = text;
+            });
+        addSizer(sizerMiddle.sizer, selectRow, 0, EXPAND | ALL, border());
+
+        const addPageButton = withString("&Add page", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, BOOK_PAGE_ADD_PAGE, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerMiddle.sizer, addPageButton, 0, EXPAND | ALL, border());
+
+        const insertButton = withString("&Insert page at", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, BOOK_PAGE_INSERT_PAGE, ptr,
+                -1, -1, -1, -1, 0))!;
+        const insertRow = this.createSizerWithText(
+            insertButton, BOOK_PAGE_INSERT_TEXT, (text) =>
+            {
+                this.textInsert = text;
+            });
+        addSizer(sizerMiddle.sizer, insertRow, 0, EXPAND | ALL, border());
+
+        const removeButton = withString("&Remove page", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, BOOK_PAGE_REMOVE_PAGE, ptr,
+                -1, -1, -1, -1, 0))!;
+        const removeRow = this.createSizerWithText(
+            removeButton, BOOK_PAGE_REMOVE_TEXT, (text) =>
+            {
+                this.textRemove = text;
+            });
+        addSizer(sizerMiddle.sizer, removeRow, 0, EXPAND | ALL, border());
+
+        const deleteAllButton = withString("&Delete All", (ptr) =>
+            createWxButton(sizerMiddle.box.ptr, BOOK_PAGE_DELETE_ALL, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerMiddle.sizer, deleteAllButton, 0, EXPAND | ALL, border());
+
+        // right pane
+        const sizerBook = createWxBoxSizer(HORIZONTAL)!;
+        this.sizerBook = sizerBook;
+
+        // the 3 panes compose the window
+        addSizer(topSizer, sizerLeft.sizer, 0, EXPAND | (ALL & ~LEFT), doubleBorder());
+        addSizer(topSizer, sizerMiddle.sizer, 0, EXPAND | ALL, doubleBorder());
+        addSizer(topSizer, sizerBook, 1, EXPAND | (ALL & ~RIGHT), doubleBorder());
+
+        this.recreateBook();
+
+        // final initializations
+        this.reset();
+        this.createImageList();
+
+        this.page.SetSizer(topSizer.ptr, false);
+
+        // EVT_BUTTON rows
+        bindEvent(this.page, BOOK_PAGE_RESET, BOOK_PAGE_RESET, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonReset();
+            });
+        bindEvent(this.page, BOOK_PAGE_SELECT_PAGE, BOOK_PAGE_SELECT_PAGE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSelectPage();
+            });
+        bindEvent(this.page, BOOK_PAGE_ADD_PAGE, BOOK_PAGE_ADD_PAGE, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonAddPage();
+            });
+        bindEvent(this.page, BOOK_PAGE_INSERT_PAGE, BOOK_PAGE_INSERT_PAGE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonInsertPage();
+            });
+        bindEvent(this.page, BOOK_PAGE_REMOVE_PAGE, BOOK_PAGE_REMOVE_PAGE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonRemovePage();
+            });
+        bindEvent(this.page, BOOK_PAGE_DELETE_ALL, BOOK_PAGE_DELETE_ALL,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonDeleteAll();
+            });
+
+        // EVT_UPDATE_UI handlers live on the controls themselves
+        this.bindUpdateUI(this.textNumPages, BOOK_PAGE_NUM_PAGES_TEXT, (eventPtr) =>
+        {
+            const book = this.book;
+            if (!book) return;
+            const event = new wxUpdateUIEvent(eventPtr, true);
+            withString(String(book.GetPageCount()), (ptr) => event.SetText(ptr));
+        });
+        this.bindUpdateUI(this.textCurrentSelection, BOOK_PAGE_CUR_SELECT_TEXT,
+            (eventPtr) =>
+            {
+                const book = this.book;
+                if (!book) return;
+                const event = new wxUpdateUIEvent(eventPtr, true);
+                withString(String(book.GetSelection()), (ptr) => event.SetText(ptr));
+            });
+
+        this.bindUpdateUI(selectButton, BOOK_PAGE_SELECT_PAGE, (eventPtr) =>
+        {
+            const event = new wxUpdateUIEvent(eventPtr, true);
+            event.Enable(this.isValidValue(this.getTextValue(this.textSelect)));
+        });
+        this.bindUpdateUI(insertButton, BOOK_PAGE_INSERT_PAGE, (eventPtr) =>
+        {
+            const event = new wxUpdateUIEvent(eventPtr, true);
+            event.Enable(this.isValidValue(this.getTextValue(this.textInsert)));
+        });
+        this.bindUpdateUI(removeButton, BOOK_PAGE_REMOVE_PAGE, (eventPtr) =>
+        {
+            const event = new wxUpdateUIEvent(eventPtr, true);
+            event.Enable(this.isValidValue(this.getTextValue(this.textRemove)));
+        });
+        this.bindUpdateUI(resetButton, BOOK_PAGE_RESET, (eventPtr) =>
+        {
+            const event = new wxUpdateUIEvent(eventPtr, true);
+            this.onUpdateUIResetButton(event);
+        });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateBook();
+        });
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_RADIOBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateBook();
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.recreateBook();
+    }
+
+    /** Creates the concrete book control; overridden by every page class. */
+    protected createBook(flags: number): wxBookCtrlBase | null
+    {
+        void flags;
+        return null;
+    }
+
+    /** Binds EVT_UPDATE_UI on a control created by CreateContent(). */
+    private bindUpdateUI(
+        control: wxWindow | null,
+        id: number,
+        handler: (eventPtr: Pointer) => void,
+    ): void
+    {
+        if (!control)
+        {
+            return;
+        }
+        bindEvent(control, id, id, EVT_UPDATE_UI, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            handler(eventPtr);
+        });
+    }
+
+    /** Shared page-change logging (NotifyBookPageEvent in the C++ subclasses). */
+    protected logPageEvent(
+        name: string,
+        action: string,
+        eventPtr: Pointer,
+    ): void
+    {
+        const event = new wxBookCtrlEvent(eventPtr, true);
+        const currentSelection = this.book ? this.book.GetSelection() : -1;
+
+        logMessage(
+            `${name} page ${action} from ${event.GetOldSelection()} to ` +
+            `${event.GetSelection()} (currently ${currentSelection}).`);
+
+        event.Skip(true);
+    }
+
+    /** BookWidgetsPage::Reset() */
+    private reset(): void
+    {
+        this.chkImages?.SetValue(true);
+        this.radioOrient?.SetSelection(ORIENT_TOP);
+    }
+
+    /** BookWidgetsPage::CreateImageList() */
+    private createImageList(): void
+    {
+        if (this.chkImages?.GetValue())
+        {
+            if (!this.imageList)
+            {
+                // create a dummy image list with a few icons
+                const created = createWxImageList(32, 32, true, 0);
+                if (created)
+                {
+                    for (const artId of BOOK_PAGE_ART_IDS)
+                    {
+                        const icon = wxArtProvider_GetIcon(artId, ART_OTHER, 32, 32);
+                        if (icon)
+                        {
+                            created.AddIcon(icon.ptr);
+                            icon.Delete();
+                        }
+                    }
+                    this.imageList = created;
+                }
+            }
+
+            if (this.book && this.imageList)
+            {
+                this.book.SetImageList(this.imageList.ptr);
+            }
+        }
+        else // no images
+        {
+            if (this.imageList)
+            {
+                this.imageList.Delete();
+                this.imageList = null;
+            }
+        }
+
+        // SetImageList(nullptr) crashes under MSW, so the image list is only
+        // deleted here: the book is always recreated right afterwards.
+    }
+
+    /** BookWidgetsPage::RecreateBook() */
+    private recreateBook(): void
+    {
+        // do not recreate anything in case page content was not prepared yet
+        if (!this.radioOrient)
+        {
+            return;
+        }
+
+        let flags = attrs.defaultFlags;
+
+        switch (this.radioOrient.GetSelection())
+        {
+            case ORIENT_BOTTOM:
+                flags |= BK_BOTTOM;
+                break;
+            case ORIENT_LEFT:
+                flags |= BK_LEFT;
+                break;
+            case ORIENT_RIGHT:
+                flags |= BK_RIGHT;
+                break;
+            default:
+                flags |= BK_TOP;
+                break;
+        }
+
+        const oldBook = this.book;
+
+        const newBook = this.createBook(flags);
+        this.book = newBook;
+        if (!newBook)
+        {
+            return;
+        }
+
+        this.notifyWidgetRecreation(newBook);
+
+        this.createImageList();
+
+        if (oldBook)
+        {
+            const selection = oldBook.GetSelection();
+            const count = oldBook.GetPageCount();
+
+            // recreate the pages
+            for (let index = 0; index < count; index++)
+            {
+                const pageTextValue = oldBook.GetPageText(index);
+                const pageText = pageTextValue
+                    ? readAndDeleteWxString(pageTextValue.ptr)
+                    : "";
+
+                const newPage = this.createNewPage();
+                if (!newPage)
+                {
+                    break;
+                }
+
+                const iconIndex = this.chkImages?.GetValue()
+                    ? this.getIconIndex()
+                    : -1;
+
+                withString(pageText, (ptr) =>
+                    newBook.AddPage(newPage.ptr, ptr, false, iconIndex));
+            }
+
+            this.sizerBook?.DetachWindow(oldBook.ptr);
+            oldBook.Destroy();
+
+            // restore selection
+            if (selection !== -1)
+            {
+                newBook.SetSelection(selection);
+            }
+        }
+
+        const sizerBook = this.sizerBook;
+        if (sizerBook)
+        {
+            addWin(sizerBook, newBook, 1, EXPAND | ALL, border());
+            sizerBook.SetMinSize(this.dip(150), 0);
+            sizerBook.Layout();
+        }
+    }
+
+    /** Creates the control used as a book page. */
+    private createNewPage(): wxWindow | null
+    {
+        const book = this.book;
+        if (!book)
+        {
+            return null;
+        }
+
+        return withString("I'm a book page", (ptr) =>
+            createWxTextCtrl(book.ptr, ID_ANY, ptr, -1, -1, -1, -1, BigInt(0)));
+    }
+
+    /** BookWidgetsPage::GetIconIndex() */
+    private getIconIndex(): number
+    {
+        const book = this.book;
+        if (book)
+        {
+            const imageCount = book.GetImageCount();
+            if (imageCount > 0)
+            {
+                return book.GetPageCount() % imageCount;
+            }
+        }
+
+        return -1;
+    }
+
+    /** BookWidgetsPage::GetTextValue() */
+    private getTextValue(text: wxTextCtrl | null): number
+    {
+        if (!text)
+        {
+            return -1;
+        }
+
+        const textValue = text.GetValue();
+        if (!textValue)
+        {
+            return -1;
+        }
+
+        const rawValue = readAndDeleteWxString(textValue.ptr).trim();
+        if (!rawValue)
+        {
+            return -1;
+        }
+
+        const position = Number(rawValue);
+        return Number.isFinite(position) ? Math.trunc(position) : -1;
+    }
+
+    /** BookWidgetsPage::IsValidValue() */
+    private isValidValue(value: number): boolean
+    {
+        const book = this.book;
+        return book !== null && value >= 0 && value < book.GetPageCount();
+    }
+
+    // -- event handlers ------------------------------------------------------
+
+    private onButtonReset(): void
+    {
+        this.reset();
+        this.recreateBook();
+    }
+
+    private onButtonDeleteAll(): void
+    {
+        this.book?.DeleteAllPages();
+    }
+
+    private onButtonSelectPage(): void
+    {
+        const position = this.getTextValue(this.textSelect);
+        if (!this.isValidValue(position))
+        {
+            return;
+        }
+
+        this.book?.SetSelection(position);
+    }
+
+    private onButtonAddPage(): void
+    {
+        const book = this.book;
+        if (!book)
+        {
+            return;
+        }
+
+        const newPage = this.createNewPage();
+        if (!newPage)
+        {
+            return;
+        }
+
+        const iconIndex = this.chkImages?.GetValue() ? this.getIconIndex() : -1;
+
+        withString("Added page", (ptr) =>
+            book.AddPage(newPage.ptr, ptr, false, iconIndex));
+    }
+
+    private onButtonInsertPage(): void
+    {
+        const book = this.book;
+        if (!book)
+        {
+            return;
+        }
+
+        const position = this.getTextValue(this.textInsert);
+        if (!this.isValidValue(position))
+        {
+            return;
+        }
+
+        const newPage = this.createNewPage();
+        if (!newPage)
+        {
+            return;
+        }
+
+        const iconIndex = this.chkImages?.GetValue() ? this.getIconIndex() : -1;
+
+        withString("Inserted page", (ptr) =>
+            book.InsertPage(position, newPage.ptr, ptr, false, iconIndex));
+    }
+
+    private onButtonRemovePage(): void
+    {
+        const book = this.book;
+        if (!book)
+        {
+            return;
+        }
+
+        const position = this.getTextValue(this.textRemove);
+        if (!this.isValidValue(position))
+        {
+            return;
+        }
+
+        book.DeletePage(position);
+    }
+
+    private onUpdateUIResetButton(event: wxUpdateUIEvent): void
+    {
+        if (!this.chkImages || !this.radioOrient)
+        {
+            return;
+        }
+
+        event.Enable(
+            !this.chkImages.GetValue() ||
+            this.radioOrient.GetSelection() !== ORIENT_TOP);
+    }
+}
+
+/** BookWidgetsPage + wxNotebook (NotebookWidgetsPage). */
+class NotebookPage extends BookWidgetsPage
+{
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/notebook");
+        // The C++ constructor calls RecreateBook(), which does nothing before
+        // the page content exists.
+        this.recreateWidget();
+    }
+
+    protected override createBook(flags: number): wxBookCtrlBase | null
+    {
+        const book = createWxNotebook(
+            this.page.ptr, BOOK_PAGE_BOOK, -1, -1, -1, -1, flags);
+        if (!book)
+        {
+            return null;
+        }
+
+        bindEvent(book, ID_ANY, ID_ANY, EVT_NOTEBOOK_PAGE_CHANGING,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.logPageEvent("Notebook", "changing", eventPtr);
+            });
+        bindEvent(book, ID_ANY, ID_ANY, EVT_NOTEBOOK_PAGE_CHANGED,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.logPageEvent("Notebook", "changed", eventPtr);
+            });
+
+        return book;
+    }
+}
+
+/** BookWidgetsPage + wxListbook (ListbookWidgetsPage). */
+class ListbookPage extends BookWidgetsPage
+{
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/listbook");
+        this.recreateWidget();
+    }
+
+    protected override createBook(flags: number): wxBookCtrlBase | null
+    {
+        const book = createWxListbook(
+            this.page.ptr, BOOK_PAGE_BOOK, -1, -1, -1, -1, flags);
+        if (!book)
+        {
+            return null;
+        }
+
+        bindEvent(book, ID_ANY, ID_ANY, EVT_LISTBOOK_PAGE_CHANGING,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.logPageEvent("Listbook", "changing", eventPtr);
+            });
+        bindEvent(book, ID_ANY, ID_ANY, EVT_LISTBOOK_PAGE_CHANGED,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.logPageEvent("Listbook", "changed", eventPtr);
+            });
+
+        return book;
+    }
+}
+
+/** BookWidgetsPage + wxChoicebook (ChoicebookWidgetsPage). */
+class ChoicebookPage extends BookWidgetsPage
+{
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/choicebk");
+        this.recreateWidget();
+    }
+
+    protected override createBook(flags: number): wxBookCtrlBase | null
+    {
+        const book = createWxChoicebook(
+            this.page.ptr, BOOK_PAGE_BOOK, -1, -1, -1, -1, flags);
+        if (!book)
+        {
+            return null;
+        }
+
+        bindEvent(book, ID_ANY, ID_ANY, EVT_CHOICEBOOK_PAGE_CHANGING,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.logPageEvent("Choicebook", "changing", eventPtr);
+            });
+        bindEvent(book, ID_ANY, ID_ANY, EVT_CHOICEBOOK_PAGE_CHANGED,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.logPageEvent("Choicebook", "changed", eventPtr);
+            });
+
+        return book;
+    }
+}
+
+export function createNotebookPage(parent: Pointer): WidgetsPage
+{
+    return new NotebookPage(parent);
+}
+
+export function createListbookPage(parent: Pointer): WidgetsPage
+{
+    return new ListbookPage(parent);
+}
+
+export function createChoicebookPage(parent: Pointer): WidgetsPage
+{
+    return new ChoicebookPage(parent);
+}

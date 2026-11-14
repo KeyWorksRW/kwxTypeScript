@@ -1,0 +1,505 @@
+// datepick.kwxts — port of wxSamples/src/widgets/datepick.cpp
+//
+// Binding gaps (see the final report):
+//  * wxDateTime::ParseDate() is bound, but the native wrapper treats its
+//    argument as a raw char* and frees it with delete, so the ISO text this
+//    page produces is parsed with the bound ParseISODate() instead.
+
+import {
+    ALIGN_CENTRE,
+    ALL,
+    BOTTOM,
+    createWxBoxSizer,
+    createWxButton,
+    createWxDatePickerCtrl,
+    createWxDateTime,
+    createWxRadioBox,
+    DP_ALLOWNONE,
+    DP_DEFAULT,
+    DP_DROPDOWN,
+    DP_SHOWCENTURY,
+    DP_SPIN,
+    EVT_BUTTON,
+    EVT_DATE_CHANGED,
+    EXPAND,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    LEFT,
+    RA_SPECIFY_COLS,
+    readAndDeleteWxString,
+    RIGHT,
+    TOP,
+    VERTICAL,
+    wxCheckBox,
+    wxDateEvent,
+    wxDatePickerCtrl,
+    wxDateTime,
+    wxRadioBox,
+    wxSizer,
+    wxTextCtrl,
+    wxWindow,
+} from "kwx";
+import { Pointer, pointerOf } from "kwx/platform";
+
+import {
+    addSizer,
+    addSpacer,
+    addStretchSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    doubleBorder,
+    logError,
+    logMessage,
+    makeStaticBoxSizer,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+const DATE_PICKER_PAGE_RESET = ID_HIGHEST;
+const DATE_PICKER_PAGE_SET = DATE_PICKER_PAGE_RESET + 1;
+const DATE_PICKER_PAGE_SET_RANGE = DATE_PICKER_PAGE_SET + 1;
+const DATE_PICKER_PAGE_SET_NULL_TEXT = DATE_PICKER_PAGE_SET_RANGE + 1;
+const DATE_PICKER_PAGE_PICKER = DATE_PICKER_PAGE_SET_NULL_TEXT + 1;
+
+/** wxDateTime::FormatISOCombined() separator: 'T'. */
+const ISO_COMBINED_SEPARATOR = 0x54;
+
+/**
+ * Builds the `char**` array expected by wxRadioBox_Create.  The returned
+ * buffers must stay reachable until the native call returns.
+ */
+function makeRadioBox(
+    parent: Pointer,
+    caption: string,
+    items: string[],
+    dimension: number,
+    style: number,
+): wxRadioBox
+{
+    const buffers: Uint8Array[] = [];
+    const pointers = new BigUint64Array(items.length);
+
+    for (let index = 0; index < items.length; index++)
+    {
+        const bytes = new TextEncoder().encode(items[index] + "\0");
+        buffers.push(bytes);
+        const address = pointerOf(bytes);
+        pointers[index] = address === null ? 0n : address;
+    }
+
+    const choices = pointerOf(pointers);
+
+    const box = withString(caption, (ptr) =>
+        createWxRadioBox(
+            parent, ID_ANY, ptr, -1, -1, -1, -1,
+            items.length, choices, dimension, style,
+        ));
+
+    // Keep the string buffers alive until the constructor has copied them.
+    void buffers;
+    return box!;
+}
+
+/** wxDateTime::FormatISODate() as a plain string. */
+function formatISODate(date: wxDateTime): string
+{
+    const value = date.FormatISODate();
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** wxDateTime::FormatISOCombined() as a plain string. */
+function formatISOCombined(date: wxDateTime): string
+{
+    const value = date.FormatISOCombined(ISO_COMBINED_SEPARATOR);
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+export class DatePickerPage extends WidgetsPage
+{
+    private datePicker: wxDatePickerCtrl | null = null;
+    private datePickerSizer: wxSizer | null = null;
+
+    private currentText: wxTextCtrl | null = null;
+    private minText: wxTextCtrl | null = null;
+    private maxText: wxTextCtrl | null = null;
+    private nullText: wxTextCtrl | null = null;
+
+    private kindRadio: wxRadioBox | null = null;
+    private checkCentury: wxCheckBox | null = null;
+    private checkAllowNone: wxCheckBox | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/datepick");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.datePicker;
+    }
+
+    override createContent(): void
+    {
+        const sizerTop = createWxBoxSizer(HORIZONTAL)!;
+
+        // left pane: style
+        const sizerLeft = createWxBoxSizer(VERTICAL)!;
+
+        const kindRadio = makeRadioBox(
+            this.page.ptr, "&Kind", ["&Default", "&Spin", "Drop do&wn"],
+            1, RA_SPECIFY_COLS);
+        this.kindRadio = kindRadio;
+        addWin(sizerLeft, kindRadio, 0, EXPAND, border());
+
+        const styleBox = makeStaticBoxSizer(this.page.ptr, VERTICAL, "&Style");
+        this.checkCentury = this.createCheckBoxAndAddToSizer(
+            styleBox.sizer, "Show &century", ID_ANY, styleBox.box.ptr);
+        this.checkAllowNone = this.createCheckBoxAndAddToSizer(
+            styleBox.sizer, "Allow &no value", ID_ANY, styleBox.box.ptr);
+        addSizer(sizerLeft, styleBox.sizer, 0, EXPAND, border());
+
+        const resetButton = withString("&Recreate", (ptr) =>
+            createWxButton(this.page.ptr, DATE_PICKER_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerLeft, resetButton, 0, ALIGN_CENTRE, border());
+
+        // middle pane: operations
+        const sizerMiddle = createWxBoxSizer(VERTICAL)!;
+
+        const setRow = this.createSizerWithTextAndButton(
+            DATE_PICKER_PAGE_SET, "&Set date", ID_ANY, (text) =>
+            {
+                this.currentText = text;
+            });
+        addSizer(sizerMiddle, setRow, 0, EXPAND, border());
+
+        // m_textCur->SetMinSize(m_textCur->GetSizeFromText("9999-99-99"))
+        if (this.currentText)
+        {
+            const width = new Int32Array(1);
+            const height = new Int32Array(1);
+            withString("9999-99-99", (ptr) => this.currentText?.GetSizeFromText(
+                ptr, pointerOf(width), pointerOf(height)));
+            this.currentText.SetMinSize(width[0], height[0]);
+        }
+
+        addSpacer(sizerMiddle, this.dip(10));
+
+        const minRow = this.createSizerWithTextAndLabel(
+            "&Min date", ID_ANY, (text) =>
+            {
+                this.minText = text;
+            });
+        addSizer(sizerMiddle, minRow, 0, EXPAND, border());
+
+        const maxRow = this.createSizerWithTextAndLabel(
+            "Ma&x date", ID_ANY, (text) =>
+            {
+                this.maxText = text;
+            });
+        addSizer(sizerMiddle, maxRow, 0, EXPAND, border());
+
+        const setRangeButton = withString("Set &range", (ptr) =>
+            createWxButton(this.page.ptr, DATE_PICKER_PAGE_SET_RANGE, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerMiddle, setRangeButton, 0, ALIGN_CENTRE, border());
+
+        addSpacer(sizerMiddle, this.dip(10));
+
+        const nullRow = this.createSizerWithTextAndLabel(
+            "&Null text", ID_ANY, (text) =>
+            {
+                this.nullText = text;
+            });
+        addSizer(sizerMiddle, nullRow, 0, EXPAND, border());
+
+        const setNullTextButton = withString("Set &null text", (ptr) =>
+            createWxButton(this.page.ptr, DATE_PICKER_PAGE_SET_NULL_TEXT, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(sizerMiddle, setNullTextButton, 0, ALIGN_CENTRE, border());
+
+        // right pane: control itself
+        const sizerRight = createWxBoxSizer(HORIZONTAL)!;
+
+        this.datePicker = createWxDatePickerCtrl(
+            this.page.ptr, DATE_PICKER_PAGE_PICKER, null,
+            -1, -1, -1, -1, BigInt(DP_DEFAULT));
+
+        if (this.datePicker)
+        {
+            addStretchSpacer(sizerRight);
+            addWin(sizerRight, this.datePicker, 1, ALIGN_CENTRE, 0);
+            addStretchSpacer(sizerRight);
+        }
+        this.datePickerSizer = sizerRight;
+
+        // the 3 panes compose the window
+        addSizer(sizerTop, sizerLeft, 0, ALL & ~LEFT, doubleBorder());
+        addSizer(sizerTop, sizerMiddle, 0, TOP | BOTTOM, doubleBorder());
+        addSizer(sizerTop, sizerRight, 1, EXPAND | (ALL & ~RIGHT), doubleBorder());
+
+        // final initializations
+        this.checkCentury?.SetValue(true);
+        this.reset();
+
+        this.page.SetSizer(sizerTop.ptr, false);
+
+        bindEvent(this.page, DATE_PICKER_PAGE_RESET, DATE_PICKER_PAGE_RESET,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.reset();
+                this.createDatePicker();
+            });
+
+        bindEvent(this.page, DATE_PICKER_PAGE_SET, DATE_PICKER_PAGE_SET,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSet();
+            });
+
+        bindEvent(this.page, DATE_PICKER_PAGE_SET_RANGE,
+            DATE_PICKER_PAGE_SET_RANGE, EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.onButtonSetRange();
+            });
+
+        bindEvent(this.page, DATE_PICKER_PAGE_SET_NULL_TEXT,
+            DATE_PICKER_PAGE_SET_NULL_TEXT, EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const value = this.nullText ? this.nullText.GetValue() : null;
+                const text = value ? readAndDeleteWxString(value.ptr) : "";
+                withString(text, (ptr) => this.datePicker?.SetNullText(ptr));
+            });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_DATE_CHANGED, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.onDateChanged(eventPtr);
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.createDatePicker();
+    }
+
+    /** Reset the date picker parameters to today. */
+    private reset(): void
+    {
+        const today = createWxDateTime();
+        if (!today)
+        {
+            return;
+        }
+
+        today.Today();
+
+        this.datePicker?.SetValue(today.ptr);
+        if (this.currentText)
+        {
+            withString(formatISODate(today), (ptr) => this.currentText?.SetValue(ptr));
+        }
+
+        today.Delete();
+    }
+
+    /** (Re)create the date picker with the currently selected style. */
+    private createDatePicker(): void
+    {
+        const value = createWxDateTime();
+        if (value && this.datePicker)
+        {
+            this.datePicker.GetValue(value.ptr);
+        }
+
+        const sizer = this.datePickerSizer;
+        if (sizer)
+        {
+            const count = sizer.GetItemCount();
+            for (let index = 0; index < count; index++)
+            {
+                sizer.Remove(0);
+            }
+        }
+
+        // wxDatePickerCtrl has no owning Delete(); destroy the window, as the
+        // C++ "delete m_datePicker" does.
+        if (this.datePicker)
+        {
+            this.datePicker.Destroy();
+            this.datePicker = null;
+        }
+
+        let style = attrs.defaultFlags;
+        switch (this.kindRadio ? this.kindRadio.GetSelection() : 0)
+        {
+            case 1:
+                style = DP_SPIN;
+                break;
+
+            case 2:
+                style = DP_DROPDOWN;
+                break;
+
+            default:
+                style = DP_DEFAULT;
+                break;
+        }
+
+        if (this.checkCentury?.GetValue())
+        {
+            style |= DP_SHOWCENTURY;
+        }
+        if (this.checkAllowNone?.GetValue())
+        {
+            style |= DP_ALLOWNONE;
+        }
+
+        this.datePicker = createWxDatePickerCtrl(
+            this.page.ptr, DATE_PICKER_PAGE_PICKER, value ? value.ptr : null,
+            -1, -1, -1, -1, BigInt(style));
+
+        if (this.datePicker)
+        {
+            this.notifyWidgetRecreation(this.datePicker);
+        }
+
+        if (sizer && this.datePicker)
+        {
+            addStretchSpacer(sizer);
+            addWin(sizer, this.datePicker, 1, ALIGN_CENTRE, 0);
+            addStretchSpacer(sizer);
+            sizer.Layout();
+        }
+
+        value?.Delete();
+    }
+
+    /** GetDateFromTextControl(): parse the ISO date held by the text control. */
+    private getDateFromTextControl(text: wxTextCtrl, target: wxDateTime): boolean
+    {
+        const value = text.GetValue();
+        const textValue = value ? readAndDeleteWxString(value.ptr) : "";
+        if (!textValue)
+        {
+            return true;
+        }
+
+        const parsed = withString(textValue, (ptr) => target.ParseISODate(ptr));
+        if (!parsed)
+        {
+            logError(`Invalid date "${textValue}"`);
+            return false;
+        }
+
+        return true;
+    }
+
+    /** OnButtonSet(): apply the date typed into the text control. */
+    private onButtonSet(): void
+    {
+        if (!this.currentText)
+        {
+            return;
+        }
+
+        const date = createWxDateTime();
+        if (!date)
+        {
+            return;
+        }
+
+        if (this.getDateFromTextControl(this.currentText, date))
+        {
+            this.datePicker?.SetValue(date.ptr);
+        }
+
+        date.Delete();
+    }
+
+    /** OnButtonSetRange(): apply and then re-read the allowed date range. */
+    private onButtonSetRange(): void
+    {
+        const first = createWxDateTime();
+        const second = createWxDateTime();
+        if (!first || !second || !this.minText || !this.maxText)
+        {
+            first?.Delete();
+            second?.Delete();
+            return;
+        }
+
+        if (!this.getDateFromTextControl(this.minText, first)
+            || !this.getDateFromTextControl(this.maxText, second))
+        {
+            first.Delete();
+            second.Delete();
+            return;
+        }
+
+        this.datePicker?.SetRange(first.ptr, second.ptr);
+
+        if (!this.datePicker || !this.datePicker.GetRange(first.ptr, second.ptr))
+        {
+            logMessage("No range set");
+        }
+        else
+        {
+            withString(first.IsValid() ? formatISODate(first) : "",
+                (ptr) => this.minText?.SetValue(ptr));
+            withString(second.IsValid() ? formatISODate(second) : "",
+                (ptr) => this.maxText?.SetValue(ptr));
+
+            logMessage("Date picker range updated");
+        }
+
+        first.Delete();
+        second.Delete();
+    }
+
+    /** FormatPossiblyInvalidDate(): "[none]" for an invalid wxDateTime. */
+    private formatPossiblyInvalidDate(date: wxDateTime): string
+    {
+        return date.IsValid() ? formatISOCombined(date) : "[none]";
+    }
+
+    /** OnDateChanged(): log both the event date and the control value. */
+    private onDateChanged(eventPtr: Pointer): void
+    {
+        const event = new wxDateEvent(eventPtr, true);
+        const eventDate = createWxDateTime();
+        const controlDate = createWxDateTime();
+
+        let eventText = "[none]";
+        let controlText = "[none]";
+
+        if (eventDate)
+        {
+            event.GetDate(eventDate.ptr);
+            eventText = this.formatPossiblyInvalidDate(eventDate);
+        }
+
+        if (controlDate && this.datePicker)
+        {
+            this.datePicker.GetValue(controlDate.ptr);
+            controlText = this.formatPossiblyInvalidDate(controlDate);
+        }
+
+        logMessage(`Date changed, now is ${eventText} (control value is ${controlText}).`);
+
+        eventDate?.Delete();
+        controlDate?.Delete();
+    }
+}
+
+export function createDatePickerPage(parent: Pointer): WidgetsPage
+{
+    return new DatePickerPage(parent);
+}

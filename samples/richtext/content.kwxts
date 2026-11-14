@@ -1,0 +1,646 @@
+// content.kwxts — MyFrame::WriteInitialText() from wxSamples/src/richtext.
+//
+// The programmatically-built document is reproduced with the same BeginXXX/
+// EndXXX stack, labels, wording and formatting, including the floating images,
+// the tab stops, the bordered text box, the 6x4 table and the five fields.
+//
+// The locked runs reproduce MyRichTextCtrl::BeginLock/EndLock. The "Lock"
+// property is written by the PrepareContent hook installed in richtext.kwxts
+// while a lock is active, exactly as the C++ override does; BeginLock/EndLock
+// only maintain m_lockId / m_locked.
+
+import {
+    BITMAP_TYPE_PNG,
+    BLACK,
+    BLUE,
+    GREEN,
+    RED,
+    TEXT_ALIGNMENT_CENTRE,
+    TEXT_ALIGNMENT_LEFT,
+    TEXT_ALIGNMENT_RIGHT,
+    TEXT_ATTR_BULLET_STYLE_ARABIC,
+    TEXT_ATTR_BULLET_STYLE_PERIOD,
+    TEXT_ATTR_BULLET_STYLE_SYMBOL,
+    TEXT_ATTR_LINE_SPACING_HALF,
+    TEXT_ATTR_TABS,
+    TEXT_ATTR_UNITS_PIXELS,
+    TEXT_BOX_ATTR_BORDER_SOLID,
+    TEXT_BOX_ATTR_FLOAT_LEFT,
+    TEXT_BOX_ATTR_FLOAT_RIGHT,
+    createWxArrayInt,
+    createWxRichTextAttr,
+    createWxRichTextAttrCopy,
+    createWxRichTextProperties,
+    wxBitmap,
+    wxCommandProcessor,
+    wxRichTextCtrl,
+    wxTextAttrDimension,
+} from "kwx";
+
+import { withString } from "./support.kwxts";
+
+/** A bitmap supplier backed by SVG assets; the caller keeps the objects alive. */
+export interface RichTextAssets
+{
+    bitmap: (name: string, width: number, height: number) => wxBitmap | null;
+}
+
+/**
+ * MyRichTextCtrl::m_lockId / m_locked. The lock id is written into each
+ * inserted object's "Lock" property by the PrepareContent hook.
+ */
+export interface LockState
+{
+    lockId: number;
+    locked: boolean;
+}
+
+function write(ctrl: wxRichTextCtrl, text: string): void
+{
+    withString(text, (ptr) => ctrl.WriteText(ptr));
+}
+
+/** MyRichTextCtrl::BeginLock() */
+export function beginLock(lock: LockState): void
+{
+    lock.lockId++;
+    lock.locked = true;
+}
+
+/** MyRichTextCtrl::EndLock() */
+export function endLock(lock: LockState): void
+{
+    lock.locked = false;
+}
+
+/** Pixel value setter for wxTextAttrDimension (SetValue(value, units) in C++). */
+function setPixels(dimension: wxTextAttrDimension | null, value: number): void
+{
+    if (dimension)
+    {
+        dimension.SetValueWithUnits(value, TEXT_ATTR_UNITS_PIXELS);
+    }
+}
+
+/** MyFrame::WriteInitialText() */
+export function writeInitialText(
+    ctrl: wxRichTextCtrl,
+    assets: RichTextAssets,
+    lock: LockState,
+): void
+{
+    // r.SetDefaultStyle(wxRichTextAttr());
+    const defaultStyle = createWxRichTextAttr();
+    if (defaultStyle)
+    {
+        ctrl.SetDefaultStyle(defaultStyle.ptr);
+        defaultStyle.Delete();
+    }
+
+    ctrl.Freeze();
+    ctrl.BeginSuppressUndo();
+    ctrl.BeginParagraphSpacing(0, 20);
+
+    ctrl.BeginAlignment(TEXT_ALIGNMENT_CENTRE);
+    ctrl.BeginBold();
+    ctrl.BeginFontSize(14);
+
+    const lineBreak = "\u001d";
+    write(
+        ctrl,
+        "Welcome to wxRichTextCtrl, a wxWidgets control" + lineBreak +
+            "for editing and presenting styled text and images\n",
+    );
+    ctrl.EndFontSize();
+
+    ctrl.BeginItalic();
+    write(ctrl, "by Julian Smart");
+    ctrl.EndItalic();
+
+    ctrl.EndBold();
+    ctrl.Newline();
+
+    // r.WriteImage(wxBitmap(zebra_xpm));  (200x167 XPM -> zebra.svg)
+    const zebra = assets.bitmap("zebra.svg", 200, 167);
+    if (zebra)
+    {
+        ctrl.WriteImageBitmap(zebra.ptr, BITMAP_TYPE_PNG, null);
+    }
+
+    ctrl.Newline();
+    ctrl.Newline();
+
+    ctrl.EndAlignment();
+
+    ctrl.BeginAlignment(TEXT_ALIGNMENT_LEFT);
+
+    // wxRichTextAttr imageAttr;
+    // imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_LEFT);
+    const imageAttr = createWxRichTextAttr();
+    if (imageAttr)
+    {
+        const textBoxAttr = imageAttr.GetTextBoxAttr();
+        if (textBoxAttr)
+        {
+            textBoxAttr.SetFloatMode(TEXT_BOX_ATTR_FLOAT_LEFT);
+        }
+    }
+
+    write(
+        ctrl,
+        "This is a simple test for a floating left image test. The zebra image " +
+            "should be placed at the left side of the current buffer and all the " +
+            "text should flow around it at the right side. This is a simple test " +
+            "for a floating left image test. The zebra image should be placed at " +
+            "the left side of the current buffer and all the text should flow " +
+            "around it at the right side. This is a simple test for a floating " +
+            "left image test. The zebra image should be placed at the left side " +
+            "of the current buffer and all the text should flow around it at the " +
+            "right side.",
+    );
+
+    if (imageAttr && zebra)
+    {
+        ctrl.WriteImageBitmap(zebra.ptr, BITMAP_TYPE_PNG, imageAttr.ptr);
+    }
+
+    // imageAttr.GetTextBoxAttr().GetTop().SetValue(200, wxTEXT_ATTR_UNITS_PIXELS);
+    // imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_RIGHT);
+    if (imageAttr)
+    {
+        const textBoxAttr = imageAttr.GetTextBoxAttr();
+        if (textBoxAttr)
+        {
+            setPixels(textBoxAttr.GetTop(), 200);
+            textBoxAttr.SetFloatMode(TEXT_BOX_ATTR_FLOAT_RIGHT);
+        }
+    }
+
+    if (imageAttr && zebra)
+    {
+        ctrl.WriteImageBitmap(zebra.ptr, BITMAP_TYPE_PNG, imageAttr.ptr);
+    }
+
+    write(
+        ctrl,
+        "This is a simple test for a floating right image test. The zebra image " +
+            "should be placed at the right side of the current buffer and all the " +
+            "text should flow around it at the left side. This is a simple test " +
+            "for a floating left image test. The zebra image should be placed at " +
+            "the right side of the current buffer and all the text should flow " +
+            "around it at the left side. This is a simple test for a floating " +
+            "left image test. The zebra image should be placed at the right side " +
+            "of the current buffer and all the text should flow around it at the " +
+            "left side.",
+    );
+    ctrl.EndAlignment();
+    ctrl.Newline();
+
+    if (imageAttr)
+    {
+        imageAttr.Delete();
+    }
+
+    write(ctrl, "What can you do with this thing? ");
+
+    const smiley = assets.bitmap("smiley.svg", 32, 32);
+    if (smiley)
+    {
+        ctrl.WriteImageBitmap(smiley.ptr, BITMAP_TYPE_PNG, null);
+    }
+
+    write(ctrl, " Well, you can change text ");
+
+    ctrl.BeginTextColour(RED);
+    write(ctrl, "colour, like this red bit.");
+    ctrl.EndTextColour();
+
+    // wxRichTextAttr backgroundColourAttr; background+text colour through
+    // BeginStyle(), which takes the real wxRichTextAttr now.
+    const backgroundColourAttr = createWxRichTextAttr();
+    if (backgroundColourAttr)
+    {
+        backgroundColourAttr.SetBackgroundColour(GREEN);
+        backgroundColourAttr.SetTextColour(BLUE);
+        ctrl.BeginStyle(backgroundColourAttr.ptr);
+        write(ctrl, " And this blue on green bit.");
+        ctrl.EndStyle();
+        backgroundColourAttr.Delete();
+    }
+    else
+    {
+        write(ctrl, " And this blue on green bit.");
+    }
+
+    write(ctrl, " Naturally you can make things ");
+    ctrl.BeginBold();
+    write(ctrl, "bold ");
+    ctrl.EndBold();
+    ctrl.BeginItalic();
+    write(ctrl, "or italic ");
+    ctrl.EndItalic();
+    ctrl.BeginUnderline();
+    write(ctrl, "or underlined.");
+    ctrl.EndUnderline();
+
+    ctrl.BeginFontSize(14);
+    write(ctrl, " Different font sizes on the same line is allowed, too.");
+    ctrl.EndFontSize();
+
+    write(ctrl, " Next we'll show an indented paragraph.");
+    ctrl.Newline();
+
+    ctrl.BeginLeftIndent(60, 0);
+    write(
+        ctrl,
+        "It was in January, the most down-trodden month of an Edinburgh winter. " +
+            "An attractive woman came into the cafe, which is nothing remarkable.",
+    );
+    ctrl.Newline();
+    ctrl.EndLeftIndent();
+
+    write(
+        ctrl,
+        "Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40).",
+    );
+    ctrl.Newline();
+
+    ctrl.BeginLeftIndent(100, -40);
+    write(
+        ctrl,
+        "It was in January, the most down-trodden month of an Edinburgh winter. " +
+            "An attractive woman came into the cafe, which is nothing remarkable.",
+    );
+    ctrl.Newline();
+    ctrl.EndLeftIndent();
+
+    write(ctrl, "Numbered bullets are possible, again using subindents:");
+    ctrl.Newline();
+
+    const numberedStyle = TEXT_ATTR_BULLET_STYLE_ARABIC | TEXT_ATTR_BULLET_STYLE_PERIOD;
+
+    ctrl.BeginNumberedBullet(1, 100, 60, numberedStyle);
+    write(
+        ctrl,
+        "This is my first item. Note that wxRichTextCtrl can apply numbering and " +
+            "bullets automatically based on list styles, but this list is formatted " +
+            "explicitly by setting indents.",
+    );
+    ctrl.Newline();
+    ctrl.EndNumberedBullet();
+
+    ctrl.BeginNumberedBullet(2, 100, 60, numberedStyle);
+    write(ctrl, "This is my second item.");
+    ctrl.Newline();
+    ctrl.EndNumberedBullet();
+
+    write(ctrl, "The following paragraph is right-indented:");
+    ctrl.Newline();
+
+    ctrl.BeginRightIndent(200);
+    write(
+        ctrl,
+        "It was in January, the most down-trodden month of an Edinburgh winter. " +
+            "An attractive woman came into the cafe, which is nothing remarkable.",
+    );
+    ctrl.Newline();
+    ctrl.EndRightIndent();
+
+    write(ctrl, "The following paragraph is right-aligned with 1.5 line spacing:");
+    ctrl.Newline();
+
+    ctrl.BeginAlignment(TEXT_ALIGNMENT_RIGHT);
+    ctrl.BeginLineSpacing(TEXT_ATTR_LINE_SPACING_HALF);
+    write(
+        ctrl,
+        "It was in January, the most down-trodden month of an Edinburgh winter. " +
+            "An attractive woman came into the cafe, which is nothing remarkable.",
+    );
+    ctrl.Newline();
+    ctrl.EndLineSpacing();
+    ctrl.EndAlignment();
+
+    // wxArrayInt tabs 400/600/800/1000; attr.SetFlags(wxTEXT_ATTR_TABS);
+    // attr.SetTabs(tabs); r.SetDefaultStyle(attr);
+    const tabsAttr = createWxRichTextAttr();
+    if (tabsAttr)
+    {
+        const tabs = createWxArrayInt();
+        if (tabs)
+        {
+            tabs.Add(400);
+            tabs.Add(600);
+            tabs.Add(800);
+            tabs.Add(1000);
+            tabsAttr.SetFlags(BigInt(TEXT_ATTR_TABS));
+            tabsAttr.SetTabs(tabs.ptr);
+            ctrl.SetDefaultStyle(tabsAttr.ptr);
+            tabs.Delete();
+        }
+    }
+
+    write(ctrl, "This line contains tabs:\tFirst tab\tSecond tab\tThird tab");
+    ctrl.Newline();
+
+    write(ctrl, "Other notable features of wxRichTextCtrl include:");
+    ctrl.Newline();
+
+    for (const item of [
+        "Compatibility with wxTextCtrl API",
+        "Easy stack-based BeginXXX()...EndXXX() style setting in addition to SetStyle()",
+        "XML loading and saving",
+        "Undo/Redo, with batching option and Undo suppressing",
+        "Clipboard copy and paste",
+        "wxRichTextStyleSheet with named character and paragraph styles, and control for applying named styles",
+        "A design that can easily be extended to other content types, ultimately with text boxes, tables, controls, and so on",
+    ])
+    {
+        withString("*", (symbol) =>
+            ctrl.BeginSymbolBullet(symbol, 100, 60, TEXT_ATTR_BULLET_STYLE_SYMBOL));
+        write(ctrl, item);
+        ctrl.Newline();
+        ctrl.EndSymbolBullet();
+    }
+
+    // Make a style suitable for showing a URL
+    const urlStyle = createWxRichTextAttr();
+    if (urlStyle)
+    {
+        urlStyle.SetTextColour(BLUE);
+        urlStyle.SetFontUnderlined(true);
+    }
+
+    write(ctrl, "wxRichTextCtrl can also display URLs, such as this one: ");
+    if (urlStyle)
+    {
+        ctrl.BeginStyle(urlStyle.ptr);
+    }
+    withString("http://www.wxwidgets.org", (url) =>
+    {
+        ctrl.BeginURL(url, null);
+        write(ctrl, "The wxWidgets Web Site");
+        ctrl.EndURL();
+    });
+    if (urlStyle)
+    {
+        ctrl.EndStyle();
+        urlStyle.Delete();
+    }
+    write(ctrl, ". Click on the URL to generate an event.");
+
+    ctrl.Newline();
+
+    write(
+        ctrl,
+        "Note: this sample content was generated programmatically from within the " +
+            "MyFrame constructor in the demo. The images were loaded from inline " +
+            "XPMs. Enjoy wxRichTextCtrl!\n",
+    );
+
+    ctrl.EndParagraphSpacing();
+
+    // ------------------------------------------------------------------
+    // Add a text box
+    // ------------------------------------------------------------------
+    {
+        ctrl.Newline();
+
+        const textBoxAttr = createWxRichTextAttr();
+        if (textBoxAttr)
+        {
+            // attr1.GetTextBoxAttr().GetMargins().GetLeft().SetValue(20, pixels);
+            // ... same for Top, Right, Bottom.
+            const boxAttr = textBoxAttr.GetTextBoxAttr();
+            if (boxAttr)
+            {
+                const margins = boxAttr.GetMargins();
+                if (margins)
+                {
+                    setPixels(margins.GetLeft(), 20);
+                    setPixels(margins.GetTop(), 20);
+                    setPixels(margins.GetRight(), 20);
+                    setPixels(margins.GetBottom(), 20);
+                }
+
+                const border = boxAttr.GetBorder();
+                if (border)
+                {
+                    border.SetColour(BLACK);
+                    border.SetWidth(1, TEXT_ATTR_UNITS_PIXELS);
+                    border.SetStyle(TEXT_BOX_ATTR_BORDER_SOLID);
+                }
+            }
+
+            const textBox = ctrl.WriteTextBox(textBoxAttr.ptr);
+            if (textBox)
+            {
+                ctrl.SetFocusObject(textBox.ptr, true);
+                write(
+                    ctrl,
+                    "This is a text box. Just testing! Once more unto the breach, " +
+                        "dear friends, once more...",
+                );
+            }
+
+            ctrl.SetFocusObject(null, true); // Set the focus back to the main buffer
+            ctrl.SetInsertionPointEnd();
+            textBoxAttr.Delete();
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Add a table
+    // ------------------------------------------------------------------
+    {
+        ctrl.Newline();
+
+        const tableAttr = createWxRichTextAttr();
+        if (tableAttr)
+        {
+            const boxAttr = tableAttr.GetTextBoxAttr();
+            if (boxAttr)
+            {
+                const margins = boxAttr.GetMargins();
+                if (margins)
+                {
+                    setPixels(margins.GetLeft(), 5);
+                    setPixels(margins.GetTop(), 5);
+                    setPixels(margins.GetRight(), 5);
+                    setPixels(margins.GetBottom(), 5);
+                }
+
+                // attr1.GetTextBoxAttr().GetPadding() = attr.GetTextBoxAttr().GetMargins();
+                if (tabsAttr)
+                {
+                    const paddingSource = tabsAttr.GetTextBoxAttr();
+                    if (paddingSource)
+                    {
+                        const sourceMargins = paddingSource.GetMargins();
+                        if (sourceMargins)
+                        {
+                            boxAttr.SetPadding(sourceMargins.ptr);
+                        }
+                    }
+                }
+
+                const border = boxAttr.GetBorder();
+                if (border)
+                {
+                    border.SetColour(BLACK);
+                    border.SetWidth(1, TEXT_ATTR_UNITS_PIXELS);
+                    border.SetStyle(TEXT_BOX_ATTR_BORDER_SOLID);
+                }
+            }
+
+            const cellAttr = createWxRichTextAttrCopy(tableAttr.ptr);
+            if (cellAttr)
+            {
+                const cellBoxAttr = cellAttr.GetTextBoxAttr();
+                if (cellBoxAttr)
+                {
+                    setPixels(cellBoxAttr.GetWidth(), 200);
+                    setPixels(cellBoxAttr.GetHeight(), 150);
+                }
+            }
+
+            const table = cellAttr
+                ? ctrl.WriteTable(6, 4, tableAttr.ptr, cellAttr.ptr)
+                : null;
+            if (table)
+            {
+                for (let row = 0; row < table.GetRowCount(); row++)
+                {
+                    for (let col = 0; col < table.GetColumnCount(); col++)
+                    {
+                        const cell = table.GetCell(row, col);
+                        if (cell)
+                        {
+                            ctrl.SetFocusObject(cell.ptr, true);
+                            write(ctrl, "This is cell " + (row + 1) + ", " + (col + 1));
+                        }
+                    }
+                }
+
+                // Demonstrate colspan and rowspan
+                let cell = table.GetCell(1, 0);
+                if (cell)
+                {
+                    cell.SetColSpan(2);
+                    ctrl.SetFocusObject(cell.ptr, true);
+                    cell.Clear();
+                    write(ctrl, "This cell spans 2 columns");
+                }
+
+                cell = table.GetCell(1, 3);
+                if (cell)
+                {
+                    cell.SetRowSpan(2);
+                    ctrl.SetFocusObject(cell.ptr, true);
+                    cell.Clear();
+                    write(ctrl, "This cell spans 2 rows");
+                }
+
+                cell = table.GetCell(2, 1);
+                if (cell)
+                {
+                    cell.SetColSpan(2);
+                    cell.SetRowSpan(3);
+                    ctrl.SetFocusObject(cell.ptr, true);
+                    cell.Clear();
+                    write(ctrl, "This cell spans 2 columns and 3 rows");
+                }
+            }
+
+            ctrl.SetFocusObject(null, true); // Set the focus back to the main buffer
+            ctrl.SetInsertionPointEnd();
+
+            if (cellAttr)
+            {
+                cellAttr.Delete();
+            }
+            tableAttr.Delete();
+        }
+    }
+
+    ctrl.Newline();
+    ctrl.Newline();
+
+    // ------------------------------------------------------------------
+    // Add the fields
+    // ------------------------------------------------------------------
+    {
+        const properties = createWxRichTextProperties();
+        const fieldAttr = createWxRichTextAttr();
+        if (properties && fieldAttr)
+        {
+            write(ctrl, "This is a rectangle field: ");
+            withString("rectangle", (name) =>
+                ctrl.WriteField(name, properties.ptr, fieldAttr.ptr));
+
+            write(ctrl, " and a begin section field: ");
+            withString("begin-section", (name) =>
+                ctrl.WriteField(name, properties.ptr, fieldAttr.ptr));
+
+            write(ctrl, "This is text between the two tags.");
+            withString("end-section", (name) =>
+                ctrl.WriteField(name, properties.ptr, fieldAttr.ptr));
+
+            write(ctrl, " Now a bitmap. ");
+            withString("bitmap", (name) =>
+                ctrl.WriteField(name, properties.ptr, fieldAttr.ptr));
+
+            write(ctrl, " Before we go, here's a composite field: ***");
+
+            const field = withString("composite", (name) =>
+                ctrl.WriteField(name, properties.ptr, fieldAttr.ptr));
+            if (field)
+            {
+                // field->UpdateField(&r.GetBuffer()) — the field type's
+                // OnUpdateField hook (wxRichTextFieldTypeCompositeTest::
+                // UpdateField) creates the composite value.
+                const buffer = ctrl.GetBuffer();
+                if (buffer)
+                {
+                    field.UpdateField(buffer.ptr);
+                }
+            }
+
+            write(ctrl, "*** End of composite field.");
+
+            fieldAttr.Delete();
+            properties.Delete();
+        }
+    }
+
+    ctrl.Newline();
+    ctrl.EndSuppressUndo();
+
+    // Add some locked content first - needs Undo to be enabled.
+    {
+        beginLock(lock);
+        write(ctrl, "This is a locked object.");
+        endLock(lock);
+
+        write(ctrl, " This is unlocked text. ");
+
+        beginLock(lock);
+        write(ctrl, "More locked content.");
+        endLock(lock);
+        ctrl.Newline();
+    }
+
+    // Flush the Undo buffer.
+    const commandProcessor = ctrl.GetCommandProcessor();
+    if (commandProcessor)
+    {
+        const processor = new wxCommandProcessor(commandProcessor, true);
+        processor.ClearCommands();
+    }
+
+    if (tabsAttr)
+    {
+        tabsAttr.Delete();
+    }
+
+    ctrl.Thaw();
+}

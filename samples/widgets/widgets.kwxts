@@ -1,0 +1,1185 @@
+// widgets.kwxts — kwxTypeScript port of wxSamples/src/widgets/widgets.cpp
+//
+// The wxWidgets "widgets" sample: a wxTreebook of demonstration pages grouped
+// by control family, a log list box fed by a custom wxLog target, and a
+// "Widget" menu that applies attributes (tooltip, colours, font, enabled,
+// visible, border, variant, layout direction, busy cursor) to the widget(s) of
+// the currently selected page.
+//
+// Run from the repository root:
+//   bin\Release\kwxts.exe samples\widgets\widgets.kwxts
+
+declare const __dirname: string;
+
+import {
+    ALIGN_RIGHT,
+    BK_DEFAULT,
+    BORDER_DOUBLE,
+    BORDER_MASK,
+    BORDER_NONE,
+    BORDER_RAISED,
+    BORDER_SIMPLE,
+    BORDER_STATIC,
+    BORDER_SUNKEN,
+    BOTTOM,
+    CENTRE,
+    createWxBoxSizer,
+    createWxButton,
+    createWxColourEmpty,
+    createWxFontDefault,
+    createWxFrame,
+    createWxIconDefault,
+    createWxListBox,
+    createWxMenu,
+    createWxMenuBar,
+    createWxPanel,
+    createWxSize,
+    createWxString,
+    createWxTextEntryDialog,
+    createWxTreeItemId,
+    createWxTreebook,
+    DEFAULT_FRAME_STYLE,
+    EVT_BUTTON,
+    EVT_CLOSE_WINDOW,
+    EVT_MENU,
+    EVT_TREEBOOK_PAGE_CHANGED,
+    EVT_TREEBOOK_PAGE_CHANGING,
+    EVT_UPDATE_UI,
+    exitMainLoop,
+    EXPAND,
+    HORIZONTAL,
+    HOURGLASS_CURSOR,
+    ID_ANY,
+    ID_EXIT,
+    ID_OK,
+    initialize,
+    Null_Cursor,
+    Layout_Default,
+    Layout_LeftToRight,
+    Layout_RightToLeft,
+    LEFT,
+    readAndDeleteWxString,
+    RIGHT,
+    run,
+    setAppName,
+    setTopWindow,
+    setVendorName,
+    shutdown,
+    VERTICAL,
+    WINDOW_VARIANT_LARGE,
+    WINDOW_VARIANT_MINI,
+    WINDOW_VARIANT_NORMAL,
+    WINDOW_VARIANT_SMALL,
+    wxApp_GetApp,
+    wxBeginBusyCursor,
+    wxBitmapBundle_FromSVGFile,
+    wxBookCtrlEvent,
+    wxCommandEvent,
+    wxEndBusyCursor,
+    wxGetColourFromUser,
+    wxGetFontFromUser,
+    wxGetNumberFromUser,
+    wxGetTextFromUser,
+    wxMenu,
+    wxMenuBar,
+    wxPersistentRegisterAndRestore,
+    wxPersistentRegisterAndRestoreTreebookNoName,
+    wxTextEntry,
+    wxUpdateUIEvent,
+    wrapWxApp,
+    wrapWxBitmapBundle,
+} from "kwx";
+import { exit, platform, pointerOf, Pointer, readCString } from "kwx/platform";
+
+import {
+    addSizer,
+    addSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    connectToWidgetEvents,
+    createPageImageArray,
+    doubleBorder,
+    initEventDispatch,
+    initMetrics,
+    installLogWindow,
+    LogWindowState,
+    logMessage,
+    makeStaticBoxSizer,
+    restoreLogWindow,
+    samplePath,
+    shutdownEventDispatch,
+    withString,
+    WidgetsPage,
+} from "./common.kwxts";
+import {
+    ALL_PAGE,
+    CATEGORY_LABELS,
+    MAX_PAGES,
+    PageEntry,
+    pageEntries,
+} from "./pages.kwxts";
+
+// ---------------------------------------------------------------------------
+// Control ids (widgets.cpp enum)
+// ---------------------------------------------------------------------------
+
+const WIDGETS_CLEAR_LOG = 100;
+const WIDGETS_QUIT = 101;
+const WIDGETS_BOOK_CTRL = 102;
+const WIDGETS_SET_TOOLTIP = 103;
+const WIDGETS_SET_FG_COLOUR = 104;
+const WIDGETS_SET_BG_COLOUR = 105;
+const WIDGETS_SET_PAGE_BG = 106;
+const WIDGETS_SET_FONT = 107;
+const WIDGETS_ENABLE = 108;
+const WIDGETS_SHOW = 109;
+
+const WIDGETS_BORDER_NONE = 110;
+const WIDGETS_BORDER_STATIC = 111;
+const WIDGETS_BORDER_SIMPLE = 112;
+const WIDGETS_BORDER_RAISED = 113;
+const WIDGETS_BORDER_SUNKEN = 114;
+const WIDGETS_BORDER_DOUBLE = 115;
+const WIDGETS_BORDER_DEFAULT = 116;
+
+const WIDGETS_VARIANT_NORMAL = 117;
+const WIDGETS_VARIANT_SMALL = 118;
+const WIDGETS_VARIANT_MINI = 119;
+const WIDGETS_VARIANT_LARGE = 120;
+
+const WIDGETS_LAYOUT_DIRECTION = 121;
+const WIDGETS_GLOBAL_BUSY_CURSOR = 122;
+const WIDGETS_BUSY_CURSOR = 123;
+const WIDGETS_GO_TO_PAGE = 124;
+
+const TEXT_ENTRY_DISABLE_AUTOCOMPLETE = 225;
+const TEXT_ENTRY_AUTOCOMPLETE_FIXED = 226;
+const TEXT_ENTRY_AUTOCOMPLETE_FILENAMES = 227;
+const TEXT_ENTRY_AUTOCOMPLETE_DIRECTORIES = 228;
+const TEXT_ENTRY_AUTOCOMPLETE_CUSTOM = 229;
+const TEXT_ENTRY_AUTOCOMPLETE_KEY_LENGTH = 230;
+const TEXT_ENTRY_SET_HINT = 231;
+const TEXT_ENTRY_END = 232;
+
+const THEME_LIGHT = 233;
+const THEME_DARK = 234;
+const THEME_SYSTEM = 235;
+
+// ---------------------------------------------------------------------------
+// Menu helpers
+// ---------------------------------------------------------------------------
+
+function newMenu(): wxMenu
+{
+    return withString("", (ptr) => createWxMenu(ptr, BigInt(0)))!;
+}
+
+function menuAppend(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (ptr) => menu.Append(id, ptr, null, false));
+}
+
+function menuAppendCheck(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (ptr) => menu.AppendCheckItem(id, ptr, null));
+}
+
+function menuAppendRadio(menu: wxMenu, id: number, label: string): void
+{
+    withString(label, (ptr) => menu.AppendRadioItem(id, ptr, null));
+}
+
+function menuAppendSub(menu: wxMenu, submenu: wxMenu, label: string): void
+{
+    withString(label, (ptr) => menu.AppendSubMenu(submenu.ptr, ptr, null));
+}
+
+function menuBarAppend(menuBar: wxMenuBar, menu: wxMenu, label: string): void
+{
+    withString(label, (ptr) => menuBar.Append(menu.ptr, ptr));
+}
+
+// ---------------------------------------------------------------------------
+// Frame state
+// ---------------------------------------------------------------------------
+
+interface FrameState
+{
+    frame: import("kwx").wxFrame;
+    panel: import("kwx").wxPanel;
+    book: import("kwx").wxTreebook;
+    logBox: import("kwx").wxListBox;
+    logWindow: LogWindowState;
+
+    /** Pages in treebook page-index order; null for a category parent. */
+    treePages: (WidgetsPage | null)[];
+
+    /** Labels in treebook page-index order; null for a category parent. */
+    treeLabels: (string | null)[];
+
+    menuBar: wxMenuBar;
+}
+
+let state: FrameState | null = null;
+
+function currentPage(): WidgetsPage | null
+{
+    if (!state)
+    {
+        return null;
+    }
+    const selection = state.book.GetSelection();
+    if (selection < 0 || selection >= state.treePages.length)
+    {
+        return null;
+    }
+    return state.treePages[selection];
+}
+
+// ---------------------------------------------------------------------------
+// Meta-option handlers
+// ---------------------------------------------------------------------------
+
+function onSetTooltip(): void
+{
+    const current = state;
+    if (!current) return;
+
+    const dialog = withString(
+        "Tooltip text (may use \\n, leave empty to remove): ", (message) =>
+            withString("Widgets sample", (caption) =>
+                withString(attrs.tooltip, (value) =>
+                    createWxTextEntryDialog(
+                        current.frame.ptr, message, caption, value,
+                        BigInt(ID_OK | CENTRE), -1, -1, -1, -1))));
+    if (!dialog) return;
+
+    if (dialog.ShowModal() !== ID_OK)
+    {
+        dialog.Destroy();
+        return;
+    }
+
+    const value = dialog.GetValue();
+    attrs.tooltip = value ? readAndDeleteWxString(value.ptr) : "";
+    attrs.tooltip = attrs.tooltip.replace(/\\n/g, "\n");
+
+    dialog.Destroy();
+
+    currentPage()?.setUpWidget();
+}
+
+function getColourFromUser(
+    parent: Pointer,
+    initial: import("kwx").wxColour | null,
+): import("kwx").wxColour | null
+{
+    let defaultValue = initial;
+    let ownedDefault = false;
+    if (!defaultValue)
+    {
+        defaultValue = createWxColourEmpty()!;
+        ownedDefault = true;
+    }
+
+    const result = createWxColourEmpty()!;
+    wxGetColourFromUser(parent, defaultValue.ptr, result.ptr);
+
+    if (ownedDefault)
+    {
+        defaultValue.Delete();
+    }
+
+    if (!result.IsOk())
+    {
+        result.Delete();
+        return null;
+    }
+    return result;
+}
+
+function onSetFgColour(): void
+{
+    const current = state;
+    const page = currentPage();
+    if (!current || !page) return;
+
+    const widget = page.getWidget();
+    if (!attrs.colFg && widget)
+    {
+        const colour = createWxColourEmpty()!;
+        widget.GetForegroundColour(colour.ptr);
+        // Keep it even if invalid: the colour dialog then starts from its own
+        // default, exactly like wxGetColourFromUser() in the original.
+        attrs.colFg = colour;
+    }
+
+    const colour = getColourFromUser(current.frame.ptr, attrs.colFg);
+    if (!colour) return;
+
+    attrs.colFg = colour;
+    page.setUpWidget();
+}
+
+function onSetBgColour(): void
+{
+    const current = state;
+    const page = currentPage();
+    if (!current || !page) return;
+
+    const widget = page.getWidget();
+    if (!attrs.colBg && widget)
+    {
+        const colour = createWxColourEmpty()!;
+        widget.GetBackgroundColour(colour.ptr);
+        attrs.colBg = colour;
+    }
+
+    const colour = getColourFromUser(current.frame.ptr, attrs.colBg);
+    if (!colour) return;
+
+    attrs.colBg = colour;
+    page.setUpWidget();
+}
+
+function onSetPageBg(): void
+{
+    const current = state;
+    const page = currentPage();
+    if (!current || !page) return;
+
+    const initial = createWxColourEmpty()!;
+    current.frame.GetBackgroundColour(initial.ptr);
+    const colour = getColourFromUser(current.frame.ptr, initial);
+    initial.Delete();
+    if (!colour) return;
+
+    attrs.colPageBg = colour;
+    page.setUpWidget();
+}
+
+function onSetFont(): void
+{
+    const current = state;
+    const page = currentPage();
+    if (!current || !page) return;
+
+    const widget = page.getWidget();
+    if (!attrs.font && widget)
+    {
+        const font = createWxFontDefault()!;
+        widget.GetFont(font.ptr);
+        attrs.font = font;
+    }
+    if (!attrs.font)
+    {
+        return;
+    }
+
+    const result = createWxFontDefault()!;
+    wxGetFontFromUser(current.frame.ptr, attrs.font.ptr, result.ptr);
+    if (!result.IsOk())
+    {
+        result.Delete();
+        return;
+    }
+
+    attrs.font = result;
+    page.setUpWidget();
+    // The best size can change with the font, as in the original.
+    page.page.Layout();
+}
+
+function onEnable(checked: boolean): void
+{
+    attrs.enabled = checked;
+    currentPage()?.setUpWidget();
+}
+
+function onShow(checked: boolean): void
+{
+    attrs.show = checked;
+    currentPage()?.setUpWidget();
+}
+
+function onSetBorder(id: number): void
+{
+    let div = 0;
+    switch (id)
+    {
+        case WIDGETS_BORDER_NONE: div = BORDER_NONE; break;
+        case WIDGETS_BORDER_STATIC: div = BORDER_STATIC; break;
+        case WIDGETS_BORDER_SIMPLE: div = BORDER_SIMPLE; break;
+        case WIDGETS_BORDER_RAISED: div = BORDER_RAISED; break;
+        case WIDGETS_BORDER_SUNKEN: div = BORDER_SUNKEN; break;
+        case WIDGETS_BORDER_DOUBLE: div = BORDER_DOUBLE; break;
+        default: div = 0; break; // wxBORDER_DEFAULT
+    }
+
+    attrs.defaultFlags &= ~BORDER_MASK;
+    attrs.defaultFlags |= div;
+
+    currentPage()?.recreateWidget();
+}
+
+function onSetVariant(id: number): void
+{
+    let variant = WINDOW_VARIANT_NORMAL;
+    switch (id)
+    {
+        case WIDGETS_VARIANT_SMALL: variant = WINDOW_VARIANT_SMALL; break;
+        case WIDGETS_VARIANT_MINI: variant = WINDOW_VARIANT_MINI; break;
+        case WIDGETS_VARIANT_LARGE: variant = WINDOW_VARIANT_LARGE; break;
+        default: variant = WINDOW_VARIANT_NORMAL; break;
+    }
+
+    attrs.variant = variant;
+
+    const page = currentPage();
+    page?.setUpWidget();
+    page?.page.Layout();
+}
+
+function onToggleLayoutDirection(): void
+{
+    const current = state;
+    if (!current) return;
+
+    let dir = attrs.dir;
+    if (dir === Layout_Default)
+    {
+        dir = current.frame.GetLayoutDirection();
+    }
+    attrs.dir = dir === Layout_LeftToRight
+        ? Layout_RightToLeft
+        : Layout_LeftToRight;
+
+    currentPage()?.setUpWidget();
+}
+
+function onToggleGlobalBusyCursor(checked: boolean): void
+{
+    if (checked)
+    {
+        wxBeginBusyCursor();
+    }
+    else
+    {
+        wxEndBusyCursor();
+    }
+}
+
+function onToggleBusyCursor(checked: boolean): void
+{
+    attrs.cursor = checked ? HOURGLASS_CURSOR : Null_Cursor();
+    currentPage()?.setUpWidget();
+}
+
+// ---------------------------------------------------------------------------
+// Text entry menu handlers
+// ---------------------------------------------------------------------------
+
+function currentTextEntry(): wxTextEntry | null
+{
+    return currentPage()?.getTextEntry() ?? null;
+}
+
+/** Builds a temporary array of UTF-8 C string pointers for AutoComplete(). */
+function autoCompleteFixed(entry: wxTextEntry): boolean
+{
+    const choices: string[] = [];
+    for (let code = "a".charCodeAt(0); code < "z".charCodeAt(0); ++code)
+    {
+        const c = String.fromCharCode(code);
+        choices.push(c + c);
+    }
+    choices.push("is this string for test?");
+    choices.push("this is a test string");
+    choices.push("this is another test string");
+    choices.push("this string is for test");
+
+    const buffers = choices.map((text) => new TextEncoder().encode(text + "\0"));
+    const pointers = new BigUint64Array(buffers.length);
+    for (let i = 0; i < buffers.length; ++i)
+    {
+        pointers[i] = BigInt(pointerOf(buffers[i]) as bigint);
+    }
+    return entry.AutoComplete(buffers.length, pointerOf(pointers));
+}
+
+function onDisableAutoComplete(): void
+{
+    const entry = currentTextEntry();
+    if (!entry) return;
+
+    if (entry.AutoComplete(0, null))
+    {
+        logMessage("Disabled auto completion.");
+    }
+    else
+    {
+        logMessage("AutoComplete() failed.");
+    }
+}
+
+function onAutoCompleteFixed(): void
+{
+    const entry = currentTextEntry();
+    if (!entry) return;
+
+    if (autoCompleteFixed(entry))
+    {
+        logMessage("Enabled auto completion of a set of fixed strings.");
+    }
+    else
+    {
+        logMessage("AutoComplete() failed.");
+    }
+}
+
+function onAutoCompleteFilenames(): void
+{
+    const entry = currentTextEntry();
+    if (!entry) return;
+
+    if (entry.AutoCompleteFileNames())
+    {
+        logMessage("Enabled auto completion of file names.");
+    }
+    else
+    {
+        logMessage("AutoCompleteFileNames() failed.");
+    }
+}
+
+function onAutoCompleteDirectories(): void
+{
+    const entry = currentTextEntry();
+    if (!entry) return;
+
+    if (entry.AutoCompleteDirectories())
+    {
+        logMessage("Enabled auto completion of directories.");
+    }
+    else
+    {
+        logMessage("AutoCompleteDirectories() failed.");
+    }
+}
+
+/** DoUseCustomAutoComplete(): needs wxTextEntry::AutoComplete(completer). */
+function doUseCustomAutoComplete(): void
+{
+    const entry = currentTextEntry();
+    if (!entry) return;
+
+    // GAP: wxTextEntry::AutoComplete(wxTextCompleterBase*) is not bound, so a
+    // custom completer cannot be installed.  The C++ code constructs a
+    // wxTextCompleterSimple subclass and calls that overload.
+    logMessage("AutoComplete() with a custom completer is not supported by "
+        + "the kwxTypeScript bindings.");
+}
+
+function onAutoCompleteKeyLength(): void
+{
+    const message = "The auto-completion is triggered if and only if\n"
+        + "the length of the search key (prefix) is at least [LENGTH].\n"
+        + "Hint: 0 disables the length check completely.";
+    const prompt = "Enter the minimum key length:";
+    const caption = "Minimum key length";
+
+    const result = withString(message, (msg) =>
+        withString(prompt, (prm) =>
+            withString(caption, (cap) =>
+                wxGetNumberFromUser(
+                    msg, prm, cap, BigInt(1), BigInt(0), BigInt(100),
+                    state ? state.frame.ptr : null, -1, -1))));
+
+    if (result === BigInt(-1))
+    {
+        return;
+    }
+
+    logMessage(`The minimum key length for autocomplete is ${result}.`);
+    doUseCustomAutoComplete();
+}
+
+let s_hint = "Type here";
+
+function onSetHint(): void
+{
+    const entry = currentTextEntry();
+    if (!entry) return;
+
+    const length = withString("Text hint:", (message) =>
+        withString("Widgets sample", (caption) =>
+            withString(s_hint, (defaultText) =>
+                wxGetTextFromUser(
+                    message, caption, defaultText,
+                    state ? state.frame.ptr : null, -1, -1, 0, null))));
+
+    if (length <= 0)
+    {
+        return;
+    }
+
+    const output = new Uint8Array(length + 1);
+    withString("Text hint:", (message) =>
+        withString("Widgets sample", (caption) =>
+            withString(s_hint, (defaultText) =>
+                wxGetTextFromUser(
+                    message, caption, defaultText,
+                    state ? state.frame.ptr : null, -1, -1, 0,
+                    pointerOf(output)))));
+
+    const hint = readCString(pointerOf(output));
+    if (hint === "")
+    {
+        return;
+    }
+
+    s_hint = hint;
+
+    if (withString(hint, (ptr) => entry.SetHint(ptr)))
+    {
+        logMessage(`Set hint to "${hint}".`);
+    }
+    else
+    {
+        logMessage("Text hints not supported.");
+    }
+}
+
+function onTheme(id: number): void
+{
+    const appearance = id === THEME_DARK ? 2 : id === THEME_LIGHT ? 1 : 0;
+    const app = wrapWxApp(wxApp_GetApp());
+    if (app.SetAppearance(appearance) === 0)
+    {
+        logMessage("SetAppearance: failure");
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Book construction
+// ---------------------------------------------------------------------------
+
+interface BuiltPage
+{
+    page: WidgetsPage;
+    label: string;
+}
+
+function initBook(current: FrameState): void
+{
+    const sorted = pageEntries.slice().sort((a: PageEntry, b: PageEntry) =>
+        a.label < b.label ? -1 : a.label > b.label ? 1 : 0);
+
+    // Construct every page first: the icon list must exist before any page is
+    // added, exactly as the two-phase loop in InitBook() does.
+    const pagesByCategory: BuiltPage[][] = [];
+    for (let cat = 0; cat < MAX_PAGES; ++cat)
+    {
+        const list: BuiltPage[] = [];
+        for (const entry of sorted)
+        {
+            if ((entry.categories & (1 << cat)) !== 0)
+            {
+                list.push({ page: entry.create(current.book.ptr), label: entry.label });
+            }
+        }
+        pagesByCategory.push(list);
+    }
+
+    const images = createPageImageArray();
+    if (images)
+    {
+        current.book.SetImages(images.ptr);
+        // wxBookCtrlBase::SetImages() copies the bundles; the array can go.
+        images.Delete();
+    }
+
+    const menuPages = newMenu();
+
+    for (let cat = 0; cat < MAX_PAGES; ++cat)
+    {
+        withString(CATEGORY_LABELS[cat], (ptr) =>
+            current.book.AddPage(null, ptr, false, 0));
+        current.treePages.push(null);
+        current.treeLabels.push(null);
+
+        for (const built of pagesByCategory[cat])
+        {
+            const added = withString(built.label, (ptr) =>
+                current.book.AddSubPage(
+                    built.page.page.ptr, ptr, false, built.page.imageIndex));
+            if (!added)
+            {
+                throw new Error("failed to add page " + built.label);
+            }
+            current.treePages.push(built.page);
+            current.treeLabels.push(built.label);
+
+            // The C++ InitBook() adds a Page-menu entry only for the pages of
+            // the last ("All controls") category; the id is the tree page
+            // index at this point.
+            if (cat === ALL_PAGE)
+            {
+                menuAppendRadio(menuPages,
+                    WIDGETS_GO_TO_PAGE + current.treePages.length - 1,
+                    built.label);
+            }
+        }
+    }
+
+    menuBarAppend(current.menuBar, menuPages, "&Page");
+
+    bindEvent(current.book, ID_ANY, ID_ANY,
+        EVT_TREEBOOK_PAGE_CHANGING, onPageChanging);
+    bindEvent(current.book, ID_ANY, ID_ANY,
+        EVT_TREEBOOK_PAGE_CHANGED, onPageChanged);
+
+    const pageSet = wxPersistentRegisterAndRestoreTreebookNoName(current.book.ptr);
+
+    // For treebook page #0 is an empty parent page, so select the first page
+    // with some contents unless a persisted selection exists.
+    if (!pageSet || !current.book.GetCurrentPage())
+    {
+        current.book.SetSelection(1);
+    }
+
+    // Ensure the top of the tree is visible and reserve room for its labels.
+    const tree = current.book.GetTreeCtrl();
+    if (tree)
+    {
+        const root = createWxTreeItemId();
+        const first = createWxTreeItemId();
+        if (root && first)
+        {
+            tree.GetRootItem(root.ptr);
+            const cookie = new BigUint64Array(1);
+            tree.GetFirstChild(root.ptr, pointerOf(cookie), first.ptr);
+            tree.EnsureVisible(first.ptr);
+
+            const best = tree.GetBestSize();
+            if (best)
+            {
+                tree.SetMinSize(Math.floor(best.GetWidth() * 9 / 8), -1);
+                best.Delete();
+            }
+        }
+        root?.Delete();
+        first?.Delete();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Page events
+// ---------------------------------------------------------------------------
+
+function onPageChanging(eventPtr: Pointer): void
+{
+    const current = state;
+    if (!current || !eventPtr) return;
+
+    const event = new wxBookCtrlEvent(eventPtr, true);
+    const selection = event.GetSelection();
+
+    // Don't allow selection of entries without pages (category nodes).
+    if (!current.book.GetPage(selection))
+    {
+        event.Veto();
+    }
+}
+
+function onPageChanged(eventPtr: Pointer): void
+{
+    const current = state;
+    if (!current || !eventPtr) return;
+
+    const event = new wxBookCtrlEvent(eventPtr, true);
+    const selection = event.GetSelection();
+
+    const item = current.menuBar.FindItem(WIDGETS_GO_TO_PAGE + selection);
+    item?.Check(true);
+
+    current.menuBar.Check(WIDGETS_BUSY_CURSOR, false);
+
+    const page = currentPage();
+    if (!page)
+    {
+        event.Skip(true);
+        return;
+    }
+
+    if (!page.contentCreated)
+    {
+        page.createContent();
+        page.contentCreated = true;
+        page.page.SetScrollRate(10, 10);
+        page.page.FitInside();
+
+        for (const widget of page.getWidgets())
+        {
+            connectToWidgetEvents(widget);
+        }
+
+        page.enableRecreationNotifications();
+    }
+
+    // The C++ original wraps this in wxWindowUpdateLocker; the bindings do not
+    // expose it, so the content is created directly.
+    page.setUpWidget();
+    event.Skip(true);
+}
+
+// ---------------------------------------------------------------------------
+// Menu bar and frame
+// ---------------------------------------------------------------------------
+
+function buildMenuBar(): wxMenuBar
+{
+    const menuBar = createWxMenuBar(0)!;
+
+    const menuWidget = newMenu();
+    menuAppend(menuWidget, WIDGETS_SET_TOOLTIP, "Set &tooltip...\tCtrl-T");
+    menuWidget.AppendSeparator();
+    menuAppend(menuWidget, WIDGETS_SET_FG_COLOUR, "Set &foreground...\tCtrl-F");
+    menuAppend(menuWidget, WIDGETS_SET_BG_COLOUR, "Set &background...\tCtrl-B");
+    menuAppend(menuWidget, WIDGETS_SET_PAGE_BG, "Set &page background...\tShift-Ctrl-B");
+    menuAppend(menuWidget, WIDGETS_SET_FONT, "Set f&ont...\tCtrl-O");
+    menuAppendCheck(menuWidget, WIDGETS_ENABLE, "&Enable/disable\tCtrl-E");
+    menuAppendCheck(menuWidget, WIDGETS_SHOW, "Show/Hide");
+
+    const menuBorders = newMenu();
+    menuAppendRadio(menuBorders, WIDGETS_BORDER_DEFAULT, "De&fault\tCtrl-Shift-9");
+    menuAppendRadio(menuBorders, WIDGETS_BORDER_NONE, "&None\tCtrl-Shift-0");
+    menuAppendRadio(menuBorders, WIDGETS_BORDER_SIMPLE, "&Simple\tCtrl-Shift-1");
+    menuAppendRadio(menuBorders, WIDGETS_BORDER_DOUBLE, "&Double\tCtrl-Shift-2");
+    menuAppendRadio(menuBorders, WIDGETS_BORDER_STATIC, "Stati&c\tCtrl-Shift-3");
+    menuAppendRadio(menuBorders, WIDGETS_BORDER_RAISED, "&Raised\tCtrl-Shift-4");
+    menuAppendRadio(menuBorders, WIDGETS_BORDER_SUNKEN, "S&unken\tCtrl-Shift-5");
+    menuAppendSub(menuWidget, menuBorders, "Set &border");
+
+    const menuVariants = newMenu();
+    menuAppendRadio(menuVariants, WIDGETS_VARIANT_MINI, "&Mini\tCtrl-Shift-6");
+    menuAppendRadio(menuVariants, WIDGETS_VARIANT_SMALL, "&Small\tCtrl-Shift-7");
+    menuAppendRadio(menuVariants, WIDGETS_VARIANT_NORMAL, "&Normal\tCtrl-Shift-8");
+    menuAppendRadio(menuVariants, WIDGETS_VARIANT_LARGE, "&Large\tCtrl-Shift-9");
+    menuAppendSub(menuWidget, menuVariants, "Set &variant");
+
+    menuWidget.AppendSeparator();
+    menuAppendCheck(menuWidget, WIDGETS_LAYOUT_DIRECTION,
+        "Toggle &layout direction\tCtrl-L");
+    menuWidget.Check(WIDGETS_LAYOUT_DIRECTION, false);
+
+    menuWidget.AppendSeparator();
+    menuAppendCheck(menuWidget, WIDGETS_GLOBAL_BUSY_CURSOR,
+        "Toggle &global busy cursor\tCtrl-Shift-U");
+    menuAppendCheck(menuWidget, WIDGETS_BUSY_CURSOR,
+        "Toggle b&usy cursor\tCtrl-U");
+
+    menuWidget.AppendSeparator();
+    menuAppend(menuWidget, ID_EXIT, "&Quit\tCtrl-Q");
+    menuBarAppend(menuBar, menuWidget, "&Widget");
+
+    const menuTextEntry = newMenu();
+    menuAppendRadio(menuTextEntry, TEXT_ENTRY_DISABLE_AUTOCOMPLETE,
+        "&Disable auto-completion");
+    menuAppendRadio(menuTextEntry, TEXT_ENTRY_AUTOCOMPLETE_FIXED,
+        "Fixed-&list auto-completion");
+    menuAppendRadio(menuTextEntry, TEXT_ENTRY_AUTOCOMPLETE_FILENAMES,
+        "&Files names auto-completion");
+    menuAppendRadio(menuTextEntry, TEXT_ENTRY_AUTOCOMPLETE_DIRECTORIES,
+        "&Directories names auto-completion");
+    menuAppendRadio(menuTextEntry, TEXT_ENTRY_AUTOCOMPLETE_CUSTOM,
+        "&Custom auto-completion");
+    menuAppendRadio(menuTextEntry, TEXT_ENTRY_AUTOCOMPLETE_KEY_LENGTH,
+        "Custom with &min length");
+    menuTextEntry.AppendSeparator();
+    menuAppend(menuTextEntry, TEXT_ENTRY_SET_HINT, "Set help &hint");
+
+    menuBarAppend(menuBar, menuTextEntry, "&Text");
+
+    menuBar.Check(WIDGETS_ENABLE, true);
+    menuBar.Check(WIDGETS_SHOW, true);
+    menuBar.Check(WIDGETS_VARIANT_NORMAL, true);
+
+    return menuBar;
+}
+
+function setFrameIcon(frame: import("kwx").wxFrame): void
+{
+    const path = createWxString(samplePath("sample.svg"));
+    const bundlePtr = wxBitmapBundle_FromSVGFile(path.ptr, 32, 32);
+    path.Delete();
+    if (!bundlePtr)
+    {
+        return;
+    }
+
+    const bundle = wrapWxBitmapBundle(bundlePtr);
+    const bitmap = bundle.GetBitmap(32, 32);
+    if (bitmap)
+    {
+        const icon = createWxIconDefault()!;
+        icon.CopyFromBitmap(bitmap.ptr);
+        if (icon.IsOk())
+        {
+            frame.SetIcon(icon.ptr);
+        }
+        icon.Delete();
+        bitmap.Delete();
+    }
+    bundle.Delete();
+}
+
+function createFrame(): FrameState | null
+{
+    // The C++ title is built from the platform macros.
+    const platformTitle = platform === "windows"
+        ? "wxMSW"
+        : platform === "linux" ? "wxGTK" : "wxMAC";
+    const title = platformTitle + " widgets demo";
+
+    const frame = withString(title, (ptr) =>
+        createWxFrame(null, ID_ANY, ptr, -1, -1, -1, -1,
+            DEFAULT_FRAME_STYLE))!;
+
+    setFrameIcon(frame);
+
+    const menuBar = buildMenuBar();
+    frame.SetMenuBar(menuBar.ptr);
+
+    const panel = createWxPanel(frame.ptr, ID_ANY, -1, -1, -1, -1, 0)!;
+
+    const sizerTop = createWxBoxSizer(VERTICAL)!;
+
+    const book = createWxTreebook(
+        panel.ptr, WIDGETS_BOOK_CTRL, -1, -1,
+        panel.FromDIP(900), panel.FromDIP(500), BK_DEFAULT,
+    )!;
+
+    const current: FrameState = {
+        frame,
+        panel,
+        book,
+        logBox: null as unknown as import("kwx").wxListBox,
+        logWindow: null as unknown as LogWindowState,
+        treePages: [],
+        treeLabels: [],
+        menuBar,
+    };
+    state = current;
+
+    initBook(current);
+
+    // The theme menu is appended after InitBook(), as in the original.
+    const menuTheme = newMenu();
+    menuAppendRadio(menuTheme, THEME_SYSTEM, "&System");
+    menuAppendRadio(menuTheme, THEME_LIGHT, "&Light");
+    menuAppendRadio(menuTheme, THEME_DARK, "&Dark");
+    menuBarAppend(menuBar, menuTheme, "T&heme");
+
+    // Lower pane: log list box plus buttons.
+    const down = makeStaticBoxSizer(panel.ptr, VERTICAL, "&Log window");
+    const sizerDown = down.sizer;
+    const sizerDownBox = down.box;
+
+    const logBox = createWxListBox(
+        sizerDownBox.ptr, ID_ANY, -1, -1, -1, -1, 0, null, 0,
+    )!;
+    current.logBox = logBox;
+    addWin(sizerDown, logBox, 1, EXPAND, border());
+    sizerDown.SetMinSize(panel.FromDIP(100), panel.FromDIP(150));
+
+    const sizerBtns = createWxBoxSizer(HORIZONTAL)!;
+
+    const clearLog = withString("Clear &log", (ptr) =>
+        createWxButton(sizerDownBox.ptr, WIDGETS_CLEAR_LOG, ptr,
+            -1, -1, -1, -1, 0))!;
+    addWin(sizerBtns, clearLog, 0, 0, 0);
+    addSpacer(sizerBtns, panel.FromDIP(10));
+
+    const exitButton = withString("E&xit", (ptr) =>
+        createWxButton(sizerDownBox.ptr, WIDGETS_QUIT, ptr,
+            -1, -1, -1, -1, 0))!;
+    addWin(sizerBtns, exitButton, 0, 0, 0);
+
+    // wxSizerFlags().Border().Right()
+    addSizer(sizerDown, sizerBtns, 0, ALIGN_RIGHT, border());
+
+    // Compose everything.
+    addWin(sizerTop, book, 1, EXPAND | LEFT | RIGHT, doubleBorder());
+    addSpacer(sizerTop, panel.FromDIP(5));
+    addSizer(sizerTop, sizerDown, 0, EXPAND | LEFT | RIGHT | BOTTOM,
+        doubleBorder());
+
+    panel.SetSizer(sizerTop.ptr, false);
+
+    const sizeSet = withString("Main", (ptr) =>
+        wxPersistentRegisterAndRestore(frame.ptr, ptr));
+
+    const sizeMin = panel.GetBestSize();
+    if (sizeMin)
+    {
+        if (!sizeSet)
+        {
+            frame.SetClientSize(sizeMin.GetWidth(), sizeMin.GetHeight());
+        }
+        frame.SetMinClientSize(sizeMin.GetWidth(), sizeMin.GetHeight());
+        sizeMin.Delete();
+    }
+
+    // Redirect log messages once everything is created.
+    current.logWindow = installLogWindow(logBox);
+
+    // Frame-level handlers.
+    bindEvent(frame, ID_ANY, ID_ANY, EVT_CLOSE_WINDOW, (eventPtr) =>
+    {
+        if (!eventPtr) return;
+        exitMainLoop();
+    });
+
+    bindEvent(clearLog, WIDGETS_CLEAR_LOG, WIDGETS_CLEAR_LOG, EVT_BUTTON,
+        (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            logBox.Clear();
+        });
+
+    bindEvent(exitButton, WIDGETS_QUIT, WIDGETS_QUIT, EVT_BUTTON,
+        (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            frame.Close(false);
+        });
+
+    bindMenus(frame);
+
+    return current;
+}
+
+// ---------------------------------------------------------------------------
+// Menu event installation
+// ---------------------------------------------------------------------------
+
+function bindMenus(frame: import("kwx").wxFrame): void
+{
+    const command = (
+        first: number,
+        last: number,
+        handler: (event: wxCommandEvent) => void,
+    ): void =>
+    {
+        bindEvent(frame, first, last, EVT_MENU, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            handler(new wxCommandEvent(eventPtr, true));
+        });
+    };
+
+    command(WIDGETS_SET_TOOLTIP, WIDGETS_SET_TOOLTIP, () => onSetTooltip());
+    command(WIDGETS_SET_FG_COLOUR, WIDGETS_SET_FG_COLOUR, () => onSetFgColour());
+    command(WIDGETS_SET_BG_COLOUR, WIDGETS_SET_BG_COLOUR, () => onSetBgColour());
+    command(WIDGETS_SET_PAGE_BG, WIDGETS_SET_PAGE_BG, () => onSetPageBg());
+    command(WIDGETS_SET_FONT, WIDGETS_SET_FONT, () => onSetFont());
+    command(WIDGETS_ENABLE, WIDGETS_ENABLE, (event) => onEnable(event.IsChecked()));
+    command(WIDGETS_SHOW, WIDGETS_SHOW, (event) => onShow(event.IsChecked()));
+
+    command(WIDGETS_BORDER_NONE, WIDGETS_BORDER_DEFAULT,
+        (event) => onSetBorder(event.GetId()));
+    command(WIDGETS_VARIANT_NORMAL, WIDGETS_VARIANT_LARGE,
+        (event) => onSetVariant(event.GetId()));
+
+    command(WIDGETS_LAYOUT_DIRECTION, WIDGETS_LAYOUT_DIRECTION,
+        () => onToggleLayoutDirection());
+    command(WIDGETS_GLOBAL_BUSY_CURSOR, WIDGETS_GLOBAL_BUSY_CURSOR,
+        (event) => onToggleGlobalBusyCursor(event.IsChecked()));
+    command(WIDGETS_BUSY_CURSOR, WIDGETS_BUSY_CURSOR,
+        (event) => onToggleBusyCursor(event.IsChecked()));
+
+    command(TEXT_ENTRY_DISABLE_AUTOCOMPLETE, TEXT_ENTRY_DISABLE_AUTOCOMPLETE,
+        () => onDisableAutoComplete());
+    command(TEXT_ENTRY_AUTOCOMPLETE_FIXED, TEXT_ENTRY_AUTOCOMPLETE_FIXED,
+        () => onAutoCompleteFixed());
+    command(TEXT_ENTRY_AUTOCOMPLETE_FILENAMES, TEXT_ENTRY_AUTOCOMPLETE_FILENAMES,
+        () => onAutoCompleteFilenames());
+    command(TEXT_ENTRY_AUTOCOMPLETE_DIRECTORIES, TEXT_ENTRY_AUTOCOMPLETE_DIRECTORIES,
+        () => onAutoCompleteDirectories());
+    command(TEXT_ENTRY_AUTOCOMPLETE_CUSTOM, TEXT_ENTRY_AUTOCOMPLETE_CUSTOM,
+        () => doUseCustomAutoComplete());
+    command(TEXT_ENTRY_AUTOCOMPLETE_KEY_LENGTH, TEXT_ENTRY_AUTOCOMPLETE_KEY_LENGTH,
+        () => onAutoCompleteKeyLength());
+    command(TEXT_ENTRY_SET_HINT, TEXT_ENTRY_SET_HINT, () => onSetHint());
+
+    command(WIDGETS_GO_TO_PAGE, WIDGETS_GO_TO_PAGE + 100, (event) =>
+    {
+        const target = event.GetId() - WIDGETS_GO_TO_PAGE;
+        if (state)
+        {
+            state.book.SetSelection(target);
+        }
+    });
+
+    command(THEME_LIGHT, THEME_SYSTEM, (event) => onTheme(event.GetId()));
+    command(ID_EXIT, ID_EXIT, () =>
+    {
+        state?.frame.Close(false);
+    });
+
+    bindEvent(frame, TEXT_ENTRY_DISABLE_AUTOCOMPLETE, TEXT_ENTRY_END - 1,
+        EVT_UPDATE_UI, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            const event = new wxUpdateUIEvent(eventPtr, true);
+            event.Enable(currentPage()?.getTextEntry() != null);
+        });
+}
+
+// ---------------------------------------------------------------------------
+// Entry point
+// ---------------------------------------------------------------------------
+
+export function main(): number
+{
+    if (!initialize())
+    {
+        console.error("Failed to initialize wxWidgets");
+        return 1;
+    }
+
+    setAppName("widgets");
+    setVendorName("wxWidgets_Samples");
+
+    initEventDispatch();
+    initMetrics();
+    attrs.cursor = Null_Cursor();
+
+    const current = createFrame();
+    if (!current)
+    {
+        console.error("Failed to create the widgets frame");
+        shutdown();
+        return 1;
+    }
+
+    current.frame.Show();
+    setTopWindow(current.frame.ptr);
+
+    const exitCode = run();
+
+    if (state)
+    {
+        restoreLogWindow(state.logWindow);
+    }
+
+    shutdownEventDispatch();
+    shutdown();
+
+    return exitCode;
+}
+
+exit(main());

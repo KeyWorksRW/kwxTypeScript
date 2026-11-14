@@ -1,0 +1,529 @@
+// gauge.kwxts — port of wxSamples/src/widgets/gauge.cpp
+//
+// Vertical/Progress styles are expressed with the generated wxGA_* constants.
+
+import {
+    ALIGN_CENTRE,
+    ALIGN_CENTRE_HORIZONTAL,
+    ALL,
+    createWxBoxSizer,
+    createWxButton,
+    createWxGauge,
+    createWxStaticText,
+    createWxTimer,
+    EVT_BUTTON,
+    EVT_CHECKBOX,
+    EVT_RADIOBOX,
+    EVT_TIMER,
+    EVT_UPDATE_UI,
+    EXPAND,
+    GA_HORIZONTAL,
+    GA_PROGRESS,
+    GA_SMOOTH,
+    GA_VERTICAL,
+    HORIZONTAL,
+    ID_ANY,
+    ID_HIGHEST,
+    LEFT,
+    RIGHT,
+    readAndDeleteWxString,
+    VERTICAL,
+    wxButton,
+    wxCheckBox,
+    wxGauge,
+    wxSizer,
+    wxTextCtrl,
+    wxTimer,
+    wxUpdateUIEvent,
+    wxWindow,
+} from "kwx";
+import { Pointer } from "kwx/platform";
+
+import {
+    addSizer,
+    addSpacer,
+    addWin,
+    attrs,
+    bindEvent,
+    border,
+    doubleBorder,
+    logMessage,
+    makeStaticBoxSizer,
+    tripleBorder,
+    WidgetsPage,
+    withString,
+} from "./common.kwxts";
+
+const GAUGE_PAGE_RESET = ID_HIGHEST;
+const GAUGE_PAGE_PROGRESS = GAUGE_PAGE_RESET + 1;
+const GAUGE_PAGE_INDETERMINATE_PROGRESS = GAUGE_PAGE_PROGRESS + 1;
+const GAUGE_PAGE_CLEAR = GAUGE_PAGE_INDETERMINATE_PROGRESS + 1;
+const GAUGE_PAGE_SET_VALUE = GAUGE_PAGE_CLEAR + 1;
+const GAUGE_PAGE_SET_RANGE = GAUGE_PAGE_SET_VALUE + 1;
+const GAUGE_PAGE_CUR_VALUE_TEXT = GAUGE_PAGE_SET_RANGE + 1;
+const GAUGE_PAGE_VALUE_TEXT = GAUGE_PAGE_CUR_VALUE_TEXT + 1;
+const GAUGE_PAGE_RANGE_TEXT = GAUGE_PAGE_VALUE_TEXT + 1;
+const GAUGE_PAGE_TIMER = GAUGE_PAGE_RANGE_TEXT + 1;
+const GAUGE_PAGE_INDETERMINATE_TIMER = GAUGE_PAGE_TIMER + 1;
+const GAUGE_PAGE_GAUGE = GAUGE_PAGE_INDETERMINATE_TIMER + 1;
+
+/** Interval of the simulation timers, in milliseconds. */
+const TIMER_INTERVAL = 300;
+
+/** wxString m_textCtrl->GetValue() */
+function readTextValue(control: wxTextCtrl): string {
+    const value = control.GetValue();
+    return value ? readAndDeleteWxString(value.ptr) : "";
+}
+
+/** m_textCtrl->SetValue() */
+function writeTextValue(control: wxTextCtrl, text: string): void {
+    withString(text, (ptr) => control.SetValue(ptr));
+}
+
+/** wxString::ToULong(): null stands for a failed conversion. */
+function parseUnsigned(text: string): number | null {
+    if (!/^[0-9]+$/.test(text)) {
+        return null;
+    }
+    const parsed = Number(text);
+    return Number.isSafeInteger(parsed) ? parsed : null;
+}
+
+/** button->SetLabel() */
+function writeButtonLabel(button: wxButton, text: string): void {
+    withString(text, (ptr) => button.SetLabel(ptr));
+}
+
+export class GaugePage extends WidgetsPage
+{
+    /** the gauge range */
+    private range = 100;
+
+    private verticalCheckbox: wxCheckBox | null = null;
+    private smoothCheckbox: wxCheckBox | null = null;
+    private progressCheckbox: wxCheckBox | null = null;
+
+    private gauge: wxGauge | null = null;
+    private gaugeSizer: wxSizer | null = null;
+
+    private textValue: wxTextCtrl | null = null;
+    private textRange: wxTextCtrl | null = null;
+    private textCurrentValue: wxTextCtrl | null = null;
+
+    private progressButton: wxButton | null = null;
+    private indeterminateButton: wxButton | null = null;
+
+    /** the timer simulating the gauge progress */
+    private timer: wxTimer | null = null;
+
+    constructor(parent: Pointer)
+    {
+        super(parent, "icons/gauge");
+    }
+
+    override getWidget(): wxWindow | null
+    {
+        return this.gauge;
+    }
+
+    override createContent(): void
+    {
+        const top = createWxBoxSizer(HORIZONTAL)!;
+
+        // left pane
+        const left = makeStaticBoxSizer(this.page.ptr, VERTICAL, "&Set style");
+
+        this.verticalCheckbox = this.createCheckBoxAndAddToSizer(
+            left.sizer, "&Vertical", ID_ANY, left.box.ptr);
+        this.smoothCheckbox = this.createCheckBoxAndAddToSizer(
+            left.sizer, "&Smooth", ID_ANY, left.box.ptr);
+        this.progressCheckbox = this.createCheckBoxAndAddToSizer(
+            left.sizer, "&Progress", ID_ANY, left.box.ptr);
+
+        addSpacer(left.sizer, this.dip(15));
+
+        const resetButton = withString("&Reset", (ptr) =>
+            createWxButton(left.box.ptr, GAUGE_PAGE_RESET, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(left.sizer, resetButton, 0, ALIGN_CENTRE_HORIZONTAL,
+            tripleBorder());
+
+        // middle pane
+        const middle = makeStaticBoxSizer(
+            this.page.ptr, VERTICAL, "&Change gauge value");
+
+        const currentValueLabel = withString("Current value", (ptr) =>
+            createWxStaticText(middle.box.ptr, ID_ANY, ptr,
+                -1, -1, -1, -1, 0))!;
+        const currentValueRow = this.createSizerWithText(
+            currentValueLabel, GAUGE_PAGE_CUR_VALUE_TEXT, (text) =>
+            {
+                this.textCurrentValue = text;
+            });
+        this.textCurrentValue?.SetEditable(false);
+        addSizer(middle.sizer, currentValueRow, 0, EXPAND | ALL, border());
+
+        const setValueButton = withString("Set &value", (ptr) =>
+            createWxButton(middle.box.ptr, GAUGE_PAGE_SET_VALUE, ptr,
+                -1, -1, -1, -1, 0))!;
+        const setValueRow = this.createSizerWithText(
+            setValueButton, GAUGE_PAGE_VALUE_TEXT, (text) =>
+            {
+                this.textValue = text;
+            });
+        addSizer(middle.sizer, setValueRow, 0, EXPAND | ALL, border());
+
+        const setRangeButton = withString("Set &range", (ptr) =>
+            createWxButton(middle.box.ptr, GAUGE_PAGE_SET_RANGE, ptr,
+                -1, -1, -1, -1, 0))!;
+        const setRangeRow = this.createSizerWithText(
+            setRangeButton, GAUGE_PAGE_RANGE_TEXT, (text) =>
+            {
+                this.textRange = text;
+            });
+        if (this.textRange)
+        {
+            writeTextValue(this.textRange, String(this.range));
+        }
+        addSizer(middle.sizer, setRangeRow, 0, EXPAND | ALL, border());
+
+        this.progressButton = withString("Simulate &progress", (ptr) =>
+            createWxButton(middle.box.ptr, GAUGE_PAGE_PROGRESS, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(middle.sizer, this.progressButton, 0, EXPAND | ALL, border());
+
+        this.indeterminateButton = withString(
+            "Simulate &indeterminate job", (ptr) =>
+                createWxButton(middle.box.ptr,
+                    GAUGE_PAGE_INDETERMINATE_PROGRESS, ptr,
+                    -1, -1, -1, -1, 0))!;
+        addWin(middle.sizer, this.indeterminateButton, 0, EXPAND | ALL,
+            border());
+
+        const clearButton = withString("&Clear", (ptr) =>
+            createWxButton(middle.box.ptr, GAUGE_PAGE_CLEAR, ptr,
+                -1, -1, -1, -1, 0))!;
+        addWin(middle.sizer, clearButton, 0, EXPAND | ALL, border());
+
+        // right pane
+        const right = createWxBoxSizer(HORIZONTAL)!;
+        this.gaugeSizer = right;
+        right.SetMinSize(this.dip(150), 0);
+
+        // final initializations
+        this.reset();
+        this.recreateWidget();
+
+        addSizer(top, left.sizer, 0, EXPAND | (ALL & ~LEFT), doubleBorder());
+        addSizer(top, middle.sizer, 1, EXPAND | ALL, doubleBorder());
+        addSizer(top, right, 1, EXPAND | (ALL & ~RIGHT), doubleBorder());
+
+        this.page.SetSizer(top.ptr, false);
+
+        // -- event handlers ---------------------------------------------------
+
+        bindEvent(this.page, GAUGE_PAGE_RESET, GAUGE_PAGE_RESET, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.reset();
+                this.recreateWidget();
+            });
+
+        bindEvent(this.page, GAUGE_PAGE_PROGRESS, GAUGE_PAGE_PROGRESS,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const button = this.progressButton;
+                if (!button) return;
+                if (!this.timer)
+                {
+                    this.startTimer(button);
+                }
+                else // stop the running timer
+                {
+                    this.stopTimer(button);
+                    logMessage("Stopped the timer.");
+                }
+            });
+
+        bindEvent(this.page, GAUGE_PAGE_INDETERMINATE_PROGRESS,
+            GAUGE_PAGE_INDETERMINATE_PROGRESS, EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const button = this.indeterminateButton;
+                if (!button) return;
+                if (!this.timer)
+                {
+                    this.startTimer(button);
+                }
+                else // stop the running timer
+                {
+                    this.stopTimer(button);
+                    this.gauge?.SetValue(0);
+                    logMessage("Stopped the timer.");
+                }
+            });
+
+        bindEvent(this.page, GAUGE_PAGE_CLEAR, GAUGE_PAGE_CLEAR, EVT_BUTTON,
+            (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                this.gauge?.SetValue(0);
+            });
+
+        bindEvent(this.page, GAUGE_PAGE_SET_VALUE, GAUGE_PAGE_SET_VALUE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                if (!this.textValue) return;
+                const value = parseUnsigned(readTextValue(this.textValue));
+                if (value === null)
+                {
+                    return;
+                }
+                this.gauge?.SetValue(value);
+            });
+
+        bindEvent(this.page, GAUGE_PAGE_SET_RANGE, GAUGE_PAGE_SET_RANGE,
+            EVT_BUTTON, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                if (!this.textRange) return;
+                const value = parseUnsigned(readTextValue(this.textRange));
+                if (value === null)
+                {
+                    return;
+                }
+                this.range = value;
+                this.gauge?.SetRange(value);
+            });
+
+        // EVT_UPDATE_UI entries, bound on the controls they belong to.
+        bindEvent(setValueButton, GAUGE_PAGE_SET_VALUE, GAUGE_PAGE_SET_VALUE,
+            EVT_UPDATE_UI, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const value = this.textValue
+                    ? parseUnsigned(readTextValue(this.textValue))
+                    : null;
+                new wxUpdateUIEvent(eventPtr, true).Enable(
+                    value !== null && value <= this.range);
+            });
+
+        bindEvent(setRangeButton, GAUGE_PAGE_SET_RANGE, GAUGE_PAGE_SET_RANGE,
+            EVT_UPDATE_UI, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                const value = this.textRange
+                    ? parseUnsigned(readTextValue(this.textRange))
+                    : null;
+                new wxUpdateUIEvent(eventPtr, true).Enable(value !== null);
+            });
+
+        bindEvent(resetButton, GAUGE_PAGE_RESET, GAUGE_PAGE_RESET,
+            EVT_UPDATE_UI, (eventPtr) =>
+            {
+                if (!eventPtr) return;
+                new wxUpdateUIEvent(eventPtr, true).Enable(
+                    (this.verticalCheckbox?.GetValue() ?? false)
+                    || (this.smoothCheckbox?.GetValue() ?? false)
+                    || (this.progressCheckbox?.GetValue() ?? false));
+            });
+
+        if (this.textCurrentValue)
+        {
+            bindEvent(this.textCurrentValue, GAUGE_PAGE_CUR_VALUE_TEXT,
+                GAUGE_PAGE_CUR_VALUE_TEXT, EVT_UPDATE_UI, (eventPtr) =>
+                {
+                    if (!eventPtr) return;
+                    const event = new wxUpdateUIEvent(eventPtr, true);
+                    withString(String(this.gauge?.GetValue() ?? 0), (ptr) =>
+                        event.SetText(ptr));
+                });
+        }
+
+        // EVT_CHECKBOX(wxID_ANY) / EVT_RADIOBOX(wxID_ANY)
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_CHECKBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateWidget();
+        });
+
+        bindEvent(this.page, ID_ANY, ID_ANY, EVT_RADIOBOX, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            this.recreateWidget();
+        });
+    }
+
+    override recreateWidget(): void
+    {
+        this.createGauge();
+    }
+
+    /** GaugeWidgetsPage::Reset() */
+    private reset(): void
+    {
+        this.verticalCheckbox?.SetValue(false);
+        this.smoothCheckbox?.SetValue(false);
+        this.progressCheckbox?.SetValue(false);
+    }
+
+    /** GaugeWidgetsPage::CreateGauge() */
+    private createGauge(): void
+    {
+        let flags = attrs.defaultFlags;
+
+        // Not generated by kwxgen (values from wx/gauge.h):
+        //   wxGA_HORIZONTAL == wxHORIZONTAL, wxGA_VERTICAL == wxVERTICAL,
+        //   wxGA_PROGRESS == 0x0010.
+        flags |= this.verticalCheckbox?.GetValue() ? GA_VERTICAL : GA_HORIZONTAL;
+
+        if (this.smoothCheckbox?.GetValue())
+        {
+            flags |= GA_SMOOTH;
+        }
+
+        if (this.progressCheckbox?.GetValue())
+        {
+            flags |= GA_PROGRESS;
+        }
+
+        let value = 0;
+        if (this.gauge)
+        {
+            value = this.gauge.GetValue();
+
+            // wxSizer::Detach() is index based; the gauge is the only child.
+            this.gaugeSizer?.Clear(true /* delete windows */);
+            this.gauge = null;
+        }
+
+        this.gauge = createWxGauge(this.page.ptr, GAUGE_PAGE_GAUGE, this.range,
+            -1, -1, -1, -1, flags);
+
+        if (!this.gauge)
+        {
+            return;
+        }
+
+        this.notifyWidgetRecreation(this.gauge);
+
+        this.gauge.SetValue(value);
+
+        if (this.gaugeSizer)
+        {
+            addWin(this.gaugeSizer, this.gauge, 1, ALIGN_CENTRE, border());
+            this.gaugeSizer.Layout();
+        }
+    }
+
+    /** GaugeWidgetsPage::StartTimer() */
+    private startTimer(clicked: wxButton): void
+    {
+        logMessage(`Launched progress timer (interval = ${TIMER_INTERVAL} ms)`);
+
+        const timerId = clicked.GetId() === GAUGE_PAGE_PROGRESS
+            ? GAUGE_PAGE_TIMER
+            : GAUGE_PAGE_INDETERMINATE_TIMER;
+
+        const timer = createWxTimer(this.page.ptr, timerId);
+        if (!timer)
+        {
+            return;
+        }
+        this.timer = timer;
+
+        // wxTimer(owner, id) delivers wxEVT_TIMER to the owner, not to the
+        // timer object; the C++ event table is on the page.
+        bindEvent(this.page, timerId, timerId, EVT_TIMER, (eventPtr) =>
+        {
+            if (!eventPtr) return;
+            if (timerId === GAUGE_PAGE_TIMER)
+            {
+                this.onProgressTimer();
+            }
+            else
+            {
+                this.onIndeterminateProgressTimer();
+            }
+        });
+
+        timer.Start(TIMER_INTERVAL, false);
+        writeButtonLabel(clicked, "&Stop timer");
+
+        if (clicked.GetId() === GAUGE_PAGE_PROGRESS)
+        {
+            this.indeterminateButton?.Disable();
+        }
+        else
+        {
+            this.progressButton?.Disable();
+        }
+    }
+
+    /** GaugeWidgetsPage::StopTimer() */
+    private stopTimer(clicked: wxButton): void
+    {
+        const timer = this.timer;
+        if (!timer)
+        {
+            return;
+        }
+
+        timer.Stop();
+        timer.Delete();
+        this.timer = null;
+
+        if (clicked.GetId() === GAUGE_PAGE_PROGRESS)
+        {
+            writeButtonLabel(clicked, "Simulate &progress");
+            this.indeterminateButton?.Enable(true);
+        }
+        else
+        {
+            writeButtonLabel(clicked, "Simulate indeterminate job");
+            this.progressButton?.Enable(true);
+        }
+
+        logMessage("Progress finished.");
+    }
+
+    /** OnProgressTimer() */
+    private onProgressTimer(): void
+    {
+        const gauge = this.gauge;
+        if (!gauge)
+        {
+            return;
+        }
+
+        const value = gauge.GetValue();
+        if (value < this.range)
+        {
+            gauge.SetValue(value + 1);
+        }
+        else // reached the end
+        {
+            const button = this.progressButton;
+            if (!button)
+            {
+                return;
+            }
+            this.stopTimer(button);
+        }
+    }
+
+    /** OnIndeterminateProgressTimer() */
+    private onIndeterminateProgressTimer(): void
+    {
+        this.gauge?.Pulse();
+    }
+}
+
+export function createGaugePage(parent: Pointer): WidgetsPage
+{
+    return new GaugePage(parent);
+}
