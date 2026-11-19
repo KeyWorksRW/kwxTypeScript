@@ -8,8 +8,9 @@ bin/
 src/version.h
 src/version.rc
 
-tests/quick
-tests/gui/artifacts/
+tests/
+samples/
+kwxSamples/
 
 sample_test.cmd
 
