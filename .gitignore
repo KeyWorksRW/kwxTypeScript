@@ -13,9 +13,13 @@ tests/gui/artifacts/
 
 sample_test.cmd
 
+samples/
+kwxSamples/
+
 # cmake
 build/
 CMakeFiles/
+tests/
 
 # Rust (kwxts/third_party/swc_transformer). The real build writes into the CMake
 # build tree; this only covers a standalone `cargo build`/`cargo test` run.
