@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -41,15 +42,21 @@ export class wxSecretValue {
   GetAsString(): wxString | null {
     const rawPtr = lib.symbols.wxSecretValue_GetAsString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }
 
-export function createWxSecretValue(secret: Pointer): wxSecretValue | null {
-    const rawPtr = lib.symbols.wxSecretValue_Create(secret);
-    if (rawPtr === null) return null;
-    return new wxSecretValue(rawPtr);
+export function createWxSecretValue(secret: string | Pointer): wxSecretValue | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof secret === "string") __s0 = createWxString(secret);
+      const rawPtr = lib.symbols.wxSecretValue_Create(__s0 ? __s0.ptr : (secret as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSecretValue(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxSecretValueDefault(): wxSecretValue | null {

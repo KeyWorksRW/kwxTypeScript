@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class kwxCmdLineDesc {
@@ -29,16 +30,46 @@ export class kwxCmdLineDesc {
     this.Delete();
   }
 
-  AddSwitch(name: Pointer, long_name: Pointer, description: Pointer, flags: number): void {
-    lib.symbols.kwxCmdLineDesc_AddSwitch(this._ptr, name, long_name, description, flags);
+  AddSwitch(name: string | Pointer, long_name: string | Pointer, description: string | Pointer, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof long_name === "string") __s1 = createWxString(long_name);
+      if (typeof description === "string") __s2 = createWxString(description);
+      lib.symbols.kwxCmdLineDesc_AddSwitch(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (long_name as Pointer), __s2 ? __s2.ptr : (description as Pointer), flags);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddOption(name: Pointer, long_name: Pointer, description: Pointer, type_: number, flags: number): void {
-    lib.symbols.kwxCmdLineDesc_AddOption(this._ptr, name, long_name, description, type_, flags);
+  AddOption(name: string | Pointer, long_name: string | Pointer, description: string | Pointer, type_: number, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof long_name === "string") __s1 = createWxString(long_name);
+      if (typeof description === "string") __s2 = createWxString(description);
+      lib.symbols.kwxCmdLineDesc_AddOption(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (long_name as Pointer), __s2 ? __s2.ptr : (description as Pointer), type_, flags);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddParam(description: Pointer, type_: number, flags: number): void {
-    lib.symbols.kwxCmdLineDesc_AddParam(this._ptr, description, type_, flags);
+  AddParam(description: string | Pointer, type_: number, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof description === "string") __s0 = createWxString(description);
+      lib.symbols.kwxCmdLineDesc_AddParam(this._ptr, __s0 ? __s0.ptr : (description as Pointer), type_, flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

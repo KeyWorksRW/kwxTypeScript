@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPickerBase } from "./wxPickerBase_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -16,33 +17,60 @@ export class wxDirPickerCtrl extends wxPickerBase {
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxDirPickerCtrl_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetPath(path: Pointer): void {
-    lib.symbols.wxDirPickerCtrl_SetPath(this._ptr, path);
+  SetPath(path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxDirPickerCtrl_SetPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetInitialDirectory(dir: Pointer): void {
-    lib.symbols.wxDirPickerCtrl_SetInitialDirectory(this._ptr, dir);
+  SetInitialDirectory(dir: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      lib.symbols.wxDirPickerCtrl_SetInitialDirectory(this._ptr, __s0 ? __s0.ptr : (dir as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetDirName(dirname: Pointer): void {
-    lib.symbols.wxDirPickerCtrl_SetDirName(this._ptr, dirname);
+  SetDirName(dirname: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dirname === "string") __s0 = createWxString(dirname);
+      lib.symbols.wxDirPickerCtrl_SetDirName(this._ptr, __s0 ? __s0.ptr : (dirname as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetDirName(): wxString | null {
     const rawPtr = lib.symbols.wxDirPickerCtrl_GetDirName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }
 
-export function createWxDirPickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, path: Pointer, message: Pointer, style: bigint): wxDirPickerCtrl | null {
-    const rawPtr = lib.symbols.wxDirPickerCtrl_Create(parent, id, x, y, width, height, path, message, style);
-    if (rawPtr === null) return null;
-    return new wxDirPickerCtrl(rawPtr);
+export function createWxDirPickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, path: string | Pointer, message: string | Pointer, style: bigint): wxDirPickerCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      if (typeof message === "string") __s1 = createWxString(message);
+      const rawPtr = lib.symbols.wxDirPickerCtrl_Create(parent, id, x, y, width, height, __s0 ? __s0.ptr : (path as Pointer), __s1 ? __s1.ptr : (message as Pointer), style);
+      if (rawPtr === null) return null;
+      return new wxDirPickerCtrl(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

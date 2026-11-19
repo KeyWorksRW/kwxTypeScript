@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -30,30 +31,54 @@ export class wxRegEx {
     this.Delete();
   }
 
-  Compile(pattern: Pointer, flags: number): boolean {
-    return (lib.symbols.wxRegEx_Compile(this._ptr, pattern, flags) as number) !== 0;
+  Compile(pattern: string | Pointer, flags: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof pattern === "string") __s0 = createWxString(pattern);
+      return (lib.symbols.wxRegEx_Compile(this._ptr, __s0 ? __s0.ptr : (pattern as Pointer), flags) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsValid(): boolean {
     return (lib.symbols.wxRegEx_IsValid(this._ptr) as number) !== 0;
   }
 
-  Matches(text: Pointer, flags: number): boolean {
-    return (lib.symbols.wxRegEx_Matches(this._ptr, text, flags) as number) !== 0;
+  Matches(text: string | Pointer, flags: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxRegEx_Matches(this._ptr, __s0 ? __s0.ptr : (text as Pointer), flags) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  MatchesFrom(text: Pointer, start: number, flags: number): boolean {
-    return (lib.symbols.wxRegEx_MatchesFrom(this._ptr, text, start, flags) as number) !== 0;
+  MatchesFrom(text: string | Pointer, start: number, flags: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxRegEx_MatchesFrom(this._ptr, __s0 ? __s0.ptr : (text as Pointer), start, flags) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetMatchCount(): number {
     return lib.symbols.wxRegEx_GetMatchCount(this._ptr);
   }
 
-  GetMatch(text: Pointer, index: number): wxString | null {
-    const rawPtr = lib.symbols.wxRegEx_GetMatch(this._ptr, text, index);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetMatch(text: string | Pointer, index: number): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxRegEx_GetMatch(this._ptr, __s0 ? __s0.ptr : (text as Pointer), index);
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetMatchStart(index: number): number {
@@ -64,16 +89,43 @@ export class wxRegEx {
     return lib.symbols.wxRegEx_GetMatchEnd(this._ptr, index);
   }
 
-  Replace(text: Pointer, replacement: Pointer): number {
-    return lib.symbols.wxRegEx_Replace(this._ptr, text, replacement);
+  Replace(text: string | Pointer, replacement: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof replacement === "string") __s1 = createWxString(replacement);
+      return lib.symbols.wxRegEx_Replace(this._ptr, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (replacement as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  ReplaceAll(text: Pointer, replacement: Pointer): number {
-    return lib.symbols.wxRegEx_ReplaceAll(this._ptr, text, replacement);
+  ReplaceAll(text: string | Pointer, replacement: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof replacement === "string") __s1 = createWxString(replacement);
+      return lib.symbols.wxRegEx_ReplaceAll(this._ptr, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (replacement as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  ReplaceFirst(text: Pointer, replacement: Pointer): number {
-    return lib.symbols.wxRegEx_ReplaceFirst(this._ptr, text, replacement);
+  ReplaceFirst(text: string | Pointer, replacement: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof replacement === "string") __s1 = createWxString(replacement);
+      return lib.symbols.wxRegEx_ReplaceFirst(this._ptr, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (replacement as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
 }
@@ -84,10 +136,16 @@ export function createWxRegEx(): wxRegEx | null {
     return new wxRegEx(rawPtr);
 }
 
-export function createWxRegExCompiled(pattern: Pointer, flags: number): wxRegEx | null {
-    const rawPtr = lib.symbols.wxRegEx_CreateCompiled(pattern, flags);
-    if (rawPtr === null) return null;
-    return new wxRegEx(rawPtr);
+export function createWxRegExCompiled(pattern: string | Pointer, flags: number): wxRegEx | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof pattern === "string") __s0 = createWxString(pattern);
+      const rawPtr = lib.symbols.wxRegEx_CreateCompiled(__s0 ? __s0.ptr : (pattern as Pointer), flags);
+      if (rawPtr === null) return null;
+      return new wxRegEx(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

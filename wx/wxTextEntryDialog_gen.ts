@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -13,26 +14,50 @@ export class wxTextEntryDialog extends wxDialog {
     return this._ptr;
   }
 
-  SetHint(hint: Pointer): void {
-    lib.symbols.wxTextEntryDialog_SetHint(this._ptr, hint);
+  SetHint(hint: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof hint === "string") __s0 = createWxString(hint);
+      lib.symbols.wxTextEntryDialog_SetHint(this._ptr, __s0 ? __s0.ptr : (hint as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetValue(): wxString | null {
     const rawPtr = lib.symbols.wxTextEntryDialog_GetValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetValue(value: Pointer): void {
-    lib.symbols.wxTextEntryDialog_SetValue(this._ptr, value);
+  SetValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxTextEntryDialog_SetValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxTextEntryDialog(parent: Pointer, message: Pointer, caption: Pointer, value: Pointer, style: bigint, x: number, y: number, sz_w: number, sz_h: number): wxTextEntryDialog | null {
-    const rawPtr = lib.symbols.wxTextEntryDialog_Create(parent, message, caption, value, style, x, y, sz_w, sz_h);
-    if (rawPtr === null) return null;
-    return new wxTextEntryDialog(rawPtr);
+export function createWxTextEntryDialog(parent: Pointer, message: string | Pointer, caption: string | Pointer, value: string | Pointer, style: bigint, x: number, y: number, sz_w: number, sz_h: number): wxTextEntryDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof caption === "string") __s1 = createWxString(caption);
+      if (typeof value === "string") __s2 = createWxString(value);
+      const rawPtr = lib.symbols.wxTextEntryDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (caption as Pointer), __s2 ? __s2.ptr : (value as Pointer), style, x, y, sz_w, sz_h);
+      if (rawPtr === null) return null;
+      return new wxTextEntryDialog(rawPtr);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

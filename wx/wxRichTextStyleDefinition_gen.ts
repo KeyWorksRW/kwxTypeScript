@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxRichTextAttr } from "./wxRichTextAttr_gen.ts";
@@ -23,34 +24,52 @@ export class wxRichTextStyleDefinition extends wxObject {
     return (lib.symbols.wxRichTextStyleDefinition_Eq(this._ptr, def) as number) !== 0;
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxRichTextStyleDefinition_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxRichTextStyleDefinition_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextStyleDefinition_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetDescription(descr: Pointer): void {
-    lib.symbols.wxRichTextStyleDefinition_SetDescription(this._ptr, descr);
+  SetDescription(descr: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof descr === "string") __s0 = createWxString(descr);
+      lib.symbols.wxRichTextStyleDefinition_SetDescription(this._ptr, __s0 ? __s0.ptr : (descr as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetDescription(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextStyleDefinition_GetDescription(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetBaseStyle(name: Pointer): void {
-    lib.symbols.wxRichTextStyleDefinition_SetBaseStyle(this._ptr, name);
+  SetBaseStyle(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxRichTextStyleDefinition_SetBaseStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetBaseStyle(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextStyleDefinition_GetBaseStyle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetStyle(style: Pointer): void {

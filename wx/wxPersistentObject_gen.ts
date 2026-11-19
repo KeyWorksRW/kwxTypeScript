@@ -23,13 +23,13 @@ export class wxPersistentObject {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxPersistentObject_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetKind(): wxString | null {
     const rawPtr = lib.symbols.wxPersistentObject_GetKind(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetObject(): Pointer {

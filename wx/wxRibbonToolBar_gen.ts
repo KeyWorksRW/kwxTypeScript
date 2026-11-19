@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRibbonControl } from "./wxRibbonControl_gen.ts";
 import { wxObject } from "./wxObject_gen.ts";
@@ -16,48 +17,108 @@ export class wxRibbonToolBar extends wxRibbonControl {
     return this._ptr;
   }
 
-  SetDropdownKeyTip(tool_id: number, keytip: Pointer): void {
-    lib.symbols.wxRibbonToolBar_SetDropdownKeyTip(this._ptr, tool_id, keytip);
+  SetDropdownKeyTip(tool_id: number, keytip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keytip === "string") __s0 = createWxString(keytip);
+      lib.symbols.wxRibbonToolBar_SetDropdownKeyTip(this._ptr, tool_id, __s0 ? __s0.ptr : (keytip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetKeyTip(tool_id: number, keytip: Pointer): void {
-    lib.symbols.wxRibbonToolBar_SetKeyTip(this._ptr, tool_id, keytip);
+  SetKeyTip(tool_id: number, keytip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keytip === "string") __s0 = createWxString(keytip);
+      lib.symbols.wxRibbonToolBar_SetKeyTip(this._ptr, tool_id, __s0 ? __s0.ptr : (keytip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddTool(tool_id: number, bitmap: Pointer, help_string: Pointer, kind: number, bitmap_disabled: Pointer, client_data: Pointer): Pointer {
-    return lib.symbols.wxRibbonToolBar_AddTool(this._ptr, tool_id, bitmap, help_string, kind, bitmap_disabled, client_data);
+  AddTool(tool_id: number, bitmap: Pointer, help_string: string | Pointer, kind: number, bitmap_disabled: Pointer, client_data: Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof help_string === "string") __s0 = createWxString(help_string);
+      return lib.symbols.wxRibbonToolBar_AddTool(this._ptr, tool_id, bitmap, __s0 ? __s0.ptr : (help_string as Pointer), kind, bitmap_disabled, client_data);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddDropdownTool(tool_id: number, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonToolBar_AddDropdownTool(this._ptr, tool_id, bitmap, help_string);
+  AddDropdownTool(tool_id: number, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof help_string === "string") __s0 = createWxString(help_string);
+      return lib.symbols.wxRibbonToolBar_AddDropdownTool(this._ptr, tool_id, bitmap, __s0 ? __s0.ptr : (help_string as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddHybridTool(tool_id: number, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonToolBar_AddHybridTool(this._ptr, tool_id, bitmap, help_string);
+  AddHybridTool(tool_id: number, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof help_string === "string") __s0 = createWxString(help_string);
+      return lib.symbols.wxRibbonToolBar_AddHybridTool(this._ptr, tool_id, bitmap, __s0 ? __s0.ptr : (help_string as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddToggleTool(tool_id: number, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonToolBar_AddToggleTool(this._ptr, tool_id, bitmap, help_string);
+  AddToggleTool(tool_id: number, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof help_string === "string") __s0 = createWxString(help_string);
+      return lib.symbols.wxRibbonToolBar_AddToggleTool(this._ptr, tool_id, bitmap, __s0 ? __s0.ptr : (help_string as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddSeparator(): Pointer {
     return lib.symbols.wxRibbonToolBar_AddSeparator(this._ptr);
   }
 
-  InsertTool(pos: bigint, tool_id: number, bitmap: Pointer, help_string: Pointer, kind: number, bitmap_disabled: Pointer, client_data: Pointer): Pointer {
-    return lib.symbols.wxRibbonToolBar_InsertTool(this._ptr, pos, tool_id, bitmap, help_string, kind, bitmap_disabled, client_data);
+  InsertTool(pos: bigint, tool_id: number, bitmap: Pointer, help_string: string | Pointer, kind: number, bitmap_disabled: Pointer, client_data: Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof help_string === "string") __s0 = createWxString(help_string);
+      return lib.symbols.wxRibbonToolBar_InsertTool(this._ptr, pos, tool_id, bitmap, __s0 ? __s0.ptr : (help_string as Pointer), kind, bitmap_disabled, client_data);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertDropdownTool(pos: bigint, tool_id: number, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonToolBar_InsertDropdownTool(this._ptr, pos, tool_id, bitmap, help_string);
+  InsertDropdownTool(pos: bigint, tool_id: number, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof help_string === "string") __s0 = createWxString(help_string);
+      return lib.symbols.wxRibbonToolBar_InsertDropdownTool(this._ptr, pos, tool_id, bitmap, __s0 ? __s0.ptr : (help_string as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertHybridTool(pos: bigint, tool_id: number, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonToolBar_InsertHybridTool(this._ptr, pos, tool_id, bitmap, help_string);
+  InsertHybridTool(pos: bigint, tool_id: number, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof help_string === "string") __s0 = createWxString(help_string);
+      return lib.symbols.wxRibbonToolBar_InsertHybridTool(this._ptr, pos, tool_id, bitmap, __s0 ? __s0.ptr : (help_string as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertToggleTool(pos: bigint, tool_id: number, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonToolBar_InsertToggleTool(this._ptr, pos, tool_id, bitmap, help_string);
+  InsertToggleTool(pos: bigint, tool_id: number, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof help_string === "string") __s0 = createWxString(help_string);
+      return lib.symbols.wxRibbonToolBar_InsertToggleTool(this._ptr, pos, tool_id, bitmap, __s0 ? __s0.ptr : (help_string as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   InsertSeparator(pos: bigint): Pointer {
@@ -119,11 +180,17 @@ export class wxRibbonToolBar extends wxRibbonControl {
   GetToolHelpString(tool_id: number): wxString | null {
     const rawPtr = lib.symbols.wxRibbonToolBar_GetToolHelpString(this._ptr, tool_id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetToolHelpString(tool_id: number, help_string: Pointer): void {
-    lib.symbols.wxRibbonToolBar_SetToolHelpString(this._ptr, tool_id, help_string);
+  SetToolHelpString(tool_id: number, help_string: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof help_string === "string") __s0 = createWxString(help_string);
+      lib.symbols.wxRibbonToolBar_SetToolHelpString(this._ptr, tool_id, __s0 ? __s0.ptr : (help_string as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetToolKind(tool_id: number): number {

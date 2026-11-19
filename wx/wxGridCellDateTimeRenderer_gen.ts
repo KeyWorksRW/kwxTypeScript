@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxGridCellDateRenderer } from "./wxGridCellDateRenderer_gen.ts";
 
@@ -21,16 +22,31 @@ export class wxGridCellDateTimeRenderer extends wxGridCellDateRenderer {
     this.Delete();
   }
 
-  override SetParameters(params: Pointer): void {
-    lib.symbols.wxGridCellDateTimeRenderer_SetParameters(this._ptr, params);
+  override SetParameters(params: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof params === "string") __s0 = createWxString(params);
+      lib.symbols.wxGridCellDateTimeRenderer_SetParameters(this._ptr, __s0 ? __s0.ptr : (params as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxGridCellDateTimeRenderer(out_format: Pointer, in_format: Pointer): wxGridCellDateTimeRenderer | null {
-    const rawPtr = lib.symbols.wxGridCellDateTimeRenderer_Create(out_format, in_format);
-    if (rawPtr === null) return null;
-    return new wxGridCellDateTimeRenderer(rawPtr);
+export function createWxGridCellDateTimeRenderer(out_format: string | Pointer, in_format: string | Pointer): wxGridCellDateTimeRenderer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof out_format === "string") __s0 = createWxString(out_format);
+      if (typeof in_format === "string") __s1 = createWxString(in_format);
+      const rawPtr = lib.symbols.wxGridCellDateTimeRenderer_Create(__s0 ? __s0.ptr : (out_format as Pointer), __s1 ? __s1.ptr : (in_format as Pointer));
+      if (rawPtr === null) return null;
+      return new wxGridCellDateTimeRenderer(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

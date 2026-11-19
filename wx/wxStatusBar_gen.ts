@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxWindow } from "./wxWindow_gen.ts";
 import { wxSize } from "./wxSize_gen.ts";
@@ -17,7 +18,7 @@ export class wxStatusBar extends wxWindow {
   GetBorders(): wxSize | null {
     const rawPtr = lib.symbols.wxStatusBar_GetBorders(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   AddFieldControl(n: number, win: Pointer): boolean {
@@ -39,7 +40,7 @@ export class wxStatusBar extends wxWindow {
   GetStatusText(number: number): wxString | null {
     const rawPtr = lib.symbols.wxStatusBar_GetStatusText(this._ptr, number);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetFieldsCount(number: number, widths: Pointer): void {
@@ -50,8 +51,14 @@ export class wxStatusBar extends wxWindow {
     lib.symbols.wxStatusBar_SetMinHeight(this._ptr, height);
   }
 
-  SetStatusText(text: Pointer, number: number): void {
-    lib.symbols.wxStatusBar_SetStatusText(this._ptr, text, number);
+  SetStatusText(text: string | Pointer, number: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStatusBar_SetStatusText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), number);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetStatusWidths(count: number, widths: Pointer): void {
@@ -66,8 +73,14 @@ export class wxStatusBar extends wxWindow {
     lib.symbols.wxStatusBar_SetStatusStyles(this._ptr, n, styles);
   }
 
-  PushStatusText(text: Pointer, field: number): void {
-    lib.symbols.wxStatusBar_PushStatusText(this._ptr, text, field);
+  PushStatusText(text: string | Pointer, field: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStatusBar_PushStatusText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), field);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   PopStatusText(field: number): void {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -34,7 +35,7 @@ export class wxSingleChoiceDialog extends wxDialog {
   GetStringSelection(): wxString | null {
     const rawPtr = lib.symbols.wxSingleChoiceDialog_GetStringSelection(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetSelectionData(): Pointer {
@@ -43,10 +44,19 @@ export class wxSingleChoiceDialog extends wxDialog {
 
 }
 
-export function createWxSingleChoiceDialog(parent: Pointer, message: Pointer, caption: Pointer, choices: Pointer, style: number): wxSingleChoiceDialog | null {
-    const rawPtr = lib.symbols.wxSingleChoiceDialog_Create(parent, message, caption, choices, style);
-    if (rawPtr === null) return null;
-    return new wxSingleChoiceDialog(rawPtr);
+export function createWxSingleChoiceDialog(parent: Pointer, message: string | Pointer, caption: string | Pointer, choices: Pointer, style: number): wxSingleChoiceDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof caption === "string") __s1 = createWxString(caption);
+      const rawPtr = lib.symbols.wxSingleChoiceDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (caption as Pointer), choices, style);
+      if (rawPtr === null) return null;
+      return new wxSingleChoiceDialog(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

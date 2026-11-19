@@ -22,16 +22,26 @@ export class wxCaret {
     return this._ptr;
   }
 
+  Delete(): void {
+    if (this._disposed || this._borrowed) return;
+    this._disposed = true;
+    lib.symbols.wxCaret_Delete(this._ptr);
+  }
+
+  [Symbol.dispose](): void {
+    this.Delete();
+  }
+
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxCaret_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxCaret_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetWindow(): wxWindow | null {

@@ -4,6 +4,7 @@ import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDropTarget } from "./wxDropTarget_gen.ts";
+import { wxString } from "./wxString_gen.ts";
 
 export class kwxTextDropTarget extends wxDropTarget {
   /** Returns the underlying native pointer. */
@@ -39,6 +40,60 @@ export class kwxTextDropTarget extends wxDropTarget {
 
   SetOnLeave(pFunction: Pointer): void {
     lib.symbols.kwxTextDropTarget_SetOnLeave(this._ptr, pFunction);
+  }
+
+  SetOnDataWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxTextDropTarget_SetOnDataWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnDropWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxTextDropTarget_SetOnDropWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnEnterWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxTextDropTarget_SetOnEnterWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnDragOverWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxTextDropTarget_SetOnDragOverWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnLeaveWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxTextDropTarget_SetOnLeaveWithData(this._ptr, pFunction, data);
+  }
+
+  SetDataResult(result: number): void {
+    lib.symbols.kwxTextDropTarget_SetDataResult(this._ptr, result);
+  }
+
+  SetDropResult(result: number): void {
+    lib.symbols.kwxTextDropTarget_SetDropResult(this._ptr, result);
+  }
+
+  SetEnterResult(result: number): void {
+    lib.symbols.kwxTextDropTarget_SetEnterResult(this._ptr, result);
+  }
+
+  SetDragOverResult(result: number): void {
+    lib.symbols.kwxTextDropTarget_SetDragOverResult(this._ptr, result);
+  }
+
+  GetDropResult(): number {
+    return lib.symbols.kwxTextDropTarget_GetDropResult(this._ptr);
+  }
+
+  SetOnDropTextWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxTextDropTarget_SetOnDropTextWithData(this._ptr, pFunction, data);
+  }
+
+  SetDropTextResult(result: number): void {
+    lib.symbols.kwxTextDropTarget_SetDropTextResult(this._ptr, result);
+  }
+
+  GetDropText(): wxString | null {
+    const rawPtr = lib.symbols.kwxTextDropTarget_GetDropText(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxString(rawPtr);
   }
 
 }

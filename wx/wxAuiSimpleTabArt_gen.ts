@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxAuiTabArt } from "./wxAuiTabArt_gen.ts";
 import { wxSize } from "./wxSize_gen.ts";
@@ -62,10 +63,16 @@ export class wxAuiSimpleTabArt extends wxAuiTabArt {
     return lib.symbols.wxAuiSimpleTabArt_GetIndentSize(this._ptr);
   }
 
-  override GetTabSize(dc: Pointer, window: Pointer, caption: Pointer, bitmap: Pointer, active: boolean, closeButtonState: number, xExtent: Pointer): wxSize | null {
-    const rawPtr = lib.symbols.wxAuiSimpleTabArt_GetTabSize(this._ptr, dc, window, caption, bitmap, active ? 1 : 0, closeButtonState, xExtent);
-    if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+  override GetTabSize(dc: Pointer, window: Pointer, caption: string | Pointer, bitmap: Pointer, active: boolean, closeButtonState: number, xExtent: Pointer): wxSize | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof caption === "string") __s0 = createWxString(caption);
+      const rawPtr = lib.symbols.wxAuiSimpleTabArt_GetTabSize(this._ptr, dc, window, __s0 ? __s0.ptr : (caption as Pointer), bitmap, active ? 1 : 0, closeButtonState, xExtent);
+      if (rawPtr === null) return null;
+      return new wxSize(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ShowDropDown(window: Pointer, items: Pointer, activeIdx: number): number {

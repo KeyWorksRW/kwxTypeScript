@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxBusyInfo {
@@ -31,10 +32,16 @@ export class wxBusyInfo {
 
 }
 
-export function createWxBusyInfo(text: Pointer, parent: Pointer): wxBusyInfo | null {
-    const rawPtr = lib.symbols.wxBusyInfo_Create(text, parent);
-    if (rawPtr === null) return null;
-    return new wxBusyInfo(rawPtr);
+export function createWxBusyInfo(text: string | Pointer, parent: Pointer): wxBusyInfo | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxBusyInfo_Create(__s0 ? __s0.ptr : (text as Pointer), parent);
+      if (rawPtr === null) return null;
+      return new wxBusyInfo(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxBusyInfoWithFlags(flags: Pointer): wxBusyInfo | null {

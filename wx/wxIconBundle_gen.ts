@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxIconBundle {
@@ -33,8 +34,14 @@ export class wxIconBundle {
     lib.symbols.wxIconBundle_AddIcon(this._ptr, icon);
   }
 
-  AddIconFromFile(file: Pointer, type_: number): void {
-    lib.symbols.wxIconBundle_AddIconFromFile(this._ptr, file, type_);
+  AddIconFromFile(file: string | Pointer, type_: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      lib.symbols.wxIconBundle_AddIconFromFile(this._ptr, __s0 ? __s0.ptr : (file as Pointer), type_);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Assign(ref: Pointer): void {
@@ -61,10 +68,16 @@ export function createWxIconBundleDefault(): wxIconBundle | null {
     return new wxIconBundle(rawPtr);
 }
 
-export function createWxIconBundleFromFile(file: Pointer, type_: number): wxIconBundle | null {
-    const rawPtr = lib.symbols.wxIconBundle_CreateFromFile(file, type_);
-    if (rawPtr === null) return null;
-    return new wxIconBundle(rawPtr);
+export function createWxIconBundleFromFile(file: string | Pointer, type_: number): wxIconBundle | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      const rawPtr = lib.symbols.wxIconBundle_CreateFromFile(__s0 ? __s0.ptr : (file as Pointer), type_);
+      if (rawPtr === null) return null;
+      return new wxIconBundle(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxIconBundleFromIcon(icon: Pointer): wxIconBundle | null {

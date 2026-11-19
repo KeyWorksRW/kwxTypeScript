@@ -91,25 +91,25 @@ export class wxPageSetupDialogData extends wxObject {
   GetMarginBottomRight(): wxPoint | null {
     const rawPtr = lib.symbols.wxPageSetupDialogData_GetMarginBottomRight(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetMarginTopLeft(): wxPoint | null {
     const rawPtr = lib.symbols.wxPageSetupDialogData_GetMarginTopLeft(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetMinMarginBottomRight(): wxPoint | null {
     const rawPtr = lib.symbols.wxPageSetupDialogData_GetMinMarginBottomRight(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetMinMarginTopLeft(): wxPoint | null {
     const rawPtr = lib.symbols.wxPageSetupDialogData_GetMinMarginTopLeft(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetPaperId(): number {
@@ -119,7 +119,7 @@ export class wxPageSetupDialogData extends wxObject {
   GetPaperSize(): wxSize | null {
     const rawPtr = lib.symbols.wxPageSetupDialogData_GetPaperSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetPrintData(ref: Pointer): void {

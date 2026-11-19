@@ -31,19 +31,19 @@ export class wxSizer extends wxObject {
   ComputeFittingClientSize(window: Pointer): wxSize | null {
     const rawPtr = lib.symbols.wxSizer_ComputeFittingClientSize(this._ptr, window);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   ComputeFittingWindowSize(window: Pointer): wxSize | null {
     const rawPtr = lib.symbols.wxSizer_ComputeFittingWindowSize(this._ptr, window);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   FitWithSize(window: Pointer): wxSize | null {
     const rawPtr = lib.symbols.wxSizer_FitWithSize(this._ptr, window);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetItemCount(): number {
@@ -91,7 +91,7 @@ export class wxSizer extends wxObject {
   CalcMin(): wxSize | null {
     const rawPtr = lib.symbols.wxSizer_CalcMin(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   Fit(window: Pointer): void {
@@ -105,19 +105,19 @@ export class wxSizer extends wxObject {
   GetMinSize(): wxSize | null {
     const rawPtr = lib.symbols.wxSizer_GetMinSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxSizer_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxSizer_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   Insert(before: number, width: number, height: number, option: number, flag: number, border: number, userData: Pointer): void {

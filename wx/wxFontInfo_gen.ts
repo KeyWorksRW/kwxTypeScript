@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -34,8 +35,14 @@ export class wxFontInfo {
     lib.symbols.wxFontInfo_SetFamily(this._ptr, family);
   }
 
-  SetFaceName(faceName: Pointer): void {
-    lib.symbols.wxFontInfo_SetFaceName(this._ptr, faceName);
+  SetFaceName(faceName: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof faceName === "string") __s0 = createWxString(faceName);
+      lib.symbols.wxFontInfo_SetFaceName(this._ptr, __s0 ? __s0.ptr : (faceName as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetWeight(weight: number): void {
@@ -97,7 +104,7 @@ export class wxFontInfo {
   GetFaceName(): wxString | null {
     const rawPtr = lib.symbols.wxFontInfo_GetFaceName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsUnderlined(): boolean {

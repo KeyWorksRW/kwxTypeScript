@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxMessageDialog } from "./wxMessageDialog_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -22,20 +23,38 @@ export class wxRichMessageDialog extends wxMessageDialog {
     this.Delete();
   }
 
-  ShowCheckBox(checkBoxText: Pointer, checked: boolean): void {
-    lib.symbols.wxRichMessageDialog_ShowCheckBox(this._ptr, checkBoxText, checked ? 1 : 0);
+  ShowCheckBox(checkBoxText: string | Pointer, checked: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof checkBoxText === "string") __s0 = createWxString(checkBoxText);
+      lib.symbols.wxRichMessageDialog_ShowCheckBox(this._ptr, __s0 ? __s0.ptr : (checkBoxText as Pointer), checked ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsCheckBoxChecked(): boolean {
     return (lib.symbols.wxRichMessageDialog_IsCheckBoxChecked(this._ptr) as number) !== 0;
   }
 
-  ShowDetailedText(text: Pointer): void {
-    lib.symbols.wxRichMessageDialog_ShowDetailedText(this._ptr, text);
+  ShowDetailedText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichMessageDialog_ShowDetailedText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetFooterText(text: Pointer): void {
-    lib.symbols.wxRichMessageDialog_SetFooterText(this._ptr, text);
+  SetFooterText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichMessageDialog_SetFooterText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFooterIcon(icon: number): void {
@@ -44,10 +63,19 @@ export class wxRichMessageDialog extends wxMessageDialog {
 
 }
 
-export function createWxRichMessageDialog(parent: Pointer, message: Pointer, caption: Pointer, style: number): wxRichMessageDialog | null {
-    const rawPtr = lib.symbols.wxRichMessageDialog_Create(parent, message, caption, style);
-    if (rawPtr === null) return null;
-    return new wxRichMessageDialog(rawPtr);
+export function createWxRichMessageDialog(parent: Pointer, message: string | Pointer, caption: string | Pointer, style: number): wxRichMessageDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof caption === "string") __s1 = createWxString(caption);
+      const rawPtr = lib.symbols.wxRichMessageDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (caption as Pointer), style);
+      if (rawPtr === null) return null;
+      return new wxRichMessageDialog(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

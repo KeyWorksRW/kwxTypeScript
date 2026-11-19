@@ -24,7 +24,7 @@ export class kwxHtmlEvent {
   GetHref(): wxString | null {
     const rawPtr = lib.symbols.kwxHtmlEvent_GetHref(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetHtmlCell(): Pointer {
@@ -34,13 +34,13 @@ export class kwxHtmlEvent {
   GetHtmlCellId(): wxString | null {
     const rawPtr = lib.symbols.kwxHtmlEvent_GetHtmlCellId(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLogicalPosition(): wxPoint | null {
     const rawPtr = lib.symbols.kwxHtmlEvent_GetLogicalPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetMouseEvent(): Pointer {
@@ -50,7 +50,7 @@ export class kwxHtmlEvent {
   GetTarget(): wxString | null {
     const rawPtr = lib.symbols.kwxHtmlEvent_GetTarget(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -23,19 +24,19 @@ export class wxClassInfo {
   GetBaseClassName1(): wxString | null {
     const rawPtr = lib.symbols.wxClassInfo_GetBaseClassName1(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetBaseClassName2(): wxString | null {
     const rawPtr = lib.symbols.wxClassInfo_GetBaseClassName2(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetClassNameEx(): wxString | null {
     const rawPtr = lib.symbols.wxClassInfo_GetClassNameEx(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetSize(): number {
@@ -54,8 +55,14 @@ export class wxClassInfo {
     return lib.symbols.wxClassInfo_GetClassName(this._ptr);
   }
 
-  IsKindOf(name: Pointer): boolean {
-    return (lib.symbols.wxClassInfo_IsKindOf(this._ptr, name) as number) !== 0;
+  IsKindOf(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxClassInfo_IsKindOf(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

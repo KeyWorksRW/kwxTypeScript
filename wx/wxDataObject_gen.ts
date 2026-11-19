@@ -23,7 +23,7 @@ export class wxDataObject {
   GetPreferredFormat(direction: number): wxDataFormat | null {
     const rawPtr = lib.symbols.wxDataObject_GetPreferredFormat(this._ptr, direction);
     if (rawPtr === null) return null;
-    return new wxDataFormat(rawPtr, true);
+    return new wxDataFormat(rawPtr);
   }
 
   GetFormatCount(direction: number): number {

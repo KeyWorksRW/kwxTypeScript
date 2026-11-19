@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxNotifyEvent } from "./wxNotifyEvent_gen.ts";
 import { wxPGProperty } from "./wxPGProperty_gen.ts";
@@ -18,8 +19,14 @@ export class wxPropertyGridEvent extends wxNotifyEvent {
     lib.symbols.wxPropertyGridEvent_SetValidationFailureBehavior(this._ptr, flags);
   }
 
-  SetValidationFailureMessage(message: Pointer): void {
-    lib.symbols.wxPropertyGridEvent_SetValidationFailureMessage(this._ptr, message);
+  SetValidationFailureMessage(message: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      lib.symbols.wxPropertyGridEvent_SetValidationFailureMessage(this._ptr, __s0 ? __s0.ptr : (message as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetValidationFailureBehavior(): number {
@@ -41,7 +48,7 @@ export class wxPropertyGridEvent extends wxNotifyEvent {
   GetValue(): wxVariant | null {
     const rawPtr = lib.symbols.wxPropertyGridEvent_GetValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxVariant(rawPtr, true);
+    return new wxVariant(rawPtr);
   }
 
   override Veto(veto: boolean): void;

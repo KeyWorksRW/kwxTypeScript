@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -30,18 +31,30 @@ export class wxHelpProvider {
     this.Delete();
   }
 
-  AddHelp(window: Pointer, text: Pointer): void {
-    lib.symbols.wxHelpProvider_AddHelp(this._ptr, window, text);
+  AddHelp(window: Pointer, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxHelpProvider_AddHelp(this._ptr, window, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddHelpById(id: number, text: Pointer): void {
-    lib.symbols.wxHelpProvider_AddHelpById(this._ptr, id, text);
+  AddHelpById(id: number, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxHelpProvider_AddHelpById(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetHelp(window: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxHelpProvider_GetHelp(this._ptr, window);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   RemoveHelp(window: Pointer): void {

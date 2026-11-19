@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRibbonControl } from "./wxRibbonControl_gen.ts";
 import { wxRibbonArtProvider } from "./wxRibbonArtProvider_gen.ts";
@@ -16,14 +17,20 @@ export class wxRibbonPanel extends wxRibbonControl {
     return this._ptr;
   }
 
-  SetExtButtonKeyTip(keytip: Pointer): void {
-    lib.symbols.wxRibbonPanel_SetExtButtonKeyTip(this._ptr, keytip);
+  SetExtButtonKeyTip(keytip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keytip === "string") __s0 = createWxString(keytip);
+      lib.symbols.wxRibbonPanel_SetExtButtonKeyTip(this._ptr, __s0 ? __s0.ptr : (keytip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override GetLabel(): wxString | null {
     const rawPtr = lib.symbols.wxRibbonPanel_GetLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsMinimised(): boolean {
@@ -61,7 +68,7 @@ export class wxRibbonPanel extends wxRibbonControl {
   override GetMinSize(): wxSize | null {
     const rawPtr = lib.symbols.wxRibbonPanel_GetMinSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   override SetArtProvider(art: Pointer): void {
@@ -76,10 +83,16 @@ export class wxRibbonPanel extends wxRibbonControl {
 
 }
 
-export function createWxRibbonPanel(parent: Pointer, id: number, label: Pointer, icon: Pointer, x: number, y: number, width: number, height: number, style: number): wxRibbonPanel | null {
-    const rawPtr = lib.symbols.wxRibbonPanel_Create(parent, id, label, icon, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxRibbonPanel(rawPtr);
+export function createWxRibbonPanel(parent: Pointer, id: number, label: string | Pointer, icon: Pointer, x: number, y: number, width: number, height: number, style: number): wxRibbonPanel | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxRibbonPanel_Create(parent, id, __s0 ? __s0.ptr : (label as Pointer), icon, x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxRibbonPanel(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

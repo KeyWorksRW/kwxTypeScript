@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxTempFile {
@@ -29,8 +30,14 @@ export class wxTempFile {
     this.Delete();
   }
 
-  Open(file_name: Pointer): boolean {
-    return (lib.symbols.wxTempFile_Open(this._ptr, file_name) as number) !== 0;
+  Open(file_name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      return (lib.symbols.wxTempFile_Open(this._ptr, __s0 ? __s0.ptr : (file_name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsOpened(): boolean {
@@ -53,8 +60,14 @@ export class wxTempFile {
     return (lib.symbols.wxTempFile_WriteBytes(this._ptr, buffer, size) as number) !== 0;
   }
 
-  WriteText(text: Pointer): boolean {
-    return (lib.symbols.wxTempFile_WriteText(this._ptr, text) as number) !== 0;
+  WriteText(text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxTempFile_WriteText(this._ptr, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Flush(): boolean {
@@ -77,10 +90,16 @@ export function createWxTempFile(): wxTempFile | null {
     return new wxTempFile(rawPtr);
 }
 
-export function createWxTempFileForName(file_name: Pointer): wxTempFile | null {
-    const rawPtr = lib.symbols.wxTempFile_CreateForName(file_name);
-    if (rawPtr === null) return null;
-    return new wxTempFile(rawPtr);
+export function createWxTempFileForName(file_name: string | Pointer): wxTempFile | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      const rawPtr = lib.symbols.wxTempFile_CreateForName(__s0 ? __s0.ptr : (file_name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxTempFile(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

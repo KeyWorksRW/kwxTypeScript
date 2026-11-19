@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxWindow } from "./wxWindow_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -22,8 +23,14 @@ export class wxHtmlHelpWindow extends wxWindow {
     this.Delete();
   }
 
-  Display(x: Pointer): boolean {
-    return (lib.symbols.wxHtmlHelpWindow_Display(this._ptr, x) as number) !== 0;
+  Display(x: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof x === "string") __s0 = createWxString(x);
+      return (lib.symbols.wxHtmlHelpWindow_Display(this._ptr, __s0 ? __s0.ptr : (x as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DisplayNumber(id: number): boolean {
@@ -38,20 +45,44 @@ export class wxHtmlHelpWindow extends wxWindow {
     return (lib.symbols.wxHtmlHelpWindow_DisplayIndex(this._ptr) as number) !== 0;
   }
 
-  KeywordSearch(keyword: Pointer, mode: number): boolean {
-    return (lib.symbols.wxHtmlHelpWindow_KeywordSearch(this._ptr, keyword, mode) as number) !== 0;
+  KeywordSearch(keyword: string | Pointer, mode: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keyword === "string") __s0 = createWxString(keyword);
+      return (lib.symbols.wxHtmlHelpWindow_KeywordSearch(this._ptr, __s0 ? __s0.ptr : (keyword as Pointer), mode) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ReadCustomization(cfg: Pointer, path: Pointer): void {
-    lib.symbols.wxHtmlHelpWindow_ReadCustomization(this._ptr, cfg, path);
+  ReadCustomization(cfg: Pointer, path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxHtmlHelpWindow_ReadCustomization(this._ptr, cfg, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  WriteCustomization(cfg: Pointer, path: Pointer): void {
-    lib.symbols.wxHtmlHelpWindow_WriteCustomization(this._ptr, cfg, path);
+  WriteCustomization(cfg: Pointer, path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxHtmlHelpWindow_WriteCustomization(this._ptr, cfg, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  UseConfig(config: Pointer, rootPath: Pointer): void {
-    lib.symbols.wxHtmlHelpWindow_UseConfig(this._ptr, config, rootPath);
+  UseConfig(config: Pointer, rootPath: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof rootPath === "string") __s0 = createWxString(rootPath);
+      lib.symbols.wxHtmlHelpWindow_UseConfig(this._ptr, config, __s0 ? __s0.ptr : (rootPath as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   NotifyPageChanged(): void {

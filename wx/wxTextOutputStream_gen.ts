@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxTextOutputStream {
@@ -29,8 +30,14 @@ export class wxTextOutputStream {
     this.Delete();
   }
 
-  WriteString(txt: Pointer): void {
-    lib.symbols.wxTextOutputStream_WriteString(this._ptr, txt);
+  WriteString(txt: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof txt === "string") __s0 = createWxString(txt);
+      lib.symbols.wxTextOutputStream_WriteString(this._ptr, __s0 ? __s0.ptr : (txt as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

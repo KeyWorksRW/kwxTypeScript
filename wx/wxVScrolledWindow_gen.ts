@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPanel } from "./wxPanel_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -12,8 +13,14 @@ export class wxVScrolledWindow extends wxPanel {
     return this._ptr;
   }
 
-  Create(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): boolean {
-    return (lib.symbols.wxVScrolledWindow_Create(this._ptr, parent, id, x, y, width, height, style, name) as number) !== 0;
+  Create(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxVScrolledWindow_Create(this._ptr, parent, id, x, y, width, height, style, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetRowCount(): bigint {

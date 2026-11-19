@@ -2,8 +2,10 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDC } from "./wxDC_gen.ts";
+import { wxMetafile } from "./wxMetafile_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
 
 export class wxMetafileDC extends wxDC {
@@ -22,16 +24,42 @@ export class wxMetafileDC extends wxDC {
     this.Delete();
   }
 
-  Close(): Pointer {
-    return lib.symbols.wxMetafileDC_Close(this._ptr);
+  Close(): wxMetafile | null {
+    const rawPtr = lib.symbols.wxMetafileDC_Close(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxMetafile(rawPtr);
   }
 
 }
 
-export function createWxMetafileDC(filePath: Pointer): wxMetafileDC | null {
-    const rawPtr = lib.symbols.wxMetafileDC_Create(filePath);
+export function createWxMetafileDC(filePath: string | Pointer): wxMetafileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filePath === "string") __s0 = createWxString(filePath);
+      const rawPtr = lib.symbols.wxMetafileDC_Create(__s0 ? __s0.ptr : (filePath as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMetafileDC(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
+}
+
+export function createWxMetafileDCDefault(): wxMetafileDC | null {
+    const rawPtr = lib.symbols.wxMetafileDC_CreateDefault();
     if (rawPtr === null) return null;
     return new wxMetafileDC(rawPtr);
+}
+
+export function createWxMetafileDCWithExtent(filePath: string | Pointer, xext: number, yext: number, xorg: number, yorg: number): wxMetafileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filePath === "string") __s0 = createWxString(filePath);
+      const rawPtr = lib.symbols.wxMetafileDC_CreateWithExtent(__s0 ? __s0.ptr : (filePath as Pointer), xext, yext, xorg, yorg);
+      if (rawPtr === null) return null;
+      return new wxMetafileDC(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -38,7 +39,7 @@ export class wxColour extends wxObject {
   GetAsString(flags: bigint): wxString | null {
     const rawPtr = lib.symbols.wxColour_GetAsString(this._ptr, flags);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Assign(other: Pointer): void {
@@ -69,8 +70,14 @@ export class wxColour extends wxObject {
     lib.symbols.wxColour_Set(this._ptr, red, green, blue, alpha);
   }
 
-  SetByName(name: Pointer): void {
-    lib.symbols.wxColour_SetByName(this._ptr, name);
+  SetByName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxColour_SetByName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
@@ -87,10 +94,16 @@ export function createWxColourFromUnsignedInt(rgba: number): wxColour | null {
     return new wxColour(rawPtr);
 }
 
-export function createWxColourByName(name: Pointer): wxColour | null {
-    const rawPtr = lib.symbols.wxColour_CreateByName(name);
-    if (rawPtr === null) return null;
-    return new wxColour(rawPtr);
+export function createWxColourByName(name: string | Pointer): wxColour | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxColour_CreateByName(__s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxColour(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxColourEmpty(): wxColour | null {

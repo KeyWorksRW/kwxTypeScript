@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxFilterClassFactoryBase } from "./wxFilterClassFactoryBase_gen.ts";
 import { wxArchiveEntry } from "./wxArchiveEntry_gen.ts";
@@ -33,10 +34,16 @@ export class wxArchiveClassFactory extends wxFilterClassFactoryBase {
     return new wxArchiveOutputStream(rawPtr);
   }
 
-  GetInternalName(name: Pointer, format: number): wxString | null {
-    const rawPtr = lib.symbols.wxArchiveClassFactory_GetInternalName(this._ptr, name, format);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetInternalName(name: string | Pointer, format: number): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxArchiveClassFactory_GetInternalName(this._ptr, __s0 ? __s0.ptr : (name as Pointer), format);
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetNext(): wxArchiveClassFactory | null {

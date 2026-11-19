@@ -115,6 +115,22 @@ export class wxScrolledWindow extends wxPanel {
     lib.symbols.wxScrolledWindow_GetViewStartPixels(this._ptr, x, y);
   }
 
+  EnableAutoScrollInside(insideWidth: number): void {
+    lib.symbols.wxScrolledWindow_EnableAutoScrollInside(this._ptr, insideWidth);
+  }
+
+  DisableAutoScrollOutside(): void {
+    lib.symbols.wxScrolledWindow_DisableAutoScrollOutside(this._ptr);
+  }
+
+  EnableAutoscrollWithoutCapture(): void {
+    lib.symbols.wxScrolledWindow_EnableAutoscrollWithoutCapture(this._ptr);
+  }
+
+  DisableAutoscrollWithoutCapture(): void {
+    lib.symbols.wxScrolledWindow_DisableAutoscrollWithoutCapture(this._ptr);
+  }
+
 }
 
 export function createWxScrolledWindow(parent: Pointer, id: number, left: number, top: number, width: number, height: number, style: number): wxScrolledWindow | null {

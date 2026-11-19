@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -30,18 +31,33 @@ export class wxExecuteEnv {
     this.Delete();
   }
 
-  SetCwd(cwd: Pointer): void {
-    lib.symbols.wxExecuteEnv_SetCwd(this._ptr, cwd);
+  SetCwd(cwd: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof cwd === "string") __s0 = createWxString(cwd);
+      lib.symbols.wxExecuteEnv_SetCwd(this._ptr, __s0 ? __s0.ptr : (cwd as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetCwd(): wxString | null {
     const rawPtr = lib.symbols.wxExecuteEnv_GetCwd(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  AddEnv(name: Pointer, value: Pointer): void {
-    lib.symbols.wxExecuteEnv_AddEnv(this._ptr, name, value);
+  AddEnv(name: string | Pointer, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof value === "string") __s1 = createWxString(value);
+      lib.symbols.wxExecuteEnv_AddEnv(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (value as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
 }

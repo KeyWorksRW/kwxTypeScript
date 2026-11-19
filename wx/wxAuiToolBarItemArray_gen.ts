@@ -41,7 +41,7 @@ export class wxAuiToolBarItemArray {
   Item(index: number): wxAuiToolBarItem | null {
     const rawPtr = lib.symbols.wxAuiToolBarItemArray_Item(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxAuiToolBarItem(rawPtr, true);
+    return new wxAuiToolBarItem(rawPtr);
   }
 
 }

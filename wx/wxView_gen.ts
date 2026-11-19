@@ -30,6 +30,22 @@ export class wxView extends wxEvtHandler {
     lib.symbols.wxView_SetOnOnUpdate(this._ptr, pFunction);
   }
 
+  SetOnOnCreateWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxView_SetOnOnCreateWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnCreateResult(result: boolean): void {
+    lib.symbols.wxView_SetOnCreateResult(this._ptr, result ? 1 : 0);
+  }
+
+  SetOnOnCloseWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxView_SetOnOnCloseWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnCloseResult(result: boolean): void {
+    lib.symbols.wxView_SetOnCloseResult(this._ptr, result ? 1 : 0);
+  }
+
   Activate(activate: boolean): void {
     lib.symbols.wxView_Activate(this._ptr, activate ? 1 : 0);
   }
@@ -52,6 +68,14 @@ export class wxView extends wxEvtHandler {
 
   SetFrame(frame: Pointer): void {
     lib.symbols.wxView_SetFrame(this._ptr, frame);
+  }
+
+  Close(deleteWindow: boolean): boolean {
+    return (lib.symbols.wxView_Close(this._ptr, deleteWindow ? 1 : 0) as number) !== 0;
+  }
+
+  CloseDefault(): boolean {
+    return (lib.symbols.wxView_CloseDefault(this._ptr) as number) !== 0;
   }
 
 }

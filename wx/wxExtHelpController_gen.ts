@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxHelpControllerBase } from "./wxHelpControllerBase_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -34,28 +35,58 @@ export class wxExtHelpController extends wxHelpControllerBase {
     return (lib.symbols.wxExtHelpController_DisplaySection(this._ptr, section_no) as number) !== 0;
   }
 
-  DisplaySectionName(section: Pointer): boolean {
-    return (lib.symbols.wxExtHelpController_DisplaySectionName(this._ptr, section) as number) !== 0;
+  DisplaySectionName(section: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof section === "string") __s0 = createWxString(section);
+      return (lib.symbols.wxExtHelpController_DisplaySectionName(this._ptr, __s0 ? __s0.ptr : (section as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Initialize(dir: Pointer): boolean {
-    return (lib.symbols.wxExtHelpController_Initialize(this._ptr, dir) as number) !== 0;
+  Initialize(dir: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      return (lib.symbols.wxExtHelpController_Initialize(this._ptr, __s0 ? __s0.ptr : (dir as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  override KeywordSearch(keyword: Pointer, mode: number): boolean {
-    return (lib.symbols.wxExtHelpController_KeywordSearch(this._ptr, keyword, mode) as number) !== 0;
+  override KeywordSearch(keyword: string | Pointer, mode: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keyword === "string") __s0 = createWxString(keyword);
+      return (lib.symbols.wxExtHelpController_KeywordSearch(this._ptr, __s0 ? __s0.ptr : (keyword as Pointer), mode) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadFile(file: Pointer): boolean {
-    return (lib.symbols.wxExtHelpController_LoadFile(this._ptr, file) as number) !== 0;
+  LoadFile(file: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      return (lib.symbols.wxExtHelpController_LoadFile(this._ptr, __s0 ? __s0.ptr : (file as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Quit(): boolean {
     return (lib.symbols.wxExtHelpController_Quit(this._ptr) as number) !== 0;
   }
 
-  SetViewer(viewer: Pointer, flags: bigint): void {
-    lib.symbols.wxExtHelpController_SetViewer(this._ptr, viewer, flags);
+  SetViewer(viewer: string | Pointer, flags: bigint): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof viewer === "string") __s0 = createWxString(viewer);
+      lib.symbols.wxExtHelpController_SetViewer(this._ptr, __s0 ? __s0.ptr : (viewer as Pointer), flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

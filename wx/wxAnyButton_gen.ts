@@ -17,49 +17,49 @@ export class wxAnyButton extends wxControl {
   GetBitmap(): wxBitmap | null {
     const rawPtr = lib.symbols.wxAnyButton_GetBitmap(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapLabel(): wxBitmap | null {
     const rawPtr = lib.symbols.wxAnyButton_GetBitmapLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapPressed(): wxBitmap | null {
     const rawPtr = lib.symbols.wxAnyButton_GetBitmapPressed(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapDisabled(): wxBitmap | null {
     const rawPtr = lib.symbols.wxAnyButton_GetBitmapDisabled(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapCurrent(): wxBitmap | null {
     const rawPtr = lib.symbols.wxAnyButton_GetBitmapCurrent(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapFocus(): wxBitmap | null {
     const rawPtr = lib.symbols.wxAnyButton_GetBitmapFocus(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapSelected(): wxBitmap | null {
     const rawPtr = lib.symbols.wxAnyButton_GetBitmapSelected(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapHover(): wxBitmap | null {
     const rawPtr = lib.symbols.wxAnyButton_GetBitmapHover(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   SetBitmap(bitmap: Pointer, dir: number): void {
@@ -101,7 +101,7 @@ export class wxAnyButton extends wxControl {
   GetBitmapMargins(): wxSize | null {
     const rawPtr = lib.symbols.wxAnyButton_GetBitmapMargins(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetBitmapPosition(dir: number): void {

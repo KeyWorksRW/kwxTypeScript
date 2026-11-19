@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -28,10 +29,16 @@ export class wxPrintAbortDialog extends wxDialog {
 
 }
 
-export function createWxPrintAbortDialog(parent: Pointer, document_title: Pointer, x: number, y: number, width: number, height: number, style: number): wxPrintAbortDialog | null {
-    const rawPtr = lib.symbols.wxPrintAbortDialog_Create(parent, document_title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxPrintAbortDialog(rawPtr);
+export function createWxPrintAbortDialog(parent: Pointer, document_title: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxPrintAbortDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof document_title === "string") __s0 = createWxString(document_title);
+      const rawPtr = lib.symbols.wxPrintAbortDialog_Create(parent, __s0 ? __s0.ptr : (document_title as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxPrintAbortDialog(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxFSFile } from "./wxFSFile_gen.ts";
@@ -24,44 +25,74 @@ export class wxFileSystem extends wxObject {
     this.Delete();
   }
 
-  ChangePathTo(location: Pointer, is_dir: boolean): void {
-    lib.symbols.wxFileSystem_ChangePathTo(this._ptr, location, is_dir ? 1 : 0);
+  ChangePathTo(location: string | Pointer, is_dir: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof location === "string") __s0 = createWxString(location);
+      lib.symbols.wxFileSystem_ChangePathTo(this._ptr, __s0 ? __s0.ptr : (location as Pointer), is_dir ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxFileSystem_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  OpenFile(location: Pointer, flags: number): wxFSFile | null {
-    const rawPtr = lib.symbols.wxFileSystem_OpenFile(this._ptr, location, flags);
-    if (rawPtr === null) return null;
-    return new wxFSFile(rawPtr, true);
+  OpenFile(location: string | Pointer, flags: number): wxFSFile | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof location === "string") __s0 = createWxString(location);
+      const rawPtr = lib.symbols.wxFileSystem_OpenFile(this._ptr, __s0 ? __s0.ptr : (location as Pointer), flags);
+      if (rawPtr === null) return null;
+      return new wxFSFile(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FindFirst(spec: Pointer, flags: number): wxString | null {
-    const rawPtr = lib.symbols.wxFileSystem_FindFirst(this._ptr, spec, flags);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  FindFirst(spec: string | Pointer, flags: number): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof spec === "string") __s0 = createWxString(spec);
+      const rawPtr = lib.symbols.wxFileSystem_FindFirst(this._ptr, __s0 ? __s0.ptr : (spec as Pointer), flags);
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   FindNext(): wxString | null {
     const rawPtr = lib.symbols.wxFileSystem_FindNext(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  FileNameToURL(file_name: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxFileSystem_FileNameToURL(this._ptr, file_name);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  FileNameToURL(file_name: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      const rawPtr = lib.symbols.wxFileSystem_FileNameToURL(this._ptr, __s0 ? __s0.ptr : (file_name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  URLToFileName(url: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxFileSystem_URLToFileName(this._ptr, url);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  URLToFileName(url: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof url === "string") __s0 = createWxString(url);
+      const rawPtr = lib.symbols.wxFileSystem_URLToFileName(this._ptr, __s0 ? __s0.ptr : (url as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

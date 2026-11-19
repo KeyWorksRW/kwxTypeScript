@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxSize } from "./wxSize_gen.ts";
@@ -31,7 +32,7 @@ export class wxFont extends wxObject {
   GetPixelSize(): wxSize | null {
     const rawPtr = lib.symbols.wxFont_GetPixelSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   IsUsingSizeInPixels(): boolean {
@@ -49,13 +50,13 @@ export class wxFont extends wxObject {
   GetNativeFontInfoDesc(): wxString | null {
     const rawPtr = lib.symbols.wxFont_GetNativeFontInfoDesc(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNativeFontInfoUserDesc(): wxString | null {
     const rawPtr = lib.symbols.wxFont_GetNativeFontInfoUserDesc(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsFixedWidth(): boolean {
@@ -78,12 +79,24 @@ export class wxFont extends wxObject {
     lib.symbols.wxFont_SetStrikethrough(this._ptr, strikethrough ? 1 : 0);
   }
 
-  SetNativeFontInfo(info: Pointer): boolean {
-    return (lib.symbols.wxFont_SetNativeFontInfo(this._ptr, info) as number) !== 0;
+  SetNativeFontInfo(info: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof info === "string") __s0 = createWxString(info);
+      return (lib.symbols.wxFont_SetNativeFontInfo(this._ptr, __s0 ? __s0.ptr : (info as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetNativeFontInfoUserDesc(info: Pointer): boolean {
-    return (lib.symbols.wxFont_SetNativeFontInfoUserDesc(this._ptr, info) as number) !== 0;
+  SetNativeFontInfoUserDesc(info: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof info === "string") __s0 = createWxString(info);
+      return (lib.symbols.wxFont_SetNativeFontInfoUserDesc(this._ptr, __s0 ? __s0.ptr : (info as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetSymbolicSize(size: number): void {
@@ -125,49 +138,49 @@ export class wxFont extends wxObject {
   Bold(): wxFont | null {
     const rawPtr = lib.symbols.wxFont_Bold(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   Italic(): wxFont | null {
     const rawPtr = lib.symbols.wxFont_Italic(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   Underlined(): wxFont | null {
     const rawPtr = lib.symbols.wxFont_Underlined(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   Strikethrough(): wxFont | null {
     const rawPtr = lib.symbols.wxFont_Strikethrough(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   Larger(): wxFont | null {
     const rawPtr = lib.symbols.wxFont_Larger(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   Smaller(): wxFont | null {
     const rawPtr = lib.symbols.wxFont_Smaller(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   Scaled(factor: number): wxFont | null {
     const rawPtr = lib.symbols.wxFont_Scaled(this._ptr, factor);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   GetBaseFont(): wxFont | null {
     const rawPtr = lib.symbols.wxFont_GetBaseFont(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   IsEqual(font: Pointer): boolean {
@@ -189,7 +202,7 @@ export class wxFont extends wxObject {
   GetFaceName(): wxString | null {
     const rawPtr = lib.symbols.wxFont_GetFaceName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFamily(): number {
@@ -199,7 +212,7 @@ export class wxFont extends wxObject {
   GetFamilyString(): wxString | null {
     const rawPtr = lib.symbols.wxFont_GetFamilyString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPointSize(): number {
@@ -213,7 +226,7 @@ export class wxFont extends wxObject {
   GetStyleString(): wxString | null {
     const rawPtr = lib.symbols.wxFont_GetStyleString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUnderlined(): boolean {
@@ -227,7 +240,7 @@ export class wxFont extends wxObject {
   GetWeightString(): wxString | null {
     const rawPtr = lib.symbols.wxFont_GetWeightString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsOk(): boolean {
@@ -242,8 +255,14 @@ export class wxFont extends wxObject {
     lib.symbols.wxFont_SetEncoding(this._ptr, encoding);
   }
 
-  SetFaceName(faceName: Pointer): void {
-    lib.symbols.wxFont_SetFaceName(this._ptr, faceName);
+  SetFaceName(faceName: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof faceName === "string") __s0 = createWxString(faceName);
+      lib.symbols.wxFont_SetFaceName(this._ptr, __s0 ? __s0.ptr : (faceName as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFamily(family: number): void {
@@ -268,10 +287,16 @@ export class wxFont extends wxObject {
 
 }
 
-export function createWxFont(pointSize: number, family: number, style: number, weight: number, underlined: boolean, face: Pointer, enc: number): wxFont | null {
-    const rawPtr = lib.symbols.wxFont_Create(pointSize, family, style, weight, underlined ? 1 : 0, face, enc);
-    if (rawPtr === null) return null;
-    return new wxFont(rawPtr);
+export function createWxFont(pointSize: number, family: number, style: number, weight: number, underlined: boolean, face: string | Pointer, enc: number): wxFont | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof face === "string") __s0 = createWxString(face);
+      const rawPtr = lib.symbols.wxFont_Create(pointSize, family, style, weight, underlined ? 1 : 0, __s0 ? __s0.ptr : (face as Pointer), enc);
+      if (rawPtr === null) return null;
+      return new wxFont(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxFontFromStock(id: number): wxFont | null {

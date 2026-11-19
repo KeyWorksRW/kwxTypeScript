@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxArrayString } from "./wxArrayString_gen.ts";
@@ -36,50 +37,119 @@ export class wxRichTextProperties extends wxObject {
     return lib.symbols.wxRichTextProperties_GetCount(this._ptr) as bigint;
   }
 
-  HasProperty(name: Pointer): boolean {
-    return (lib.symbols.wxRichTextProperties_HasProperty(this._ptr, name) as number) !== 0;
+  HasProperty(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxRichTextProperties_HasProperty(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Find(name: Pointer): number {
-    return lib.symbols.wxRichTextProperties_Find(this._ptr, name);
+  Find(name: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxRichTextProperties_Find(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Remove(name: Pointer): boolean {
-    return (lib.symbols.wxRichTextProperties_Remove(this._ptr, name) as number) !== 0;
+  Remove(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxRichTextProperties_Remove(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetPropertyString(name: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxRichTextProperties_GetPropertyString(this._ptr, name);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetPropertyString(name: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextProperties_GetPropertyString(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetPropertyLong(name: Pointer): bigint {
-    return lib.symbols.wxRichTextProperties_GetPropertyLong(this._ptr, name) as bigint;
+  GetPropertyLong(name: string | Pointer): bigint {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxRichTextProperties_GetPropertyLong(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as bigint;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetPropertyBool(name: Pointer): boolean {
-    return (lib.symbols.wxRichTextProperties_GetPropertyBool(this._ptr, name) as number) !== 0;
+  GetPropertyBool(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxRichTextProperties_GetPropertyBool(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetPropertyDouble(name: Pointer): number {
-    return lib.symbols.wxRichTextProperties_GetPropertyDouble(this._ptr, name);
+  GetPropertyDouble(name: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxRichTextProperties_GetPropertyDouble(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPropertyString(name: Pointer, value: Pointer): void {
-    lib.symbols.wxRichTextProperties_SetPropertyString(this._ptr, name, value);
+  SetPropertyString(name: string | Pointer, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof value === "string") __s1 = createWxString(value);
+      lib.symbols.wxRichTextProperties_SetPropertyString(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (value as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetPropertyLong(name: Pointer, value: bigint): void {
-    lib.symbols.wxRichTextProperties_SetPropertyLong(this._ptr, name, value);
+  SetPropertyLong(name: string | Pointer, value: bigint): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxRichTextProperties_SetPropertyLong(this._ptr, __s0 ? __s0.ptr : (name as Pointer), value);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPropertyBool(name: Pointer, value: boolean): void {
-    lib.symbols.wxRichTextProperties_SetPropertyBool(this._ptr, name, value ? 1 : 0);
+  SetPropertyBool(name: string | Pointer, value: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxRichTextProperties_SetPropertyBool(this._ptr, __s0 ? __s0.ptr : (name as Pointer), value ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPropertyDouble(name: Pointer, value: number): void {
-    lib.symbols.wxRichTextProperties_SetPropertyDouble(this._ptr, name, value);
+  SetPropertyDouble(name: string | Pointer, value: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxRichTextProperties_SetPropertyDouble(this._ptr, __s0 ? __s0.ptr : (name as Pointer), value);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetPropertyNames(): wxArrayString | null {

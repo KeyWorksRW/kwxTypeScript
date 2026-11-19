@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -71,31 +72,49 @@ export class wxAppConsole {
   GetAppName(): wxString | null {
     const rawPtr = lib.symbols.wxAppConsole_GetAppName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetAppName(name: Pointer): void {
-    lib.symbols.wxAppConsole_SetAppName(this._ptr, name);
+  SetAppName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxAppConsole_SetAppName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetAppDisplayName(): wxString | null {
     const rawPtr = lib.symbols.wxAppConsole_GetAppDisplayName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetAppDisplayName(name: Pointer): void {
-    lib.symbols.wxAppConsole_SetAppDisplayName(this._ptr, name);
+  SetAppDisplayName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxAppConsole_SetAppDisplayName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetVendorName(): wxString | null {
     const rawPtr = lib.symbols.wxAppConsole_GetVendorName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetVendorName(name: Pointer): void {
-    lib.symbols.wxAppConsole_SetVendorName(this._ptr, name);
+  SetVendorName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxAppConsole_SetVendorName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ExitMainLoop(): void {

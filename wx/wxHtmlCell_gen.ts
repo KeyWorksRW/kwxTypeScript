@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxPoint } from "./wxPoint_gen.ts";
@@ -88,15 +89,21 @@ export class wxHtmlCell extends wxObject {
   GetId(): wxString | null {
     const rawPtr = lib.symbols.wxHtmlCell_GetId(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   HasId(): boolean {
     return (lib.symbols.wxHtmlCell_HasId(this._ptr) as number) !== 0;
   }
 
-  SetId(id: Pointer): void {
-    lib.symbols.wxHtmlCell_SetId(this._ptr, id);
+  SetId(id: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof id === "string") __s0 = createWxString(id);
+      lib.symbols.wxHtmlCell_SetId(this._ptr, __s0 ? __s0.ptr : (id as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetLink(x: number, y: number): Pointer {
@@ -134,13 +141,13 @@ export class wxHtmlCell extends wxObject {
   GetAbsPos(rootCell: Pointer): wxPoint | null {
     const rawPtr = lib.symbols.wxHtmlCell_GetAbsPos(this._ptr, rootCell);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetRect(rootCell: Pointer): wxRect | null {
     const rawPtr = lib.symbols.wxHtmlCell_GetRect(this._ptr, rootCell);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetRootCell(): Pointer {
@@ -166,13 +173,13 @@ export class wxHtmlCell extends wxObject {
   ConvertToText(sel: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxHtmlCell_ConvertToText(this._ptr, sel);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Dump(indent: number): wxString | null {
     const rawPtr = lib.symbols.wxHtmlCell_Dump(this._ptr, indent);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

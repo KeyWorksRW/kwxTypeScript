@@ -40,7 +40,7 @@ export class wxJoystickEvent extends wxEvent {
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxJoystickEvent_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetZPosition(): number {

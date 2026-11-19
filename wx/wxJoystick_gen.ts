@@ -75,7 +75,7 @@ export class wxJoystick extends wxObject {
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxJoystick_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetProductId(): number {
@@ -85,7 +85,7 @@ export class wxJoystick extends wxObject {
   GetProductName(): wxString | null {
     const rawPtr = lib.symbols.wxJoystick_GetProductName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetRudderMax(): number {

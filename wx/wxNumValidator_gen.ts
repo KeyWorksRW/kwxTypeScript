@@ -74,6 +74,10 @@ export class wxNumValidator extends wxValidator {
     lib.symbols.wxNumValidator_SetMinDouble(this._ptr, min_value);
   }
 
+  SetPrecision(precision: number): void {
+    lib.symbols.wxNumValidator_SetPrecision(this._ptr, precision);
+  }
+
   SetRange(min_value: bigint, max_value: bigint): void {
     lib.symbols.wxNumValidator_SetRange(this._ptr, min_value, max_value);
   }

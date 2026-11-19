@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextFileHandler } from "./wxRichTextFileHandler_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -24,10 +25,19 @@ export class wxRichTextXMLHandler extends wxRichTextFileHandler {
 
 }
 
-export function createWxRichTextXMLHandler(name: Pointer, ext: Pointer, type_: number): wxRichTextXMLHandler | null {
-    const rawPtr = lib.symbols.wxRichTextXMLHandler_Create(name, ext, type_);
-    if (rawPtr === null) return null;
-    return new wxRichTextXMLHandler(rawPtr);
+export function createWxRichTextXMLHandler(name: string | Pointer, ext: string | Pointer, type_: number): wxRichTextXMLHandler | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof ext === "string") __s1 = createWxString(ext);
+      const rawPtr = lib.symbols.wxRichTextXMLHandler_Create(__s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (ext as Pointer), type_);
+      if (rawPtr === null) return null;
+      return new wxRichTextXMLHandler(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

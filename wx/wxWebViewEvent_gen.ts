@@ -16,13 +16,13 @@ export class wxWebViewEvent extends wxNotifyEvent {
   GetURL(): wxString | null {
     const rawPtr = lib.symbols.wxWebViewEvent_GetURL(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMessageHandler(): wxString | null {
     const rawPtr = lib.symbols.wxWebViewEvent_GetMessageHandler(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetTargetWindowFeatures(): Pointer {
@@ -40,7 +40,7 @@ export class wxWebViewEvent extends wxNotifyEvent {
   GetTarget(): wxString | null {
     const rawPtr = lib.symbols.wxWebViewEvent_GetTarget(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNavigationAction(): number {
@@ -54,7 +54,7 @@ export class wxWebViewEvent extends wxNotifyEvent {
   override GetString(): wxString | null {
     const rawPtr = lib.symbols.wxWebViewEvent_GetString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

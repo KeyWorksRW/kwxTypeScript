@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxRichTextCtrl } from "./wxRichTextCtrl_gen.ts";
@@ -73,7 +74,7 @@ export class wxRichTextStyleOrganiserDialog extends wxDialog {
   GetSelectedStyle(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextStyleOrganiserDialog_GetSelectedStyle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetSelectedStyleDefinition(): wxRichTextStyleDefinition | null {
@@ -88,10 +89,16 @@ export class wxRichTextStyleOrganiserDialog extends wxDialog {
 
 }
 
-export function createWxRichTextStyleOrganiserDialog(flags: number, sheet: Pointer, ctrl: Pointer, parent: Pointer, id: number, caption: Pointer, x: number, y: number, w: number, h: number, style: bigint): wxRichTextStyleOrganiserDialog | null {
-    const rawPtr = lib.symbols.wxRichTextStyleOrganiserDialog_Create(flags, sheet, ctrl, parent, id, caption, x, y, w, h, style);
-    if (rawPtr === null) return null;
-    return new wxRichTextStyleOrganiserDialog(rawPtr);
+export function createWxRichTextStyleOrganiserDialog(flags: number, sheet: Pointer, ctrl: Pointer, parent: Pointer, id: number, caption: string | Pointer, x: number, y: number, w: number, h: number, style: bigint): wxRichTextStyleOrganiserDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof caption === "string") __s0 = createWxString(caption);
+      const rawPtr = lib.symbols.wxRichTextStyleOrganiserDialog_Create(flags, sheet, ctrl, parent, id, __s0 ? __s0.ptr : (caption as Pointer), x, y, w, h, style);
+      if (rawPtr === null) return null;
+      return new wxRichTextStyleOrganiserDialog(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

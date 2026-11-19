@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxBitmapBundle } from "./wxBitmapBundle_gen.ts";
 import { wxColour } from "./wxColour_gen.ts";
@@ -49,8 +50,14 @@ export class wxPGCell {
     lib.symbols.wxPGCell_MergeFrom(this._ptr, srcCell);
   }
 
-  SetText(text: Pointer): void {
-    lib.symbols.wxPGCell_SetText(this._ptr, text);
+  SetText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxPGCell_SetText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetBitmap(bitmap: Pointer): void {
@@ -72,31 +79,31 @@ export class wxPGCell {
   GetText(): wxString | null {
     const rawPtr = lib.symbols.wxPGCell_GetText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetBitmap(): wxBitmapBundle | null {
     const rawPtr = lib.symbols.wxPGCell_GetBitmap(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmapBundle(rawPtr, true);
+    return new wxBitmapBundle(rawPtr);
   }
 
   GetFgCol(): wxColour | null {
     const rawPtr = lib.symbols.wxPGCell_GetFgCol(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetBgCol(): wxColour | null {
     const rawPtr = lib.symbols.wxPGCell_GetBgCol(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetFont(): wxFont | null {
     const rawPtr = lib.symbols.wxPGCell_GetFont(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
 }
@@ -107,10 +114,16 @@ export function createWxPGCell(): wxPGCell | null {
     return new wxPGCell(rawPtr);
 }
 
-export function createWxPGCellWithText(text: Pointer): wxPGCell | null {
-    const rawPtr = lib.symbols.wxPGCell_CreateWithText(text);
-    if (rawPtr === null) return null;
-    return new wxPGCell(rawPtr);
+export function createWxPGCellWithText(text: string | Pointer): wxPGCell | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxPGCell_CreateWithText(__s0 ? __s0.ptr : (text as Pointer));
+      if (rawPtr === null) return null;
+      return new wxPGCell(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

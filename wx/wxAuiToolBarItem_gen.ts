@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxSize } from "./wxSize_gen.ts";
 import { wxSizerItem } from "./wxSizerItem_gen.ts";
@@ -23,10 +24,20 @@ export class wxAuiToolBarItem {
     return this._ptr;
   }
 
+  Delete(): void {
+    if (this._disposed || this._borrowed) return;
+    this._disposed = true;
+    lib.symbols.wxAuiToolBarItem_Delete(this._ptr);
+  }
+
+  [Symbol.dispose](): void {
+    this.Delete();
+  }
+
   Copy(source: Pointer): wxAuiToolBarItem | null {
     const rawPtr = lib.symbols.wxAuiToolBarItem_Copy(this._ptr, source);
     if (rawPtr === null) return null;
-    return new wxAuiToolBarItem(rawPtr, true);
+    return new wxAuiToolBarItem(rawPtr);
   }
 
   Assign(source: Pointer): void {
@@ -77,14 +88,20 @@ export class wxAuiToolBarItem {
     return new wxSizerItem(rawPtr, true);
   }
 
-  SetLabel(label: Pointer): void {
-    lib.symbols.wxAuiToolBarItem_SetLabel(this._ptr, label);
+  SetLabel(label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxAuiToolBarItem_SetLabel(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetLabel(): wxString | null {
     const rawPtr = lib.symbols.wxAuiToolBarItem_GetLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetBitmap(bitmap: Pointer): void {
@@ -111,24 +128,36 @@ export class wxAuiToolBarItem {
     lib.symbols.wxAuiToolBarItem_GetHoverBitmap(this._ptr, ref);
   }
 
-  SetShortHelp(helpString: Pointer): void {
-    lib.symbols.wxAuiToolBarItem_SetShortHelp(this._ptr, helpString);
+  SetShortHelp(helpString: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof helpString === "string") __s0 = createWxString(helpString);
+      lib.symbols.wxAuiToolBarItem_SetShortHelp(this._ptr, __s0 ? __s0.ptr : (helpString as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetShortHelp(): wxString | null {
     const rawPtr = lib.symbols.wxAuiToolBarItem_GetShortHelp(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetLongHelp(helpString: Pointer): void {
-    lib.symbols.wxAuiToolBarItem_SetLongHelp(this._ptr, helpString);
+  SetLongHelp(helpString: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof helpString === "string") __s0 = createWxString(helpString);
+      lib.symbols.wxAuiToolBarItem_SetLongHelp(this._ptr, __s0 ? __s0.ptr : (helpString as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetLongHelp(): wxString | null {
     const rawPtr = lib.symbols.wxAuiToolBarItem_GetLongHelp(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetMinSize(width: number, height: number): void {
@@ -138,7 +167,7 @@ export class wxAuiToolBarItem {
   GetMinSize(): wxSize | null {
     const rawPtr = lib.symbols.wxAuiToolBarItem_GetMinSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetSpacerPixels(spacerPixels: number): void {

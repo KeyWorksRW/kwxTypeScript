@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -23,8 +24,14 @@ export class wxFileHistory extends wxObject {
     this.Delete();
   }
 
-  AddFileToHistory(file: Pointer): void {
-    lib.symbols.wxFileHistory_AddFileToHistory(this._ptr, file);
+  AddFileToHistory(file: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      lib.symbols.wxFileHistory_AddFileToHistory(this._ptr, __s0 ? __s0.ptr : (file as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddFilesToMenu(menu: Pointer): void {
@@ -42,7 +49,7 @@ export class wxFileHistory extends wxObject {
   GetHistoryFile(index: number): wxString | null {
     const rawPtr = lib.symbols.wxFileHistory_GetHistoryFile(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMaxFiles(): number {

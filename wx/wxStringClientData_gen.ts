@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxClientData } from "./wxClientData_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -25,11 +26,17 @@ export class wxStringClientData extends wxClientData {
   GetData(): wxString | null {
     const rawPtr = lib.symbols.wxStringClientData_GetData(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetData(data: Pointer): void {
-    lib.symbols.wxStringClientData_SetData(this._ptr, data);
+  SetData(data: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof data === "string") __s0 = createWxString(data);
+      lib.symbols.wxStringClientData_SetData(this._ptr, __s0 ? __s0.ptr : (data as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
@@ -40,10 +47,16 @@ export function createWxStringClientData(): wxStringClientData | null {
     return new wxStringClientData(rawPtr);
 }
 
-export function createWxStringClientDataWithData(data: Pointer): wxStringClientData | null {
-    const rawPtr = lib.symbols.wxStringClientData_CreateWithData(data);
-    if (rawPtr === null) return null;
-    return new wxStringClientData(rawPtr);
+export function createWxStringClientDataWithData(data: string | Pointer): wxStringClientData | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof data === "string") __s0 = createWxString(data);
+      const rawPtr = lib.symbols.wxStringClientData_CreateWithData(__s0 ? __s0.ptr : (data as Pointer));
+      if (rawPtr === null) return null;
+      return new wxStringClientData(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

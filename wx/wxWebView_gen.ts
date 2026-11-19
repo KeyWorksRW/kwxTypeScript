@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -17,12 +18,24 @@ export class wxWebView extends wxControl {
     lib.symbols.wxWebView_RegisterHandler(this._ptr, handler);
   }
 
-  AddScriptMessageHandler(name: Pointer): boolean {
-    return (lib.symbols.wxWebView_AddScriptMessageHandler(this._ptr, name) as number) !== 0;
+  AddScriptMessageHandler(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxWebView_AddScriptMessageHandler(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddUserScript(javascript: Pointer, injectionTime: number): boolean {
-    return (lib.symbols.wxWebView_AddUserScript(this._ptr, javascript, injectionTime) as number) !== 0;
+  AddUserScript(javascript: string | Pointer, injectionTime: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof javascript === "string") __s0 = createWxString(javascript);
+      return (lib.symbols.wxWebView_AddUserScript(this._ptr, __s0 ? __s0.ptr : (javascript as Pointer), injectionTime) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AreBrowserAcceleratorKeysEnabled(): boolean {
@@ -60,7 +73,7 @@ export class wxWebView extends wxControl {
   GetUserAgent(): wxString | null {
     const rawPtr = lib.symbols.wxWebView_GetUserAgent(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Redo(): void {
@@ -71,12 +84,24 @@ export class wxWebView extends wxControl {
     lib.symbols.wxWebView_SelectAll(this._ptr);
   }
 
-  SetProxy(proxy: Pointer): boolean {
-    return (lib.symbols.wxWebView_SetProxy(this._ptr, proxy) as number) !== 0;
+  SetProxy(proxy: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof proxy === "string") __s0 = createWxString(proxy);
+      return (lib.symbols.wxWebView_SetProxy(this._ptr, __s0 ? __s0.ptr : (proxy as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetUserAgent(userAgent: Pointer): boolean {
-    return (lib.symbols.wxWebView_SetUserAgent(this._ptr, userAgent) as number) !== 0;
+  SetUserAgent(userAgent: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof userAgent === "string") __s0 = createWxString(userAgent);
+      return (lib.symbols.wxWebView_SetUserAgent(this._ptr, __s0 ? __s0.ptr : (userAgent as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ShowDevTools(): boolean {
@@ -87,8 +112,14 @@ export class wxWebView extends wxControl {
     lib.symbols.wxWebView_Undo(this._ptr);
   }
 
-  LoadURL(url: Pointer): void {
-    lib.symbols.wxWebView_LoadURL(this._ptr, url);
+  LoadURL(url: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof url === "string") __s0 = createWxString(url);
+      lib.symbols.wxWebView_LoadURL(this._ptr, __s0 ? __s0.ptr : (url as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GoBack(): void {
@@ -118,37 +149,55 @@ export class wxWebView extends wxControl {
   GetCurrentURL(): wxString | null {
     const rawPtr = lib.symbols.wxWebView_GetCurrentURL(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetCurrentTitle(): wxString | null {
     const rawPtr = lib.symbols.wxWebView_GetCurrentTitle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPageSource(): wxString | null {
     const rawPtr = lib.symbols.wxWebView_GetPageSource(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPageText(): wxString | null {
     const rawPtr = lib.symbols.wxWebView_GetPageText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsBusy(): boolean {
     return (lib.symbols.wxWebView_IsBusy(this._ptr) as number) !== 0;
   }
 
-  SetPage(html: Pointer, baseUrl: Pointer): void {
-    lib.symbols.wxWebView_SetPage(this._ptr, html, baseUrl);
+  SetPage(html: string | Pointer, baseUrl: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof html === "string") __s0 = createWxString(html);
+      if (typeof baseUrl === "string") __s1 = createWxString(baseUrl);
+      lib.symbols.wxWebView_SetPage(this._ptr, __s0 ? __s0.ptr : (html as Pointer), __s1 ? __s1.ptr : (baseUrl as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  RunScript(javascript: Pointer, output: Pointer): boolean {
-    return (lib.symbols.wxWebView_RunScript(this._ptr, javascript, output) as number) !== 0;
+  RunScript(javascript: string | Pointer, output: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof javascript === "string") __s0 = createWxString(javascript);
+      if (typeof output === "string") __s1 = createWxString(output);
+      return (lib.symbols.wxWebView_RunScript(this._ptr, __s0 ? __s0.ptr : (javascript as Pointer), __s1 ? __s1.ptr : (output as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   SetZoom(zoom: number): void {
@@ -210,13 +259,13 @@ export class wxWebView extends wxControl {
   GetSelectedText(): wxString | null {
     const rawPtr = lib.symbols.wxWebView_GetSelectedText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetSelectedSource(): wxString | null {
     const rawPtr = lib.symbols.wxWebView_GetSelectedSource(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   ClearSelection(): void {
@@ -227,8 +276,14 @@ export class wxWebView extends wxControl {
     return (lib.symbols.wxWebView_HasSelection(this._ptr) as number) !== 0;
   }
 
-  Find(text: Pointer, flags: number): bigint {
-    return lib.symbols.wxWebView_Find(this._ptr, text, flags) as bigint;
+  Find(text: string | Pointer, flags: number): bigint {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxWebView_Find(this._ptr, __s0 ? __s0.ptr : (text as Pointer), flags) as bigint;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Print(): void {

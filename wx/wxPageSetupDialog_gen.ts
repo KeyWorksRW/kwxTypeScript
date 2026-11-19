@@ -16,7 +16,7 @@ export class wxPageSetupDialog extends wxObject {
   GetPageSetupDialogData(): wxPageSetupDialogData | null {
     const rawPtr = lib.symbols.wxPageSetupDialog_GetPageSetupDialogData(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPageSetupDialogData(rawPtr, true);
+    return new wxPageSetupDialogData(rawPtr);
   }
 
   GetPageSetupData(ref: Pointer): void {

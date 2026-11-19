@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxWindow } from "./wxWindow_gen.ts";
@@ -33,8 +34,14 @@ export class wxGenericAboutDialog extends wxDialog {
     return new wxWindow(rawPtr, true);
   }
 
-  AddText(text: Pointer): boolean {
-    return (lib.symbols.wxGenericAboutDialog_AddText(this._ptr, text) as number) !== 0;
+  AddText(text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxGenericAboutDialog_AddText(this._ptr, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override ShowModal(): number {

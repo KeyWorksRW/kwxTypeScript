@@ -38,12 +38,52 @@ export class kwxRichTextCtrl extends wxRichTextCtrl {
     lib.symbols.kwxRichTextCtrl_SetOnCanInsertContent(this._ptr, pFunction);
   }
 
+  SetOnPrepareContentWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextCtrl_SetOnPrepareContentWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnCanDeleteRangeWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextCtrl_SetOnCanDeleteRangeWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnCanInsertContentWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextCtrl_SetOnCanInsertContentWithData(this._ptr, pFunction, data);
+  }
+
   SetCanDeleteRangeResult(result: boolean): void {
     lib.symbols.kwxRichTextCtrl_SetCanDeleteRangeResult(this._ptr, result ? 1 : 0);
   }
 
   SetCanInsertContentResult(result: boolean): void {
     lib.symbols.kwxRichTextCtrl_SetCanInsertContentResult(this._ptr, result ? 1 : 0);
+  }
+
+  SetCallbackObject(object: Pointer): void {
+    lib.symbols.kwxRichTextCtrl_SetCallbackObject(this._ptr, object);
+  }
+
+  GetCallbackObject(): Pointer {
+    return lib.symbols.kwxRichTextCtrl_GetCallbackObject(this._ptr);
+  }
+
+  SetLockId(id: bigint): void {
+    lib.symbols.kwxRichTextCtrl_SetLockId(this._ptr, id);
+  }
+
+  GetLockId(): bigint {
+    return lib.symbols.kwxRichTextCtrl_GetLockId(this._ptr) as bigint;
+  }
+
+  BeginLock(): void {
+    lib.symbols.kwxRichTextCtrl_BeginLock(this._ptr);
+  }
+
+  EndLock(): void {
+    lib.symbols.kwxRichTextCtrl_EndLock(this._ptr);
+  }
+
+  IsLocked(): boolean {
+    return (lib.symbols.kwxRichTextCtrl_IsLocked(this._ptr) as number) !== 0;
   }
 
 }

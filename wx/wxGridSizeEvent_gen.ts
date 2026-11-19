@@ -20,7 +20,7 @@ export class wxGridSizeEvent extends wxNotifyEvent {
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxGridSizeEvent_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   ControlDown(): boolean {

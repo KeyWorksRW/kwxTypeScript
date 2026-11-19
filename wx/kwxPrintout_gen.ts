@@ -53,7 +53,7 @@ export class kwxPrintout {
   GetTitle(): wxString | null {
     const rawPtr = lib.symbols.kwxPrintout_GetTitle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsPreview(): boolean {

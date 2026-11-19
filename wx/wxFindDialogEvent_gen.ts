@@ -17,7 +17,7 @@ export class wxFindDialogEvent extends wxCommandEvent {
   GetFindString(): wxString | null {
     const rawPtr = lib.symbols.wxFindDialogEvent_GetFindString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDialog(): wxFindReplaceDialog | null {
@@ -33,7 +33,7 @@ export class wxFindDialogEvent extends wxCommandEvent {
   GetReplaceString(): wxString | null {
     const rawPtr = lib.symbols.wxFindDialogEvent_GetReplaceString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

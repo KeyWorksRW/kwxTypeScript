@@ -50,6 +50,26 @@ export class kwxApp extends wxApp {
     lib.symbols.kwxApp_SetOnCreateTraits(this._ptr, pFunction);
   }
 
+  override SetOnOnFatalException(pFunction: Pointer): void {
+    lib.symbols.kwxApp_SetOnOnFatalException(this._ptr, pFunction);
+  }
+
+  override SetOnOnUnhandledException(pFunction: Pointer): void {
+    lib.symbols.kwxApp_SetOnOnUnhandledException(this._ptr, pFunction);
+  }
+
+  override SetOnStoreCurrentException(pFunction: Pointer): void {
+    lib.symbols.kwxApp_SetOnStoreCurrentException(this._ptr, pFunction);
+  }
+
+  override SetOnOnExceptionInMainLoop(pFunction: Pointer): void {
+    lib.symbols.kwxApp_SetOnOnExceptionInMainLoop(this._ptr, pFunction);
+  }
+
+  override SetOnRethrowStoredException(pFunction: Pointer): void {
+    lib.symbols.kwxApp_SetOnRethrowStoredException(this._ptr, pFunction);
+  }
+
 }
 
 export function createKwxApp(pObject: Pointer): Pointer {

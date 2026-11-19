@@ -32,13 +32,13 @@ export class wxAuiNotebookPage {
   Caption(): wxString | null {
     const rawPtr = lib.symbols.wxAuiNotebookPage_Caption(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Tooltip(): wxString | null {
     const rawPtr = lib.symbols.wxAuiNotebookPage_Tooltip(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Bitmap(): wxBitmapBundle | null {
@@ -50,7 +50,7 @@ export class wxAuiNotebookPage {
   Rect(): wxRect | null {
     const rawPtr = lib.symbols.wxAuiNotebookPage_Rect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   Active(): boolean {

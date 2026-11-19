@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -73,67 +74,67 @@ export class wxPlatformInfo {
   GetPlatformDescription(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetPlatformDescription(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetOperatingSystemFamilyName(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetOperatingSystemFamilyName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetOperatingSystemIdName(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetOperatingSystemIdName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPortIdName(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetPortIdName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPortIdShortName(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetPortIdShortName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetBitnessName(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetBitnessName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetEndiannessName(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetEndiannessName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetCpuArchitectureName(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetCpuArchitectureName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNativeCpuArchitectureName(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetNativeCpuArchitectureName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetOperatingSystemDescription(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetOperatingSystemDescription(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDesktopEnvironment(): wxString | null {
     const rawPtr = lib.symbols.wxPlatformInfo_GetDesktopEnvironment(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsOk(): boolean {
@@ -156,8 +157,14 @@ export class wxPlatformInfo {
     lib.symbols.wxPlatformInfo_SetOperatingSystemId(this._ptr, os_id);
   }
 
-  SetOperatingSystemDescription(description: Pointer): void {
-    lib.symbols.wxPlatformInfo_SetOperatingSystemDescription(this._ptr, description);
+  SetOperatingSystemDescription(description: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof description === "string") __s0 = createWxString(description);
+      lib.symbols.wxPlatformInfo_SetOperatingSystemDescription(this._ptr, __s0 ? __s0.ptr : (description as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetPortId(port_id: number): void {
@@ -172,16 +179,34 @@ export class wxPlatformInfo {
     lib.symbols.wxPlatformInfo_SetEndianness(this._ptr, endianness);
   }
 
-  SetCpuArchitectureName(cpu_architecture: Pointer): void {
-    lib.symbols.wxPlatformInfo_SetCpuArchitectureName(this._ptr, cpu_architecture);
+  SetCpuArchitectureName(cpu_architecture: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof cpu_architecture === "string") __s0 = createWxString(cpu_architecture);
+      lib.symbols.wxPlatformInfo_SetCpuArchitectureName(this._ptr, __s0 ? __s0.ptr : (cpu_architecture as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetNativeCpuArchitectureName(cpu_architecture: Pointer): void {
-    lib.symbols.wxPlatformInfo_SetNativeCpuArchitectureName(this._ptr, cpu_architecture);
+  SetNativeCpuArchitectureName(cpu_architecture: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof cpu_architecture === "string") __s0 = createWxString(cpu_architecture);
+      lib.symbols.wxPlatformInfo_SetNativeCpuArchitectureName(this._ptr, __s0 ? __s0.ptr : (cpu_architecture as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetDesktopEnvironment(desktop_environment: Pointer): void {
-    lib.symbols.wxPlatformInfo_SetDesktopEnvironment(this._ptr, desktop_environment);
+  SetDesktopEnvironment(desktop_environment: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof desktop_environment === "string") __s0 = createWxString(desktop_environment);
+      lib.symbols.wxPlatformInfo_SetDesktopEnvironment(this._ptr, __s0 ? __s0.ptr : (desktop_environment as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

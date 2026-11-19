@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRibbonControl } from "./wxRibbonControl_gen.ts";
 import { wxRibbonArtProvider } from "./wxRibbonArtProvider_gen.ts";
@@ -43,7 +44,7 @@ export class wxRibbonPage extends wxRibbonControl {
   override GetLabel(): wxString | null {
     const rawPtr = lib.symbols.wxRibbonPage_GetLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override Realize(): boolean {
@@ -53,7 +54,7 @@ export class wxRibbonPage extends wxRibbonControl {
   override GetMinSize(): wxSize | null {
     const rawPtr = lib.symbols.wxRibbonPage_GetMinSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   override SetArtProvider(art: Pointer): void {
@@ -68,10 +69,16 @@ export class wxRibbonPage extends wxRibbonControl {
 
 }
 
-export function createWxRibbonPage(parent: Pointer, id: number, label: Pointer, icon: Pointer, style: number): wxRibbonPage | null {
-    const rawPtr = lib.symbols.wxRibbonPage_Create(parent, id, label, icon, style);
-    if (rawPtr === null) return null;
-    return new wxRibbonPage(rawPtr);
+export function createWxRibbonPage(parent: Pointer, id: number, label: string | Pointer, icon: Pointer, style: number): wxRibbonPage | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxRibbonPage_Create(parent, id, __s0 ? __s0.ptr : (label as Pointer), icon, style);
+      if (rawPtr === null) return null;
+      return new wxRibbonPage(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

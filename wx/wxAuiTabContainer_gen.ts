@@ -90,13 +90,13 @@ export class wxAuiTabContainer {
   GetPage(idx: bigint): wxAuiNotebookPage | null {
     const rawPtr = lib.symbols.wxAuiTabContainer_GetPage(this._ptr, idx);
     if (rawPtr === null) return null;
-    return new wxAuiNotebookPage(rawPtr, true);
+    return new wxAuiNotebookPage(rawPtr);
   }
 
   GetPages(): wxAuiNotebookPageArray | null {
     const rawPtr = lib.symbols.wxAuiTabContainer_GetPages(this._ptr);
     if (rawPtr === null) return null;
-    return new wxAuiNotebookPageArray(rawPtr, true);
+    return new wxAuiNotebookPageArray(rawPtr);
   }
 
   SetNormalFont(normalFont: Pointer): void {

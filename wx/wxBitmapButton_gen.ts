@@ -52,6 +52,22 @@ export class wxBitmapButton extends wxButton {
     lib.symbols.wxBitmapButton_SetBitmapSelected(this._ptr, sel);
   }
 
+  SetBitmapDisabledBundle(disabled: Pointer): void {
+    lib.symbols.wxBitmapButton_SetBitmapDisabledBundle(this._ptr, disabled);
+  }
+
+  SetBitmapFocusBundle(focus: Pointer): void {
+    lib.symbols.wxBitmapButton_SetBitmapFocusBundle(this._ptr, focus);
+  }
+
+  SetBitmapLabelBundle(bitmap: Pointer): void {
+    lib.symbols.wxBitmapButton_SetBitmapLabelBundle(this._ptr, bitmap);
+  }
+
+  SetBitmapSelectedBundle(sel: Pointer): void {
+    lib.symbols.wxBitmapButton_SetBitmapSelectedBundle(this._ptr, sel);
+  }
+
   SetMargins(x: number, y: number): void {
     lib.symbols.wxBitmapButton_SetMargins(this._ptr, x, y);
   }
@@ -60,6 +76,12 @@ export class wxBitmapButton extends wxButton {
 
 export function createWxBitmapButton(parent: Pointer, id: number, bitmap: Pointer, left: number, top: number, width: number, height: number, style: number): wxBitmapButton | null {
     const rawPtr = lib.symbols.wxBitmapButton_Create(parent, id, bitmap, left, top, width, height, style);
+    if (rawPtr === null) return null;
+    return new wxBitmapButton(rawPtr);
+}
+
+export function createWxBitmapButtonWithBundle(parent: Pointer, id: number, bitmap: Pointer, left: number, top: number, width: number, height: number, style: number): wxBitmapButton | null {
+    const rawPtr = lib.symbols.wxBitmapButton_CreateWithBundle(parent, id, bitmap, left, top, width, height, style);
     if (rawPtr === null) return null;
     return new wxBitmapButton(rawPtr);
 }

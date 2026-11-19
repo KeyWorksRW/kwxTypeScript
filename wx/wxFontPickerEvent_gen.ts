@@ -26,7 +26,7 @@ export class wxFontPickerEvent extends wxCommandEvent {
   GetFont(): wxFont | null {
     const rawPtr = lib.symbols.wxFontPickerEvent_GetFont(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   SetFont(font: Pointer): void {

@@ -40,7 +40,7 @@ export class wxZipInputStream extends wxArchiveInputStream {
   GetComment(): wxString | null {
     const rawPtr = lib.symbols.wxZipInputStream_GetComment(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetTotalEntries(): number {

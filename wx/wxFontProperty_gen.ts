@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPGProperty } from "./wxPGProperty_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -25,10 +26,19 @@ export class wxFontProperty extends wxPGProperty {
 
 }
 
-export function createWxFontProperty(label: Pointer, name: Pointer, value: Pointer): wxFontProperty | null {
-    const rawPtr = lib.symbols.wxFontProperty_Create(label, name, value);
-    if (rawPtr === null) return null;
-    return new wxFontProperty(rawPtr);
+export function createWxFontProperty(label: string | Pointer, name: string | Pointer, value: Pointer): wxFontProperty | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.wxFontProperty_Create(__s0 ? __s0.ptr : (label as Pointer), __s1 ? __s1.ptr : (name as Pointer), value);
+      if (rawPtr === null) return null;
+      return new wxFontProperty(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

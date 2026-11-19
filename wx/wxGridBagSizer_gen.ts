@@ -17,7 +17,7 @@ export class wxGridBagSizer extends wxGridSizer {
   GetCellSize(row: number, col: number): wxSize | null {
     const rawPtr = lib.symbols.wxGridBagSizer_GetCellSize(this._ptr, row, col);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   FindItem(window: Pointer): wxSizerItem | null {

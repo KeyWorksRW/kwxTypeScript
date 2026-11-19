@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -22,19 +23,31 @@ export class wxGenericProgressDialog extends wxDialog {
     this.Delete();
   }
 
-  override Update(value: number, message: Pointer, skip: Pointer): boolean;
+  override Update(value: number, message: string | Pointer, skip: Pointer): boolean;
   override Update(): void;
-  override Update(value?: number, message?: Pointer, skip?: Pointer): boolean | void {
+  override Update(value?: number, message?: string | Pointer, skip?: Pointer): boolean | void {
     if (arguments.length === 3) {
-      return (lib.symbols.wxGenericProgressDialog_Update(this._ptr, value as number, message as Pointer, skip as Pointer) as number) !== 0;
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof message === "string") __s0 = createWxString(message);
+        return (lib.symbols.wxGenericProgressDialog_Update(this._ptr, value as number, __s0 ? __s0.ptr : (message as Pointer), skip as Pointer) as number) !== 0;
+      } finally {
+        __s0?.Delete();
+      }
     }
     else {
       super.Update();
     }
   }
 
-  Pulse(message: Pointer, skip: Pointer): boolean {
-    return (lib.symbols.wxGenericProgressDialog_Pulse(this._ptr, message, skip) as number) !== 0;
+  Pulse(message: string | Pointer, skip: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      return (lib.symbols.wxGenericProgressDialog_Pulse(this._ptr, __s0 ? __s0.ptr : (message as Pointer), skip) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Resume(): void {
@@ -43,10 +56,19 @@ export class wxGenericProgressDialog extends wxDialog {
 
 }
 
-export function createWxGenericProgressDialog(title: Pointer, message: Pointer, maximum: number, parent: Pointer, style: number): wxGenericProgressDialog | null {
-    const rawPtr = lib.symbols.wxGenericProgressDialog_Create(title, message, maximum, parent, style);
-    if (rawPtr === null) return null;
-    return new wxGenericProgressDialog(rawPtr);
+export function createWxGenericProgressDialog(title: string | Pointer, message: string | Pointer, maximum: number, parent: Pointer, style: number): wxGenericProgressDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      if (typeof message === "string") __s1 = createWxString(message);
+      const rawPtr = lib.symbols.wxGenericProgressDialog_Create(__s0 ? __s0.ptr : (title as Pointer), __s1 ? __s1.ptr : (message as Pointer), maximum, parent, style);
+      if (rawPtr === null) return null;
+      return new wxGenericProgressDialog(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxClientData } from "./wxClientData_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -21,8 +22,14 @@ export class wxItemContainer {
     return this._ptr;
   }
 
-  AppendString(item: Pointer): void {
-    lib.symbols.wxItemContainer_AppendString(this._ptr, item);
+  AppendString(item: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      lib.symbols.wxItemContainer_AppendString(this._ptr, __s0 ? __s0.ptr : (item as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetClientObject(n: number, clientData: Pointer): void {
@@ -64,15 +71,27 @@ export class wxItemContainer {
   GetString(n: number): wxString | null {
     const rawPtr = lib.symbols.wxItemContainer_GetString(this._ptr, n);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetString(n: number, s: Pointer): void {
-    lib.symbols.wxItemContainer_SetString(this._ptr, n, s);
+  SetString(n: number, s: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof s === "string") __s0 = createWxString(s);
+      lib.symbols.wxItemContainer_SetString(this._ptr, n, __s0 ? __s0.ptr : (s as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FindString(s: Pointer, caseSensitive: boolean): number {
-    return lib.symbols.wxItemContainer_FindString(this._ptr, s, caseSensitive ? 1 : 0);
+  FindString(s: string | Pointer, caseSensitive: boolean): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof s === "string") __s0 = createWxString(s);
+      return lib.symbols.wxItemContainer_FindString(this._ptr, __s0 ? __s0.ptr : (s as Pointer), caseSensitive ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetSelection(n: number): void {
@@ -83,30 +102,48 @@ export class wxItemContainer {
     return lib.symbols.wxItemContainer_GetSelection(this._ptr);
   }
 
-  SetStringSelection(s: Pointer): boolean {
-    return (lib.symbols.wxItemContainer_SetStringSelection(this._ptr, s) as number) !== 0;
+  SetStringSelection(s: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof s === "string") __s0 = createWxString(s);
+      return (lib.symbols.wxItemContainer_SetStringSelection(this._ptr, __s0 ? __s0.ptr : (s as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetStringSelection(): wxString | null {
     const rawPtr = lib.symbols.wxItemContainer_GetStringSelection(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Select(n: number): void {
     lib.symbols.wxItemContainer_Select(this._ptr, n);
   }
 
-  Append(item: Pointer): number {
-    return lib.symbols.wxItemContainer_Append(this._ptr, item);
+  Append(item: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxItemContainer_Append(this._ptr, __s0 ? __s0.ptr : (item as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AppendItems(count: number, items: Pointer): number {
     return lib.symbols.wxItemContainer_AppendItems(this._ptr, count, items);
   }
 
-  Insert(item: Pointer, pos: number): number {
-    return lib.symbols.wxItemContainer_Insert(this._ptr, item, pos);
+  Insert(item: string | Pointer, pos: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxItemContainer_Insert(this._ptr, __s0 ? __s0.ptr : (item as Pointer), pos);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   InsertItems(count: number, items: Pointer, pos: number): number {

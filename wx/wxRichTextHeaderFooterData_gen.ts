@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -23,34 +24,52 @@ export class wxRichTextHeaderFooterData extends wxObject {
     this.Delete();
   }
 
-  SetHeaderText(text: Pointer, page: number, location: number): void {
-    lib.symbols.wxRichTextHeaderFooterData_SetHeaderText(this._ptr, text, page, location);
+  SetHeaderText(text: string | Pointer, page: number, location: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextHeaderFooterData_SetHeaderText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), page, location);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetHeaderText(page: number, location: number): wxString | null {
     const rawPtr = lib.symbols.wxRichTextHeaderFooterData_GetHeaderText(this._ptr, page, location);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetFooterText(text: Pointer, page: number, location: number): void {
-    lib.symbols.wxRichTextHeaderFooterData_SetFooterText(this._ptr, text, page, location);
+  SetFooterText(text: string | Pointer, page: number, location: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextHeaderFooterData_SetFooterText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), page, location);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFooterText(page: number, location: number): wxString | null {
     const rawPtr = lib.symbols.wxRichTextHeaderFooterData_GetFooterText(this._ptr, page, location);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetText(text: Pointer, headerFooter: number, page: number, location: number): void {
-    lib.symbols.wxRichTextHeaderFooterData_SetText(this._ptr, text, headerFooter, page, location);
+  SetText(text: string | Pointer, headerFooter: number, page: number, location: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextHeaderFooterData_SetText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), headerFooter, page, location);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetText(headerFooter: number, page: number, location: number): wxString | null {
     const rawPtr = lib.symbols.wxRichTextHeaderFooterData_GetText(this._ptr, headerFooter, page, location);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetMargins(headerMargin: number, footerMargin: number): void {

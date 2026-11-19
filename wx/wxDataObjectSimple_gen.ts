@@ -25,7 +25,7 @@ export class wxDataObjectSimple extends wxDataObject {
   GetFormat(): wxDataFormat | null {
     const rawPtr = lib.symbols.wxDataObjectSimple_GetFormat(this._ptr);
     if (rawPtr === null) return null;
-    return new wxDataFormat(rawPtr, true);
+    return new wxDataFormat(rawPtr);
   }
 
   SetFormat(format: Pointer): void {

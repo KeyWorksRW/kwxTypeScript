@@ -21,13 +21,13 @@ export class wxAuiToolBarEvent extends wxNotifyEvent {
   GetClickPoint(): wxPoint | null {
     const rawPtr = lib.symbols.wxAuiToolBarEvent_GetClickPoint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetItemRect(): wxRect | null {
     const rawPtr = lib.symbols.wxAuiToolBarEvent_GetItemRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetToolId(): number {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -23,12 +24,27 @@ export class wxStringTokenizer extends wxObject {
     this.Delete();
   }
 
-  SetString(str: Pointer, delimiters: Pointer, mode: number): void {
-    lib.symbols.wxStringTokenizer_SetString(this._ptr, str, delimiters, mode);
+  SetString(str: string | Pointer, delimiters: string | Pointer, mode: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      if (typeof delimiters === "string") __s1 = createWxString(delimiters);
+      lib.symbols.wxStringTokenizer_SetString(this._ptr, __s0 ? __s0.ptr : (str as Pointer), __s1 ? __s1.ptr : (delimiters as Pointer), mode);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  Reinit(str: Pointer): void {
-    lib.symbols.wxStringTokenizer_Reinit(this._ptr, str);
+  Reinit(str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxStringTokenizer_Reinit(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   CountTokens(): number {
@@ -42,7 +58,7 @@ export class wxStringTokenizer extends wxObject {
   GetNextToken(): wxString | null {
     const rawPtr = lib.symbols.wxStringTokenizer_GetNextToken(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLastDelimiter(): number {
@@ -52,7 +68,7 @@ export class wxStringTokenizer extends wxObject {
   GetString(): wxString | null {
     const rawPtr = lib.symbols.wxStringTokenizer_GetString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPosition(): number {
@@ -75,10 +91,19 @@ export function createWxStringTokenizer(): wxStringTokenizer | null {
     return new wxStringTokenizer(rawPtr);
 }
 
-export function createWxStringTokenizerFor(str: Pointer, delimiters: Pointer, mode: number): wxStringTokenizer | null {
-    const rawPtr = lib.symbols.wxStringTokenizer_CreateFor(str, delimiters, mode);
-    if (rawPtr === null) return null;
-    return new wxStringTokenizer(rawPtr);
+export function createWxStringTokenizerFor(str: string | Pointer, delimiters: string | Pointer, mode: number): wxStringTokenizer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      if (typeof delimiters === "string") __s1 = createWxString(delimiters);
+      const rawPtr = lib.symbols.wxStringTokenizer_CreateFor(__s0 ? __s0.ptr : (str as Pointer), __s1 ? __s1.ptr : (delimiters as Pointer), mode);
+      if (rawPtr === null) return null;
+      return new wxStringTokenizer(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

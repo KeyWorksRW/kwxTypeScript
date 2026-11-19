@@ -108,6 +108,122 @@ export class wxAccessible {
     lib.symbols.wxAccessible_SetOnGetFocus(this._ptr, pFunction);
   }
 
+  SetOnGetSelections(pFunction: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetSelections(this._ptr, pFunction);
+  }
+
+  SetOnHitTestWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnHitTestWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetLocationWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetLocationWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnNavigateWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnNavigateWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetNameWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetNameWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetChildCountWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetChildCountWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetChildWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetChildWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetParentWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetParentWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnDoDefaultActionWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnDoDefaultActionWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetDefaultActionWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetDefaultActionWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetDescriptionWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetDescriptionWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetHelpTextWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetHelpTextWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetKeyboardShortcutWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetKeyboardShortcutWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetRoleWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetRoleWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetStateWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetStateWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetValueWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetValueWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnSelectWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnSelectWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetFocusWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetFocusWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetSelectionsWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxAccessible_SetOnGetSelectionsWithData(this._ptr, pFunction, data);
+  }
+
+  SetHookResult(result: number): void {
+    lib.symbols.wxAccessible_SetHookResult(this._ptr, result);
+  }
+
+  SetHitTestResult(childId: number, childObject: Pointer): void {
+    lib.symbols.wxAccessible_SetHitTestResult(this._ptr, childId, childObject);
+  }
+
+  SetGetLocationResult(x: number, y: number, width: number, height: number): void {
+    lib.symbols.wxAccessible_SetGetLocationResult(this._ptr, x, y, width, height);
+  }
+
+  SetNavigateResult(toId: number, toObject: Pointer): void {
+    lib.symbols.wxAccessible_SetNavigateResult(this._ptr, toId, toObject);
+  }
+
+  SetGetChildCountResult(childCount: number): void {
+    lib.symbols.wxAccessible_SetGetChildCountResult(this._ptr, childCount);
+  }
+
+  SetGetChildResult(child: Pointer): void {
+    lib.symbols.wxAccessible_SetGetChildResult(this._ptr, child);
+  }
+
+  SetGetParentResult(parent: Pointer): void {
+    lib.symbols.wxAccessible_SetGetParentResult(this._ptr, parent);
+  }
+
+  SetGetRoleResult(role: number): void {
+    lib.symbols.wxAccessible_SetGetRoleResult(this._ptr, role);
+  }
+
+  SetGetStateResult(state: number): void {
+    lib.symbols.wxAccessible_SetGetStateResult(this._ptr, state);
+  }
+
+  SetGetFocusResult(childId: number, child: Pointer): void {
+    lib.symbols.wxAccessible_SetGetFocusResult(this._ptr, childId, child);
+  }
+
 }
 
 export function createWxAccessible(win: Pointer, pObject: Pointer): wxAccessible | null {

@@ -31,7 +31,7 @@ export class wxDataInputStream {
   ReadString(): wxString | null {
     const rawPtr = lib.symbols.wxDataInputStream_ReadString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

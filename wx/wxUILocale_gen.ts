@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -41,31 +42,31 @@ export class wxUILocale {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxUILocale_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLocaleTag(): wxString | null {
     const rawPtr = lib.symbols.wxUILocale_GetLocaleTag(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLocalizedName(name: number, form: number): wxString | null {
     const rawPtr = lib.symbols.wxUILocale_GetLocalizedName(this._ptr, name, form);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMonthName(month: number, form: number): wxString | null {
     const rawPtr = lib.symbols.wxUILocale_GetMonthName(this._ptr, month, form);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetWeekDayName(weekday: number, form: number): wxString | null {
     const rawPtr = lib.symbols.wxUILocale_GetWeekDayName(this._ptr, weekday, form);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLayoutDirection(): number {
@@ -75,13 +76,13 @@ export class wxUILocale {
   GetCurrencySymbol(): wxString | null {
     const rawPtr = lib.symbols.wxUILocale_GetCurrencySymbol(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetCurrencyCode(): wxString | null {
     const rawPtr = lib.symbols.wxUILocale_GetCurrencyCode(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetCurrencySymbolPosition(): number {
@@ -92,16 +93,31 @@ export class wxUILocale {
     return lib.symbols.wxUILocale_UsesMetricSystem(this._ptr);
   }
 
-  CompareStrings(lhs: Pointer, rhs: Pointer, flags: number): number {
-    return lib.symbols.wxUILocale_CompareStrings(this._ptr, lhs, rhs, flags);
+  CompareStrings(lhs: string | Pointer, rhs: string | Pointer, flags: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof lhs === "string") __s0 = createWxString(lhs);
+      if (typeof rhs === "string") __s1 = createWxString(rhs);
+      return lib.symbols.wxUILocale_CompareStrings(this._ptr, __s0 ? __s0.ptr : (lhs as Pointer), __s1 ? __s1.ptr : (rhs as Pointer), flags);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxUILocaleFromTag(tag: Pointer): wxUILocale | null {
-    const rawPtr = lib.symbols.wxUILocale_CreateFromTag(tag);
-    if (rawPtr === null) return null;
-    return new wxUILocale(rawPtr);
+export function createWxUILocaleFromTag(tag: string | Pointer): wxUILocale | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof tag === "string") __s0 = createWxString(tag);
+      const rawPtr = lib.symbols.wxUILocale_CreateFromTag(__s0 ? __s0.ptr : (tag as Pointer));
+      if (rawPtr === null) return null;
+      return new wxUILocale(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -40,7 +40,7 @@ export class wxRibbonArtProvider {
   GetColor(id: number): wxColour | null {
     const rawPtr = lib.symbols.wxRibbonArtProvider_GetColor(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetColourScheme(primary: Pointer, secondary: Pointer, tertiary: Pointer): void {
@@ -58,13 +58,13 @@ export class wxRibbonArtProvider {
   GetColour(id: number): wxColour | null {
     const rawPtr = lib.symbols.wxRibbonArtProvider_GetColour(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetFont(id: number): wxFont | null {
     const rawPtr = lib.symbols.wxRibbonArtProvider_GetFont(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   SetColour(id: number, colour: Pointer): void {

@@ -17,13 +17,13 @@ export class wxSetCursorEvent extends wxEvent {
   GetCursor(): wxCursor | null {
     const rawPtr = lib.symbols.wxSetCursorEvent_GetCursor(this._ptr);
     if (rawPtr === null) return null;
-    return new wxCursor(rawPtr, true);
+    return new wxCursor(rawPtr);
   }
 
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxSetCursorEvent_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetX(): number {

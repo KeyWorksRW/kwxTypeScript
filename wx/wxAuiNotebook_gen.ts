@@ -2,11 +2,14 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxBookCtrlBase } from "./wxBookCtrlBase_gen.ts";
 import { wxArrayInt } from "./wxArrayInt_gen.ts";
 import { wxAuiTabArt } from "./wxAuiTabArt_gen.ts";
+import { wxAuiTabCtrl } from "./wxAuiTabCtrl_gen.ts";
 import { wxAuiTabCtrlArray } from "./wxAuiTabCtrlArray_gen.ts";
+import { wxSize } from "./wxSize_gen.ts";
 import { wxString } from "./wxString_gen.ts";
 import { wxWindow } from "./wxWindow_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -53,12 +56,24 @@ export class wxAuiNotebook extends wxBookCtrlBase {
     return (lib.symbols.wxAuiNotebook_CreateFromDefault(this._ptr, parent, id, x, y, width, height, style) as number) !== 0;
   }
 
-  AddPageWithBitmap(page: Pointer, caption: Pointer, select: boolean, bitmap: Pointer): boolean {
-    return (lib.symbols.wxAuiNotebook_AddPageWithBitmap(this._ptr, page, caption, select ? 1 : 0, bitmap) as number) !== 0;
+  AddPageWithBitmap(page: Pointer, caption: string | Pointer, select: boolean, bitmap: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof caption === "string") __s0 = createWxString(caption);
+      return (lib.symbols.wxAuiNotebook_AddPageWithBitmap(this._ptr, page, __s0 ? __s0.ptr : (caption as Pointer), select ? 1 : 0, bitmap) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  override AddPage(page: Pointer, text: Pointer, select: boolean, imageId: number): boolean {
-    return (lib.symbols.wxAuiNotebook_AddPage(this._ptr, page, text, select ? 1 : 0, imageId) as number) !== 0;
+  override AddPage(page: Pointer, text: string | Pointer, select: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxAuiNotebook_AddPage(this._ptr, page, __s0 ? __s0.ptr : (text as Pointer), select ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override AdvanceSelection(forward: boolean): void {
@@ -114,13 +129,13 @@ export class wxAuiNotebook extends wxBookCtrlBase {
   override GetPageText(page: number): wxString | null {
     const rawPtr = lib.symbols.wxAuiNotebook_GetPageText(this._ptr, page);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPageToolTip(pageIdx: number): wxString | null {
     const rawPtr = lib.symbols.wxAuiNotebook_GetPageToolTip(this._ptr, pageIdx);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override GetSelection(): number {
@@ -131,12 +146,24 @@ export class wxAuiNotebook extends wxBookCtrlBase {
     return lib.symbols.wxAuiNotebook_GetTabCtrlHeight(this._ptr);
   }
 
-  InsertPageWithBitmap(page_idx: number, page: Pointer, caption: Pointer, select: boolean, bitmap: Pointer): boolean {
-    return (lib.symbols.wxAuiNotebook_InsertPageWithBitmap(this._ptr, page_idx, page, caption, select ? 1 : 0, bitmap) as number) !== 0;
+  InsertPageWithBitmap(page_idx: number, page: Pointer, caption: string | Pointer, select: boolean, bitmap: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof caption === "string") __s0 = createWxString(caption);
+      return (lib.symbols.wxAuiNotebook_InsertPageWithBitmap(this._ptr, page_idx, page, __s0 ? __s0.ptr : (caption as Pointer), select ? 1 : 0, bitmap) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  override InsertPage(index: number, page: Pointer, text: Pointer, select: boolean, imageId: number): boolean {
-    return (lib.symbols.wxAuiNotebook_InsertPage(this._ptr, index, page, text, select ? 1 : 0, imageId) as number) !== 0;
+  override InsertPage(index: number, page: Pointer, text: string | Pointer, select: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxAuiNotebook_InsertPage(this._ptr, index, page, __s0 ? __s0.ptr : (text as Pointer), select ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override RemovePage(page: number): boolean {
@@ -167,12 +194,24 @@ export class wxAuiNotebook extends wxBookCtrlBase {
     return (lib.symbols.wxAuiNotebook_SetPageImage(this._ptr, index, imageId) as number) !== 0;
   }
 
-  override SetPageText(page: number, text: Pointer): boolean {
-    return (lib.symbols.wxAuiNotebook_SetPageText(this._ptr, page, text) as number) !== 0;
+  override SetPageText(page: number, text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxAuiNotebook_SetPageText(this._ptr, page, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPageToolTip(page: number, text: Pointer): boolean {
-    return (lib.symbols.wxAuiNotebook_SetPageToolTip(this._ptr, page, text) as number) !== 0;
+  SetPageToolTip(page: number, text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxAuiNotebook_SetPageToolTip(this._ptr, page, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetSelectedFont(font: Pointer): void {
@@ -222,12 +261,70 @@ export class wxAuiNotebook extends wxBookCtrlBase {
     return new wxArrayInt(rawPtr);
   }
 
-  SaveLayout(name: Pointer, serializer: Pointer): void {
-    lib.symbols.wxAuiNotebook_SaveLayout(this._ptr, name, serializer);
+  SaveLayout(name: string | Pointer, serializer: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxAuiNotebook_SaveLayout(this._ptr, __s0 ? __s0.ptr : (name as Pointer), serializer);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadLayout(name: Pointer, deserializer: Pointer): void {
-    lib.symbols.wxAuiNotebook_LoadLayout(this._ptr, name, deserializer);
+  LoadLayout(name: string | Pointer, deserializer: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxAuiNotebook_LoadLayout(this._ptr, __s0 ? __s0.ptr : (name as Pointer), deserializer);
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  AddPageWithBundle(page: Pointer, caption: string | Pointer, select: boolean, bitmap: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof caption === "string") __s0 = createWxString(caption);
+      return (lib.symbols.wxAuiNotebook_AddPageWithBundle(this._ptr, page, __s0 ? __s0.ptr : (caption as Pointer), select ? 1 : 0, bitmap) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  InsertPageWithBundle(page_idx: number, page: Pointer, caption: string | Pointer, select: boolean, bitmap: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof caption === "string") __s0 = createWxString(caption);
+      return (lib.symbols.wxAuiNotebook_InsertPageWithBundle(this._ptr, page_idx, page, __s0 ? __s0.ptr : (caption as Pointer), select ? 1 : 0, bitmap) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  SetPageBitmapBundle(page: number, bitmap: Pointer): boolean {
+    return (lib.symbols.wxAuiNotebook_SetPageBitmapBundle(this._ptr, page, bitmap) as number) !== 0;
+  }
+
+  CalculateNewSplitSize(): wxSize | null {
+    const rawPtr = lib.symbols.wxAuiNotebook_CalculateNewSplitSize(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxSize(rawPtr);
+  }
+
+  GetTabCtrlFromPoint(x: number, y: number): wxAuiTabCtrl | null {
+    const rawPtr = lib.symbols.wxAuiNotebook_GetTabCtrlFromPoint(this._ptr, x, y);
+    if (rawPtr === null) return null;
+    return new wxAuiTabCtrl(rawPtr, true);
+  }
+
+  FindTabCtrl(page: Pointer): wxAuiTabCtrl | null {
+    const rawPtr = lib.symbols.wxAuiNotebook_FindTabCtrl(this._ptr, page);
+    if (rawPtr === null) return null;
+    return new wxAuiTabCtrl(rawPtr, true);
+  }
+
+  FindTabIndex(page: Pointer): number {
+    return lib.symbols.wxAuiNotebook_FindTabIndex(this._ptr, page);
   }
 
 }

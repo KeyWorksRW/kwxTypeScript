@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -13,14 +14,20 @@ export class wxRichTextDrawingHandler extends wxObject {
     return this._ptr;
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxRichTextDrawingHandler_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxRichTextDrawingHandler_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextDrawingHandler_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

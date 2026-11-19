@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxFSFile } from "./wxFSFile_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -31,24 +32,36 @@ export class wxWebViewHandler {
     this.Delete();
   }
 
-  GetFile(uri: Pointer): wxFSFile | null {
-    const rawPtr = lib.symbols.wxWebViewHandler_GetFile(this._ptr, uri);
-    if (rawPtr === null) return null;
-    return new wxFSFile(rawPtr, true);
+  GetFile(uri: string | Pointer): wxFSFile | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof uri === "string") __s0 = createWxString(uri);
+      const rawPtr = lib.symbols.wxWebViewHandler_GetFile(this._ptr, __s0 ? __s0.ptr : (uri as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFSFile(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxWebViewHandler_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }
 
-export function createWxWebViewHandler(scheme: Pointer): wxWebViewHandler | null {
-    const rawPtr = lib.symbols.wxWebViewHandler_Create(scheme);
-    if (rawPtr === null) return null;
-    return new wxWebViewHandler(rawPtr);
+export function createWxWebViewHandler(scheme: string | Pointer): wxWebViewHandler | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof scheme === "string") __s0 = createWxString(scheme);
+      const rawPtr = lib.symbols.wxWebViewHandler_Create(__s0 ? __s0.ptr : (scheme as Pointer));
+      if (rawPtr === null) return null;
+      return new wxWebViewHandler(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

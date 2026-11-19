@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -30,8 +31,14 @@ export class wxArrayString {
     this.Delete();
   }
 
-  Add(str: Pointer): void {
-    lib.symbols.wxArrayString_Add(this._ptr, str);
+  Add(str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxArrayString_Add(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetCount(): number {
@@ -42,8 +49,14 @@ export class wxArrayString {
     return lib.symbols.wxArrayString_Count(this._ptr);
   }
 
-  Insert(str: Pointer, index: number): void {
-    lib.symbols.wxArrayString_Insert(this._ptr, str, index);
+  Insert(str: string | Pointer, index: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxArrayString_Insert(this._ptr, __s0 ? __s0.ptr : (str as Pointer), index);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   RemoveAt(index: number, count: number): void {
@@ -57,7 +70,7 @@ export class wxArrayString {
   Item(index: number): wxString | null {
     const rawPtr = lib.symbols.wxArrayString_Item(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Sort(reverse: boolean): void {

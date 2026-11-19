@@ -50,7 +50,7 @@ export class wxDisplay {
   GetRawPPI(): wxSize | null {
     const rawPtr = lib.symbols.wxDisplay_GetRawPPI(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   ResetMode(): void {
@@ -74,7 +74,7 @@ export class wxDisplay {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxDisplay_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPPI(width: Pointer, height: Pointer): void {

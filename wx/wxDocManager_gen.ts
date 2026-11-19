@@ -2,9 +2,12 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
+import { wxDocTemplate } from "./wxDocTemplate_gen.ts";
 import { wxDocument } from "./wxDocument_gen.ts";
+import { wxView } from "./wxView_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
 
 export class wxDocManager extends wxEvtHandler {
@@ -13,20 +16,52 @@ export class wxDocManager extends wxEvtHandler {
     return this._ptr;
   }
 
+  override Delete(): void {
+    if (this._disposed || this._borrowed) return;
+    this._disposed = true;
+    lib.symbols.wxDocManager_Delete(this._ptr);
+  }
+
+  override [Symbol.dispose](): void {
+    this.Delete();
+  }
+
+  AddDocument(doc: Pointer): void {
+    lib.symbols.wxDocManager_AddDocument(this._ptr, doc);
+  }
+
+  AssociateTemplate(docTemplate: Pointer): void {
+    lib.symbols.wxDocManager_AssociateTemplate(this._ptr, docTemplate);
+  }
+
+  Clear(force: boolean): boolean {
+    return (lib.symbols.wxDocManager_Clear(this._ptr, force ? 1 : 0) as number) !== 0;
+  }
+
   CloseDocuments(force: boolean): boolean {
     return (lib.symbols.wxDocManager_CloseDocuments(this._ptr, force ? 1 : 0) as number) !== 0;
   }
 
-  CreateDocument(path: Pointer, flags: bigint): wxDocument | null {
-    const rawPtr = lib.symbols.wxDocManager_CreateDocument(this._ptr, path, flags);
-    if (rawPtr === null) return null;
-    return new wxDocument(rawPtr, true);
+  CreateDocument(path: string | Pointer, flags: bigint): wxDocument | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      const rawPtr = lib.symbols.wxDocManager_CreateDocument(this._ptr, __s0 ? __s0.ptr : (path as Pointer), flags);
+      if (rawPtr === null) return null;
+      return new wxDocument(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   CreateNewDocument(): wxDocument | null {
     const rawPtr = lib.symbols.wxDocManager_CreateNewDocument(this._ptr);
     if (rawPtr === null) return null;
     return new wxDocument(rawPtr, true);
+  }
+
+  DisassociateTemplate(docTemplate: Pointer): void {
+    lib.symbols.wxDocManager_DisassociateTemplate(this._ptr, docTemplate);
   }
 
   FileHistoryLoad(config: Pointer): void {
@@ -41,10 +76,62 @@ export class wxDocManager extends wxEvtHandler {
     lib.symbols.wxDocManager_FileHistoryUseMenu(this._ptr, menu);
   }
 
+  GetCurrentDocument(): wxDocument | null {
+    const rawPtr = lib.symbols.wxDocManager_GetCurrentDocument(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxDocument(rawPtr, true);
+  }
+
+  GetCurrentView(): wxView | null {
+    const rawPtr = lib.symbols.wxDocManager_GetCurrentView(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxView(rawPtr, true);
+  }
+
+  GetDocumentCount(): number {
+    return lib.symbols.wxDocManager_GetDocumentCount(this._ptr);
+  }
+
+  GetDocumentAt(pos: number): wxDocument | null {
+    const rawPtr = lib.symbols.wxDocManager_GetDocumentAt(this._ptr, pos);
+    if (rawPtr === null) return null;
+    return new wxDocument(rawPtr, true);
+  }
+
+  GetMaxDocsOpen(): number {
+    return lib.symbols.wxDocManager_GetMaxDocsOpen(this._ptr);
+  }
+
+  GetTemplateAt(pos: number): wxDocTemplate | null {
+    const rawPtr = lib.symbols.wxDocManager_GetTemplateAt(this._ptr, pos);
+    if (rawPtr === null) return null;
+    return new wxDocTemplate(rawPtr, true);
+  }
+
+  GetTemplateCount(): number {
+    return lib.symbols.wxDocManager_GetTemplateCount(this._ptr);
+  }
+
+  RemoveDocument(doc: Pointer): void {
+    lib.symbols.wxDocManager_RemoveDocument(this._ptr, doc);
+  }
+
   SetMaxDocsOpen(n: number): void {
     lib.symbols.wxDocManager_SetMaxDocsOpen(this._ptr, n);
   }
 
+}
+
+export function createWxDocManager(flags: number, initialize: boolean): wxDocManager | null {
+    const rawPtr = lib.symbols.wxDocManager_Create(flags, initialize ? 1 : 0);
+    if (rawPtr === null) return null;
+    return new wxDocManager(rawPtr);
+}
+
+export function createWxDocManagerDefault(): wxDocManager | null {
+    const rawPtr = lib.symbols.wxDocManager_CreateDefault();
+    if (rawPtr === null) return null;
+    return new wxDocManager(rawPtr);
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

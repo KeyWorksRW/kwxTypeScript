@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxDC } from "./wxDC_gen.ts";
@@ -52,8 +53,14 @@ export class wxPrinter extends wxObject {
     return new wxDC(rawPtr, true);
   }
 
-  ReportError(parent: Pointer, printout: Pointer, message: Pointer): void {
-    lib.symbols.wxPrinter_ReportError(this._ptr, parent, printout, message);
+  ReportError(parent: Pointer, printout: Pointer, message: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      lib.symbols.wxPrinter_ReportError(this._ptr, parent, printout, __s0 ? __s0.ptr : (message as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Setup(parent: Pointer): boolean {

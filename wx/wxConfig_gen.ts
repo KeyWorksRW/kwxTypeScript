@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxConfigBase } from "./wxConfigBase_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -14,10 +15,25 @@ export class wxConfig extends wxConfigBase {
 
 }
 
-export function createWxConfig(app_name: Pointer, vendor_name: Pointer, local_filename: Pointer, global_filename: Pointer, style: bigint): wxConfig | null {
-    const rawPtr = lib.symbols.wxConfig_Create(app_name, vendor_name, local_filename, global_filename, style);
-    if (rawPtr === null) return null;
-    return new wxConfig(rawPtr);
+export function createWxConfig(app_name: string | Pointer, vendor_name: string | Pointer, local_filename: string | Pointer, global_filename: string | Pointer, style: bigint): wxConfig | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    let __s3: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof app_name === "string") __s0 = createWxString(app_name);
+      if (typeof vendor_name === "string") __s1 = createWxString(vendor_name);
+      if (typeof local_filename === "string") __s2 = createWxString(local_filename);
+      if (typeof global_filename === "string") __s3 = createWxString(global_filename);
+      const rawPtr = lib.symbols.wxConfig_Create(__s0 ? __s0.ptr : (app_name as Pointer), __s1 ? __s1.ptr : (vendor_name as Pointer), __s2 ? __s2.ptr : (local_filename as Pointer), __s3 ? __s3.ptr : (global_filename as Pointer), style);
+      if (rawPtr === null) return null;
+      return new wxConfig(rawPtr);
+    } finally {
+      __s3?.Delete();
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

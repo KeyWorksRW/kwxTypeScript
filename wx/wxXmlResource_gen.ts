@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxBitmapButton } from "./wxBitmapButton_gen.ts";
@@ -68,14 +69,29 @@ export class wxXmlResource extends wxObject {
     lib.symbols.wxXmlResource_AddHandler(this._ptr, handler);
   }
 
-  LoadAllFiles(dirname: Pointer): boolean {
-    return (lib.symbols.wxXmlResource_LoadAllFiles(this._ptr, dirname) as number) !== 0;
+  LoadAllFiles(dirname: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dirname === "string") __s0 = createWxString(dirname);
+      return (lib.symbols.wxXmlResource_LoadAllFiles(this._ptr, __s0 ? __s0.ptr : (dirname as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadObjectRecursively(parent: Pointer, name: Pointer, classname: Pointer): wxObject | null {
-    const rawPtr = lib.symbols.wxXmlResource_LoadObjectRecursively(this._ptr, parent, name, classname);
-    if (rawPtr === null) return null;
-    return new wxObject(rawPtr, true);
+  LoadObjectRecursively(parent: Pointer, name: string | Pointer, classname: string | Pointer): wxObject | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof classname === "string") __s1 = createWxString(classname);
+      const rawPtr = lib.symbols.wxXmlResource_LoadObjectRecursively(this._ptr, parent, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (classname as Pointer));
+      if (rawPtr === null) return null;
+      return new wxObject(rawPtr, true);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   AddSubclassFactory(factory: Pointer): void {
@@ -97,7 +113,7 @@ export class wxXmlResource extends wxObject {
   GetDomain(): wxString | null {
     const rawPtr = lib.symbols.wxXmlResource_GetDomain(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFlags(): number {
@@ -108,8 +124,14 @@ export class wxXmlResource extends wxObject {
     return lib.symbols.wxXmlResource_GetVersion(this._ptr) as bigint;
   }
 
-  GetXRCID(str_id: Pointer, value_if_not_found: number): number {
-    return lib.symbols.wxXmlResource_GetXRCID(this._ptr, str_id, value_if_not_found);
+  GetXRCID(str_id: string | Pointer, value_if_not_found: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      return lib.symbols.wxXmlResource_GetXRCID(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer), value_if_not_found);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   InitAllHandlers(): void {
@@ -120,284 +142,572 @@ export class wxXmlResource extends wxObject {
     lib.symbols.wxXmlResource_InsertHandler(this._ptr, handler);
   }
 
-  Load(filemask: Pointer): boolean {
-    return (lib.symbols.wxXmlResource_Load(this._ptr, filemask) as number) !== 0;
+  Load(filemask: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filemask === "string") __s0 = createWxString(filemask);
+      return (lib.symbols.wxXmlResource_Load(this._ptr, __s0 ? __s0.ptr : (filemask as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadBitmap(name: Pointer, ref: Pointer): void {
-    lib.symbols.wxXmlResource_LoadBitmap(this._ptr, name, ref);
+  LoadBitmap(name: string | Pointer, ref: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxXmlResource_LoadBitmap(this._ptr, __s0 ? __s0.ptr : (name as Pointer), ref);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadDialog(parent: Pointer, name: Pointer): wxDialog | null {
-    const rawPtr = lib.symbols.wxXmlResource_LoadDialog(this._ptr, parent, name);
-    if (rawPtr === null) return null;
-    return new wxDialog(rawPtr, true);
+  LoadDialog(parent: Pointer, name: string | Pointer): wxDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxXmlResource_LoadDialog(this._ptr, parent, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxDialog(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadFrame(parent: Pointer, name: Pointer): wxFrame | null {
-    const rawPtr = lib.symbols.wxXmlResource_LoadFrame(this._ptr, parent, name);
-    if (rawPtr === null) return null;
-    return new wxFrame(rawPtr, true);
+  LoadFrame(parent: Pointer, name: string | Pointer): wxFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxXmlResource_LoadFrame(this._ptr, parent, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFrame(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadIcon(name: Pointer, ref: Pointer): void {
-    lib.symbols.wxXmlResource_LoadIcon(this._ptr, name, ref);
+  LoadIcon(name: string | Pointer, ref: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxXmlResource_LoadIcon(this._ptr, __s0 ? __s0.ptr : (name as Pointer), ref);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadMenu(name: Pointer): wxMenu | null {
-    const rawPtr = lib.symbols.wxXmlResource_LoadMenu(this._ptr, name);
-    if (rawPtr === null) return null;
-    return new wxMenu(rawPtr, true);
+  LoadMenu(name: string | Pointer): wxMenu | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxXmlResource_LoadMenu(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMenu(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadMenuBar(parent: Pointer, name: Pointer): wxMenuBar | null {
-    const rawPtr = lib.symbols.wxXmlResource_LoadMenuBar(this._ptr, parent, name);
-    if (rawPtr === null) return null;
-    return new wxMenuBar(rawPtr, true);
+  LoadMenuBar(parent: Pointer, name: string | Pointer): wxMenuBar | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxXmlResource_LoadMenuBar(this._ptr, parent, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMenuBar(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadPanel(parent: Pointer, name: Pointer): wxPanel | null {
-    const rawPtr = lib.symbols.wxXmlResource_LoadPanel(this._ptr, parent, name);
-    if (rawPtr === null) return null;
-    return new wxPanel(rawPtr, true);
+  LoadPanel(parent: Pointer, name: string | Pointer): wxPanel | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxXmlResource_LoadPanel(this._ptr, parent, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxPanel(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadToolBar(parent: Pointer, name: Pointer): wxToolBar | null {
-    const rawPtr = lib.symbols.wxXmlResource_LoadToolBar(this._ptr, parent, name);
-    if (rawPtr === null) return null;
-    return new wxToolBar(rawPtr, true);
+  LoadToolBar(parent: Pointer, name: string | Pointer): wxToolBar | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxXmlResource_LoadToolBar(this._ptr, parent, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxToolBar(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetSizer(str_id: Pointer): wxSizer | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetSizer(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxSizer(rawPtr, true);
+  GetSizer(str_id: string | Pointer): wxSizer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetSizer(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSizer(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetBoxSizer(str_id: Pointer): wxBoxSizer | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetBoxSizer(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxBoxSizer(rawPtr, true);
+  GetBoxSizer(str_id: string | Pointer): wxBoxSizer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetBoxSizer(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxBoxSizer(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetStaticBoxSizer(str_id: Pointer): wxStaticBoxSizer | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetStaticBoxSizer(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxStaticBoxSizer(rawPtr, true);
+  GetStaticBoxSizer(str_id: string | Pointer): wxStaticBoxSizer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetStaticBoxSizer(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxStaticBoxSizer(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetGridSizer(str_id: Pointer): wxGridSizer | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetGridSizer(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxGridSizer(rawPtr, true);
+  GetGridSizer(str_id: string | Pointer): wxGridSizer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetGridSizer(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxGridSizer(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetFlexGridSizer(str_id: Pointer): wxFlexGridSizer | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetFlexGridSizer(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxFlexGridSizer(rawPtr, true);
+  GetFlexGridSizer(str_id: string | Pointer): wxFlexGridSizer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetFlexGridSizer(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFlexGridSizer(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetBitmapButton(str_id: Pointer): wxBitmapButton | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetBitmapButton(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxBitmapButton(rawPtr, true);
+  GetBitmapButton(str_id: string | Pointer): wxBitmapButton | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetBitmapButton(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxBitmapButton(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetButton(str_id: Pointer): wxButton | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetButton(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxButton(rawPtr, true);
+  GetButton(str_id: string | Pointer): wxButton | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetButton(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxButton(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetCalendarCtrl(str_id: Pointer): wxCalendarCtrl | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetCalendarCtrl(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxCalendarCtrl(rawPtr, true);
+  GetCalendarCtrl(str_id: string | Pointer): wxCalendarCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetCalendarCtrl(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxCalendarCtrl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetCheckBox(str_id: Pointer): wxCheckBox | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetCheckBox(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxCheckBox(rawPtr, true);
+  GetCheckBox(str_id: string | Pointer): wxCheckBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetCheckBox(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxCheckBox(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetCheckListBox(str_id: Pointer): wxCheckListBox | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetCheckListBox(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxCheckListBox(rawPtr, true);
+  GetCheckListBox(str_id: string | Pointer): wxCheckListBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetCheckListBox(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxCheckListBox(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetChoice(str_id: Pointer): wxChoice | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetChoice(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxChoice(rawPtr, true);
+  GetChoice(str_id: string | Pointer): wxChoice | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetChoice(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxChoice(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetComboBox(str_id: Pointer): wxComboBox | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetComboBox(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxComboBox(rawPtr, true);
+  GetComboBox(str_id: string | Pointer): wxComboBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetComboBox(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxComboBox(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetGauge(str_id: Pointer): wxGauge | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetGauge(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxGauge(rawPtr, true);
+  GetGauge(str_id: string | Pointer): wxGauge | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetGauge(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxGauge(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetGrid(str_id: Pointer): wxGrid | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetGrid(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxGrid(rawPtr, true);
+  GetGrid(str_id: string | Pointer): wxGrid | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetGrid(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxGrid(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetHtmlWindow(str_id: Pointer): wxHtmlWindow | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetHtmlWindow(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxHtmlWindow(rawPtr, true);
+  GetHtmlWindow(str_id: string | Pointer): wxHtmlWindow | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetHtmlWindow(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxHtmlWindow(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetListBox(str_id: Pointer): wxListBox | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetListBox(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxListBox(rawPtr, true);
+  GetListBox(str_id: string | Pointer): wxListBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetListBox(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxListBox(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetListCtrl(str_id: Pointer): wxListCtrl | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetListCtrl(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxListCtrl(rawPtr, true);
+  GetListCtrl(str_id: string | Pointer): wxListCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetListCtrl(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxListCtrl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetMDIChildFrame(str_id: Pointer): wxMDIChildFrame | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetMDIChildFrame(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxMDIChildFrame(rawPtr, true);
+  GetMDIChildFrame(str_id: string | Pointer): wxMDIChildFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetMDIChildFrame(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMDIChildFrame(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetMDIParentFrame(str_id: Pointer): wxMDIParentFrame | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetMDIParentFrame(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxMDIParentFrame(rawPtr, true);
+  GetMDIParentFrame(str_id: string | Pointer): wxMDIParentFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetMDIParentFrame(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMDIParentFrame(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetMenu(str_id: Pointer): wxMenu | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetMenu(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxMenu(rawPtr, true);
+  GetMenu(str_id: string | Pointer): wxMenu | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetMenu(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMenu(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetMenuBar(str_id: Pointer): wxMenuBar | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetMenuBar(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxMenuBar(rawPtr, true);
+  GetMenuBar(str_id: string | Pointer): wxMenuBar | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetMenuBar(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMenuBar(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetMenuItem(str_id: Pointer): wxMenuItem | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetMenuItem(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxMenuItem(rawPtr, true);
+  GetMenuItem(str_id: string | Pointer): wxMenuItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetMenuItem(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMenuItem(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetNotebook(str_id: Pointer): wxNotebook | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetNotebook(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxNotebook(rawPtr, true);
+  GetNotebook(str_id: string | Pointer): wxNotebook | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetNotebook(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxNotebook(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetPanel(str_id: Pointer): wxPanel | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetPanel(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxPanel(rawPtr, true);
+  GetPanel(str_id: string | Pointer): wxPanel | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetPanel(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxPanel(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetRadioButton(str_id: Pointer): wxRadioButton | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetRadioButton(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxRadioButton(rawPtr, true);
+  GetRadioButton(str_id: string | Pointer): wxRadioButton | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetRadioButton(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxRadioButton(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetRadioBox(str_id: Pointer): wxRadioBox | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetRadioBox(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxRadioBox(rawPtr, true);
+  GetRadioBox(str_id: string | Pointer): wxRadioBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetRadioBox(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxRadioBox(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetScrollBar(str_id: Pointer): wxScrollBar | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetScrollBar(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxScrollBar(rawPtr, true);
+  GetScrollBar(str_id: string | Pointer): wxScrollBar | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetScrollBar(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxScrollBar(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetScrolledWindow(str_id: Pointer): wxScrolledWindow | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetScrolledWindow(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxScrolledWindow(rawPtr, true);
+  GetScrolledWindow(str_id: string | Pointer): wxScrolledWindow | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetScrolledWindow(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxScrolledWindow(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetSlider(str_id: Pointer): wxSlider | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetSlider(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxSlider(rawPtr, true);
+  GetSlider(str_id: string | Pointer): wxSlider | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetSlider(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSlider(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetSpinButton(str_id: Pointer): wxSpinButton | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetSpinButton(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxSpinButton(rawPtr, true);
+  GetSpinButton(str_id: string | Pointer): wxSpinButton | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetSpinButton(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSpinButton(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetSpinCtrl(str_id: Pointer): wxSpinCtrl | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetSpinCtrl(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxSpinCtrl(rawPtr, true);
+  GetSpinCtrl(str_id: string | Pointer): wxSpinCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetSpinCtrl(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSpinCtrl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetSplitterWindow(str_id: Pointer): wxSplitterWindow | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetSplitterWindow(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxSplitterWindow(rawPtr, true);
+  GetSplitterWindow(str_id: string | Pointer): wxSplitterWindow | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetSplitterWindow(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSplitterWindow(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetStaticBitmap(str_id: Pointer): wxStaticBitmap | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetStaticBitmap(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxStaticBitmap(rawPtr, true);
+  GetStaticBitmap(str_id: string | Pointer): wxStaticBitmap | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetStaticBitmap(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxStaticBitmap(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetStaticBox(str_id: Pointer): wxStaticBox | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetStaticBox(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxStaticBox(rawPtr, true);
+  GetStaticBox(str_id: string | Pointer): wxStaticBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetStaticBox(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxStaticBox(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetStaticLine(str_id: Pointer): wxStaticLine | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetStaticLine(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxStaticLine(rawPtr, true);
+  GetStaticLine(str_id: string | Pointer): wxStaticLine | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetStaticLine(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxStaticLine(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetStaticText(str_id: Pointer): wxStaticText | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetStaticText(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxStaticText(rawPtr, true);
+  GetStaticText(str_id: string | Pointer): wxStaticText | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetStaticText(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxStaticText(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetTextCtrl(str_id: Pointer): wxTextCtrl | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetTextCtrl(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxTextCtrl(rawPtr, true);
+  GetTextCtrl(str_id: string | Pointer): wxTextCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetTextCtrl(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxTextCtrl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetTreeCtrl(str_id: Pointer): wxTreeCtrl | null {
-    const rawPtr = lib.symbols.wxXmlResource_GetTreeCtrl(this._ptr, str_id);
-    if (rawPtr === null) return null;
-    return new wxTreeCtrl(rawPtr, true);
+  GetTreeCtrl(str_id: string | Pointer): wxTreeCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str_id === "string") __s0 = createWxString(str_id);
+      const rawPtr = lib.symbols.wxXmlResource_GetTreeCtrl(this._ptr, __s0 ? __s0.ptr : (str_id as Pointer));
+      if (rawPtr === null) return null;
+      return new wxTreeCtrl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Unload(filemask: Pointer): boolean {
-    return (lib.symbols.wxXmlResource_Unload(this._ptr, filemask) as number) !== 0;
+  Unload(filemask: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filemask === "string") __s0 = createWxString(filemask);
+      return (lib.symbols.wxXmlResource_Unload(this._ptr, __s0 ? __s0.ptr : (filemask as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Set(): wxXmlResource | null {
@@ -406,8 +716,14 @@ export class wxXmlResource extends wxObject {
     return new wxXmlResource(rawPtr, true);
   }
 
-  SetDomain(domain: Pointer): void {
-    lib.symbols.wxXmlResource_SetDomain(this._ptr, domain);
+  SetDomain(domain: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof domain === "string") __s0 = createWxString(domain);
+      lib.symbols.wxXmlResource_SetDomain(this._ptr, __s0 ? __s0.ptr : (domain as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFlags(flags: number): void {
@@ -422,10 +738,16 @@ export function createWxXmlResource(flags: number): wxXmlResource | null {
     return new wxXmlResource(rawPtr);
 }
 
-export function createWxXmlResourceFromFile(filemask: Pointer, flags: number): wxXmlResource | null {
-    const rawPtr = lib.symbols.wxXmlResource_CreateFromFile(filemask, flags);
-    if (rawPtr === null) return null;
-    return new wxXmlResource(rawPtr);
+export function createWxXmlResourceFromFile(filemask: string | Pointer, flags: number): wxXmlResource | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filemask === "string") __s0 = createWxString(filemask);
+      const rawPtr = lib.symbols.wxXmlResource_CreateFromFile(__s0 ? __s0.ptr : (filemask as Pointer), flags);
+      if (rawPtr === null) return null;
+      return new wxXmlResource(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

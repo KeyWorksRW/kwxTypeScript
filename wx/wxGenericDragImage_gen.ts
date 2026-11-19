@@ -27,7 +27,7 @@ export class wxGenericDragImage {
   GetImageRect(x_pos: number, y_pos: number): wxRect | null {
     const rawPtr = lib.symbols.wxGenericDragImage_GetImageRect(this._ptr, x_pos, y_pos);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   UpdateBackingFromWindow(windowDC: Pointer, destDC: Pointer, x: number, y: number, width: number, height: number, xdest: number, ydest: number, destWidth: number, destHeight: number): boolean {

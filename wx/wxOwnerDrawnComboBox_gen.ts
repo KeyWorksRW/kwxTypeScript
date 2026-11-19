@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxComboCtrl } from "./wxComboCtrl_gen.ts";
 import { wxClientData } from "./wxClientData_gen.ts";
@@ -14,12 +15,24 @@ export class wxOwnerDrawnComboBox extends wxComboCtrl {
     return this._ptr;
   }
 
-  Append(item: Pointer): number {
-    return lib.symbols.wxOwnerDrawnComboBox_Append(this._ptr, item);
+  Append(item: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxOwnerDrawnComboBox_Append(this._ptr, __s0 ? __s0.ptr : (item as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AppendWithClientData(item: Pointer, clientData: Pointer): number {
-    return lib.symbols.wxOwnerDrawnComboBox_AppendWithClientData(this._ptr, item, clientData);
+  AppendWithClientData(item: string | Pointer, clientData: Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxOwnerDrawnComboBox_AppendWithClientData(this._ptr, __s0 ? __s0.ptr : (item as Pointer), clientData);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override Clear(): void {
@@ -31,8 +44,14 @@ export class wxOwnerDrawnComboBox extends wxComboCtrl {
     lib.symbols.wxOwnerDrawnComboBox_Delete(this._ptr, index);
   }
 
-  FindString(str: Pointer, caseSensitive: boolean): number {
-    return lib.symbols.wxOwnerDrawnComboBox_FindString(this._ptr, str, caseSensitive ? 1 : 0);
+  FindString(str: string | Pointer, caseSensitive: boolean): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      return lib.symbols.wxOwnerDrawnComboBox_FindString(this._ptr, __s0 ? __s0.ptr : (str as Pointer), caseSensitive ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override GetClientData(index: number): wxClientData | null;
@@ -66,21 +85,33 @@ export class wxOwnerDrawnComboBox extends wxComboCtrl {
   GetString(index: number): wxString | null {
     const rawPtr = lib.symbols.wxOwnerDrawnComboBox_GetString(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override GetStringSelection(): wxString | null {
     const rawPtr = lib.symbols.wxOwnerDrawnComboBox_GetStringSelection(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  Insert(item: Pointer, pos: number): number {
-    return lib.symbols.wxOwnerDrawnComboBox_Insert(this._ptr, item, pos);
+  Insert(item: string | Pointer, pos: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxOwnerDrawnComboBox_Insert(this._ptr, __s0 ? __s0.ptr : (item as Pointer), pos);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertWithClientData(item: Pointer, pos: number, clientData: Pointer): number {
-    return lib.symbols.wxOwnerDrawnComboBox_InsertWithClientData(this._ptr, item, pos, clientData);
+  InsertWithClientData(item: string | Pointer, pos: number, clientData: Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxOwnerDrawnComboBox_InsertWithClientData(this._ptr, __s0 ? __s0.ptr : (item as Pointer), pos, clientData);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsListEmpty(): boolean {
@@ -113,22 +144,46 @@ export class wxOwnerDrawnComboBox extends wxComboCtrl {
     }
   }
 
-  SetString(index: number, str: Pointer): void {
-    lib.symbols.wxOwnerDrawnComboBox_SetString(this._ptr, index, str);
+  SetString(index: number, str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxOwnerDrawnComboBox_SetString(this._ptr, index, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetStringSelection(str: Pointer): void {
-    lib.symbols.wxOwnerDrawnComboBox_SetStringSelection(this._ptr, str);
+  SetStringSelection(str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxOwnerDrawnComboBox_SetStringSelection(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxOwnerDrawnComboBox(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: bigint): Pointer {
-    return lib.symbols.wxOwnerDrawnComboBox_Create(parent, id, value, x, y, width, height, style);
+export function createWxOwnerDrawnComboBox(parent: Pointer, id: number, value: string | Pointer, x: number, y: number, width: number, height: number, style: bigint): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      return lib.symbols.wxOwnerDrawnComboBox_Create(parent, id, __s0 ? __s0.ptr : (value as Pointer), x, y, width, height, style);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxOwnerDrawnComboBoxWithChoices(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, count: number, choices: Pointer, style: bigint): Pointer {
-    return lib.symbols.wxOwnerDrawnComboBox_CreateWithChoices(parent, id, value, x, y, width, height, count, choices, style);
+export function createWxOwnerDrawnComboBoxWithChoices(parent: Pointer, id: number, value: string | Pointer, x: number, y: number, width: number, height: number, count: number, choices: Pointer, style: bigint): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      return lib.symbols.wxOwnerDrawnComboBox_CreateWithChoices(parent, id, __s0 ? __s0.ptr : (value as Pointer), x, y, width, height, count, choices, style);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

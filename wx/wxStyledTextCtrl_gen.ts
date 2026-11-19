@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxColour } from "./wxColour_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -32,15 +33,21 @@ export class wxStyledTextCtrl {
   AnnotationGetText(line: number): wxString | null {
     const rawPtr = lib.symbols.wxStyledTextCtrl_AnnotationGetText(this._ptr, line);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   AnnotationSetStyle(line: number, style: number): void {
     lib.symbols.wxStyledTextCtrl_AnnotationSetStyle(this._ptr, line, style);
   }
 
-  AnnotationSetText(line: number, text: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_AnnotationSetText(this._ptr, line, text);
+  AnnotationSetText(line: number, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStyledTextCtrl_AnnotationSetText(this._ptr, line, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AnnotationSetVisible(visible: number): void {
@@ -94,13 +101,13 @@ export class wxStyledTextCtrl {
   StyleGetBackground(style: number): wxColour | null {
     const rawPtr = lib.symbols.wxStyledTextCtrl_StyleGetBackground(this._ptr, style);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   StyleGetForeground(style: number): wxColour | null {
     const rawPtr = lib.symbols.wxStyledTextCtrl_StyleGetForeground(this._ptr, style);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   StyleGetSizeFractional(style: number): number {
@@ -115,12 +122,24 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_AddStyledText(pObject, data);
   }
 
-  AddText(pObject: Pointer, text: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_AddText(pObject, text);
+  AddText(pObject: Pointer, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStyledTextCtrl_AddText(pObject, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AppendText(pObject: Pointer, text: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_AppendText(pObject, text);
+  AppendText(pObject: Pointer, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStyledTextCtrl_AppendText(pObject, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AutoCompActive(pObject: Pointer): boolean {
@@ -167,8 +186,14 @@ export class wxStyledTextCtrl {
     return lib.symbols.wxStyledTextCtrl_AutoCompPosStart(pObject);
   }
 
-  AutoCompSelect(pObject: Pointer, text: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_AutoCompSelect(pObject, text);
+  AutoCompSelect(pObject: Pointer, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStyledTextCtrl_AutoCompSelect(pObject, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AutoCompSetAutoHide(pObject: Pointer, autoHide: boolean): void {
@@ -187,8 +212,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_AutoCompSetDropRestOfWord(pObject, dropRestOfWord ? 1 : 0);
   }
 
-  AutoCompSetFillUps(pObject: Pointer, characterSet: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_AutoCompSetFillUps(pObject, characterSet);
+  AutoCompSetFillUps(pObject: Pointer, characterSet: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof characterSet === "string") __s0 = createWxString(characterSet);
+      lib.symbols.wxStyledTextCtrl_AutoCompSetFillUps(pObject, __s0 ? __s0.ptr : (characterSet as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AutoCompSetIgnoreCase(pObject: Pointer, ignoreCase: boolean): void {
@@ -203,12 +234,24 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_AutoCompSetTypeSeparator(pObject, separatorCharacter);
   }
 
-  AutoCompShow(pObject: Pointer, lenEntered: number, itemList: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_AutoCompShow(pObject, lenEntered, itemList);
+  AutoCompShow(pObject: Pointer, lenEntered: number, itemList: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof itemList === "string") __s0 = createWxString(itemList);
+      lib.symbols.wxStyledTextCtrl_AutoCompShow(pObject, lenEntered, __s0 ? __s0.ptr : (itemList as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AutoCompStops(pObject: Pointer, characterSet: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_AutoCompStops(pObject, characterSet);
+  AutoCompStops(pObject: Pointer, characterSet: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof characterSet === "string") __s0 = createWxString(characterSet);
+      lib.symbols.wxStyledTextCtrl_AutoCompStops(pObject, __s0 ? __s0.ptr : (characterSet as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   BeginUndoAction(pObject: Pointer): void {
@@ -255,8 +298,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_CallTipSetHighlight(pObject, start, end);
   }
 
-  CallTipShow(pObject: Pointer, pos: number, definition: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_CallTipShow(pObject, pos, definition);
+  CallTipShow(pObject: Pointer, pos: number, definition: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof definition === "string") __s0 = createWxString(definition);
+      lib.symbols.wxStyledTextCtrl_CallTipShow(pObject, pos, __s0 ? __s0.ptr : (definition as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   CanPaste(pObject: Pointer): boolean {
@@ -323,8 +372,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_CopyRange(pObject, start, end);
   }
 
-  CopyText(pObject: Pointer, length: number, text: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_CopyText(pObject, length, text);
+  CopyText(pObject: Pointer, length: number, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStyledTextCtrl_CopyText(pObject, length, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Cut(pObject: Pointer): void {
@@ -363,8 +418,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_EnsureVisibleEnforcePolicy(pObject, line);
   }
 
-  FindText(pObject: Pointer, minPos: number, maxPos: number, text: Pointer, flags: number): number {
-    return lib.symbols.wxStyledTextCtrl_FindText(pObject, minPos, maxPos, text, flags);
+  FindText(pObject: Pointer, minPos: number, maxPos: number, text: string | Pointer, flags: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxStyledTextCtrl_FindText(pObject, minPos, maxPos, __s0 ? __s0.ptr : (text as Pointer), flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   FormatRange(pObject: Pointer, doDraw: boolean, startPos: number, endPos: number, draw: Pointer, target: Pointer, renderRect: Pointer, pageRect: Pointer): number {
@@ -739,8 +800,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_IndicatorSetStyle(pObject, indic, style);
   }
 
-  InsertText(pObject: Pointer, pos: number, text: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_InsertText(pObject, pos, text);
+  InsertText(pObject: Pointer, pos: number, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStyledTextCtrl_InsertText(pObject, pos, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   LineCopy(pObject: Pointer): void {
@@ -783,8 +850,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_LinesSplit(pObject, pixelWidth);
   }
 
-  LoadFile(pObject: Pointer, filename: Pointer): boolean {
-    return (lib.symbols.wxStyledTextCtrl_LoadFile(pObject, filename) as number) !== 0;
+  LoadFile(pObject: Pointer, filename: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxStyledTextCtrl_LoadFile(pObject, __s0 ? __s0.ptr : (filename as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   MarkerAdd(pObject: Pointer, line: number, markerNumber: number): number {
@@ -879,20 +952,44 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_ReleaseDocument(pObject, docPointer);
   }
 
-  ReplaceSelection(pObject: Pointer, text: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_ReplaceSelection(pObject, text);
+  ReplaceSelection(pObject: Pointer, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStyledTextCtrl_ReplaceSelection(pObject, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ReplaceTarget(pObject: Pointer, text: Pointer): number {
-    return lib.symbols.wxStyledTextCtrl_ReplaceTarget(pObject, text);
+  ReplaceTarget(pObject: Pointer, text: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxStyledTextCtrl_ReplaceTarget(pObject, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ReplaceTargetRE(pObject: Pointer, text: Pointer): number {
-    return lib.symbols.wxStyledTextCtrl_ReplaceTargetRE(pObject, text);
+  ReplaceTargetRE(pObject: Pointer, text: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxStyledTextCtrl_ReplaceTargetRE(pObject, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SaveFile(pObject: Pointer, filename: Pointer): boolean {
-    return (lib.symbols.wxStyledTextCtrl_SaveFile(pObject, filename) as number) !== 0;
+  SaveFile(pObject: Pointer, filename: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxStyledTextCtrl_SaveFile(pObject, __s0 ? __s0.ptr : (filename as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ScrollToColumn(pObject: Pointer, column: number): void {
@@ -907,16 +1004,34 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_SearchAnchor(pObject);
   }
 
-  SearchInTarget(pObject: Pointer, text: Pointer): number {
-    return lib.symbols.wxStyledTextCtrl_SearchInTarget(pObject, text);
+  SearchInTarget(pObject: Pointer, text: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxStyledTextCtrl_SearchInTarget(pObject, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SearchNext(pObject: Pointer, flags: number, text: Pointer): number {
-    return lib.symbols.wxStyledTextCtrl_SearchNext(pObject, flags, text);
+  SearchNext(pObject: Pointer, flags: number, text: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxStyledTextCtrl_SearchNext(pObject, flags, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SearchPrev(pObject: Pointer, flags: number, text: Pointer): number {
-    return lib.symbols.wxStyledTextCtrl_SearchPrev(pObject, flags, text);
+  SearchPrev(pObject: Pointer, flags: number, text: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxStyledTextCtrl_SearchPrev(pObject, flags, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SelectAll(pObject: Pointer): void {
@@ -1043,8 +1158,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_SetIndentationGuides(pObject, show ? 1 : 0);
   }
 
-  SetKeyWords(pObject: Pointer, keywordSet: number, keyWords: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_SetKeyWords(pObject, keywordSet, keyWords);
+  SetKeyWords(pObject: Pointer, keywordSet: number, keyWords: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keyWords === "string") __s0 = createWxString(keyWords);
+      lib.symbols.wxStyledTextCtrl_SetKeyWords(pObject, keywordSet, __s0 ? __s0.ptr : (keyWords as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetLastKeydownProcessed(pObject: Pointer, val: boolean): void {
@@ -1059,8 +1180,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_SetLexer(pObject, lexer);
   }
 
-  SetLexerLanguage(pObject: Pointer, language: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_SetLexerLanguage(pObject, language);
+  SetLexerLanguage(pObject: Pointer, language: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof language === "string") __s0 = createWxString(language);
+      lib.symbols.wxStyledTextCtrl_SetLexerLanguage(pObject, __s0 ? __s0.ptr : (language as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetLineIndentation(pObject: Pointer, line: number, indentSize: number): void {
@@ -1127,8 +1254,17 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_SetPrintWrapMode(pObject, mode);
   }
 
-  SetProperty(pObject: Pointer, key: Pointer, value: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_SetProperty(pObject, key, value);
+  SetProperty(pObject: Pointer, key: string | Pointer, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      if (typeof value === "string") __s1 = createWxString(value);
+      lib.symbols.wxStyledTextCtrl_SetProperty(pObject, __s0 ? __s0.ptr : (key as Pointer), __s1 ? __s1.ptr : (value as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   SetReadOnly(pObject: Pointer, readOnly: boolean): void {
@@ -1203,8 +1339,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_SetTargetStart(pObject, pos);
   }
 
-  SetText(pObject: Pointer, text: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_SetText(pObject, text);
+  SetText(pObject: Pointer, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxStyledTextCtrl_SetText(pObject, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetUndoCollection(pObject: Pointer, collectUndo: boolean): void {
@@ -1247,8 +1389,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_SetWhitespaceForeground(pObject, useSetting ? 1 : 0, fore_r, fore_g, fore_b);
   }
 
-  SetWordChars(pObject: Pointer, characters: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_SetWordChars(pObject, characters);
+  SetWordChars(pObject: Pointer, characters: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof characters === "string") __s0 = createWxString(characters);
+      lib.symbols.wxStyledTextCtrl_SetWordChars(pObject, __s0 ? __s0.ptr : (characters as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetWrapMode(pObject: Pointer, mode: number): void {
@@ -1319,16 +1467,28 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_StyleSetEOLFilled(pObject, style, filled ? 1 : 0);
   }
 
-  StyleSetFaceName(pObject: Pointer, style: number, fontName: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_StyleSetFaceName(pObject, style, fontName);
+  StyleSetFaceName(pObject: Pointer, style: number, fontName: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fontName === "string") __s0 = createWxString(fontName);
+      lib.symbols.wxStyledTextCtrl_StyleSetFaceName(pObject, style, __s0 ? __s0.ptr : (fontName as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   StyleSetFont(pObject: Pointer, styleNum: number, font: Pointer): void {
     lib.symbols.wxStyledTextCtrl_StyleSetFont(pObject, styleNum, font);
   }
 
-  StyleSetFontAttr(pObject: Pointer, styleNum: number, size: number, faceName: Pointer, bold: boolean, italic: boolean, underline: boolean): void {
-    lib.symbols.wxStyledTextCtrl_StyleSetFontAttr(pObject, styleNum, size, faceName, bold ? 1 : 0, italic ? 1 : 0, underline ? 1 : 0);
+  StyleSetFontAttr(pObject: Pointer, styleNum: number, size: number, faceName: string | Pointer, bold: boolean, italic: boolean, underline: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof faceName === "string") __s0 = createWxString(faceName);
+      lib.symbols.wxStyledTextCtrl_StyleSetFontAttr(pObject, styleNum, size, __s0 ? __s0.ptr : (faceName as Pointer), bold ? 1 : 0, italic ? 1 : 0, underline ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   StyleSetForeground(pObject: Pointer, style: number, fore_r: number, fore_g: number, fore_b: number): void {
@@ -1347,8 +1507,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_StyleSetSize(pObject, style, sizePoints);
   }
 
-  StyleSetSpec(pObject: Pointer, styleNum: number, spec: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_StyleSetSpec(pObject, styleNum, spec);
+  StyleSetSpec(pObject: Pointer, styleNum: number, spec: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof spec === "string") __s0 = createWxString(spec);
+      lib.symbols.wxStyledTextCtrl_StyleSetSpec(pObject, styleNum, __s0 ? __s0.ptr : (spec as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   StyleSetUnderline(pObject: Pointer, style: number, underline: boolean): void {
@@ -1367,8 +1533,14 @@ export class wxStyledTextCtrl {
     return lib.symbols.wxStyledTextCtrl_TextHeight(pObject, line);
   }
 
-  TextWidth(pObject: Pointer, style: number, text: Pointer): number {
-    return lib.symbols.wxStyledTextCtrl_TextWidth(pObject, style, text);
+  TextWidth(pObject: Pointer, style: number, text: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxStyledTextCtrl_TextWidth(pObject, style, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ToggleFold(pObject: Pointer, line: number): void {
@@ -1383,8 +1555,14 @@ export class wxStyledTextCtrl {
     lib.symbols.wxStyledTextCtrl_UsePopUp(pObject, allowPopUp ? 1 : 0);
   }
 
-  UserListShow(pObject: Pointer, listType: number, itemList: Pointer): void {
-    lib.symbols.wxStyledTextCtrl_UserListShow(pObject, listType, itemList);
+  UserListShow(pObject: Pointer, listType: number, itemList: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof itemList === "string") __s0 = createWxString(itemList);
+      lib.symbols.wxStyledTextCtrl_UserListShow(pObject, listType, __s0 ? __s0.ptr : (itemList as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   VisibleFromDocLine(pObject: Pointer, line: number): number {
@@ -1417,8 +1595,14 @@ export class wxStyledTextCtrl {
 
 }
 
-export function createWxStyledTextCtrl(parent: Pointer, id: number, text: Pointer, x: number, y: number, width: number, height: number, style: number): Pointer {
-    return lib.symbols.wxStyledTextCtrl_Create(parent, id, text, x, y, width, height, style);
+export function createWxStyledTextCtrl(parent: Pointer, id: number, text: string | Pointer, x: number, y: number, width: number, height: number, style: number): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxStyledTextCtrl_Create(parent, id, __s0 ? __s0.ptr : (text as Pointer), x, y, width, height, style);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxStyledTextCtrlDocument(pObject: Pointer): Pointer {

@@ -41,7 +41,7 @@ export class wxBitmapVector {
   Item(index: number): wxBitmap | null {
     const rawPtr = lib.symbols.wxBitmapVector_Item(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
 }

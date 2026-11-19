@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -24,28 +25,74 @@ export class wxXmlDocument extends wxObject {
     this.Delete();
   }
 
+  LoadFile(filename: string | Pointer, flags: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxXmlDocument_LoadFile(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), flags) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  LoadStream(stream: Pointer, flags: number): boolean {
+    return (lib.symbols.wxXmlDocument_LoadStream(this._ptr, stream, flags) as number) !== 0;
+  }
+
+  SaveFile(filename: string | Pointer, indentstep: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxXmlDocument_SaveFile(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), indentstep) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  SaveStream(stream: Pointer, indentstep: number): boolean {
+    return (lib.symbols.wxXmlDocument_SaveStream(this._ptr, stream, indentstep) as number) !== 0;
+  }
+
   GetDocumentNode(): wxXmlNode | null {
     const rawPtr = lib.symbols.wxXmlDocument_GetDocumentNode(this._ptr);
     if (rawPtr === null) return null;
     return new wxXmlNode(rawPtr, true);
   }
 
-  Load(file_name: Pointer, flags: number): boolean {
-    return (lib.symbols.wxXmlDocument_Load(this._ptr, file_name, flags) as number) !== 0;
+  Load(file_name: string | Pointer, flags: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      return (lib.symbols.wxXmlDocument_Load(this._ptr, __s0 ? __s0.ptr : (file_name as Pointer), flags) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadFromString(text: Pointer, flags: number): boolean {
-    return (lib.symbols.wxXmlDocument_LoadFromString(this._ptr, text, flags) as number) !== 0;
+  LoadFromString(text: string | Pointer, flags: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxXmlDocument_LoadFromString(this._ptr, __s0 ? __s0.ptr : (text as Pointer), flags) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Save(file_name: Pointer, indent_step: number): boolean {
-    return (lib.symbols.wxXmlDocument_Save(this._ptr, file_name, indent_step) as number) !== 0;
+  Save(file_name: string | Pointer, indent_step: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      return (lib.symbols.wxXmlDocument_Save(this._ptr, __s0 ? __s0.ptr : (file_name as Pointer), indent_step) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SaveToString(indent_step: number): wxString | null {
     const rawPtr = lib.symbols.wxXmlDocument_SaveToString(this._ptr, indent_step);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetRoot(): wxXmlNode | null {
@@ -67,21 +114,33 @@ export class wxXmlDocument extends wxObject {
   GetVersion(): wxString | null {
     const rawPtr = lib.symbols.wxXmlDocument_GetVersion(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetVersion(version: Pointer): void {
-    lib.symbols.wxXmlDocument_SetVersion(this._ptr, version);
+  SetVersion(version: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof version === "string") __s0 = createWxString(version);
+      lib.symbols.wxXmlDocument_SetVersion(this._ptr, __s0 ? __s0.ptr : (version as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFileEncoding(): wxString | null {
     const rawPtr = lib.symbols.wxXmlDocument_GetFileEncoding(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetFileEncoding(encoding: Pointer): void {
-    lib.symbols.wxXmlDocument_SetFileEncoding(this._ptr, encoding);
+  SetFileEncoding(encoding: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof encoding === "string") __s0 = createWxString(encoding);
+      lib.symbols.wxXmlDocument_SetFileEncoding(this._ptr, __s0 ? __s0.ptr : (encoding as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFileType(): number {
@@ -112,16 +171,28 @@ export function createWxXmlDocument(): wxXmlDocument | null {
     return new wxXmlDocument(rawPtr);
 }
 
-export function createWxXmlDocumentFromFile(file_name: Pointer, flags: number): wxXmlDocument | null {
-    const rawPtr = lib.symbols.wxXmlDocument_CreateFromFile(file_name, flags);
-    if (rawPtr === null) return null;
-    return new wxXmlDocument(rawPtr);
+export function createWxXmlDocumentFromFile(file_name: string | Pointer, flags: number): wxXmlDocument | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      const rawPtr = lib.symbols.wxXmlDocument_CreateFromFile(__s0 ? __s0.ptr : (file_name as Pointer), flags);
+      if (rawPtr === null) return null;
+      return new wxXmlDocument(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxXmlDocumentFromString(text: Pointer, flags: number): wxXmlDocument | null {
-    const rawPtr = lib.symbols.wxXmlDocument_CreateFromString(text, flags);
-    if (rawPtr === null) return null;
-    return new wxXmlDocument(rawPtr);
+export function createWxXmlDocumentFromString(text: string | Pointer, flags: number): wxXmlDocument | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxXmlDocument_CreateFromString(__s0 ? __s0.ptr : (text as Pointer), flags);
+      if (rawPtr === null) return null;
+      return new wxXmlDocument(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

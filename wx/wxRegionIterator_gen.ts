@@ -26,7 +26,7 @@ export class wxRegionIterator extends wxObject {
   GetRect(): wxRect | null {
     const rawPtr = lib.symbols.wxRegionIterator_GetRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetHeight(): number {

@@ -16,7 +16,7 @@ export class wxSashEvent extends wxEvent {
   GetDragRect(): wxRect | null {
     const rawPtr = lib.symbols.wxSashEvent_GetDragRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetDragStatus(): number {

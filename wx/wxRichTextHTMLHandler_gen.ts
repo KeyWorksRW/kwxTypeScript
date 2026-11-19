@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextFileHandler } from "./wxRichTextFileHandler_gen.ts";
 import { wxArrayInt } from "./wxArrayInt_gen.ts";
@@ -24,8 +25,14 @@ export class wxRichTextHTMLHandler extends wxRichTextFileHandler {
     this.Delete();
   }
 
-  override CanHandle(filename: Pointer): boolean {
-    return (lib.symbols.wxRichTextHTMLHandler_CanHandle(this._ptr, filename) as number) !== 0;
+  override CanHandle(filename: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxRichTextHTMLHandler_CanHandle(this._ptr, __s0 ? __s0.ptr : (filename as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ClearTemporaryImageLocations(): void {
@@ -36,14 +43,20 @@ export class wxRichTextHTMLHandler extends wxRichTextFileHandler {
     return (lib.symbols.wxRichTextHTMLHandler_DeleteTemporaryImages(this._ptr) as number) !== 0;
   }
 
-  SetTempDir(tempDir: Pointer): void {
-    lib.symbols.wxRichTextHTMLHandler_SetTempDir(this._ptr, tempDir);
+  SetTempDir(tempDir: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof tempDir === "string") __s0 = createWxString(tempDir);
+      lib.symbols.wxRichTextHTMLHandler_SetTempDir(this._ptr, __s0 ? __s0.ptr : (tempDir as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetTempDir(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextHTMLHandler_GetTempDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetFontSizeMapping(mapping: Pointer): void {
@@ -58,10 +71,19 @@ export class wxRichTextHTMLHandler extends wxRichTextFileHandler {
 
 }
 
-export function createWxRichTextHTMLHandler(name: Pointer, ext: Pointer, type_: number): wxRichTextHTMLHandler | null {
-    const rawPtr = lib.symbols.wxRichTextHTMLHandler_Create(name, ext, type_);
-    if (rawPtr === null) return null;
-    return new wxRichTextHTMLHandler(rawPtr);
+export function createWxRichTextHTMLHandler(name: string | Pointer, ext: string | Pointer, type_: number): wxRichTextHTMLHandler | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof ext === "string") __s1 = createWxString(ext);
+      const rawPtr = lib.symbols.wxRichTextHTMLHandler_Create(__s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (ext as Pointer), type_);
+      if (rawPtr === null) return null;
+      return new wxRichTextHTMLHandler(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

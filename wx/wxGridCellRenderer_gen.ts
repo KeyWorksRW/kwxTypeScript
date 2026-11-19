@@ -27,7 +27,7 @@ export class wxGridCellRenderer {
   GetPreferredSize(grid: Pointer, attr: Pointer, dc: Pointer, row: number, col: number): wxSize | null {
     const rawPtr = lib.symbols.wxGridCellRenderer_GetPreferredSize(this._ptr, grid, attr, dc, row, col);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetPreferredHeight(grid: Pointer, attr: Pointer, dc: Pointer, row: number, col: number, width: number): number {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxDateTime } from "./wxDateTime_gen.ts";
@@ -49,7 +50,7 @@ export class wxArchiveEntry extends wxObject {
   GetInternalName(): wxString | null {
     const rawPtr = lib.symbols.wxArchiveEntry_GetInternalName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetInternalFormat(): number {
@@ -59,7 +60,7 @@ export class wxArchiveEntry extends wxObject {
   GetName(path_format: number): wxString | null {
     const rawPtr = lib.symbols.wxArchiveEntry_GetName(this._ptr, path_format);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Clone(): wxArchiveEntry | null {
@@ -84,8 +85,14 @@ export class wxArchiveEntry extends wxObject {
     lib.symbols.wxArchiveEntry_SetIsReadOnly(this._ptr, is_read_only ? 1 : 0);
   }
 
-  SetName(entry_name: Pointer, path_format: number): void {
-    lib.symbols.wxArchiveEntry_SetName(this._ptr, entry_name, path_format);
+  SetName(entry_name: string | Pointer, path_format: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      lib.symbols.wxArchiveEntry_SetName(this._ptr, __s0 ? __s0.ptr : (entry_name as Pointer), path_format);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

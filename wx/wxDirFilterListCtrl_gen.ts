@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxChoice } from "./wxChoice_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -22,8 +23,14 @@ export class wxDirFilterListCtrl extends wxChoice {
     this.Delete();
   }
 
-  FillFilterList(filter: Pointer, default_filter: number): void {
-    lib.symbols.wxDirFilterListCtrl_FillFilterList(this._ptr, filter, default_filter);
+  FillFilterList(filter: string | Pointer, default_filter: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filter === "string") __s0 = createWxString(filter);
+      lib.symbols.wxDirFilterListCtrl_FillFilterList(this._ptr, __s0 ? __s0.ptr : (filter as Pointer), default_filter);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

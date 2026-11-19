@@ -25,7 +25,7 @@ export class wxTreeItemData extends wxClientData {
   GetId(): wxTreeItemId | null {
     const rawPtr = lib.symbols.wxTreeItemData_GetId(this._ptr);
     if (rawPtr === null) return null;
-    return new wxTreeItemId(rawPtr, true);
+    return new wxTreeItemId(rawPtr);
   }
 
   SetId(id: Pointer): void {

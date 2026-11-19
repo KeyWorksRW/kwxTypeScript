@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -12,8 +13,14 @@ export class wxInfoBar extends wxControl {
     return this._ptr;
   }
 
-  AddButton(btnid: number, label: Pointer): void {
-    lib.symbols.wxInfoBar_AddButton(this._ptr, btnid, label);
+  AddButton(btnid: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxInfoBar_AddButton(this._ptr, btnid, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Dismiss(): void {
@@ -56,20 +63,38 @@ export class wxInfoBar extends wxControl {
     lib.symbols.wxInfoBar_SetShowHideEffects(this._ptr, showEffect, hideEffect);
   }
 
-  ShowMessage(msg: Pointer, flags: number): void {
-    lib.symbols.wxInfoBar_ShowMessage(this._ptr, msg, flags);
+  ShowMessage(msg: string | Pointer, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof msg === "string") __s0 = createWxString(msg);
+      lib.symbols.wxInfoBar_ShowMessage(this._ptr, __s0 ? __s0.ptr : (msg as Pointer), flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ShowCheckBox(checkBoxText: Pointer, checked: boolean): void {
-    lib.symbols.wxInfoBar_ShowCheckBox(this._ptr, checkBoxText, checked ? 1 : 0);
+  ShowCheckBox(checkBoxText: string | Pointer, checked: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof checkBoxText === "string") __s0 = createWxString(checkBoxText);
+      lib.symbols.wxInfoBar_ShowCheckBox(this._ptr, __s0 ? __s0.ptr : (checkBoxText as Pointer), checked ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsCheckBoxChecked(): boolean {
     return (lib.symbols.wxInfoBar_IsCheckBoxChecked(this._ptr) as number) !== 0;
   }
 
-  ShowMessageFor(msg: Pointer, timeoutInSeconds: number, flags: number): void {
-    lib.symbols.wxInfoBar_ShowMessageFor(this._ptr, msg, timeoutInSeconds, flags);
+  ShowMessageFor(msg: string | Pointer, timeoutInSeconds: number, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof msg === "string") __s0 = createWxString(msg);
+      lib.symbols.wxInfoBar_ShowMessageFor(this._ptr, __s0 ? __s0.ptr : (msg as Pointer), timeoutInSeconds, flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   RemoveAllButtons(): void {

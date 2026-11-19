@@ -26,7 +26,7 @@ export class wxPrinterDC extends wxDC {
   GetPaperRect(): wxRect | null {
     const rawPtr = lib.symbols.wxPrinterDC_GetPaperRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
 }

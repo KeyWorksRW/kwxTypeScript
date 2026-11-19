@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPoint } from "./wxPoint_gen.ts";
 import { wxSize } from "./wxSize_gen.ts";
@@ -36,13 +37,13 @@ export class wxAuiPaneInfo {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxAuiPaneInfo_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetCaption(): wxString | null {
     const rawPtr = lib.symbols.wxAuiPaneInfo_GetCaption(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetWindow(): wxWindow | null {
@@ -115,10 +116,16 @@ export class wxAuiPaneInfo {
     return new wxAuiPaneInfo(rawPtr, true);
   }
 
-  Caption(caption: Pointer): wxAuiPaneInfo | null {
-    const rawPtr = lib.symbols.wxAuiPaneInfo_Caption(this._ptr, caption);
-    if (rawPtr === null) return null;
-    return new wxAuiPaneInfo(rawPtr, true);
+  Caption(caption: string | Pointer): wxAuiPaneInfo | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof caption === "string") __s0 = createWxString(caption);
+      const rawPtr = lib.symbols.wxAuiPaneInfo_Caption(this._ptr, __s0 ? __s0.ptr : (caption as Pointer));
+      if (rawPtr === null) return null;
+      return new wxAuiPaneInfo(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   CaptionVisible(visible: boolean): wxAuiPaneInfo | null {
@@ -339,10 +346,16 @@ export class wxAuiPaneInfo {
     return new wxAuiPaneInfo(rawPtr, true);
   }
 
-  Name(name: Pointer): wxAuiPaneInfo | null {
-    const rawPtr = lib.symbols.wxAuiPaneInfo_Name(this._ptr, name);
-    if (rawPtr === null) return null;
-    return new wxAuiPaneInfo(rawPtr, true);
+  Name(name: string | Pointer): wxAuiPaneInfo | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxAuiPaneInfo_Name(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxAuiPaneInfo(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   PaneBorder(visible: boolean): wxAuiPaneInfo | null {
@@ -513,6 +526,12 @@ export class wxAuiPaneInfo {
 
   MinSizeXY(x: number, y: number): wxAuiPaneInfo | null {
     const rawPtr = lib.symbols.wxAuiPaneInfo_MinSizeXY(this._ptr, x, y);
+    if (rawPtr === null) return null;
+    return new wxAuiPaneInfo(rawPtr, true);
+  }
+
+  IconBundle(bitmap: Pointer): wxAuiPaneInfo | null {
+    const rawPtr = lib.symbols.wxAuiPaneInfo_IconBundle(this._ptr, bitmap);
     if (rawPtr === null) return null;
     return new wxAuiPaneInfo(rawPtr, true);
   }

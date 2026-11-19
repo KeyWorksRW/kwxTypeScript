@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxHelpControllerBase } from "./wxHelpControllerBase_gen.ts";
 import { wxFrame } from "./wxFrame_gen.ts";
@@ -51,14 +52,20 @@ export class wxHtmlHelpController extends wxHelpControllerBase {
     return lib.symbols.wxHtmlHelpController_DisplayNumber(this._ptr, id);
   }
 
-  override DisplaySection(section: Pointer): boolean;
+  override DisplaySection(section: string | Pointer): boolean;
   override DisplaySection(sectionNo: number): boolean;
-  override DisplaySection(section: Pointer | number): boolean {
+  override DisplaySection(section: string | Pointer | number): boolean {
     if (arguments.length === 1 && typeof section === "number") {
       return super.DisplaySection(section as number);
     }
     else {
-      return (lib.symbols.wxHtmlHelpController_DisplaySection(this._ptr, section as Pointer) as number) !== 0;
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof section === "string") __s0 = createWxString(section);
+        return (lib.symbols.wxHtmlHelpController_DisplaySection(this._ptr, __s0 ? __s0.ptr : (section as Pointer)) as number) !== 0;
+      } finally {
+        __s0?.Delete();
+      }
     }
   }
 
@@ -76,48 +83,96 @@ export class wxHtmlHelpController extends wxHelpControllerBase {
     return lib.symbols.wxHtmlHelpController_GetFrameParameters(this._ptr, title, width, height, pos_x, pos_y, newFrameEachTime);
   }
 
-  Initialize(file: Pointer): boolean {
-    return (lib.symbols.wxHtmlHelpController_Initialize(this._ptr, file) as number) !== 0;
+  Initialize(file: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      return (lib.symbols.wxHtmlHelpController_Initialize(this._ptr, __s0 ? __s0.ptr : (file as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  override KeywordSearch(keyword: Pointer): boolean {
-    return (lib.symbols.wxHtmlHelpController_KeywordSearch(this._ptr, keyword) as number) !== 0;
+  override KeywordSearch(keyword: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keyword === "string") __s0 = createWxString(keyword);
+      return (lib.symbols.wxHtmlHelpController_KeywordSearch(this._ptr, __s0 ? __s0.ptr : (keyword as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadFile(file: Pointer): boolean {
-    return (lib.symbols.wxHtmlHelpController_LoadFile(this._ptr, file) as number) !== 0;
+  LoadFile(file: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      return (lib.symbols.wxHtmlHelpController_LoadFile(this._ptr, __s0 ? __s0.ptr : (file as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Quit(): boolean {
     return (lib.symbols.wxHtmlHelpController_Quit(this._ptr) as number) !== 0;
   }
 
-  ReadCustomization(cfg: Pointer, path: Pointer): void {
-    lib.symbols.wxHtmlHelpController_ReadCustomization(this._ptr, cfg, path);
+  ReadCustomization(cfg: Pointer, path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxHtmlHelpController_ReadCustomization(this._ptr, cfg, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFrameParameters(title: Pointer, width: number, height: number, pos_x: number, pos_y: number, newFrameEachTime: boolean): void {
     lib.symbols.wxHtmlHelpController_SetFrameParameters(this._ptr, title, width, height, pos_x, pos_y, newFrameEachTime ? 1 : 0);
   }
 
-  SetTempDir(path: Pointer): void {
-    lib.symbols.wxHtmlHelpController_SetTempDir(this._ptr, path);
+  SetTempDir(path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxHtmlHelpController_SetTempDir(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetTitleFormat(format: Pointer): void {
     lib.symbols.wxHtmlHelpController_SetTitleFormat(this._ptr, format);
   }
 
-  SetViewer(viewer: Pointer, flags: number): void {
-    lib.symbols.wxHtmlHelpController_SetViewer(this._ptr, viewer, flags);
+  SetViewer(viewer: string | Pointer, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof viewer === "string") __s0 = createWxString(viewer);
+      lib.symbols.wxHtmlHelpController_SetViewer(this._ptr, __s0 ? __s0.ptr : (viewer as Pointer), flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  UseConfig(config: Pointer, rootpath: Pointer): void {
-    lib.symbols.wxHtmlHelpController_UseConfig(this._ptr, config, rootpath);
+  UseConfig(config: Pointer, rootpath: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof rootpath === "string") __s0 = createWxString(rootpath);
+      lib.symbols.wxHtmlHelpController_UseConfig(this._ptr, config, __s0 ? __s0.ptr : (rootpath as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  WriteCustomization(cfg: Pointer, path: Pointer): void {
-    lib.symbols.wxHtmlHelpController_WriteCustomization(this._ptr, cfg, path);
+  WriteCustomization(cfg: Pointer, path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxHtmlHelpController_WriteCustomization(this._ptr, cfg, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

@@ -27,7 +27,7 @@ export class wxColourDialogEvent extends wxCommandEvent {
   GetColour(): wxColour | null {
     const rawPtr = lib.symbols.wxColourDialogEvent_GetColour(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetDialog(): wxColourDialog | null {

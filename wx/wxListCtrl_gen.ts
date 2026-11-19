@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxColour } from "./wxColour_gen.ts";
@@ -35,7 +36,7 @@ export class wxListCtrl extends wxControl {
   GetItemPosition2(item: number): wxPoint | null {
     const rawPtr = lib.symbols.wxListCtrl_GetItemPosition2(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   RefreshItems(from_: bigint, toPos: bigint): void {
@@ -62,10 +63,14 @@ export class wxListCtrl extends wxControl {
     return (lib.symbols.wxListCtrl_SetItemPtrData(this._ptr, item, data) as number) !== 0;
   }
 
+  GetItemPtrData(item: bigint): bigint {
+    return lib.symbols.wxListCtrl_GetItemPtrData(this._ptr, item) as bigint;
+  }
+
   GetItemTextColour(item: bigint): wxColour | null {
     const rawPtr = lib.symbols.wxListCtrl_GetItemTextColour(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   SetItemTextColour(item: bigint, col: Pointer): void {
@@ -75,7 +80,7 @@ export class wxListCtrl extends wxControl {
   GetItemBackgroundColour(item: bigint): wxColour | null {
     const rawPtr = lib.symbols.wxListCtrl_GetItemBackgroundColour(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   SetItemBackgroundColour(item: bigint, col: Pointer): void {
@@ -86,8 +91,14 @@ export class wxListCtrl extends wxControl {
     lib.symbols.wxListCtrl_SetItemFont(this._ptr, item, font);
   }
 
-  AppendColumn(heading: Pointer, format: number, width: number): number {
-    return lib.symbols.wxListCtrl_AppendColumn(this._ptr, heading, format, width);
+  AppendColumn(heading: string | Pointer, format: number, width: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof heading === "string") __s0 = createWxString(heading);
+      return lib.symbols.wxListCtrl_AppendColumn(this._ptr, __s0 ? __s0.ptr : (heading as Pointer), format, width);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsEmpty(): boolean {
@@ -113,7 +124,7 @@ export class wxListCtrl extends wxControl {
   GetAlternateRowColour(): wxColour | null {
     const rawPtr = lib.symbols.wxListCtrl_GetAlternateRowColour(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   ExtendRulesAndAlternateColour(extend: boolean): void {
@@ -165,8 +176,14 @@ export class wxListCtrl extends wxControl {
     return (lib.symbols.wxListCtrl_EnsureVisible(this._ptr, item) as number) !== 0;
   }
 
-  FindItem(start: number, str: Pointer, partial: boolean): number {
-    return lib.symbols.wxListCtrl_FindItem(this._ptr, start, str, partial ? 1 : 0);
+  FindItem(start: number, str: string | Pointer, partial: boolean): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      return lib.symbols.wxListCtrl_FindItem(this._ptr, start, __s0 ? __s0.ptr : (str as Pointer), partial ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   FindItemByData(start: number, data: number): number {
@@ -220,25 +237,25 @@ export class wxListCtrl extends wxControl {
   GetItemFont(item: bigint): wxFont | null {
     const rawPtr = lib.symbols.wxListCtrl_GetItemFont(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   GetItemPosition(item: number): wxPoint | null {
     const rawPtr = lib.symbols.wxListCtrl_GetItemPosition(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetItemRect(item: number, code: number): wxRect | null {
     const rawPtr = lib.symbols.wxListCtrl_GetItemRect(this._ptr, item, code);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetItemSpacing(isSmall: boolean): wxSize | null {
     const rawPtr = lib.symbols.wxListCtrl_GetItemSpacing(this._ptr, isSmall ? 1 : 0);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetItemState(item: number, stateMask: number): number {
@@ -248,7 +265,7 @@ export class wxListCtrl extends wxControl {
   GetItemText(item: number, col: number): wxString | null {
     const rawPtr = lib.symbols.wxListCtrl_GetItemText(this._ptr, item, col);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNextItem(item: number, geometry: number, state: number): number {
@@ -271,8 +288,14 @@ export class wxListCtrl extends wxControl {
     return lib.symbols.wxListCtrl_HitTest(this._ptr, x, y, flags, pSubItem);
   }
 
-  InsertColumn(col: number, heading: Pointer, format: number, width: number): number {
-    return lib.symbols.wxListCtrl_InsertColumn(this._ptr, col, heading, format, width);
+  InsertColumn(col: number, heading: string | Pointer, format: number, width: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof heading === "string") __s0 = createWxString(heading);
+      return lib.symbols.wxListCtrl_InsertColumn(this._ptr, col, __s0 ? __s0.ptr : (heading as Pointer), format, width);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   InsertColumnFromInfo(col: number, info: Pointer): number {
@@ -283,16 +306,28 @@ export class wxListCtrl extends wxControl {
     return lib.symbols.wxListCtrl_InsertItem(this._ptr, info);
   }
 
-  InsertItemWithData(index: number, label: Pointer): number {
-    return lib.symbols.wxListCtrl_InsertItemWithData(this._ptr, index, label);
+  InsertItemWithData(index: number, label: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      return lib.symbols.wxListCtrl_InsertItemWithData(this._ptr, index, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   InsertItemWithImage(index: number, imageIndex: number): number {
     return lib.symbols.wxListCtrl_InsertItemWithImage(this._ptr, index, imageIndex);
   }
 
-  InsertItemWithLabel(index: number, label: Pointer, imageIndex: number): number {
-    return lib.symbols.wxListCtrl_InsertItemWithLabel(this._ptr, index, label, imageIndex);
+  InsertItemWithLabel(index: number, label: string | Pointer, imageIndex: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      return lib.symbols.wxListCtrl_InsertItemWithLabel(this._ptr, index, __s0 ? __s0.ptr : (label as Pointer), imageIndex);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsVirtual(): boolean {
@@ -327,8 +362,14 @@ export class wxListCtrl extends wxControl {
     lib.symbols.wxListCtrl_SetImageList(this._ptr, imageList, which);
   }
 
-  SetItem(index: number, col: number, label: Pointer, imageId: number): boolean {
-    return (lib.symbols.wxListCtrl_SetItem(this._ptr, index, col, label, imageId) as number) !== 0;
+  SetItem(index: number, col: number, label: string | Pointer, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      return (lib.symbols.wxListCtrl_SetItem(this._ptr, index, col, __s0 ? __s0.ptr : (label as Pointer), imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetItemData(item: number, data: number): boolean {
@@ -351,8 +392,14 @@ export class wxListCtrl extends wxControl {
     return (lib.symbols.wxListCtrl_SetItemState(this._ptr, item, state, stateMask) as number) !== 0;
   }
 
-  SetItemText(item: number, str: Pointer): void {
-    lib.symbols.wxListCtrl_SetItemText(this._ptr, item, str);
+  SetItemText(item: number, str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxListCtrl_SetItemText(this._ptr, item, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetSingleStyle(style: number, add: boolean): void {

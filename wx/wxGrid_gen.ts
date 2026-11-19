@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxScrolledWindow } from "./wxScrolledWindow_gen.ts";
 import { wxGridCellEditor } from "./wxGridCellEditor_gen.ts";
@@ -25,8 +26,14 @@ export class wxGrid extends wxScrolledWindow {
     lib.symbols.wxGrid_HideRowLabels(this._ptr);
   }
 
-  SetColFormatDate(col: number, format: Pointer): void {
-    lib.symbols.wxGrid_SetColFormatDate(this._ptr, col, format);
+  SetColFormatDate(col: number, format: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof format === "string") __s0 = createWxString(format);
+      lib.symbols.wxGrid_SetColFormatDate(this._ptr, col, __s0 ? __s0.ptr : (format as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AppendRows(numRows: number, updateLabels: boolean): boolean {
@@ -60,7 +67,7 @@ export class wxGrid extends wxScrolledWindow {
   BlockToDeviceRect(top: number, left: number, bottom: number, right: number): wxRect | null {
     const rawPtr = lib.symbols.wxGrid_BlockToDeviceRect(this._ptr, top, left, bottom, right);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   CanDragColSize(col: number): boolean {
@@ -82,7 +89,7 @@ export class wxGrid extends wxScrolledWindow {
   CellToRect(row: number, col: number): wxRect | null {
     const rawPtr = lib.symbols.wxGrid_CellToRect(this._ptr, row, col);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   ClearGrid(): void {
@@ -157,8 +164,14 @@ export class wxGrid extends wxScrolledWindow {
     lib.symbols.wxGrid_DrawRowLabels(this._ptr, dc);
   }
 
-  DrawTextRectangle(dc: Pointer, txt: Pointer, x: number, y: number, width: number, height: number, horizontalAlignment: number, verticalAlignment: number): void {
-    lib.symbols.wxGrid_DrawTextRectangle(this._ptr, dc, txt, x, y, width, height, horizontalAlignment, verticalAlignment);
+  DrawTextRectangle(dc: Pointer, txt: string | Pointer, x: number, y: number, width: number, height: number, horizontalAlignment: number, verticalAlignment: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof txt === "string") __s0 = createWxString(txt);
+      lib.symbols.wxGrid_DrawTextRectangle(this._ptr, dc, __s0 ? __s0.ptr : (txt as Pointer), x, y, width, height, horizontalAlignment, verticalAlignment);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EnableCellEditControl(enable: boolean): void {
@@ -228,7 +241,7 @@ export class wxGrid extends wxScrolledWindow {
   GetCellValue(row: number, col: number): wxString | null {
     const rawPtr = lib.symbols.wxGrid_GetCellValue(this._ptr, row, col);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetColLabelAlignment(horiz: Pointer, vert: Pointer): void {
@@ -242,7 +255,7 @@ export class wxGrid extends wxScrolledWindow {
   GetColLabelValue(col: number): wxString | null {
     const rawPtr = lib.symbols.wxGrid_GetColLabelValue(this._ptr, col);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetColSize(col: number): number {
@@ -285,10 +298,16 @@ export class wxGrid extends wxScrolledWindow {
     return new wxGridCellEditor(rawPtr, true);
   }
 
-  GetDefaultEditorForType(typeName: Pointer): wxGridCellEditor | null {
-    const rawPtr = lib.symbols.wxGrid_GetDefaultEditorForType(this._ptr, typeName);
-    if (rawPtr === null) return null;
-    return new wxGridCellEditor(rawPtr, true);
+  GetDefaultEditorForType(typeName: string | Pointer): wxGridCellEditor | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof typeName === "string") __s0 = createWxString(typeName);
+      const rawPtr = lib.symbols.wxGrid_GetDefaultEditorForType(this._ptr, __s0 ? __s0.ptr : (typeName as Pointer));
+      if (rawPtr === null) return null;
+      return new wxGridCellEditor(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetDefaultRenderer(): wxGridCellRenderer | null {
@@ -303,10 +322,16 @@ export class wxGrid extends wxScrolledWindow {
     return new wxGridCellRenderer(rawPtr, true);
   }
 
-  GetDefaultRendererForType(typeName: Pointer): wxGridCellRenderer | null {
-    const rawPtr = lib.symbols.wxGrid_GetDefaultRendererForType(this._ptr, typeName);
-    if (rawPtr === null) return null;
-    return new wxGridCellRenderer(rawPtr, true);
+  GetDefaultRendererForType(typeName: string | Pointer): wxGridCellRenderer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof typeName === "string") __s0 = createWxString(typeName);
+      const rawPtr = lib.symbols.wxGrid_GetDefaultRendererForType(this._ptr, __s0 ? __s0.ptr : (typeName as Pointer));
+      if (rawPtr === null) return null;
+      return new wxGridCellRenderer(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetDefaultRowLabelSize(): number {
@@ -360,7 +385,7 @@ export class wxGrid extends wxScrolledWindow {
   GetRowLabelValue(row: number): wxString | null {
     const rawPtr = lib.symbols.wxGrid_GetRowLabelValue(this._ptr, row);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetRowSize(row: number): number {
@@ -481,8 +506,14 @@ export class wxGrid extends wxScrolledWindow {
     return (lib.symbols.wxGrid_ProcessTableMessage(this._ptr, evt) as number) !== 0;
   }
 
-  RegisterDataType(typeName: Pointer, renderer: Pointer, editor: Pointer): void {
-    lib.symbols.wxGrid_RegisterDataType(this._ptr, typeName, renderer, editor);
+  RegisterDataType(typeName: string | Pointer, renderer: Pointer, editor: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof typeName === "string") __s0 = createWxString(typeName);
+      lib.symbols.wxGrid_RegisterDataType(this._ptr, __s0 ? __s0.ptr : (typeName as Pointer), renderer, editor);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SaveEditControlValue(): void {
@@ -533,8 +564,14 @@ export class wxGrid extends wxScrolledWindow {
     lib.symbols.wxGrid_SetCellTextColour(this._ptr, row, col, colour);
   }
 
-  SetCellValue(row: number, col: number, str: Pointer): void {
-    lib.symbols.wxGrid_SetCellValue(this._ptr, row, col, str);
+  SetCellValue(row: number, col: number, str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxGrid_SetCellValue(this._ptr, row, col, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetColAttr(col: number, attr: Pointer): void {
@@ -545,8 +582,14 @@ export class wxGrid extends wxScrolledWindow {
     lib.symbols.wxGrid_SetColFormatBool(this._ptr, col);
   }
 
-  SetColFormatCustom(col: number, typeName: Pointer): void {
-    lib.symbols.wxGrid_SetColFormatCustom(this._ptr, col, typeName);
+  SetColFormatCustom(col: number, typeName: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof typeName === "string") __s0 = createWxString(typeName);
+      lib.symbols.wxGrid_SetColFormatCustom(this._ptr, col, __s0 ? __s0.ptr : (typeName as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetColFormatFloat(col: number, width: number, precision: number): void {
@@ -565,8 +608,14 @@ export class wxGrid extends wxScrolledWindow {
     lib.symbols.wxGrid_SetColLabelSize(this._ptr, height);
   }
 
-  SetColLabelValue(col: number, label: Pointer): void {
-    lib.symbols.wxGrid_SetColLabelValue(this._ptr, col, label);
+  SetColLabelValue(col: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxGrid_SetColLabelValue(this._ptr, col, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetColMinimalWidth(col: number, width: number): void {
@@ -649,8 +698,14 @@ export class wxGrid extends wxScrolledWindow {
     lib.symbols.wxGrid_SetRowLabelSize(this._ptr, width);
   }
 
-  SetRowLabelValue(row: number, label: Pointer): void {
-    lib.symbols.wxGrid_SetRowLabelValue(this._ptr, row, label);
+  SetRowLabelValue(row: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxGrid_SetRowLabelValue(this._ptr, row, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetRowMinimalHeight(row: number, width: number): void {
@@ -681,8 +736,14 @@ export class wxGrid extends wxScrolledWindow {
     lib.symbols.wxGrid_ShowCellEditControl(this._ptr);
   }
 
-  StringToLines(value: Pointer, lines: Pointer): number {
-    return lib.symbols.wxGrid_StringToLines(this._ptr, value, lines);
+  StringToLines(value: string | Pointer, lines: Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      return lib.symbols.wxGrid_StringToLines(this._ptr, __s0 ? __s0.ptr : (value as Pointer), lines);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   XToCol(x: number, clipToMinMax: boolean): number {

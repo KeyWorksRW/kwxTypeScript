@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxHelpControllerBase } from "./wxHelpControllerBase_gen.ts";
 import { wxWindow } from "./wxWindow_gen.ts";
@@ -13,12 +14,24 @@ export class wxHelpController extends wxHelpControllerBase {
     return this._ptr;
   }
 
-  Initialize(file: Pointer): boolean {
-    return (lib.symbols.wxHelpController_Initialize(this._ptr, file) as number) !== 0;
+  Initialize(file: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      return (lib.symbols.wxHelpController_Initialize(this._ptr, __s0 ? __s0.ptr : (file as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadFile(file: Pointer): boolean {
-    return (lib.symbols.wxHelpController_LoadFile(this._ptr, file) as number) !== 0;
+  LoadFile(file: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      return (lib.symbols.wxHelpController_LoadFile(this._ptr, __s0 ? __s0.ptr : (file as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override DisplayContents(): boolean {
@@ -29,16 +42,28 @@ export class wxHelpController extends wxHelpControllerBase {
     return (lib.symbols.wxHelpController_DisplaySection(this._ptr, section) as number) !== 0;
   }
 
-  DisplaySectionName(section: Pointer): boolean {
-    return (lib.symbols.wxHelpController_DisplaySectionName(this._ptr, section) as number) !== 0;
+  DisplaySectionName(section: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof section === "string") __s0 = createWxString(section);
+      return (lib.symbols.wxHelpController_DisplaySectionName(this._ptr, __s0 ? __s0.ptr : (section as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DisplayBlock(block: number): boolean {
     return (lib.symbols.wxHelpController_DisplayBlock(this._ptr, block) as number) !== 0;
   }
 
-  override KeywordSearch(keyword: Pointer, mode: number): boolean {
-    return (lib.symbols.wxHelpController_KeywordSearch(this._ptr, keyword, mode) as number) !== 0;
+  override KeywordSearch(keyword: string | Pointer, mode: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keyword === "string") __s0 = createWxString(keyword);
+      return (lib.symbols.wxHelpController_KeywordSearch(this._ptr, __s0 ? __s0.ptr : (keyword as Pointer), mode) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Quit(): boolean {

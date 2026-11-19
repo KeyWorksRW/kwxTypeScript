@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -27,52 +28,115 @@ export class wxMessageDialog extends wxDialog {
     return lib.symbols.wxMessageDialog_ShowModal(this._ptr);
   }
 
-  SetMessage(message: Pointer): void {
-    lib.symbols.wxMessageDialog_SetMessage(this._ptr, message);
+  SetMessage(message: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      lib.symbols.wxMessageDialog_SetMessage(this._ptr, __s0 ? __s0.ptr : (message as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetMessage(): wxString | null {
     const rawPtr = lib.symbols.wxMessageDialog_GetMessage(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetExtendedMessage(message: Pointer): void {
-    lib.symbols.wxMessageDialog_SetExtendedMessage(this._ptr, message);
+  SetExtendedMessage(message: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      lib.symbols.wxMessageDialog_SetExtendedMessage(this._ptr, __s0 ? __s0.ptr : (message as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetExtendedMessage(): wxString | null {
     const rawPtr = lib.symbols.wxMessageDialog_GetExtendedMessage(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetOKLabel(label: Pointer): boolean {
-    return (lib.symbols.wxMessageDialog_SetOKLabel(this._ptr, label) as number) !== 0;
+  SetOKLabel(label: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      return (lib.symbols.wxMessageDialog_SetOKLabel(this._ptr, __s0 ? __s0.ptr : (label as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetOKCancelLabels(ok: Pointer, cancel: Pointer): boolean {
-    return (lib.symbols.wxMessageDialog_SetOKCancelLabels(this._ptr, ok, cancel) as number) !== 0;
+  SetOKCancelLabels(ok: string | Pointer, cancel: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof ok === "string") __s0 = createWxString(ok);
+      if (typeof cancel === "string") __s1 = createWxString(cancel);
+      return (lib.symbols.wxMessageDialog_SetOKCancelLabels(this._ptr, __s0 ? __s0.ptr : (ok as Pointer), __s1 ? __s1.ptr : (cancel as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetYesNoLabels(yes: Pointer, no: Pointer): boolean {
-    return (lib.symbols.wxMessageDialog_SetYesNoLabels(this._ptr, yes, no) as number) !== 0;
+  SetYesNoLabels(yes: string | Pointer, no: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof yes === "string") __s0 = createWxString(yes);
+      if (typeof no === "string") __s1 = createWxString(no);
+      return (lib.symbols.wxMessageDialog_SetYesNoLabels(this._ptr, __s0 ? __s0.ptr : (yes as Pointer), __s1 ? __s1.ptr : (no as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetYesNoCancelLabels(yes: Pointer, no: Pointer, cancel: Pointer): boolean {
-    return (lib.symbols.wxMessageDialog_SetYesNoCancelLabels(this._ptr, yes, no, cancel) as number) !== 0;
+  SetYesNoCancelLabels(yes: string | Pointer, no: string | Pointer, cancel: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof yes === "string") __s0 = createWxString(yes);
+      if (typeof no === "string") __s1 = createWxString(no);
+      if (typeof cancel === "string") __s2 = createWxString(cancel);
+      return (lib.symbols.wxMessageDialog_SetYesNoCancelLabels(this._ptr, __s0 ? __s0.ptr : (yes as Pointer), __s1 ? __s1.ptr : (no as Pointer), __s2 ? __s2.ptr : (cancel as Pointer)) as number) !== 0;
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetHelpLabel(label: Pointer): boolean {
-    return (lib.symbols.wxMessageDialog_SetHelpLabel(this._ptr, label) as number) !== 0;
+  SetHelpLabel(label: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      return (lib.symbols.wxMessageDialog_SetHelpLabel(this._ptr, __s0 ? __s0.ptr : (label as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxMessageDialog(parent: Pointer, message: Pointer, caption: Pointer, style: number): wxMessageDialog | null {
-    const rawPtr = lib.symbols.wxMessageDialog_Create(parent, message, caption, style);
-    if (rawPtr === null) return null;
-    return new wxMessageDialog(rawPtr);
+export function createWxMessageDialog(parent: Pointer, message: string | Pointer, caption: string | Pointer, style: number): wxMessageDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof caption === "string") __s1 = createWxString(caption);
+      const rawPtr = lib.symbols.wxMessageDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (caption as Pointer), style);
+      if (rawPtr === null) return null;
+      return new wxMessageDialog(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextParagraphStyleDefinition } from "./wxRichTextParagraphStyleDefinition_gen.ts";
 import { wxRichTextAttr } from "./wxRichTextAttr_gen.ts";
@@ -37,8 +38,14 @@ export class wxRichTextListStyleDefinition extends wxRichTextParagraphStyleDefin
     return new wxRichTextAttr(rawPtr, true);
   }
 
-  SetAttributes(level: number, leftIndent: number, leftSubIndent: number, bulletStyle: number, bulletSymbol: Pointer): void {
-    lib.symbols.wxRichTextListStyleDefinition_SetAttributes(this._ptr, level, leftIndent, leftSubIndent, bulletStyle, bulletSymbol);
+  SetAttributes(level: number, leftIndent: number, leftSubIndent: number, bulletStyle: number, bulletSymbol: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof bulletSymbol === "string") __s0 = createWxString(bulletSymbol);
+      lib.symbols.wxRichTextListStyleDefinition_SetAttributes(this._ptr, level, leftIndent, leftSubIndent, bulletStyle, __s0 ? __s0.ptr : (bulletSymbol as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   FindLevelForIndent(indent: number): number {
@@ -73,10 +80,16 @@ export class wxRichTextListStyleDefinition extends wxRichTextParagraphStyleDefin
 
 }
 
-export function createWxRichTextListStyleDefinition(name: Pointer): wxRichTextListStyleDefinition | null {
-    const rawPtr = lib.symbols.wxRichTextListStyleDefinition_Create(name);
-    if (rawPtr === null) return null;
-    return new wxRichTextListStyleDefinition(rawPtr);
+export function createWxRichTextListStyleDefinition(name: string | Pointer): wxRichTextListStyleDefinition | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextListStyleDefinition_Create(__s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxRichTextListStyleDefinition(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

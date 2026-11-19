@@ -25,7 +25,7 @@ export class wxPrintout extends wxObject {
   GetLogicalPageMarginsRect(pageSetupData: Pointer): wxRect | null {
     const rawPtr = lib.symbols.wxPrintout_GetLogicalPageMarginsRect(this._ptr, pageSetupData);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   MapScreenSizeToPage(): void {
@@ -55,7 +55,7 @@ export class wxPrintout extends wxObject {
   GetTitle(pObject: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxPrintout_GetTitle(pObject);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsPreview(): boolean {

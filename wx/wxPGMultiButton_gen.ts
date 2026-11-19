@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxWindow } from "./wxWindow_gen.ts";
 import { wxSize } from "./wxSize_gen.ts";
@@ -37,8 +38,14 @@ export class wxPGMultiButton extends wxWindow {
     return lib.symbols.wxPGMultiButton_GetCount(this._ptr);
   }
 
-  Add(label: Pointer, id: number): void {
-    lib.symbols.wxPGMultiButton_Add(this._ptr, label, id);
+  Add(label: string | Pointer, id: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxPGMultiButton_Add(this._ptr, __s0 ? __s0.ptr : (label as Pointer), id);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddBitmap(bitmap: Pointer, id: number): void {
@@ -48,7 +55,7 @@ export class wxPGMultiButton extends wxWindow {
   GetPrimarySize(): wxSize | null {
     const rawPtr = lib.symbols.wxPGMultiButton_GetPrimarySize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   Finalize(propgrid: Pointer, x: number, y: number): void {

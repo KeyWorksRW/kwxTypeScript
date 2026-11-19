@@ -40,6 +40,18 @@ export class wxRichTextAttr extends wxTextAttr {
     return (lib.symbols.wxRichTextAttr_HasTextBoxAttr(this._ptr) as number) !== 0;
   }
 
+  override SetBackgroundColour(colour: Pointer): void {
+    lib.symbols.wxRichTextAttr_SetBackgroundColour(this._ptr, colour);
+  }
+
+  override SetParagraphSpacingAfter(spacing: number): void {
+    lib.symbols.wxRichTextAttr_SetParagraphSpacingAfter(this._ptr, spacing);
+  }
+
+  override SetLineSpacing(spacing: number): void {
+    lib.symbols.wxRichTextAttr_SetLineSpacing(this._ptr, spacing);
+  }
+
 }
 
 export function createWxRichTextAttr(): wxRichTextAttr | null {

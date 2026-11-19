@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -97,19 +98,37 @@ export class wxDateTime {
   FormatISOCombined(separator: number): wxString | null {
     const rawPtr = lib.symbols.wxDateTime_FormatISOCombined(this._ptr, separator);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  ParseISODate(text: Pointer): boolean {
-    return (lib.symbols.wxDateTime_ParseISODate(this._ptr, text) as number) !== 0;
+  ParseISODate(text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxDateTime_ParseISODate(this._ptr, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ParseISOTime(text: Pointer): boolean {
-    return (lib.symbols.wxDateTime_ParseISOTime(this._ptr, text) as number) !== 0;
+  ParseISOTime(text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxDateTime_ParseISOTime(this._ptr, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ParseISOCombined(text: Pointer, separator: number): boolean {
-    return (lib.symbols.wxDateTime_ParseISOCombined(this._ptr, text, separator) as number) !== 0;
+  ParseISOCombined(text: string | Pointer, separator: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxDateTime_ParseISOCombined(this._ptr, __s0 ? __s0.ptr : (text as Pointer), separator) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DiffAsDateSpan(datetime: Pointer, ref: Pointer): void {
@@ -143,31 +162,31 @@ export class wxDateTime {
   Format(format: Pointer, timeZone: number): wxString | null {
     const rawPtr = lib.symbols.wxDateTime_Format(this._ptr, format, timeZone);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   FormatDate(): wxString | null {
     const rawPtr = lib.symbols.wxDateTime_FormatDate(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   FormatISODate(): wxString | null {
     const rawPtr = lib.symbols.wxDateTime_FormatISODate(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   FormatISOTime(): wxString | null {
     const rawPtr = lib.symbols.wxDateTime_FormatISOTime(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   FormatTime(): wxString | null {
     const rawPtr = lib.symbols.wxDateTime_FormatTime(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDay(timeZone: number): number {
@@ -318,8 +337,14 @@ export class wxDateTime {
     return lib.symbols.wxDateTime_ParseRfc822Date(this._ptr, date);
   }
 
-  ParseTime(time: Pointer): Pointer {
-    return lib.symbols.wxDateTime_ParseTime(this._ptr, time);
+  ParseTime(time: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof time === "string") __s0 = createWxString(time);
+      return lib.symbols.wxDateTime_ParseTime(this._ptr, __s0 ? __s0.ptr : (time as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ResetTime(): void {

@@ -24,7 +24,7 @@ export class wxRect {
   CentreIn(r: Pointer, dir: number): wxRect | null {
     const rawPtr = lib.symbols.wxRect_CentreIn(this._ptr, r, dir);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   Contains(x: number, y: number): boolean {
@@ -34,7 +34,7 @@ export class wxRect {
   Deflate(dx: number, dy: number): wxRect | null {
     const rawPtr = lib.symbols.wxRect_Deflate(this._ptr, dx, dy);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetBottom(): number {
@@ -44,7 +44,7 @@ export class wxRect {
   GetBottomLeft(): wxPoint | null {
     const rawPtr = lib.symbols.wxRect_GetBottomLeft(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetLeft(): number {
@@ -54,13 +54,13 @@ export class wxRect {
   GetLeftTop(): wxPoint | null {
     const rawPtr = lib.symbols.wxRect_GetLeftTop(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxRect_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetRight(): number {
@@ -70,7 +70,7 @@ export class wxRect {
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxRect_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetTop(): number {
@@ -80,19 +80,19 @@ export class wxRect {
   GetTopLeft(): wxPoint | null {
     const rawPtr = lib.symbols.wxRect_GetTopLeft(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetTopRight(): wxPoint | null {
     const rawPtr = lib.symbols.wxRect_GetTopRight(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   Inflate(dx: number, dy: number): wxRect | null {
     const rawPtr = lib.symbols.wxRect_Inflate(this._ptr, dx, dy);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   Offset(dx: number, dy: number): void {

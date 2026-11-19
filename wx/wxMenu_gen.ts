@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
 import { wxClientData } from "./wxClientData_gen.ts";
@@ -23,10 +24,19 @@ export class wxMenu extends wxEvtHandler {
     return new wxMenuBar(rawPtr, true);
   }
 
-  AppendSubMenu(submenu: Pointer, text: Pointer, help: Pointer): wxMenuItem | null {
-    const rawPtr = lib.symbols.wxMenu_AppendSubMenu(this._ptr, submenu, text, help);
-    if (rawPtr === null) return null;
-    return new wxMenuItem(rawPtr, true);
+  AppendSubMenu(submenu: Pointer, text: string | Pointer, help: string | Pointer): wxMenuItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      const rawPtr = lib.symbols.wxMenu_AppendSubMenu(this._ptr, submenu, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMenuItem(rawPtr, true);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   RemoveItem(id: number): wxMenuItem | null {
@@ -38,7 +48,7 @@ export class wxMenu extends wxEvtHandler {
   GetLabel(id: number): wxString | null {
     const rawPtr = lib.symbols.wxMenu_GetLabel(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetWindow(): wxWindow | null {
@@ -51,8 +61,17 @@ export class wxMenu extends wxEvtHandler {
     lib.symbols.wxMenu_Detach(this._ptr);
   }
 
-  Append(id: number, text: Pointer, help: Pointer, isCheckable: boolean): void {
-    lib.symbols.wxMenu_Append(this._ptr, id, text, help, isCheckable ? 1 : 0);
+  Append(id: number, text: string | Pointer, help: string | Pointer, isCheckable: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_Append(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer), isCheckable ? 1 : 0);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   AppendById(id: number): void {
@@ -71,8 +90,17 @@ export class wxMenu extends wxEvtHandler {
     lib.symbols.wxMenu_AppendSeparator(this._ptr);
   }
 
-  AppendSub(id: number, text: Pointer, submenu: Pointer, help: Pointer): void {
-    lib.symbols.wxMenu_AppendSub(this._ptr, id, text, submenu, help);
+  AppendSub(id: number, text: string | Pointer, submenu: Pointer, help: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_AppendSub(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer), submenu, __s1 ? __s1.ptr : (help as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   Break(): void {
@@ -113,8 +141,14 @@ export class wxMenu extends wxEvtHandler {
     return new wxMenuItem(rawPtr, true);
   }
 
-  FindItemByLabel(itemString: Pointer): number {
-    return lib.symbols.wxMenu_FindItemByLabel(this._ptr, itemString);
+  FindItemByLabel(itemString: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof itemString === "string") __s0 = createWxString(itemString);
+      return lib.symbols.wxMenu_FindItemByLabel(this._ptr, __s0 ? __s0.ptr : (itemString as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override GetClientData(): wxClientData | null {
@@ -126,7 +160,7 @@ export class wxMenu extends wxEvtHandler {
   GetHelpString(id: number): wxString | null {
     const rawPtr = lib.symbols.wxMenu_GetHelpString(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetInvokingWindow(): wxWindow | null {
@@ -138,7 +172,7 @@ export class wxMenu extends wxEvtHandler {
   GetLabelText(id: number): wxString | null {
     const rawPtr = lib.symbols.wxMenu_GetLabelText(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMenuItemCount(): bigint {
@@ -162,19 +196,37 @@ export class wxMenu extends wxEvtHandler {
   GetTitle(): wxString | null {
     const rawPtr = lib.symbols.wxMenu_GetTitle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  Insert(pos: bigint, id: number, text: Pointer, help: Pointer, isCheckable: boolean): void {
-    lib.symbols.wxMenu_Insert(this._ptr, pos, id, text, help, isCheckable ? 1 : 0);
+  Insert(pos: bigint, id: number, text: string | Pointer, help: string | Pointer, isCheckable: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_Insert(this._ptr, pos, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer), isCheckable ? 1 : 0);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   InsertItem(pos: bigint, item: Pointer): void {
     lib.symbols.wxMenu_InsertItem(this._ptr, pos, item);
   }
 
-  InsertSub(pos: bigint, id: number, text: Pointer, submenu: Pointer, help: Pointer): void {
-    lib.symbols.wxMenu_InsertSub(this._ptr, pos, id, text, submenu, help);
+  InsertSub(pos: bigint, id: number, text: string | Pointer, submenu: Pointer, help: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_InsertSub(this._ptr, pos, id, __s0 ? __s0.ptr : (text as Pointer), submenu, __s1 ? __s1.ptr : (help as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   IsAttached(): boolean {
@@ -189,16 +241,34 @@ export class wxMenu extends wxEvtHandler {
     return (lib.symbols.wxMenu_IsEnabled(this._ptr, id) as number) !== 0;
   }
 
-  Prepend(id: number, text: Pointer, help: Pointer, isCheckable: boolean): void {
-    lib.symbols.wxMenu_Prepend(this._ptr, id, text, help, isCheckable ? 1 : 0);
+  Prepend(id: number, text: string | Pointer, help: string | Pointer, isCheckable: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_Prepend(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer), isCheckable ? 1 : 0);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   PrependItem(item: Pointer): void {
     lib.symbols.wxMenu_PrependItem(this._ptr, item);
   }
 
-  PrependSub(id: number, text: Pointer, submenu: Pointer, help: Pointer): void {
-    lib.symbols.wxMenu_PrependSub(this._ptr, id, text, submenu, help);
+  PrependSub(id: number, text: string | Pointer, submenu: Pointer, help: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_PrependSub(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer), submenu, __s1 ? __s1.ptr : (help as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   RemoveById(id: number, item: Pointer): void {
@@ -217,60 +287,132 @@ export class wxMenu extends wxEvtHandler {
     lib.symbols.wxMenu_SetEventHandler(this._ptr, handler);
   }
 
-  SetHelpString(id: number, helpString: Pointer): void {
-    lib.symbols.wxMenu_SetHelpString(this._ptr, id, helpString);
+  SetHelpString(id: number, helpString: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof helpString === "string") __s0 = createWxString(helpString);
+      lib.symbols.wxMenu_SetHelpString(this._ptr, id, __s0 ? __s0.ptr : (helpString as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetInvokingWindow(win: Pointer): void {
     lib.symbols.wxMenu_SetInvokingWindow(this._ptr, win);
   }
 
-  SetLabel(id: number, label: Pointer): void {
-    lib.symbols.wxMenu_SetLabel(this._ptr, id, label);
+  SetLabel(id: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxMenu_SetLabel(this._ptr, id, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetParent(parent: Pointer): void {
     lib.symbols.wxMenu_SetParent(this._ptr, parent);
   }
 
-  SetTitle(title: Pointer): void {
-    lib.symbols.wxMenu_SetTitle(this._ptr, title);
+  SetTitle(title: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      lib.symbols.wxMenu_SetTitle(this._ptr, __s0 ? __s0.ptr : (title as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   UpdateUI(source: Pointer): void {
     lib.symbols.wxMenu_UpdateUI(this._ptr, source);
   }
 
-  AppendCheckItem(id: number, text: Pointer, help: Pointer): void {
-    lib.symbols.wxMenu_AppendCheckItem(this._ptr, id, text, help);
+  AppendCheckItem(id: number, text: string | Pointer, help: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_AppendCheckItem(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AppendRadioItem(id: number, text: Pointer, help: Pointer): void {
-    lib.symbols.wxMenu_AppendRadioItem(this._ptr, id, text, help);
+  AppendRadioItem(id: number, text: string | Pointer, help: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_AppendRadioItem(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   InsertSeparator(pos: bigint): void {
     lib.symbols.wxMenu_InsertSeparator(this._ptr, pos);
   }
 
-  InsertCheckItem(pos: bigint, id: number, text: Pointer, help: Pointer): void {
-    lib.symbols.wxMenu_InsertCheckItem(this._ptr, pos, id, text, help);
+  InsertCheckItem(pos: bigint, id: number, text: string | Pointer, help: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_InsertCheckItem(this._ptr, pos, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  InsertRadioItem(pos: bigint, id: number, text: Pointer, help: Pointer): void {
-    lib.symbols.wxMenu_InsertRadioItem(this._ptr, pos, id, text, help);
+  InsertRadioItem(pos: bigint, id: number, text: string | Pointer, help: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_InsertRadioItem(this._ptr, pos, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   PrependSeparator(): void {
     lib.symbols.wxMenu_PrependSeparator(this._ptr);
   }
 
-  PrependCheckItem(id: number, text: Pointer, help: Pointer): void {
-    lib.symbols.wxMenu_PrependCheckItem(this._ptr, id, text, help);
+  PrependCheckItem(id: number, text: string | Pointer, help: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_PrependCheckItem(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  PrependRadioItem(id: number, text: Pointer, help: Pointer): void {
-    lib.symbols.wxMenu_PrependRadioItem(this._ptr, id, text, help);
+  PrependRadioItem(id: number, text: string | Pointer, help: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof help === "string") __s1 = createWxString(help);
+      lib.symbols.wxMenu_PrependRadioItem(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (help as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   FindItemByPosition(pos: bigint): wxMenuItem | null {
@@ -287,8 +429,20 @@ export class wxMenu extends wxEvtHandler {
 
 }
 
-export function createWxMenu(title: Pointer, style: bigint): wxMenu | null {
-    const rawPtr = lib.symbols.wxMenu_Create(title, style);
+export function createWxMenu(title: string | Pointer, style: bigint): wxMenu | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxMenu_Create(__s0 ? __s0.ptr : (title as Pointer), style);
+      if (rawPtr === null) return null;
+      return new wxMenu(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
+}
+
+export function createWxMenuDefault(): wxMenu | null {
+    const rawPtr = lib.symbols.wxMenu_CreateDefault();
     if (rawPtr === null) return null;
     return new wxMenu(rawPtr);
 }

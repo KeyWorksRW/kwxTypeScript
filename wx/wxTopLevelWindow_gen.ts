@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxWindow } from "./wxWindow_gen.ts";
 import { wxButton } from "./wxButton_gen.ts";
@@ -63,7 +64,7 @@ export class wxTopLevelWindow extends wxWindow {
   GetTitle(): wxString | null {
     const rawPtr = lib.symbols.wxTopLevelWindow_GetTitle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Iconize(iconize: boolean): boolean {
@@ -118,8 +119,14 @@ export class wxTopLevelWindow extends wxWindow {
     lib.symbols.wxTopLevelWindow_CenterOnScreen(this._ptr, direction);
   }
 
-  SetTitle(pString: Pointer): void {
-    lib.symbols.wxTopLevelWindow_SetTitle(this._ptr, pString);
+  SetTitle(pString: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof pString === "string") __s0 = createWxString(pString);
+      lib.symbols.wxTopLevelWindow_SetTitle(this._ptr, __s0 ? __s0.ptr : (pString as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Restore(): void {
@@ -162,8 +169,14 @@ export class wxTopLevelWindow extends wxWindow {
     return (lib.symbols.wxTopLevelWindow_OSXIsModified(this._ptr) as number) !== 0;
   }
 
-  SetRepresentedFilename(filename: Pointer): void {
-    lib.symbols.wxTopLevelWindow_SetRepresentedFilename(this._ptr, filename);
+  SetRepresentedFilename(filename: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      lib.symbols.wxTopLevelWindow_SetRepresentedFilename(this._ptr, __s0 ? __s0.ptr : (filename as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

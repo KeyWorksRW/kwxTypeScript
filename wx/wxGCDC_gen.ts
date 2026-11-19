@@ -53,6 +53,12 @@ export function createWxGCDCFromPrinter(dc: Pointer): wxGCDC | null {
     return new wxGCDC(rawPtr);
 }
 
+export function createWxGCDCDefault(): wxGCDC | null {
+    const rawPtr = lib.symbols.wxGCDC_CreateDefault();
+    if (rawPtr === null) return null;
+    return new wxGCDC(rawPtr);
+}
+
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */
 export function wrapWxGCDC(ptr: Pointer): wxGCDC {
     return new wxGCDC(ptr, true);

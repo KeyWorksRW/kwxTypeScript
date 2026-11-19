@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -24,8 +25,14 @@ export class wxAnimationCtrl extends wxControl {
     return (lib.symbols.wxAnimationCtrl_IsPlaying(this._ptr) as number) !== 0;
   }
 
-  LoadFile(filename: Pointer, type_: number): boolean {
-    return (lib.symbols.wxAnimationCtrl_LoadFile(this._ptr, filename, type_) as number) !== 0;
+  LoadFile(filename: string | Pointer, type_: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxAnimationCtrl_LoadFile(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), type_) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Load(stream: Pointer, type_: number): boolean {

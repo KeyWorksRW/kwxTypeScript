@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -33,13 +34,13 @@ export class wxXmlAttribute {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxXmlAttribute_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetValue(): wxString | null {
     const rawPtr = lib.symbols.wxXmlAttribute_GetValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNext(): wxXmlAttribute | null {
@@ -48,12 +49,24 @@ export class wxXmlAttribute {
     return new wxXmlAttribute(rawPtr, true);
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxXmlAttribute_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxXmlAttribute_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetValue(value: Pointer): void {
-    lib.symbols.wxXmlAttribute_SetValue(this._ptr, value);
+  SetValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxXmlAttribute_SetValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetNext(next_attribute: Pointer): void {
@@ -62,10 +75,19 @@ export class wxXmlAttribute {
 
 }
 
-export function createWxXmlAttribute(name: Pointer, value: Pointer): wxXmlAttribute | null {
-    const rawPtr = lib.symbols.wxXmlAttribute_Create(name, value);
-    if (rawPtr === null) return null;
-    return new wxXmlAttribute(rawPtr);
+export function createWxXmlAttribute(name: string | Pointer, value: string | Pointer): wxXmlAttribute | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof value === "string") __s1 = createWxString(value);
+      const rawPtr = lib.symbols.wxXmlAttribute_Create(__s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (value as Pointer));
+      if (rawPtr === null) return null;
+      return new wxXmlAttribute(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

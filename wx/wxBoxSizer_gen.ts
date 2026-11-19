@@ -25,7 +25,7 @@ export class wxBoxSizer extends wxSizer {
   override CalcMin(): wxSize | null {
     const rawPtr = lib.symbols.wxBoxSizer_CalcMin(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   override AddSpacer(size: number): wxSizerItem | null {

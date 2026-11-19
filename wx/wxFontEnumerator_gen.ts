@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxFontEnumerator {
@@ -29,8 +30,14 @@ export class wxFontEnumerator {
     this.Delete();
   }
 
-  EnumerateEncodings(facename: Pointer): boolean {
-    return (lib.symbols.wxFontEnumerator_EnumerateEncodings(this._ptr, facename) as number) !== 0;
+  EnumerateEncodings(facename: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof facename === "string") __s0 = createWxString(facename);
+      return (lib.symbols.wxFontEnumerator_EnumerateEncodings(this._ptr, __s0 ? __s0.ptr : (facename as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EnumerateFacenames(encoding: number, fixedWidthOnly: number): boolean {
@@ -41,8 +48,14 @@ export class wxFontEnumerator {
     return lib.symbols.wxFontEnumerator_EnumerateFacenamesToArray(this._ptr, encoding, fixedWidthOnly ? 1 : 0, out);
   }
 
-  EnumerateEncodingsToArray(facename: Pointer, out: Pointer): number {
-    return lib.symbols.wxFontEnumerator_EnumerateEncodingsToArray(this._ptr, facename, out);
+  EnumerateEncodingsToArray(facename: string | Pointer, out: Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof facename === "string") __s0 = createWxString(facename);
+      return lib.symbols.wxFontEnumerator_EnumerateEncodingsToArray(this._ptr, __s0 ? __s0.ptr : (facename as Pointer), out);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

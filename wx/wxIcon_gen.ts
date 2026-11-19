@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxBitmap } from "./wxBitmap_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -58,8 +59,14 @@ export class wxIcon extends wxBitmap {
     return (lib.symbols.wxIcon_IsEqual(this._ptr, this._ptr) as number) !== 0;
   }
 
-  Load(name: Pointer, type_: bigint, width: number, height: number): number {
-    return lib.symbols.wxIcon_Load(this._ptr, name, type_, width, height);
+  Load(name: string | Pointer, type_: bigint, width: number, height: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxIcon_Load(this._ptr, __s0 ? __s0.ptr : (name as Pointer), type_, width, height);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override IsOk(): boolean {
@@ -74,14 +81,26 @@ export function createWxIconDefault(): wxIcon | null {
     return new wxIcon(rawPtr);
 }
 
-export function createWxIconLoad(name: Pointer, type_: bigint, width: number, height: number): wxIcon | null {
-    const rawPtr = lib.symbols.wxIcon_CreateLoad(name, type_, width, height);
-    if (rawPtr === null) return null;
-    return new wxIcon(rawPtr);
+export function createWxIconLoad(name: string | Pointer, type_: bigint, width: number, height: number): wxIcon | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxIcon_CreateLoad(__s0 ? __s0.ptr : (name as Pointer), type_, width, height);
+      if (rawPtr === null) return null;
+      return new wxIcon(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxIconFromXPMData(xpm: Pointer): wxIcon | null {
     const rawPtr = lib.symbols.wxIcon_CreateFromXPMData(xpm);
+    if (rawPtr === null) return null;
+    return new wxIcon(rawPtr);
+}
+
+export function createWxIconFromXPMString(xpm: Pointer): wxIcon | null {
+    const rawPtr = lib.symbols.wxIcon_CreateFromXPMString(xpm);
     if (rawPtr === null) return null;
     return new wxIcon(rawPtr);
 }

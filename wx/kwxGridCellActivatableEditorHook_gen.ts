@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxGridCellEditor } from "./wxGridCellEditor_gen.ts";
 
@@ -23,8 +24,14 @@ export class kwxGridCellActivatableEditorHook extends wxGridCellEditor {
     lib.symbols.kwxGridCellActivatableEditorHook_SetTryActivateResult(this._ptr, action);
   }
 
-  SetTryActivateValue(value: Pointer): void {
-    lib.symbols.kwxGridCellActivatableEditorHook_SetTryActivateValue(this._ptr, value);
+  SetTryActivateValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.kwxGridCellActivatableEditorHook_SetTryActivateValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxAnimation {
@@ -49,8 +50,14 @@ export class wxAnimation {
     return (lib.symbols.wxAnimation_IsOk(this._ptr) as number) !== 0;
   }
 
-  LoadFile(filename: Pointer, type_: number): boolean {
-    return (lib.symbols.wxAnimation_LoadFile(this._ptr, filename, type_) as number) !== 0;
+  LoadFile(filename: string | Pointer, type_: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxAnimation_LoadFile(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), type_) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Load(stream: Pointer, type_: number): boolean {
@@ -65,10 +72,16 @@ export function createWxAnimation(): wxAnimation | null {
     return new wxAnimation(rawPtr);
 }
 
-export function createWxAnimationFromFile(filename: Pointer, type_: number): wxAnimation | null {
-    const rawPtr = lib.symbols.wxAnimation_CreateFromFile(filename, type_);
-    if (rawPtr === null) return null;
-    return new wxAnimation(rawPtr);
+export function createWxAnimationFromFile(filename: string | Pointer, type_: number): wxAnimation | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      const rawPtr = lib.symbols.wxAnimation_CreateFromFile(__s0 ? __s0.ptr : (filename as Pointer), type_);
+      if (rawPtr === null) return null;
+      return new wxAnimation(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

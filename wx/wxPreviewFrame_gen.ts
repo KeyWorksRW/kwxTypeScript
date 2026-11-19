@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxFrame } from "./wxFrame_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -32,10 +33,19 @@ export class wxPreviewFrame extends wxFrame {
 
 }
 
-export function createWxPreviewFrame(preview: Pointer, parent: Pointer, title: Pointer, x: number, y: number, width: number, height: number, style: number, name: Pointer): wxPreviewFrame | null {
-    const rawPtr = lib.symbols.wxPreviewFrame_Create(preview, parent, title, x, y, width, height, style, name);
-    if (rawPtr === null) return null;
-    return new wxPreviewFrame(rawPtr);
+export function createWxPreviewFrame(preview: Pointer, parent: Pointer, title: string | Pointer, x: number, y: number, width: number, height: number, style: number, name: string | Pointer): wxPreviewFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.wxPreviewFrame_Create(preview, parent, __s0 ? __s0.ptr : (title as Pointer), x, y, width, height, style, __s1 ? __s1.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxPreviewFrame(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

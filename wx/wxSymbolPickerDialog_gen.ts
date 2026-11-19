@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -46,21 +47,33 @@ export class wxSymbolPickerDialog extends wxDialog {
   GetSymbol(): wxString | null {
     const rawPtr = lib.symbols.wxSymbolPickerDialog_GetSymbol(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetSymbol(symbol: Pointer): void {
-    lib.symbols.wxSymbolPickerDialog_SetSymbol(this._ptr, symbol);
+  SetSymbol(symbol: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof symbol === "string") __s0 = createWxString(symbol);
+      lib.symbols.wxSymbolPickerDialog_SetSymbol(this._ptr, __s0 ? __s0.ptr : (symbol as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFontName(): wxString | null {
     const rawPtr = lib.symbols.wxSymbolPickerDialog_GetFontName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetFontName(fontName: Pointer): void {
-    lib.symbols.wxSymbolPickerDialog_SetFontName(this._ptr, fontName);
+  SetFontName(fontName: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fontName === "string") __s0 = createWxString(fontName);
+      lib.symbols.wxSymbolPickerDialog_SetFontName(this._ptr, __s0 ? __s0.ptr : (fontName as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFromUnicode(): boolean {
@@ -74,19 +87,40 @@ export class wxSymbolPickerDialog extends wxDialog {
   GetNormalTextFontName(): wxString | null {
     const rawPtr = lib.symbols.wxSymbolPickerDialog_GetNormalTextFontName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetNormalTextFontName(fontName: Pointer): void {
-    lib.symbols.wxSymbolPickerDialog_SetNormalTextFontName(this._ptr, fontName);
+  SetNormalTextFontName(fontName: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fontName === "string") __s0 = createWxString(fontName);
+      lib.symbols.wxSymbolPickerDialog_SetNormalTextFontName(this._ptr, __s0 ? __s0.ptr : (fontName as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxSymbolPickerDialog(symbol: Pointer, fontName: Pointer, normalTextFont: Pointer, parent: Pointer, id: number, caption: Pointer, x: number, y: number, w: number, h: number, style: bigint): wxSymbolPickerDialog | null {
-    const rawPtr = lib.symbols.wxSymbolPickerDialog_Create(symbol, fontName, normalTextFont, parent, id, caption, x, y, w, h, style);
-    if (rawPtr === null) return null;
-    return new wxSymbolPickerDialog(rawPtr);
+export function createWxSymbolPickerDialog(symbol: string | Pointer, fontName: string | Pointer, normalTextFont: string | Pointer, parent: Pointer, id: number, caption: string | Pointer, x: number, y: number, w: number, h: number, style: bigint): wxSymbolPickerDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    let __s3: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof symbol === "string") __s0 = createWxString(symbol);
+      if (typeof fontName === "string") __s1 = createWxString(fontName);
+      if (typeof normalTextFont === "string") __s2 = createWxString(normalTextFont);
+      if (typeof caption === "string") __s3 = createWxString(caption);
+      const rawPtr = lib.symbols.wxSymbolPickerDialog_Create(__s0 ? __s0.ptr : (symbol as Pointer), __s1 ? __s1.ptr : (fontName as Pointer), __s2 ? __s2.ptr : (normalTextFont as Pointer), parent, id, __s3 ? __s3.ptr : (caption as Pointer), x, y, w, h, style);
+      if (rawPtr === null) return null;
+      return new wxSymbolPickerDialog(rawPtr);
+    } finally {
+      __s3?.Delete();
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

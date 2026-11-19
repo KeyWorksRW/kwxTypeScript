@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxNotificationMessage } from "./wxNotificationMessage_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -14,10 +15,19 @@ export class wxGenericNotificationMessage extends wxNotificationMessage {
 
 }
 
-export function createWxGenericNotificationMessage(title: Pointer, message: Pointer, parent: Pointer): wxGenericNotificationMessage | null {
-    const rawPtr = lib.symbols.wxGenericNotificationMessage_Create(title, message, parent);
-    if (rawPtr === null) return null;
-    return new wxGenericNotificationMessage(rawPtr);
+export function createWxGenericNotificationMessage(title: string | Pointer, message: string | Pointer, parent: Pointer): wxGenericNotificationMessage | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      if (typeof message === "string") __s1 = createWxString(message);
+      const rawPtr = lib.symbols.wxGenericNotificationMessage_Create(__s0 ? __s0.ptr : (title as Pointer), __s1 ? __s1.ptr : (message as Pointer), parent);
+      if (rawPtr === null) return null;
+      return new wxGenericNotificationMessage(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

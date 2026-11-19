@@ -16,7 +16,7 @@ export class wxMoveEvent extends wxEvent {
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxMoveEvent_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
 }

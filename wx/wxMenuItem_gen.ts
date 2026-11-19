@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxAcceleratorEntry } from "./wxAcceleratorEntry_gen.ts";
@@ -45,7 +46,7 @@ export class wxMenuItem extends wxObject {
   GetHelp(): wxString | null {
     const rawPtr = lib.symbols.wxMenuItem_GetHelp(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetId(): number {
@@ -55,7 +56,7 @@ export class wxMenuItem extends wxObject {
   GetItemLabelText(): wxString | null {
     const rawPtr = lib.symbols.wxMenuItem_GetItemLabelText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMenu(): wxMenu | null {
@@ -73,7 +74,7 @@ export class wxMenuItem extends wxObject {
   GetItemLabel(): wxString | null {
     const rawPtr = lib.symbols.wxMenuItem_GetItemLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsCheckable(): boolean {
@@ -100,8 +101,14 @@ export class wxMenuItem extends wxObject {
     lib.symbols.wxMenuItem_SetCheckable(this._ptr, checkable ? 1 : 0);
   }
 
-  SetHelp(str: Pointer): void {
-    lib.symbols.wxMenuItem_SetHelp(this._ptr, str);
+  SetHelp(str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxMenuItem_SetHelp(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetId(id: number): void {
@@ -112,8 +119,14 @@ export class wxMenuItem extends wxObject {
     lib.symbols.wxMenuItem_SetSubMenu(this._ptr, menu);
   }
 
-  SetItemLabel(str: Pointer): void {
-    lib.symbols.wxMenuItem_SetItemLabel(this._ptr, str);
+  SetItemLabel(str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxMenuItem_SetItemLabel(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetKind(): number {
@@ -139,7 +152,7 @@ export class wxMenuItem extends wxObject {
   GetBitmap(): wxBitmap | null {
     const rawPtr = lib.symbols.wxMenuItem_GetBitmap(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetAccel(): wxAcceleratorEntry | null {
@@ -150,16 +163,34 @@ export class wxMenuItem extends wxObject {
 
 }
 
-export function createWxMenuItemEx(id: number, text: Pointer, helpstr: Pointer, itemkind: number, submenu: Pointer): wxMenuItem | null {
-    const rawPtr = lib.symbols.wxMenuItem_CreateEx(id, text, helpstr, itemkind, submenu);
-    if (rawPtr === null) return null;
-    return new wxMenuItem(rawPtr);
+export function createWxMenuItemEx(id: number, text: string | Pointer, helpstr: string | Pointer, itemkind: number, submenu: Pointer): wxMenuItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof helpstr === "string") __s1 = createWxString(helpstr);
+      const rawPtr = lib.symbols.wxMenuItem_CreateEx(id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (helpstr as Pointer), itemkind, submenu);
+      if (rawPtr === null) return null;
+      return new wxMenuItem(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
-export function createWxMenuItemExWithParent(parentMenu: Pointer, id: number, text: Pointer, helpstr: Pointer, itemkind: number, subMenu: Pointer): wxMenuItem | null {
-    const rawPtr = lib.symbols.wxMenuItem_CreateExWithParent(parentMenu, id, text, helpstr, itemkind, subMenu);
-    if (rawPtr === null) return null;
-    return new wxMenuItem(rawPtr);
+export function createWxMenuItemExWithParent(parentMenu: Pointer, id: number, text: string | Pointer, helpstr: string | Pointer, itemkind: number, subMenu: Pointer): wxMenuItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof helpstr === "string") __s1 = createWxString(helpstr);
+      const rawPtr = lib.symbols.wxMenuItem_CreateExWithParent(parentMenu, id, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (helpstr as Pointer), itemkind, subMenu);
+      if (rawPtr === null) return null;
+      return new wxMenuItem(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 export function createWxMenuItemSeparator(): wxMenuItem | null {

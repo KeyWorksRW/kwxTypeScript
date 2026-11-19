@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxPageSetupDialogData } from "./wxPageSetupDialogData_gen.ts";
@@ -35,12 +36,24 @@ export class wxRichTextPrinting extends wxObject {
     return (lib.symbols.wxRichTextPrinting_PrintBuffer(this._ptr, buffer, showPrintDialog ? 1 : 0) as number) !== 0;
   }
 
-  PreviewFile(richTextFile: Pointer): boolean {
-    return (lib.symbols.wxRichTextPrinting_PreviewFile(this._ptr, richTextFile) as number) !== 0;
+  PreviewFile(richTextFile: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof richTextFile === "string") __s0 = createWxString(richTextFile);
+      return (lib.symbols.wxRichTextPrinting_PreviewFile(this._ptr, __s0 ? __s0.ptr : (richTextFile as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  PrintFile(richTextFile: Pointer, showPrintDialog: boolean): boolean {
-    return (lib.symbols.wxRichTextPrinting_PrintFile(this._ptr, richTextFile, showPrintDialog ? 1 : 0) as number) !== 0;
+  PrintFile(richTextFile: string | Pointer, showPrintDialog: boolean): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof richTextFile === "string") __s0 = createWxString(richTextFile);
+      return (lib.symbols.wxRichTextPrinting_PrintFile(this._ptr, __s0 ? __s0.ptr : (richTextFile as Pointer), showPrintDialog ? 1 : 0) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   PageSetup(): void {
@@ -55,24 +68,36 @@ export class wxRichTextPrinting extends wxObject {
     lib.symbols.wxRichTextPrinting_GetHeaderFooterData(this._ptr, data);
   }
 
-  SetHeaderText(text: Pointer, page: number, location: number): void {
-    lib.symbols.wxRichTextPrinting_SetHeaderText(this._ptr, text, page, location);
+  SetHeaderText(text: string | Pointer, page: number, location: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextPrinting_SetHeaderText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), page, location);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetHeaderText(page: number, location: number): wxString | null {
     const rawPtr = lib.symbols.wxRichTextPrinting_GetHeaderText(this._ptr, page, location);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetFooterText(text: Pointer, page: number, location: number): void {
-    lib.symbols.wxRichTextPrinting_SetFooterText(this._ptr, text, page, location);
+  SetFooterText(text: string | Pointer, page: number, location: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextPrinting_SetFooterText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), page, location);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFooterText(page: number, location: number): wxString | null {
     const rawPtr = lib.symbols.wxRichTextPrinting_GetFooterText(this._ptr, page, location);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetShowOnFirstPage(show: boolean): void {
@@ -137,14 +162,20 @@ export class wxRichTextPrinting extends wxObject {
     return new wxWindow(rawPtr, true);
   }
 
-  SetTitle(title: Pointer): void {
-    lib.symbols.wxRichTextPrinting_SetTitle(this._ptr, title);
+  SetTitle(title: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      lib.symbols.wxRichTextPrinting_SetTitle(this._ptr, __s0 ? __s0.ptr : (title as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetTitle(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextPrinting_GetTitle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetPreviewRect(x: number, y: number, w: number, h: number): void {
@@ -157,10 +188,16 @@ export class wxRichTextPrinting extends wxObject {
 
 }
 
-export function createWxRichTextPrinting(name: Pointer, parentWindow: Pointer): wxRichTextPrinting | null {
-    const rawPtr = lib.symbols.wxRichTextPrinting_Create(name, parentWindow);
-    if (rawPtr === null) return null;
-    return new wxRichTextPrinting(rawPtr);
+export function createWxRichTextPrinting(name: string | Pointer, parentWindow: Pointer): wxRichTextPrinting | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextPrinting_Create(__s0 ? __s0.ptr : (name as Pointer), parentWindow);
+      if (rawPtr === null) return null;
+      return new wxRichTextPrinting(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

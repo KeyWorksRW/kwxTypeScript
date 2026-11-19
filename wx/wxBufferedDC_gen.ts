@@ -3,10 +3,10 @@
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
 import { Pointer } from "kwx/platform";
-import { wxDC } from "./wxDC_gen.ts";
+import { wxMemoryDC } from "./wxMemoryDC_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
 
-export class wxBufferedDC extends wxDC {
+export class wxBufferedDC extends wxMemoryDC {
   /** Returns the underlying native pointer. */
   override get ptr(): Pointer {
     return this._ptr;

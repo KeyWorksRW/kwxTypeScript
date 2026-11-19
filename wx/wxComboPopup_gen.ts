@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxComboCtrl } from "./wxComboCtrl_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -44,18 +45,33 @@ export class wxComboPopup {
     lib.symbols.wxComboPopup_OnDismiss(this._ptr);
   }
 
-  SetStringValue(value: Pointer): void {
-    lib.symbols.wxComboPopup_SetStringValue(this._ptr, value);
+  SetStringValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxComboPopup_SetStringValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetStringValue(): wxString | null {
     const rawPtr = lib.symbols.wxComboPopup_GetStringValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  FindItem(item: Pointer, trueItem: Pointer): boolean {
-    return (lib.symbols.wxComboPopup_FindItem(this._ptr, item, trueItem) as number) !== 0;
+  FindItem(item: string | Pointer, trueItem: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      if (typeof trueItem === "string") __s1 = createWxString(trueItem);
+      return (lib.symbols.wxComboPopup_FindItem(this._ptr, __s0 ? __s0.ptr : (item as Pointer), __s1 ? __s1.ptr : (trueItem as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   PaintComboControl(dc: Pointer, x: number, y: number, width: number, height: number): void {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxSize } from "./wxSize_gen.ts";
@@ -32,7 +33,7 @@ export class wxWizard extends wxDialog {
   GetPageSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWizard_GetPageSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   RunWizard(firstPage: Pointer): number {
@@ -69,8 +70,14 @@ export class wxWizard extends wxDialog {
     lib.symbols.wxWizard_GetBitmap(this._ptr, ref);
   }
 
-  Create2(parent: Pointer, id: number, text: Pointer, bitmap: Pointer, x: number, y: number, style: bigint): boolean {
-    return (lib.symbols.wxWizard_Create2(this._ptr, parent, id, text, bitmap, x, y, style) as number) !== 0;
+  Create2(parent: Pointer, id: number, text: string | Pointer, bitmap: Pointer, x: number, y: number, style: bigint): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxWizard_Create2(this._ptr, parent, id, __s0 ? __s0.ptr : (text as Pointer), bitmap, x, y, style) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetBitmap(bitmap: Pointer): void {
@@ -81,12 +88,38 @@ export class wxWizard extends wxDialog {
     return lib.symbols.wxWizard_GetBitmapPlacement(this._ptr);
   }
 
+  IsRunning(): boolean {
+    return (lib.symbols.wxWizard_IsRunning(this._ptr) as number) !== 0;
+  }
+
+  SetBitmapBackgroundColour(colour: Pointer): void {
+    lib.symbols.wxWizard_SetBitmapBackgroundColour(this._ptr, colour);
+  }
+
+  GetBitmapBackgroundColour(ref: Pointer): void {
+    lib.symbols.wxWizard_GetBitmapBackgroundColour(this._ptr, ref);
+  }
+
+  SetMinimumBitmapWidth(width: number): void {
+    lib.symbols.wxWizard_SetMinimumBitmapWidth(this._ptr, width);
+  }
+
+  GetMinimumBitmapWidth(): number {
+    return lib.symbols.wxWizard_GetMinimumBitmapWidth(this._ptr);
+  }
+
 }
 
-export function createWxWizard(parent: Pointer, id: number, text: Pointer, bitmap: Pointer, left: number, top: number, width: number, height: number, style: bigint): wxWizard | null {
-    const rawPtr = lib.symbols.wxWizard_Create(parent, id, text, bitmap, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxWizard(rawPtr);
+export function createWxWizard(parent: Pointer, id: number, text: string | Pointer, bitmap: Pointer, left: number, top: number, width: number, height: number, style: bigint): wxWizard | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxWizard_Create(parent, id, __s0 ? __s0.ptr : (text as Pointer), bitmap, left, top, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxWizard(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxWizardDefault(): wxWizard | null {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -28,7 +29,7 @@ export class wxFileDialogCustomControl extends wxEvtHandler {
   GetTextValue(): wxString | null {
     const rawPtr = lib.symbols.wxFileDialogCustomControl_GetTextValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetValue(): boolean {
@@ -39,16 +40,28 @@ export class wxFileDialogCustomControl extends wxEvtHandler {
     lib.symbols.wxFileDialogCustomControl_Hide(this._ptr);
   }
 
-  SetLabelText(text: Pointer): void {
-    lib.symbols.wxFileDialogCustomControl_SetLabelText(this._ptr, text);
+  SetLabelText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxFileDialogCustomControl_SetLabelText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetSelection(selection: number): void {
     lib.symbols.wxFileDialogCustomControl_SetSelection(this._ptr, selection);
   }
 
-  SetTextValue(text: Pointer): void {
-    lib.symbols.wxFileDialogCustomControl_SetTextValue(this._ptr, text);
+  SetTextValue(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxFileDialogCustomControl_SetTextValue(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetValue(value: boolean): void {

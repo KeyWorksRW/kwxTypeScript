@@ -16,7 +16,7 @@ export class wxPGEditor extends wxObject {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxPGEditor_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   CanContainCustomImage(): boolean {

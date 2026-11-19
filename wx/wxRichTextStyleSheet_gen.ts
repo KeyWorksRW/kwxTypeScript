@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxRichTextBoxStyleDefinition } from "./wxRichTextBoxStyleDefinition_gen.ts";
@@ -77,34 +78,64 @@ export class wxRichTextStyleSheet extends wxObject {
     return (lib.symbols.wxRichTextStyleSheet_RemoveStyle(this._ptr, def, deleteStyle ? 1 : 0) as number) !== 0;
   }
 
-  FindCharacterStyle(name: Pointer, recurse: boolean): wxRichTextCharacterStyleDefinition | null {
-    const rawPtr = lib.symbols.wxRichTextStyleSheet_FindCharacterStyle(this._ptr, name, recurse ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new wxRichTextCharacterStyleDefinition(rawPtr, true);
+  FindCharacterStyle(name: string | Pointer, recurse: boolean): wxRichTextCharacterStyleDefinition | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextStyleSheet_FindCharacterStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer), recurse ? 1 : 0);
+      if (rawPtr === null) return null;
+      return new wxRichTextCharacterStyleDefinition(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FindParagraphStyle(name: Pointer, recurse: boolean): wxRichTextParagraphStyleDefinition | null {
-    const rawPtr = lib.symbols.wxRichTextStyleSheet_FindParagraphStyle(this._ptr, name, recurse ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new wxRichTextParagraphStyleDefinition(rawPtr, true);
+  FindParagraphStyle(name: string | Pointer, recurse: boolean): wxRichTextParagraphStyleDefinition | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextStyleSheet_FindParagraphStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer), recurse ? 1 : 0);
+      if (rawPtr === null) return null;
+      return new wxRichTextParagraphStyleDefinition(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FindListStyle(name: Pointer, recurse: boolean): wxRichTextListStyleDefinition | null {
-    const rawPtr = lib.symbols.wxRichTextStyleSheet_FindListStyle(this._ptr, name, recurse ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new wxRichTextListStyleDefinition(rawPtr, true);
+  FindListStyle(name: string | Pointer, recurse: boolean): wxRichTextListStyleDefinition | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextStyleSheet_FindListStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer), recurse ? 1 : 0);
+      if (rawPtr === null) return null;
+      return new wxRichTextListStyleDefinition(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FindBoxStyle(name: Pointer, recurse: boolean): wxRichTextBoxStyleDefinition | null {
-    const rawPtr = lib.symbols.wxRichTextStyleSheet_FindBoxStyle(this._ptr, name, recurse ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new wxRichTextBoxStyleDefinition(rawPtr, true);
+  FindBoxStyle(name: string | Pointer, recurse: boolean): wxRichTextBoxStyleDefinition | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextStyleSheet_FindBoxStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer), recurse ? 1 : 0);
+      if (rawPtr === null) return null;
+      return new wxRichTextBoxStyleDefinition(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FindStyle(name: Pointer, recurse: boolean): wxRichTextStyleDefinition | null {
-    const rawPtr = lib.symbols.wxRichTextStyleSheet_FindStyle(this._ptr, name, recurse ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new wxRichTextStyleDefinition(rawPtr, true);
+  FindStyle(name: string | Pointer, recurse: boolean): wxRichTextStyleDefinition | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextStyleSheet_FindStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer), recurse ? 1 : 0);
+      if (rawPtr === null) return null;
+      return new wxRichTextStyleDefinition(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetCharacterStyleCount(): bigint {
@@ -183,24 +214,36 @@ export class wxRichTextStyleSheet extends wxObject {
     lib.symbols.wxRichTextStyleSheet_SetPreviousSheet(this._ptr, sheet);
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxRichTextStyleSheet_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxRichTextStyleSheet_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextStyleSheet_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetDescription(descr: Pointer): void {
-    lib.symbols.wxRichTextStyleSheet_SetDescription(this._ptr, descr);
+  SetDescription(descr: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof descr === "string") __s0 = createWxString(descr);
+      lib.symbols.wxRichTextStyleSheet_SetDescription(this._ptr, __s0 ? __s0.ptr : (descr as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetDescription(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextStyleSheet_GetDescription(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetProperties(): wxRichTextProperties | null {

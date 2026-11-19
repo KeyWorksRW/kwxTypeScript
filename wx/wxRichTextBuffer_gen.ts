@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextParagraphLayoutBox } from "./wxRichTextParagraphLayoutBox_gen.ts";
 import { wxRichTextStyleSheet } from "./wxRichTextStyleSheet_gen.ts";
@@ -24,8 +25,14 @@ export class wxRichTextBuffer extends wxRichTextParagraphLayoutBox {
     this.Delete();
   }
 
-  override AddParagraph(text: Pointer, paraStyle: Pointer, start: Pointer, end: Pointer): void {
-    lib.symbols.wxRichTextBuffer_AddParagraph(this._ptr, text, paraStyle, start, end);
+  override AddParagraph(text: string | Pointer, paraStyle: Pointer, start: Pointer, end: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextBuffer_AddParagraph(this._ptr, __s0 ? __s0.ptr : (text as Pointer), paraStyle, start, end);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override DeleteRange(start: bigint, end: bigint): boolean {
@@ -39,19 +46,31 @@ export class wxRichTextBuffer extends wxRichTextParagraphLayoutBox {
   override GetText(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextBuffer_GetText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override Clear(): void {
     lib.symbols.wxRichTextBuffer_Clear(this._ptr);
   }
 
-  LoadFile(filename: Pointer, type_: number): boolean {
-    return (lib.symbols.wxRichTextBuffer_LoadFile(this._ptr, filename, type_) as number) !== 0;
+  LoadFile(filename: string | Pointer, type_: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxRichTextBuffer_LoadFile(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), type_) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SaveFile(filename: Pointer, type_: number): boolean {
-    return (lib.symbols.wxRichTextBuffer_SaveFile(this._ptr, filename, type_) as number) !== 0;
+  SaveFile(filename: string | Pointer, type_: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxRichTextBuffer_SaveFile(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), type_) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ResetAndClearCommands(): void {
@@ -106,8 +125,14 @@ export class wxRichTextBuffer extends wxRichTextParagraphLayoutBox {
     return lib.symbols.wxRichTextBuffer_GetDimensionScale(this._ptr);
   }
 
-  BeginBatchUndo(cmdName: Pointer): boolean {
-    return (lib.symbols.wxRichTextBuffer_BeginBatchUndo(this._ptr, cmdName) as number) !== 0;
+  BeginBatchUndo(cmdName: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof cmdName === "string") __s0 = createWxString(cmdName);
+      return (lib.symbols.wxRichTextBuffer_BeginBatchUndo(this._ptr, __s0 ? __s0.ptr : (cmdName as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EndBatchUndo(): boolean {

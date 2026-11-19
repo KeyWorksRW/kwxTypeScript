@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -118,10 +119,16 @@ export class wxTimeSpan {
     return lib.symbols.wxTimeSpan_GetValue(this._ptr);
   }
 
-  Format(format: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxTimeSpan_Format(this._ptr, format);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  Format(format: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof format === "string") __s0 = createWxString(format);
+      const rawPtr = lib.symbols.wxTimeSpan_Format(this._ptr, __s0 ? __s0.ptr : (format as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

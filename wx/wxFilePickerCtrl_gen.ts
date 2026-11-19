@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPickerBase } from "./wxPickerBase_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -16,33 +17,63 @@ export class wxFilePickerCtrl extends wxPickerBase {
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxFilePickerCtrl_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetPath(path: Pointer): void {
-    lib.symbols.wxFilePickerCtrl_SetPath(this._ptr, path);
+  SetPath(path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxFilePickerCtrl_SetPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetInitialDirectory(dir: Pointer): void {
-    lib.symbols.wxFilePickerCtrl_SetInitialDirectory(this._ptr, dir);
+  SetInitialDirectory(dir: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      lib.symbols.wxFilePickerCtrl_SetInitialDirectory(this._ptr, __s0 ? __s0.ptr : (dir as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetFileName(filename: Pointer): void {
-    lib.symbols.wxFilePickerCtrl_SetFileName(this._ptr, filename);
+  SetFileName(filename: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      lib.symbols.wxFilePickerCtrl_SetFileName(this._ptr, __s0 ? __s0.ptr : (filename as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFileName(): wxString | null {
     const rawPtr = lib.symbols.wxFilePickerCtrl_GetFileName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }
 
-export function createWxFilePickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, path: Pointer, message: Pointer, wildcard: Pointer, style: bigint): wxFilePickerCtrl | null {
-    const rawPtr = lib.symbols.wxFilePickerCtrl_Create(parent, id, x, y, width, height, path, message, wildcard, style);
-    if (rawPtr === null) return null;
-    return new wxFilePickerCtrl(rawPtr);
+export function createWxFilePickerCtrl(parent: Pointer, id: number, x: number, y: number, width: number, height: number, path: string | Pointer, message: string | Pointer, wildcard: string | Pointer, style: bigint): wxFilePickerCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      if (typeof message === "string") __s1 = createWxString(message);
+      if (typeof wildcard === "string") __s2 = createWxString(wildcard);
+      const rawPtr = lib.symbols.wxFilePickerCtrl_Create(parent, id, x, y, width, height, __s0 ? __s0.ptr : (path as Pointer), __s1 ? __s1.ptr : (message as Pointer), __s2 ? __s2.ptr : (wildcard as Pointer), style);
+      if (rawPtr === null) return null;
+      return new wxFilePickerCtrl(rawPtr);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

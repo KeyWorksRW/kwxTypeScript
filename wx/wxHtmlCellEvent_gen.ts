@@ -20,7 +20,7 @@ export class wxHtmlCellEvent extends wxCommandEvent {
   GetPoint(): wxPoint | null {
     const rawPtr = lib.symbols.wxHtmlCellEvent_GetPoint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetMouseEvent(): Pointer {

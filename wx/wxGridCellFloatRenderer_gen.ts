@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxGridCellStringRenderer } from "./wxGridCellStringRenderer_gen.ts";
 
@@ -45,8 +46,14 @@ export class wxGridCellFloatRenderer extends wxGridCellStringRenderer {
     lib.symbols.wxGridCellFloatRenderer_SetFormat(this._ptr, format);
   }
 
-  SetParameters(params: Pointer): void {
-    lib.symbols.wxGridCellFloatRenderer_SetParameters(this._ptr, params);
+  SetParameters(params: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof params === "string") __s0 = createWxString(params);
+      lib.symbols.wxGridCellFloatRenderer_SetParameters(this._ptr, __s0 ? __s0.ptr : (params as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

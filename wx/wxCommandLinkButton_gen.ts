@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxButton } from "./wxButton_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -13,36 +14,66 @@ export class wxCommandLinkButton extends wxButton {
     return this._ptr;
   }
 
-  SetMainLabel(mainLabel: Pointer): void {
-    lib.symbols.wxCommandLinkButton_SetMainLabel(this._ptr, mainLabel);
+  SetMainLabel(mainLabel: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof mainLabel === "string") __s0 = createWxString(mainLabel);
+      lib.symbols.wxCommandLinkButton_SetMainLabel(this._ptr, __s0 ? __s0.ptr : (mainLabel as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetNote(note: Pointer): void {
-    lib.symbols.wxCommandLinkButton_SetNote(this._ptr, note);
+  SetNote(note: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof note === "string") __s0 = createWxString(note);
+      lib.symbols.wxCommandLinkButton_SetNote(this._ptr, __s0 ? __s0.ptr : (note as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetMainLabel(): wxString | null {
     const rawPtr = lib.symbols.wxCommandLinkButton_GetMainLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNote(): wxString | null {
     const rawPtr = lib.symbols.wxCommandLinkButton_GetNote(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetMainLabelAndNote(mainLabel: Pointer, note: Pointer): void {
-    lib.symbols.wxCommandLinkButton_SetMainLabelAndNote(this._ptr, mainLabel, note);
+  SetMainLabelAndNote(mainLabel: string | Pointer, note: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof mainLabel === "string") __s0 = createWxString(mainLabel);
+      if (typeof note === "string") __s1 = createWxString(note);
+      lib.symbols.wxCommandLinkButton_SetMainLabelAndNote(this._ptr, __s0 ? __s0.ptr : (mainLabel as Pointer), __s1 ? __s1.ptr : (note as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxCommandLinkButton(parent: Pointer, id: number, mainLabel: Pointer, note: Pointer, x: number, y: number, width: number, height: number, style: number): wxCommandLinkButton | null {
-    const rawPtr = lib.symbols.wxCommandLinkButton_Create(parent, id, mainLabel, note, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxCommandLinkButton(rawPtr);
+export function createWxCommandLinkButton(parent: Pointer, id: number, mainLabel: string | Pointer, note: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxCommandLinkButton | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof mainLabel === "string") __s0 = createWxString(mainLabel);
+      if (typeof note === "string") __s1 = createWxString(note);
+      const rawPtr = lib.symbols.wxCommandLinkButton_Create(parent, id, __s0 ? __s0.ptr : (mainLabel as Pointer), __s1 ? __s1.ptr : (note as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxCommandLinkButton(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

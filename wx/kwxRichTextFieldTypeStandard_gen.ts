@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextFieldTypeStandard } from "./wxRichTextFieldTypeStandard_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -34,8 +35,14 @@ export class kwxRichTextFieldTypeStandard extends wxRichTextFieldTypeStandard {
     lib.symbols.kwxRichTextFieldTypeStandard_SetOnGetPropertiesMenuLabel(this._ptr, pFunction);
   }
 
-  SetPropertiesMenuLabelResult(label: Pointer): void {
-    lib.symbols.kwxRichTextFieldTypeStandard_SetPropertiesMenuLabelResult(this._ptr, label);
+  SetPropertiesMenuLabelResult(label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.kwxRichTextFieldTypeStandard_SetPropertiesMenuLabelResult(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetCanEditPropertiesResult(result: boolean): void {
@@ -62,12 +69,53 @@ export class kwxRichTextFieldTypeStandard extends wxRichTextFieldTypeStandard {
     lib.symbols.kwxRichTextFieldTypeStandard_SetOnIsTopLevel(this._ptr, pFunction);
   }
 
+  SetOnCanEditPropertiesWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextFieldTypeStandard_SetOnCanEditPropertiesWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnEditPropertiesWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextFieldTypeStandard_SetOnEditPropertiesWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetPropertiesMenuLabelWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextFieldTypeStandard_SetOnGetPropertiesMenuLabelWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnUpdateFieldWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextFieldTypeStandard_SetOnUpdateFieldWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnIsTopLevelWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextFieldTypeStandard_SetOnIsTopLevelWithData(this._ptr, pFunction, data);
+  }
+
 }
 
-export function createKwxRichTextFieldTypeStandard(pObject: Pointer, name: Pointer, label: Pointer, displayStyle: number): kwxRichTextFieldTypeStandard | null {
-    const rawPtr = lib.symbols.kwxRichTextFieldTypeStandard_Create(pObject, name, label, displayStyle);
-    if (rawPtr === null) return null;
-    return new kwxRichTextFieldTypeStandard(rawPtr);
+export function createKwxRichTextFieldTypeStandard(pObject: Pointer, name: string | Pointer, label: string | Pointer, displayStyle: number): kwxRichTextFieldTypeStandard | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof label === "string") __s1 = createWxString(label);
+      const rawPtr = lib.symbols.kwxRichTextFieldTypeStandard_Create(pObject, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (label as Pointer), displayStyle);
+      if (rawPtr === null) return null;
+      return new kwxRichTextFieldTypeStandard(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
+}
+
+export function createKwxRichTextFieldTypeStandardWithBitmap(pObject: Pointer, name: string | Pointer, bitmap: Pointer, displayStyle: number): kwxRichTextFieldTypeStandard | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.kwxRichTextFieldTypeStandard_CreateWithBitmap(pObject, __s0 ? __s0.ptr : (name as Pointer), bitmap, displayStyle);
+      if (rawPtr === null) return null;
+      return new kwxRichTextFieldTypeStandard(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

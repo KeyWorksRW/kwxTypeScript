@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -28,8 +29,14 @@ export class wxDatePickerCtrl extends wxControl {
     return (lib.symbols.wxDatePickerCtrl_GetRange(this._ptr, dt1, dt2) as number) !== 0;
   }
 
-  SetNullText(text: Pointer): void {
-    lib.symbols.wxDatePickerCtrl_SetNullText(this._ptr, text);
+  SetNullText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxDatePickerCtrl_SetNullText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

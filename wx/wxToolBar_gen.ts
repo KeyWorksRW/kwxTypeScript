@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxToolBarBase } from "./wxToolBarBase_gen.ts";
 import { wxControl } from "./wxControl_gen.ts";
@@ -27,14 +28,26 @@ export class wxToolBar extends wxToolBarBase {
     this.Delete();
   }
 
-  AddTool2(toolId: number, label: Pointer, bmp: Pointer, bmpDisabled: Pointer, itemKind: number, shortHelp: Pointer, longHelp: Pointer): void {
-    lib.symbols.wxToolBar_AddTool2(this._ptr, toolId, label, bmp, bmpDisabled, itemKind, shortHelp, longHelp);
+  AddTool2(toolId: number, label: string | Pointer, bmp: Pointer, bmpDisabled: Pointer, itemKind: number, shortHelp: string | Pointer, longHelp: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof shortHelp === "string") __s1 = createWxString(shortHelp);
+      if (typeof longHelp === "string") __s2 = createWxString(longHelp);
+      lib.symbols.wxToolBar_AddTool2(this._ptr, toolId, __s0 ? __s0.ptr : (label as Pointer), bmp, bmpDisabled, itemKind, __s1 ? __s1.ptr : (shortHelp as Pointer), __s2 ? __s2.ptr : (longHelp as Pointer));
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   GetToolMargins(): wxSize | null {
     const rawPtr = lib.symbols.wxToolBar_GetToolMargins(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetMaxRowsCols(rows: number, cols: number): void {
@@ -62,13 +75,13 @@ export class wxToolBar extends wxToolBarBase {
   }
 
   override AddControl(ctrl: Pointer): boolean;
-  override AddControl(control: Pointer, label: Pointer): Pointer;
-  override AddControl(ctrl: Pointer, label?: Pointer): boolean | Pointer {
+  override AddControl(control: Pointer, label: string | Pointer): Pointer;
+  override AddControl(ctrl: Pointer, label?: string | Pointer): boolean | Pointer {
     if (arguments.length === 1) {
       return (lib.symbols.wxToolBar_AddControl(this._ptr, ctrl) as number) !== 0;
     }
     else {
-      return super.AddControl(ctrl, label as Pointer);
+      return super.AddControl(ctrl, label as (string | Pointer));
     }
   }
 
@@ -76,8 +89,20 @@ export class wxToolBar extends wxToolBarBase {
     return lib.symbols.wxToolBar_AddSeparator(this._ptr);
   }
 
-  override AddTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer, data: Pointer): Pointer {
-    return lib.symbols.wxToolBar_AddTool(this._ptr, toolid, label, bitmap, bmpDisabled, kind, shortHelp, longHelp, data);
+  override AddTool(toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: string | Pointer, longHelp: string | Pointer, data: Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof shortHelp === "string") __s1 = createWxString(shortHelp);
+      if (typeof longHelp === "string") __s2 = createWxString(longHelp);
+      return lib.symbols.wxToolBar_AddTool(this._ptr, toolid, __s0 ? __s0.ptr : (label as Pointer), bitmap, bmpDisabled, kind, __s1 ? __s1.ptr : (shortHelp as Pointer), __s2 ? __s2.ptr : (longHelp as Pointer), data);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   override DeleteTool(id: number): boolean {
@@ -95,13 +120,13 @@ export class wxToolBar extends wxToolBarBase {
   GetMargins(): wxPoint | null {
     const rawPtr = lib.symbols.wxToolBar_GetMargins(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetToolBitmapSize(): wxSize | null {
     const rawPtr = lib.symbols.wxToolBar_GetToolBitmapSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetToolClientData(id: number): wxObject | null {
@@ -117,7 +142,7 @@ export class wxToolBar extends wxToolBarBase {
   GetToolLongHelp(id: number): wxString | null {
     const rawPtr = lib.symbols.wxToolBar_GetToolLongHelp(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override GetToolPacking(): number {
@@ -127,13 +152,13 @@ export class wxToolBar extends wxToolBarBase {
   GetToolShortHelp(id: number): wxString | null {
     const rawPtr = lib.symbols.wxToolBar_GetToolShortHelp(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetToolSize(): wxSize | null {
     const rawPtr = lib.symbols.wxToolBar_GetToolSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   override GetToolState(id: number): boolean {
@@ -175,8 +200,14 @@ export class wxToolBar extends wxToolBarBase {
     lib.symbols.wxToolBar_SetToolClientData(this._ptr, id, data);
   }
 
-  SetToolLongHelp(id: number, str: Pointer): void {
-    lib.symbols.wxToolBar_SetToolLongHelp(this._ptr, id, str);
+  SetToolLongHelp(id: number, str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxToolBar_SetToolLongHelp(this._ptr, id, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetToolPacking(packing: number): void {
@@ -187,30 +218,60 @@ export class wxToolBar extends wxToolBarBase {
     lib.symbols.wxToolBar_SetToolSeparation(this._ptr, separation);
   }
 
-  override SetToolShortHelp(id: number, str: Pointer): void {
-    lib.symbols.wxToolBar_SetToolShortHelp(this._ptr, id, str);
+  override SetToolShortHelp(id: number, str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxToolBar_SetToolShortHelp(this._ptr, id, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override ToggleTool(id: number, toggle: boolean): void {
     lib.symbols.wxToolBar_ToggleTool(this._ptr, id, toggle ? 1 : 0);
   }
 
-  override AddCheckTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer): void;
-  override AddCheckTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer, clientData: Pointer): Pointer;
-  override AddCheckTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer, clientData?: Pointer): void | Pointer {
+  override AddCheckTool(toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: string | Pointer, longHelp: string | Pointer): void;
+  override AddCheckTool(toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: string | Pointer, longHelp: string | Pointer, clientData: Pointer): Pointer;
+  override AddCheckTool(toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: string | Pointer, longHelp: string | Pointer, clientData?: Pointer): void | Pointer {
     if (arguments.length === 6) {
-      lib.symbols.wxToolBar_AddCheckTool(this._ptr, toolid, label, bitmap, bmpDisabled, shortHelp, longHelp);
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      let __s1: ReturnType<typeof createWxString> | null = null;
+      let __s2: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof label === "string") __s0 = createWxString(label);
+        if (typeof shortHelp === "string") __s1 = createWxString(shortHelp);
+        if (typeof longHelp === "string") __s2 = createWxString(longHelp);
+        lib.symbols.wxToolBar_AddCheckTool(this._ptr, toolid, __s0 ? __s0.ptr : (label as Pointer), bitmap, bmpDisabled, __s1 ? __s1.ptr : (shortHelp as Pointer), __s2 ? __s2.ptr : (longHelp as Pointer));
+      } finally {
+        __s2?.Delete();
+        __s1?.Delete();
+        __s0?.Delete();
+      }
     }
     else {
       return super.AddCheckTool(toolid, label, bitmap, bmpDisabled, shortHelp, longHelp, clientData as Pointer);
     }
   }
 
-  override AddRadioTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer): void;
-  override AddRadioTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer, clientData: Pointer): Pointer;
-  override AddRadioTool(toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: Pointer, longHelp: Pointer, clientData?: Pointer): void | Pointer {
+  override AddRadioTool(toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: string | Pointer, longHelp: string | Pointer): void;
+  override AddRadioTool(toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: string | Pointer, longHelp: string | Pointer, clientData: Pointer): Pointer;
+  override AddRadioTool(toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, shortHelp: string | Pointer, longHelp: string | Pointer, clientData?: Pointer): void | Pointer {
     if (arguments.length === 6) {
-      lib.symbols.wxToolBar_AddRadioTool(this._ptr, toolid, label, bitmap, bmpDisabled, shortHelp, longHelp);
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      let __s1: ReturnType<typeof createWxString> | null = null;
+      let __s2: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof label === "string") __s0 = createWxString(label);
+        if (typeof shortHelp === "string") __s1 = createWxString(shortHelp);
+        if (typeof longHelp === "string") __s2 = createWxString(longHelp);
+        lib.symbols.wxToolBar_AddRadioTool(this._ptr, toolid, __s0 ? __s0.ptr : (label as Pointer), bitmap, bmpDisabled, __s1 ? __s1.ptr : (shortHelp as Pointer), __s2 ? __s2.ptr : (longHelp as Pointer));
+      } finally {
+        __s2?.Delete();
+        __s1?.Delete();
+        __s0?.Delete();
+      }
     }
     else {
       return super.AddRadioTool(toolid, label, bitmap, bmpDisabled, shortHelp, longHelp, clientData as Pointer);
@@ -225,11 +286,23 @@ export class wxToolBar extends wxToolBarBase {
     return lib.symbols.wxToolBar_InsertStretchableSpace(this._ptr, pos);
   }
 
-  override InsertTool(pos: bigint, toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer): void;
-  override InsertTool(pos: bigint, toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer, clientData: Pointer): Pointer;
-  override InsertTool(pos: bigint, toolid: number, label: Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: Pointer, longHelp: Pointer, clientData?: Pointer): void | Pointer {
+  override InsertTool(pos: bigint, toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: string | Pointer, longHelp: string | Pointer): void;
+  override InsertTool(pos: bigint, toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: string | Pointer, longHelp: string | Pointer, clientData: Pointer): Pointer;
+  override InsertTool(pos: bigint, toolid: number, label: string | Pointer, bitmap: Pointer, bmpDisabled: Pointer, kind: number, shortHelp: string | Pointer, longHelp: string | Pointer, clientData?: Pointer): void | Pointer {
     if (arguments.length === 8) {
-      lib.symbols.wxToolBar_InsertTool(this._ptr, pos, toolid, label, bitmap, bmpDisabled, kind, shortHelp, longHelp);
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      let __s1: ReturnType<typeof createWxString> | null = null;
+      let __s2: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof label === "string") __s0 = createWxString(label);
+        if (typeof shortHelp === "string") __s1 = createWxString(shortHelp);
+        if (typeof longHelp === "string") __s2 = createWxString(longHelp);
+        lib.symbols.wxToolBar_InsertTool(this._ptr, pos, toolid, __s0 ? __s0.ptr : (label as Pointer), bitmap, bmpDisabled, kind, __s1 ? __s1.ptr : (shortHelp as Pointer), __s2 ? __s2.ptr : (longHelp as Pointer));
+      } finally {
+        __s2?.Delete();
+        __s1?.Delete();
+        __s0?.Delete();
+      }
     }
     else {
       return super.InsertTool(pos, toolid, label, bitmap, bmpDisabled, kind, shortHelp, longHelp, clientData as Pointer);

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxAnimationBundle {
@@ -33,8 +34,14 @@ export class wxAnimationBundle {
     lib.symbols.wxAnimationBundle_Add(this._ptr, anim);
   }
 
-  AddFile(filename: Pointer, type_: number): void {
-    lib.symbols.wxAnimationBundle_AddFile(this._ptr, filename, type_);
+  AddFile(filename: string | Pointer, type_: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      lib.symbols.wxAnimationBundle_AddFile(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), type_);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsOk(): boolean {
@@ -55,10 +62,16 @@ export function createWxAnimationBundleFromAnimation(anim: Pointer): wxAnimation
     return new wxAnimationBundle(rawPtr);
 }
 
-export function createWxAnimationBundleFromFile(filename: Pointer, type_: number): wxAnimationBundle | null {
-    const rawPtr = lib.symbols.wxAnimationBundle_CreateFromFile(filename, type_);
-    if (rawPtr === null) return null;
-    return new wxAnimationBundle(rawPtr);
+export function createWxAnimationBundleFromFile(filename: string | Pointer, type_: number): wxAnimationBundle | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      const rawPtr = lib.symbols.wxAnimationBundle_CreateFromFile(__s0 ? __s0.ptr : (filename as Pointer), type_);
+      if (rawPtr === null) return null;
+      return new wxAnimationBundle(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxSingleInstanceChecker {
@@ -35,8 +36,17 @@ export class wxSingleInstanceChecker {
 
 }
 
-export function createWxSingleInstanceChecker(pObject: Pointer, name: Pointer, path: Pointer): boolean {
-    return (lib.symbols.wxSingleInstanceChecker_Create(pObject, name, path) as number) !== 0;
+export function createWxSingleInstanceChecker(pObject: Pointer, name: string | Pointer, path: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof path === "string") __s1 = createWxString(path);
+      return (lib.symbols.wxSingleInstanceChecker_Create(pObject, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (path as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 export function createWxSingleInstanceCheckerDefault(): wxSingleInstanceChecker | null {

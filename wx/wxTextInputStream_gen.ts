@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -33,15 +34,21 @@ export class wxTextInputStream {
   ReadLine(): wxString | null {
     const rawPtr = lib.symbols.wxTextInputStream_ReadLine(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }
 
-export function createWxTextInputStream(inputStream: Pointer, sep: Pointer): wxTextInputStream | null {
-    const rawPtr = lib.symbols.wxTextInputStream_Create(inputStream, sep);
-    if (rawPtr === null) return null;
-    return new wxTextInputStream(rawPtr);
+export function createWxTextInputStream(inputStream: Pointer, sep: string | Pointer): wxTextInputStream | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof sep === "string") __s0 = createWxString(sep);
+      const rawPtr = lib.symbols.wxTextInputStream_Create(inputStream, __s0 ? __s0.ptr : (sep as Pointer));
+      if (rawPtr === null) return null;
+      return new wxTextInputStream(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

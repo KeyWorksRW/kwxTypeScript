@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxArchiveEntry } from "./wxArchiveEntry_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -32,13 +33,13 @@ export class wxTarEntry extends wxArchiveEntry {
   override GetName(path_format: number): wxString | null {
     const rawPtr = lib.symbols.wxTarEntry_GetName(this._ptr, path_format);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override GetInternalName(): wxString | null {
     const rawPtr = lib.symbols.wxTarEntry_GetInternalName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMode(): number {
@@ -68,19 +69,19 @@ export class wxTarEntry extends wxArchiveEntry {
   GetLinkName(): wxString | null {
     const rawPtr = lib.symbols.wxTarEntry_GetLinkName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUserName(): wxString | null {
     const rawPtr = lib.symbols.wxTarEntry_GetUserName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetGroupName(): wxString | null {
     const rawPtr = lib.symbols.wxTarEntry_GetGroupName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDevMajor(): number {
@@ -99,8 +100,14 @@ export class wxTarEntry extends wxArchiveEntry {
     return (lib.symbols.wxTarEntry_IsReadOnly(this._ptr) as number) !== 0;
   }
 
-  override SetName(entry_name: Pointer, path_format: number): void {
-    lib.symbols.wxTarEntry_SetName(this._ptr, entry_name, path_format);
+  override SetName(entry_name: string | Pointer, path_format: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      lib.symbols.wxTarEntry_SetName(this._ptr, __s0 ? __s0.ptr : (entry_name as Pointer), path_format);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetUserId(user_id: number): void {
@@ -123,16 +130,34 @@ export class wxTarEntry extends wxArchiveEntry {
     lib.symbols.wxTarEntry_SetTypeFlag(this._ptr, type_flag);
   }
 
-  SetLinkName(link_name: Pointer): void {
-    lib.symbols.wxTarEntry_SetLinkName(this._ptr, link_name);
+  SetLinkName(link_name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof link_name === "string") __s0 = createWxString(link_name);
+      lib.symbols.wxTarEntry_SetLinkName(this._ptr, __s0 ? __s0.ptr : (link_name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetUserName(user_name: Pointer): void {
-    lib.symbols.wxTarEntry_SetUserName(this._ptr, user_name);
+  SetUserName(user_name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof user_name === "string") __s0 = createWxString(user_name);
+      lib.symbols.wxTarEntry_SetUserName(this._ptr, __s0 ? __s0.ptr : (user_name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetGroupName(group_name: Pointer): void {
-    lib.symbols.wxTarEntry_SetGroupName(this._ptr, group_name);
+  SetGroupName(group_name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof group_name === "string") __s0 = createWxString(group_name);
+      lib.symbols.wxTarEntry_SetGroupName(this._ptr, __s0 ? __s0.ptr : (group_name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetDevMajor(dev_major: number): void {
@@ -159,10 +184,16 @@ export function createWxTarEntry(): wxTarEntry | null {
     return new wxTarEntry(rawPtr);
 }
 
-export function createWxTarEntryNamed(entry_name: Pointer): wxTarEntry | null {
-    const rawPtr = lib.symbols.wxTarEntry_CreateNamed(entry_name);
-    if (rawPtr === null) return null;
-    return new wxTarEntry(rawPtr);
+export function createWxTarEntryNamed(entry_name: string | Pointer): wxTarEntry | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      const rawPtr = lib.symbols.wxTarEntry_CreateNamed(__s0 ? __s0.ptr : (entry_name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxTarEntry(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

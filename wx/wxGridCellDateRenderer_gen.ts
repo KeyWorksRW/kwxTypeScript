@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxGridCellStringRenderer } from "./wxGridCellStringRenderer_gen.ts";
 
@@ -21,16 +22,28 @@ export class wxGridCellDateRenderer extends wxGridCellStringRenderer {
     this.Delete();
   }
 
-  SetParameters(params: Pointer): void {
-    lib.symbols.wxGridCellDateRenderer_SetParameters(this._ptr, params);
+  SetParameters(params: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof params === "string") __s0 = createWxString(params);
+      lib.symbols.wxGridCellDateRenderer_SetParameters(this._ptr, __s0 ? __s0.ptr : (params as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxGridCellDateRenderer(out_format: Pointer): wxGridCellDateRenderer | null {
-    const rawPtr = lib.symbols.wxGridCellDateRenderer_Create(out_format);
-    if (rawPtr === null) return null;
-    return new wxGridCellDateRenderer(rawPtr);
+export function createWxGridCellDateRenderer(out_format: string | Pointer): wxGridCellDateRenderer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof out_format === "string") __s0 = createWxString(out_format);
+      const rawPtr = lib.symbols.wxGridCellDateRenderer_Create(__s0 ? __s0.ptr : (out_format as Pointer));
+      if (rawPtr === null) return null;
+      return new wxGridCellDateRenderer(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

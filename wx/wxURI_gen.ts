@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -23,8 +24,14 @@ export class wxURI extends wxObject {
     this.Delete();
   }
 
-  Parse(uri_text: Pointer): boolean {
-    return (lib.symbols.wxURI_Parse(this._ptr, uri_text) as number) !== 0;
+  Parse(uri_text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof uri_text === "string") __s0 = createWxString(uri_text);
+      return (lib.symbols.wxURI_Parse(this._ptr, __s0 ? __s0.ptr : (uri_text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsEmpty(): boolean {
@@ -62,75 +69,84 @@ export class wxURI extends wxObject {
   GetScheme(): wxString | null {
     const rawPtr = lib.symbols.wxURI_GetScheme(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxURI_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetQuery(): wxString | null {
     const rawPtr = lib.symbols.wxURI_GetQuery(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFragment(): wxString | null {
     const rawPtr = lib.symbols.wxURI_GetFragment(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPort(): wxString | null {
     const rawPtr = lib.symbols.wxURI_GetPort(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUserInfo(): wxString | null {
     const rawPtr = lib.symbols.wxURI_GetUserInfo(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetServer(): wxString | null {
     const rawPtr = lib.symbols.wxURI_GetServer(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUser(): wxString | null {
     const rawPtr = lib.symbols.wxURI_GetUser(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPassword(): wxString | null {
     const rawPtr = lib.symbols.wxURI_GetPassword(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetHostType(): number {
     return lib.symbols.wxURI_GetHostType(this._ptr);
   }
 
-  SetUserAndPassword(user: Pointer, password: Pointer): void {
-    lib.symbols.wxURI_SetUserAndPassword(this._ptr, user, password);
+  SetUserAndPassword(user: string | Pointer, password: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof user === "string") __s0 = createWxString(user);
+      if (typeof password === "string") __s1 = createWxString(password);
+      lib.symbols.wxURI_SetUserAndPassword(this._ptr, __s0 ? __s0.ptr : (user as Pointer), __s1 ? __s1.ptr : (password as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   BuildURI(): wxString | null {
     const rawPtr = lib.symbols.wxURI_BuildURI(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   BuildUnescapedURI(): wxString | null {
     const rawPtr = lib.symbols.wxURI_BuildUnescapedURI(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Resolve(base: Pointer, flags: number): void {
@@ -153,10 +169,16 @@ export function createWxURI(): wxURI | null {
     return new wxURI(rawPtr);
 }
 
-export function createWxURIFromString(uri_text: Pointer): wxURI | null {
-    const rawPtr = lib.symbols.wxURI_CreateFromString(uri_text);
-    if (rawPtr === null) return null;
-    return new wxURI(rawPtr);
+export function createWxURIFromString(uri_text: string | Pointer): wxURI | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof uri_text === "string") __s0 = createWxString(uri_text);
+      const rawPtr = lib.symbols.wxURI_CreateFromString(__s0 ? __s0.ptr : (uri_text as Pointer));
+      if (rawPtr === null) return null;
+      return new wxURI(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

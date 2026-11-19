@@ -26,7 +26,7 @@ export class wxColourPickerEvent extends wxCommandEvent {
   GetColour(): wxColour | null {
     const rawPtr = lib.symbols.wxColourPickerEvent_GetColour(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   SetColour(colour: Pointer): void {

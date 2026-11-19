@@ -41,6 +41,12 @@ export function createWxDropSource(data: Pointer, win: Pointer, copy: Pointer, m
     return new wxDropSource(rawPtr);
 }
 
+export function createWxDropSourceDefault(data: Pointer, win: Pointer): wxDropSource | null {
+    const rawPtr = lib.symbols.DropSource_CreateDefault(data, win);
+    if (rawPtr === null) return null;
+    return new wxDropSource(rawPtr);
+}
+
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */
 export function wrapWxDropSource(ptr: Pointer): wxDropSource {
     return new wxDropSource(ptr, true);

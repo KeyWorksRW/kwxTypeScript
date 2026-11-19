@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxMDIParentFrame } from "./wxMDIParentFrame_gen.ts";
 import { wxDocManager } from "./wxDocManager_gen.ts";
@@ -21,10 +22,16 @@ export class wxDocMDIParentFrame extends wxMDIParentFrame {
 
 }
 
-export function createWxDocMDIParentFrame(manager: Pointer, parent: Pointer, id: number, title: Pointer, x: number, y: number, width: number, height: number, style: number): wxDocMDIParentFrame | null {
-    const rawPtr = lib.symbols.wxDocMDIParentFrame_Create(manager, parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxDocMDIParentFrame(rawPtr);
+export function createWxDocMDIParentFrame(manager: Pointer, parent: Pointer, id: number, title: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxDocMDIParentFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxDocMDIParentFrame_Create(manager, parent, id, __s0 ? __s0.ptr : (title as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxDocMDIParentFrame(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxBusyInfoFlags {
@@ -37,12 +38,24 @@ export class wxBusyInfoFlags {
     lib.symbols.wxBusyInfoFlags_SetIcon(this._ptr, icon);
   }
 
-  SetTitle(title: Pointer): void {
-    lib.symbols.wxBusyInfoFlags_SetTitle(this._ptr, title);
+  SetTitle(title: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      lib.symbols.wxBusyInfoFlags_SetTitle(this._ptr, __s0 ? __s0.ptr : (title as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetText(text: Pointer): void {
-    lib.symbols.wxBusyInfoFlags_SetText(this._ptr, text);
+  SetText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxBusyInfoFlags_SetText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetForeground(colour: Pointer): void {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxIcon } from "./wxIcon_gen.ts";
@@ -16,8 +17,14 @@ export class wxBookCtrlBase extends wxControl {
     return this._ptr;
   }
 
-  CreateFromDefault(parent: Pointer, winid: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): boolean {
-    return (lib.symbols.wxBookCtrlBase_CreateFromDefault(this._ptr, parent, winid, x, y, width, height, style, name) as number) !== 0;
+  CreateFromDefault(parent: Pointer, winid: number, x: number, y: number, width: number, height: number, style: bigint, name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxBookCtrlBase_CreateFromDefault(this._ptr, parent, winid, x, y, width, height, style, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetPageSize(width: number, height: number): void {
@@ -43,11 +50,17 @@ export class wxBookCtrlBase extends wxControl {
   GetPageText(nPage: number): wxString | null {
     const rawPtr = lib.symbols.wxBookCtrlBase_GetPageText(this._ptr, nPage);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetPageText(page: number, text: Pointer): boolean {
-    return (lib.symbols.wxBookCtrlBase_SetPageText(this._ptr, page, text) as number) !== 0;
+  SetPageText(page: number, text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxBookCtrlBase_SetPageText(this._ptr, page, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetSelection(): number {
@@ -76,8 +89,14 @@ export class wxBookCtrlBase extends wxControl {
     return lib.symbols.wxBookCtrlBase_FindPage(this._ptr, page);
   }
 
-  AddPage(page: Pointer, text: Pointer, select: boolean, imageId: number): boolean {
-    return (lib.symbols.wxBookCtrlBase_AddPage(this._ptr, page, text, select ? 1 : 0, imageId) as number) !== 0;
+  AddPage(page: Pointer, text: string | Pointer, select: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxBookCtrlBase_AddPage(this._ptr, page, __s0 ? __s0.ptr : (text as Pointer), select ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DeleteAllPages(): boolean {
@@ -88,8 +107,14 @@ export class wxBookCtrlBase extends wxControl {
     return (lib.symbols.wxBookCtrlBase_DeletePage(this._ptr, page) as number) !== 0;
   }
 
-  InsertPage(index: number, page: Pointer, text: Pointer, select: boolean, imageId: number): boolean {
-    return (lib.symbols.wxBookCtrlBase_InsertPage(this._ptr, index, page, text, select ? 1 : 0, imageId) as number) !== 0;
+  InsertPage(index: number, page: Pointer, text: string | Pointer, select: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxBookCtrlBase_InsertPage(this._ptr, index, page, __s0 ? __s0.ptr : (text as Pointer), select ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   RemovePage(page: number): boolean {
@@ -135,7 +160,7 @@ export class wxBookCtrlBase extends wxControl {
   GetImage(iconIndex: number): wxIcon | null {
     const rawPtr = lib.symbols.wxBookCtrlBase_GetImage(this._ptr, iconIndex);
     if (rawPtr === null) return null;
-    return new wxIcon(rawPtr, true);
+    return new wxIcon(rawPtr);
   }
 
 }

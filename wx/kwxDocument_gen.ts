@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDocument } from "./wxDocument_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -50,10 +51,86 @@ export class kwxDocument extends wxDocument {
     lib.symbols.kwxDocument_SetOnOnOpenDocument(this._ptr, pFunction);
   }
 
+  override SetOnDoOpenDocumentWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDocument_SetOnDoOpenDocumentWithData(this._ptr, pFunction, data);
+  }
+
+  override SetDoOpenDocumentResult(result: boolean): void {
+    lib.symbols.kwxDocument_SetDoOpenDocumentResult(this._ptr, result ? 1 : 0);
+  }
+
+  override SetOnDoSaveDocumentWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDocument_SetOnDoSaveDocumentWithData(this._ptr, pFunction, data);
+  }
+
+  override SetDoSaveDocumentResult(result: boolean): void {
+    lib.symbols.kwxDocument_SetDoSaveDocumentResult(this._ptr, result ? 1 : 0);
+  }
+
+  override SetOnIsModifiedWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDocument_SetOnIsModifiedWithData(this._ptr, pFunction, data);
+  }
+
+  override SetIsModifiedResult(result: boolean): void {
+    lib.symbols.kwxDocument_SetIsModifiedResult(this._ptr, result ? 1 : 0);
+  }
+
+  override SetOnModifyWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDocument_SetOnModifyWithData(this._ptr, pFunction, data);
+  }
+
+  override SetOnOnCreateWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDocument_SetOnOnCreateWithData(this._ptr, pFunction, data);
+  }
+
+  override SetOnCreateResult(result: boolean): void {
+    lib.symbols.kwxDocument_SetOnCreateResult(this._ptr, result ? 1 : 0);
+  }
+
+  override SetOnOnOpenDocumentWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDocument_SetOnOnOpenDocumentWithData(this._ptr, pFunction, data);
+  }
+
+  override SetOnOpenDocumentResult(result: boolean): void {
+    lib.symbols.kwxDocument_SetOnOpenDocumentResult(this._ptr, result ? 1 : 0);
+  }
+
+  override OnCreateBase(path: string | Pointer, flags: bigint): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      return (lib.symbols.kwxDocument_OnCreateBase(this._ptr, __s0 ? __s0.ptr : (path as Pointer), flags) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  override OnOpenDocumentBase(filename: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.kwxDocument_OnOpenDocumentBase(this._ptr, __s0 ? __s0.ptr : (filename as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  override IsModifiedBase(): boolean {
+    return (lib.symbols.kwxDocument_IsModifiedBase(this._ptr) as number) !== 0;
+  }
+
+  override ModifyBase(modified: boolean): void {
+    lib.symbols.kwxDocument_ModifyBase(this._ptr, modified ? 1 : 0);
+  }
+
 }
 
 export function createKwxDocument(pObject: Pointer): Pointer {
     return lib.symbols.kwxDocument_Create(pObject);
+}
+
+export function createKwxDocumentWithParent(pObject: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.kwxDocument_CreateWithParent(pObject, parent);
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

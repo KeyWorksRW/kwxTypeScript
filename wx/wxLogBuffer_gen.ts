@@ -26,7 +26,7 @@ export class wxLogBuffer extends wxLog {
   GetBuffer(): wxString | null {
     const rawPtr = lib.symbols.wxLogBuffer_GetBuffer(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override Flush(): void {

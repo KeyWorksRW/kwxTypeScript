@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPGProperty } from "./wxPGProperty_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -25,10 +26,16 @@ export class wxPropertyCategory extends wxPGProperty {
 
 }
 
-export function createWxPropertyCategory(label: Pointer): wxPropertyCategory | null {
-    const rawPtr = lib.symbols.wxPropertyCategory_Create(label);
-    if (rawPtr === null) return null;
-    return new wxPropertyCategory(rawPtr);
+export function createWxPropertyCategory(label: string | Pointer): wxPropertyCategory | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxPropertyCategory_Create(__s0 ? __s0.ptr : (label as Pointer));
+      if (rawPtr === null) return null;
+      return new wxPropertyCategory(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

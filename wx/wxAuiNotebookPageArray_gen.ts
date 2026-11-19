@@ -37,7 +37,7 @@ export class wxAuiNotebookPageArray {
   Item(index: number): wxAuiNotebookPage | null {
     const rawPtr = lib.symbols.wxAuiNotebookPageArray_Item(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxAuiNotebookPage(rawPtr, true);
+    return new wxAuiNotebookPage(rawPtr);
   }
 
 }

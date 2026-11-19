@@ -38,3 +38,53 @@ export function readAndDeleteWxString(wxStrPtr: Pointer): string
     lib.symbols.wxString_Delete(wxStrPtr);
     return result;
 }
+
+// --- Helper: borrow a wxString for one call; released on every exit path ---
+// WARNING: the pointer is valid only inside fn. Do not store it.
+export function withWxString<T>(text: string, fn: (ptr: Pointer) => T): T
+{
+    const ws = createWxString(text);
+    try
+    {
+        return fn(ws.ptr);
+    }
+    finally
+    {
+        ws.Delete();
+    }
+}
+
+// --- Helper: borrow several wxStrings for one call; released in reverse order ---
+export function withWxStrings<T>(texts: readonly string[], fn: (ptrs: Pointer[]) => T): T
+{
+    const owned: wxString[] = [];
+    try
+    {
+        for (const text of texts)
+        {
+            owned.push(createWxString(text));
+        }
+        return fn(owned.map((ws) => ws.ptr));
+    }
+    finally
+    {
+        for (let i = owned.length - 1; i >= 0; --i)
+        {
+            owned[i].Delete();
+        }
+    }
+}
+
+// --- Helper: read a wxArrayString* into a JS string array ---
+// Every element wxArrayString_Item returns is a heap copy, so each is consumed.
+export function readWxStringArray(ptr: Pointer): string[]
+{
+    if (!ptr) return [];
+    const count = lib.symbols.wxArrayString_GetCount(ptr);
+    const result: string[] = [];
+    for (let i = 0; i < count; ++i)
+    {
+        result.push(readAndDeleteWxString(lib.symbols.wxArrayString_Item(ptr, i)));
+    }
+    return result;
+}

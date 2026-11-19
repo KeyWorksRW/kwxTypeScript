@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxGridCellStringRenderer } from "./wxGridCellStringRenderer_gen.ts";
 
@@ -21,16 +22,28 @@ export class wxGridCellEnumRenderer extends wxGridCellStringRenderer {
     this.Delete();
   }
 
-  SetParameters(params: Pointer): void {
-    lib.symbols.wxGridCellEnumRenderer_SetParameters(this._ptr, params);
+  SetParameters(params: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof params === "string") __s0 = createWxString(params);
+      lib.symbols.wxGridCellEnumRenderer_SetParameters(this._ptr, __s0 ? __s0.ptr : (params as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxGridCellEnumRenderer(choices: Pointer): wxGridCellEnumRenderer | null {
-    const rawPtr = lib.symbols.wxGridCellEnumRenderer_Create(choices);
-    if (rawPtr === null) return null;
-    return new wxGridCellEnumRenderer(rawPtr);
+export function createWxGridCellEnumRenderer(choices: string | Pointer): wxGridCellEnumRenderer | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof choices === "string") __s0 = createWxString(choices);
+      const rawPtr = lib.symbols.wxGridCellEnumRenderer_Create(__s0 ? __s0.ptr : (choices as Pointer));
+      if (rawPtr === null) return null;
+      return new wxGridCellEnumRenderer(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

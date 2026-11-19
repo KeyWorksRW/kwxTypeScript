@@ -16,13 +16,13 @@ export class wxDPIChangedEvent extends wxEvent {
   GetOldDPI(): wxSize | null {
     const rawPtr = lib.symbols.wxDPIChangedEvent_GetOldDPI(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetNewDPI(): wxSize | null {
     const rawPtr = lib.symbols.wxDPIChangedEvent_GetNewDPI(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
 }

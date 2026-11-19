@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPGProperty } from "./wxPGProperty_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -59,8 +60,14 @@ export class kwxPGProperty extends wxPGProperty {
     lib.symbols.kwxPGProperty_SetDoGetValueResult(this._ptr, value);
   }
 
-  SetValueToStringResult(value: Pointer): void {
-    lib.symbols.kwxPGProperty_SetValueToStringResult(this._ptr, value);
+  SetValueToStringResult(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.kwxPGProperty_SetValueToStringResult(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetStringToValueResult(result: boolean): void {
@@ -73,10 +80,19 @@ export class kwxPGProperty extends wxPGProperty {
 
 }
 
-export function createKwxPGProperty(pObject: Pointer, label: Pointer, name: Pointer, value: Pointer): kwxPGProperty | null {
-    const rawPtr = lib.symbols.kwxPGProperty_Create(pObject, label, name, value);
-    if (rawPtr === null) return null;
-    return new kwxPGProperty(rawPtr);
+export function createKwxPGProperty(pObject: Pointer, label: string | Pointer, name: string | Pointer, value: Pointer): kwxPGProperty | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.kwxPGProperty_Create(pObject, __s0 ? __s0.ptr : (label as Pointer), __s1 ? __s1.ptr : (name as Pointer), value);
+      if (rawPtr === null) return null;
+      return new kwxPGProperty(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

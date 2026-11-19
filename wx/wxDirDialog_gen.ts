@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -16,13 +17,13 @@ export class wxDirDialog extends wxDialog {
   GetMessage(): wxString | null {
     const rawPtr = lib.symbols.wxDirDialog_GetMessage(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxDirDialog_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetStyle(): number {
@@ -33,12 +34,24 @@ export class wxDirDialog extends wxDialog {
     return lib.symbols.wxDirDialog_GetPaths(this._ptr, paths, capacity);
   }
 
-  SetMessage(msg: Pointer): void {
-    lib.symbols.wxDirDialog_SetMessage(this._ptr, msg);
+  SetMessage(msg: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof msg === "string") __s0 = createWxString(msg);
+      lib.symbols.wxDirDialog_SetMessage(this._ptr, __s0 ? __s0.ptr : (msg as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPath(pth: Pointer): void {
-    lib.symbols.wxDirDialog_SetPath(this._ptr, pth);
+  SetPath(pth: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof pth === "string") __s0 = createWxString(pth);
+      lib.symbols.wxDirDialog_SetPath(this._ptr, __s0 ? __s0.ptr : (pth as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetStyle(style: number): void {
@@ -47,10 +60,19 @@ export class wxDirDialog extends wxDialog {
 
 }
 
-export function createWxDirDialog(parent: Pointer, message: Pointer, directory: Pointer, left: number, top: number, style: number): wxDirDialog | null {
-    const rawPtr = lib.symbols.wxDirDialog_Create(parent, message, directory, left, top, style);
-    if (rawPtr === null) return null;
-    return new wxDirDialog(rawPtr);
+export function createWxDirDialog(parent: Pointer, message: string | Pointer, directory: string | Pointer, left: number, top: number, style: number): wxDirDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof directory === "string") __s1 = createWxString(directory);
+      const rawPtr = lib.symbols.wxDirDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (directory as Pointer), left, top, style);
+      if (rawPtr === null) return null;
+      return new wxDirDialog(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

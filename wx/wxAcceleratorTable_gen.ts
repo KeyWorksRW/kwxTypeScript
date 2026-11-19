@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import type { wxAcceleratorEntry } from "./wxAcceleratorEntry_gen.ts";
 
@@ -43,10 +44,16 @@ export class wxAcceleratorTable {
 
 }
 
-export function createWxAcceleratorTableFromResource(resource: Pointer): wxAcceleratorTable | null {
-    const rawPtr = lib.symbols.wxAcceleratorTable_CreateFromResource(resource);
-    if (rawPtr === null) return null;
-    return new wxAcceleratorTable(rawPtr);
+export function createWxAcceleratorTableFromResource(resource: string | Pointer): wxAcceleratorTable | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof resource === "string") __s0 = createWxString(resource);
+      const rawPtr = lib.symbols.wxAcceleratorTable_CreateFromResource(__s0 ? __s0.ptr : (resource as Pointer));
+      if (rawPtr === null) return null;
+      return new wxAcceleratorTable(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxAcceleratorTable(count: number, entries: Pointer): wxAcceleratorTable | null {
