@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxFrame } from "./wxFrame_gen.ts";
 import { wxMDIChildFrame } from "./wxMDIChildFrame_gen.ts";
@@ -65,10 +66,16 @@ export class wxMDIParentFrame extends wxFrame {
 
 }
 
-export function createWxMDIParentFrame(parent: Pointer, id: number, text: Pointer, left: number, top: number, width: number, height: number, style: number): wxMDIParentFrame | null {
-    const rawPtr = lib.symbols.wxMDIParentFrame_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxMDIParentFrame(rawPtr);
+export function createWxMDIParentFrame(parent: Pointer, id: number, text: string | Pointer, left: number, top: number, width: number, height: number, style: number): wxMDIParentFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxMDIParentFrame_Create(parent, id, __s0 ? __s0.ptr : (text as Pointer), left, top, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxMDIParentFrame(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

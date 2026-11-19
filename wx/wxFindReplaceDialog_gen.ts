@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxFindReplaceData } from "./wxFindReplaceData_gen.ts";
@@ -36,10 +37,16 @@ export class wxFindReplaceDialog extends wxDialog {
 
 }
 
-export function createWxFindReplaceDialog(parent: Pointer, data: Pointer, title: Pointer, style: number): wxFindReplaceDialog | null {
-    const rawPtr = lib.symbols.wxFindReplaceDialog_Create(parent, data, title, style);
-    if (rawPtr === null) return null;
-    return new wxFindReplaceDialog(rawPtr);
+export function createWxFindReplaceDialog(parent: Pointer, data: Pointer, title: string | Pointer, style: number): wxFindReplaceDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxFindReplaceDialog_Create(parent, data, __s0 ? __s0.ptr : (title as Pointer), style);
+      if (rawPtr === null) return null;
+      return new wxFindReplaceDialog(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

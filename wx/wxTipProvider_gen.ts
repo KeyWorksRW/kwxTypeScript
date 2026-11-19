@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -33,7 +34,7 @@ export class wxTipProvider {
   GetTip(): wxString | null {
     const rawPtr = lib.symbols.wxTipProvider_GetTip(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetCurrentTip(): number {
@@ -42,10 +43,16 @@ export class wxTipProvider {
 
 }
 
-export function createWxTipProviderFile(filename: Pointer, current_tip: number): wxTipProvider | null {
-    const rawPtr = lib.symbols.wxTipProvider_CreateFile(filename, current_tip);
-    if (rawPtr === null) return null;
-    return new wxTipProvider(rawPtr);
+export function createWxTipProviderFile(filename: string | Pointer, current_tip: number): wxTipProvider | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      const rawPtr = lib.symbols.wxTipProvider_CreateFile(__s0 ? __s0.ptr : (filename as Pointer), current_tip);
+      if (rawPtr === null) return null;
+      return new wxTipProvider(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

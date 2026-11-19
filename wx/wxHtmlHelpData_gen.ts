@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -23,24 +24,42 @@ export class wxHtmlHelpData extends wxObject {
     this.Delete();
   }
 
-  AddBook(book: Pointer): boolean {
-    return (lib.symbols.wxHtmlHelpData_AddBook(this._ptr, book) as number) !== 0;
+  AddBook(book: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof book === "string") __s0 = createWxString(book);
+      return (lib.symbols.wxHtmlHelpData_AddBook(this._ptr, __s0 ? __s0.ptr : (book as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   FindPageById(id: number): wxString | null {
     const rawPtr = lib.symbols.wxHtmlHelpData_FindPageById(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  FindPageByName(page: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxHtmlHelpData_FindPageByName(this._ptr, page);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  FindPageByName(page: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof page === "string") __s0 = createWxString(page);
+      const rawPtr = lib.symbols.wxHtmlHelpData_FindPageByName(this._ptr, __s0 ? __s0.ptr : (page as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetTempDir(path: Pointer): void {
-    lib.symbols.wxHtmlHelpData_SetTempDir(this._ptr, path);
+  SetTempDir(path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxHtmlHelpData_SetTempDir(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetBookRecArray(): Pointer {

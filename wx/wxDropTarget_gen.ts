@@ -3,6 +3,7 @@
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxDataObject } from "./wxDataObject_gen.ts";
 
 export class wxDropTarget {
   protected readonly _ptr: Pointer;
@@ -19,8 +20,14 @@ export class wxDropTarget {
     return this._ptr;
   }
 
-  GetData(): void {
-    lib.symbols.wxDropTarget_GetData(this._ptr);
+  GetData(): boolean {
+    return (lib.symbols.wxDropTarget_GetData(this._ptr) as number) !== 0;
+  }
+
+  GetDataObject(): wxDataObject | null {
+    const rawPtr = lib.symbols.wxDropTarget_GetDataObject(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxDataObject(rawPtr, true);
   }
 
   SetDataObject(dataObject: Pointer): void {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxTopLevelWindow } from "./wxTopLevelWindow_gen.ts";
 import { wxIcon } from "./wxIcon_gen.ts";
@@ -27,13 +28,13 @@ export class wxFrame extends wxTopLevelWindow {
   override GetIcon(): wxIcon | null {
     const rawPtr = lib.symbols.wxFrame_GetIcon(this._ptr);
     if (rawPtr === null) return null;
-    return new wxIcon(rawPtr, true);
+    return new wxIcon(rawPtr);
   }
 
   override GetTitle(): wxString | null {
     const rawPtr = lib.symbols.wxFrame_GetTitle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override Iconize(): boolean {
@@ -64,8 +65,14 @@ export class wxFrame extends wxTopLevelWindow {
     return (lib.symbols.wxFrame_SetShape(this._ptr, region) as number) !== 0;
   }
 
-  override SetTitle(text: Pointer): void {
-    lib.symbols.wxFrame_SetTitle(this._ptr, text);
+  override SetTitle(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxFrame_SetTitle(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override ShowFullScreen(show: boolean, style: number): boolean;
@@ -82,7 +89,7 @@ export class wxFrame extends wxTopLevelWindow {
   GetClientAreaOriginPoint(): wxPoint | null {
     const rawPtr = lib.symbols.wxFrame_GetClientAreaOriginPoint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   SetWindowModality(modality: number): void {
@@ -161,8 +168,14 @@ export class wxFrame extends wxTopLevelWindow {
     lib.symbols.wxFrame_SetStatusBar(this._ptr, statBar);
   }
 
-  SetStatusText(text: Pointer, number: number): void {
-    lib.symbols.wxFrame_SetStatusText(this._ptr, text, number);
+  SetStatusText(text: string | Pointer, number: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxFrame_SetStatusText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), number);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetStatusWidths(count: number, widths: Pointer): void {
@@ -191,8 +204,14 @@ export class wxFrame extends wxTopLevelWindow {
     return lib.symbols.wxFrame_GetStatusBarPane(this._ptr);
   }
 
-  PushStatusText(text: Pointer, field: number): void {
-    lib.symbols.wxFrame_PushStatusText(this._ptr, text, field);
+  PushStatusText(text: string | Pointer, field: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxFrame_PushStatusText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), field);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   PopStatusText(field: number): void {
@@ -201,10 +220,16 @@ export class wxFrame extends wxTopLevelWindow {
 
 }
 
-export function createWxFrame(parent: Pointer, id: number, text: Pointer, left: number, top: number, width: number, height: number, style: number): wxFrame | null {
-    const rawPtr = lib.symbols.wxFrame_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxFrame(rawPtr);
+export function createWxFrame(parent: Pointer, id: number, text: string | Pointer, left: number, top: number, width: number, height: number, style: number): wxFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxFrame_Create(parent, id, __s0 ? __s0.ptr : (text as Pointer), left, top, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxFrame(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

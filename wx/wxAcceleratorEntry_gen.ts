@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxMenuItem } from "./wxMenuItem_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -52,17 +53,23 @@ export class wxAcceleratorEntry {
   ToString(): wxString | null {
     const rawPtr = lib.symbols.wxAcceleratorEntry_ToString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   ToRawString(): wxString | null {
     const rawPtr = lib.symbols.wxAcceleratorEntry_ToRawString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  FromString(str: Pointer): boolean {
-    return (lib.symbols.wxAcceleratorEntry_FromString(this._ptr, str) as number) !== 0;
+  FromString(str: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      return (lib.symbols.wxAcceleratorEntry_FromString(this._ptr, __s0 ? __s0.ptr : (str as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetCommand(): number {
@@ -83,10 +90,16 @@ export class wxAcceleratorEntry {
 
 }
 
-export function createWxAcceleratorEntryFromString(str: Pointer): wxAcceleratorEntry | null {
-    const rawPtr = lib.symbols.wxAcceleratorEntry_CreateFromString(str);
-    if (rawPtr === null) return null;
-    return new wxAcceleratorEntry(rawPtr);
+export function createWxAcceleratorEntryFromString(str: string | Pointer): wxAcceleratorEntry | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      const rawPtr = lib.symbols.wxAcceleratorEntry_CreateFromString(__s0 ? __s0.ptr : (str as Pointer));
+      if (rawPtr === null) return null;
+      return new wxAcceleratorEntry(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxAcceleratorEntry(flags: number, keyCode: number, cmd: number): wxAcceleratorEntry | null {

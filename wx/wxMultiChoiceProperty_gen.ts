@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPGProperty } from "./wxPGProperty_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -25,22 +26,49 @@ export class wxMultiChoiceProperty extends wxPGProperty {
 
 }
 
-export function createWxMultiChoiceProperty(label: Pointer, name: Pointer, count: number, values: Pointer): wxMultiChoiceProperty | null {
-    const rawPtr = lib.symbols.wxMultiChoiceProperty_Create(label, name, count, values);
-    if (rawPtr === null) return null;
-    return new wxMultiChoiceProperty(rawPtr);
+export function createWxMultiChoiceProperty(label: string | Pointer, name: string | Pointer, count: number, values: Pointer): wxMultiChoiceProperty | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.wxMultiChoiceProperty_Create(__s0 ? __s0.ptr : (label as Pointer), __s1 ? __s1.ptr : (name as Pointer), count, values);
+      if (rawPtr === null) return null;
+      return new wxMultiChoiceProperty(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
-export function createWxMultiChoicePropertyFromArray(label: Pointer, name: Pointer, value: Pointer): wxMultiChoiceProperty | null {
-    const rawPtr = lib.symbols.wxMultiChoiceProperty_CreateFromArray(label, name, value);
-    if (rawPtr === null) return null;
-    return new wxMultiChoiceProperty(rawPtr);
+export function createWxMultiChoicePropertyFromArray(label: string | Pointer, name: string | Pointer, value: Pointer): wxMultiChoiceProperty | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.wxMultiChoiceProperty_CreateFromArray(__s0 ? __s0.ptr : (label as Pointer), __s1 ? __s1.ptr : (name as Pointer), value);
+      if (rawPtr === null) return null;
+      return new wxMultiChoiceProperty(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
-export function createWxMultiChoicePropertyWithChoices(label: Pointer, name: Pointer, choices: Pointer, value: Pointer): wxMultiChoiceProperty | null {
-    const rawPtr = lib.symbols.wxMultiChoiceProperty_CreateWithChoices(label, name, choices, value);
-    if (rawPtr === null) return null;
-    return new wxMultiChoiceProperty(rawPtr);
+export function createWxMultiChoicePropertyWithChoices(label: string | Pointer, name: string | Pointer, choices: Pointer, value: Pointer): wxMultiChoiceProperty | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.wxMultiChoiceProperty_CreateWithChoices(__s0 ? __s0.ptr : (label as Pointer), __s1 ? __s1.ptr : (name as Pointer), choices, value);
+      if (rawPtr === null) return null;
+      return new wxMultiChoiceProperty(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

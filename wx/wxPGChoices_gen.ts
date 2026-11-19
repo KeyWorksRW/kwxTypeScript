@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPGChoiceEntry } from "./wxPGChoiceEntry_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -38,7 +39,7 @@ export class wxPGChoices {
   GetLabel(index: number): wxString | null {
     const rawPtr = lib.symbols.wxPGChoices_GetLabel(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetValue(index: number): number {
@@ -51,16 +52,28 @@ export class wxPGChoices {
     return new wxPGChoiceEntry(rawPtr, true);
   }
 
-  Add(label: Pointer, value: number): wxPGChoiceEntry | null {
-    const rawPtr = lib.symbols.wxPGChoices_Add(this._ptr, label, value);
-    if (rawPtr === null) return null;
-    return new wxPGChoiceEntry(rawPtr, true);
+  Add(label: string | Pointer, value: number): wxPGChoiceEntry | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxPGChoices_Add(this._ptr, __s0 ? __s0.ptr : (label as Pointer), value);
+      if (rawPtr === null) return null;
+      return new wxPGChoiceEntry(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddAsSorted(label: Pointer, value: number): wxPGChoiceEntry | null {
-    const rawPtr = lib.symbols.wxPGChoices_AddAsSorted(this._ptr, label, value);
-    if (rawPtr === null) return null;
-    return new wxPGChoiceEntry(rawPtr, true);
+  AddAsSorted(label: string | Pointer, value: number): wxPGChoiceEntry | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxPGChoices_AddAsSorted(this._ptr, __s0 ? __s0.ptr : (label as Pointer), value);
+      if (rawPtr === null) return null;
+      return new wxPGChoiceEntry(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddStrings(labels: Pointer, values: Pointer): void {
@@ -75,8 +88,14 @@ export class wxPGChoices {
     lib.symbols.wxPGChoices_RemoveAt(this._ptr, index, count);
   }
 
-  Index(label: Pointer): number {
-    return lib.symbols.wxPGChoices_Index(this._ptr, label);
+  Index(label: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      return lib.symbols.wxPGChoices_Index(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IndexValue(value: number): number {

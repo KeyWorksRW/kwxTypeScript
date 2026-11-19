@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxBookCtrlBase } from "./wxBookCtrlBase_gen.ts";
@@ -14,8 +15,14 @@ export class wxPropertySheetDialog extends wxDialog {
     return this._ptr;
   }
 
-  CreateEx(parent: Pointer, id: number, title: Pointer, x: number, y: number, width: number, height: number, style: number): boolean {
-    return (lib.symbols.wxPropertySheetDialog_CreateEx(this._ptr, parent, id, title, x, y, width, height, style) as number) !== 0;
+  CreateEx(parent: Pointer, id: number, title: string | Pointer, x: number, y: number, width: number, height: number, style: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      return (lib.symbols.wxPropertySheetDialog_CreateEx(this._ptr, parent, id, __s0 ? __s0.ptr : (title as Pointer), x, y, width, height, style) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   CreateButtons(flags: number): void {
@@ -68,10 +75,16 @@ export class wxPropertySheetDialog extends wxDialog {
 
 }
 
-export function createWxPropertySheetDialog(parent: Pointer, id: number, title: Pointer, x: number, y: number, width: number, height: number, style: number): wxPropertySheetDialog | null {
-    const rawPtr = lib.symbols.wxPropertySheetDialog_Create(parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxPropertySheetDialog(rawPtr);
+export function createWxPropertySheetDialog(parent: Pointer, id: number, title: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxPropertySheetDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxPropertySheetDialog_Create(parent, id, __s0 ? __s0.ptr : (title as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxPropertySheetDialog(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxPropertySheetDialogDefault(): wxPropertySheetDialog | null {

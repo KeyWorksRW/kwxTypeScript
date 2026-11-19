@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxSocketClient } from "./wxSocketClient_gen.ts";
 import { wxInputStream } from "./wxInputStream_gen.ts";
@@ -28,56 +29,105 @@ export class wxProtocol extends wxSocketClient {
     return (lib.symbols.wxProtocol_Reconnect(this._ptr) as number) !== 0;
   }
 
-  override Connect(host: Pointer): boolean {
-    return (lib.symbols.wxProtocol_Connect(this._ptr, host) as number) !== 0;
+  override Connect(host: string | Pointer): boolean;
+  override Connect(address: Pointer, wait: boolean): boolean;
+  override Connect(host: string | Pointer, wait?: boolean): boolean {
+    if (arguments.length === 1) {
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof host === "string") __s0 = createWxString(host);
+        return (lib.symbols.wxProtocol_Connect(this._ptr, __s0 ? __s0.ptr : (host as Pointer)) as number) !== 0;
+      } finally {
+        __s0?.Delete();
+      }
+    }
+    else {
+      return super.Connect(host as Pointer, wait as boolean);
+    }
   }
 
   ConnectAddr(address: Pointer, wait: boolean): boolean {
     return (lib.symbols.wxProtocol_ConnectAddr(this._ptr, address, wait ? 1 : 0) as number) !== 0;
   }
 
-  ReadLine(result: Pointer): number {
-    return lib.symbols.wxProtocol_ReadLine(this._ptr, result);
+  ReadLine(result: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof result === "string") __s0 = createWxString(result);
+      return lib.symbols.wxProtocol_ReadLine(this._ptr, __s0 ? __s0.ptr : (result as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Abort(): boolean {
     return (lib.symbols.wxProtocol_Abort(this._ptr) as number) !== 0;
   }
 
-  GetInputStream(path: Pointer): wxInputStream | null {
-    const rawPtr = lib.symbols.wxProtocol_GetInputStream(this._ptr, path);
-    if (rawPtr === null) return null;
-    return new wxInputStream(rawPtr, true);
+  GetInputStream(path: string | Pointer): wxInputStream | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      const rawPtr = lib.symbols.wxProtocol_GetInputStream(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+      if (rawPtr === null) return null;
+      return new wxInputStream(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetContentType(): wxString | null {
     const rawPtr = lib.symbols.wxProtocol_GetContentType(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetError(): number {
     return lib.symbols.wxProtocol_GetError(this._ptr);
   }
 
-  SetUser(user: Pointer): void {
-    lib.symbols.wxProtocol_SetUser(this._ptr, user);
+  SetUser(user: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof user === "string") __s0 = createWxString(user);
+      lib.symbols.wxProtocol_SetUser(this._ptr, __s0 ? __s0.ptr : (user as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPassword(password: Pointer): void {
-    lib.symbols.wxProtocol_SetPassword(this._ptr, password);
+  SetPassword(password: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof password === "string") __s0 = createWxString(password);
+      lib.symbols.wxProtocol_SetPassword(this._ptr, __s0 ? __s0.ptr : (password as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetDefaultTimeout(seconds: number): void {
     lib.symbols.wxProtocol_SetDefaultTimeout(this._ptr, seconds);
   }
 
-  LogRequest(text: Pointer): void {
-    lib.symbols.wxProtocol_LogRequest(this._ptr, text);
+  LogRequest(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxProtocol_LogRequest(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LogResponse(text: Pointer): void {
-    lib.symbols.wxProtocol_LogResponse(this._ptr, text);
+  LogResponse(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxProtocol_LogResponse(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

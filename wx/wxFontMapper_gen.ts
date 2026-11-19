@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxFontMapper {
@@ -19,16 +20,34 @@ export class wxFontMapper {
     return this._ptr;
   }
 
-  CharsetToEncoding(charset: Pointer, interactive: boolean): number {
-    return lib.symbols.wxFontMapper_CharsetToEncoding(this._ptr, charset, interactive ? 1 : 0);
+  CharsetToEncoding(charset: string | Pointer, interactive: boolean): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof charset === "string") __s0 = createWxString(charset);
+      return lib.symbols.wxFontMapper_CharsetToEncoding(this._ptr, __s0 ? __s0.ptr : (charset as Pointer), interactive ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetAltForEncoding(encoding: number, alt_encoding: Pointer, buffer: Pointer): boolean {
-    return (lib.symbols.wxFontMapper_GetAltForEncoding(this._ptr, encoding, alt_encoding, buffer) as number) !== 0;
+  GetAltForEncoding(encoding: number, alt_encoding: Pointer, buffer: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof buffer === "string") __s0 = createWxString(buffer);
+      return (lib.symbols.wxFontMapper_GetAltForEncoding(this._ptr, encoding, alt_encoding, __s0 ? __s0.ptr : (buffer as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  IsEncodingAvailable(encoding: number, buffer: Pointer): boolean {
-    return (lib.symbols.wxFontMapper_IsEncodingAvailable(this._ptr, encoding, buffer) as number) !== 0;
+  IsEncodingAvailable(encoding: number, buffer: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof buffer === "string") __s0 = createWxString(buffer);
+      return (lib.symbols.wxFontMapper_IsEncodingAvailable(this._ptr, encoding, __s0 ? __s0.ptr : (buffer as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

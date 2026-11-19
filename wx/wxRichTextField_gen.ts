@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextParagraphLayoutBox } from "./wxRichTextParagraphLayoutBox_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -24,14 +25,20 @@ export class wxRichTextField extends wxRichTextParagraphLayoutBox {
     this.Delete();
   }
 
-  SetFieldType(fieldType: Pointer): void {
-    lib.symbols.wxRichTextField_SetFieldType(this._ptr, fieldType);
+  SetFieldType(fieldType: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fieldType === "string") __s0 = createWxString(fieldType);
+      lib.symbols.wxRichTextField_SetFieldType(this._ptr, __s0 ? __s0.ptr : (fieldType as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFieldType(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextField_GetFieldType(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   UpdateField(buffer: Pointer): boolean {
@@ -44,10 +51,16 @@ export class wxRichTextField extends wxRichTextParagraphLayoutBox {
 
 }
 
-export function createWxRichTextField(fieldType: Pointer, parent: Pointer): wxRichTextField | null {
-    const rawPtr = lib.symbols.wxRichTextField_Create(fieldType, parent);
-    if (rawPtr === null) return null;
-    return new wxRichTextField(rawPtr);
+export function createWxRichTextField(fieldType: string | Pointer, parent: Pointer): wxRichTextField | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fieldType === "string") __s0 = createWxString(fieldType);
+      const rawPtr = lib.symbols.wxRichTextField_Create(__s0 ? __s0.ptr : (fieldType as Pointer), parent);
+      if (rawPtr === null) return null;
+      return new wxRichTextField(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

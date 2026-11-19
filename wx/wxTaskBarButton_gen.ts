@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxTaskBarButton {
@@ -49,8 +50,14 @@ export class wxTaskBarButton {
     lib.symbols.wxTaskBarButton_Realize(this._ptr);
   }
 
-  SetOverlayIcon(icon: Pointer, description: Pointer): void {
-    lib.symbols.wxTaskBarButton_SetOverlayIcon(this._ptr, icon, description);
+  SetOverlayIcon(icon: Pointer, description: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof description === "string") __s0 = createWxString(description);
+      lib.symbols.wxTaskBarButton_SetOverlayIcon(this._ptr, icon, __s0 ? __s0.ptr : (description as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetProgressRange(range: number): void {
@@ -69,8 +76,14 @@ export class wxTaskBarButton {
     lib.symbols.wxTaskBarButton_SetThumbnailClip(this._ptr, x, y, width, height);
   }
 
-  SetThumbnailTooltip(tooltip: Pointer): void {
-    lib.symbols.wxTaskBarButton_SetThumbnailTooltip(this._ptr, tooltip);
+  SetThumbnailTooltip(tooltip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof tooltip === "string") __s0 = createWxString(tooltip);
+      lib.symbols.wxTaskBarButton_SetThumbnailTooltip(this._ptr, __s0 ? __s0.ptr : (tooltip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Show(show: boolean): void {

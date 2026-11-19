@@ -38,6 +38,26 @@ export class kwxView extends wxView {
     lib.symbols.kwxView_SetOnOnUpdate(this._ptr, pFunction);
   }
 
+  override SetOnOnCreateWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxView_SetOnOnCreateWithData(this._ptr, pFunction, data);
+  }
+
+  override SetOnCreateResult(result: boolean): void {
+    lib.symbols.kwxView_SetOnCreateResult(this._ptr, result ? 1 : 0);
+  }
+
+  override SetOnOnCloseWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxView_SetOnOnCloseWithData(this._ptr, pFunction, data);
+  }
+
+  override SetOnCloseResult(result: boolean): void {
+    lib.symbols.kwxView_SetOnCloseResult(this._ptr, result ? 1 : 0);
+  }
+
+  OnCloseBase(deleteWindow: boolean): boolean {
+    return (lib.symbols.kwxView_OnCloseBase(this._ptr, deleteWindow ? 1 : 0) as number) !== 0;
+  }
+
 }
 
 export function createKwxView(pObject: Pointer): Pointer {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxWindow } from "./wxWindow_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -24,33 +25,57 @@ export class wxControl extends wxWindow {
   override GetLabel(): wxString | null {
     const rawPtr = lib.symbols.wxControl_GetLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  override SetLabel(text: Pointer): void {
-    lib.symbols.wxControl_SetLabel(this._ptr, text);
+  override SetLabel(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxControl_SetLabel(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetLabelText(text: Pointer): void {
-    lib.symbols.wxControl_SetLabelText(this._ptr, text);
+  SetLabelText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxControl_SetLabelText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetLabelText(): wxString | null {
     const rawPtr = lib.symbols.wxControl_GetLabelText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetLabelMarkup(markup: Pointer): boolean {
-    return (lib.symbols.wxControl_SetLabelMarkup(this._ptr, markup) as number) !== 0;
+  SetLabelMarkup(markup: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof markup === "string") __s0 = createWxString(markup);
+      return (lib.symbols.wxControl_SetLabelMarkup(this._ptr, __s0 ? __s0.ptr : (markup as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetAlignment(): number {
     return lib.symbols.wxControl_GetAlignment(this._ptr);
   }
 
-  GetSizeFromText(text: Pointer, width: Pointer, height: Pointer): void {
-    lib.symbols.wxControl_GetSizeFromText(this._ptr, text, width, height);
+  GetSizeFromText(text: string | Pointer, width: Pointer, height: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxControl_GetSizeFromText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), width, height);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetSizeFromTextSize(xlen: number, ylen: number, width: Pointer, height: Pointer): void {

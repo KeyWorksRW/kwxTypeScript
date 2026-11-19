@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxColour } from "./wxColour_gen.ts";
@@ -17,19 +18,19 @@ export class wxHyperlinkCtrl extends wxControl {
   GetHoverColour(): wxColour | null {
     const rawPtr = lib.symbols.wxHyperlinkCtrl_GetHoverColour(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetNormalColour(): wxColour | null {
     const rawPtr = lib.symbols.wxHyperlinkCtrl_GetNormalColour(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetURL(): wxString | null {
     const rawPtr = lib.symbols.wxHyperlinkCtrl_GetURL(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetVisited(): boolean {
@@ -39,7 +40,7 @@ export class wxHyperlinkCtrl extends wxControl {
   GetVisitedColour(): wxColour | null {
     const rawPtr = lib.symbols.wxHyperlinkCtrl_GetVisitedColour(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   SetHoverColour(colour: Pointer): void {
@@ -50,8 +51,14 @@ export class wxHyperlinkCtrl extends wxControl {
     lib.symbols.wxHyperlinkCtrl_SetNormalColour(this._ptr, colour);
   }
 
-  SetURL(url: Pointer): void {
-    lib.symbols.wxHyperlinkCtrl_SetURL(this._ptr, url);
+  SetURL(url: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof url === "string") __s0 = createWxString(url);
+      lib.symbols.wxHyperlinkCtrl_SetURL(this._ptr, __s0 ? __s0.ptr : (url as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetVisited(visited: boolean): void {
@@ -64,10 +71,19 @@ export class wxHyperlinkCtrl extends wxControl {
 
 }
 
-export function createWxHyperlinkCtrl(parent: Pointer, id: number, label: Pointer, url: Pointer, x: number, y: number, width: number, height: number, style: number): wxHyperlinkCtrl | null {
-    const rawPtr = lib.symbols.wxHyperlinkCtrl_Create(parent, id, label, url, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxHyperlinkCtrl(rawPtr);
+export function createWxHyperlinkCtrl(parent: Pointer, id: number, label: string | Pointer, url: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxHyperlinkCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof url === "string") __s1 = createWxString(url);
+      const rawPtr = lib.symbols.wxHyperlinkCtrl_Create(parent, id, __s0 ? __s0.ptr : (label as Pointer), __s1 ? __s1.ptr : (url as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxHyperlinkCtrl(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

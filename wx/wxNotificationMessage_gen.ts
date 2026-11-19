@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -22,8 +23,14 @@ export class wxNotificationMessage extends wxEvtHandler {
     this.Delete();
   }
 
-  AddAction(actionid: number, label: Pointer): boolean {
-    return (lib.symbols.wxNotificationMessage_AddAction(this._ptr, actionid, label) as number) !== 0;
+  AddAction(actionid: number, label: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      return (lib.symbols.wxNotificationMessage_AddAction(this._ptr, actionid, __s0 ? __s0.ptr : (label as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Close(): boolean {
@@ -42,16 +49,28 @@ export class wxNotificationMessage extends wxEvtHandler {
     lib.symbols.wxNotificationMessage_SetIconBitmap(this._ptr, icon);
   }
 
-  SetMessage(message: Pointer): void {
-    lib.symbols.wxNotificationMessage_SetMessage(this._ptr, message);
+  SetMessage(message: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      lib.symbols.wxNotificationMessage_SetMessage(this._ptr, __s0 ? __s0.ptr : (message as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetParent(parent: Pointer): void {
     lib.symbols.wxNotificationMessage_SetParent(this._ptr, parent);
   }
 
-  SetTitle(title: Pointer): void {
-    lib.symbols.wxNotificationMessage_SetTitle(this._ptr, title);
+  SetTitle(title: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      lib.symbols.wxNotificationMessage_SetTitle(this._ptr, __s0 ? __s0.ptr : (title as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Show(timeout: number): boolean {
@@ -60,10 +79,19 @@ export class wxNotificationMessage extends wxEvtHandler {
 
 }
 
-export function createWxNotificationMessage(title: Pointer, message: Pointer, parent: Pointer, flags: number): wxNotificationMessage | null {
-    const rawPtr = lib.symbols.wxNotificationMessage_Create(title, message, parent, flags);
-    if (rawPtr === null) return null;
-    return new wxNotificationMessage(rawPtr);
+export function createWxNotificationMessage(title: string | Pointer, message: string | Pointer, parent: Pointer, flags: number): wxNotificationMessage | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      if (typeof message === "string") __s1 = createWxString(message);
+      const rawPtr = lib.symbols.wxNotificationMessage_Create(__s0 ? __s0.ptr : (title as Pointer), __s1 ? __s1.ptr : (message as Pointer), parent, flags);
+      if (rawPtr === null) return null;
+      return new wxNotificationMessage(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

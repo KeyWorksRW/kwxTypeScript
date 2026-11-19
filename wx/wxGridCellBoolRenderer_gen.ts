@@ -19,13 +19,13 @@ export class wxGridCellBoolRenderer extends wxGridCellRenderer {
   override GetPreferredSize(grid: Pointer, attr: Pointer, dc: Pointer, row: number, col: number): wxSize | null {
     const rawPtr = lib.symbols.wxGridCellBoolRenderer_GetPreferredSize(this._ptr, grid, attr, dc, row, col);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetMaxBestSize(grid: Pointer, attr: Pointer, dc: Pointer): wxSize | null {
     const rawPtr = lib.symbols.wxGridCellBoolRenderer_GetMaxBestSize(this._ptr, grid, attr, dc);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
 }

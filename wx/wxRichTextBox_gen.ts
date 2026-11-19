@@ -27,7 +27,7 @@ export class wxRichTextBox extends wxRichTextParagraphLayoutBox {
   GetXMLNodeName(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextBox_GetXMLNodeName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

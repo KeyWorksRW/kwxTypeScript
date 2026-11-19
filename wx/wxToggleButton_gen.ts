@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -20,8 +21,14 @@ export class wxToggleButton extends wxControl {
     return (lib.symbols.wxToggleButton_GetValue(this._ptr) as number) !== 0;
   }
 
-  override SetLabel(label: Pointer): void {
-    lib.symbols.wxToggleButton_SetLabel(this._ptr, label);
+  override SetLabel(label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxToggleButton_SetLabel(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetValue(state: boolean): void {
@@ -30,10 +37,16 @@ export class wxToggleButton extends wxControl {
 
 }
 
-export function createWxToggleButton(parent: Pointer, id: number, label: Pointer, x: number, y: number, width: number, height: number, style: number): wxToggleButton | null {
-    const rawPtr = lib.symbols.wxToggleButton_Create(parent, id, label, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxToggleButton(rawPtr);
+export function createWxToggleButton(parent: Pointer, id: number, label: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxToggleButton | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxToggleButton_Create(parent, id, __s0 ? __s0.ptr : (label as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxToggleButton(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

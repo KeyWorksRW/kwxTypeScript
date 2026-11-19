@@ -56,7 +56,7 @@ export class wxFlexGridSizer extends wxGridSizer {
   override CalcMin(): wxSize | null {
     const rawPtr = lib.symbols.wxFlexGridSizer_CalcMin(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   override RecalcSizes(): void {

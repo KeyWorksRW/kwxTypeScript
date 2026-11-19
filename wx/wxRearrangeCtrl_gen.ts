@@ -17,7 +17,7 @@ export class wxRearrangeCtrl extends wxPanel {
   GetCurrentOrder(): wxArrayInt | null {
     const rawPtr = lib.symbols.wxRearrangeCtrl_GetCurrentOrder(this._ptr);
     if (rawPtr === null) return null;
-    return new wxArrayInt(rawPtr, true);
+    return new wxArrayInt(rawPtr);
   }
 
   GetList(): wxRearrangeList | null {

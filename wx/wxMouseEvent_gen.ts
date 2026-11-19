@@ -108,13 +108,13 @@ export class wxMouseEvent extends wxEvent {
   GetLogicalPosition(dc: Pointer): wxPoint | null {
     const rawPtr = lib.symbols.wxMouseEvent_GetLogicalPosition(this._ptr, dc);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxMouseEvent_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetX(): number {

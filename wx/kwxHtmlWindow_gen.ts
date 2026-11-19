@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class kwxHtmlWindow {
@@ -21,10 +22,16 @@ export class kwxHtmlWindow {
 
 }
 
-export function createKwxHtmlWindow(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): kwxHtmlWindow | null {
-    const rawPtr = lib.symbols.kwxHtmlWindow_Create(parent, id, x, y, width, height, style, name);
-    if (rawPtr === null) return null;
-    return new kwxHtmlWindow(rawPtr);
+export function createKwxHtmlWindow(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: string | Pointer): kwxHtmlWindow | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.kwxHtmlWindow_Create(parent, id, x, y, width, height, style, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new kwxHtmlWindow(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

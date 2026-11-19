@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxFileDialogCustomControl } from "./wxFileDialogCustomControl_gen.ts";
 
@@ -20,16 +21,28 @@ export class wxFileDialogCustomize {
     return this._ptr;
   }
 
-  AddButton(label: Pointer): wxFileDialogCustomControl | null {
-    const rawPtr = lib.symbols.wxFileDialogCustomize_AddButton(this._ptr, label);
-    if (rawPtr === null) return null;
-    return new wxFileDialogCustomControl(rawPtr, true);
+  AddButton(label: string | Pointer): wxFileDialogCustomControl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxFileDialogCustomize_AddButton(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFileDialogCustomControl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddCheckBox(label: Pointer): wxFileDialogCustomControl | null {
-    const rawPtr = lib.symbols.wxFileDialogCustomize_AddCheckBox(this._ptr, label);
-    if (rawPtr === null) return null;
-    return new wxFileDialogCustomControl(rawPtr, true);
+  AddCheckBox(label: string | Pointer): wxFileDialogCustomControl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxFileDialogCustomize_AddCheckBox(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFileDialogCustomControl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddChoice(n: number, strings: Pointer): wxFileDialogCustomControl | null {
@@ -38,22 +51,40 @@ export class wxFileDialogCustomize {
     return new wxFileDialogCustomControl(rawPtr, true);
   }
 
-  AddRadioButton(label: Pointer): wxFileDialogCustomControl | null {
-    const rawPtr = lib.symbols.wxFileDialogCustomize_AddRadioButton(this._ptr, label);
-    if (rawPtr === null) return null;
-    return new wxFileDialogCustomControl(rawPtr, true);
+  AddRadioButton(label: string | Pointer): wxFileDialogCustomControl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxFileDialogCustomize_AddRadioButton(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFileDialogCustomControl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddStaticText(label: Pointer): wxFileDialogCustomControl | null {
-    const rawPtr = lib.symbols.wxFileDialogCustomize_AddStaticText(this._ptr, label);
-    if (rawPtr === null) return null;
-    return new wxFileDialogCustomControl(rawPtr, true);
+  AddStaticText(label: string | Pointer): wxFileDialogCustomControl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxFileDialogCustomize_AddStaticText(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFileDialogCustomControl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddTextCtrl(label: Pointer): wxFileDialogCustomControl | null {
-    const rawPtr = lib.symbols.wxFileDialogCustomize_AddTextCtrl(this._ptr, label);
-    if (rawPtr === null) return null;
-    return new wxFileDialogCustomControl(rawPtr, true);
+  AddTextCtrl(label: string | Pointer): wxFileDialogCustomControl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxFileDialogCustomize_AddTextCtrl(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFileDialogCustomControl(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

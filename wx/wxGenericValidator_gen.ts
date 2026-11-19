@@ -42,6 +42,48 @@ export function createWxGenericValidatorString(value: Pointer): wxGenericValidat
     return new wxGenericValidator(rawPtr);
 }
 
+export function createWxGenericValidatorArrayInt(value: Pointer): wxGenericValidator | null {
+    const rawPtr = lib.symbols.wxGenericValidator_CreateArrayInt(value);
+    if (rawPtr === null) return null;
+    return new wxGenericValidator(rawPtr);
+}
+
+export function createWxGenericValidatorDateTime(value: Pointer): wxGenericValidator | null {
+    const rawPtr = lib.symbols.wxGenericValidator_CreateDateTime(value);
+    if (rawPtr === null) return null;
+    return new wxGenericValidator(rawPtr);
+}
+
+export function createWxGenericValidatorFileName(value: Pointer): wxGenericValidator | null {
+    const rawPtr = lib.symbols.wxGenericValidator_CreateFileName(value);
+    if (rawPtr === null) return null;
+    return new wxGenericValidator(rawPtr);
+}
+
+export function createWxGenericValidatorFloat(value: Pointer): wxGenericValidator | null {
+    const rawPtr = lib.symbols.wxGenericValidator_CreateFloat(value);
+    if (rawPtr === null) return null;
+    return new wxGenericValidator(rawPtr);
+}
+
+export function createWxGenericValidatorDouble(value: Pointer): wxGenericValidator | null {
+    const rawPtr = lib.symbols.wxGenericValidator_CreateDouble(value);
+    if (rawPtr === null) return null;
+    return new wxGenericValidator(rawPtr);
+}
+
+export function createWxGenericValidatorColour(value: Pointer): wxGenericValidator | null {
+    const rawPtr = lib.symbols.wxGenericValidator_CreateColour(value);
+    if (rawPtr === null) return null;
+    return new wxGenericValidator(rawPtr);
+}
+
+export function createWxGenericValidatorCheckBoxState(value: Pointer): wxGenericValidator | null {
+    const rawPtr = lib.symbols.wxGenericValidator_CreateCheckBoxState(value);
+    if (rawPtr === null) return null;
+    return new wxGenericValidator(rawPtr);
+}
+
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */
 export function wrapWxGenericValidator(ptr: Pointer): wxGenericValidator {
     return new wxGenericValidator(ptr, true);

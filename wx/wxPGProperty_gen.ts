@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxPGCell } from "./wxPGCell_gen.ts";
@@ -24,17 +25,23 @@ export class wxPGProperty extends wxObject {
   GetChoices(): wxPGChoices | null {
     const rawPtr = lib.symbols.wxPGProperty_GetChoices(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPGChoices(rawPtr, true);
+    return new wxPGChoices(rawPtr);
   }
 
   GetBaseName(): wxString | null {
     const rawPtr = lib.symbols.wxPGProperty_GetBaseName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  AddChoice(label: Pointer, value: number): number {
-    return lib.symbols.wxPGProperty_AddChoice(this._ptr, label, value);
+  AddChoice(label: string | Pointer, value: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      return lib.symbols.wxPGProperty_AddChoice(this._ptr, __s0 ? __s0.ptr : (label as Pointer), value);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddPrivateChild(prop: Pointer): void {
@@ -56,13 +63,13 @@ export class wxPGProperty extends wxObject {
   GetCell(column: number): wxPGCell | null {
     const rawPtr = lib.symbols.wxPGProperty_GetCell(this._ptr, column);
     if (rawPtr === null) return null;
-    return new wxPGCell(rawPtr, true);
+    return new wxPGCell(rawPtr);
   }
 
   GetDisplayedString(): wxString | null {
     const rawPtr = lib.symbols.wxPGProperty_GetDisplayedString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetIndexInParent(): number {
@@ -73,8 +80,14 @@ export class wxPGProperty extends wxObject {
     return (lib.symbols.wxPGProperty_HasAnyChild(this._ptr) as number) !== 0;
   }
 
-  InsertChoice(label: Pointer, index: number, value: number): number {
-    return lib.symbols.wxPGProperty_InsertChoice(this._ptr, label, index, value);
+  InsertChoice(label: string | Pointer, index: number, value: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      return lib.symbols.wxPGProperty_InsertChoice(this._ptr, __s0 ? __s0.ptr : (label as Pointer), index, value);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsCategory(): boolean {
@@ -97,8 +110,14 @@ export class wxPGProperty extends wxObject {
     lib.symbols.wxPGProperty_RefreshEditor(this._ptr);
   }
 
-  SetAttribute(name: Pointer, value: Pointer): void {
-    lib.symbols.wxPGProperty_SetAttribute(this._ptr, name, value);
+  SetAttribute(name: string | Pointer, value: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxPGProperty_SetAttribute(this._ptr, __s0 ? __s0.ptr : (name as Pointer), value);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetAutoUnspecified(enable: boolean): void {
@@ -116,13 +135,13 @@ export class wxPGProperty extends wxObject {
   GetValue(): wxVariant | null {
     const rawPtr = lib.symbols.wxPGProperty_GetValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxVariant(rawPtr, true);
+    return new wxVariant(rawPtr);
   }
 
   GetHintText(): wxString | null {
     const rawPtr = lib.symbols.wxPGProperty_GetHintText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetGrid(): wxPropertyGrid | null {
@@ -181,40 +200,58 @@ export class wxPGProperty extends wxObject {
     return lib.symbols.wxPGProperty_GetDisplayedCommonValueCount(this._ptr);
   }
 
-  SetLabel(label: Pointer): void {
-    lib.symbols.wxPGProperty_SetLabel(this._ptr, label);
+  SetLabel(label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxPGProperty_SetLabel(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxPGProperty_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxPGProperty_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetLabel(): wxString | null {
     const rawPtr = lib.symbols.wxPGProperty_GetLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxPGProperty_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetValueAsString(): wxString | null {
     const rawPtr = lib.symbols.wxPGProperty_GetValueAsString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetValueType(): wxString | null {
     const rawPtr = lib.symbols.wxPGProperty_GetValueType(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetHelpString(helpString: Pointer): void {
-    lib.symbols.wxPGProperty_SetHelpString(this._ptr, helpString);
+  SetHelpString(helpString: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof helpString === "string") __s0 = createWxString(helpString);
+      lib.symbols.wxPGProperty_SetHelpString(this._ptr, __s0 ? __s0.ptr : (helpString as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

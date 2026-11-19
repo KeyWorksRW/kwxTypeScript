@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPoint } from "./wxPoint_gen.ts";
 import { wxSize } from "./wxSize_gen.ts";
@@ -35,7 +36,7 @@ export class wxAuiPaneLayoutInfo {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxAuiPaneLayoutInfo_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDockDirection(): number {
@@ -134,10 +135,16 @@ export class wxAuiPaneLayoutInfo {
 
 }
 
-export function createWxAuiPaneLayoutInfo(name: Pointer): wxAuiPaneLayoutInfo | null {
-    const rawPtr = lib.symbols.wxAuiPaneLayoutInfo_Create(name);
-    if (rawPtr === null) return null;
-    return new wxAuiPaneLayoutInfo(rawPtr);
+export function createWxAuiPaneLayoutInfo(name: string | Pointer): wxAuiPaneLayoutInfo | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxAuiPaneLayoutInfo_Create(__s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxAuiPaneLayoutInfo(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

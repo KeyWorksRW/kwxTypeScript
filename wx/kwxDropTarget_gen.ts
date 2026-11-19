@@ -41,6 +41,46 @@ export class kwxDropTarget extends wxDropTarget {
     lib.symbols.kwxDropTarget_SetOnLeave(this._ptr, pFunction);
   }
 
+  SetOnDataWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDropTarget_SetOnDataWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnDropWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDropTarget_SetOnDropWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnEnterWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDropTarget_SetOnEnterWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnDragOverWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDropTarget_SetOnDragOverWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnLeaveWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxDropTarget_SetOnLeaveWithData(this._ptr, pFunction, data);
+  }
+
+  SetDataResult(result: number): void {
+    lib.symbols.kwxDropTarget_SetDataResult(this._ptr, result);
+  }
+
+  SetDropResult(result: number): void {
+    lib.symbols.kwxDropTarget_SetDropResult(this._ptr, result);
+  }
+
+  SetEnterResult(result: number): void {
+    lib.symbols.kwxDropTarget_SetEnterResult(this._ptr, result);
+  }
+
+  SetDragOverResult(result: number): void {
+    lib.symbols.kwxDropTarget_SetDragOverResult(this._ptr, result);
+  }
+
+  GetDropResult(): number {
+    return lib.symbols.kwxDropTarget_GetDropResult(this._ptr);
+  }
+
 }
 
 export function createKwxDropTarget(pObject: Pointer): kwxDropTarget | null {

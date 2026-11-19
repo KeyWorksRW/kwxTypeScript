@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPopupTransientWindow } from "./wxPopupTransientWindow_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -26,10 +27,16 @@ export class wxTipWindow extends wxPopupTransientWindow {
 
 }
 
-export function createWxTipWindow(parent: Pointer, text: Pointer, maxLength: number): wxTipWindow | null {
-    const rawPtr = lib.symbols.wxTipWindow_Create(parent, text, maxLength);
-    if (rawPtr === null) return null;
-    return new wxTipWindow(rawPtr);
+export function createWxTipWindow(parent: Pointer, text: string | Pointer, maxLength: number): wxTipWindow | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxTipWindow_Create(parent, __s0 ? __s0.ptr : (text as Pointer), maxLength);
+      if (rawPtr === null) return null;
+      return new wxTipWindow(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

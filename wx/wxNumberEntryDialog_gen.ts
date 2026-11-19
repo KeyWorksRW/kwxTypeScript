@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -28,10 +29,22 @@ export class wxNumberEntryDialog extends wxDialog {
 
 }
 
-export function createWxNumberEntryDialog(parent: Pointer, message: Pointer, prompt: Pointer, caption: Pointer, value: bigint, min_value: bigint, max_value: bigint, x: number, y: number): wxNumberEntryDialog | null {
-    const rawPtr = lib.symbols.wxNumberEntryDialog_Create(parent, message, prompt, caption, value, min_value, max_value, x, y);
-    if (rawPtr === null) return null;
-    return new wxNumberEntryDialog(rawPtr);
+export function createWxNumberEntryDialog(parent: Pointer, message: string | Pointer, prompt: string | Pointer, caption: string | Pointer, value: bigint, min_value: bigint, max_value: bigint, x: number, y: number): wxNumberEntryDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof prompt === "string") __s1 = createWxString(prompt);
+      if (typeof caption === "string") __s2 = createWxString(caption);
+      const rawPtr = lib.symbols.wxNumberEntryDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (prompt as Pointer), __s2 ? __s2.ptr : (caption as Pointer), value, min_value, max_value, x, y);
+      if (rawPtr === null) return null;
+      return new wxNumberEntryDialog(rawPtr);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

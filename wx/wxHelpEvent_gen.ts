@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxCommandEvent } from "./wxCommandEvent_gen.ts";
 import { wxPoint } from "./wxPoint_gen.ts";
@@ -17,31 +18,43 @@ export class wxHelpEvent extends wxCommandEvent {
   GetLink(): wxString | null {
     const rawPtr = lib.symbols.wxHelpEvent_GetLink(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxHelpEvent_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetTarget(): wxString | null {
     const rawPtr = lib.symbols.wxHelpEvent_GetTarget(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetLink(link: Pointer): void {
-    lib.symbols.wxHelpEvent_SetLink(this._ptr, link);
+  SetLink(link: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof link === "string") __s0 = createWxString(link);
+      lib.symbols.wxHelpEvent_SetLink(this._ptr, __s0 ? __s0.ptr : (link as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetPosition(x: number, y: number): void {
     lib.symbols.wxHelpEvent_SetPosition(this._ptr, x, y);
   }
 
-  SetTarget(target: Pointer): void {
-    lib.symbols.wxHelpEvent_SetTarget(this._ptr, target);
+  SetTarget(target: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof target === "string") __s0 = createWxString(target);
+      lib.symbols.wxHelpEvent_SetTarget(this._ptr, __s0 ? __s0.ptr : (target as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

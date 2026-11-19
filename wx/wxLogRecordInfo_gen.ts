@@ -23,7 +23,7 @@ export class wxLogRecordInfo {
   GetFilename(): wxString | null {
     const rawPtr = lib.symbols.wxLogRecordInfo_GetFilename(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLine(): number {
@@ -33,13 +33,13 @@ export class wxLogRecordInfo {
   GetFunc(): wxString | null {
     const rawPtr = lib.symbols.wxLogRecordInfo_GetFunc(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetComponent(): wxString | null {
     const rawPtr = lib.symbols.wxLogRecordInfo_GetComponent(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetTimestamp(): bigint {
@@ -53,7 +53,7 @@ export class wxLogRecordInfo {
   GetMask(): wxString | null {
     const rawPtr = lib.symbols.wxLogRecordInfo_GetMask(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

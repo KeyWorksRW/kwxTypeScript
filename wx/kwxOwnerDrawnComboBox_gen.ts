@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxOwnerDrawnComboBox } from "./wxOwnerDrawnComboBox_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -12,8 +13,14 @@ export class kwxOwnerDrawnComboBox extends wxOwnerDrawnComboBox {
     return this._ptr;
   }
 
-  Create(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: bigint): boolean {
-    return (lib.symbols.kwxOwnerDrawnComboBox_Create(this._ptr, parent, id, value, x, y, width, height, style) as number) !== 0;
+  Create(parent: Pointer, id: number, value: string | Pointer, x: number, y: number, width: number, height: number, style: bigint): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      return (lib.symbols.kwxOwnerDrawnComboBox_Create(this._ptr, parent, id, __s0 ? __s0.ptr : (value as Pointer), x, y, width, height, style) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetOnDrawItem(pFunction: Pointer): void {
@@ -40,10 +47,16 @@ export function createKwxOwnerDrawnComboBoxDefault(pObject: Pointer): kwxOwnerDr
     return new kwxOwnerDrawnComboBox(rawPtr);
 }
 
-export function createKwxOwnerDrawnComboBoxWith(pObject: Pointer, parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: bigint): kwxOwnerDrawnComboBox | null {
-    const rawPtr = lib.symbols.kwxOwnerDrawnComboBox_CreateWith(pObject, parent, id, value, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new kwxOwnerDrawnComboBox(rawPtr);
+export function createKwxOwnerDrawnComboBoxWith(pObject: Pointer, parent: Pointer, id: number, value: string | Pointer, x: number, y: number, width: number, height: number, style: bigint): kwxOwnerDrawnComboBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      const rawPtr = lib.symbols.kwxOwnerDrawnComboBox_CreateWith(pObject, parent, id, __s0 ? __s0.ptr : (value as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new kwxOwnerDrawnComboBox(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

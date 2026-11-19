@@ -46,7 +46,7 @@ export class wxEvent extends wxObject {
     return (lib.symbols.wxEvent_IsCommandEvent(this._ptr) as number) !== 0;
   }
 
-  IsOfClass(className: Pointer): boolean {
+  override IsOfClass(className: Pointer): boolean {
     return (lib.symbols.wxEvent_IsOfClass(this._ptr, className) as number) !== 0;
   }
 
@@ -68,6 +68,14 @@ export class wxEvent extends wxObject {
 
   Skip(skip: boolean): void {
     lib.symbols.wxEvent_Skip(this._ptr, skip ? 1 : 0);
+  }
+
+  StopPropagation(): number {
+    return lib.symbols.wxEvent_StopPropagation(this._ptr);
+  }
+
+  ResumePropagation(propagationLevel: number): void {
+    lib.symbols.wxEvent_ResumePropagation(this._ptr, propagationLevel);
   }
 
   SetOnClone(pFunction: Pointer): void {

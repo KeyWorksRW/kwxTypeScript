@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxBitmap } from "./wxBitmap_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -36,8 +37,20 @@ export function createWxCursorFromImage(image: Pointer): wxCursor | null {
     return new wxCursor(rawPtr);
 }
 
-export function createWxCursorLoad(name: Pointer, type_: bigint, width: number, height: number): wxCursor | null {
-    const rawPtr = lib.symbols.Cursor_CreateLoad(name, type_, width, height);
+export function createWxCursorLoad(name: string | Pointer, type_: bigint, width: number, height: number): wxCursor | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.Cursor_CreateLoad(__s0 ? __s0.ptr : (name as Pointer), type_, width, height);
+      if (rawPtr === null) return null;
+      return new wxCursor(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
+}
+
+export function createWxCursorFromXPMString(xpm: Pointer): wxCursor | null {
+    const rawPtr = lib.symbols.Cursor_CreateFromXPMString(xpm);
     if (rawPtr === null) return null;
     return new wxCursor(rawPtr);
 }

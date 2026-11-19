@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxComboBox } from "./wxComboBox_gen.ts";
 import { wxBitmap } from "./wxBitmap_gen.ts";
@@ -14,33 +15,57 @@ export class wxBitmapComboBox extends wxComboBox {
     return this._ptr;
   }
 
-  AppendWithBitmap(item: Pointer, bitmap: Pointer): void {
-    lib.symbols.wxBitmapComboBox_Append(this._ptr, item, bitmap);
+  AppendWithBitmap(item: string | Pointer, bitmap: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      lib.symbols.wxBitmapComboBox_Append(this._ptr, __s0 ? __s0.ptr : (item as Pointer), bitmap);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  override AppendWithClientData(item: Pointer, bitmap: Pointer, data: Pointer): void;
-  override AppendWithClientData(item: Pointer, clientData: Pointer): number;
-  override AppendWithClientData(item: Pointer, bitmap: Pointer, data?: Pointer): void | number {
+  override AppendWithClientData(item: string | Pointer, bitmap: Pointer, data: Pointer): void;
+  override AppendWithClientData(item: string | Pointer, clientData: Pointer): number;
+  override AppendWithClientData(item: string | Pointer, bitmap: Pointer, data?: Pointer): void | number {
     if (arguments.length === 3) {
-      lib.symbols.wxBitmapComboBox_AppendWithClientData(this._ptr, item, bitmap, data as Pointer);
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof item === "string") __s0 = createWxString(item);
+        lib.symbols.wxBitmapComboBox_AppendWithClientData(this._ptr, __s0 ? __s0.ptr : (item as Pointer), bitmap, data as Pointer);
+      } finally {
+        __s0?.Delete();
+      }
     }
     else {
       return super.AppendWithClientData(item, bitmap);
     }
   }
 
-  InsertWithBitmap(item: Pointer, bitmap: Pointer, pos: number): void {
-    lib.symbols.wxBitmapComboBox_Insert(this._ptr, item, bitmap, pos);
+  InsertWithBitmap(item: string | Pointer, bitmap: Pointer, pos: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      lib.symbols.wxBitmapComboBox_Insert(this._ptr, __s0 ? __s0.ptr : (item as Pointer), bitmap, pos);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertWithClientData(item: Pointer, bitmap: Pointer, pos: number, data: Pointer): void {
-    lib.symbols.wxBitmapComboBox_InsertWithClientData(this._ptr, item, bitmap, pos, data);
+  InsertWithClientData(item: string | Pointer, bitmap: Pointer, pos: number, data: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      lib.symbols.wxBitmapComboBox_InsertWithClientData(this._ptr, __s0 ? __s0.ptr : (item as Pointer), bitmap, pos, data);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetItemBitmap(index: number): wxBitmap | null {
     const rawPtr = lib.symbols.wxBitmapComboBox_GetItemBitmap(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   SetItemBitmap(index: number, bitmap: Pointer): void {
@@ -50,15 +75,21 @@ export class wxBitmapComboBox extends wxComboBox {
   GetBitmapSize(): wxSize | null {
     const rawPtr = lib.symbols.wxBitmapComboBox_GetBitmapSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
 }
 
-export function createWxBitmapComboBox(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, n: number, str: Pointer, style: number): wxBitmapComboBox | null {
-    const rawPtr = lib.symbols.wxBitmapComboBox_Create(parent, id, value, x, y, width, height, n, str, style);
-    if (rawPtr === null) return null;
-    return new wxBitmapComboBox(rawPtr);
+export function createWxBitmapComboBox(parent: Pointer, id: number, value: string | Pointer, x: number, y: number, width: number, height: number, n: number, str: Pointer, style: number): wxBitmapComboBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      const rawPtr = lib.symbols.wxBitmapComboBox_Create(parent, id, __s0 ? __s0.ptr : (value as Pointer), x, y, width, height, n, str, style);
+      if (rawPtr === null) return null;
+      return new wxBitmapComboBox(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

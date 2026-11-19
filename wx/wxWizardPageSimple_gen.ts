@@ -16,19 +16,19 @@ export class wxWizardPageSimple extends wxWizardPage {
   override GetBitmap(): wxBitmap | null {
     const rawPtr = lib.symbols.wxWizardPageSimple_GetBitmap(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
-  override GetNext(): wxWizardPageSimple | null {
+  override GetNext(): wxWizardPage | null {
     const rawPtr = lib.symbols.wxWizardPageSimple_GetNext(this._ptr);
     if (rawPtr === null) return null;
-    return new wxWizardPageSimple(rawPtr, true);
+    return new wxWizardPage(rawPtr, true);
   }
 
-  override GetPrev(): wxWizardPageSimple | null {
+  override GetPrev(): wxWizardPage | null {
     const rawPtr = lib.symbols.wxWizardPageSimple_GetPrev(this._ptr);
     if (rawPtr === null) return null;
-    return new wxWizardPageSimple(rawPtr, true);
+    return new wxWizardPage(rawPtr, true);
   }
 
   SetNext(next: Pointer): void {
@@ -37,6 +37,12 @@ export class wxWizardPageSimple extends wxWizardPage {
 
   SetPrev(prev: Pointer): void {
     lib.symbols.wxWizardPageSimple_SetPrev(this._ptr, prev);
+  }
+
+  Chain(next: Pointer): wxWizardPageSimple | null {
+    const rawPtr = lib.symbols.wxWizardPageSimple_Chain(this._ptr, next);
+    if (rawPtr === null) return null;
+    return new wxWizardPageSimple(rawPtr, true);
   }
 
 }

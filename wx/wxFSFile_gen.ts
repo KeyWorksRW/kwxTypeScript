@@ -40,25 +40,25 @@ export class wxFSFile extends wxObject {
   GetLocation(): wxString | null {
     const rawPtr = lib.symbols.wxFSFile_GetLocation(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMimeType(): wxString | null {
     const rawPtr = lib.symbols.wxFSFile_GetMimeType(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetAnchor(): wxString | null {
     const rawPtr = lib.symbols.wxFSFile_GetAnchor(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetModificationTime(): wxDateTime | null {
     const rawPtr = lib.symbols.wxFSFile_GetModificationTime(this._ptr);
     if (rawPtr === null) return null;
-    return new wxDateTime(rawPtr, true);
+    return new wxDateTime(rawPtr);
   }
 
 }

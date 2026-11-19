@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -34,8 +35,20 @@ export class wxLocale {
     return (lib.symbols.wxLocale_Init(this._ptr, language, flags) as number) !== 0;
   }
 
-  InitFromName(name: Pointer, short_name: Pointer, locale: Pointer, load_default: boolean): boolean {
-    return (lib.symbols.wxLocale_InitFromName(this._ptr, name, short_name, locale, load_default ? 1 : 0) as number) !== 0;
+  InitFromName(name: string | Pointer, short_name: string | Pointer, locale: string | Pointer, load_default: boolean): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof short_name === "string") __s1 = createWxString(short_name);
+      if (typeof locale === "string") __s2 = createWxString(locale);
+      return (lib.symbols.wxLocale_InitFromName(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (short_name as Pointer), __s2 ? __s2.ptr : (locale as Pointer), load_default ? 1 : 0) as number) !== 0;
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   GetLanguage(): number {
@@ -45,33 +58,66 @@ export class wxLocale {
   GetSysName(): wxString | null {
     const rawPtr = lib.symbols.wxLocale_GetSysName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetCanonicalName(): wxString | null {
     const rawPtr = lib.symbols.wxLocale_GetCanonicalName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  GetHeaderValue(header: Pointer, domain: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxLocale_GetHeaderValue(this._ptr, header, domain);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetHeaderValue(header: string | Pointer, domain: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof header === "string") __s0 = createWxString(header);
+      if (typeof domain === "string") __s1 = createWxString(domain);
+      const rawPtr = lib.symbols.wxLocale_GetHeaderValue(this._ptr, __s0 ? __s0.ptr : (header as Pointer), __s1 ? __s1.ptr : (domain as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  GetPluralString(orig_string: Pointer, plural_string: Pointer, count: number, domain: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxLocale_GetPluralString(this._ptr, orig_string, plural_string, count, domain);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetPluralString(orig_string: string | Pointer, plural_string: string | Pointer, count: number, domain: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof orig_string === "string") __s0 = createWxString(orig_string);
+      if (typeof plural_string === "string") __s1 = createWxString(plural_string);
+      if (typeof domain === "string") __s2 = createWxString(domain);
+      const rawPtr = lib.symbols.wxLocale_GetPluralString(this._ptr, __s0 ? __s0.ptr : (orig_string as Pointer), __s1 ? __s1.ptr : (plural_string as Pointer), count, __s2 ? __s2.ptr : (domain as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddCatalog(szDomain: Pointer, msgIdLanguage: number): number {
-    return lib.symbols.wxLocale_AddCatalog(this._ptr, szDomain, msgIdLanguage);
+  AddCatalog(szDomain: string | Pointer, msgIdLanguage: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof szDomain === "string") __s0 = createWxString(szDomain);
+      return lib.symbols.wxLocale_AddCatalog(this._ptr, __s0 ? __s0.ptr : (szDomain as Pointer), msgIdLanguage);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddCatalogLookupPathPrefix(prefix: Pointer): void {
-    lib.symbols.wxLocale_AddCatalogLookupPathPrefix(this._ptr, prefix);
+  AddCatalogLookupPathPrefix(prefix: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof prefix === "string") __s0 = createWxString(prefix);
+      lib.symbols.wxLocale_AddCatalogLookupPathPrefix(this._ptr, __s0 ? __s0.ptr : (prefix as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetLocale(): wxLocale | null {
@@ -83,15 +129,30 @@ export class wxLocale {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxLocale_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  GetString(szOrigString: Pointer, szDomain: Pointer): Pointer {
-    return lib.symbols.wxLocale_GetString(this._ptr, szOrigString, szDomain);
+  GetString(szOrigString: string | Pointer, szDomain: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof szOrigString === "string") __s0 = createWxString(szOrigString);
+      if (typeof szDomain === "string") __s1 = createWxString(szDomain);
+      return lib.symbols.wxLocale_GetString(this._ptr, __s0 ? __s0.ptr : (szOrigString as Pointer), __s1 ? __s1.ptr : (szDomain as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  IsLoaded(szDomain: Pointer): boolean {
-    return (lib.symbols.wxLocale_IsLoaded(this._ptr, szDomain) as number) !== 0;
+  IsLoaded(szDomain: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof szDomain === "string") __s0 = createWxString(szDomain);
+      return (lib.symbols.wxLocale_IsLoaded(this._ptr, __s0 ? __s0.ptr : (szDomain as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsOk(): boolean {

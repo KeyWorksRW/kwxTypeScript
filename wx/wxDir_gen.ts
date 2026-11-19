@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -30,8 +31,14 @@ export class wxDir {
     this.Delete();
   }
 
-  Open(directory: Pointer): boolean {
-    return (lib.symbols.wxDir_Open(this._ptr, directory) as number) !== 0;
+  Open(directory: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof directory === "string") __s0 = createWxString(directory);
+      return (lib.symbols.wxDir_Open(this._ptr, __s0 ? __s0.ptr : (directory as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Close(): void {
@@ -45,33 +52,66 @@ export class wxDir {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxDir_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNameWithSep(): wxString | null {
     const rawPtr = lib.symbols.wxDir_GetNameWithSep(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  GetFirst(filename: Pointer, spec: Pointer, flags: number): boolean {
-    return (lib.symbols.wxDir_GetFirst(this._ptr, filename, spec, flags) as number) !== 0;
+  GetFirst(filename: string | Pointer, spec: string | Pointer, flags: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      if (typeof spec === "string") __s1 = createWxString(spec);
+      return (lib.symbols.wxDir_GetFirst(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), __s1 ? __s1.ptr : (spec as Pointer), flags) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  GetNext(filename: Pointer): boolean {
-    return (lib.symbols.wxDir_GetNext(this._ptr, filename) as number) !== 0;
+  GetNext(filename: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxDir_GetNext(this._ptr, __s0 ? __s0.ptr : (filename as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  HasFiles(spec: Pointer): boolean {
-    return (lib.symbols.wxDir_HasFiles(this._ptr, spec) as number) !== 0;
+  HasFiles(spec: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof spec === "string") __s0 = createWxString(spec);
+      return (lib.symbols.wxDir_HasFiles(this._ptr, __s0 ? __s0.ptr : (spec as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  HasSubDirs(spec: Pointer): boolean {
-    return (lib.symbols.wxDir_HasSubDirs(this._ptr, spec) as number) !== 0;
+  HasSubDirs(spec: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof spec === "string") __s0 = createWxString(spec);
+      return (lib.symbols.wxDir_HasSubDirs(this._ptr, __s0 ? __s0.ptr : (spec as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Traverse(sink: Pointer, spec: Pointer, flags: number): bigint {
-    return lib.symbols.wxDir_Traverse(this._ptr, sink, spec, flags) as bigint;
+  Traverse(sink: Pointer, spec: string | Pointer, flags: number): bigint {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof spec === "string") __s0 = createWxString(spec);
+      return lib.symbols.wxDir_Traverse(this._ptr, sink, __s0 ? __s0.ptr : (spec as Pointer), flags) as bigint;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
@@ -82,10 +122,16 @@ export function createWxDir(): wxDir | null {
     return new wxDir(rawPtr);
 }
 
-export function createWxDirFromPath(directory: Pointer): wxDir | null {
-    const rawPtr = lib.symbols.wxDir_CreateFromPath(directory);
-    if (rawPtr === null) return null;
-    return new wxDir(rawPtr);
+export function createWxDirFromPath(directory: string | Pointer): wxDir | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof directory === "string") __s0 = createWxString(directory);
+      const rawPtr = lib.symbols.wxDir_CreateFromPath(__s0 ? __s0.ptr : (directory as Pointer));
+      if (rawPtr === null) return null;
+      return new wxDir(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

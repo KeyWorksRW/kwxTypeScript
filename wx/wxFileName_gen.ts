@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDateTime } from "./wxDateTime_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -34,43 +35,43 @@ export class wxFileName {
   GetFullPath(format: number): wxString | null {
     const rawPtr = lib.symbols.wxFileName_GetFullPath(this._ptr, format);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPath(flags: number, format: number): wxString | null {
     const rawPtr = lib.symbols.wxFileName_GetPath(this._ptr, flags, format);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPathWithSep(format: number): wxString | null {
     const rawPtr = lib.symbols.wxFileName_GetPathWithSep(this._ptr, format);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFullName(): wxString | null {
     const rawPtr = lib.symbols.wxFileName_GetFullName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxFileName_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetExt(): wxString | null {
     const rawPtr = lib.symbols.wxFileName_GetExt(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetVolume(): wxString | null {
     const rawPtr = lib.symbols.wxFileName_GetVolume(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDirCount(): bigint {
@@ -93,20 +94,44 @@ export class wxFileName {
     return (lib.symbols.wxFileName_HasVolume(this._ptr) as number) !== 0;
   }
 
-  SetPath(path: Pointer, format: number): void {
-    lib.symbols.wxFileName_SetPath(this._ptr, path, format);
+  SetPath(path: string | Pointer, format: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxFileName_SetPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer), format);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxFileName_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxFileName_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetFullName(full_name: Pointer): void {
-    lib.symbols.wxFileName_SetFullName(this._ptr, full_name);
+  SetFullName(full_name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof full_name === "string") __s0 = createWxString(full_name);
+      lib.symbols.wxFileName_SetFullName(this._ptr, __s0 ? __s0.ptr : (full_name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetExt(ext: Pointer): void {
-    lib.symbols.wxFileName_SetExt(this._ptr, ext);
+  SetExt(ext: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof ext === "string") __s0 = createWxString(ext);
+      lib.symbols.wxFileName_SetExt(this._ptr, __s0 ? __s0.ptr : (ext as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetEmptyExt(): void {
@@ -117,20 +142,44 @@ export class wxFileName {
     lib.symbols.wxFileName_ClearExt(this._ptr);
   }
 
-  SetVolume(volume: Pointer): void {
-    lib.symbols.wxFileName_SetVolume(this._ptr, volume);
+  SetVolume(volume: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof volume === "string") __s0 = createWxString(volume);
+      lib.symbols.wxFileName_SetVolume(this._ptr, __s0 ? __s0.ptr : (volume as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Assign(full_path: Pointer, format: number): void {
-    lib.symbols.wxFileName_Assign(this._ptr, full_path, format);
+  Assign(full_path: string | Pointer, format: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof full_path === "string") __s0 = createWxString(full_path);
+      lib.symbols.wxFileName_Assign(this._ptr, __s0 ? __s0.ptr : (full_path as Pointer), format);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AssignDir(dir: Pointer, format: number): void {
-    lib.symbols.wxFileName_AssignDir(this._ptr, dir, format);
+  AssignDir(dir: string | Pointer, format: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      lib.symbols.wxFileName_AssignDir(this._ptr, __s0 ? __s0.ptr : (dir as Pointer), format);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AssignCwd(volume: Pointer): void {
-    lib.symbols.wxFileName_AssignCwd(this._ptr, volume);
+  AssignCwd(volume: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof volume === "string") __s0 = createWxString(volume);
+      lib.symbols.wxFileName_AssignCwd(this._ptr, __s0 ? __s0.ptr : (volume as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AssignHomeDir(): void {
@@ -141,16 +190,34 @@ export class wxFileName {
     lib.symbols.wxFileName_Clear(this._ptr);
   }
 
-  AppendDir(dir: Pointer): boolean {
-    return (lib.symbols.wxFileName_AppendDir(this._ptr, dir) as number) !== 0;
+  AppendDir(dir: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      return (lib.symbols.wxFileName_AppendDir(this._ptr, __s0 ? __s0.ptr : (dir as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  PrependDir(dir: Pointer): void {
-    lib.symbols.wxFileName_PrependDir(this._ptr, dir);
+  PrependDir(dir: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      lib.symbols.wxFileName_PrependDir(this._ptr, __s0 ? __s0.ptr : (dir as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertDir(before: bigint, dir: Pointer): boolean {
-    return (lib.symbols.wxFileName_InsertDir(this._ptr, before, dir) as number) !== 0;
+  InsertDir(before: bigint, dir: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      return (lib.symbols.wxFileName_InsertDir(this._ptr, before, __s0 ? __s0.ptr : (dir as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   RemoveDir(position: bigint): void {
@@ -161,26 +228,59 @@ export class wxFileName {
     lib.symbols.wxFileName_RemoveLastDir(this._ptr);
   }
 
-  Normalize(flags: number, cwd: Pointer, format: number): boolean {
-    return (lib.symbols.wxFileName_Normalize(this._ptr, flags, cwd, format) as number) !== 0;
+  Normalize(flags: number, cwd: string | Pointer, format: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof cwd === "string") __s0 = createWxString(cwd);
+      return (lib.symbols.wxFileName_Normalize(this._ptr, flags, __s0 ? __s0.ptr : (cwd as Pointer), format) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  MakeAbsolute(cwd: Pointer, format: number): boolean {
-    return (lib.symbols.wxFileName_MakeAbsolute(this._ptr, cwd, format) as number) !== 0;
+  MakeAbsolute(cwd: string | Pointer, format: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof cwd === "string") __s0 = createWxString(cwd);
+      return (lib.symbols.wxFileName_MakeAbsolute(this._ptr, __s0 ? __s0.ptr : (cwd as Pointer), format) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  MakeRelativeTo(path_base: Pointer, format: number): boolean {
-    return (lib.symbols.wxFileName_MakeRelativeTo(this._ptr, path_base, format) as number) !== 0;
+  MakeRelativeTo(path_base: string | Pointer, format: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path_base === "string") __s0 = createWxString(path_base);
+      return (lib.symbols.wxFileName_MakeRelativeTo(this._ptr, __s0 ? __s0.ptr : (path_base as Pointer), format) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetAbsolutePath(cwd: Pointer, format: number): wxString | null {
-    const rawPtr = lib.symbols.wxFileName_GetAbsolutePath(this._ptr, cwd, format);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetAbsolutePath(cwd: string | Pointer, format: number): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof cwd === "string") __s0 = createWxString(cwd);
+      const rawPtr = lib.symbols.wxFileName_GetAbsolutePath(this._ptr, __s0 ? __s0.ptr : (cwd as Pointer), format);
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ReplaceEnvVariable(env_name: Pointer, replacement_format: Pointer, format: number): boolean {
-    return (lib.symbols.wxFileName_ReplaceEnvVariable(this._ptr, env_name, replacement_format, format) as number) !== 0;
+  ReplaceEnvVariable(env_name: string | Pointer, replacement_format: string | Pointer, format: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof env_name === "string") __s0 = createWxString(env_name);
+      if (typeof replacement_format === "string") __s1 = createWxString(replacement_format);
+      return (lib.symbols.wxFileName_ReplaceEnvVariable(this._ptr, __s0 ? __s0.ptr : (env_name as Pointer), __s1 ? __s1.ptr : (replacement_format as Pointer), format) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   ReplaceHomeDir(format: number): boolean {
@@ -250,7 +350,7 @@ export class wxFileName {
   ResolveLink(): wxFileName | null {
     const rawPtr = lib.symbols.wxFileName_ResolveLink(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFileName(rawPtr, true);
+    return new wxFileName(rawPtr);
   }
 
   Mkdir(perm: number, flags: number): boolean {
@@ -276,23 +376,29 @@ export class wxFileName {
   GetModificationTime(): wxDateTime | null {
     const rawPtr = lib.symbols.wxFileName_GetModificationTime(this._ptr);
     if (rawPtr === null) return null;
-    return new wxDateTime(rawPtr, true);
+    return new wxDateTime(rawPtr);
   }
 
   GetSize(): number {
     return lib.symbols.wxFileName_GetSize(this._ptr);
   }
 
-  GetHumanReadableSize(fail_message: Pointer, precision: number, convention: number): wxString | null {
-    const rawPtr = lib.symbols.wxFileName_GetHumanReadableSize(this._ptr, fail_message, precision, convention);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetHumanReadableSize(fail_message: string | Pointer, precision: number, convention: number): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fail_message === "string") __s0 = createWxString(fail_message);
+      const rawPtr = lib.symbols.wxFileName_GetHumanReadableSize(this._ptr, __s0 ? __s0.ptr : (fail_message as Pointer), precision, convention);
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   FileNameToURL(): wxString | null {
     const rawPtr = lib.symbols.wxFileName_FileNameToURL(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }
@@ -303,28 +409,70 @@ export function createWxFileName(): wxFileName | null {
     return new wxFileName(rawPtr);
 }
 
-export function createWxFileNameFromPath(full_path: Pointer, format: number): wxFileName | null {
-    const rawPtr = lib.symbols.wxFileName_CreateFromPath(full_path, format);
-    if (rawPtr === null) return null;
-    return new wxFileName(rawPtr);
+export function createWxFileNameFromPath(full_path: string | Pointer, format: number): wxFileName | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof full_path === "string") __s0 = createWxString(full_path);
+      const rawPtr = lib.symbols.wxFileName_CreateFromPath(__s0 ? __s0.ptr : (full_path as Pointer), format);
+      if (rawPtr === null) return null;
+      return new wxFileName(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxFileNameWithName(path: Pointer, name: Pointer, format: number): wxFileName | null {
-    const rawPtr = lib.symbols.wxFileName_CreateWithName(path, name, format);
-    if (rawPtr === null) return null;
-    return new wxFileName(rawPtr);
+export function createWxFileNameWithName(path: string | Pointer, name: string | Pointer, format: number): wxFileName | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.wxFileName_CreateWithName(__s0 ? __s0.ptr : (path as Pointer), __s1 ? __s1.ptr : (name as Pointer), format);
+      if (rawPtr === null) return null;
+      return new wxFileName(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
-export function createWxFileNameWithExt(path: Pointer, name: Pointer, ext: Pointer, format: number): wxFileName | null {
-    const rawPtr = lib.symbols.wxFileName_CreateWithExt(path, name, ext, format);
-    if (rawPtr === null) return null;
-    return new wxFileName(rawPtr);
+export function createWxFileNameWithExt(path: string | Pointer, name: string | Pointer, ext: string | Pointer, format: number): wxFileName | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      if (typeof name === "string") __s1 = createWxString(name);
+      if (typeof ext === "string") __s2 = createWxString(ext);
+      const rawPtr = lib.symbols.wxFileName_CreateWithExt(__s0 ? __s0.ptr : (path as Pointer), __s1 ? __s1.ptr : (name as Pointer), __s2 ? __s2.ptr : (ext as Pointer), format);
+      if (rawPtr === null) return null;
+      return new wxFileName(rawPtr);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
-export function createWxFileNameFull(volume: Pointer, path: Pointer, name: Pointer, ext: Pointer, format: number): wxFileName | null {
-    const rawPtr = lib.symbols.wxFileName_CreateFull(volume, path, name, ext, format);
-    if (rawPtr === null) return null;
-    return new wxFileName(rawPtr);
+export function createWxFileNameFull(volume: string | Pointer, path: string | Pointer, name: string | Pointer, ext: string | Pointer, format: number): wxFileName | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    let __s3: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof volume === "string") __s0 = createWxString(volume);
+      if (typeof path === "string") __s1 = createWxString(path);
+      if (typeof name === "string") __s2 = createWxString(name);
+      if (typeof ext === "string") __s3 = createWxString(ext);
+      const rawPtr = lib.symbols.wxFileName_CreateFull(__s0 ? __s0.ptr : (volume as Pointer), __s1 ? __s1.ptr : (path as Pointer), __s2 ? __s2.ptr : (name as Pointer), __s3 ? __s3.ptr : (ext as Pointer), format);
+      if (rawPtr === null) return null;
+      return new wxFileName(rawPtr);
+    } finally {
+      __s3?.Delete();
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

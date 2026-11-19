@@ -30,7 +30,7 @@ export class wxSizerItem extends wxObject {
   CalcMin(): wxSize | null {
     const rawPtr = lib.symbols.wxSizerItem_CalcMin(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetMinSize(size: Pointer): void {
@@ -48,13 +48,13 @@ export class wxSizerItem extends wxObject {
   GetMinSize(): wxSize | null {
     const rawPtr = lib.symbols.wxSizerItem_GetMinSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxSizerItem_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetRatio(): number {
@@ -64,7 +64,7 @@ export class wxSizerItem extends wxObject {
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxSizerItem_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetSizer(): wxSizer | null {
@@ -142,13 +142,13 @@ export class wxSizerItem extends wxObject {
   GetRect(): wxRect | null {
     const rawPtr = lib.symbols.wxSizerItem_GetRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetSpacer(): wxSize | null {
     const rawPtr = lib.symbols.wxSizerItem_GetSpacer(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   IsShown(): number {

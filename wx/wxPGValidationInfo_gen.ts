@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 import { wxVariant } from "./wxVariant_gen.ts";
@@ -42,17 +43,23 @@ export class wxPGValidationInfo {
   GetFailureMessage(): wxString | null {
     const rawPtr = lib.symbols.wxPGValidationInfo_GetFailureMessage(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetFailureMessage(message: Pointer): void {
-    lib.symbols.wxPGValidationInfo_SetFailureMessage(this._ptr, message);
+  SetFailureMessage(message: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      lib.symbols.wxPGValidationInfo_SetFailureMessage(this._ptr, __s0 ? __s0.ptr : (message as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetValue(): wxVariant | null {
     const rawPtr = lib.symbols.wxPGValidationInfo_GetValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxVariant(rawPtr, true);
+    return new wxVariant(rawPtr);
   }
 
 }

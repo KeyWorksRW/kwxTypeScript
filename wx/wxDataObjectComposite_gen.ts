@@ -4,6 +4,7 @@ import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDataObject } from "./wxDataObject_gen.ts";
+import { wxDataFormat } from "./wxDataFormat_gen.ts";
 
 export class wxDataObjectComposite extends wxDataObject {
   /** Returns the underlying native pointer. */
@@ -23,6 +24,12 @@ export class wxDataObjectComposite extends wxDataObject {
 
   Add(data: Pointer, preferred: number): void {
     lib.symbols.wxDataObjectComposite_Add(this._ptr, data, preferred);
+  }
+
+  GetReceivedFormat(): wxDataFormat | null {
+    const rawPtr = lib.symbols.wxDataObjectComposite_GetReceivedFormat(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxDataFormat(rawPtr);
   }
 
 }

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -22,8 +23,17 @@ export class kwxClient extends wxObject {
     this.Delete();
   }
 
-  MakeConnection(host: Pointer, server: Pointer, topic: Pointer): void {
-    lib.symbols.kwxClient_MakeConnection(this._ptr, host, server, topic);
+  MakeConnection(host: string | Pointer, server: Pointer, topic: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof host === "string") __s0 = createWxString(host);
+      if (typeof topic === "string") __s1 = createWxString(topic);
+      lib.symbols.kwxClient_MakeConnection(this._ptr, __s0 ? __s0.ptr : (host as Pointer), server, __s1 ? __s1.ptr : (topic as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
 }

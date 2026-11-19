@@ -2,8 +2,10 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDC } from "./wxDC_gen.ts";
+import { wxString } from "./wxString_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
 
 export class wxSVGFileDC extends wxDC {
@@ -22,8 +24,43 @@ export class wxSVGFileDC extends wxDC {
     this.Delete();
   }
 
+  BeginAccessibleGroup(attributes: Pointer, title: string | Pointer, desc: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      if (typeof desc === "string") __s1 = createWxString(desc);
+      lib.symbols.wxSVGFileDC_BeginAccessibleGroup(this._ptr, attributes, __s0 ? __s0.ptr : (title as Pointer), __s1 ? __s1.ptr : (desc as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
+  }
+
   EndAccessibleGroup(): void {
     lib.symbols.wxSVGFileDC_EndAccessibleGroup(this._ptr);
+  }
+
+  BeginLayer(opacity: number): void {
+    lib.symbols.wxSVGFileDC_BeginLayer(this._ptr, opacity);
+  }
+
+  EndLayer(): void {
+    lib.symbols.wxSVGFileDC_EndLayer(this._ptr);
+  }
+
+  Save(): boolean {
+    return (lib.symbols.wxSVGFileDC_Save(this._ptr) as number) !== 0;
+  }
+
+  GetSVGDocument(): wxString | null {
+    const rawPtr = lib.symbols.wxSVGFileDC_GetSVGDocument(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxString(rawPtr);
+  }
+
+  SetShapeRenderingMode(mode: number): void {
+    lib.symbols.wxSVGFileDC_SetShapeRenderingMode(this._ptr, mode);
   }
 
   SetBitmapHandler(handler: Pointer): void {
@@ -32,22 +69,121 @@ export class wxSVGFileDC extends wxDC {
 
 }
 
-export function createWxSVGFileDC(fileName: Pointer): wxSVGFileDC | null {
-    const rawPtr = lib.symbols.wxSVGFileDC_Create(fileName);
+export function createWxSVGFileDC(fileName: string | Pointer): wxSVGFileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      const rawPtr = lib.symbols.wxSVGFileDC_Create(__s0 ? __s0.ptr : (fileName as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSVGFileDC(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
+}
+
+export function createWxSVGFileDCWithSize(fileName: string | Pointer, width: number, height: number): wxSVGFileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSize(__s0 ? __s0.ptr : (fileName as Pointer), width, height);
+      if (rawPtr === null) return null;
+      return new wxSVGFileDC(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
+}
+
+export function createWxSVGFileDCWithSizeAndResolution(fileName: string | Pointer, width: number, height: number, a_dpi: number): wxSVGFileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSizeAndResolution(__s0 ? __s0.ptr : (fileName as Pointer), width, height, a_dpi);
+      if (rawPtr === null) return null;
+      return new wxSVGFileDC(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
+}
+
+export function createWxSVGFileDCWithTitle(fileName: string | Pointer, title: string | Pointer): wxSVGFileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      if (typeof title === "string") __s1 = createWxString(title);
+      const rawPtr = lib.symbols.wxSVGFileDC_CreateWithTitle(__s0 ? __s0.ptr : (fileName as Pointer), __s1 ? __s1.ptr : (title as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSVGFileDC(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
+}
+
+export function createWxSVGFileDCWithSizeAndTitle(fileName: string | Pointer, width: number, height: number, title: string | Pointer): wxSVGFileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      if (typeof title === "string") __s1 = createWxString(title);
+      const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSizeAndTitle(__s0 ? __s0.ptr : (fileName as Pointer), width, height, __s1 ? __s1.ptr : (title as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSVGFileDC(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
+}
+
+export function createWxSVGFileDCWithSizeResolutionAndTitle(fileName: string | Pointer, width: number, height: number, a_dpi: number, title: string | Pointer): wxSVGFileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      if (typeof title === "string") __s1 = createWxString(title);
+      const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSizeResolutionAndTitle(__s0 ? __s0.ptr : (fileName as Pointer), width, height, a_dpi, __s1 ? __s1.ptr : (title as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSVGFileDC(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
+}
+
+export function createWxSVGFileDCFromSize(width: number, height: number): wxSVGFileDC | null {
+    const rawPtr = lib.symbols.wxSVGFileDC_CreateFromSize(width, height);
     if (rawPtr === null) return null;
     return new wxSVGFileDC(rawPtr);
 }
 
-export function createWxSVGFileDCWithSize(fileName: Pointer, width: number, height: number): wxSVGFileDC | null {
-    const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSize(fileName, width, height);
-    if (rawPtr === null) return null;
-    return new wxSVGFileDC(rawPtr);
+export function createWxSVGFileDCFromSizeWithFileAndTitle(width: number, height: number, fileName: string | Pointer, title: string | Pointer): wxSVGFileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      if (typeof title === "string") __s1 = createWxString(title);
+      const rawPtr = lib.symbols.wxSVGFileDC_CreateFromSizeWithFileAndTitle(width, height, __s0 ? __s0.ptr : (fileName as Pointer), __s1 ? __s1.ptr : (title as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSVGFileDC(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
-export function createWxSVGFileDCWithSizeAndResolution(fileName: Pointer, width: number, height: number, a_dpi: number): wxSVGFileDC | null {
-    const rawPtr = lib.symbols.wxSVGFileDC_CreateWithSizeAndResolution(fileName, width, height, a_dpi);
-    if (rawPtr === null) return null;
-    return new wxSVGFileDC(rawPtr);
+export function createWxSVGFileDCFromSizeWithFileTitleAndResolution(width: number, height: number, fileName: string | Pointer, title: string | Pointer, a_dpi: number): wxSVGFileDC | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      if (typeof title === "string") __s1 = createWxString(title);
+      const rawPtr = lib.symbols.wxSVGFileDC_CreateFromSizeWithFileTitleAndResolution(width, height, __s0 ? __s0.ptr : (fileName as Pointer), __s1 ? __s1.ptr : (title as Pointer), a_dpi);
+      if (rawPtr === null) return null;
+      return new wxSVGFileDC(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

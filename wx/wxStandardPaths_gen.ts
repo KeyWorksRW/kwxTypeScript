@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -23,103 +24,121 @@ export class wxStandardPaths {
   GetConfigDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetConfigDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUserConfigDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetUserConfigDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDataDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetDataDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLocalDataDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetLocalDataDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUserDataDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetUserDataDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUserLocalDataDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetUserLocalDataDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDocumentsDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetDocumentsDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetAppDocumentsDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetAppDocumentsDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetExecutablePath(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetExecutablePath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPluginsDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetPluginsDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetResourcesDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetResourcesDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetSharedLibrariesDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetSharedLibrariesDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetTempDir(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetTempDir(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUserDir(user_dir: number): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetUserDir(this._ptr, user_dir);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  GetLocalizedResourcesDir(lang: Pointer, category: number): wxString | null {
-    const rawPtr = lib.symbols.wxStandardPaths_GetLocalizedResourcesDir(this._ptr, lang, category);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetLocalizedResourcesDir(lang: string | Pointer, category: number): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof lang === "string") __s0 = createWxString(lang);
+      const rawPtr = lib.symbols.wxStandardPaths_GetLocalizedResourcesDir(this._ptr, __s0 ? __s0.ptr : (lang as Pointer), category);
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AppendAppInfo(dir: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxStandardPaths_AppendAppInfo(this._ptr, dir);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  AppendAppInfo(dir: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      const rawPtr = lib.symbols.wxStandardPaths_AppendAppInfo(this._ptr, __s0 ? __s0.ptr : (dir as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  MakeConfigFileName(base_name: Pointer, convention: number): wxString | null {
-    const rawPtr = lib.symbols.wxStandardPaths_MakeConfigFileName(this._ptr, base_name, convention);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  MakeConfigFileName(base_name: string | Pointer, convention: number): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof base_name === "string") __s0 = createWxString(base_name);
+      const rawPtr = lib.symbols.wxStandardPaths_MakeConfigFileName(this._ptr, __s0 ? __s0.ptr : (base_name as Pointer), convention);
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFileLayout(): number {
@@ -137,15 +156,27 @@ export class wxStandardPaths {
   GetInstallPrefix(): wxString | null {
     const rawPtr = lib.symbols.wxStandardPaths_GetInstallPrefix(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetInstallPrefix(prefix: Pointer): void {
-    lib.symbols.wxStandardPaths_SetInstallPrefix(this._ptr, prefix);
+  SetInstallPrefix(prefix: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof prefix === "string") __s0 = createWxString(prefix);
+      lib.symbols.wxStandardPaths_SetInstallPrefix(this._ptr, __s0 ? __s0.ptr : (prefix as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  IgnoreAppSubDir(subdir_pattern: Pointer): void {
-    lib.symbols.wxStandardPaths_IgnoreAppSubDir(this._ptr, subdir_pattern);
+  IgnoreAppSubDir(subdir_pattern: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof subdir_pattern === "string") __s0 = createWxString(subdir_pattern);
+      lib.symbols.wxStandardPaths_IgnoreAppSubDir(this._ptr, __s0 ? __s0.ptr : (subdir_pattern as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IgnoreAppBuildSubDirs(): void {

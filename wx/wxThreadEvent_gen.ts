@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvent } from "./wxEvent_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -32,11 +33,17 @@ export class wxThreadEvent extends wxEvent {
   GetString(): wxString | null {
     const rawPtr = lib.symbols.wxThreadEvent_GetString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetString(text: Pointer): void {
-    lib.symbols.wxThreadEvent_SetString(this._ptr, text);
+  SetString(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxThreadEvent_SetString(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetInt(): number {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextFieldType } from "./wxRichTextFieldType_gen.ts";
 import { wxBitmap } from "./wxBitmap_gen.ts";
@@ -29,14 +30,20 @@ export class wxRichTextFieldTypeStandard extends wxRichTextFieldType {
     lib.symbols.wxRichTextFieldTypeStandard_Copy(this._ptr, field);
   }
 
-  SetLabel(label: Pointer): void {
-    lib.symbols.wxRichTextFieldTypeStandard_SetLabel(this._ptr, label);
+  SetLabel(label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxRichTextFieldTypeStandard_SetLabel(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetLabel(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextFieldTypeStandard_GetLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetBitmap(bitmap: Pointer): void {
@@ -125,16 +132,31 @@ export class wxRichTextFieldTypeStandard extends wxRichTextFieldType {
 
 }
 
-export function createWxRichTextFieldTypeStandard(name: Pointer, label: Pointer, displayStyle: number): wxRichTextFieldTypeStandard | null {
-    const rawPtr = lib.symbols.wxRichTextFieldTypeStandard_Create(name, label, displayStyle);
-    if (rawPtr === null) return null;
-    return new wxRichTextFieldTypeStandard(rawPtr);
+export function createWxRichTextFieldTypeStandard(name: string | Pointer, label: string | Pointer, displayStyle: number): wxRichTextFieldTypeStandard | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof label === "string") __s1 = createWxString(label);
+      const rawPtr = lib.symbols.wxRichTextFieldTypeStandard_Create(__s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (label as Pointer), displayStyle);
+      if (rawPtr === null) return null;
+      return new wxRichTextFieldTypeStandard(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
-export function createWxRichTextFieldTypeStandardWithBitmap(name: Pointer, bitmap: Pointer, displayStyle: number): wxRichTextFieldTypeStandard | null {
-    const rawPtr = lib.symbols.wxRichTextFieldTypeStandard_CreateWithBitmap(name, bitmap, displayStyle);
-    if (rawPtr === null) return null;
-    return new wxRichTextFieldTypeStandard(rawPtr);
+export function createWxRichTextFieldTypeStandardWithBitmap(name: string | Pointer, bitmap: Pointer, displayStyle: number): wxRichTextFieldTypeStandard | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextFieldTypeStandard_CreateWithBitmap(__s0 ? __s0.ptr : (name as Pointer), bitmap, displayStyle);
+      if (rawPtr === null) return null;
+      return new wxRichTextFieldTypeStandard(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxRichTextFieldTypeStandardDefault(): wxRichTextFieldTypeStandard | null {

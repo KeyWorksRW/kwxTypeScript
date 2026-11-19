@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRibbonControl } from "./wxRibbonControl_gen.ts";
 import { wxRibbonArtProvider } from "./wxRibbonArtProvider_gen.ts";
@@ -26,20 +27,38 @@ export class wxRibbonBar extends wxRibbonControl {
     lib.symbols.wxRibbonBar_HidePage(this._ptr, page);
   }
 
-  SetHelpButtonKeyTip(keytip: Pointer): void {
-    lib.symbols.wxRibbonBar_SetHelpButtonKeyTip(this._ptr, keytip);
+  SetHelpButtonKeyTip(keytip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keytip === "string") __s0 = createWxString(keytip);
+      lib.symbols.wxRibbonBar_SetHelpButtonKeyTip(this._ptr, __s0 ? __s0.ptr : (keytip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPageKeyTip(page: bigint, keytip: Pointer): void {
-    lib.symbols.wxRibbonBar_SetPageKeyTip(this._ptr, page, keytip);
+  SetPageKeyTip(page: bigint, keytip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keytip === "string") __s0 = createWxString(keytip);
+      lib.symbols.wxRibbonBar_SetPageKeyTip(this._ptr, page, __s0 ? __s0.ptr : (keytip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetTabCtrlMargins(left: number, right: number): void {
     lib.symbols.wxRibbonBar_SetTabCtrlMargins(this._ptr, left, right);
   }
 
-  SetToggleButtonKeyTip(keytip: Pointer): void {
-    lib.symbols.wxRibbonBar_SetToggleButtonKeyTip(this._ptr, keytip);
+  SetToggleButtonKeyTip(keytip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keytip === "string") __s0 = createWxString(keytip);
+      lib.symbols.wxRibbonBar_SetToggleButtonKeyTip(this._ptr, __s0 ? __s0.ptr : (keytip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ShowPage(page: bigint, show: boolean): void {

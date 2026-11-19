@@ -2,8 +2,10 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
+import { wxCommandProcessor } from "./wxCommandProcessor_gen.ts";
 import { wxMenu } from "./wxMenu_gen.ts";
 import { wxRichTextObject } from "./wxRichTextObject_gen.ts";
 import { wxRichTextParagraphLayoutBox } from "./wxRichTextParagraphLayoutBox_gen.ts";
@@ -37,15 +39,23 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_EndSuppressUndo(this._ptr) as number) !== 0;
   }
 
-  GetCommandProcessor(): Pointer {
-    return lib.symbols.wxRichTextCtrl_GetCommandProcessor(this._ptr);
+  GetCommandProcessor(): wxCommandProcessor | null {
+    const rawPtr = lib.symbols.wxRichTextCtrl_GetCommandProcessor(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxCommandProcessor(rawPtr, true);
   }
 
-  WriteField(fieldType: Pointer, properties: Pointer, textAttr: Pointer): wxRichTextField | null {
-    const rawPtr = lib.symbols.wxRichTextCtrl_WriteField(this._ptr, fieldType, properties, textAttr);
-    if (rawPtr === null) return null;
-    const WrapperClass = getClass<wxRichTextField>("wxRichTextField");
-    return new WrapperClass(rawPtr, true);
+  WriteField(fieldType: string | Pointer, properties: Pointer, textAttr: Pointer): wxRichTextField | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fieldType === "string") __s0 = createWxString(fieldType);
+      const rawPtr = lib.symbols.wxRichTextCtrl_WriteField(this._ptr, __s0 ? __s0.ptr : (fieldType as Pointer), properties, textAttr);
+      if (rawPtr === null) return null;
+      const WrapperClass = getClass<wxRichTextField>("wxRichTextField");
+      return new WrapperClass(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   WriteTable(rows: number, cols: number, tableAttr: Pointer, cellAttr: Pointer): wxRichTextTable | null {
@@ -228,8 +238,14 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_SetDefaultStyleToCursorStyle(this._ptr) as number) !== 0;
   }
 
-  AddParagraph(text: Pointer, start: Pointer, end: Pointer): void {
-    lib.symbols.wxRichTextCtrl_AddParagraph(this._ptr, text, start, end);
+  AddParagraph(text: string | Pointer, start: Pointer, end: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextCtrl_AddParagraph(this._ptr, __s0 ? __s0.ptr : (text as Pointer), start, end);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddImage(image: Pointer, start: Pointer, end: Pointer): void {
@@ -272,44 +288,80 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_EndAllStyles(this._ptr) as number) !== 0;
   }
 
-  BeginCharacterStyle(name: Pointer): boolean {
-    return (lib.symbols.wxRichTextCtrl_BeginCharacterStyle(this._ptr, name) as number) !== 0;
+  BeginCharacterStyle(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxRichTextCtrl_BeginCharacterStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EndCharacterStyle(): boolean {
     return (lib.symbols.wxRichTextCtrl_EndCharacterStyle(this._ptr) as number) !== 0;
   }
 
-  BeginParagraphStyle(name: Pointer): boolean {
-    return (lib.symbols.wxRichTextCtrl_BeginParagraphStyle(this._ptr, name) as number) !== 0;
+  BeginParagraphStyle(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxRichTextCtrl_BeginParagraphStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EndParagraphStyle(): boolean {
     return (lib.symbols.wxRichTextCtrl_EndParagraphStyle(this._ptr) as number) !== 0;
   }
 
-  BeginListStyle(name: Pointer, level: number, number: number): boolean {
-    return (lib.symbols.wxRichTextCtrl_BeginListStyle(this._ptr, name, level, number) as number) !== 0;
+  BeginListStyle(name: string | Pointer, level: number, number: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxRichTextCtrl_BeginListStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer), level, number) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EndListStyle(): boolean {
     return (lib.symbols.wxRichTextCtrl_EndListStyle(this._ptr) as number) !== 0;
   }
 
-  SetListStyle(start: bigint, end: bigint, defName: Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
-    return (lib.symbols.wxRichTextCtrl_SetListStyle(this._ptr, start, end, defName, flags, startFrom, specifiedLevel) as number) !== 0;
+  SetListStyle(start: bigint, end: bigint, defName: string | Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof defName === "string") __s0 = createWxString(defName);
+      return (lib.symbols.wxRichTextCtrl_SetListStyle(this._ptr, start, end, __s0 ? __s0.ptr : (defName as Pointer), flags, startFrom, specifiedLevel) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ClearListStyle(start: bigint, end: bigint, flags: number): boolean {
     return (lib.symbols.wxRichTextCtrl_ClearListStyle(this._ptr, start, end, flags) as number) !== 0;
   }
 
-  NumberList(start: bigint, end: bigint, defName: Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
-    return (lib.symbols.wxRichTextCtrl_NumberList(this._ptr, start, end, defName, flags, startFrom, specifiedLevel) as number) !== 0;
+  NumberList(start: bigint, end: bigint, defName: string | Pointer, flags: number, startFrom: number, specifiedLevel: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof defName === "string") __s0 = createWxString(defName);
+      return (lib.symbols.wxRichTextCtrl_NumberList(this._ptr, start, end, __s0 ? __s0.ptr : (defName as Pointer), flags, startFrom, specifiedLevel) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  PromoteList(promoteBy: number, start: bigint, end: bigint, defName: Pointer, flags: number, specifiedLevel: number): boolean {
-    return (lib.symbols.wxRichTextCtrl_PromoteList(this._ptr, promoteBy, start, end, defName, flags, specifiedLevel) as number) !== 0;
+  PromoteList(promoteBy: number, start: bigint, end: bigint, defName: string | Pointer, flags: number, specifiedLevel: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof defName === "string") __s0 = createWxString(defName);
+      return (lib.symbols.wxRichTextCtrl_PromoteList(this._ptr, promoteBy, start, end, __s0 ? __s0.ptr : (defName as Pointer), flags, specifiedLevel) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ApplyStyle(def: Pointer): boolean {
@@ -472,6 +524,14 @@ export class wxRichTextCtrl extends wxControl {
     return lib.symbols.wxRichTextCtrl_GetAdjustedCaretPosition(this._ptr, caretPosition) as bigint;
   }
 
+  GetCaretPosition(): bigint {
+    return lib.symbols.wxRichTextCtrl_GetCaretPosition(this._ptr) as bigint;
+  }
+
+  SetMargins(left: number, top: number): boolean {
+    return (lib.symbols.wxRichTextCtrl_SetMargins(this._ptr, left, top) as number) !== 0;
+  }
+
   FindNextWordPosition(direction: number): bigint {
     return lib.symbols.wxRichTextCtrl_FindNextWordPosition(this._ptr, direction) as bigint;
   }
@@ -491,17 +551,23 @@ export class wxRichTextCtrl extends wxControl {
   GetValue(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextCtrl_GetValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetValue(value: Pointer): void {
-    lib.symbols.wxRichTextCtrl_SetValue(this._ptr, value);
+  SetValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxRichTextCtrl_SetValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetRange(from_: bigint, toPos: bigint): wxString | null {
     const rawPtr = lib.symbols.wxRichTextCtrl_GetRange(this._ptr, from_, toPos);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLineLength(lineNo: bigint): number {
@@ -511,7 +577,7 @@ export class wxRichTextCtrl extends wxControl {
   GetLineText(lineNo: bigint): wxString | null {
     const rawPtr = lib.symbols.wxRichTextCtrl_GetLineText(this._ptr, lineNo);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNumberOfLines(): number {
@@ -557,7 +623,7 @@ export class wxRichTextCtrl extends wxControl {
   GetStringSelection(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextCtrl_GetStringSelection(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetInsertionPoint(): bigint {
@@ -576,42 +642,78 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxRichTextCtrl_SetInsertionPointEnd(this._ptr);
   }
 
-  WriteText(text: Pointer): void {
-    lib.symbols.wxRichTextCtrl_WriteText(this._ptr, text);
+  WriteText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextCtrl_WriteText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AppendText(text: Pointer): void {
-    lib.symbols.wxRichTextCtrl_AppendText(this._ptr, text);
+  AppendText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextCtrl_AppendText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Clear(): void {
     lib.symbols.wxRichTextCtrl_Clear(this._ptr);
   }
 
-  Replace(from_: bigint, toPos: bigint, value: Pointer): void {
-    lib.symbols.wxRichTextCtrl_Replace(this._ptr, from_, toPos, value);
+  Replace(from_: bigint, toPos: bigint, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxRichTextCtrl_Replace(this._ptr, from_, toPos, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Remove(from_: bigint, toPos: bigint): void {
     lib.symbols.wxRichTextCtrl_Remove(this._ptr, from_, toPos);
   }
 
-  LoadFile(file: Pointer, type_: number): boolean {
-    return (lib.symbols.wxRichTextCtrl_LoadFile(this._ptr, file, type_) as number) !== 0;
+  LoadFile(file: string | Pointer, type_: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      return (lib.symbols.wxRichTextCtrl_LoadFile(this._ptr, __s0 ? __s0.ptr : (file as Pointer), type_) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SaveFile(file: Pointer, type_: number): boolean {
-    return (lib.symbols.wxRichTextCtrl_SaveFile(this._ptr, file, type_) as number) !== 0;
+  SaveFile(file: string | Pointer, type_: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file === "string") __s0 = createWxString(file);
+      return (lib.symbols.wxRichTextCtrl_SaveFile(this._ptr, __s0 ? __s0.ptr : (file as Pointer), type_) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFilename(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextCtrl_GetFilename(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetFilename(filename: Pointer): void {
-    lib.symbols.wxRichTextCtrl_SetFilename(this._ptr, filename);
+  SetFilename(filename: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      lib.symbols.wxRichTextCtrl_SetFilename(this._ptr, __s0 ? __s0.ptr : (filename as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Undo(): void {
@@ -677,7 +779,7 @@ export class wxRichTextCtrl extends wxControl {
   GetDefaultStyle(): wxTextAttr | null {
     const rawPtr = lib.symbols.wxRichTextCtrl_GetDefaultStyle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxTextAttr(rawPtr, true);
+    return new wxTextAttr(rawPtr);
   }
 
   override SetFont(font: Pointer): boolean {
@@ -816,24 +918,45 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_EndNumberedBullet(this._ptr) as number) !== 0;
   }
 
-  BeginSymbolBullet(symbol: Pointer, leftIndent: number, leftSubIndent: number, bulletStyle: number): boolean {
-    return (lib.symbols.wxRichTextCtrl_BeginSymbolBullet(this._ptr, symbol, leftIndent, leftSubIndent, bulletStyle) as number) !== 0;
+  BeginSymbolBullet(symbol: string | Pointer, leftIndent: number, leftSubIndent: number, bulletStyle: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof symbol === "string") __s0 = createWxString(symbol);
+      return (lib.symbols.wxRichTextCtrl_BeginSymbolBullet(this._ptr, __s0 ? __s0.ptr : (symbol as Pointer), leftIndent, leftSubIndent, bulletStyle) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EndSymbolBullet(): boolean {
     return (lib.symbols.wxRichTextCtrl_EndSymbolBullet(this._ptr) as number) !== 0;
   }
 
-  BeginStandardBullet(bulletName: Pointer, leftIndent: number, leftSubIndent: number, bulletStyle: number): boolean {
-    return (lib.symbols.wxRichTextCtrl_BeginStandardBullet(this._ptr, bulletName, leftIndent, leftSubIndent, bulletStyle) as number) !== 0;
+  BeginStandardBullet(bulletName: string | Pointer, leftIndent: number, leftSubIndent: number, bulletStyle: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof bulletName === "string") __s0 = createWxString(bulletName);
+      return (lib.symbols.wxRichTextCtrl_BeginStandardBullet(this._ptr, __s0 ? __s0.ptr : (bulletName as Pointer), leftIndent, leftSubIndent, bulletStyle) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EndStandardBullet(): boolean {
     return (lib.symbols.wxRichTextCtrl_EndStandardBullet(this._ptr) as number) !== 0;
   }
 
-  BeginURL(url: Pointer, characterStyle: Pointer): boolean {
-    return (lib.symbols.wxRichTextCtrl_BeginURL(this._ptr, url, characterStyle) as number) !== 0;
+  BeginURL(url: string | Pointer, characterStyle: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof url === "string") __s0 = createWxString(url);
+      if (typeof characterStyle === "string") __s1 = createWxString(characterStyle);
+      return (lib.symbols.wxRichTextCtrl_BeginURL(this._ptr, __s0 ? __s0.ptr : (url as Pointer), __s1 ? __s1.ptr : (characterStyle as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   EndURL(): boolean {
@@ -844,8 +967,14 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxRichTextCtrl_WriteImage(this._ptr, image, bitmapType, textAttr) as number) !== 0;
   }
 
-  WriteImageFile(filename: Pointer, bitmapType: number, textAttr: Pointer): boolean {
-    return (lib.symbols.wxRichTextCtrl_WriteImageFile(this._ptr, filename, bitmapType, textAttr) as number) !== 0;
+  WriteImageFile(filename: string | Pointer, bitmapType: number, textAttr: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxRichTextCtrl_WriteImageFile(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), bitmapType, textAttr) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Newline(): boolean {
@@ -864,8 +993,14 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxTextEntry_ForwardEnableTextChangedEvents(this._ptr, enable ? 1 : 0);
   }
 
-  ChangeValue(value: Pointer): void {
-    lib.symbols.wxTextEntry_ChangeValue(this._ptr, value);
+  ChangeValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxTextEntry_ChangeValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsEmpty(): boolean {
@@ -884,18 +1019,20 @@ export class wxRichTextCtrl extends wxControl {
     lib.symbols.wxTextEntry_ForceUpper(this._ptr);
   }
 
-  SetHint(hint: Pointer): boolean {
-    return (lib.symbols.wxTextEntry_SetHint(this._ptr, hint) as number) !== 0;
+  SetHint(hint: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof hint === "string") __s0 = createWxString(hint);
+      return (lib.symbols.wxTextEntry_SetHint(this._ptr, __s0 ? __s0.ptr : (hint as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetHint(): wxString | null {
     const rawPtr = lib.symbols.wxTextEntry_GetHint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
-  }
-
-  SetMargins(left: number, top: number): boolean {
-    return (lib.symbols.wxTextEntry_SetMargins(this._ptr, left, top) as number) !== 0;
+    return new wxString(rawPtr);
   }
 
   GetMargins(left: Pointer, top: Pointer): void {
@@ -906,12 +1043,20 @@ export class wxRichTextCtrl extends wxControl {
     return (lib.symbols.wxTextEntry_AutoComplete(this._ptr, count, items) as number) !== 0;
   }
 
+  AutoCompleteStrings(items: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteStrings(this._ptr, items) as number) !== 0;
+  }
+
   AutoCompleteFileNames(): boolean {
     return (lib.symbols.wxTextEntry_AutoCompleteFileNames(this._ptr) as number) !== 0;
   }
 
   AutoCompleteDirectories(): boolean {
     return (lib.symbols.wxTextEntry_AutoCompleteDirectories(this._ptr) as number) !== 0;
+  }
+
+  AutoCompleteCompleter(completer: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteCompleter(this._ptr, completer) as number) !== 0;
   }
 
 }

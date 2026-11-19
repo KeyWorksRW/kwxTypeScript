@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxCommandEvent } from "./wxCommandEvent_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -26,19 +27,31 @@ export class wxHyperlinkEvent extends wxCommandEvent {
   GetURL(): wxString | null {
     const rawPtr = lib.symbols.wxHyperlinkEvent_GetURL(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetURL(url: Pointer): void {
-    lib.symbols.wxHyperlinkEvent_SetURL(this._ptr, url);
+  SetURL(url: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof url === "string") __s0 = createWxString(url);
+      lib.symbols.wxHyperlinkEvent_SetURL(this._ptr, __s0 ? __s0.ptr : (url as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxHyperlinkEvent(generator: Pointer, id: number, url: Pointer): wxHyperlinkEvent | null {
-    const rawPtr = lib.symbols.wxHyperlinkEvent_Create(generator, id, url);
-    if (rawPtr === null) return null;
-    return new wxHyperlinkEvent(rawPtr);
+export function createWxHyperlinkEvent(generator: Pointer, id: number, url: string | Pointer): wxHyperlinkEvent | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof url === "string") __s0 = createWxString(url);
+      const rawPtr = lib.symbols.wxHyperlinkEvent_Create(generator, id, __s0 ? __s0.ptr : (url as Pointer));
+      if (rawPtr === null) return null;
+      return new wxHyperlinkEvent(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -23,14 +24,26 @@ export class wxPathList extends wxObject {
     this.Delete();
   }
 
-  Add(path: Pointer): boolean {
-    return (lib.symbols.wxPathList_Add(this._ptr, path) as number) !== 0;
+  Add(path: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      return (lib.symbols.wxPathList_Add(this._ptr, __s0 ? __s0.ptr : (path as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FindValidPath(filename: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxPathList_FindValidPath(this._ptr, filename);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  FindValidPath(filename: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      const rawPtr = lib.symbols.wxPathList_FindValidPath(this._ptr, __s0 ? __s0.ptr : (filename as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

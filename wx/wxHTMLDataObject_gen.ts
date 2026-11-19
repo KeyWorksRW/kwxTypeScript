@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDataObjectSimple } from "./wxDataObjectSimple_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -25,11 +26,17 @@ export class wxHTMLDataObject extends wxDataObjectSimple {
   GetHTML(): wxString | null {
     const rawPtr = lib.symbols.wxHTMLDataObject_GetHTML(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetHTML(html: Pointer): void {
-    lib.symbols.wxHTMLDataObject_SetHTML(this._ptr, html);
+  SetHTML(html: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof html === "string") __s0 = createWxString(html);
+      lib.symbols.wxHTMLDataObject_SetHTML(this._ptr, __s0 ? __s0.ptr : (html as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetLength(): bigint {
@@ -38,10 +45,16 @@ export class wxHTMLDataObject extends wxDataObjectSimple {
 
 }
 
-export function createWxHTMLDataObject(html: Pointer): wxHTMLDataObject | null {
-    const rawPtr = lib.symbols.wxHTMLDataObject_Create(html);
-    if (rawPtr === null) return null;
-    return new wxHTMLDataObject(rawPtr);
+export function createWxHTMLDataObject(html: string | Pointer): wxHTMLDataObject | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof html === "string") __s0 = createWxString(html);
+      const rawPtr = lib.symbols.wxHTMLDataObject_Create(__s0 ? __s0.ptr : (html as Pointer));
+      if (rawPtr === null) return null;
+      return new wxHTMLDataObject(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPanel } from "./wxPanel_gen.ts";
 import { wxBitmapButton } from "./wxBitmapButton_gen.ts";
@@ -70,10 +71,16 @@ export class wxEditableListBox extends wxPanel {
 
 }
 
-export function createWxEditableListBox(parent: Pointer, id: number, label: Pointer, x: number, y: number, width: number, height: number, style: number): wxEditableListBox | null {
-    const rawPtr = lib.symbols.wxEditableListBox_Create(parent, id, label, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxEditableListBox(rawPtr);
+export function createWxEditableListBox(parent: Pointer, id: number, label: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxEditableListBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxEditableListBox_Create(parent, id, __s0 ? __s0.ptr : (label as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxEditableListBox(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

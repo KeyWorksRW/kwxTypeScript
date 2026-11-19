@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -38,16 +39,28 @@ export class wxTextFile {
     return (lib.symbols.wxTextFile_CreateOnDisk(this._ptr) as number) !== 0;
   }
 
-  CreateOnDiskNamed(file_name: Pointer): boolean {
-    return (lib.symbols.wxTextFile_CreateOnDiskNamed(this._ptr, file_name) as number) !== 0;
+  CreateOnDiskNamed(file_name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      return (lib.symbols.wxTextFile_CreateOnDiskNamed(this._ptr, __s0 ? __s0.ptr : (file_name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Open(): boolean {
     return (lib.symbols.wxTextFile_Open(this._ptr) as number) !== 0;
   }
 
-  OpenNamed(file_name: Pointer): boolean {
-    return (lib.symbols.wxTextFile_OpenNamed(this._ptr, file_name) as number) !== 0;
+  OpenNamed(file_name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      return (lib.symbols.wxTextFile_OpenNamed(this._ptr, __s0 ? __s0.ptr : (file_name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Close(): boolean {
@@ -65,7 +78,7 @@ export class wxTextFile {
   GetLine(line_index: number): wxString | null {
     const rawPtr = lib.symbols.wxTextFile_GetLine(this._ptr, line_index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetCurrentLine(): number {
@@ -83,25 +96,25 @@ export class wxTextFile {
   GetFirstLine(): wxString | null {
     const rawPtr = lib.symbols.wxTextFile_GetFirstLine(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNextLine(): wxString | null {
     const rawPtr = lib.symbols.wxTextFile_GetNextLine(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPrevLine(): wxString | null {
     const rawPtr = lib.symbols.wxTextFile_GetPrevLine(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLastLine(): wxString | null {
     const rawPtr = lib.symbols.wxTextFile_GetLastLine(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLineType(line_index: number): number {
@@ -115,15 +128,27 @@ export class wxTextFile {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxTextFile_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  AddLine(line: Pointer, line_type: number): void {
-    lib.symbols.wxTextFile_AddLine(this._ptr, line, line_type);
+  AddLine(line: string | Pointer, line_type: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof line === "string") __s0 = createWxString(line);
+      lib.symbols.wxTextFile_AddLine(this._ptr, __s0 ? __s0.ptr : (line as Pointer), line_type);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertLine(line: Pointer, line_index: number, line_type: number): void {
-    lib.symbols.wxTextFile_InsertLine(this._ptr, line, line_index, line_type);
+  InsertLine(line: string | Pointer, line_index: number, line_type: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof line === "string") __s0 = createWxString(line);
+      lib.symbols.wxTextFile_InsertLine(this._ptr, __s0 ? __s0.ptr : (line as Pointer), line_index, line_type);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   RemoveLine(line_index: number): void {
@@ -150,10 +175,16 @@ export function createWxTextFile(): wxTextFile | null {
     return new wxTextFile(rawPtr);
 }
 
-export function createWxTextFileFromFile(file_name: Pointer): wxTextFile | null {
-    const rawPtr = lib.symbols.wxTextFile_CreateFromFile(file_name);
-    if (rawPtr === null) return null;
-    return new wxTextFile(rawPtr);
+export function createWxTextFileFromFile(file_name: string | Pointer): wxTextFile | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      const rawPtr = lib.symbols.wxTextFile_CreateFromFile(__s0 ? __s0.ptr : (file_name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxTextFile(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

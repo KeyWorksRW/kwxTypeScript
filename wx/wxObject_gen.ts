@@ -56,6 +56,10 @@ export class wxObject {
     return (lib.symbols.wxObject_IsScrolledWindow(this._ptr) as number) !== 0;
   }
 
+  IsOfClass(className: Pointer): boolean {
+    return (lib.symbols.wxObject_IsOfClass(this._ptr, className) as number) !== 0;
+  }
+
   SetClientClosure(closure: Pointer): void {
     lib.symbols.wxObject_SetClientClosure(this._ptr, closure);
   }

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxFileType } from "./wxFileType_gen.ts";
 
@@ -28,20 +29,41 @@ export class wxMimeTypesManager {
     return lib.symbols.wxMimeTypesManager_EnumAllFileTypes(this._ptr, list);
   }
 
-  GetFileTypeFromExtension(extension: Pointer): wxFileType | null {
-    const rawPtr = lib.symbols.wxMimeTypesManager_GetFileTypeFromExtension(this._ptr, extension);
-    if (rawPtr === null) return null;
-    return new wxFileType(rawPtr, true);
+  GetFileTypeFromExtension(extension: string | Pointer): wxFileType | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof extension === "string") __s0 = createWxString(extension);
+      const rawPtr = lib.symbols.wxMimeTypesManager_GetFileTypeFromExtension(this._ptr, __s0 ? __s0.ptr : (extension as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFileType(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetFileTypeFromMimeType(name: Pointer): wxFileType | null {
-    const rawPtr = lib.symbols.wxMimeTypesManager_GetFileTypeFromMimeType(this._ptr, name);
-    if (rawPtr === null) return null;
-    return new wxFileType(rawPtr, true);
+  GetFileTypeFromMimeType(name: string | Pointer): wxFileType | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxMimeTypesManager_GetFileTypeFromMimeType(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFileType(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  IsOfType(type_: Pointer, wildcard: Pointer): boolean {
-    return (lib.symbols.wxMimeTypesManager_IsOfType(this._ptr, type_, wildcard) as number) !== 0;
+  IsOfType(type_: string | Pointer, wildcard: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof type_ === "string") __s0 = createWxString(type_);
+      if (typeof wildcard === "string") __s1 = createWxString(wildcard);
+      return (lib.symbols.wxMimeTypesManager_IsOfType(this._ptr, __s0 ? __s0.ptr : (type_ as Pointer), __s1 ? __s1.ptr : (wildcard as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
 }

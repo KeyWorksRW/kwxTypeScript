@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -44,16 +45,28 @@ export class wxSpinCtrl extends wxControl {
     lib.symbols.wxSpinCtrl_SetIncrement(this._ptr, inc);
   }
 
-  SetValueString(value: Pointer): void {
-    lib.symbols.wxSpinCtrl_SetValueString(this._ptr, value);
+  SetValueString(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxSpinCtrl_SetValueString(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxSpinCtrl(parent: Pointer, id: number, text: Pointer, left: number, top: number, width: number, height: number, style: bigint, minVal: number, maxVal: number, init: number): wxSpinCtrl | null {
-    const rawPtr = lib.symbols.wxSpinCtrl_Create(parent, id, text, left, top, width, height, style, minVal, maxVal, init);
-    if (rawPtr === null) return null;
-    return new wxSpinCtrl(rawPtr);
+export function createWxSpinCtrl(parent: Pointer, id: number, text: string | Pointer, left: number, top: number, width: number, height: number, style: bigint, minVal: number, maxVal: number, init: number): wxSpinCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxSpinCtrl_Create(parent, id, __s0 ? __s0.ptr : (text as Pointer), left, top, width, height, style, minVal, maxVal, init);
+      if (rawPtr === null) return null;
+      return new wxSpinCtrl(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

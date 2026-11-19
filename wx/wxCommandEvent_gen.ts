@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvent } from "./wxEvent_gen.ts";
 import { wxClientData } from "./wxClientData_gen.ts";
@@ -51,7 +52,7 @@ export class wxCommandEvent extends wxEvent {
   GetString(): wxString | null {
     const rawPtr = lib.symbols.wxCommandEvent_GetString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsChecked(): boolean {
@@ -78,8 +79,14 @@ export class wxCommandEvent extends wxEvent {
     lib.symbols.wxCommandEvent_SetInt(this._ptr, intValue);
   }
 
-  SetString(str: Pointer): void {
-    lib.symbols.wxCommandEvent_SetString(this._ptr, str);
+  SetString(str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxCommandEvent_SetString(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

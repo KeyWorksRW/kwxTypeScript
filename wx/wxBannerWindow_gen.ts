@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxWindow } from "./wxWindow_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -16,8 +17,17 @@ export class wxBannerWindow extends wxWindow {
     lib.symbols.wxBannerWindow_SetBitmap(this._ptr, bmp);
   }
 
-  SetText(title: Pointer, message: Pointer): void {
-    lib.symbols.wxBannerWindow_SetText(this._ptr, title, message);
+  SetText(title: string | Pointer, message: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      if (typeof message === "string") __s1 = createWxString(message);
+      lib.symbols.wxBannerWindow_SetText(this._ptr, __s0 ? __s0.ptr : (title as Pointer), __s1 ? __s1.ptr : (message as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   SetGradient(start: Pointer, end: Pointer): void {

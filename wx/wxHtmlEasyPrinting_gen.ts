@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -23,40 +24,100 @@ export class wxHtmlEasyPrinting extends wxObject {
     this.Delete();
   }
 
-  PreviewFile(htmlfile: Pointer): boolean {
-    return (lib.symbols.wxHtmlEasyPrinting_PreviewFile(this._ptr, htmlfile) as number) !== 0;
+  PreviewFile(htmlfile: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof htmlfile === "string") __s0 = createWxString(htmlfile);
+      return (lib.symbols.wxHtmlEasyPrinting_PreviewFile(this._ptr, __s0 ? __s0.ptr : (htmlfile as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  PreviewText(htmltext: Pointer, basepath: Pointer): boolean {
-    return (lib.symbols.wxHtmlEasyPrinting_PreviewText(this._ptr, htmltext, basepath) as number) !== 0;
+  PreviewText(htmltext: string | Pointer, basepath: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof htmltext === "string") __s0 = createWxString(htmltext);
+      if (typeof basepath === "string") __s1 = createWxString(basepath);
+      return (lib.symbols.wxHtmlEasyPrinting_PreviewText(this._ptr, __s0 ? __s0.ptr : (htmltext as Pointer), __s1 ? __s1.ptr : (basepath as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  PrintFile(htmlfile: Pointer): boolean {
-    return (lib.symbols.wxHtmlEasyPrinting_PrintFile(this._ptr, htmlfile) as number) !== 0;
+  PrintFile(htmlfile: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof htmlfile === "string") __s0 = createWxString(htmlfile);
+      return (lib.symbols.wxHtmlEasyPrinting_PrintFile(this._ptr, __s0 ? __s0.ptr : (htmlfile as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  PrintText(htmltext: Pointer, basepath: Pointer): boolean {
-    return (lib.symbols.wxHtmlEasyPrinting_PrintText(this._ptr, htmltext, basepath) as number) !== 0;
+  PrintText(htmltext: string | Pointer, basepath: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof htmltext === "string") __s0 = createWxString(htmltext);
+      if (typeof basepath === "string") __s1 = createWxString(basepath);
+      return (lib.symbols.wxHtmlEasyPrinting_PrintText(this._ptr, __s0 ? __s0.ptr : (htmltext as Pointer), __s1 ? __s1.ptr : (basepath as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   PageSetup(): void {
     lib.symbols.wxHtmlEasyPrinting_PageSetup(this._ptr);
   }
 
-  SetHeader(header: Pointer, pg: number): void {
-    lib.symbols.wxHtmlEasyPrinting_SetHeader(this._ptr, header, pg);
+  SetHeader(header: string | Pointer, pg: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof header === "string") __s0 = createWxString(header);
+      lib.symbols.wxHtmlEasyPrinting_SetHeader(this._ptr, __s0 ? __s0.ptr : (header as Pointer), pg);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetFooter(footer: Pointer, pg: number): void {
-    lib.symbols.wxHtmlEasyPrinting_SetFooter(this._ptr, footer, pg);
+  SetFooter(footer: string | Pointer, pg: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof footer === "string") __s0 = createWxString(footer);
+      lib.symbols.wxHtmlEasyPrinting_SetFooter(this._ptr, __s0 ? __s0.ptr : (footer as Pointer), pg);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetFonts(normal_face: Pointer, fixed_face: Pointer, sizes: Pointer): void {
-    lib.symbols.wxHtmlEasyPrinting_SetFonts(this._ptr, normal_face, fixed_face, sizes);
+  SetFonts(normal_face: string | Pointer, fixed_face: string | Pointer, sizes: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof normal_face === "string") __s0 = createWxString(normal_face);
+      if (typeof fixed_face === "string") __s1 = createWxString(fixed_face);
+      lib.symbols.wxHtmlEasyPrinting_SetFonts(this._ptr, __s0 ? __s0.ptr : (normal_face as Pointer), __s1 ? __s1.ptr : (fixed_face as Pointer), sizes);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetStandardFonts(size: number, normal_face: Pointer, fixed_face: Pointer): void {
-    lib.symbols.wxHtmlEasyPrinting_SetStandardFonts(this._ptr, size, normal_face, fixed_face);
+  SetStandardFonts(size: number, normal_face: string | Pointer, fixed_face: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof normal_face === "string") __s0 = createWxString(normal_face);
+      if (typeof fixed_face === "string") __s1 = createWxString(fixed_face);
+      lib.symbols.wxHtmlEasyPrinting_SetStandardFonts(this._ptr, size, __s0 ? __s0.ptr : (normal_face as Pointer), __s1 ? __s1.ptr : (fixed_face as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   GetPrintData(): Pointer {
@@ -78,11 +139,17 @@ export class wxHtmlEasyPrinting extends wxObject {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxHtmlEasyPrinting_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxHtmlEasyPrinting_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxHtmlEasyPrinting_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetPromptMode(promptMode: number): void {
@@ -91,10 +158,16 @@ export class wxHtmlEasyPrinting extends wxObject {
 
 }
 
-export function createWxHtmlEasyPrinting(name: Pointer, parentWindow: Pointer): wxHtmlEasyPrinting | null {
-    const rawPtr = lib.symbols.wxHtmlEasyPrinting_Create(name, parentWindow);
-    if (rawPtr === null) return null;
-    return new wxHtmlEasyPrinting(rawPtr);
+export function createWxHtmlEasyPrinting(name: string | Pointer, parentWindow: Pointer): wxHtmlEasyPrinting | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxHtmlEasyPrinting_Create(__s0 ? __s0.ptr : (name as Pointer), parentWindow);
+      if (rawPtr === null) return null;
+      return new wxHtmlEasyPrinting(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

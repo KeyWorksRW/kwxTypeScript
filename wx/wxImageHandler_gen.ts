@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -16,31 +17,49 @@ export class wxImageHandler extends wxObject {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxImageHandler_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxImageHandler_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxImageHandler_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetExtension(): wxString | null {
     const rawPtr = lib.symbols.wxImageHandler_GetExtension(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetExtension(ext: Pointer): void {
-    lib.symbols.wxImageHandler_SetExtension(this._ptr, ext);
+  SetExtension(ext: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof ext === "string") __s0 = createWxString(ext);
+      lib.symbols.wxImageHandler_SetExtension(this._ptr, __s0 ? __s0.ptr : (ext as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetMimeType(): wxString | null {
     const rawPtr = lib.symbols.wxImageHandler_GetMimeType(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetMimeType(mime: Pointer): void {
-    lib.symbols.wxImageHandler_SetMimeType(this._ptr, mime);
+  SetMimeType(mime: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof mime === "string") __s0 = createWxString(mime);
+      lib.symbols.wxImageHandler_SetMimeType(this._ptr, __s0 ? __s0.ptr : (mime as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetType(): number {
@@ -59,8 +78,14 @@ export class wxImageHandler extends wxObject {
     return (lib.symbols.wxImageHandler_CanReadStream(this._ptr, stream) as number) !== 0;
   }
 
-  CanReadFile(name: Pointer): boolean {
-    return (lib.symbols.wxImageHandler_CanReadFile(this._ptr, name) as number) !== 0;
+  CanReadFile(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxImageHandler_CanReadFile(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   LoadFile(image: Pointer, stream: Pointer, verbose: boolean, index: number): boolean {

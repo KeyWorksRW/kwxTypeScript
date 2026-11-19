@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxSize } from "./wxSize_gen.ts";
 
@@ -46,10 +47,16 @@ export class wxAuiTabArt {
     return lib.symbols.wxAuiTabArt_GetIndentSize(this._ptr);
   }
 
-  GetTabSize(dc: Pointer, window: Pointer, caption: Pointer, bitmap: Pointer, active: boolean, close_button_state: number, x_extent: Pointer): wxSize | null {
-    const rawPtr = lib.symbols.wxAuiTabArt_GetTabSize(this._ptr, dc, window, caption, bitmap, active ? 1 : 0, close_button_state, x_extent);
-    if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+  GetTabSize(dc: Pointer, window: Pointer, caption: string | Pointer, bitmap: Pointer, active: boolean, close_button_state: number, x_extent: Pointer): wxSize | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof caption === "string") __s0 = createWxString(caption);
+      const rawPtr = lib.symbols.wxAuiTabArt_GetTabSize(this._ptr, dc, window, __s0 ? __s0.ptr : (caption as Pointer), bitmap, active ? 1 : 0, close_button_state, x_extent);
+      if (rawPtr === null) return null;
+      return new wxSize(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFlags(flags: number): void {

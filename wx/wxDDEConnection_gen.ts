@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxConnectionBase } from "./wxConnectionBase_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -12,12 +13,24 @@ export class wxDDEConnection extends wxConnectionBase {
     return this._ptr;
   }
 
-  StartAdvise(item: Pointer): boolean {
-    return (lib.symbols.wxDDEConnection_StartAdvise(this._ptr, item) as number) !== 0;
+  StartAdvise(item: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return (lib.symbols.wxDDEConnection_StartAdvise(this._ptr, __s0 ? __s0.ptr : (item as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  StopAdvise(item: Pointer): boolean {
-    return (lib.symbols.wxDDEConnection_StopAdvise(this._ptr, item) as number) !== 0;
+  StopAdvise(item: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return (lib.symbols.wxDDEConnection_StopAdvise(this._ptr, __s0 ? __s0.ptr : (item as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

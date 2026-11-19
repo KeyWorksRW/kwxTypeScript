@@ -39,31 +39,31 @@ export class wxRibbonControl extends wxControl {
   GetBestSizeForParentSize(width: number, height: number): wxSize | null {
     const rawPtr = lib.symbols.wxRibbonControl_GetBestSizeForParentSize(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetNextLargerSize(direction: number): wxSize | null {
     const rawPtr = lib.symbols.wxRibbonControl_GetNextLargerSize(this._ptr, direction);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetNextLargerSize_Relative(direction: number, width: number, height: number): wxSize | null {
     const rawPtr = lib.symbols.wxRibbonControl_GetNextLargerSize_Relative(this._ptr, direction, width, height);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetNextSmallerSize(direction: number): wxSize | null {
     const rawPtr = lib.symbols.wxRibbonControl_GetNextSmallerSize(this._ptr, direction);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetNextSmallerSize_Relative(direction: number, width: number, height: number): wxSize | null {
     const rawPtr = lib.symbols.wxRibbonControl_GetNextSmallerSize_Relative(this._ptr, direction, width, height);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   IsSizingContinuous(): boolean {

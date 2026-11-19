@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -36,10 +37,19 @@ export class wxMultiChoiceDialog extends wxDialog {
 
 }
 
-export function createWxMultiChoiceDialog(parent: Pointer, message: Pointer, caption: Pointer, n: number, choices: Pointer, style: bigint, x: number, y: number): wxMultiChoiceDialog | null {
-    const rawPtr = lib.symbols.wxMultiChoiceDialog_Create(parent, message, caption, n, choices, style, x, y);
-    if (rawPtr === null) return null;
-    return new wxMultiChoiceDialog(rawPtr);
+export function createWxMultiChoiceDialog(parent: Pointer, message: string | Pointer, caption: string | Pointer, n: number, choices: Pointer, style: bigint, x: number, y: number): wxMultiChoiceDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof caption === "string") __s1 = createWxString(caption);
+      const rawPtr = lib.symbols.wxMultiChoiceDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (caption as Pointer), n, choices, style, x, y);
+      if (rawPtr === null) return null;
+      return new wxMultiChoiceDialog(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

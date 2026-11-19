@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxFilterOutputStream } from "./wxFilterOutputStream_gen.ts";
 
@@ -25,12 +26,24 @@ export class wxArchiveOutputStream extends wxFilterOutputStream {
     return (lib.symbols.wxArchiveOutputStream_PutNextEntry(this._ptr, entry) as number) !== 0;
   }
 
-  PutNextEntryDate(entry_name: Pointer, dt: Pointer, size: bigint): boolean {
-    return (lib.symbols.wxArchiveOutputStream_PutNextEntryDate(this._ptr, entry_name, dt, size) as number) !== 0;
+  PutNextEntryDate(entry_name: string | Pointer, dt: Pointer, size: bigint): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      return (lib.symbols.wxArchiveOutputStream_PutNextEntryDate(this._ptr, __s0 ? __s0.ptr : (entry_name as Pointer), dt, size) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  PutNextDirEntryDate(entry_name: Pointer, dt: Pointer): boolean {
-    return (lib.symbols.wxArchiveOutputStream_PutNextDirEntryDate(this._ptr, entry_name, dt) as number) !== 0;
+  PutNextDirEntryDate(entry_name: string | Pointer, dt: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      return (lib.symbols.wxArchiveOutputStream_PutNextDirEntryDate(this._ptr, __s0 ? __s0.ptr : (entry_name as Pointer), dt) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   CopyEntry(entry: Pointer, input_stream: Pointer): boolean {

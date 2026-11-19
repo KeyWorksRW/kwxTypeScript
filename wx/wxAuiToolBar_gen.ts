@@ -2,10 +2,12 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxAuiToolBarArt } from "./wxAuiToolBarArt_gen.ts";
 import { wxAuiToolBarItem } from "./wxAuiToolBarItem_gen.ts";
+import { wxObject } from "./wxObject_gen.ts";
 import { wxRect } from "./wxRect_gen.ts";
 import { wxSize } from "./wxSize_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -53,34 +55,76 @@ export class wxAuiToolBar extends wxControl {
     return (lib.symbols.wxAuiToolBar_SetFont(this._ptr, font) as number) !== 0;
   }
 
-  AddToolByLabel(tool_id: number, label: Pointer, bitmap: Pointer, shortHelpString: Pointer, kind: number): wxAuiToolBarItem | null {
-    const rawPtr = lib.symbols.wxAuiToolBar_AddToolByLabel(this._ptr, tool_id, label, bitmap, shortHelpString, kind);
-    if (rawPtr === null) return null;
-    return new wxAuiToolBarItem(rawPtr, true);
+  AddToolByLabel(tool_id: number, label: string | Pointer, bitmap: Pointer, shortHelpString: string | Pointer, kind: number): wxAuiToolBarItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof shortHelpString === "string") __s1 = createWxString(shortHelpString);
+      const rawPtr = lib.symbols.wxAuiToolBar_AddToolByLabel(this._ptr, tool_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (shortHelpString as Pointer), kind);
+      if (rawPtr === null) return null;
+      return new wxAuiToolBarItem(rawPtr, true);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddTool(tool_id: number, label: Pointer, bitmap: Pointer, disabledBitmap: Pointer, kind: number, shortHelpString: Pointer, longHelpString: Pointer, clientData: Pointer): wxAuiToolBarItem | null {
-    const rawPtr = lib.symbols.wxAuiToolBar_AddTool(this._ptr, tool_id, label, bitmap, disabledBitmap, kind, shortHelpString, longHelpString, clientData);
-    if (rawPtr === null) return null;
-    return new wxAuiToolBarItem(rawPtr, true);
+  AddTool(tool_id: number, label: string | Pointer, bitmap: Pointer, disabledBitmap: Pointer, kind: number, shortHelpString: string | Pointer, longHelpString: string | Pointer, clientData: Pointer): wxAuiToolBarItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof shortHelpString === "string") __s1 = createWxString(shortHelpString);
+      if (typeof longHelpString === "string") __s2 = createWxString(longHelpString);
+      const rawPtr = lib.symbols.wxAuiToolBar_AddTool(this._ptr, tool_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, disabledBitmap, kind, __s1 ? __s1.ptr : (shortHelpString as Pointer), __s2 ? __s2.ptr : (longHelpString as Pointer), clientData);
+      if (rawPtr === null) return null;
+      return new wxAuiToolBarItem(rawPtr, true);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddToolByBitmap(tool_id: number, bitmap: Pointer, disabledBitmap: Pointer, toggle: boolean, clientData: Pointer, shortHelpString: Pointer, longHelpString: Pointer): wxAuiToolBarItem | null {
-    const rawPtr = lib.symbols.wxAuiToolBar_AddToolByBitmap(this._ptr, tool_id, bitmap, disabledBitmap, toggle ? 1 : 0, clientData, shortHelpString, longHelpString);
-    if (rawPtr === null) return null;
-    return new wxAuiToolBarItem(rawPtr, true);
+  AddToolByBitmap(tool_id: number, bitmap: Pointer, disabledBitmap: Pointer, toggle: boolean, clientData: Pointer, shortHelpString: string | Pointer, longHelpString: string | Pointer): wxAuiToolBarItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof shortHelpString === "string") __s0 = createWxString(shortHelpString);
+      if (typeof longHelpString === "string") __s1 = createWxString(longHelpString);
+      const rawPtr = lib.symbols.wxAuiToolBar_AddToolByBitmap(this._ptr, tool_id, bitmap, disabledBitmap, toggle ? 1 : 0, clientData, __s0 ? __s0.ptr : (shortHelpString as Pointer), __s1 ? __s1.ptr : (longHelpString as Pointer));
+      if (rawPtr === null) return null;
+      return new wxAuiToolBarItem(rawPtr, true);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddLabel(tool_id: number, label: Pointer, width: number): wxAuiToolBarItem | null {
-    const rawPtr = lib.symbols.wxAuiToolBar_AddLabel(this._ptr, tool_id, label, width);
-    if (rawPtr === null) return null;
-    return new wxAuiToolBarItem(rawPtr, true);
+  AddLabel(tool_id: number, label: string | Pointer, width: number): wxAuiToolBarItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxAuiToolBar_AddLabel(this._ptr, tool_id, __s0 ? __s0.ptr : (label as Pointer), width);
+      if (rawPtr === null) return null;
+      return new wxAuiToolBarItem(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddControl(control: Pointer, label: Pointer): wxAuiToolBarItem | null {
-    const rawPtr = lib.symbols.wxAuiToolBar_AddControl(this._ptr, control, label);
-    if (rawPtr === null) return null;
-    return new wxAuiToolBarItem(rawPtr, true);
+  AddControl(control: Pointer, label: string | Pointer): wxAuiToolBarItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxAuiToolBar_AddControl(this._ptr, control, __s0 ? __s0.ptr : (label as Pointer));
+      if (rawPtr === null) return null;
+      return new wxAuiToolBarItem(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddSeparator(): wxAuiToolBarItem | null {
@@ -145,6 +189,24 @@ export class wxAuiToolBar extends wxControl {
     return (lib.symbols.wxAuiToolBar_DeleteByIndex(this._ptr, tool_id) as number) !== 0;
   }
 
+  DestroyTool(tool_id: number): boolean {
+    return (lib.symbols.wxAuiToolBar_DestroyTool(this._ptr, tool_id) as number) !== 0;
+  }
+
+  DestroyToolByIndex(idx: number): boolean {
+    return (lib.symbols.wxAuiToolBar_DestroyToolByIndex(this._ptr, idx) as number) !== 0;
+  }
+
+  GetToolClientData(tool_id: number): wxObject | null {
+    const rawPtr = lib.symbols.wxAuiToolBar_GetToolClientData(this._ptr, tool_id);
+    if (rawPtr === null) return null;
+    return new wxObject(rawPtr, true);
+  }
+
+  SetToolClientData(tool_id: number, clientData: Pointer): void {
+    lib.symbols.wxAuiToolBar_SetToolClientData(this._ptr, tool_id, clientData);
+  }
+
   GetToolCount(): bigint {
     return lib.symbols.wxAuiToolBar_GetToolCount(this._ptr) as bigint;
   }
@@ -164,7 +226,7 @@ export class wxAuiToolBar extends wxControl {
   GetToolRect(tool_id: number): wxRect | null {
     const rawPtr = lib.symbols.wxAuiToolBar_GetToolRect(this._ptr, tool_id);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetToolFitsByIndex(tool_id: number): boolean {
@@ -194,7 +256,7 @@ export class wxAuiToolBar extends wxControl {
   GetToolBitmapSize(): wxSize | null {
     const rawPtr = lib.symbols.wxAuiToolBar_GetToolBitmapSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetOverflowVisible(): boolean {
@@ -288,11 +350,17 @@ export class wxAuiToolBar extends wxControl {
   GetToolLabel(tool_id: number): wxString | null {
     const rawPtr = lib.symbols.wxAuiToolBar_GetToolLabel(this._ptr, tool_id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetToolLabel(tool_id: number, label: Pointer): void {
-    lib.symbols.wxAuiToolBar_SetToolLabel(this._ptr, tool_id, label);
+  SetToolLabel(tool_id: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxAuiToolBar_SetToolLabel(this._ptr, tool_id, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetToolBitmap(tool_id: number, bitmap: Pointer): void {
@@ -306,21 +374,33 @@ export class wxAuiToolBar extends wxControl {
   GetToolShortHelp(tool_id: number): wxString | null {
     const rawPtr = lib.symbols.wxAuiToolBar_GetToolShortHelp(this._ptr, tool_id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetToolShortHelp(tool_id: number, helpString: Pointer): void {
-    lib.symbols.wxAuiToolBar_SetToolShortHelp(this._ptr, tool_id, helpString);
+  SetToolShortHelp(tool_id: number, helpString: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof helpString === "string") __s0 = createWxString(helpString);
+      lib.symbols.wxAuiToolBar_SetToolShortHelp(this._ptr, tool_id, __s0 ? __s0.ptr : (helpString as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetToolLongHelp(tool_id: number): wxString | null {
     const rawPtr = lib.symbols.wxAuiToolBar_GetToolLongHelp(this._ptr, tool_id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetToolLongHelp(tool_id: number, helpString: Pointer): void {
-    lib.symbols.wxAuiToolBar_SetToolLongHelp(this._ptr, tool_id, helpString);
+  SetToolLongHelp(tool_id: number, helpString: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof helpString === "string") __s0 = createWxString(helpString);
+      lib.symbols.wxAuiToolBar_SetToolLongHelp(this._ptr, tool_id, __s0 ? __s0.ptr : (helpString as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetCustomOverflowItems(prepend: Pointer, append: Pointer): void {
@@ -330,11 +410,63 @@ export class wxAuiToolBar extends wxControl {
   GetHintSize(dock_direction: number): wxSize | null {
     const rawPtr = lib.symbols.wxAuiToolBar_GetHintSize(this._ptr, dock_direction);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   IsPaneValid(pane: Pointer): boolean {
     return (lib.symbols.wxAuiToolBar_IsPaneValid(this._ptr, pane) as number) !== 0;
+  }
+
+  AddToolByLabelBundle(tool_id: number, label: string | Pointer, bitmap: Pointer, shortHelpString: string | Pointer, kind: number): wxAuiToolBarItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof shortHelpString === "string") __s1 = createWxString(shortHelpString);
+      const rawPtr = lib.symbols.wxAuiToolBar_AddToolByLabelBundle(this._ptr, tool_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (shortHelpString as Pointer), kind);
+      if (rawPtr === null) return null;
+      return new wxAuiToolBarItem(rawPtr, true);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
+  }
+
+  AddToolBundle(tool_id: number, label: string | Pointer, bitmap: Pointer, disabledBitmap: Pointer, kind: number, shortHelpString: string | Pointer, longHelpString: string | Pointer, clientData: Pointer): wxAuiToolBarItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof shortHelpString === "string") __s1 = createWxString(shortHelpString);
+      if (typeof longHelpString === "string") __s2 = createWxString(longHelpString);
+      const rawPtr = lib.symbols.wxAuiToolBar_AddToolBundle(this._ptr, tool_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, disabledBitmap, kind, __s1 ? __s1.ptr : (shortHelpString as Pointer), __s2 ? __s2.ptr : (longHelpString as Pointer), clientData);
+      if (rawPtr === null) return null;
+      return new wxAuiToolBarItem(rawPtr, true);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
+  }
+
+  AddToolByBitmapBundle(tool_id: number, bitmap: Pointer, disabledBitmap: Pointer, toggle: boolean, clientData: Pointer, shortHelpString: string | Pointer, longHelpString: string | Pointer): wxAuiToolBarItem | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof shortHelpString === "string") __s0 = createWxString(shortHelpString);
+      if (typeof longHelpString === "string") __s1 = createWxString(longHelpString);
+      const rawPtr = lib.symbols.wxAuiToolBar_AddToolByBitmapBundle(this._ptr, tool_id, bitmap, disabledBitmap, toggle ? 1 : 0, clientData, __s0 ? __s0.ptr : (shortHelpString as Pointer), __s1 ? __s1.ptr : (longHelpString as Pointer));
+      if (rawPtr === null) return null;
+      return new wxAuiToolBarItem(rawPtr, true);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
+  }
+
+  SetToolBitmapBundle(tool_id: number, bitmap: Pointer): void {
+    lib.symbols.wxAuiToolBar_SetToolBitmapBundle(this._ptr, tool_id, bitmap);
   }
 
 }

@@ -2,11 +2,14 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
 import { wxAuiDockArt } from "./wxAuiDockArt_gen.ts";
 import { wxAuiPaneInfo } from "./wxAuiPaneInfo_gen.ts";
 import { wxAuiPaneInfoArray } from "./wxAuiPaneInfoArray_gen.ts";
+import { wxRect } from "./wxRect_gen.ts";
+import { wxSize } from "./wxSize_gen.ts";
 import { wxString } from "./wxString_gen.ts";
 import { wxWindow } from "./wxWindow_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -79,24 +82,36 @@ export class wxAuiManager extends wxEvtHandler {
     return (lib.symbols.wxAuiManager_InsertPane(this._ptr, window, insertLocation, insertLevel) as number) !== 0;
   }
 
-  LoadPaneInfo(panePart: Pointer, pane: Pointer): void {
-    lib.symbols.wxAuiManager_LoadPaneInfo(this._ptr, panePart, pane);
+  LoadPaneInfo(panePart: string | Pointer, pane: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof panePart === "string") __s0 = createWxString(panePart);
+      lib.symbols.wxAuiManager_LoadPaneInfo(this._ptr, __s0 ? __s0.ptr : (panePart as Pointer), pane);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadPerspective(perspective: Pointer, update: boolean): boolean {
-    return (lib.symbols.wxAuiManager_LoadPerspective(this._ptr, perspective, update ? 1 : 0) as number) !== 0;
+  LoadPerspective(perspective: string | Pointer, update: boolean): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof perspective === "string") __s0 = createWxString(perspective);
+      return (lib.symbols.wxAuiManager_LoadPerspective(this._ptr, __s0 ? __s0.ptr : (perspective as Pointer), update ? 1 : 0) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SavePaneInfo(pane: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxAuiManager_SavePaneInfo(this._ptr, pane);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SavePerspective(): wxString | null {
     const rawPtr = lib.symbols.wxAuiManager_SavePerspective(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SaveLayout(serializer: Pointer): void {
@@ -135,8 +150,14 @@ export class wxAuiManager extends wxEvtHandler {
     lib.symbols.wxAuiManager_Update(this._ptr);
   }
 
-  AddPane(window: Pointer, direction: number, caption: Pointer): boolean {
-    return (lib.symbols.wxAuiManager_AddPane(this._ptr, window, direction, caption) as number) !== 0;
+  AddPane(window: Pointer, direction: number, caption: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof caption === "string") __s0 = createWxString(caption);
+      return (lib.symbols.wxAuiManager_AddPane(this._ptr, window, direction, __s0 ? __s0.ptr : (caption as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddPaneByPaneInfo(window: Pointer, paneInfo: Pointer): boolean {
@@ -153,10 +174,72 @@ export class wxAuiManager extends wxEvtHandler {
     return new wxAuiPaneInfo(rawPtr, true);
   }
 
-  GetPaneByName(name: Pointer): wxAuiPaneInfo | null {
-    const rawPtr = lib.symbols.wxAuiManager_GetPaneByName(this._ptr, name);
+  GetPaneByName(name: string | Pointer): wxAuiPaneInfo | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxAuiManager_GetPaneByName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxAuiPaneInfo(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  CanDockPanel(pane: Pointer): boolean {
+    return (lib.symbols.wxAuiManager_CanDockPanel(this._ptr, pane) as number) !== 0;
+  }
+
+  CalculateNewSplitSize(): wxSize | null {
+    const rawPtr = lib.symbols.wxAuiManager_CalculateNewSplitSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxAuiPaneInfo(rawPtr, true);
+    return new wxSize(rawPtr);
+  }
+
+  CalculateHintRect(paneWindow: Pointer, x: number, y: number, offsetX: number, offsetY: number): wxRect | null {
+    const rawPtr = lib.symbols.wxAuiManager_CalculateHintRect(this._ptr, paneWindow, x, y, offsetX, offsetY);
+    if (rawPtr === null) return null;
+    return new wxRect(rawPtr);
+  }
+
+  ClosePane(paneInfo: Pointer): void {
+    lib.symbols.wxAuiManager_ClosePane(this._ptr, paneInfo);
+  }
+
+  DrawHintRect(paneWindow: Pointer, x: number, y: number, offsetX: number, offsetY: number): void {
+    lib.symbols.wxAuiManager_DrawHintRect(this._ptr, paneWindow, x, y, offsetX, offsetY);
+  }
+
+  HasLiveResize(): boolean {
+    return (lib.symbols.wxAuiManager_HasLiveResize(this._ptr) as number) !== 0;
+  }
+
+  MaximizePane(paneInfo: Pointer): void {
+    lib.symbols.wxAuiManager_MaximizePane(this._ptr, paneInfo);
+  }
+
+  MinimizePane(paneInfo: Pointer): void {
+    lib.symbols.wxAuiManager_MinimizePane(this._ptr, paneInfo);
+  }
+
+  RestoreMaximizedPane(): void {
+    lib.symbols.wxAuiManager_RestoreMaximizedPane(this._ptr);
+  }
+
+  RestorePane(paneInfo: Pointer): void {
+    lib.symbols.wxAuiManager_RestorePane(this._ptr, paneInfo);
+  }
+
+  SplitPane(window: Pointer, newWindow: Pointer, direction: number, dropX: number, dropY: number): boolean {
+    return (lib.symbols.wxAuiManager_SplitPane(this._ptr, window, newWindow, direction, dropX, dropY) as number) !== 0;
+  }
+
+  StartPaneDrag(paneWindow: Pointer, offsetX: number, offsetY: number): void {
+    lib.symbols.wxAuiManager_StartPaneDrag(this._ptr, paneWindow, offsetX, offsetY);
+  }
+
+  UpdateHint(rect: Pointer): void {
+    lib.symbols.wxAuiManager_UpdateHint(this._ptr, rect);
   }
 
 }

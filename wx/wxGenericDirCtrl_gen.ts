@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -13,28 +14,40 @@ export class wxGenericDirCtrl extends wxControl {
     return this._ptr;
   }
 
-  CollapsePath(path: Pointer): boolean {
-    return (lib.symbols.wxGenericDirCtrl_CollapsePath(this._ptr, path) as number) !== 0;
+  CollapsePath(path: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      return (lib.symbols.wxGenericDirCtrl_CollapsePath(this._ptr, __s0 ? __s0.ptr : (path as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   CollapseTree(): void {
     lib.symbols.wxGenericDirCtrl_CollapseTree(this._ptr);
   }
 
-  ExpandPath(path: Pointer): boolean {
-    return (lib.symbols.wxGenericDirCtrl_ExpandPath(this._ptr, path) as number) !== 0;
+  ExpandPath(path: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      return (lib.symbols.wxGenericDirCtrl_ExpandPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetDefaultPath(): wxString | null {
     const rawPtr = lib.symbols.wxGenericDirCtrl_GetDefaultPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFilePath(): wxString | null {
     const rawPtr = lib.symbols.wxGenericDirCtrl_GetFilePath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFilePaths(paths: Pointer): void {
@@ -44,7 +57,7 @@ export class wxGenericDirCtrl extends wxControl {
   GetFilter(): wxString | null {
     const rawPtr = lib.symbols.wxGenericDirCtrl_GetFilter(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFilterIndex(): number {
@@ -58,7 +71,7 @@ export class wxGenericDirCtrl extends wxControl {
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxGenericDirCtrl_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPaths(paths: Pointer): void {
@@ -73,28 +86,52 @@ export class wxGenericDirCtrl extends wxControl {
     lib.symbols.wxGenericDirCtrl_ReCreateTree(this._ptr);
   }
 
-  SelectPath(path: Pointer, select: boolean): void {
-    lib.symbols.wxGenericDirCtrl_SelectPath(this._ptr, path, select ? 1 : 0);
+  SelectPath(path: string | Pointer, select: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxGenericDirCtrl_SelectPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer), select ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SelectPaths(paths: Pointer): void {
     lib.symbols.wxGenericDirCtrl_SelectPaths(this._ptr, paths);
   }
 
-  SetDefaultPath(path: Pointer): void {
-    lib.symbols.wxGenericDirCtrl_SetDefaultPath(this._ptr, path);
+  SetDefaultPath(path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxGenericDirCtrl_SetDefaultPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetFilter(filter: Pointer): void {
-    lib.symbols.wxGenericDirCtrl_SetFilter(this._ptr, filter);
+  SetFilter(filter: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filter === "string") __s0 = createWxString(filter);
+      lib.symbols.wxGenericDirCtrl_SetFilter(this._ptr, __s0 ? __s0.ptr : (filter as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFilterIndex(index: number): void {
     lib.symbols.wxGenericDirCtrl_SetFilterIndex(this._ptr, index);
   }
 
-  SetPath(path: Pointer): void {
-    lib.symbols.wxGenericDirCtrl_SetPath(this._ptr, path);
+  SetPath(path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxGenericDirCtrl_SetPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ShowHidden(show: boolean): void {
@@ -108,13 +145,22 @@ export class wxGenericDirCtrl extends wxControl {
   GetPathForItem(item: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxGenericDirCtrl_GetPathForItem(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }
 
-export function createWxGenericDirCtrl(parent: Pointer, id: number, dir: Pointer, x: number, y: number, width: number, height: number, style: bigint, filter: Pointer, defaultFilter: number): Pointer {
-    return lib.symbols.wxGenericDirCtrl_Create(parent, id, dir, x, y, width, height, style, filter, defaultFilter);
+export function createWxGenericDirCtrl(parent: Pointer, id: number, dir: string | Pointer, x: number, y: number, width: number, height: number, style: bigint, filter: string | Pointer, defaultFilter: number): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      if (typeof filter === "string") __s1 = createWxString(filter);
+      return lib.symbols.wxGenericDirCtrl_Create(parent, id, __s0 ? __s0.ptr : (dir as Pointer), x, y, width, height, style, __s1 ? __s1.ptr : (filter as Pointer), defaultFilter);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

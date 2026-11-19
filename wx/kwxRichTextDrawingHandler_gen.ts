@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextDrawingHandler } from "./wxRichTextDrawingHandler_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -42,8 +43,34 @@ export class kwxRichTextDrawingHandler extends wxRichTextDrawingHandler {
     lib.symbols.kwxRichTextDrawingHandler_SetOnGetVirtualText(this._ptr, pFunction);
   }
 
-  SetVirtualTextResult(text: Pointer): void {
-    lib.symbols.kwxRichTextDrawingHandler_SetVirtualTextResult(this._ptr, text);
+  SetOnHasVirtualAttributesWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextDrawingHandler_SetOnHasVirtualAttributesWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetVirtualAttributesWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextDrawingHandler_SetOnGetVirtualAttributesWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetVirtualSubobjectAttributesCountWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextDrawingHandler_SetOnGetVirtualSubobjectAttributesCountWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnHasVirtualTextWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextDrawingHandler_SetOnHasVirtualTextWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnGetVirtualTextWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxRichTextDrawingHandler_SetOnGetVirtualTextWithData(this._ptr, pFunction, data);
+  }
+
+  SetVirtualTextResult(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.kwxRichTextDrawingHandler_SetVirtualTextResult(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetHasVirtualAttributesResult(result: boolean): void {
@@ -64,10 +91,16 @@ export class kwxRichTextDrawingHandler extends wxRichTextDrawingHandler {
 
 }
 
-export function createKwxRichTextDrawingHandler(pObject: Pointer, name: Pointer): kwxRichTextDrawingHandler | null {
-    const rawPtr = lib.symbols.kwxRichTextDrawingHandler_Create(pObject, name);
-    if (rawPtr === null) return null;
-    return new kwxRichTextDrawingHandler(rawPtr);
+export function createKwxRichTextDrawingHandler(pObject: Pointer, name: string | Pointer): kwxRichTextDrawingHandler | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.kwxRichTextDrawingHandler_Create(pObject, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new kwxRichTextDrawingHandler(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPanel } from "./wxPanel_gen.ts";
 import { wxArrayInt } from "./wxArrayInt_gen.ts";
@@ -27,16 +28,28 @@ export class wxPropertyGridManager extends wxPanel {
     return this._ptr;
   }
 
-  AddPageObject(label: Pointer, bitmap: Pointer, page: Pointer): wxPropertyGridPage | null {
-    const rawPtr = lib.symbols.wxPropertyGridManager_AddPageObject(this._ptr, label, bitmap, page);
-    if (rawPtr === null) return null;
-    return new wxPropertyGridPage(rawPtr, true);
+  AddPageObject(label: string | Pointer, bitmap: Pointer, page: Pointer): wxPropertyGridPage | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxPropertyGridManager_AddPageObject(this._ptr, __s0 ? __s0.ptr : (label as Pointer), bitmap, page);
+      if (rawPtr === null) return null;
+      return new wxPropertyGridPage(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertPageObject(index: number, label: Pointer, bitmap: Pointer, page: Pointer): wxPropertyGridPage | null {
-    const rawPtr = lib.symbols.wxPropertyGridManager_InsertPageObject(this._ptr, index, label, bitmap, page);
-    if (rawPtr === null) return null;
-    return new wxPropertyGridPage(rawPtr, true);
+  InsertPageObject(index: number, label: string | Pointer, bitmap: Pointer, page: Pointer): wxPropertyGridPage | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxPropertyGridManager_InsertPageObject(this._ptr, index, __s0 ? __s0.ptr : (label as Pointer), bitmap, page);
+      if (rawPtr === null) return null;
+      return new wxPropertyGridPage(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetColumnCount(page: number): number {
@@ -47,20 +60,38 @@ export class wxPropertyGridManager extends wxPanel {
     lib.symbols.wxPropertyGridManager_SetColumnCount(this._ptr, colCount, page);
   }
 
-  SetColumnTitle(idx: number, title: Pointer): void {
-    lib.symbols.wxPropertyGridManager_SetColumnTitle(this._ptr, idx, title);
+  SetColumnTitle(idx: number, title: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      lib.symbols.wxPropertyGridManager_SetColumnTitle(this._ptr, idx, __s0 ? __s0.ptr : (title as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddPage(label: Pointer, bmp: Pointer): wxPropertyGridPage | null {
-    const rawPtr = lib.symbols.wxPropertyGridManager_AddPage(this._ptr, label, bmp);
-    if (rawPtr === null) return null;
-    return new wxPropertyGridPage(rawPtr, true);
+  AddPage(label: string | Pointer, bmp: Pointer): wxPropertyGridPage | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxPropertyGridManager_AddPage(this._ptr, __s0 ? __s0.ptr : (label as Pointer), bmp);
+      if (rawPtr === null) return null;
+      return new wxPropertyGridPage(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertPage(index: number, label: Pointer, bmp: Pointer): wxPropertyGridPage | null {
-    const rawPtr = lib.symbols.wxPropertyGridManager_InsertPage(this._ptr, index, label, bmp);
-    if (rawPtr === null) return null;
-    return new wxPropertyGridPage(rawPtr, true);
+  InsertPage(index: number, label: string | Pointer, bmp: Pointer): wxPropertyGridPage | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxPropertyGridManager_InsertPage(this._ptr, index, __s0 ? __s0.ptr : (label as Pointer), bmp);
+      if (rawPtr === null) return null;
+      return new wxPropertyGridPage(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   RemovePage(page: number): boolean {
@@ -81,14 +112,20 @@ export class wxPropertyGridManager extends wxPanel {
     return new wxPropertyGridPage(rawPtr, true);
   }
 
-  GetPageByName(name: Pointer): number {
-    return lib.symbols.wxPropertyGridManager_GetPageByName(this._ptr, name);
+  GetPageByName(name: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxPropertyGridManager_GetPageByName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetPageName(index: number): wxString | null {
     const rawPtr = lib.symbols.wxPropertyGridManager_GetPageName(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetSelectedPage(): number {
@@ -99,8 +136,14 @@ export class wxPropertyGridManager extends wxPanel {
     lib.symbols.wxPropertyGridManager_SelectPage(this._ptr, index);
   }
 
-  SelectPageByLabel(label: Pointer): void {
-    lib.symbols.wxPropertyGridManager_SelectPageByLabel(this._ptr, label);
+  SelectPageByLabel(label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxPropertyGridManager_SelectPageByLabel(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetGrid(): wxPropertyGrid | null {
@@ -145,48 +188,81 @@ export class wxPropertyGridManager extends wxPanel {
     lib.symbols.wxPropertyGridManager_Clear(this._ptr);
   }
 
-  GetPropertyByName(name: Pointer): wxPGProperty | null {
-    const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyByName(this._ptr, name);
-    if (rawPtr === null) return null;
-    return new wxPGProperty(rawPtr, true);
+  GetPropertyByName(name: string | Pointer): wxPGProperty | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyByName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxPGProperty(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetProperty(name: Pointer): Pointer {
-    return lib.symbols.wxPropertyGridInterface_GetProperty(this._ptr, name);
+  GetProperty(name: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxPropertyGridInterface_GetProperty(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPropertyAttributeAll(attrName: Pointer, value: Pointer): void {
-    lib.symbols.wxPropertyGridInterface_SetPropertyAttributeAll(this._ptr, attrName, value);
+  SetPropertyAttributeAll(attrName: string | Pointer, value: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof attrName === "string") __s0 = createWxString(attrName);
+      lib.symbols.wxPropertyGridInterface_SetPropertyAttributeAll(this._ptr, __s0 ? __s0.ptr : (attrName as Pointer), value);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetPropertyByName2(name: Pointer, subname: Pointer): wxPGProperty | null {
-    const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyByName2(this._ptr, name, subname);
-    if (rawPtr === null) return null;
-    return new wxPGProperty(rawPtr, true);
+  GetPropertyByName2(name: string | Pointer, subname: string | Pointer): wxPGProperty | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof subname === "string") __s1 = createWxString(subname);
+      const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyByName2(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (subname as Pointer));
+      if (rawPtr === null) return null;
+      return new wxPGProperty(rawPtr, true);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  GetPropertyByLabel(label: Pointer): wxPGProperty | null {
-    const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyByLabel(this._ptr, label);
-    if (rawPtr === null) return null;
-    return new wxPGProperty(rawPtr, true);
+  GetPropertyByLabel(label: string | Pointer): wxPGProperty | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyByLabel(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+      if (rawPtr === null) return null;
+      return new wxPGProperty(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetPropertyName(property: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyName(this._ptr, property);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPropertyLabel(id: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyLabel(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPropertyHelpString(id: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyHelpString(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPropertyParent(id: Pointer): wxPGProperty | null {
@@ -332,13 +408,13 @@ export class wxPropertyGridManager extends wxPanel {
   GetPropertyValue(id: Pointer): wxVariant | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyValue(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxVariant(rawPtr, true);
+    return new wxVariant(rawPtr);
   }
 
   GetPropertyValueAsString(id: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyValueAsString(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPropertyValueAsLong(id: Pointer): bigint {
@@ -361,8 +437,14 @@ export class wxPropertyGridManager extends wxPanel {
     lib.symbols.wxPropertyGridInterface_SetPropertyValue(this._ptr, id, value);
   }
 
-  SetPropertyValueString(id: Pointer, value: Pointer): void {
-    lib.symbols.wxPropertyGridInterface_SetPropertyValueString(this._ptr, id, value);
+  SetPropertyValueString(id: Pointer, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxPropertyGridInterface_SetPropertyValueString(this._ptr, id, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetPropertyValueLong(id: Pointer, value: bigint): void {
@@ -385,16 +467,34 @@ export class wxPropertyGridManager extends wxPanel {
     lib.symbols.wxPropertyGridInterface_SetPropertyValueUnspecified(this._ptr, id);
   }
 
-  SetPropertyLabel(id: Pointer, label: Pointer): void {
-    lib.symbols.wxPropertyGridInterface_SetPropertyLabel(this._ptr, id, label);
+  SetPropertyLabel(id: Pointer, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxPropertyGridInterface_SetPropertyLabel(this._ptr, id, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPropertyName(id: Pointer, name: Pointer): void {
-    lib.symbols.wxPropertyGridInterface_SetPropertyName(this._ptr, id, name);
+  SetPropertyName(id: Pointer, name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxPropertyGridInterface_SetPropertyName(this._ptr, id, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPropertyHelpString(id: Pointer, text: Pointer): void {
-    lib.symbols.wxPropertyGridInterface_SetPropertyHelpString(this._ptr, id, text);
+  SetPropertyHelpString(id: Pointer, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxPropertyGridInterface_SetPropertyHelpString(this._ptr, id, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetPropertyReadOnly(id: Pointer, read_only: boolean, flags: number): void {
@@ -405,16 +505,28 @@ export class wxPropertyGridManager extends wxPanel {
     lib.symbols.wxPropertyGridInterface_SetPropertyEditor(this._ptr, id, editor);
   }
 
-  SetPropertyEditorByName(id: Pointer, name: Pointer): void {
-    lib.symbols.wxPropertyGridInterface_SetPropertyEditorByName(this._ptr, id, name);
+  SetPropertyEditorByName(id: Pointer, name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxPropertyGridInterface_SetPropertyEditorByName(this._ptr, id, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetPropertyImage(id: Pointer, bitmap: Pointer): void {
     lib.symbols.wxPropertyGridInterface_SetPropertyImage(this._ptr, id, bitmap);
   }
 
-  SetPropertyCell(id: Pointer, column: number, text: Pointer, bitmap: Pointer, fg_col: Pointer, bg_col: Pointer): void {
-    lib.symbols.wxPropertyGridInterface_SetPropertyCell(this._ptr, id, column, text, bitmap, fg_col, bg_col);
+  SetPropertyCell(id: Pointer, column: number, text: string | Pointer, bitmap: Pointer, fg_col: Pointer, bg_col: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxPropertyGridInterface_SetPropertyCell(this._ptr, id, column, __s0 ? __s0.ptr : (text as Pointer), bitmap, fg_col, bg_col);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsPropertyCategory(id: Pointer): boolean {
@@ -456,11 +568,17 @@ export class wxPropertyGridManager extends wxPanel {
   SaveEditableState(included_states: number): wxString | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_SaveEditableState(this._ptr, included_states);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  RestoreEditableState(src: Pointer, restore_states: number): boolean {
-    return (lib.symbols.wxPropertyGridInterface_RestoreEditableState(this._ptr, src, restore_states) as number) !== 0;
+  RestoreEditableState(src: string | Pointer, restore_states: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof src === "string") __s0 = createWxString(src);
+      return (lib.symbols.wxPropertyGridInterface_RestoreEditableState(this._ptr, __s0 ? __s0.ptr : (src as Pointer), restore_states) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Sort(flags: number): void {
@@ -483,14 +601,26 @@ export class wxPropertyGridManager extends wxPanel {
     return (lib.symbols.wxPropertyGridInterface_ChangePropertyValue(this._ptr, id, value) as number) !== 0;
   }
 
-  GetPropertyAttribute(id: Pointer, attrName: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyAttribute(this._ptr, id, attrName);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr, true);
+  GetPropertyAttribute(id: Pointer, attrName: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof attrName === "string") __s0 = createWxString(attrName);
+      const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyAttribute(this._ptr, id, __s0 ? __s0.ptr : (attrName as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPropertyAttribute(id: Pointer, attrName: Pointer, value: Pointer, flags: number): void {
-    lib.symbols.wxPropertyGridInterface_SetPropertyAttribute(this._ptr, id, attrName, value, flags);
+  SetPropertyAttribute(id: Pointer, attrName: string | Pointer, value: Pointer, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof attrName === "string") __s0 = createWxString(attrName);
+      lib.symbols.wxPropertyGridInterface_SetPropertyAttribute(this._ptr, id, __s0 ? __s0.ptr : (attrName as Pointer), value, flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetPropertyClientData(id: Pointer): Pointer {
@@ -511,10 +641,16 @@ export class wxPropertyGridManager extends wxPanel {
     lib.symbols.wxPropertyGridInterface_SetPropertyValidator(this._ptr, id, validator);
   }
 
-  GetPropertyValues(listname: Pointer, baseparent: Pointer, flags: number): wxVariant | null {
-    const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyValues(this._ptr, listname, baseparent, flags);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr, true);
+  GetPropertyValues(listname: string | Pointer, baseparent: Pointer, flags: number): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof listname === "string") __s0 = createWxString(listname);
+      const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyValues(this._ptr, __s0 ? __s0.ptr : (listname as Pointer), baseparent, flags);
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetPropertyValues(list: Pointer, baseparent: Pointer): void {
@@ -536,13 +672,13 @@ export class wxPropertyGridManager extends wxPanel {
   GetPropertyBackgroundColour(id: Pointer): wxColour | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyBackgroundColour(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetPropertyTextColour(id: Pointer): wxColour | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyTextColour(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   SetPropertyMaxLength(id: Pointer, maxLen: number): boolean {
@@ -564,19 +700,19 @@ export class wxPropertyGridManager extends wxPanel {
   GetPropertyValueAsArrayString(id: Pointer): wxArrayString | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyValueAsArrayString(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxArrayString(rawPtr, true);
+    return new wxArrayString(rawPtr);
   }
 
   GetPropertyValueAsArrayInt(id: Pointer): wxArrayInt | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyValueAsArrayInt(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxArrayInt(rawPtr, true);
+    return new wxArrayInt(rawPtr);
   }
 
   GetPropertyValueAsDateTime(id: Pointer): wxDateTime | null {
     const rawPtr = lib.symbols.wxPropertyGridInterface_GetPropertyValueAsDateTime(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxDateTime(rawPtr, true);
+    return new wxDateTime(rawPtr);
   }
 
 }

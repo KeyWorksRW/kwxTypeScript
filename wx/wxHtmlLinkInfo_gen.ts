@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxHtmlCell } from "./wxHtmlCell_gen.ts";
@@ -28,13 +29,13 @@ export class wxHtmlLinkInfo extends wxObject {
   GetHref(): wxString | null {
     const rawPtr = lib.symbols.wxHtmlLinkInfo_GetHref(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetTarget(): wxString | null {
     const rawPtr = lib.symbols.wxHtmlLinkInfo_GetTarget(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetEvent(): wxMouseEvent | null {
@@ -61,10 +62,19 @@ export function createWxHtmlLinkInfo(): wxHtmlLinkInfo | null {
     return new wxHtmlLinkInfo(rawPtr);
 }
 
-export function createWxHtmlLinkInfoWithHref(href: Pointer, target: Pointer): wxHtmlLinkInfo | null {
-    const rawPtr = lib.symbols.wxHtmlLinkInfo_CreateWithHref(href, target);
-    if (rawPtr === null) return null;
-    return new wxHtmlLinkInfo(rawPtr);
+export function createWxHtmlLinkInfoWithHref(href: string | Pointer, target: string | Pointer): wxHtmlLinkInfo | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof href === "string") __s0 = createWxString(href);
+      if (typeof target === "string") __s1 = createWxString(target);
+      const rawPtr = lib.symbols.wxHtmlLinkInfo_CreateWithHref(__s0 ? __s0.ptr : (href as Pointer), __s1 ? __s1.ptr : (target as Pointer));
+      if (rawPtr === null) return null;
+      return new wxHtmlLinkInfo(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

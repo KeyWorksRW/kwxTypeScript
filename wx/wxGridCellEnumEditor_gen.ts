@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxGridCellChoiceEditor } from "./wxGridCellChoiceEditor_gen.ts";
 
@@ -25,16 +26,28 @@ export class wxGridCellEnumEditor extends wxGridCellChoiceEditor {
     lib.symbols.wxGridCellEnumEditor_Create(this._ptr, parent, window_id, evt_handler);
   }
 
-  override SetParameters(params: Pointer): void {
-    lib.symbols.wxGridCellEnumEditor_SetParameters(this._ptr, params);
+  override SetParameters(params: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof params === "string") __s0 = createWxString(params);
+      lib.symbols.wxGridCellEnumEditor_SetParameters(this._ptr, __s0 ? __s0.ptr : (params as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxGridCellEnumEditor(choices: Pointer): wxGridCellEnumEditor | null {
-    const rawPtr = lib.symbols.wxGridCellEnumEditor_Ctor(choices);
-    if (rawPtr === null) return null;
-    return new wxGridCellEnumEditor(rawPtr);
+export function createWxGridCellEnumEditor(choices: string | Pointer): wxGridCellEnumEditor | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof choices === "string") __s0 = createWxString(choices);
+      const rawPtr = lib.symbols.wxGridCellEnumEditor_Ctor(__s0 ? __s0.ptr : (choices as Pointer));
+      if (rawPtr === null) return null;
+      return new wxGridCellEnumEditor(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

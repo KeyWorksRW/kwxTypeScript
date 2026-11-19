@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -16,21 +17,33 @@ export class wxToolTip extends wxObject {
   GetTip(): wxString | null {
     const rawPtr = lib.symbols.wxToolTip_GetTip(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetWindow(): Pointer {
     return lib.symbols.wxToolTip_GetWindow(this._ptr);
   }
 
-  SetTip(tip: Pointer): void {
-    lib.symbols.wxToolTip_SetTip(this._ptr, tip);
+  SetTip(tip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof tip === "string") __s0 = createWxString(tip);
+      lib.symbols.wxToolTip_SetTip(this._ptr, __s0 ? __s0.ptr : (tip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxToolTip(tip: Pointer): Pointer {
-    return lib.symbols.wxToolTip_Create(tip);
+export function createWxToolTip(tip: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof tip === "string") __s0 = createWxString(tip);
+      return lib.symbols.wxToolTip_Create(__s0 ? __s0.ptr : (tip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

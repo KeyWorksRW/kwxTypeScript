@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -20,8 +21,14 @@ export class wxHelpControllerBase extends wxObject {
     return (lib.symbols.wxHelpControllerBase_DisplaySection(this._ptr, sectionNo) as number) !== 0;
   }
 
-  KeywordSearch(k: Pointer, mode: number): boolean {
-    return (lib.symbols.wxHelpControllerBase_KeywordSearch(this._ptr, k, mode) as number) !== 0;
+  KeywordSearch(k: string | Pointer, mode: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof k === "string") __s0 = createWxString(k);
+      return (lib.symbols.wxHelpControllerBase_KeywordSearch(this._ptr, __s0 ? __s0.ptr : (k as Pointer), mode) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

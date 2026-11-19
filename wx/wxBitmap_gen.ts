@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxImage } from "./wxImage_gen.ts";
@@ -33,7 +34,7 @@ export class wxBitmap extends wxObject {
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxBitmap_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetScaleFactor(scale: number): void {
@@ -47,13 +48,13 @@ export class wxBitmap extends wxObject {
   GetDIPSize(): wxSize | null {
     const rawPtr = lib.symbols.wxBitmap_GetDIPSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetLogicalSize(): wxSize | null {
     const rawPtr = lib.symbols.wxBitmap_GetLogicalSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetLogicalWidth(): number {
@@ -71,19 +72,19 @@ export class wxBitmap extends wxObject {
   ConvertToImage(): wxImage | null {
     const rawPtr = lib.symbols.wxBitmap_ConvertToImage(this._ptr);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ConvertToDisabled(brightness: number): wxBitmap | null {
     const rawPtr = lib.symbols.wxBitmap_ConvertToDisabled(this._ptr, brightness);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetPalette(): wxPalette | null {
     const rawPtr = lib.symbols.wxBitmap_GetPalette(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPalette(rawPtr, true);
+    return new wxPalette(rawPtr);
   }
 
   SetPalette(palette: Pointer): void {
@@ -136,16 +137,28 @@ export class wxBitmap extends wxObject {
     return lib.symbols.wxBitmap_GetWidth(this._ptr);
   }
 
-  LoadFile(name: Pointer, type_: number): number {
-    return lib.symbols.wxBitmap_LoadFile(this._ptr, name, type_);
+  LoadFile(name: string | Pointer, type_: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxBitmap_LoadFile(this._ptr, __s0 ? __s0.ptr : (name as Pointer), type_);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsOk(): boolean {
     return (lib.symbols.wxBitmap_IsOk(this._ptr) as number) !== 0;
   }
 
-  SaveFile(name: Pointer, type_: number, cmap: Pointer): number {
-    return lib.symbols.wxBitmap_SaveFile(this._ptr, name, type_, cmap);
+  SaveFile(name: string | Pointer, type_: number, cmap: Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxBitmap_SaveFile(this._ptr, __s0 ? __s0.ptr : (name as Pointer), type_, cmap);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetMask(mask: Pointer): void {
@@ -184,10 +197,22 @@ export function createWxBitmapFromXPM(data: Pointer): wxBitmap | null {
     return new wxBitmap(rawPtr);
 }
 
-export function createWxBitmapLoad(name: Pointer, type_: number): wxBitmap | null {
-    const rawPtr = lib.symbols.wxBitmap_CreateLoad(name, type_);
+export function createWxBitmapFromXPMString(xpm: Pointer): wxBitmap | null {
+    const rawPtr = lib.symbols.wxBitmap_CreateFromXPMString(xpm);
     if (rawPtr === null) return null;
     return new wxBitmap(rawPtr);
+}
+
+export function createWxBitmapLoad(name: string | Pointer, type_: number): wxBitmap | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxBitmap_CreateLoad(__s0 ? __s0.ptr : (name as Pointer), type_);
+      if (rawPtr === null) return null;
+      return new wxBitmap(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxBitmapFromData(data: Pointer, size: bigint, bitmap_type: number): wxBitmap | null {

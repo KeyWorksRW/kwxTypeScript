@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -18,8 +19,14 @@ export class wxFileDialog extends wxDialog {
     return (lib.symbols.wxFileDialog_SetExtraControlCreator(this._ptr, pFunction) as number) !== 0;
   }
 
-  AddShortcut(directory: Pointer, flags: number): boolean {
-    return (lib.symbols.wxFileDialog_AddShortcut(this._ptr, directory, flags) as number) !== 0;
+  AddShortcut(directory: string | Pointer, flags: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof directory === "string") __s0 = createWxString(directory);
+      return (lib.symbols.wxFileDialog_AddShortcut(this._ptr, __s0 ? __s0.ptr : (directory as Pointer), flags) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetCurrentlySelectedFilterIndex(): number {
@@ -33,13 +40,13 @@ export class wxFileDialog extends wxDialog {
   GetDirectory(): wxString | null {
     const rawPtr = lib.symbols.wxFileDialog_GetDirectory(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFilename(): wxString | null {
     const rawPtr = lib.symbols.wxFileDialog_GetFilename(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFilenames(paths: Pointer, capacity: number): number {
@@ -53,13 +60,13 @@ export class wxFileDialog extends wxDialog {
   GetMessage(): wxString | null {
     const rawPtr = lib.symbols.wxFileDialog_GetMessage(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxFileDialog_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPaths(paths: Pointer, capacity: number): number {
@@ -73,41 +80,71 @@ export class wxFileDialog extends wxDialog {
   GetWildcard(): wxString | null {
     const rawPtr = lib.symbols.wxFileDialog_GetWildcard(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetDirectory(dir: Pointer): void {
-    lib.symbols.wxFileDialog_SetDirectory(this._ptr, dir);
+  SetDirectory(dir: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof dir === "string") __s0 = createWxString(dir);
+      lib.symbols.wxFileDialog_SetDirectory(this._ptr, __s0 ? __s0.ptr : (dir as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetFilename(name: Pointer): void {
-    lib.symbols.wxFileDialog_SetFilename(this._ptr, name);
+  SetFilename(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxFileDialog_SetFilename(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFilterIndex(filterIndex: number): void {
     lib.symbols.wxFileDialog_SetFilterIndex(this._ptr, filterIndex);
   }
 
-  SetMessage(message: Pointer): void {
-    lib.symbols.wxFileDialog_SetMessage(this._ptr, message);
+  SetMessage(message: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      lib.symbols.wxFileDialog_SetMessage(this._ptr, __s0 ? __s0.ptr : (message as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPath(path: Pointer): void {
-    lib.symbols.wxFileDialog_SetPath(this._ptr, path);
+  SetPath(path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxFileDialog_SetPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetStyle(style: number): void {
     lib.symbols.wxFileDialog_SetStyle(this._ptr, style);
   }
 
-  SetWildcard(wildCard: Pointer): void {
-    lib.symbols.wxFileDialog_SetWildcard(this._ptr, wildCard);
+  SetWildcard(wildCard: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof wildCard === "string") __s0 = createWxString(wildCard);
+      lib.symbols.wxFileDialog_SetWildcard(this._ptr, __s0 ? __s0.ptr : (wildCard as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetCurrentlySelectedFilename(): wxString | null {
     const rawPtr = lib.symbols.wxFileDialog_GetCurrentlySelectedFilename(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetExtraControl(): wxWindow | null {
@@ -118,10 +155,25 @@ export class wxFileDialog extends wxDialog {
 
 }
 
-export function createWxFileDialog(parent: Pointer, message: Pointer, directory: Pointer, files: Pointer, weekday: Pointer, left: number, top: number, style: number, sz_w: number, sz_h: number): wxFileDialog | null {
-    const rawPtr = lib.symbols.wxFileDialog_Create(parent, message, directory, files, weekday, left, top, style, sz_w, sz_h);
-    if (rawPtr === null) return null;
-    return new wxFileDialog(rawPtr);
+export function createWxFileDialog(parent: Pointer, message: string | Pointer, directory: string | Pointer, files: string | Pointer, weekday: string | Pointer, left: number, top: number, style: number, sz_w: number, sz_h: number): wxFileDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    let __s3: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof directory === "string") __s1 = createWxString(directory);
+      if (typeof files === "string") __s2 = createWxString(files);
+      if (typeof weekday === "string") __s3 = createWxString(weekday);
+      const rawPtr = lib.symbols.wxFileDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (directory as Pointer), __s2 ? __s2.ptr : (files as Pointer), __s3 ? __s3.ptr : (weekday as Pointer), left, top, style, sz_w, sz_h);
+      if (rawPtr === null) return null;
+      return new wxFileDialog(rawPtr);
+    } finally {
+      __s3?.Delete();
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

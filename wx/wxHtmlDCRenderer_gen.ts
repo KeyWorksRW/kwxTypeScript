@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -30,12 +31,30 @@ export class wxHtmlDCRenderer extends wxObject {
     lib.symbols.wxHtmlDCRenderer_SetSize(this._ptr, width, height);
   }
 
-  SetHtmlText(html: Pointer, basepath: Pointer, isdir: boolean): void {
-    lib.symbols.wxHtmlDCRenderer_SetHtmlText(this._ptr, html, basepath, isdir ? 1 : 0);
+  SetHtmlText(html: string | Pointer, basepath: string | Pointer, isdir: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof html === "string") __s0 = createWxString(html);
+      if (typeof basepath === "string") __s1 = createWxString(basepath);
+      lib.symbols.wxHtmlDCRenderer_SetHtmlText(this._ptr, __s0 ? __s0.ptr : (html as Pointer), __s1 ? __s1.ptr : (basepath as Pointer), isdir ? 1 : 0);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetStandardFonts(size: number, normalFace: Pointer, fixedFace: Pointer): void {
-    lib.symbols.wxHtmlDCRenderer_SetStandardFonts(this._ptr, size, normalFace, fixedFace);
+  SetStandardFonts(size: number, normalFace: string | Pointer, fixedFace: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof normalFace === "string") __s0 = createWxString(normalFace);
+      if (typeof fixedFace === "string") __s1 = createWxString(fixedFace);
+      lib.symbols.wxHtmlDCRenderer_SetStandardFonts(this._ptr, size, __s0 ? __s0.ptr : (normalFace as Pointer), __s1 ? __s1.ptr : (fixedFace as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   FindNextPageBreak(pos: number): number {

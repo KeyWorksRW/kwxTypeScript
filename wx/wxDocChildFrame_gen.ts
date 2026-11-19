@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxFrame } from "./wxFrame_gen.ts";
 import { wxDocument } from "./wxDocument_gen.ts";
@@ -36,10 +37,16 @@ export class wxDocChildFrame extends wxFrame {
 
 }
 
-export function createWxDocChildFrame(doc: Pointer, view: Pointer, parent: Pointer, id: number, title: Pointer, x: number, y: number, width: number, height: number, style: number): wxDocChildFrame | null {
-    const rawPtr = lib.symbols.wxDocChildFrame_Create(doc, view, parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxDocChildFrame(rawPtr);
+export function createWxDocChildFrame(doc: Pointer, view: Pointer, parent: Pointer, id: number, title: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxDocChildFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxDocChildFrame_Create(doc, view, parent, id, __s0 ? __s0.ptr : (title as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxDocChildFrame(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

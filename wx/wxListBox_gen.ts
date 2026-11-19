@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxClientData } from "./wxClientData_gen.ts";
@@ -14,8 +15,14 @@ export class wxListBox extends wxControl {
     return this._ptr;
   }
 
-  Append(item: Pointer): void {
-    lib.symbols.wxListBox_Append(this._ptr, item);
+  Append(item: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      lib.symbols.wxListBox_Append(this._ptr, __s0 ? __s0.ptr : (item as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetItem(n: bigint): Pointer {
@@ -26,8 +33,14 @@ export class wxListBox extends wxControl {
     return (lib.symbols.wxListBox_SetFont(this._ptr, font) as number) !== 0;
   }
 
-  AppendData(item: Pointer, data: Pointer): void {
-    lib.symbols.wxListBox_AppendData(this._ptr, item, data);
+  AppendData(item: string | Pointer, data: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      lib.symbols.wxListBox_AppendData(this._ptr, __s0 ? __s0.ptr : (item as Pointer), data);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Clear(): void {
@@ -39,8 +52,14 @@ export class wxListBox extends wxControl {
     lib.symbols.wxListBox_Delete(this._ptr, index);
   }
 
-  FindString(str: Pointer): number {
-    return lib.symbols.wxListBox_FindString(this._ptr, str);
+  FindString(str: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      return lib.symbols.wxListBox_FindString(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetItemClientData(index: number): wxClientData | null {
@@ -64,7 +83,7 @@ export class wxListBox extends wxControl {
   GetString(index: number): wxString | null {
     const rawPtr = lib.symbols.wxListBox_GetString(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   InsertItems(items: Pointer, pos: number, count: number): void {
@@ -87,12 +106,24 @@ export class wxListBox extends wxControl {
     lib.symbols.wxListBox_SetSelection(this._ptr, index, select ? 1 : 0);
   }
 
-  SetString(index: number, str: Pointer): void {
-    lib.symbols.wxListBox_SetString(this._ptr, index, str);
+  SetString(index: number, str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxListBox_SetString(this._ptr, index, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetStringSelection(str: Pointer, sel: boolean): void {
-    lib.symbols.wxListBox_SetStringSelection(this._ptr, str, sel ? 1 : 0);
+  SetStringSelection(str: string | Pointer, sel: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxListBox_SetStringSelection(this._ptr, __s0 ? __s0.ptr : (str as Pointer), sel ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EnsureVisible(index: number): void {
@@ -111,8 +142,14 @@ export class wxListBox extends wxControl {
     return lib.symbols.wxListBox_GetCountPerPage(this._ptr);
   }
 
-  AppendString(item: Pointer): void {
-    lib.symbols.wxItemContainer_AppendString(this._ptr, item);
+  AppendString(item: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      lib.symbols.wxItemContainer_AppendString(this._ptr, __s0 ? __s0.ptr : (item as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetClientObject(n: number): wxClientData | null {
@@ -146,7 +183,7 @@ export class wxListBox extends wxControl {
   GetStringSelection(): wxString | null {
     const rawPtr = lib.symbols.wxItemContainer_GetStringSelection(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Select(n: number): void {
@@ -157,8 +194,14 @@ export class wxListBox extends wxControl {
     return lib.symbols.wxItemContainer_AppendItems(this._ptr, count, items);
   }
 
-  Insert(item: Pointer, pos: number): number {
-    return lib.symbols.wxItemContainer_Insert(this._ptr, item, pos);
+  Insert(item: string | Pointer, pos: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxItemContainer_Insert(this._ptr, __s0 ? __s0.ptr : (item as Pointer), pos);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Set(count: number, items: Pointer): void {

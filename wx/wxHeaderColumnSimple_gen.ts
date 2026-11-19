@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -45,7 +46,7 @@ export class wxHeaderColumnSimple {
   GetTitle(): wxString | null {
     const rawPtr = lib.symbols.wxHeaderColumnSimple_GetTitle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetWidth(): number {
@@ -80,8 +81,14 @@ export class wxHeaderColumnSimple {
     lib.symbols.wxHeaderColumnSimple_SetSortOrder(this._ptr, ascending ? 1 : 0);
   }
 
-  SetTitle(title: Pointer): void {
-    lib.symbols.wxHeaderColumnSimple_SetTitle(this._ptr, title);
+  SetTitle(title: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      lib.symbols.wxHeaderColumnSimple_SetTitle(this._ptr, __s0 ? __s0.ptr : (title as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetWidth(width: number): void {
@@ -90,8 +97,14 @@ export class wxHeaderColumnSimple {
 
 }
 
-export function createWxHeaderColumnSimple(title: Pointer, width: number, align: number, flags: number): Pointer {
-    return lib.symbols.wxHeaderColumnSimple_Create(title, width, align, flags);
+export function createWxHeaderColumnSimple(title: string | Pointer, width: number, align: number, flags: number): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      return lib.symbols.wxHeaderColumnSimple_Create(__s0 ? __s0.ptr : (title as Pointer), width, align, flags);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxHeaderColumnSimpleWithBitmap(bitmap: Pointer, width: number, align: number, flags: number): Pointer {

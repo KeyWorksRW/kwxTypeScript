@@ -2,8 +2,10 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
+import { wxSize } from "./wxSize_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
 
 export class wxMetafile extends wxObject {
@@ -34,12 +36,32 @@ export class wxMetafile extends wxObject {
     return (lib.symbols.wxMetafile_SetClipboard(this._ptr, width, height) as number) !== 0;
   }
 
+  GetWidth(): number {
+    return lib.symbols.wxMetafile_GetWidth(this._ptr);
+  }
+
+  GetHeight(): number {
+    return lib.symbols.wxMetafile_GetHeight(this._ptr);
+  }
+
+  GetSize(): wxSize | null {
+    const rawPtr = lib.symbols.wxMetafile_GetSize(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxSize(rawPtr);
+  }
+
 }
 
-export function createWxMetafile(filePath: Pointer): wxMetafile | null {
-    const rawPtr = lib.symbols.wxMetafile_Create(filePath);
-    if (rawPtr === null) return null;
-    return new wxMetafile(rawPtr);
+export function createWxMetafile(filePath: string | Pointer): wxMetafile | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filePath === "string") __s0 = createWxString(filePath);
+      const rawPtr = lib.symbols.wxMetafile_Create(__s0 ? __s0.ptr : (filePath as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMetafile(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

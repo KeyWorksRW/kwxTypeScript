@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
 import { wxAcceleratorTable } from "./wxAcceleratorTable_gen.ts";
@@ -48,26 +49,32 @@ export class wxWindow extends wxEvtHandler {
     return new wxAccessible(rawPtr, true);
   }
 
-  SetAccessibleName(name: Pointer): void {
-    lib.symbols.wxWindow_SetAccessibleName(this._ptr, name);
+  SetAccessibleName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxWindow_SetAccessibleName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ConvertDialogToPixelsEx(x: number, y: number): wxPoint | null {
     const rawPtr = lib.symbols.wxWindow_ConvertDialogToPixelsEx(this._ptr, x, y);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   ConvertPixelsToDialogEx(x: number, y: number): wxPoint | null {
     const rawPtr = lib.symbols.wxWindow_ConvertPixelsToDialogEx(this._ptr, x, y);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   ScreenToClient2(x: number, y: number): wxPoint | null {
     const rawPtr = lib.symbols.wxWindow_ScreenToClient2(this._ptr, x, y);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   CentreOnParent(dir: number): void {
@@ -83,7 +90,7 @@ export class wxWindow extends wxEvtHandler {
   GetMinSizeFromKnownDirection(direction: number, size: number, availableOtherDir: number): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetMinSizeFromKnownDirection(this._ptr, direction, size, availableOtherDir);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   IsTransparentBackgroundSupported(reason: Pointer): boolean {
@@ -121,7 +128,7 @@ export class wxWindow extends wxEvtHandler {
   GetScreenRect(): wxRect | null {
     const rawPtr = lib.symbols.wxWindow_GetScreenRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetClientAreaOrigin(x: Pointer, y: Pointer): void {
@@ -131,11 +138,15 @@ export class wxWindow extends wxEvtHandler {
   GetClientRect(): wxRect | null {
     const rawPtr = lib.symbols.wxWindow_GetClientRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   ClientToWindowSize(width: Pointer, height: Pointer): void {
     lib.symbols.wxWindow_ClientToWindowSize(this._ptr, width, height);
+  }
+
+  SetSizeWH(width: number, height: number): void {
+    lib.symbols.wxWindow_SetSizeWH(this._ptr, width, height);
   }
 
   WindowToClientSize(width: Pointer, height: Pointer): void {
@@ -169,13 +180,13 @@ export class wxWindow extends wxEvtHandler {
   GetMinSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetMinSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetMaxSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetMaxSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetMinClientSize(width: number, height: number): void {
@@ -189,19 +200,19 @@ export class wxWindow extends wxEvtHandler {
   GetMinClientSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetMinClientSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetMaxClientSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetMaxClientSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetBestVirtualSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetBestVirtualSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetContentScaleFactor(): number {
@@ -215,7 +226,7 @@ export class wxWindow extends wxEvtHandler {
   GetWindowBorderSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetWindowBorderSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SendSizeEvent(flags: number): void {
@@ -383,7 +394,7 @@ export class wxWindow extends wxEvtHandler {
   GetDPI(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetDPI(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   FromDIP(value: number): number {
@@ -392,6 +403,12 @@ export class wxWindow extends wxEvtHandler {
 
   ToDIP(value: number): number {
     return lib.symbols.wxWindow_ToDIP(this._ptr, value);
+  }
+
+  FromDIPSize(width: number, height: number): wxSize | null {
+    const rawPtr = lib.symbols.wxWindow_FromDIPSize(this._ptr, width, height);
+    if (rawPtr === null) return null;
+    return new wxSize(rawPtr);
   }
 
   HasCapture(): boolean {
@@ -417,7 +434,7 @@ export class wxWindow extends wxEvtHandler {
   GetUpdateClientRect(): wxRect | null {
     const rawPtr = lib.symbols.wxWindow_GetUpdateClientRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   SetOwnBackgroundColour(colour: Pointer): void {
@@ -479,7 +496,7 @@ export class wxWindow extends wxEvtHandler {
   GetInputMethodCursorRect(): wxRect | null {
     const rawPtr = lib.symbols.wxWindow_GetInputMethodCursorRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   HitTest(x: number, y: number): number {
@@ -538,14 +555,20 @@ export class wxWindow extends wxEvtHandler {
     return (lib.symbols.wxWindow_IsScrollbarAlwaysShown(this._ptr, orient) as number) !== 0;
   }
 
-  SetHelpText(text: Pointer): void {
-    lib.symbols.wxWindow_SetHelpText(this._ptr, text);
+  SetHelpText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxWindow_SetHelpText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetHelpText(): wxString | null {
     const rawPtr = lib.symbols.wxWindow_GetHelpText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   UnsetToolTip(): void {
@@ -555,7 +578,7 @@ export class wxWindow extends wxEvtHandler {
   GetToolTipText(): wxString | null {
     const rawPtr = lib.symbols.wxWindow_GetToolTipText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   DragAcceptFiles(accept: boolean): void {
@@ -577,7 +600,7 @@ export class wxWindow extends wxEvtHandler {
   GetPalette(): wxPalette | null {
     const rawPtr = lib.symbols.wxWindow_GetPalette(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPalette(rawPtr, true);
+    return new wxPalette(rawPtr);
   }
 
   SetPalette(palette: Pointer): void {
@@ -627,7 +650,7 @@ export class wxWindow extends wxEvtHandler {
   GetHelpTextAtPoint(x: number, y: number, origin: number): wxString | null {
     const rawPtr = lib.symbols.wxWindow_GetHelpTextAtPoint(this._ptr, x, y, origin);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetHelpIdAtPoint(x: number, y: number): number {
@@ -673,7 +696,7 @@ export class wxWindow extends wxEvtHandler {
   ClientToScreen(x: number, y: number): wxPoint | null {
     const rawPtr = lib.symbols.wxWindow_ClientToScreen(this._ptr, x, y);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   Close(force: boolean): boolean {
@@ -683,13 +706,13 @@ export class wxWindow extends wxEvtHandler {
   ConvertDialogToPixels(): wxPoint | null {
     const rawPtr = lib.symbols.wxWindow_ConvertDialogToPixels(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   ConvertPixelsToDialog(): wxPoint | null {
     const rawPtr = lib.symbols.wxWindow_ConvertPixelsToDialog(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   Destroy(): boolean {
@@ -714,10 +737,16 @@ export class wxWindow extends wxEvtHandler {
     return new wxWindow(rawPtr, true);
   }
 
-  FindWindow(name: Pointer): wxWindow | null {
-    const rawPtr = lib.symbols.wxWindow_FindWindow(this._ptr, name);
-    if (rawPtr === null) return null;
-    return new wxWindow(rawPtr, true);
+  FindWindow(name: string | Pointer): wxWindow | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxWindow_FindWindow(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxWindow(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   FindWindowByIdSelf(id: number): wxWindow | null {
@@ -741,7 +770,7 @@ export class wxWindow extends wxEvtHandler {
   GetEffectiveMinSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetEffectiveMinSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetAutoLayout(): number {
@@ -755,7 +784,7 @@ export class wxWindow extends wxEvtHandler {
   GetBestSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetBestSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetCaret(): wxCaret | null {
@@ -785,13 +814,13 @@ export class wxWindow extends wxEvtHandler {
   GetClientSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetClientSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetCursor(): wxCursor | null {
     const rawPtr = lib.symbols.wxWindow_GetCursor(this._ptr);
     if (rawPtr === null) return null;
-    return new wxCursor(rawPtr, true);
+    return new wxCursor(rawPtr);
   }
 
   GetDropTarget(): wxDropTarget | null {
@@ -825,7 +854,7 @@ export class wxWindow extends wxEvtHandler {
   GetLabel(): wxString | null {
     const rawPtr = lib.symbols.wxWindow_GetLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLabelEmpty(): number {
@@ -851,7 +880,7 @@ export class wxWindow extends wxEvtHandler {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxWindow_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetParent(): wxWindow | null {
@@ -863,13 +892,13 @@ export class wxWindow extends wxEvtHandler {
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxWindow_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetRect(): wxRect | null {
     const rawPtr = lib.symbols.wxWindow_GetRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetScrollPos(orient: number): number {
@@ -887,7 +916,7 @@ export class wxWindow extends wxEvtHandler {
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetSizer(): wxSizer | null {
@@ -896,14 +925,20 @@ export class wxWindow extends wxEvtHandler {
     return new wxSizer(rawPtr, true);
   }
 
-  GetTextExtent(string: Pointer, x: Pointer, y: Pointer, descent: Pointer, externalLeading: Pointer, theFont: Pointer): void {
-    lib.symbols.wxWindow_GetTextExtent(this._ptr, string, x, y, descent, externalLeading, theFont);
+  GetTextExtent(string: string | Pointer, x: Pointer, y: Pointer, descent: Pointer, externalLeading: Pointer, theFont: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof string === "string") __s0 = createWxString(string);
+      lib.symbols.wxWindow_GetTextExtent(this._ptr, __s0 ? __s0.ptr : (string as Pointer), x, y, descent, externalLeading, theFont);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetToolTip(): wxString | null {
     const rawPtr = lib.symbols.wxWindow_GetToolTip(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUpdateRegion(): wxRegion | null {
@@ -921,7 +956,7 @@ export class wxWindow extends wxEvtHandler {
   GetVirtualSize(): wxSize | null {
     const rawPtr = lib.symbols.wxWindow_GetVirtualSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetWindowStyleFlag(): bigint {
@@ -1019,7 +1054,7 @@ export class wxWindow extends wxEvtHandler {
   ScreenToClient(x: number, y: number): wxPoint | null {
     const rawPtr = lib.symbols.wxWindow_ScreenToClient(this._ptr, x, y);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   ScrollWindow(dx: number, dy: number): void {
@@ -1062,6 +1097,10 @@ export class wxWindow extends wxEvtHandler {
     return lib.symbols.wxWindow_SetCursor(this._ptr, cursor);
   }
 
+  SetCursorBundle(bundle: Pointer): void {
+    lib.symbols.wxWindow_SetCursorBundle(this._ptr, bundle);
+  }
+
   SetDropTarget(dropTarget: Pointer): void {
     lib.symbols.wxWindow_SetDropTarget(this._ptr, dropTarget);
   }
@@ -1086,12 +1125,24 @@ export class wxWindow extends wxEvtHandler {
     lib.symbols.wxWindow_SetId(this._ptr, id);
   }
 
-  SetLabel(title: Pointer): void {
-    lib.symbols.wxWindow_SetLabel(this._ptr, title);
+  SetLabel(title: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      lib.symbols.wxWindow_SetLabel(this._ptr, __s0 ? __s0.ptr : (title as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxWindow_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxWindow_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetScrollPos(orient: number, pos: number, refresh: boolean): void {
@@ -1126,8 +1177,14 @@ export class wxWindow extends wxEvtHandler {
     lib.symbols.wxWindow_SetSizerAndFit(this._ptr, sizer, deleteOld ? 1 : 0);
   }
 
-  SetToolTip(tip: Pointer): void {
-    lib.symbols.wxWindow_SetToolTip(this._ptr, tip);
+  SetToolTip(tip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof tip === "string") __s0 = createWxString(tip);
+      lib.symbols.wxWindow_SetToolTip(this._ptr, __s0 ? __s0.ptr : (tip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetValidator(validator: Pointer): void {
@@ -1178,6 +1235,12 @@ export class wxWindow extends wxEvtHandler {
 
 export function createWxWindow(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number): wxWindow | null {
     const rawPtr = lib.symbols.wxWindow_Create(parent, id, x, y, width, height, style);
+    if (rawPtr === null) return null;
+    return new wxWindow(rawPtr);
+}
+
+export function createWxWindowWithBackgroundStyle(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: number, backgroundStyle: number): wxWindow | null {
+    const rawPtr = lib.symbols.wxWindow_CreateWithBackgroundStyle(parent, id, x, y, width, height, style, backgroundStyle);
     if (rawPtr === null) return null;
     return new wxWindow(rawPtr);
 }

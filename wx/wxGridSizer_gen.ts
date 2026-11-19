@@ -24,7 +24,7 @@ export class wxGridSizer extends wxSizer {
   override CalcMin(): wxSize | null {
     const rawPtr = lib.symbols.wxGridSizer_CalcMin(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetCols(): number {

@@ -2,7 +2,9 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
+import { wxGraphicsBitmap } from "./wxGraphicsBitmap_gen.ts";
 import { wxGraphicsBrush } from "./wxGraphicsBrush_gen.ts";
 import { wxGraphicsFont } from "./wxGraphicsFont_gen.ts";
 import { wxGraphicsMatrix } from "./wxGraphicsMatrix_gen.ts";
@@ -43,12 +45,16 @@ export class wxGraphicsContext {
     lib.symbols.wxGraphicsContext_BeginLayer(this._ptr, opacity);
   }
 
-  CreateBitmap(bitmap: Pointer): Pointer {
-    return lib.symbols.wxGraphicsContext_CreateBitmap(this._ptr, bitmap);
+  CreateBitmap(bitmap: Pointer): wxGraphicsBitmap | null {
+    const rawPtr = lib.symbols.wxGraphicsContext_CreateBitmap(this._ptr, bitmap);
+    if (rawPtr === null) return null;
+    return new wxGraphicsBitmap(rawPtr, true);
   }
 
-  CreateBitmapFromImage(image: Pointer): Pointer {
-    return lib.symbols.wxGraphicsContext_CreateBitmapFromImage(this._ptr, image);
+  CreateBitmapFromImage(image: Pointer): wxGraphicsBitmap | null {
+    const rawPtr = lib.symbols.wxGraphicsContext_CreateBitmapFromImage(this._ptr, image);
+    if (rawPtr === null) return null;
+    return new wxGraphicsBitmap(rawPtr, true);
   }
 
   CreateFont(font: Pointer, col: Pointer): wxGraphicsFont | null {
@@ -69,14 +75,34 @@ export class wxGraphicsContext {
     return new wxGraphicsPen(rawPtr, true);
   }
 
+  CreatePenFromInfo(info: Pointer): wxGraphicsPen | null {
+    const rawPtr = lib.symbols.wxGraphicsContext_CreatePenFromInfo(this._ptr, info);
+    if (rawPtr === null) return null;
+    return new wxGraphicsPen(rawPtr, true);
+  }
+
+  CreateLinearGradientBrushFromStops(x1: number, y1: number, x2: number, y2: number, stops: Pointer, matrix: Pointer): wxGraphicsBrush | null {
+    const rawPtr = lib.symbols.wxGraphicsContext_CreateLinearGradientBrushFromStops(this._ptr, x1, y1, x2, y2, stops, matrix);
+    if (rawPtr === null) return null;
+    return new wxGraphicsBrush(rawPtr, true);
+  }
+
+  CreateRadialGradientBrushFromStops(startX: number, startY: number, endX: number, endY: number, radius: number, stops: Pointer, matrix: Pointer): wxGraphicsBrush | null {
+    const rawPtr = lib.symbols.wxGraphicsContext_CreateRadialGradientBrushFromStops(this._ptr, startX, startY, endX, endY, radius, stops, matrix);
+    if (rawPtr === null) return null;
+    return new wxGraphicsBrush(rawPtr, true);
+  }
+
   CreateRadialGradientBrush(startX: number, startY: number, endX: number, endY: number, radius: number, oColor: Pointer, cColor: Pointer, matrix: Pointer): wxGraphicsBrush | null {
     const rawPtr = lib.symbols.wxGraphicsContext_CreateRadialGradientBrush(this._ptr, startX, startY, endX, endY, radius, oColor, cColor, matrix);
     if (rawPtr === null) return null;
     return new wxGraphicsBrush(rawPtr, true);
   }
 
-  CreateSubBitmap(bitmap: Pointer, x: number, y: number, w: number, h: number): Pointer {
-    return lib.symbols.wxGraphicsContext_CreateSubBitmap(this._ptr, bitmap, x, y, w, h);
+  CreateSubBitmap(bitmap: Pointer, x: number, y: number, w: number, h: number): wxGraphicsBitmap | null {
+    const rawPtr = lib.symbols.wxGraphicsContext_CreateSubBitmap(this._ptr, bitmap, x, y, w, h);
+    if (rawPtr === null) return null;
+    return new wxGraphicsBitmap(rawPtr, true);
   }
 
   EndLayer(): void {
@@ -86,7 +112,7 @@ export class wxGraphicsContext {
   FromDIP(sz: Pointer): wxSize | null {
     const rawPtr = lib.symbols.wxGraphicsContext_FromDIP(this._ptr, sz);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetAntialiasMode(antialias: number): boolean {
@@ -127,6 +153,10 @@ export class wxGraphicsContext {
     lib.symbols.wxGraphicsContext_DrawBitmap(this._ptr, bmp, x, y, width, height);
   }
 
+  DrawGraphicsBitmap(bmp: Pointer, x: number, y: number, width: number, height: number): void {
+    lib.symbols.wxGraphicsContext_DrawGraphicsBitmap(this._ptr, bmp, x, y, width, height);
+  }
+
   DrawEllipse(x: number, y: number, width: number, height: number): void {
     lib.symbols.wxGraphicsContext_DrawEllipse(this._ptr, x, y, width, height);
   }
@@ -151,12 +181,24 @@ export class wxGraphicsContext {
     lib.symbols.wxGraphicsContext_DrawRoundedRectangle(this._ptr, x, y, width, height, radius);
   }
 
-  DrawText(str: Pointer, x: number, y: number): void {
-    lib.symbols.wxGraphicsContext_DrawText(this._ptr, str, x, y);
+  DrawText(str: string | Pointer, x: number, y: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxGraphicsContext_DrawText(this._ptr, __s0 ? __s0.ptr : (str as Pointer), x, y);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  DrawTextWithAngle(str: Pointer, x: number, y: number, angle: number): void {
-    lib.symbols.wxGraphicsContext_DrawTextWithAngle(this._ptr, str, x, y, angle);
+  DrawTextWithAngle(str: string | Pointer, x: number, y: number, angle: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxGraphicsContext_DrawTextWithAngle(this._ptr, __s0 ? __s0.ptr : (str as Pointer), x, y, angle);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   FillPath(path: Pointer, fillStyle: number): void {
@@ -167,12 +209,24 @@ export class wxGraphicsContext {
     return lib.symbols.wxGraphicsContext_GetNativeContext(this._ptr);
   }
 
-  GetPartialTextExtents(text: Pointer, widths: Pointer, count: bigint): void {
-    lib.symbols.wxGraphicsContext_GetPartialTextExtents(this._ptr, text, widths, count);
+  GetPartialTextExtents(text: string | Pointer, widths: Pointer, count: bigint): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxGraphicsContext_GetPartialTextExtents(this._ptr, __s0 ? __s0.ptr : (text as Pointer), widths, count);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetTextExtent(text: Pointer, width: Pointer, height: Pointer, descent: Pointer, externalLeading: Pointer): void {
-    lib.symbols.wxGraphicsContext_GetTextExtent(this._ptr, text, width, height, descent, externalLeading);
+  GetTextExtent(text: string | Pointer, width: Pointer, height: Pointer, descent: Pointer, externalLeading: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxGraphicsContext_GetTextExtent(this._ptr, __s0 ? __s0.ptr : (text as Pointer), width, height, descent, externalLeading);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   PopState(): void {

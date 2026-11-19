@@ -36,7 +36,7 @@ export class wxGridEvent extends wxNotifyEvent {
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxGridEvent_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetRow(): number {

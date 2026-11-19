@@ -32,7 +32,7 @@ export class wxQueryLayoutInfoEvent extends wxEvent {
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxQueryLayoutInfoEvent_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetAlignment(align: number): void {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxSize } from "./wxSize_gen.ts";
@@ -43,13 +44,13 @@ export class wxPrintData extends wxObject {
   GetFilename(): wxString | null {
     const rawPtr = lib.symbols.wxPrintData_GetFilename(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFontMetricPath(): wxString | null {
     const rawPtr = lib.symbols.wxPrintData_GetFontMetricPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNoCopies(): number {
@@ -67,13 +68,13 @@ export class wxPrintData extends wxObject {
   GetPaperSize(): wxSize | null {
     const rawPtr = lib.symbols.wxPrintData_GetPaperSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetPreviewCommand(): wxString | null {
     const rawPtr = lib.symbols.wxPrintData_GetPreviewCommand(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPrintMode(): number {
@@ -83,19 +84,19 @@ export class wxPrintData extends wxObject {
   GetPrinterCommand(): wxString | null {
     const rawPtr = lib.symbols.wxPrintData_GetPrinterCommand(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPrinterName(): wxString | null {
     const rawPtr = lib.symbols.wxPrintData_GetPrinterName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPrinterOptions(): wxString | null {
     const rawPtr = lib.symbols.wxPrintData_GetPrinterOptions(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPrinterScaleX(): number {
@@ -130,12 +131,24 @@ export class wxPrintData extends wxObject {
     lib.symbols.wxPrintData_SetDuplex(this._ptr, duplex);
   }
 
-  SetFilename(filename: Pointer): void {
-    lib.symbols.wxPrintData_SetFilename(this._ptr, filename);
+  SetFilename(filename: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      lib.symbols.wxPrintData_SetFilename(this._ptr, __s0 ? __s0.ptr : (filename as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetFontMetricPath(path: Pointer): void {
-    lib.symbols.wxPrintData_SetFontMetricPath(this._ptr, path);
+  SetFontMetricPath(path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxPrintData_SetFontMetricPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetNoCopies(value: number): void {
@@ -166,12 +179,24 @@ export class wxPrintData extends wxObject {
     lib.symbols.wxPrintData_SetPrinterCommand(this._ptr, command);
   }
 
-  SetPrinterName(name: Pointer): void {
-    lib.symbols.wxPrintData_SetPrinterName(this._ptr, name);
+  SetPrinterName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxPrintData_SetPrinterName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPrinterOptions(options: Pointer): void {
-    lib.symbols.wxPrintData_SetPrinterOptions(this._ptr, options);
+  SetPrinterOptions(options: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof options === "string") __s0 = createWxString(options);
+      lib.symbols.wxPrintData_SetPrinterOptions(this._ptr, __s0 ? __s0.ptr : (options as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetPrinterScaleX(x: number): void {

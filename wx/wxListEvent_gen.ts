@@ -42,8 +42,8 @@ export class wxListEvent extends wxNotifyEvent {
     return lib.symbols.wxListEvent_GetColumn(this._ptr);
   }
 
-  GetData(): number {
-    return lib.symbols.wxListEvent_GetData(this._ptr);
+  GetData(): bigint {
+    return lib.symbols.wxListEvent_GetData(this._ptr) as bigint;
   }
 
   GetImage(): number {
@@ -61,7 +61,7 @@ export class wxListEvent extends wxNotifyEvent {
   GetLabel(): wxString | null {
     const rawPtr = lib.symbols.wxListEvent_GetLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMask(): number {
@@ -71,13 +71,13 @@ export class wxListEvent extends wxNotifyEvent {
   GetPoint(): wxPoint | null {
     const rawPtr = lib.symbols.wxListEvent_GetPoint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetText(): wxString | null {
     const rawPtr = lib.symbols.wxListEvent_GetText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -26,7 +27,7 @@ export class wxFindReplaceData extends wxObject {
   GetFindString(): wxString | null {
     const rawPtr = lib.symbols.wxFindReplaceData_GetFindString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFlags(): number {
@@ -36,19 +37,31 @@ export class wxFindReplaceData extends wxObject {
   GetReplaceString(): wxString | null {
     const rawPtr = lib.symbols.wxFindReplaceData_GetReplaceString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetFindString(str: Pointer): void {
-    lib.symbols.wxFindReplaceData_SetFindString(this._ptr, str);
+  SetFindString(str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxFindReplaceData_SetFindString(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFlags(flags: number): void {
     lib.symbols.wxFindReplaceData_SetFlags(this._ptr, flags);
   }
 
-  SetReplaceString(str: Pointer): void {
-    lib.symbols.wxFindReplaceData_SetReplaceString(this._ptr, str);
+  SetReplaceString(str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxFindReplaceData_SetReplaceString(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

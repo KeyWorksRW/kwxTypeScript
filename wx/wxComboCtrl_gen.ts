@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxBitmap } from "./wxBitmap_gen.ts";
@@ -36,31 +37,31 @@ export class wxComboCtrl extends wxControl {
   GetBitmapDisabled(): wxBitmap | null {
     const rawPtr = lib.symbols.wxComboCtrl_GetBitmapDisabled(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapHover(): wxBitmap | null {
     const rawPtr = lib.symbols.wxComboCtrl_GetBitmapHover(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapNormal(): wxBitmap | null {
     const rawPtr = lib.symbols.wxComboCtrl_GetBitmapNormal(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetBitmapPressed(): wxBitmap | null {
     const rawPtr = lib.symbols.wxComboCtrl_GetBitmapPressed(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   GetButtonSize(): wxSize | null {
     const rawPtr = lib.symbols.wxComboCtrl_GetButtonSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetCustomPaintWidth(): number {
@@ -70,7 +71,7 @@ export class wxComboCtrl extends wxControl {
   GetHint(): wxString | null {
     const rawPtr = lib.symbols.wxComboCtrl_GetHint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetInsertionPoint(): bigint {
@@ -106,13 +107,13 @@ export class wxComboCtrl extends wxControl {
   GetTextRect(): wxRect | null {
     const rawPtr = lib.symbols.wxComboCtrl_GetTextRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetValue(): wxString | null {
     const rawPtr = lib.symbols.wxComboCtrl_GetValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   HidePopup(generateEvent: boolean): void {
@@ -151,8 +152,14 @@ export class wxComboCtrl extends wxControl {
     lib.symbols.wxComboCtrl_Remove(this._ptr, from_, toPos);
   }
 
-  Replace(from_: bigint, toPos: bigint, value: Pointer): void {
-    lib.symbols.wxComboCtrl_Replace(this._ptr, from_, toPos, value);
+  Replace(from_: bigint, toPos: bigint, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxComboCtrl_Replace(this._ptr, from_, toPos, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SelectAll(): void {
@@ -171,8 +178,14 @@ export class wxComboCtrl extends wxControl {
     lib.symbols.wxComboCtrl_SetCustomPaintWidth(this._ptr, width);
   }
 
-  SetHint(hint: Pointer): boolean {
-    return (lib.symbols.wxComboCtrl_SetHint(this._ptr, hint) as number) !== 0;
+  SetHint(hint: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof hint === "string") __s0 = createWxString(hint);
+      return (lib.symbols.wxComboCtrl_SetHint(this._ptr, __s0 ? __s0.ptr : (hint as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetInsertionPoint(pos: bigint): void {
@@ -215,20 +228,38 @@ export class wxComboCtrl extends wxControl {
     lib.symbols.wxComboCtrl_SetSelection(this._ptr, from_, toPos);
   }
 
-  SetText(value: Pointer): void {
-    lib.symbols.wxComboCtrl_SetText(this._ptr, value);
+  SetText(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxComboCtrl_SetText(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetTextCtrlStyle(style: number): void {
     lib.symbols.wxComboCtrl_SetTextCtrlStyle(this._ptr, style);
   }
 
-  SetValue(value: Pointer): void {
-    lib.symbols.wxComboCtrl_SetValue(this._ptr, value);
+  SetValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxComboCtrl_SetValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetValueByUser(value: Pointer): void {
-    lib.symbols.wxComboCtrl_SetValueByUser(this._ptr, value);
+  SetValueByUser(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxComboCtrl_SetValueByUser(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ShouldDrawFocus(): boolean {
@@ -255,26 +286,44 @@ export class wxComboCtrl extends wxControl {
     lib.symbols.wxTextEntry_ForwardEnableTextChangedEvents(this._ptr, enable ? 1 : 0);
   }
 
-  ChangeValue(value: Pointer): void {
-    lib.symbols.wxTextEntry_ChangeValue(this._ptr, value);
+  ChangeValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxTextEntry_ChangeValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetRange(from_: bigint, to: bigint): wxString | null {
     const rawPtr = lib.symbols.wxTextEntry_GetRange(this._ptr, from_, to);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsEmpty(): boolean {
     return (lib.symbols.wxTextEntry_IsEmpty(this._ptr) as number) !== 0;
   }
 
-  WriteText(text: Pointer): void {
-    lib.symbols.wxTextEntry_WriteText(this._ptr, text);
+  WriteText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTextEntry_WriteText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AppendText(text: Pointer): void {
-    lib.symbols.wxTextEntry_AppendText(this._ptr, text);
+  AppendText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTextEntry_AppendText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Clear(): void {
@@ -324,7 +373,7 @@ export class wxComboCtrl extends wxControl {
   GetStringSelection(): wxString | null {
     const rawPtr = lib.symbols.wxTextEntry_GetStringSelection(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetEditable(editable: boolean): void {
@@ -343,6 +392,10 @@ export class wxComboCtrl extends wxControl {
     return (lib.symbols.wxTextEntry_AutoComplete(this._ptr, count, items) as number) !== 0;
   }
 
+  AutoCompleteStrings(items: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteStrings(this._ptr, items) as number) !== 0;
+  }
+
   AutoCompleteFileNames(): boolean {
     return (lib.symbols.wxTextEntry_AutoCompleteFileNames(this._ptr) as number) !== 0;
   }
@@ -351,10 +404,20 @@ export class wxComboCtrl extends wxControl {
     return (lib.symbols.wxTextEntry_AutoCompleteDirectories(this._ptr) as number) !== 0;
   }
 
+  AutoCompleteCompleter(completer: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteCompleter(this._ptr, completer) as number) !== 0;
+  }
+
 }
 
-export function createWxComboCtrl(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: bigint): Pointer {
-    return lib.symbols.wxComboCtrl_Create(parent, id, value, x, y, width, height, style);
+export function createWxComboCtrl(parent: Pointer, id: number, value: string | Pointer, x: number, y: number, width: number, height: number, style: bigint): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      return lib.symbols.wxComboCtrl_Create(parent, id, __s0 ? __s0.ptr : (value as Pointer), x, y, width, height, style);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

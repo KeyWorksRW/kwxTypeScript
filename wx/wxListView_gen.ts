@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxListCtrl } from "./wxListCtrl_gen.ts";
 import { wxComboCtrl } from "./wxComboCtrl_gen.ts";
@@ -69,14 +70,20 @@ export class wxListView extends wxListCtrl {
     lib.symbols.wxComboPopup_OnDismiss(this._ptr);
   }
 
-  SetStringValue(value: Pointer): void {
-    lib.symbols.wxComboPopup_SetStringValue(this._ptr, value);
+  SetStringValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxComboPopup_SetStringValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetStringValue(): wxString | null {
     const rawPtr = lib.symbols.wxComboPopup_GetStringValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   PaintComboControl(dc: Pointer, x: number, y: number, width: number, height: number): void {

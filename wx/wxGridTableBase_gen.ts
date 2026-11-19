@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxGrid } from "./wxGrid_gen.ts";
@@ -45,25 +46,43 @@ export class wxGridTableBase extends wxObject {
   GetValue(row: number, col: number): wxString | null {
     const rawPtr = lib.symbols.wxGridTableBase_GetValue(this._ptr, row, col);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetValue(row: number, col: number, value: Pointer): void {
-    lib.symbols.wxGridTableBase_SetValue(this._ptr, row, col, value);
+  SetValue(row: number, col: number, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxGridTableBase_SetValue(this._ptr, row, col, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetTypeName(row: number, col: number): wxString | null {
     const rawPtr = lib.symbols.wxGridTableBase_GetTypeName(this._ptr, row, col);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  CanGetValueAs(row: number, col: number, type_name: Pointer): boolean {
-    return (lib.symbols.wxGridTableBase_CanGetValueAs(this._ptr, row, col, type_name) as number) !== 0;
+  CanGetValueAs(row: number, col: number, type_name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof type_name === "string") __s0 = createWxString(type_name);
+      return (lib.symbols.wxGridTableBase_CanGetValueAs(this._ptr, row, col, __s0 ? __s0.ptr : (type_name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  CanSetValueAs(row: number, col: number, type_name: Pointer): boolean {
-    return (lib.symbols.wxGridTableBase_CanSetValueAs(this._ptr, row, col, type_name) as number) !== 0;
+  CanSetValueAs(row: number, col: number, type_name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof type_name === "string") __s0 = createWxString(type_name);
+      return (lib.symbols.wxGridTableBase_CanSetValueAs(this._ptr, row, col, __s0 ? __s0.ptr : (type_name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetValueAsLong(row: number, col: number): bigint {
@@ -131,31 +150,49 @@ export class wxGridTableBase extends wxObject {
   GetRowLabelValue(row: number): wxString | null {
     const rawPtr = lib.symbols.wxGridTableBase_GetRowLabelValue(this._ptr, row);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetColLabelValue(col: number): wxString | null {
     const rawPtr = lib.symbols.wxGridTableBase_GetColLabelValue(this._ptr, col);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetRowLabelValue(row: number, label: Pointer): void {
-    lib.symbols.wxGridTableBase_SetRowLabelValue(this._ptr, row, label);
+  SetRowLabelValue(row: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxGridTableBase_SetRowLabelValue(this._ptr, row, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetColLabelValue(col: number, label: Pointer): void {
-    lib.symbols.wxGridTableBase_SetColLabelValue(this._ptr, col, label);
+  SetColLabelValue(col: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxGridTableBase_SetColLabelValue(this._ptr, col, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetCornerLabelValue(): wxString | null {
     const rawPtr = lib.symbols.wxGridTableBase_GetCornerLabelValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetCornerLabelValue(label: Pointer): void {
-    lib.symbols.wxGridTableBase_SetCornerLabelValue(this._ptr, label);
+  SetCornerLabelValue(label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxGridTableBase_SetCornerLabelValue(this._ptr, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   CanHaveAttributes(): boolean {

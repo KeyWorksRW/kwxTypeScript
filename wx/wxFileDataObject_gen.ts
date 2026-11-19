@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDataObjectSimple } from "./wxDataObjectSimple_gen.ts";
 
@@ -21,12 +22,22 @@ export class wxFileDataObject extends wxDataObjectSimple {
     this.Delete();
   }
 
-  AddFile(files: Pointer): void {
-    lib.symbols.FileDataObject_AddFile(this._ptr, files);
+  AddFile(files: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof files === "string") __s0 = createWxString(files);
+      lib.symbols.FileDataObject_AddFile(this._ptr, __s0 ? __s0.ptr : (files as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFilenames(list: Pointer, capacity: number): number {
     return lib.symbols.FileDataObject_GetFilenames(this._ptr, list, capacity);
+  }
+
+  GetFilenamesArray(filenames: Pointer): void {
+    lib.symbols.wxFileDataObject_GetFilenamesArray(this._ptr, filenames);
   }
 
 }

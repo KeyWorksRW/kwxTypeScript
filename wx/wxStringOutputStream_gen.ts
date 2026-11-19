@@ -25,7 +25,7 @@ export class wxStringOutputStream extends wxOutputStream {
   GetString(): wxString | null {
     const rawPtr = lib.symbols.wxStringOutputStream_GetString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

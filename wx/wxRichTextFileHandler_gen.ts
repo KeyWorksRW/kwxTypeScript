@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -26,25 +27,37 @@ export class wxRichTextFileHandler extends wxObject {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextFileHandler_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SaveFile(buffer: Pointer, stream: Pointer): boolean {
     return (lib.symbols.wxRichTextFileHandler_SaveFile(this._ptr, buffer, stream) as number) !== 0;
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxRichTextFileHandler_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxRichTextFileHandler_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetExtension(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextFileHandler_GetExtension(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetExtension(ext: Pointer): void {
-    lib.symbols.wxRichTextFileHandler_SetExtension(this._ptr, ext);
+  SetExtension(ext: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof ext === "string") __s0 = createWxString(ext);
+      lib.symbols.wxRichTextFileHandler_SetExtension(this._ptr, __s0 ? __s0.ptr : (ext as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetType(): number {
@@ -63,18 +76,30 @@ export class wxRichTextFileHandler extends wxObject {
     lib.symbols.wxRichTextFileHandler_SetFlags(this._ptr, flags);
   }
 
-  SetEncoding(encoding: Pointer): void {
-    lib.symbols.wxRichTextFileHandler_SetEncoding(this._ptr, encoding);
+  SetEncoding(encoding: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof encoding === "string") __s0 = createWxString(encoding);
+      lib.symbols.wxRichTextFileHandler_SetEncoding(this._ptr, __s0 ? __s0.ptr : (encoding as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetEncoding(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextFileHandler_GetEncoding(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  CanHandle(filename: Pointer): boolean {
-    return (lib.symbols.wxRichTextFileHandler_CanHandle(this._ptr, filename) as number) !== 0;
+  CanHandle(filename: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxRichTextFileHandler_CanHandle(this._ptr, __s0 ? __s0.ptr : (filename as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   CanLoad(): boolean {

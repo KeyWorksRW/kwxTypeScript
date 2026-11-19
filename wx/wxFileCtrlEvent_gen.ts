@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxCommandEvent } from "./wxCommandEvent_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -27,8 +28,14 @@ export class wxFileCtrlEvent extends wxCommandEvent {
     lib.symbols.wxFileCtrlEvent_SetFiles(this._ptr, files);
   }
 
-  SetDirectory(directory: Pointer): void {
-    lib.symbols.wxFileCtrlEvent_SetDirectory(this._ptr, directory);
+  SetDirectory(directory: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof directory === "string") __s0 = createWxString(directory);
+      lib.symbols.wxFileCtrlEvent_SetDirectory(this._ptr, __s0 ? __s0.ptr : (directory as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFilterIndex(filter_index: number): void {
@@ -42,7 +49,7 @@ export class wxFileCtrlEvent extends wxCommandEvent {
   GetDirectory(): wxString | null {
     const rawPtr = lib.symbols.wxFileCtrlEvent_GetDirectory(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFilterIndex(): number {
@@ -52,7 +59,7 @@ export class wxFileCtrlEvent extends wxCommandEvent {
   GetFile(): wxString | null {
     const rawPtr = lib.symbols.wxFileCtrlEvent_GetFile(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

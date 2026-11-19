@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxCommandEvent } from "./wxCommandEvent_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -26,19 +27,31 @@ export class wxFileDirPickerEvent extends wxCommandEvent {
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxFileDirPickerEvent_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetPath(path: Pointer): void {
-    lib.symbols.wxFileDirPickerEvent_SetPath(this._ptr, path);
+  SetPath(path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxFileDirPickerEvent_SetPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxFileDirPickerEvent(event_type: number, generator: Pointer, id: number, path: Pointer): wxFileDirPickerEvent | null {
-    const rawPtr = lib.symbols.wxFileDirPickerEvent_Create(event_type, generator, id, path);
-    if (rawPtr === null) return null;
-    return new wxFileDirPickerEvent(rawPtr);
+export function createWxFileDirPickerEvent(event_type: number, generator: Pointer, id: number, path: string | Pointer): wxFileDirPickerEvent | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      const rawPtr = lib.symbols.wxFileDirPickerEvent_Create(event_type, generator, id, __s0 ? __s0.ptr : (path as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFileDirPickerEvent(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

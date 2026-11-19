@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -30,16 +31,37 @@ export class wxCmdLineParser {
     this.Delete();
   }
 
-  AddLongOption(lng: Pointer, desc: Pointer, type_: number, flags: number): void {
-    lib.symbols.wxCmdLineParser_AddLongOption(this._ptr, lng, desc, type_, flags);
+  AddLongOption(lng: string | Pointer, desc: string | Pointer, type_: number, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof lng === "string") __s0 = createWxString(lng);
+      if (typeof desc === "string") __s1 = createWxString(desc);
+      lib.symbols.wxCmdLineParser_AddLongOption(this._ptr, __s0 ? __s0.ptr : (lng as Pointer), __s1 ? __s1.ptr : (desc as Pointer), type_, flags);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddUsageText(text: Pointer): void {
-    lib.symbols.wxCmdLineParser_AddUsageText(this._ptr, text);
+  AddUsageText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxCmdLineParser_AddUsageText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FoundSwitch(name: Pointer): number {
-    return lib.symbols.wxCmdLineParser_FoundSwitch(this._ptr, name);
+  FoundSwitch(name: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxCmdLineParser_FoundSwitch(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Usage(): void {
@@ -56,36 +78,88 @@ export class wxCmdLineParser {
     lib.symbols.wxCmdLineParser_SetDesc(this._ptr, desc);
   }
 
-  AddSwitch(name: Pointer, long_name: Pointer, description: Pointer, flags: number): void {
-    lib.symbols.wxCmdLineParser_AddSwitch(this._ptr, name, long_name, description, flags);
+  AddSwitch(name: string | Pointer, long_name: string | Pointer, description: string | Pointer, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof long_name === "string") __s1 = createWxString(long_name);
+      if (typeof description === "string") __s2 = createWxString(description);
+      lib.symbols.wxCmdLineParser_AddSwitch(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (long_name as Pointer), __s2 ? __s2.ptr : (description as Pointer), flags);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddOption(name: Pointer, long_name: Pointer, description: Pointer, type_: number, flags: number): void {
-    lib.symbols.wxCmdLineParser_AddOption(this._ptr, name, long_name, description, type_, flags);
+  AddOption(name: string | Pointer, long_name: string | Pointer, description: string | Pointer, type_: number, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof long_name === "string") __s1 = createWxString(long_name);
+      if (typeof description === "string") __s2 = createWxString(description);
+      lib.symbols.wxCmdLineParser_AddOption(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (long_name as Pointer), __s2 ? __s2.ptr : (description as Pointer), type_, flags);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddParam(description: Pointer, type_: number, flags: number): void {
-    lib.symbols.wxCmdLineParser_AddParam(this._ptr, description, type_, flags);
+  AddParam(description: string | Pointer, type_: number, flags: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof description === "string") __s0 = createWxString(description);
+      lib.symbols.wxCmdLineParser_AddParam(this._ptr, __s0 ? __s0.ptr : (description as Pointer), type_, flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Parse(argc: number, argv: Pointer): number {
     return lib.symbols.wxCmdLineParser_Parse(this._ptr, argc, argv);
   }
 
-  ParseString(command_line: Pointer): number {
-    return lib.symbols.wxCmdLineParser_ParseString(this._ptr, command_line);
+  ParseString(command_line: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof command_line === "string") __s0 = createWxString(command_line);
+      return lib.symbols.wxCmdLineParser_ParseString(this._ptr, __s0 ? __s0.ptr : (command_line as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ParseArgs(argc: number, argv: Pointer): number {
     return lib.symbols.wxCmdLineParser_ParseArgs(this._ptr, argc, argv);
   }
 
-  ParseStringArgs(command_line: Pointer): number {
-    return lib.symbols.wxCmdLineParser_ParseStringArgs(this._ptr, command_line);
+  ParseStringArgs(command_line: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof command_line === "string") __s0 = createWxString(command_line);
+      return lib.symbols.wxCmdLineParser_ParseStringArgs(this._ptr, __s0 ? __s0.ptr : (command_line as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Found(name: Pointer): boolean {
-    return (lib.symbols.wxCmdLineParser_Found(this._ptr, name) as number) !== 0;
+  ParseArgv(argc: number, argv: Pointer): number {
+    return lib.symbols.wxCmdLineParser_ParseArgv(this._ptr, argc, argv);
+  }
+
+  Found(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxCmdLineParser_Found(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetParamCount(): number {
@@ -95,17 +169,29 @@ export class wxCmdLineParser {
   GetParam(index: number): wxString | null {
     const rawPtr = lib.symbols.wxCmdLineParser_GetParam(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  GetOptionValue(name: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxCmdLineParser_GetOptionValue(this._ptr, name);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetOptionValue(name: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxCmdLineParser_GetOptionValue(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetOptionLong(name: Pointer, default_value: bigint): bigint {
-    return lib.symbols.wxCmdLineParser_GetOptionLong(this._ptr, name, default_value) as bigint;
+  GetOptionLong(name: string | Pointer, default_value: bigint): bigint {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxCmdLineParser_GetOptionLong(this._ptr, __s0 ? __s0.ptr : (name as Pointer), default_value) as bigint;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

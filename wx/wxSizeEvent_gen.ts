@@ -16,7 +16,7 @@ export class wxSizeEvent extends wxEvent {
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxSizeEvent_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
 }

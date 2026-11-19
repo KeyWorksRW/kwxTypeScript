@@ -28,9 +28,11 @@ extern "C"
     int exp_wxEVT_AUITOOLBAR_RIGHT_CLICK();
     int exp_wxEVT_AUITOOLBAR_TOOL_DROPDOWN();
     int exp_wxEVT_AUI_FIND_MANAGER();
+    int exp_wxEVT_AUI_PANE_ACTIVATED();
     int exp_wxEVT_AUI_PANE_BUTTON();
     int exp_wxEVT_AUI_PANE_CLOSE();
     int exp_wxEVT_AUI_PANE_MAXIMIZE();
+    int exp_wxEVT_AUI_PANE_MINIMIZE();
     int exp_wxEVT_AUI_PANE_RESTORE();
     int exp_wxEVT_AUI_RENDER();
     int exp_wxEVT_AUX1_DCLICK();
@@ -624,6 +626,25 @@ extern "C"
     int expwxANTIALIAS_DEFAULT();
     int expwxANTIALIAS_NONE();
     int expwxAPPLY();
+    int expwxAUI_BUTTON_CLOSE();
+    int expwxAUI_BUTTON_CUSTOM1();
+    int expwxAUI_BUTTON_CUSTOM2();
+    int expwxAUI_BUTTON_CUSTOM3();
+    int expwxAUI_BUTTON_DOWN();
+    int expwxAUI_BUTTON_LEFT();
+    int expwxAUI_BUTTON_MAXIMIZE_RESTORE();
+    int expwxAUI_BUTTON_MINIMIZE();
+    int expwxAUI_BUTTON_OPTIONS();
+    int expwxAUI_BUTTON_PIN();
+    int expwxAUI_BUTTON_RIGHT();
+    int expwxAUI_BUTTON_STATE_CHECKED();
+    int expwxAUI_BUTTON_STATE_DISABLED();
+    int expwxAUI_BUTTON_STATE_HIDDEN();
+    int expwxAUI_BUTTON_STATE_HOVER();
+    int expwxAUI_BUTTON_STATE_NORMAL();
+    int expwxAUI_BUTTON_STATE_PRESSED();
+    int expwxAUI_BUTTON_UP();
+    int expwxAUI_BUTTON_WINDOWLIST();
     int expwxAUI_DOCKART_ACTIVE_CAPTION_COLOUR();
     int expwxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR();
     int expwxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR();
@@ -638,13 +659,25 @@ extern "C"
     int expwxAUI_DOCKART_PANE_BORDER_SIZE();
     int expwxAUI_DOCKART_SASH_COLOUR();
     int expwxAUI_DOCKART_SASH_SIZE();
+    int expwxAUI_DOCK_BOTTOM();
+    int expwxAUI_DOCK_CENTER();
+    int expwxAUI_DOCK_CENTRE();
+    int expwxAUI_DOCK_LEFT();
+    int expwxAUI_DOCK_NONE();
+    int expwxAUI_DOCK_RIGHT();
+    int expwxAUI_DOCK_TOP();
     int expwxAUI_GRADIENT_HORIZONTAL();
     int expwxAUI_GRADIENT_NONE();
     int expwxAUI_GRADIENT_VERTICAL();
+    int expwxAUI_INSERT_DOCK();
+    int expwxAUI_INSERT_PANE();
+    int expwxAUI_INSERT_ROW();
     int expwxAUI_MGR_ALLOW_ACTIVE_PANE();
     int expwxAUI_MGR_ALLOW_FLOATING();
+    int expwxAUI_MGR_DEFAULT();
     int expwxAUI_MGR_HINT_FADE();
     int expwxAUI_MGR_LIVE_RESIZE();
+    int expwxAUI_MGR_NO_VENETIAN_BLINDS_FADE();
     int expwxAUI_MGR_RECTANGLE_HINT();
     int expwxAUI_MGR_TRANSPARENT_DRAG();
     int expwxAUI_MGR_TRANSPARENT_HINT();
@@ -658,6 +691,7 @@ extern "C"
     int expwxAUI_NB_CLOSE_ON_ACTIVE_TAB();
     int expwxAUI_NB_CLOSE_ON_ALL_TABS();
     int expwxAUI_NB_DEFAULT_STYLE();
+    int expwxAUI_NB_MIDDLE_CLICK_CLOSE();
     int expwxAUI_NB_MULTILINE();
     int expwxAUI_NB_PIN_ON_ACTIVE_TAB();
     int expwxAUI_NB_SCROLL_BUTTONS();
@@ -668,12 +702,26 @@ extern "C"
     int expwxAUI_NB_TOP();
     int expwxAUI_NB_UNPIN_ON_ALL_PINNED();
     int expwxAUI_NB_WINDOWLIST_BUTTON();
+    int expwxAUI_TAB_LOCKED();
+    int expwxAUI_TAB_NORMAL();
+    int expwxAUI_TAB_PINNED();
     int expwxAUI_TB_DEFAULT_STYLE();
+    int expwxAUI_TB_GRIPPER();
     int expwxAUI_TB_HORIZONTAL();
+    int expwxAUI_TB_HORZ_LAYOUT();
     int expwxAUI_TB_HORZ_TEXT();
+    int expwxAUI_TB_NO_AUTORESIZE();
+    int expwxAUI_TB_NO_TOOLTIPS();
     int expwxAUI_TB_OVERFLOW();
+    int expwxAUI_TB_PLAIN_BACKGROUND();
     int expwxAUI_TB_TEXT();
     int expwxAUI_TB_VERTICAL();
+    int expwxApp_AppearanceResult_CannotChange();
+    int expwxApp_AppearanceResult_Failure();
+    int expwxApp_AppearanceResult_Ok();
+    int expwxApp_Appearance_Dark();
+    int expwxApp_Appearance_Light();
+    int expwxApp_Appearance_System();
     int expwxBACKINGSTORE();
     int expwxBACKWARD();
     int expwxBATTERY_CRITICAL_STATE();
@@ -683,6 +731,7 @@ extern "C"
     int expwxBATTERY_UNKNOWN_STATE();
     int expwxBG_STYLE_ERASE();
     int expwxBG_STYLE_PAINT();
+    int expwxBG_STYLE_SYSTEM();
     int expwxBG_STYLE_TRANSPARENT();
     int expwxBIG_ENDIAN();
     int expwxBITMAP_SCREEN_DEPTH();
@@ -739,6 +788,7 @@ extern "C"
     int expwxBMP_8BPP_GREY();
     int expwxBMP_8BPP_PALETTE();
     int expwxBMP_8BPP_RED();
+    int expwxBORDER();
     int expwxBORDER_DEFAULT();
     int expwxBORDER_DOUBLE();
     int expwxBORDER_MASK();
@@ -764,6 +814,16 @@ extern "C"
     int expwxBRUSHSTYLE_STIPPLE_MASK_OPAQUE();
     int expwxBRUSHSTYLE_TRANSPARENT();
     int expwxBRUSHSTYLE_VERTICAL_HATCH();
+    int expwxBRUSH_STOCK_BLACK();
+    int expwxBRUSH_STOCK_BLUE();
+    int expwxBRUSH_STOCK_CYAN();
+    int expwxBRUSH_STOCK_GREEN();
+    int expwxBRUSH_STOCK_GREY();
+    int expwxBRUSH_STOCK_LIGHT_GREY();
+    int expwxBRUSH_STOCK_MEDIUM_GREY();
+    int expwxBRUSH_STOCK_RED();
+    int expwxBRUSH_STOCK_TRANSPARENT();
+    int expwxBRUSH_STOCK_WHITE();
     int expwxBU_AUTODRAW();
     int expwxBU_BOTTOM();
     int expwxBU_EXACTFIT();
@@ -833,6 +893,13 @@ extern "C"
     int expwxCMD_LINE_VAL_STRING();
     int expwxCMD_SWITCH_ON();
     int expwxCOLOURED();
+    int expwxCOLOUR_STOCK_BLACK();
+    int expwxCOLOUR_STOCK_BLUE();
+    int expwxCOLOUR_STOCK_CYAN();
+    int expwxCOLOUR_STOCK_GREEN();
+    int expwxCOLOUR_STOCK_LIGHT_GREY();
+    int expwxCOLOUR_STOCK_RED();
+    int expwxCOLOUR_STOCK_WHITE();
     int expwxCOL_DEFAULT_FLAGS();
     int expwxCOL_HIDDEN();
     int expwxCOL_REORDERABLE();
@@ -899,6 +966,8 @@ extern "C"
     int expwxCURSOR_WAIT();
     int expwxCURSOR_WATCH();
     int expwxColourData_NUM_CUSTOM();
+    int expwxColourDatabase_CSS();
+    int expwxColourDatabase_Traditional();
     int expwxDATAVIEW_CELL_ACTIVATABLE();
     int expwxDATAVIEW_CELL_EDITABLE();
     int expwxDATAVIEW_CELL_INERT();
@@ -912,6 +981,7 @@ extern "C"
     int expwxDD_SHOW_HIDDEN();
     int expwxDEFAULT_DIALOG_STYLE();
     int expwxDEFAULT_FRAME_STYLE();
+    int expwxDEFAULT_TEMPLATE_FLAGS();
     int expwxDF_BITMAP();
     int expwxDF_DIB();
     int expwxDF_DIF();
@@ -953,6 +1023,7 @@ extern "C"
     int expwxDIR_IGNORE();
     int expwxDIR_NO_FOLLOW();
     int expwxDIR_STOP();
+    int expwxDOC_NEW();
     int expwxDOC_SILENT();
     int expwxDOUBLE_BORDER();
     int expwxDOWN();
@@ -964,6 +1035,14 @@ extern "C"
     int expwxDUPLEX_HORIZONTAL();
     int expwxDUPLEX_SIMPLEX();
     int expwxDUPLEX_VERTICAL();
+    int expwxDVR_DEFAULT_ALIGNMENT();
+    int expwxDV_HORIZ_RULES();
+    int expwxDV_MULTIPLE();
+    int expwxDV_NO_HEADER();
+    int expwxDV_ROW_LINES();
+    int expwxDV_SINGLE();
+    int expwxDV_VARIABLE_LINE_HEIGHT();
+    int expwxDV_VERT_RULES();
     int expwxDateTime_Apr();
     int expwxDateTime_Aug();
     int expwxDateTime_Country_Default();
@@ -992,6 +1071,8 @@ extern "C"
     int expwxDateTime_Thu();
     int expwxDateTime_Tue();
     int expwxDateTime_Wed();
+    int expwxDebugReport_Context_Current();
+    int expwxDebugReport_Context_Exception();
     int expwxDefaultCoord();
     int expwxDragCancel();
     int expwxDragCopy();
@@ -1006,6 +1087,11 @@ extern "C"
     int expwxELLIPSIZE_MIDDLE();
     int expwxELLIPSIZE_NONE();
     int expwxELLIPSIZE_START();
+    int expwxEL_ALLOW_DELETE();
+    int expwxEL_ALLOW_EDIT();
+    int expwxEL_ALLOW_NEW();
+    int expwxEL_DEFAULT_STYLE();
+    int expwxEL_NO_REORDER();
     int expwxEQUIV();
     int expwxEXEC_ASYNC();
     int expwxEXEC_BLOCK();
@@ -1137,6 +1223,10 @@ extern "C"
     int expwxFONTWEIGHT_NORMAL();
     int expwxFONTWEIGHT_SEMIBOLD();
     int expwxFONTWEIGHT_THIN();
+    int expwxFONT_STOCK_ITALIC();
+    int expwxFONT_STOCK_NORMAL();
+    int expwxFONT_STOCK_SMALL();
+    int expwxFONT_STOCK_SWISS();
     int expwxFORWARD();
     int expwxFRAME_EX_CONTEXTHELP();
     int expwxFRAME_FLOAT_ON_PARENT();
@@ -1235,6 +1325,7 @@ extern "C"
     int expwxICONIZE();
     int expwxICON_AUTH_NEEDED();
     int expwxICON_ERROR();
+    int expwxICON_HAND();
     int expwxICON_INFORMATION();
     int expwxICON_NONE();
     int expwxICON_QUESTION();
@@ -1637,6 +1728,7 @@ extern "C"
     int expwxLAYOUT_VERTICAL();
     int expwxLB_ALWAYS_SB();
     int expwxLB_EXTENDED();
+    int expwxLB_HSCROLL();
     int expwxLB_MULTIPLE();
     int expwxLB_NEEDED_SB();
     int expwxLB_OWNERDRAW();
@@ -1743,11 +1835,13 @@ extern "C"
     int expwxNOR();
     int expwxNORTH();
     int expwxNOT_FOUND();
+    int expwxNO_BORDER();
     int expwxNO_DEFAULT();
     int expwxNO_FULL_REPAINT_ON_RESIZE();
     int expwxNO_OP();
     int expwxNUM_VAL_NO_TRAILING_ZEROES();
     int expwxNUM_VAL_SIGN_PLUS();
+    int expwxNUM_VAL_SIGN_SPACE();
     int expwxNUM_VAL_THOUSANDS_SEPARATOR();
     int expwxNUM_VAL_ZERO_AS_BLANK();
     int expwxNotificationMessage_Timeout_Auto();
@@ -1767,6 +1861,7 @@ extern "C"
     int expwxODCB_DCLICK_CYCLES();
     int expwxODCB_PAINTING_CONTROL();
     int expwxODCB_PAINTING_SELECTED();
+    int expwxODCB_STD_CONTROL_PAINT();
     int expwxODDEVEN_RULE();
     int expwxOK();
     int expwxOR();
@@ -1878,6 +1973,16 @@ extern "C"
     int expwxPENSTYLE_TRANSPARENT();
     int expwxPENSTYLE_USER_DASH();
     int expwxPENSTYLE_VERTICAL_HATCH();
+    int expwxPEN_STOCK_BLACK();
+    int expwxPEN_STOCK_BLACK_DASHED();
+    int expwxPEN_STOCK_CYAN();
+    int expwxPEN_STOCK_GREEN();
+    int expwxPEN_STOCK_GREY();
+    int expwxPEN_STOCK_LIGHT_GREY();
+    int expwxPEN_STOCK_MEDIUM_GREY();
+    int expwxPEN_STOCK_RED();
+    int expwxPEN_STOCK_TRANSPARENT();
+    int expwxPEN_STOCK_WHITE();
     int expPGMAN_DEFAULT_STYLE();
     int expwxPG_AUTO_SORT();
     int expwxPG_BOLD_MODIFIED();
@@ -1956,6 +2061,7 @@ extern "C"
     int expwxPROPSHEET_SHRINKTOFIT();
     int expwxPROPSHEET_TOOLBOOK();
     int expPU_CONTAINS_CONTROLS();
+    int expwxRAISED_BORDER();
     int expwxRA_SPECIFY_COLS();
     int expwxRA_SPECIFY_ROWS();
     int expwxRB_GROUP();
@@ -2115,6 +2221,7 @@ extern "C"
     int expwxROLE_SYSTEM_TOOLTIP();
     int expwxROLE_SYSTEM_WHITESPACE();
     int expwxROLE_SYSTEM_WINDOW();
+    int expwxRichTextFormattingDialog_Option_AllowPixelFontSize();
     int expwxSASH_BOTTOM();
     int expwxSASH_DRAG_DRAGGING();
     int expwxSASH_DRAG_LEFT_DOWN();
@@ -2163,6 +2270,7 @@ extern "C"
     int expwxSIGSYS();
     int expwxSIGTERM();
     int expwxSIGTRAP();
+    int expwxSIMPLE_BORDER();
     int expwxSIZE_ALLOW_MINUS_ONE();
     int expwxSIZE_AUTO();
     int expwxSIZE_AUTO_HEIGHT();
@@ -2172,6 +2280,7 @@ extern "C"
     int expwxSL_AUTOTICKS();
     int expwxSL_BOTH();
     int expwxSL_BOTTOM();
+    int expwxSL_HORIZONTAL();
     int expwxSL_INVERSE();
     int expwxSL_LABELS();
     int expwxSL_LEFT();
@@ -2180,6 +2289,7 @@ extern "C"
     int expwxSL_SELRANGE();
     int expwxSL_TOP();
     int expwxSL_VALUE_LABEL();
+    int expwxSL_VERTICAL();
     int expwxSOCKET_BLOCK();
     int expwxSOCKET_CONNECTION();
     int expwxSOCKET_CONNECTION_FLAG();
@@ -2212,12 +2322,15 @@ extern "C"
     int expwxSP_3DSASH();
     int expwxSP_ARROW_KEYS();
     int expwxSP_BORDER();
+    int expwxSP_HORIZONTAL();
     int expwxSP_LIVE_UPDATE();
     int expwxSP_NOBORDER();
     int expwxSP_NOSASH();
     int expwxSP_PERMIT_UNSPLIT();
+    int expwxSP_VERTICAL();
     int expwxSP_WRAP();
     int expwxSRC_INVERT();
+    int expwxSTATIC_BORDER();
     int expwxSTAY_ON_TOP();
     int expwxSTB_DEFAULT_STYLE();
     int expwxSTB_ELLIPSIZE_END();
@@ -2238,6 +2351,7 @@ extern "C"
     int expwxST_NO_AUTORESIZE();
     int expwxST_SIZEGRIP();
     int expwxST_WRAP();
+    int expwxSUNKEN_BORDER();
     int expwxSW_3D();
     int expwxSW_3DBORDER();
     int expwxSW_3DSASH();
@@ -2337,6 +2451,10 @@ extern "C"
     int expwxSYS_WINDOWMIN_X();
     int expwxSYS_WINDOWMIN_Y();
     int expwxS_DIR_DEFAULT();
+    int expwxStaticBitmapBase_Scale_AspectFill();
+    int expwxStaticBitmapBase_Scale_AspectFit();
+    int expwxStaticBitmapBase_Scale_Fill();
+    int expwxStaticBitmapBase_Scale_None();
     int expwxStrip_Accel();
     int expwxStrip_All();
     int expwxStrip_CJKMnemonics();
@@ -2350,6 +2468,8 @@ extern "C"
     int expwxStyle_SignPlus();
     int expwxStyle_SignSpace();
     int expwxStyle_WithThousandsSep();
+    int expwxSysMetric_CursorSize();
+    int expwxSysMetric_Other();
     int expwxTAB_TRAVERSAL();
     int expwxTASKBAR_BUTTON_ERROR();
     int expwxTASKBAR_BUTTON_INDETERMINATE();
@@ -2380,6 +2500,8 @@ extern "C"
     int expwxTC_MULTILINE();
     int expwxTC_OWNERDRAW();
     int expwxTC_RIGHTJUSTIFY();
+    int expwxTEMPLATE_INVISIBLE();
+    int expwxTEMPLATE_VISIBLE();
     int expwxTEXT_ALIGNMENT_CENTRE();
     int expwxTEXT_ALIGNMENT_JUSTIFIED();
     int expwxTEXT_ALIGNMENT_LEFT();
@@ -2620,12 +2742,12 @@ extern "C"
     int expwxYES_NO();
     int expwxZIP_FORMAT_ZIP64();
 
-    static int s_values[2615];
+    static int s_values[2737];
     static std::once_flag s_once;
 
     WXFFI_EXPORT(int, kwxConstants_IntCount)()
     {
-        return 2615;
+        return 2737;
     }
 
     WXFFI_EXPORT(const int*, kwxConstants_IntTable)()
@@ -2658,9 +2780,11 @@ extern "C"
                            s_values[i++] = exp_wxEVT_AUITOOLBAR_RIGHT_CLICK();
                            s_values[i++] = exp_wxEVT_AUITOOLBAR_TOOL_DROPDOWN();
                            s_values[i++] = exp_wxEVT_AUI_FIND_MANAGER();
+                           s_values[i++] = exp_wxEVT_AUI_PANE_ACTIVATED();
                            s_values[i++] = exp_wxEVT_AUI_PANE_BUTTON();
                            s_values[i++] = exp_wxEVT_AUI_PANE_CLOSE();
                            s_values[i++] = exp_wxEVT_AUI_PANE_MAXIMIZE();
+                           s_values[i++] = exp_wxEVT_AUI_PANE_MINIMIZE();
                            s_values[i++] = exp_wxEVT_AUI_PANE_RESTORE();
                            s_values[i++] = exp_wxEVT_AUI_RENDER();
                            s_values[i++] = exp_wxEVT_AUX1_DCLICK();
@@ -3254,6 +3378,25 @@ extern "C"
                            s_values[i++] = expwxANTIALIAS_DEFAULT();
                            s_values[i++] = expwxANTIALIAS_NONE();
                            s_values[i++] = expwxAPPLY();
+                           s_values[i++] = expwxAUI_BUTTON_CLOSE();
+                           s_values[i++] = expwxAUI_BUTTON_CUSTOM1();
+                           s_values[i++] = expwxAUI_BUTTON_CUSTOM2();
+                           s_values[i++] = expwxAUI_BUTTON_CUSTOM3();
+                           s_values[i++] = expwxAUI_BUTTON_DOWN();
+                           s_values[i++] = expwxAUI_BUTTON_LEFT();
+                           s_values[i++] = expwxAUI_BUTTON_MAXIMIZE_RESTORE();
+                           s_values[i++] = expwxAUI_BUTTON_MINIMIZE();
+                           s_values[i++] = expwxAUI_BUTTON_OPTIONS();
+                           s_values[i++] = expwxAUI_BUTTON_PIN();
+                           s_values[i++] = expwxAUI_BUTTON_RIGHT();
+                           s_values[i++] = expwxAUI_BUTTON_STATE_CHECKED();
+                           s_values[i++] = expwxAUI_BUTTON_STATE_DISABLED();
+                           s_values[i++] = expwxAUI_BUTTON_STATE_HIDDEN();
+                           s_values[i++] = expwxAUI_BUTTON_STATE_HOVER();
+                           s_values[i++] = expwxAUI_BUTTON_STATE_NORMAL();
+                           s_values[i++] = expwxAUI_BUTTON_STATE_PRESSED();
+                           s_values[i++] = expwxAUI_BUTTON_UP();
+                           s_values[i++] = expwxAUI_BUTTON_WINDOWLIST();
                            s_values[i++] = expwxAUI_DOCKART_ACTIVE_CAPTION_COLOUR();
                            s_values[i++] = expwxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR();
                            s_values[i++] = expwxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR();
@@ -3268,13 +3411,25 @@ extern "C"
                            s_values[i++] = expwxAUI_DOCKART_PANE_BORDER_SIZE();
                            s_values[i++] = expwxAUI_DOCKART_SASH_COLOUR();
                            s_values[i++] = expwxAUI_DOCKART_SASH_SIZE();
+                           s_values[i++] = expwxAUI_DOCK_BOTTOM();
+                           s_values[i++] = expwxAUI_DOCK_CENTER();
+                           s_values[i++] = expwxAUI_DOCK_CENTRE();
+                           s_values[i++] = expwxAUI_DOCK_LEFT();
+                           s_values[i++] = expwxAUI_DOCK_NONE();
+                           s_values[i++] = expwxAUI_DOCK_RIGHT();
+                           s_values[i++] = expwxAUI_DOCK_TOP();
                            s_values[i++] = expwxAUI_GRADIENT_HORIZONTAL();
                            s_values[i++] = expwxAUI_GRADIENT_NONE();
                            s_values[i++] = expwxAUI_GRADIENT_VERTICAL();
+                           s_values[i++] = expwxAUI_INSERT_DOCK();
+                           s_values[i++] = expwxAUI_INSERT_PANE();
+                           s_values[i++] = expwxAUI_INSERT_ROW();
                            s_values[i++] = expwxAUI_MGR_ALLOW_ACTIVE_PANE();
                            s_values[i++] = expwxAUI_MGR_ALLOW_FLOATING();
+                           s_values[i++] = expwxAUI_MGR_DEFAULT();
                            s_values[i++] = expwxAUI_MGR_HINT_FADE();
                            s_values[i++] = expwxAUI_MGR_LIVE_RESIZE();
+                           s_values[i++] = expwxAUI_MGR_NO_VENETIAN_BLINDS_FADE();
                            s_values[i++] = expwxAUI_MGR_RECTANGLE_HINT();
                            s_values[i++] = expwxAUI_MGR_TRANSPARENT_DRAG();
                            s_values[i++] = expwxAUI_MGR_TRANSPARENT_HINT();
@@ -3288,6 +3443,7 @@ extern "C"
                            s_values[i++] = expwxAUI_NB_CLOSE_ON_ACTIVE_TAB();
                            s_values[i++] = expwxAUI_NB_CLOSE_ON_ALL_TABS();
                            s_values[i++] = expwxAUI_NB_DEFAULT_STYLE();
+                           s_values[i++] = expwxAUI_NB_MIDDLE_CLICK_CLOSE();
                            s_values[i++] = expwxAUI_NB_MULTILINE();
                            s_values[i++] = expwxAUI_NB_PIN_ON_ACTIVE_TAB();
                            s_values[i++] = expwxAUI_NB_SCROLL_BUTTONS();
@@ -3298,12 +3454,26 @@ extern "C"
                            s_values[i++] = expwxAUI_NB_TOP();
                            s_values[i++] = expwxAUI_NB_UNPIN_ON_ALL_PINNED();
                            s_values[i++] = expwxAUI_NB_WINDOWLIST_BUTTON();
+                           s_values[i++] = expwxAUI_TAB_LOCKED();
+                           s_values[i++] = expwxAUI_TAB_NORMAL();
+                           s_values[i++] = expwxAUI_TAB_PINNED();
                            s_values[i++] = expwxAUI_TB_DEFAULT_STYLE();
+                           s_values[i++] = expwxAUI_TB_GRIPPER();
                            s_values[i++] = expwxAUI_TB_HORIZONTAL();
+                           s_values[i++] = expwxAUI_TB_HORZ_LAYOUT();
                            s_values[i++] = expwxAUI_TB_HORZ_TEXT();
+                           s_values[i++] = expwxAUI_TB_NO_AUTORESIZE();
+                           s_values[i++] = expwxAUI_TB_NO_TOOLTIPS();
                            s_values[i++] = expwxAUI_TB_OVERFLOW();
+                           s_values[i++] = expwxAUI_TB_PLAIN_BACKGROUND();
                            s_values[i++] = expwxAUI_TB_TEXT();
                            s_values[i++] = expwxAUI_TB_VERTICAL();
+                           s_values[i++] = expwxApp_AppearanceResult_CannotChange();
+                           s_values[i++] = expwxApp_AppearanceResult_Failure();
+                           s_values[i++] = expwxApp_AppearanceResult_Ok();
+                           s_values[i++] = expwxApp_Appearance_Dark();
+                           s_values[i++] = expwxApp_Appearance_Light();
+                           s_values[i++] = expwxApp_Appearance_System();
                            s_values[i++] = expwxBACKINGSTORE();
                            s_values[i++] = expwxBACKWARD();
                            s_values[i++] = expwxBATTERY_CRITICAL_STATE();
@@ -3313,6 +3483,7 @@ extern "C"
                            s_values[i++] = expwxBATTERY_UNKNOWN_STATE();
                            s_values[i++] = expwxBG_STYLE_ERASE();
                            s_values[i++] = expwxBG_STYLE_PAINT();
+                           s_values[i++] = expwxBG_STYLE_SYSTEM();
                            s_values[i++] = expwxBG_STYLE_TRANSPARENT();
                            s_values[i++] = expwxBIG_ENDIAN();
                            s_values[i++] = expwxBITMAP_SCREEN_DEPTH();
@@ -3369,6 +3540,7 @@ extern "C"
                            s_values[i++] = expwxBMP_8BPP_GREY();
                            s_values[i++] = expwxBMP_8BPP_PALETTE();
                            s_values[i++] = expwxBMP_8BPP_RED();
+                           s_values[i++] = expwxBORDER();
                            s_values[i++] = expwxBORDER_DEFAULT();
                            s_values[i++] = expwxBORDER_DOUBLE();
                            s_values[i++] = expwxBORDER_MASK();
@@ -3394,6 +3566,16 @@ extern "C"
                            s_values[i++] = expwxBRUSHSTYLE_STIPPLE_MASK_OPAQUE();
                            s_values[i++] = expwxBRUSHSTYLE_TRANSPARENT();
                            s_values[i++] = expwxBRUSHSTYLE_VERTICAL_HATCH();
+                           s_values[i++] = expwxBRUSH_STOCK_BLACK();
+                           s_values[i++] = expwxBRUSH_STOCK_BLUE();
+                           s_values[i++] = expwxBRUSH_STOCK_CYAN();
+                           s_values[i++] = expwxBRUSH_STOCK_GREEN();
+                           s_values[i++] = expwxBRUSH_STOCK_GREY();
+                           s_values[i++] = expwxBRUSH_STOCK_LIGHT_GREY();
+                           s_values[i++] = expwxBRUSH_STOCK_MEDIUM_GREY();
+                           s_values[i++] = expwxBRUSH_STOCK_RED();
+                           s_values[i++] = expwxBRUSH_STOCK_TRANSPARENT();
+                           s_values[i++] = expwxBRUSH_STOCK_WHITE();
                            s_values[i++] = expwxBU_AUTODRAW();
                            s_values[i++] = expwxBU_BOTTOM();
                            s_values[i++] = expwxBU_EXACTFIT();
@@ -3463,6 +3645,13 @@ extern "C"
                            s_values[i++] = expwxCMD_LINE_VAL_STRING();
                            s_values[i++] = expwxCMD_SWITCH_ON();
                            s_values[i++] = expwxCOLOURED();
+                           s_values[i++] = expwxCOLOUR_STOCK_BLACK();
+                           s_values[i++] = expwxCOLOUR_STOCK_BLUE();
+                           s_values[i++] = expwxCOLOUR_STOCK_CYAN();
+                           s_values[i++] = expwxCOLOUR_STOCK_GREEN();
+                           s_values[i++] = expwxCOLOUR_STOCK_LIGHT_GREY();
+                           s_values[i++] = expwxCOLOUR_STOCK_RED();
+                           s_values[i++] = expwxCOLOUR_STOCK_WHITE();
                            s_values[i++] = expwxCOL_DEFAULT_FLAGS();
                            s_values[i++] = expwxCOL_HIDDEN();
                            s_values[i++] = expwxCOL_REORDERABLE();
@@ -3529,6 +3718,8 @@ extern "C"
                            s_values[i++] = expwxCURSOR_WAIT();
                            s_values[i++] = expwxCURSOR_WATCH();
                            s_values[i++] = expwxColourData_NUM_CUSTOM();
+                           s_values[i++] = expwxColourDatabase_CSS();
+                           s_values[i++] = expwxColourDatabase_Traditional();
                            s_values[i++] = expwxDATAVIEW_CELL_ACTIVATABLE();
                            s_values[i++] = expwxDATAVIEW_CELL_EDITABLE();
                            s_values[i++] = expwxDATAVIEW_CELL_INERT();
@@ -3542,6 +3733,7 @@ extern "C"
                            s_values[i++] = expwxDD_SHOW_HIDDEN();
                            s_values[i++] = expwxDEFAULT_DIALOG_STYLE();
                            s_values[i++] = expwxDEFAULT_FRAME_STYLE();
+                           s_values[i++] = expwxDEFAULT_TEMPLATE_FLAGS();
                            s_values[i++] = expwxDF_BITMAP();
                            s_values[i++] = expwxDF_DIB();
                            s_values[i++] = expwxDF_DIF();
@@ -3583,6 +3775,7 @@ extern "C"
                            s_values[i++] = expwxDIR_IGNORE();
                            s_values[i++] = expwxDIR_NO_FOLLOW();
                            s_values[i++] = expwxDIR_STOP();
+                           s_values[i++] = expwxDOC_NEW();
                            s_values[i++] = expwxDOC_SILENT();
                            s_values[i++] = expwxDOUBLE_BORDER();
                            s_values[i++] = expwxDOWN();
@@ -3594,6 +3787,14 @@ extern "C"
                            s_values[i++] = expwxDUPLEX_HORIZONTAL();
                            s_values[i++] = expwxDUPLEX_SIMPLEX();
                            s_values[i++] = expwxDUPLEX_VERTICAL();
+                           s_values[i++] = expwxDVR_DEFAULT_ALIGNMENT();
+                           s_values[i++] = expwxDV_HORIZ_RULES();
+                           s_values[i++] = expwxDV_MULTIPLE();
+                           s_values[i++] = expwxDV_NO_HEADER();
+                           s_values[i++] = expwxDV_ROW_LINES();
+                           s_values[i++] = expwxDV_SINGLE();
+                           s_values[i++] = expwxDV_VARIABLE_LINE_HEIGHT();
+                           s_values[i++] = expwxDV_VERT_RULES();
                            s_values[i++] = expwxDateTime_Apr();
                            s_values[i++] = expwxDateTime_Aug();
                            s_values[i++] = expwxDateTime_Country_Default();
@@ -3622,6 +3823,8 @@ extern "C"
                            s_values[i++] = expwxDateTime_Thu();
                            s_values[i++] = expwxDateTime_Tue();
                            s_values[i++] = expwxDateTime_Wed();
+                           s_values[i++] = expwxDebugReport_Context_Current();
+                           s_values[i++] = expwxDebugReport_Context_Exception();
                            s_values[i++] = expwxDefaultCoord();
                            s_values[i++] = expwxDragCancel();
                            s_values[i++] = expwxDragCopy();
@@ -3636,6 +3839,11 @@ extern "C"
                            s_values[i++] = expwxELLIPSIZE_MIDDLE();
                            s_values[i++] = expwxELLIPSIZE_NONE();
                            s_values[i++] = expwxELLIPSIZE_START();
+                           s_values[i++] = expwxEL_ALLOW_DELETE();
+                           s_values[i++] = expwxEL_ALLOW_EDIT();
+                           s_values[i++] = expwxEL_ALLOW_NEW();
+                           s_values[i++] = expwxEL_DEFAULT_STYLE();
+                           s_values[i++] = expwxEL_NO_REORDER();
                            s_values[i++] = expwxEQUIV();
                            s_values[i++] = expwxEXEC_ASYNC();
                            s_values[i++] = expwxEXEC_BLOCK();
@@ -3767,6 +3975,10 @@ extern "C"
                            s_values[i++] = expwxFONTWEIGHT_NORMAL();
                            s_values[i++] = expwxFONTWEIGHT_SEMIBOLD();
                            s_values[i++] = expwxFONTWEIGHT_THIN();
+                           s_values[i++] = expwxFONT_STOCK_ITALIC();
+                           s_values[i++] = expwxFONT_STOCK_NORMAL();
+                           s_values[i++] = expwxFONT_STOCK_SMALL();
+                           s_values[i++] = expwxFONT_STOCK_SWISS();
                            s_values[i++] = expwxFORWARD();
                            s_values[i++] = expwxFRAME_EX_CONTEXTHELP();
                            s_values[i++] = expwxFRAME_FLOAT_ON_PARENT();
@@ -3865,6 +4077,7 @@ extern "C"
                            s_values[i++] = expwxICONIZE();
                            s_values[i++] = expwxICON_AUTH_NEEDED();
                            s_values[i++] = expwxICON_ERROR();
+                           s_values[i++] = expwxICON_HAND();
                            s_values[i++] = expwxICON_INFORMATION();
                            s_values[i++] = expwxICON_NONE();
                            s_values[i++] = expwxICON_QUESTION();
@@ -4267,6 +4480,7 @@ extern "C"
                            s_values[i++] = expwxLAYOUT_VERTICAL();
                            s_values[i++] = expwxLB_ALWAYS_SB();
                            s_values[i++] = expwxLB_EXTENDED();
+                           s_values[i++] = expwxLB_HSCROLL();
                            s_values[i++] = expwxLB_MULTIPLE();
                            s_values[i++] = expwxLB_NEEDED_SB();
                            s_values[i++] = expwxLB_OWNERDRAW();
@@ -4373,11 +4587,13 @@ extern "C"
                            s_values[i++] = expwxNOR();
                            s_values[i++] = expwxNORTH();
                            s_values[i++] = expwxNOT_FOUND();
+                           s_values[i++] = expwxNO_BORDER();
                            s_values[i++] = expwxNO_DEFAULT();
                            s_values[i++] = expwxNO_FULL_REPAINT_ON_RESIZE();
                            s_values[i++] = expwxNO_OP();
                            s_values[i++] = expwxNUM_VAL_NO_TRAILING_ZEROES();
                            s_values[i++] = expwxNUM_VAL_SIGN_PLUS();
+                           s_values[i++] = expwxNUM_VAL_SIGN_SPACE();
                            s_values[i++] = expwxNUM_VAL_THOUSANDS_SEPARATOR();
                            s_values[i++] = expwxNUM_VAL_ZERO_AS_BLANK();
                            s_values[i++] = expwxNotificationMessage_Timeout_Auto();
@@ -4397,6 +4613,7 @@ extern "C"
                            s_values[i++] = expwxODCB_DCLICK_CYCLES();
                            s_values[i++] = expwxODCB_PAINTING_CONTROL();
                            s_values[i++] = expwxODCB_PAINTING_SELECTED();
+                           s_values[i++] = expwxODCB_STD_CONTROL_PAINT();
                            s_values[i++] = expwxODDEVEN_RULE();
                            s_values[i++] = expwxOK();
                            s_values[i++] = expwxOR();
@@ -4508,6 +4725,16 @@ extern "C"
                            s_values[i++] = expwxPENSTYLE_TRANSPARENT();
                            s_values[i++] = expwxPENSTYLE_USER_DASH();
                            s_values[i++] = expwxPENSTYLE_VERTICAL_HATCH();
+                           s_values[i++] = expwxPEN_STOCK_BLACK();
+                           s_values[i++] = expwxPEN_STOCK_BLACK_DASHED();
+                           s_values[i++] = expwxPEN_STOCK_CYAN();
+                           s_values[i++] = expwxPEN_STOCK_GREEN();
+                           s_values[i++] = expwxPEN_STOCK_GREY();
+                           s_values[i++] = expwxPEN_STOCK_LIGHT_GREY();
+                           s_values[i++] = expwxPEN_STOCK_MEDIUM_GREY();
+                           s_values[i++] = expwxPEN_STOCK_RED();
+                           s_values[i++] = expwxPEN_STOCK_TRANSPARENT();
+                           s_values[i++] = expwxPEN_STOCK_WHITE();
                            s_values[i++] = expPGMAN_DEFAULT_STYLE();
                            s_values[i++] = expwxPG_AUTO_SORT();
                            s_values[i++] = expwxPG_BOLD_MODIFIED();
@@ -4586,6 +4813,7 @@ extern "C"
                            s_values[i++] = expwxPROPSHEET_SHRINKTOFIT();
                            s_values[i++] = expwxPROPSHEET_TOOLBOOK();
                            s_values[i++] = expPU_CONTAINS_CONTROLS();
+                           s_values[i++] = expwxRAISED_BORDER();
                            s_values[i++] = expwxRA_SPECIFY_COLS();
                            s_values[i++] = expwxRA_SPECIFY_ROWS();
                            s_values[i++] = expwxRB_GROUP();
@@ -4745,6 +4973,7 @@ extern "C"
                            s_values[i++] = expwxROLE_SYSTEM_TOOLTIP();
                            s_values[i++] = expwxROLE_SYSTEM_WHITESPACE();
                            s_values[i++] = expwxROLE_SYSTEM_WINDOW();
+                           s_values[i++] = expwxRichTextFormattingDialog_Option_AllowPixelFontSize();
                            s_values[i++] = expwxSASH_BOTTOM();
                            s_values[i++] = expwxSASH_DRAG_DRAGGING();
                            s_values[i++] = expwxSASH_DRAG_LEFT_DOWN();
@@ -4793,6 +5022,7 @@ extern "C"
                            s_values[i++] = expwxSIGSYS();
                            s_values[i++] = expwxSIGTERM();
                            s_values[i++] = expwxSIGTRAP();
+                           s_values[i++] = expwxSIMPLE_BORDER();
                            s_values[i++] = expwxSIZE_ALLOW_MINUS_ONE();
                            s_values[i++] = expwxSIZE_AUTO();
                            s_values[i++] = expwxSIZE_AUTO_HEIGHT();
@@ -4802,6 +5032,7 @@ extern "C"
                            s_values[i++] = expwxSL_AUTOTICKS();
                            s_values[i++] = expwxSL_BOTH();
                            s_values[i++] = expwxSL_BOTTOM();
+                           s_values[i++] = expwxSL_HORIZONTAL();
                            s_values[i++] = expwxSL_INVERSE();
                            s_values[i++] = expwxSL_LABELS();
                            s_values[i++] = expwxSL_LEFT();
@@ -4810,6 +5041,7 @@ extern "C"
                            s_values[i++] = expwxSL_SELRANGE();
                            s_values[i++] = expwxSL_TOP();
                            s_values[i++] = expwxSL_VALUE_LABEL();
+                           s_values[i++] = expwxSL_VERTICAL();
                            s_values[i++] = expwxSOCKET_BLOCK();
                            s_values[i++] = expwxSOCKET_CONNECTION();
                            s_values[i++] = expwxSOCKET_CONNECTION_FLAG();
@@ -4842,12 +5074,15 @@ extern "C"
                            s_values[i++] = expwxSP_3DSASH();
                            s_values[i++] = expwxSP_ARROW_KEYS();
                            s_values[i++] = expwxSP_BORDER();
+                           s_values[i++] = expwxSP_HORIZONTAL();
                            s_values[i++] = expwxSP_LIVE_UPDATE();
                            s_values[i++] = expwxSP_NOBORDER();
                            s_values[i++] = expwxSP_NOSASH();
                            s_values[i++] = expwxSP_PERMIT_UNSPLIT();
+                           s_values[i++] = expwxSP_VERTICAL();
                            s_values[i++] = expwxSP_WRAP();
                            s_values[i++] = expwxSRC_INVERT();
+                           s_values[i++] = expwxSTATIC_BORDER();
                            s_values[i++] = expwxSTAY_ON_TOP();
                            s_values[i++] = expwxSTB_DEFAULT_STYLE();
                            s_values[i++] = expwxSTB_ELLIPSIZE_END();
@@ -4868,6 +5103,7 @@ extern "C"
                            s_values[i++] = expwxST_NO_AUTORESIZE();
                            s_values[i++] = expwxST_SIZEGRIP();
                            s_values[i++] = expwxST_WRAP();
+                           s_values[i++] = expwxSUNKEN_BORDER();
                            s_values[i++] = expwxSW_3D();
                            s_values[i++] = expwxSW_3DBORDER();
                            s_values[i++] = expwxSW_3DSASH();
@@ -4967,6 +5203,10 @@ extern "C"
                            s_values[i++] = expwxSYS_WINDOWMIN_X();
                            s_values[i++] = expwxSYS_WINDOWMIN_Y();
                            s_values[i++] = expwxS_DIR_DEFAULT();
+                           s_values[i++] = expwxStaticBitmapBase_Scale_AspectFill();
+                           s_values[i++] = expwxStaticBitmapBase_Scale_AspectFit();
+                           s_values[i++] = expwxStaticBitmapBase_Scale_Fill();
+                           s_values[i++] = expwxStaticBitmapBase_Scale_None();
                            s_values[i++] = expwxStrip_Accel();
                            s_values[i++] = expwxStrip_All();
                            s_values[i++] = expwxStrip_CJKMnemonics();
@@ -4980,6 +5220,8 @@ extern "C"
                            s_values[i++] = expwxStyle_SignPlus();
                            s_values[i++] = expwxStyle_SignSpace();
                            s_values[i++] = expwxStyle_WithThousandsSep();
+                           s_values[i++] = expwxSysMetric_CursorSize();
+                           s_values[i++] = expwxSysMetric_Other();
                            s_values[i++] = expwxTAB_TRAVERSAL();
                            s_values[i++] = expwxTASKBAR_BUTTON_ERROR();
                            s_values[i++] = expwxTASKBAR_BUTTON_INDETERMINATE();
@@ -5010,6 +5252,8 @@ extern "C"
                            s_values[i++] = expwxTC_MULTILINE();
                            s_values[i++] = expwxTC_OWNERDRAW();
                            s_values[i++] = expwxTC_RIGHTJUSTIFY();
+                           s_values[i++] = expwxTEMPLATE_INVISIBLE();
+                           s_values[i++] = expwxTEMPLATE_VISIBLE();
                            s_values[i++] = expwxTEXT_ALIGNMENT_CENTRE();
                            s_values[i++] = expwxTEXT_ALIGNMENT_JUSTIFIED();
                            s_values[i++] = expwxTEXT_ALIGNMENT_LEFT();
@@ -5255,7 +5499,7 @@ extern "C"
 
     WXFFI_EXPORT(const char* const*, kwxConstants_NameTable)()
     {
-        static const char* const s_names[2615] = {
+        static const char* const s_names[2737] = {
             "EVT_ACCELERATOR_KEY",
             "EVT_ACTIVATE",
             "EVT_ACTIVATE_APP",
@@ -5280,9 +5524,11 @@ extern "C"
             "EVT_AUITOOLBAR_RIGHT_CLICK",
             "EVT_AUITOOLBAR_TOOL_DROPDOWN",
             "EVT_AUI_FIND_MANAGER",
+            "EVT_AUI_PANE_ACTIVATED",
             "EVT_AUI_PANE_BUTTON",
             "EVT_AUI_PANE_CLOSE",
             "EVT_AUI_PANE_MAXIMIZE",
+            "EVT_AUI_PANE_MINIMIZE",
             "EVT_AUI_PANE_RESTORE",
             "EVT_AUI_RENDER",
             "EVT_AUX1_DCLICK",
@@ -5876,6 +6122,25 @@ extern "C"
             "ANTIALIAS_DEFAULT",
             "ANTIALIAS_NONE",
             "APPLY",
+            "AUI_BUTTON_CLOSE",
+            "AUI_BUTTON_CUSTOM1",
+            "AUI_BUTTON_CUSTOM2",
+            "AUI_BUTTON_CUSTOM3",
+            "AUI_BUTTON_DOWN",
+            "AUI_BUTTON_LEFT",
+            "AUI_BUTTON_MAXIMIZE_RESTORE",
+            "AUI_BUTTON_MINIMIZE",
+            "AUI_BUTTON_OPTIONS",
+            "AUI_BUTTON_PIN",
+            "AUI_BUTTON_RIGHT",
+            "AUI_BUTTON_STATE_CHECKED",
+            "AUI_BUTTON_STATE_DISABLED",
+            "AUI_BUTTON_STATE_HIDDEN",
+            "AUI_BUTTON_STATE_HOVER",
+            "AUI_BUTTON_STATE_NORMAL",
+            "AUI_BUTTON_STATE_PRESSED",
+            "AUI_BUTTON_UP",
+            "AUI_BUTTON_WINDOWLIST",
             "AUI_DOCKART_ACTIVE_CAPTION_COLOUR",
             "AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR",
             "AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR",
@@ -5890,13 +6155,25 @@ extern "C"
             "AUI_DOCKART_PANE_BORDER_SIZE",
             "AUI_DOCKART_SASH_COLOUR",
             "AUI_DOCKART_SASH_SIZE",
+            "AUI_DOCK_BOTTOM",
+            "AUI_DOCK_CENTER",
+            "AUI_DOCK_CENTRE",
+            "AUI_DOCK_LEFT",
+            "AUI_DOCK_NONE",
+            "AUI_DOCK_RIGHT",
+            "AUI_DOCK_TOP",
             "AUI_GRADIENT_HORIZONTAL",
             "AUI_GRADIENT_NONE",
             "AUI_GRADIENT_VERTICAL",
+            "AUI_INSERT_DOCK",
+            "AUI_INSERT_PANE",
+            "AUI_INSERT_ROW",
             "AUI_MGR_ALLOW_ACTIVE_PANE",
             "AUI_MGR_ALLOW_FLOATING",
+            "AUI_MGR_DEFAULT",
             "AUI_MGR_HINT_FADE",
             "AUI_MGR_LIVE_RESIZE",
+            "AUI_MGR_NO_VENETIAN_BLINDS_FADE",
             "AUI_MGR_RECTANGLE_HINT",
             "AUI_MGR_TRANSPARENT_DRAG",
             "AUI_MGR_TRANSPARENT_HINT",
@@ -5910,6 +6187,7 @@ extern "C"
             "AUI_NB_CLOSE_ON_ACTIVE_TAB",
             "AUI_NB_CLOSE_ON_ALL_TABS",
             "AUI_NB_DEFAULT_STYLE",
+            "AUI_NB_MIDDLE_CLICK_CLOSE",
             "AUI_NB_MULTILINE",
             "AUI_NB_PIN_ON_ACTIVE_TAB",
             "AUI_NB_SCROLL_BUTTONS",
@@ -5920,12 +6198,26 @@ extern "C"
             "AUI_NB_TOP",
             "AUI_NB_UNPIN_ON_ALL_PINNED",
             "AUI_NB_WINDOWLIST_BUTTON",
+            "AUI_TAB_LOCKED",
+            "AUI_TAB_NORMAL",
+            "AUI_TAB_PINNED",
             "AUI_TB_DEFAULT_STYLE",
+            "AUI_TB_GRIPPER",
             "AUI_TB_HORIZONTAL",
+            "AUI_TB_HORZ_LAYOUT",
             "AUI_TB_HORZ_TEXT",
+            "AUI_TB_NO_AUTORESIZE",
+            "AUI_TB_NO_TOOLTIPS",
             "AUI_TB_OVERFLOW",
+            "AUI_TB_PLAIN_BACKGROUND",
             "AUI_TB_TEXT",
             "AUI_TB_VERTICAL",
+            "App_AppearanceResult_CannotChange",
+            "App_AppearanceResult_Failure",
+            "App_AppearanceResult_Ok",
+            "App_Appearance_Dark",
+            "App_Appearance_Light",
+            "App_Appearance_System",
             "BACKINGSTORE",
             "BACKWARD",
             "BATTERY_CRITICAL_STATE",
@@ -5935,6 +6227,7 @@ extern "C"
             "BATTERY_UNKNOWN_STATE",
             "BG_STYLE_ERASE",
             "BG_STYLE_PAINT",
+            "BG_STYLE_SYSTEM",
             "BG_STYLE_TRANSPARENT",
             "BIG_ENDIAN",
             "BITMAP_SCREEN_DEPTH",
@@ -5991,6 +6284,7 @@ extern "C"
             "BMP_8BPP_GREY",
             "BMP_8BPP_PALETTE",
             "BMP_8BPP_RED",
+            "BORDER",
             "BORDER_DEFAULT",
             "BORDER_DOUBLE",
             "BORDER_MASK",
@@ -6016,6 +6310,16 @@ extern "C"
             "BRUSHSTYLE_STIPPLE_MASK_OPAQUE",
             "BRUSHSTYLE_TRANSPARENT",
             "BRUSHSTYLE_VERTICAL_HATCH",
+            "BRUSH_STOCK_BLACK",
+            "BRUSH_STOCK_BLUE",
+            "BRUSH_STOCK_CYAN",
+            "BRUSH_STOCK_GREEN",
+            "BRUSH_STOCK_GREY",
+            "BRUSH_STOCK_LIGHT_GREY",
+            "BRUSH_STOCK_MEDIUM_GREY",
+            "BRUSH_STOCK_RED",
+            "BRUSH_STOCK_TRANSPARENT",
+            "BRUSH_STOCK_WHITE",
             "BU_AUTODRAW",
             "BU_BOTTOM",
             "BU_EXACTFIT",
@@ -6085,6 +6389,13 @@ extern "C"
             "CMD_LINE_VAL_STRING",
             "CMD_SWITCH_ON",
             "COLOURED",
+            "COLOUR_STOCK_BLACK",
+            "COLOUR_STOCK_BLUE",
+            "COLOUR_STOCK_CYAN",
+            "COLOUR_STOCK_GREEN",
+            "COLOUR_STOCK_LIGHT_GREY",
+            "COLOUR_STOCK_RED",
+            "COLOUR_STOCK_WHITE",
             "COL_DEFAULT_FLAGS",
             "COL_HIDDEN",
             "COL_REORDERABLE",
@@ -6151,6 +6462,8 @@ extern "C"
             "CURSOR_WAIT",
             "CURSOR_WATCH",
             "ColourData_NUM_CUSTOM",
+            "ColourDatabase_CSS",
+            "ColourDatabase_Traditional",
             "DATAVIEW_CELL_ACTIVATABLE",
             "DATAVIEW_CELL_EDITABLE",
             "DATAVIEW_CELL_INERT",
@@ -6164,6 +6477,7 @@ extern "C"
             "DD_SHOW_HIDDEN",
             "DEFAULT_DIALOG_STYLE",
             "DEFAULT_FRAME_STYLE",
+            "DEFAULT_TEMPLATE_FLAGS",
             "DF_BITMAP",
             "DF_DIB",
             "DF_DIF",
@@ -6205,6 +6519,7 @@ extern "C"
             "DIR_IGNORE",
             "DIR_NO_FOLLOW",
             "DIR_STOP",
+            "DOC_NEW",
             "DOC_SILENT",
             "DOUBLE_BORDER",
             "DOWN",
@@ -6216,6 +6531,14 @@ extern "C"
             "DUPLEX_HORIZONTAL",
             "DUPLEX_SIMPLEX",
             "DUPLEX_VERTICAL",
+            "DVR_DEFAULT_ALIGNMENT",
+            "DV_HORIZ_RULES",
+            "DV_MULTIPLE",
+            "DV_NO_HEADER",
+            "DV_ROW_LINES",
+            "DV_SINGLE",
+            "DV_VARIABLE_LINE_HEIGHT",
+            "DV_VERT_RULES",
             "DateTime_Apr",
             "DateTime_Aug",
             "DateTime_Country_Default",
@@ -6244,6 +6567,8 @@ extern "C"
             "DateTime_Thu",
             "DateTime_Tue",
             "DateTime_Wed",
+            "DebugReport_Context_Current",
+            "DebugReport_Context_Exception",
             "DefaultCoord",
             "DragCancel",
             "DragCopy",
@@ -6258,6 +6583,11 @@ extern "C"
             "ELLIPSIZE_MIDDLE",
             "ELLIPSIZE_NONE",
             "ELLIPSIZE_START",
+            "EL_ALLOW_DELETE",
+            "EL_ALLOW_EDIT",
+            "EL_ALLOW_NEW",
+            "EL_DEFAULT_STYLE",
+            "EL_NO_REORDER",
             "EQUIV",
             "EXEC_ASYNC",
             "EXEC_BLOCK",
@@ -6389,6 +6719,10 @@ extern "C"
             "FONTWEIGHT_NORMAL",
             "FONTWEIGHT_SEMIBOLD",
             "FONTWEIGHT_THIN",
+            "FONT_STOCK_ITALIC",
+            "FONT_STOCK_NORMAL",
+            "FONT_STOCK_SMALL",
+            "FONT_STOCK_SWISS",
             "FORWARD",
             "FRAME_EX_CONTEXTHELP",
             "FRAME_FLOAT_ON_PARENT",
@@ -6487,6 +6821,7 @@ extern "C"
             "ICONIZE",
             "ICON_AUTH_NEEDED",
             "ICON_ERROR",
+            "ICON_HAND",
             "ICON_INFORMATION",
             "ICON_NONE",
             "ICON_QUESTION",
@@ -6889,6 +7224,7 @@ extern "C"
             "LAYOUT_VERTICAL",
             "LB_ALWAYS_SB",
             "LB_EXTENDED",
+            "LB_HSCROLL",
             "LB_MULTIPLE",
             "LB_NEEDED_SB",
             "LB_OWNERDRAW",
@@ -6995,11 +7331,13 @@ extern "C"
             "NOR",
             "NORTH",
             "NOT_FOUND",
+            "NO_BORDER",
             "NO_DEFAULT",
             "NO_FULL_REPAINT_ON_RESIZE",
             "NO_OP",
             "NUM_VAL_NO_TRAILING_ZEROES",
             "NUM_VAL_SIGN_PLUS",
+            "NUM_VAL_SIGN_SPACE",
             "NUM_VAL_THOUSANDS_SEPARATOR",
             "NUM_VAL_ZERO_AS_BLANK",
             "NotificationMessage_Timeout_Auto",
@@ -7019,6 +7357,7 @@ extern "C"
             "ODCB_DCLICK_CYCLES",
             "ODCB_PAINTING_CONTROL",
             "ODCB_PAINTING_SELECTED",
+            "ODCB_STD_CONTROL_PAINT",
             "ODDEVEN_RULE",
             "OK",
             "OR",
@@ -7130,6 +7469,16 @@ extern "C"
             "PENSTYLE_TRANSPARENT",
             "PENSTYLE_USER_DASH",
             "PENSTYLE_VERTICAL_HATCH",
+            "PEN_STOCK_BLACK",
+            "PEN_STOCK_BLACK_DASHED",
+            "PEN_STOCK_CYAN",
+            "PEN_STOCK_GREEN",
+            "PEN_STOCK_GREY",
+            "PEN_STOCK_LIGHT_GREY",
+            "PEN_STOCK_MEDIUM_GREY",
+            "PEN_STOCK_RED",
+            "PEN_STOCK_TRANSPARENT",
+            "PEN_STOCK_WHITE",
             "PGMAN_DEFAULT_STYLE",
             "PG_AUTO_SORT",
             "PG_BOLD_MODIFIED",
@@ -7208,6 +7557,7 @@ extern "C"
             "PROPSHEET_SHRINKTOFIT",
             "PROPSHEET_TOOLBOOK",
             "PU_CONTAINS_CONTROLS",
+            "RAISED_BORDER",
             "RA_SPECIFY_COLS",
             "RA_SPECIFY_ROWS",
             "RB_GROUP",
@@ -7367,6 +7717,7 @@ extern "C"
             "ROLE_SYSTEM_TOOLTIP",
             "ROLE_SYSTEM_WHITESPACE",
             "ROLE_SYSTEM_WINDOW",
+            "RichTextFormattingDialog_Option_AllowPixelFontSize",
             "SASH_BOTTOM",
             "SASH_DRAG_DRAGGING",
             "SASH_DRAG_LEFT_DOWN",
@@ -7415,6 +7766,7 @@ extern "C"
             "SIGSYS",
             "SIGTERM",
             "SIGTRAP",
+            "SIMPLE_BORDER",
             "SIZE_ALLOW_MINUS_ONE",
             "SIZE_AUTO",
             "SIZE_AUTO_HEIGHT",
@@ -7424,6 +7776,7 @@ extern "C"
             "SL_AUTOTICKS",
             "SL_BOTH",
             "SL_BOTTOM",
+            "SL_HORIZONTAL",
             "SL_INVERSE",
             "SL_LABELS",
             "SL_LEFT",
@@ -7432,6 +7785,7 @@ extern "C"
             "SL_SELRANGE",
             "SL_TOP",
             "SL_VALUE_LABEL",
+            "SL_VERTICAL",
             "SOCKET_BLOCK",
             "SOCKET_CONNECTION",
             "SOCKET_CONNECTION_FLAG",
@@ -7464,12 +7818,15 @@ extern "C"
             "SP_3DSASH",
             "SP_ARROW_KEYS",
             "SP_BORDER",
+            "SP_HORIZONTAL",
             "SP_LIVE_UPDATE",
             "SP_NOBORDER",
             "SP_NOSASH",
             "SP_PERMIT_UNSPLIT",
+            "SP_VERTICAL",
             "SP_WRAP",
             "SRC_INVERT",
+            "STATIC_BORDER",
             "STAY_ON_TOP",
             "STB_DEFAULT_STYLE",
             "STB_ELLIPSIZE_END",
@@ -7490,6 +7847,7 @@ extern "C"
             "ST_NO_AUTORESIZE",
             "ST_SIZEGRIP",
             "ST_WRAP",
+            "SUNKEN_BORDER",
             "SW_3D",
             "SW_3DBORDER",
             "SW_3DSASH",
@@ -7589,6 +7947,10 @@ extern "C"
             "SYS_WINDOWMIN_X",
             "SYS_WINDOWMIN_Y",
             "S_DIR_DEFAULT",
+            "StaticBitmapBase_Scale_AspectFill",
+            "StaticBitmapBase_Scale_AspectFit",
+            "StaticBitmapBase_Scale_Fill",
+            "StaticBitmapBase_Scale_None",
             "Strip_Accel",
             "Strip_All",
             "Strip_CJKMnemonics",
@@ -7602,6 +7964,8 @@ extern "C"
             "Style_SignPlus",
             "Style_SignSpace",
             "Style_WithThousandsSep",
+            "SysMetric_CursorSize",
+            "SysMetric_Other",
             "TAB_TRAVERSAL",
             "TASKBAR_BUTTON_ERROR",
             "TASKBAR_BUTTON_INDETERMINATE",
@@ -7632,6 +7996,8 @@ extern "C"
             "TC_MULTILINE",
             "TC_OWNERDRAW",
             "TC_RIGHTJUSTIFY",
+            "TEMPLATE_INVISIBLE",
+            "TEMPLATE_VISIBLE",
             "TEXT_ALIGNMENT_CENTRE",
             "TEXT_ALIGNMENT_JUSTIFIED",
             "TEXT_ALIGNMENT_LEFT",

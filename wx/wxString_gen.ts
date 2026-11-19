@@ -37,6 +37,18 @@ export class wxString {
     return lib.symbols.wxString_Length(this._ptr) as bigint;
   }
 
+  ToLong(value: Pointer): boolean {
+    return (lib.symbols.wxString_ToLong(this._ptr, value) as number) !== 0;
+  }
+
+  ToLongLong(value: Pointer): boolean {
+    return (lib.symbols.wxString_ToLongLong(this._ptr, value) as number) !== 0;
+  }
+
+  ToDouble(value: Pointer): boolean {
+    return (lib.symbols.wxString_ToDouble(this._ptr, value) as number) !== 0;
+  }
+
 }
 
 export function createWxStringFromBuffer(buffer: Pointer): wxString | null {

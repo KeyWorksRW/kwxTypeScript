@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxSize } from "./wxSize_gen.ts";
 
@@ -41,7 +42,7 @@ export class wxMediaCtrl {
   GetBestSize(): wxSize | null {
     const rawPtr = lib.symbols.wxMediaCtrl_GetBestSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetPlaybackRate(): number {
@@ -60,16 +61,37 @@ export class wxMediaCtrl {
     return lib.symbols.wxMediaCtrl_Length(this._ptr) as bigint;
   }
 
-  Load(fileName: Pointer): boolean {
-    return (lib.symbols.wxMediaCtrl_Load(this._ptr, fileName) as number) !== 0;
+  Load(fileName: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      return (lib.symbols.wxMediaCtrl_Load(this._ptr, __s0 ? __s0.ptr : (fileName as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadURI(uri: Pointer): boolean {
-    return (lib.symbols.wxMediaCtrl_LoadURI(this._ptr, uri) as number) !== 0;
+  LoadURI(uri: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof uri === "string") __s0 = createWxString(uri);
+      return (lib.symbols.wxMediaCtrl_LoadURI(this._ptr, __s0 ? __s0.ptr : (uri as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  LoadURIWithProxy(uri: Pointer, proxy: Pointer): boolean {
-    return (lib.symbols.wxMediaCtrl_LoadURIWithProxy(this._ptr, uri, proxy) as number) !== 0;
+  LoadURIWithProxy(uri: string | Pointer, proxy: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof uri === "string") __s0 = createWxString(uri);
+      if (typeof proxy === "string") __s1 = createWxString(proxy);
+      return (lib.symbols.wxMediaCtrl_LoadURIWithProxy(this._ptr, __s0 ? __s0.ptr : (uri as Pointer), __s1 ? __s1.ptr : (proxy as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   Pause(): boolean {
@@ -106,10 +128,22 @@ export class wxMediaCtrl {
 
 }
 
-export function createWxMediaCtrl(parent: Pointer, id: number, fileName: Pointer, x: number, y: number, width: number, height: number, style: bigint, szBackend: Pointer, name: Pointer): wxMediaCtrl | null {
-    const rawPtr = lib.symbols.wxMediaCtrl_Create(parent, id, fileName, x, y, width, height, style, szBackend, name);
-    if (rawPtr === null) return null;
-    return new wxMediaCtrl(rawPtr);
+export function createWxMediaCtrl(parent: Pointer, id: number, fileName: string | Pointer, x: number, y: number, width: number, height: number, style: bigint, szBackend: string | Pointer, name: string | Pointer): wxMediaCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      if (typeof szBackend === "string") __s1 = createWxString(szBackend);
+      if (typeof name === "string") __s2 = createWxString(name);
+      const rawPtr = lib.symbols.wxMediaCtrl_Create(parent, id, __s0 ? __s0.ptr : (fileName as Pointer), x, y, width, height, style, __s1 ? __s1.ptr : (szBackend as Pointer), __s2 ? __s2.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxMediaCtrl(rawPtr);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

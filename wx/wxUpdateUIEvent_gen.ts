@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvent } from "./wxEvent_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -44,11 +45,17 @@ export class wxUpdateUIEvent extends wxEvent {
   GetText(): wxString | null {
     const rawPtr = lib.symbols.wxUpdateUIEvent_GetText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetText(text: Pointer): void {
-    lib.symbols.wxUpdateUIEvent_SetText(this._ptr, text);
+  SetText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxUpdateUIEvent_SetText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

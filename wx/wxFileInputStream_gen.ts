@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxInputStream } from "./wxInputStream_gen.ts";
 
@@ -31,10 +32,16 @@ export class wxFileInputStream extends wxInputStream {
 
 }
 
-export function createWxFileInputStream(ofileName: Pointer): wxFileInputStream | null {
-    const rawPtr = lib.symbols.wxFileInputStream_Create(ofileName);
-    if (rawPtr === null) return null;
-    return new wxFileInputStream(rawPtr);
+export function createWxFileInputStream(ofileName: string | Pointer): wxFileInputStream | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof ofileName === "string") __s0 = createWxString(ofileName);
+      const rawPtr = lib.symbols.wxFileInputStream_Create(__s0 ? __s0.ptr : (ofileName as Pointer));
+      if (rawPtr === null) return null;
+      return new wxFileInputStream(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

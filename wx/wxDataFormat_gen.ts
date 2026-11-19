@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -33,7 +34,7 @@ export class wxDataFormat {
   GetId(): wxString | null {
     const rawPtr = lib.symbols.wxDataFormat_GetId(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetType(): number {
@@ -54,10 +55,16 @@ export class wxDataFormat {
 
 }
 
-export function createWxDataFormatFromId(name: Pointer): wxDataFormat | null {
-    const rawPtr = lib.symbols.wxDataFormat_CreateFromId(name);
-    if (rawPtr === null) return null;
-    return new wxDataFormat(rawPtr);
+export function createWxDataFormatFromId(name: string | Pointer): wxDataFormat | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxDataFormat_CreateFromId(__s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxDataFormat(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxDataFormatFromType(typ: number): wxDataFormat | null {

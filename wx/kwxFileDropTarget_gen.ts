@@ -4,6 +4,7 @@ import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDropTarget } from "./wxDropTarget_gen.ts";
+import { wxArrayString } from "./wxArrayString_gen.ts";
 
 export class kwxFileDropTarget extends wxDropTarget {
   /** Returns the underlying native pointer. */
@@ -39,6 +40,60 @@ export class kwxFileDropTarget extends wxDropTarget {
 
   SetOnLeave(pFunction: Pointer): void {
     lib.symbols.kwxFileDropTarget_SetOnLeave(this._ptr, pFunction);
+  }
+
+  SetOnDataWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxFileDropTarget_SetOnDataWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnDropWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxFileDropTarget_SetOnDropWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnEnterWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxFileDropTarget_SetOnEnterWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnDragOverWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxFileDropTarget_SetOnDragOverWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnLeaveWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxFileDropTarget_SetOnLeaveWithData(this._ptr, pFunction, data);
+  }
+
+  SetDataResult(result: number): void {
+    lib.symbols.kwxFileDropTarget_SetDataResult(this._ptr, result);
+  }
+
+  SetDropResult(result: number): void {
+    lib.symbols.kwxFileDropTarget_SetDropResult(this._ptr, result);
+  }
+
+  SetEnterResult(result: number): void {
+    lib.symbols.kwxFileDropTarget_SetEnterResult(this._ptr, result);
+  }
+
+  SetDragOverResult(result: number): void {
+    lib.symbols.kwxFileDropTarget_SetDragOverResult(this._ptr, result);
+  }
+
+  GetDropResult(): number {
+    return lib.symbols.kwxFileDropTarget_GetDropResult(this._ptr);
+  }
+
+  SetOnDropFilesWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxFileDropTarget_SetOnDropFilesWithData(this._ptr, pFunction, data);
+  }
+
+  SetDropFilesResult(result: number): void {
+    lib.symbols.kwxFileDropTarget_SetDropFilesResult(this._ptr, result);
+  }
+
+  GetDropFiles(): wxArrayString | null {
+    const rawPtr = lib.symbols.kwxFileDropTarget_GetDropFiles(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxArrayString(rawPtr, true);
   }
 
 }

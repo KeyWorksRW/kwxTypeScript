@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxProtocol } from "./wxProtocol_gen.ts";
 import { wxInputStream } from "./wxInputStream_gen.ts";
@@ -24,12 +25,31 @@ export class wxHTTP extends wxProtocol {
     this.Delete();
   }
 
-  override Connect(host: Pointer): boolean {
-    return (lib.symbols.wxHTTP_Connect(this._ptr, host) as number) !== 0;
+  override Connect(host: string | Pointer): boolean;
+  override Connect(address: Pointer, wait: boolean): boolean;
+  override Connect(host: string | Pointer, wait?: boolean): boolean {
+    if (arguments.length === 1) {
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof host === "string") __s0 = createWxString(host);
+        return (lib.symbols.wxHTTP_Connect(this._ptr, __s0 ? __s0.ptr : (host as Pointer)) as number) !== 0;
+      } finally {
+        __s0?.Delete();
+      }
+    }
+    else {
+      return super.Connect(host as Pointer, wait as boolean);
+    }
   }
 
-  ConnectPort(host: Pointer, port: number): boolean {
-    return (lib.symbols.wxHTTP_ConnectPort(this._ptr, host, port) as number) !== 0;
+  ConnectPort(host: string | Pointer, port: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof host === "string") __s0 = createWxString(host);
+      return (lib.symbols.wxHTTP_ConnectPort(this._ptr, __s0 ? __s0.ptr : (host as Pointer), port) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override ConnectAddr(address: Pointer, wait: boolean): boolean {
@@ -40,52 +60,100 @@ export class wxHTTP extends wxProtocol {
     return (lib.symbols.wxHTTP_Abort(this._ptr) as number) !== 0;
   }
 
-  override GetInputStream(path: Pointer): wxInputStream | null {
-    const rawPtr = lib.symbols.wxHTTP_GetInputStream(this._ptr, path);
-    if (rawPtr === null) return null;
-    return new wxInputStream(rawPtr, true);
+  override GetInputStream(path: string | Pointer): wxInputStream | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      const rawPtr = lib.symbols.wxHTTP_GetInputStream(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+      if (rawPtr === null) return null;
+      return new wxInputStream(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override GetContentType(): wxString | null {
     const rawPtr = lib.symbols.wxHTTP_GetContentType(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  GetHeader(header: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxHTTP_GetHeader(this._ptr, header);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetHeader(header: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof header === "string") __s0 = createWxString(header);
+      const rawPtr = lib.symbols.wxHTTP_GetHeader(this._ptr, __s0 ? __s0.ptr : (header as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetResponse(): number {
     return lib.symbols.wxHTTP_GetResponse(this._ptr);
   }
 
-  SetMethod(method: Pointer): void {
-    lib.symbols.wxHTTP_SetMethod(this._ptr, method);
+  SetMethod(method: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof method === "string") __s0 = createWxString(method);
+      lib.symbols.wxHTTP_SetMethod(this._ptr, __s0 ? __s0.ptr : (method as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetHeader(header: Pointer, header_data: Pointer): void {
-    lib.symbols.wxHTTP_SetHeader(this._ptr, header, header_data);
+  SetHeader(header: string | Pointer, header_data: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof header === "string") __s0 = createWxString(header);
+      if (typeof header_data === "string") __s1 = createWxString(header_data);
+      lib.symbols.wxHTTP_SetHeader(this._ptr, __s0 ? __s0.ptr : (header as Pointer), __s1 ? __s1.ptr : (header_data as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetPostText(content_type: Pointer, text: Pointer): boolean {
-    return (lib.symbols.wxHTTP_SetPostText(this._ptr, content_type, text) as number) !== 0;
+  SetPostText(content_type: string | Pointer, text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof content_type === "string") __s0 = createWxString(content_type);
+      if (typeof text === "string") __s1 = createWxString(text);
+      return (lib.symbols.wxHTTP_SetPostText(this._ptr, __s0 ? __s0.ptr : (content_type as Pointer), __s1 ? __s1.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetPostBuffer(content_type: Pointer, buffer: Pointer): boolean {
-    return (lib.symbols.wxHTTP_SetPostBuffer(this._ptr, content_type, buffer) as number) !== 0;
+  SetPostBuffer(content_type: string | Pointer, buffer: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof content_type === "string") __s0 = createWxString(content_type);
+      return (lib.symbols.wxHTTP_SetPostBuffer(this._ptr, __s0 ? __s0.ptr : (content_type as Pointer), buffer) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetProxyMode(enable_proxy: boolean): void {
     lib.symbols.wxHTTP_SetProxyMode(this._ptr, enable_proxy ? 1 : 0);
   }
 
-  GetCookie(cookie: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxHTTP_GetCookie(this._ptr, cookie);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetCookie(cookie: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof cookie === "string") __s0 = createWxString(cookie);
+      const rawPtr = lib.symbols.wxHTTP_GetCookie(this._ptr, __s0 ? __s0.ptr : (cookie as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   HasCookies(): boolean {

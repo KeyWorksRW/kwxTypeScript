@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRibbonControl } from "./wxRibbonControl_gen.ts";
 import { wxRibbonArtProvider } from "./wxRibbonArtProvider_gen.ts";
@@ -18,48 +19,132 @@ export class wxRibbonButtonBar extends wxRibbonControl {
     lib.symbols.wxRibbonButtonBar_SetButtonTextMinWidth(this._ptr, button_id, min_width_medium, min_width_large);
   }
 
-  SetDropdownKeyTip(button_id: number, keytip: Pointer): void {
-    lib.symbols.wxRibbonButtonBar_SetDropdownKeyTip(this._ptr, button_id, keytip);
+  SetDropdownKeyTip(button_id: number, keytip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keytip === "string") __s0 = createWxString(keytip);
+      lib.symbols.wxRibbonButtonBar_SetDropdownKeyTip(this._ptr, button_id, __s0 ? __s0.ptr : (keytip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetKeyTip(button_id: number, keytip: Pointer): void {
-    lib.symbols.wxRibbonButtonBar_SetKeyTip(this._ptr, button_id, keytip);
+  SetKeyTip(button_id: number, keytip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keytip === "string") __s0 = createWxString(keytip);
+      lib.symbols.wxRibbonButtonBar_SetKeyTip(this._ptr, button_id, __s0 ? __s0.ptr : (keytip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ToggleButton(button_id: number, checked: boolean): void {
     lib.symbols.wxRibbonButtonBar_ToggleButton(this._ptr, button_id, checked ? 1 : 0);
   }
 
-  AddButton(button_id: number, label: Pointer, bitmap: Pointer, help_string: Pointer, kind: number, bitmap_small: Pointer, bitmap_disabled: Pointer, bitmap_small_disabled: Pointer): Pointer {
-    return lib.symbols.wxRibbonButtonBar_AddButton(this._ptr, button_id, label, bitmap, help_string, kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
+  AddButton(button_id: number, label: string | Pointer, bitmap: Pointer, help_string: string | Pointer, kind: number, bitmap_small: Pointer, bitmap_disabled: Pointer, bitmap_small_disabled: Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof help_string === "string") __s1 = createWxString(help_string);
+      return lib.symbols.wxRibbonButtonBar_AddButton(this._ptr, button_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (help_string as Pointer), kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddDropdownButton(button_id: number, label: Pointer, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonButtonBar_AddDropdownButton(this._ptr, button_id, label, bitmap, help_string);
+  AddDropdownButton(button_id: number, label: string | Pointer, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof help_string === "string") __s1 = createWxString(help_string);
+      return lib.symbols.wxRibbonButtonBar_AddDropdownButton(this._ptr, button_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (help_string as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddHybridButton(button_id: number, label: Pointer, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonButtonBar_AddHybridButton(this._ptr, button_id, label, bitmap, help_string);
+  AddHybridButton(button_id: number, label: string | Pointer, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof help_string === "string") __s1 = createWxString(help_string);
+      return lib.symbols.wxRibbonButtonBar_AddHybridButton(this._ptr, button_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (help_string as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddToggleButton(button_id: number, label: Pointer, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonButtonBar_AddToggleButton(this._ptr, button_id, label, bitmap, help_string);
+  AddToggleButton(button_id: number, label: string | Pointer, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof help_string === "string") __s1 = createWxString(help_string);
+      return lib.symbols.wxRibbonButtonBar_AddToggleButton(this._ptr, button_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (help_string as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  InsertButton(pos: bigint, button_id: number, label: Pointer, bitmap: Pointer, help_string: Pointer, kind: number, bitmap_small: Pointer, bitmap_disabled: Pointer, bitmap_small_disabled: Pointer): Pointer {
-    return lib.symbols.wxRibbonButtonBar_InsertButton(this._ptr, pos, button_id, label, bitmap, help_string, kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
+  InsertButton(pos: bigint, button_id: number, label: string | Pointer, bitmap: Pointer, help_string: string | Pointer, kind: number, bitmap_small: Pointer, bitmap_disabled: Pointer, bitmap_small_disabled: Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof help_string === "string") __s1 = createWxString(help_string);
+      return lib.symbols.wxRibbonButtonBar_InsertButton(this._ptr, pos, button_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (help_string as Pointer), kind, bitmap_small, bitmap_disabled, bitmap_small_disabled);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  InsertDropdownButton(pos: bigint, button_id: number, label: Pointer, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonButtonBar_InsertDropdownButton(this._ptr, pos, button_id, label, bitmap, help_string);
+  InsertDropdownButton(pos: bigint, button_id: number, label: string | Pointer, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof help_string === "string") __s1 = createWxString(help_string);
+      return lib.symbols.wxRibbonButtonBar_InsertDropdownButton(this._ptr, pos, button_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (help_string as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  InsertHybridButton(pos: bigint, button_id: number, label: Pointer, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonButtonBar_InsertHybridButton(this._ptr, pos, button_id, label, bitmap, help_string);
+  InsertHybridButton(pos: bigint, button_id: number, label: string | Pointer, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof help_string === "string") __s1 = createWxString(help_string);
+      return lib.symbols.wxRibbonButtonBar_InsertHybridButton(this._ptr, pos, button_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (help_string as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  InsertToggleButton(pos: bigint, button_id: number, label: Pointer, bitmap: Pointer, help_string: Pointer): Pointer {
-    return lib.symbols.wxRibbonButtonBar_InsertToggleButton(this._ptr, pos, button_id, label, bitmap, help_string);
+  InsertToggleButton(pos: bigint, button_id: number, label: string | Pointer, bitmap: Pointer, help_string: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      if (typeof help_string === "string") __s1 = createWxString(help_string);
+      return lib.symbols.wxRibbonButtonBar_InsertToggleButton(this._ptr, pos, button_id, __s0 ? __s0.ptr : (label as Pointer), bitmap, __s1 ? __s1.ptr : (help_string as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   ClearButtons(): void {
@@ -78,16 +163,28 @@ export class wxRibbonButtonBar extends wxRibbonControl {
     lib.symbols.wxRibbonButtonBar_SetButtonIcon(this._ptr, button_id, bitmap, bitmap_small, bitmap_disabled, bitmap_small_disabled);
   }
 
-  SetButtonText(button_id: number, label: Pointer): void {
-    lib.symbols.wxRibbonButtonBar_SetButtonText(this._ptr, button_id, label);
+  SetButtonText(button_id: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxRibbonButtonBar_SetButtonText(this._ptr, button_id, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetButtonTextMinWidth_Int(button_id: number, min_width_medium: number, min_width_large: number): void {
     lib.symbols.wxRibbonButtonBar_SetButtonTextMinWidth_Int(this._ptr, button_id, min_width_medium, min_width_large);
   }
 
-  SetButtonTextMinWidth_String(button_id: number, label: Pointer): void {
-    lib.symbols.wxRibbonButtonBar_SetButtonTextMinWidth_String(this._ptr, button_id, label);
+  SetButtonTextMinWidth_String(button_id: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxRibbonButtonBar_SetButtonTextMinWidth_String(this._ptr, button_id, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetButtonMinSizeClass(button_id: number, min_class: number): void {

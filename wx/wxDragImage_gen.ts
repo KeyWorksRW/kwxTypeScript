@@ -30,6 +30,10 @@ export class wxDragImage extends wxObject {
     return (lib.symbols.wxDragImage_BeginDragFullScreen(this._ptr, x_pos, y_pos, window, fullScreen ? 1 : 0, rect) as number) !== 0;
   }
 
+  BeginDragFullScreenDefault(x_pos: number, y_pos: number, window: Pointer, fullScreen: boolean): boolean {
+    return (lib.symbols.wxDragImage_BeginDragFullScreenDefault(this._ptr, x_pos, y_pos, window, fullScreen ? 1 : 0) as number) !== 0;
+  }
+
   EndDrag(): boolean {
     return (lib.symbols.wxDragImage_EndDrag(this._ptr) as number) !== 0;
   }
@@ -50,6 +54,12 @@ export class wxDragImage extends wxObject {
 
 export function createWxDragImage(image: Pointer, x: number, y: number): wxDragImage | null {
     const rawPtr = lib.symbols.wxDragImage_Create(image, x, y);
+    if (rawPtr === null) return null;
+    return new wxDragImage(rawPtr);
+}
+
+export function createWxDragImageWithCursor(image: Pointer, cursor: Pointer): wxDragImage | null {
+    const rawPtr = lib.symbols.wxDragImage_CreateWithCursor(image, cursor);
     if (rawPtr === null) return null;
     return new wxDragImage(rawPtr);
 }

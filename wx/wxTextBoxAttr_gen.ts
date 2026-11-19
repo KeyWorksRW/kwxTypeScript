@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 import { wxTextAttrBorder } from "./wxTextAttrBorder_gen.ts";
@@ -161,11 +162,17 @@ export class wxTextBoxAttr {
   GetBoxStyleName(): wxString | null {
     const rawPtr = lib.symbols.wxTextBoxAttr_GetBoxStyleName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetBoxStyleName(name: Pointer): void {
-    lib.symbols.wxTextBoxAttr_SetBoxStyleName(this._ptr, name);
+  SetBoxStyleName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxTextBoxAttr_SetBoxStyleName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

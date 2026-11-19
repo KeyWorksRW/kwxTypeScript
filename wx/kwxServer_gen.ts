@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -22,8 +23,14 @@ export class kwxServer extends wxObject {
     this.Delete();
   }
 
-  Initialize(name: Pointer): number {
-    return lib.symbols.kwxServer_Initialize(this._ptr, name);
+  Initialize(name: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.kwxServer_Initialize(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

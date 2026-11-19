@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
 import { wxAppTraits } from "./wxAppTraits_gen.ts";
@@ -18,35 +19,53 @@ export class wxApp extends wxEvtHandler {
   GetAppDisplayName(): wxString | null {
     const rawPtr = lib.symbols.wxApp_GetAppDisplayName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetAppName(): wxString | null {
     const rawPtr = lib.symbols.wxApp_GetAppName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetVendorName(): wxString | null {
     const rawPtr = lib.symbols.wxApp_GetVendorName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetAppDisplayName(name: Pointer): void {
-    lib.symbols.wxApp_SetAppDisplayName(this._ptr, name);
+  SetAppDisplayName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxApp_SetAppDisplayName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetAppName(name: Pointer): void {
-    lib.symbols.wxApp_SetAppName(this._ptr, name);
+  SetAppName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxApp_SetAppName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetAppearance(appearance: number): number {
     return lib.symbols.wxApp_SetAppearance(this._ptr, appearance);
   }
 
-  SetVendorName(name: Pointer): void {
-    lib.symbols.wxApp_SetVendorName(this._ptr, name);
+  SetVendorName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxApp_SetVendorName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Yield(onlyIfNeeded: boolean): boolean {
@@ -107,6 +126,26 @@ export class wxApp extends wxEvtHandler {
 
   SetOnCreateTraits(pFunction: Pointer): void {
     lib.symbols.wxApp_SetOnCreateTraits(this._ptr, pFunction);
+  }
+
+  SetOnOnFatalException(pFunction: Pointer): void {
+    lib.symbols.wxApp_SetOnOnFatalException(this._ptr, pFunction);
+  }
+
+  SetOnOnUnhandledException(pFunction: Pointer): void {
+    lib.symbols.wxApp_SetOnOnUnhandledException(this._ptr, pFunction);
+  }
+
+  SetOnStoreCurrentException(pFunction: Pointer): void {
+    lib.symbols.wxApp_SetOnStoreCurrentException(this._ptr, pFunction);
+  }
+
+  SetOnOnExceptionInMainLoop(pFunction: Pointer): void {
+    lib.symbols.wxApp_SetOnOnExceptionInMainLoop(this._ptr, pFunction);
+  }
+
+  SetOnRethrowStoredException(pFunction: Pointer): void {
+    lib.symbols.wxApp_SetOnRethrowStoredException(this._ptr, pFunction);
   }
 
 }

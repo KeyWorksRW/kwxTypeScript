@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxArrayString } from "./wxArrayString_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -35,60 +36,132 @@ export class wxTranslations {
     lib.symbols.wxTranslations_SetLanguage(this._ptr, language);
   }
 
-  SetLanguageName(language: Pointer): void {
-    lib.symbols.wxTranslations_SetLanguageName(this._ptr, language);
+  SetLanguageName(language: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof language === "string") __s0 = createWxString(language);
+      lib.symbols.wxTranslations_SetLanguageName(this._ptr, __s0 ? __s0.ptr : (language as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetAvailableTranslations(domain: Pointer): wxArrayString | null {
-    const rawPtr = lib.symbols.wxTranslations_GetAvailableTranslations(this._ptr, domain);
-    if (rawPtr === null) return null;
-    return new wxArrayString(rawPtr, true);
+  GetAvailableTranslations(domain: string | Pointer): wxArrayString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof domain === "string") __s0 = createWxString(domain);
+      const rawPtr = lib.symbols.wxTranslations_GetAvailableTranslations(this._ptr, __s0 ? __s0.ptr : (domain as Pointer));
+      if (rawPtr === null) return null;
+      return new wxArrayString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetBestAvailableTranslation(domain: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxTranslations_GetBestAvailableTranslation(this._ptr, domain);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetBestAvailableTranslation(domain: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof domain === "string") __s0 = createWxString(domain);
+      const rawPtr = lib.symbols.wxTranslations_GetBestAvailableTranslation(this._ptr, __s0 ? __s0.ptr : (domain as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetBestTranslation(domain: Pointer, msg_id_language: number): wxString | null {
-    const rawPtr = lib.symbols.wxTranslations_GetBestTranslation(this._ptr, domain, msg_id_language);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetBestTranslation(domain: string | Pointer, msg_id_language: number): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof domain === "string") __s0 = createWxString(domain);
+      const rawPtr = lib.symbols.wxTranslations_GetBestTranslation(this._ptr, __s0 ? __s0.ptr : (domain as Pointer), msg_id_language);
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetBestTranslationForName(domain: Pointer, msg_id_language: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxTranslations_GetBestTranslationForName(this._ptr, domain, msg_id_language);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetBestTranslationForName(domain: string | Pointer, msg_id_language: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof domain === "string") __s0 = createWxString(domain);
+      if (typeof msg_id_language === "string") __s1 = createWxString(msg_id_language);
+      const rawPtr = lib.symbols.wxTranslations_GetBestTranslationForName(this._ptr, __s0 ? __s0.ptr : (domain as Pointer), __s1 ? __s1.ptr : (msg_id_language as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  AddAvailableCatalog(domain: Pointer, msg_id_language: number): boolean {
-    return (lib.symbols.wxTranslations_AddAvailableCatalog(this._ptr, domain, msg_id_language) as number) !== 0;
+  AddAvailableCatalog(domain: string | Pointer, msg_id_language: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof domain === "string") __s0 = createWxString(domain);
+      return (lib.symbols.wxTranslations_AddAvailableCatalog(this._ptr, __s0 ? __s0.ptr : (domain as Pointer), msg_id_language) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddStdCatalog(): boolean {
     return (lib.symbols.wxTranslations_AddStdCatalog(this._ptr) as number) !== 0;
   }
 
-  AddCatalog(domain: Pointer, msg_id_language: number): boolean {
-    return (lib.symbols.wxTranslations_AddCatalog(this._ptr, domain, msg_id_language) as number) !== 0;
+  AddCatalog(domain: string | Pointer, msg_id_language: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof domain === "string") __s0 = createWxString(domain);
+      return (lib.symbols.wxTranslations_AddCatalog(this._ptr, __s0 ? __s0.ptr : (domain as Pointer), msg_id_language) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  IsLoaded(domain: Pointer): boolean {
-    return (lib.symbols.wxTranslations_IsLoaded(this._ptr, domain) as number) !== 0;
+  IsLoaded(domain: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof domain === "string") __s0 = createWxString(domain);
+      return (lib.symbols.wxTranslations_IsLoaded(this._ptr, __s0 ? __s0.ptr : (domain as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetTranslatedString(text: Pointer, domain: Pointer, context: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxTranslations_GetTranslatedString(this._ptr, text, domain, context);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetTranslatedString(text: string | Pointer, domain: string | Pointer, context: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof domain === "string") __s1 = createWxString(domain);
+      if (typeof context === "string") __s2 = createWxString(context);
+      const rawPtr = lib.symbols.wxTranslations_GetTranslatedString(this._ptr, __s0 ? __s0.ptr : (text as Pointer), __s1 ? __s1.ptr : (domain as Pointer), __s2 ? __s2.ptr : (context as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  GetHeaderValue(header: Pointer, domain: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxTranslations_GetHeaderValue(this._ptr, header, domain);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetHeaderValue(header: string | Pointer, domain: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof header === "string") __s0 = createWxString(header);
+      if (typeof domain === "string") __s1 = createWxString(domain);
+      const rawPtr = lib.symbols.wxTranslations_GetHeaderValue(this._ptr, __s0 ? __s0.ptr : (header as Pointer), __s1 ? __s1.ptr : (domain as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
 }

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxArchiveEntry } from "./wxArchiveEntry_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -44,13 +45,13 @@ export class wxZipEntry extends wxArchiveEntry {
   override GetName(path_format: number): wxString | null {
     const rawPtr = lib.symbols.wxZipEntry_GetName(this._ptr, path_format);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override GetInternalName(): wxString | null {
     const rawPtr = lib.symbols.wxZipEntry_GetInternalName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMethod(): number {
@@ -80,7 +81,7 @@ export class wxZipEntry extends wxArchiveEntry {
   GetComment(): wxString | null {
     const rawPtr = lib.symbols.wxZipEntry_GetComment(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override IsDir(): boolean {
@@ -107,8 +108,14 @@ export class wxZipEntry extends wxArchiveEntry {
     lib.symbols.wxZipEntry_SetMethod(this._ptr, method);
   }
 
-  SetComment(comment: Pointer): void {
-    lib.symbols.wxZipEntry_SetComment(this._ptr, comment);
+  SetComment(comment: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof comment === "string") __s0 = createWxString(comment);
+      lib.symbols.wxZipEntry_SetComment(this._ptr, __s0 ? __s0.ptr : (comment as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetExternalAttributes(attributes: number): void {
@@ -123,8 +130,14 @@ export class wxZipEntry extends wxArchiveEntry {
     lib.symbols.wxZipEntry_SetMode(this._ptr, mode);
   }
 
-  override SetName(entry_name: Pointer, path_format: number): void {
-    lib.symbols.wxZipEntry_SetName(this._ptr, entry_name, path_format);
+  override SetName(entry_name: string | Pointer, path_format: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      lib.symbols.wxZipEntry_SetName(this._ptr, __s0 ? __s0.ptr : (entry_name as Pointer), path_format);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override SetIsDir(is_dir: boolean): void {
@@ -147,10 +160,16 @@ export function createWxZipEntry(): wxZipEntry | null {
     return new wxZipEntry(rawPtr);
 }
 
-export function createWxZipEntryNamed(entry_name: Pointer): wxZipEntry | null {
-    const rawPtr = lib.symbols.wxZipEntry_CreateNamed(entry_name);
-    if (rawPtr === null) return null;
-    return new wxZipEntry(rawPtr);
+export function createWxZipEntryNamed(entry_name: string | Pointer): wxZipEntry | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      const rawPtr = lib.symbols.wxZipEntry_CreateNamed(__s0 ? __s0.ptr : (entry_name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxZipEntry(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

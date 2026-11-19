@@ -2,9 +2,11 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextCompositeObject } from "./wxRichTextCompositeObject_gen.ts";
 import { wxRichTextCtrl } from "./wxRichTextCtrl_gen.ts";
+import { wxRichTextObject } from "./wxRichTextObject_gen.ts";
 import { wxRichTextStyleSheet } from "./wxRichTextStyleSheet_gen.ts";
 import { wxString } from "./wxString_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -26,8 +28,10 @@ export class wxRichTextParagraphLayoutBox extends wxRichTextCompositeObject {
     this.Delete();
   }
 
-  GetLeafObjectAtPosition(position: bigint): Pointer {
-    return lib.symbols.wxRichTextParagraphLayoutBox_GetLeafObjectAtPosition(this._ptr, position);
+  GetLeafObjectAtPosition(position: bigint): wxRichTextObject | null {
+    const rawPtr = lib.symbols.wxRichTextParagraphLayoutBox_GetLeafObjectAtPosition(this._ptr, position);
+    if (rawPtr === null) return null;
+    return new wxRichTextObject(rawPtr, true);
   }
 
   Clear(): void {
@@ -38,12 +42,24 @@ export class wxRichTextParagraphLayoutBox extends wxRichTextCompositeObject {
     lib.symbols.wxRichTextParagraphLayoutBox_Reset(this._ptr);
   }
 
-  AddParagraph(text: Pointer, paraStyle: Pointer, start: Pointer, end: Pointer): void {
-    lib.symbols.wxRichTextParagraphLayoutBox_AddParagraph(this._ptr, text, paraStyle, start, end);
+  AddParagraph(text: string | Pointer, paraStyle: Pointer, start: Pointer, end: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextParagraphLayoutBox_AddParagraph(this._ptr, __s0 ? __s0.ptr : (text as Pointer), paraStyle, start, end);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddParagraphs(text: Pointer, paraStyle: Pointer, start: Pointer, end: Pointer): void {
-    lib.symbols.wxRichTextParagraphLayoutBox_AddParagraphs(this._ptr, text, paraStyle, start, end);
+  AddParagraphs(text: string | Pointer, paraStyle: Pointer, start: Pointer, end: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxRichTextParagraphLayoutBox_AddParagraphs(this._ptr, __s0 ? __s0.ptr : (text as Pointer), paraStyle, start, end);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AddImage(image: Pointer, paraStyle: Pointer, start: Pointer, end: Pointer): void {
@@ -53,7 +69,7 @@ export class wxRichTextParagraphLayoutBox extends wxRichTextCompositeObject {
   GetText(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextParagraphLayoutBox_GetText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   DeleteRange(start: bigint, end: bigint): boolean {
@@ -79,7 +95,7 @@ export class wxRichTextParagraphLayoutBox extends wxRichTextCompositeObject {
   GetParagraphText(paragraphNumber: bigint): wxString | null {
     const rawPtr = lib.symbols.wxRichTextParagraphLayoutBox_GetParagraphText(this._ptr, paragraphNumber);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetParagraphLength(paragraphNumber: bigint): number {

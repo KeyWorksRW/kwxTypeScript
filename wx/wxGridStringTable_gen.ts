@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxGridTableBase } from "./wxGridTableBase_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -34,11 +35,17 @@ export class wxGridStringTable extends wxGridTableBase {
   override GetValue(row: number, col: number): wxString | null {
     const rawPtr = lib.symbols.wxGridStringTable_GetValue(this._ptr, row, col);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  override SetValue(row: number, col: number, value: Pointer): void {
-    lib.symbols.wxGridStringTable_SetValue(this._ptr, row, col, value);
+  override SetValue(row: number, col: number, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxGridStringTable_SetValue(this._ptr, row, col, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override Clear(): void {
@@ -69,24 +76,36 @@ export class wxGridStringTable extends wxGridTableBase {
     return (lib.symbols.wxGridStringTable_DeleteCols(this._ptr, pos, num_cols) as number) !== 0;
   }
 
-  override SetRowLabelValue(row: number, label: Pointer): void {
-    lib.symbols.wxGridStringTable_SetRowLabelValue(this._ptr, row, label);
+  override SetRowLabelValue(row: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxGridStringTable_SetRowLabelValue(this._ptr, row, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  override SetColLabelValue(col: number, label: Pointer): void {
-    lib.symbols.wxGridStringTable_SetColLabelValue(this._ptr, col, label);
+  override SetColLabelValue(col: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxGridStringTable_SetColLabelValue(this._ptr, col, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override GetRowLabelValue(row: number): wxString | null {
     const rawPtr = lib.symbols.wxGridStringTable_GetRowLabelValue(this._ptr, row);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override GetColLabelValue(col: number): wxString | null {
     const rawPtr = lib.symbols.wxGridStringTable_GetColLabelValue(this._ptr, col);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

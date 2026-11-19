@@ -1,0 +1,83 @@
+name: Build
+
+# Builds the kwxts runtime plus the generated TypeScript bindings, then
+# type-checks tests/quick_port with Deno. No wxUiEditor binary and no generated
+# tree is required.
+#
+# The C/C++ side uses the same msys64 clang64 clang the local lane uses.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-kwxtypescript-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: library and quick port
+    runs-on: windows-2025-vs2026
+    timeout-minutes: 350
+    env:
+      CI: true
+    steps:
+      - name: Checkout kwxTypeScript
+        uses: actions/checkout@v7
+        with:
+          path: kwxTypeScript
+
+      - name: Checkout kwxFFI (sibling sources, headers, kwxgen)
+        uses: actions/checkout@v7
+        with:
+          repository: KeyWorksRW/kwxFFI
+          path: kwxFFI
+
+      - name: Setup CMake 4.2+
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: '~4.2.0'
+          ninjaVersion: 'latest'
+
+      - name: Setup MSYS2 toolchain (clang64)
+        shell: pwsh
+        run: |
+          $msys_bash = 'C:\msys64\usr\bin\bash.exe'
+          if (-not (Test-Path $msys_bash)) {
+            choco install msys2 --params="/InstallDir:C:\msys64" -y --no-progress
+          }
+          if (-not (Test-Path $msys_bash)) {
+            throw "MSYS2 is not installed at C:\msys64."
+          }
+          & $msys_bash -lc "pacman -Sy --noconfirm --needed mingw-w64-clang-x86_64-toolchain"
+          if ($LASTEXITCODE -ne 0) { throw "pacman failed (exit $LASTEXITCODE)." }
+          "C:\msys64\clang64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Configure
+        working-directory: kwxTypeScript
+        run: cmake --preset ninja-clang
+
+      - name: Build library and bindings (Release)
+        working-directory: kwxTypeScript
+        run: cmake --build build --config Release
+
+      - name: Build tests/quick_port when present
+        working-directory: kwxTypeScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d tests/quick_port ]; then
+            echo "tests/quick_port is not present; nothing to build."
+            exit 0
+          fi
+          ./build_quick_port.cmd

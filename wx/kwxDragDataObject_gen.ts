@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class kwxDragDataObject {
@@ -31,10 +32,16 @@ export class kwxDragDataObject {
 
 }
 
-export function createKwxDragDataObject(pObject: Pointer, format: Pointer, fnGetDataSize: Pointer, fnGetDataHere: Pointer, fnSetData: Pointer): kwxDragDataObject | null {
-    const rawPtr = lib.symbols.kwxDragDataObject_Create(pObject, format, fnGetDataSize, fnGetDataHere, fnSetData);
-    if (rawPtr === null) return null;
-    return new kwxDragDataObject(rawPtr);
+export function createKwxDragDataObject(pObject: Pointer, format: string | Pointer, fnGetDataSize: Pointer, fnGetDataHere: Pointer, fnSetData: Pointer): kwxDragDataObject | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof format === "string") __s0 = createWxString(format);
+      const rawPtr = lib.symbols.kwxDragDataObject_Create(pObject, __s0 ? __s0.ptr : (format as Pointer), fnGetDataSize, fnGetDataHere, fnSetData);
+      if (rawPtr === null) return null;
+      return new kwxDragDataObject(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

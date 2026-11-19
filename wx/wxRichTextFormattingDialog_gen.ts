@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxPropertySheetDialog } from "./wxPropertySheetDialog_gen.ts";
 import { wxRichTextObject } from "./wxRichTextObject_gen.ts";
@@ -101,10 +102,16 @@ export class wxRichTextFormattingDialog extends wxPropertySheetDialog {
 
 }
 
-export function createWxRichTextFormattingDialog(flags: bigint, parent: Pointer, title: Pointer, id: number, x: number, y: number, w: number, h: number, style: bigint): wxRichTextFormattingDialog | null {
-    const rawPtr = lib.symbols.wxRichTextFormattingDialog_Create(flags, parent, title, id, x, y, w, h, style);
-    if (rawPtr === null) return null;
-    return new wxRichTextFormattingDialog(rawPtr);
+export function createWxRichTextFormattingDialog(flags: bigint, parent: Pointer, title: string | Pointer, id: number, x: number, y: number, w: number, h: number, style: bigint): wxRichTextFormattingDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxRichTextFormattingDialog_Create(flags, parent, __s0 ? __s0.ptr : (title as Pointer), id, x, y, w, h, style);
+      if (rawPtr === null) return null;
+      return new wxRichTextFormattingDialog(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

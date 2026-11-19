@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxConnectionBase } from "./wxConnectionBase_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -22,8 +23,14 @@ export class kwxConnection extends wxConnectionBase {
     this.Delete();
   }
 
-  Advise(item: Pointer, data: Pointer, size: number, format: number): number {
-    return lib.symbols.kwxConnection_Advise(this._ptr, item, data, size, format);
+  Advise(item: string | Pointer, data: Pointer, size: number, format: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.kwxConnection_Advise(this._ptr, __s0 ? __s0.ptr : (item as Pointer), data, size, format);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Compress(enable: number): void {
@@ -40,16 +47,34 @@ export class kwxConnection extends wxConnectionBase {
     return (lib.symbols.kwxConnection_Disconnect(this._ptr) as number) !== 0;
   }
 
-  Execute(data: Pointer, size: number, format: number): boolean {
-    return (lib.symbols.kwxConnection_Execute(this._ptr, data, size, format) as number) !== 0;
+  Execute(data: string | Pointer, size: number, format: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof data === "string") __s0 = createWxString(data);
+      return (lib.symbols.kwxConnection_Execute(this._ptr, __s0 ? __s0.ptr : (data as Pointer), size, format) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Poke(item: Pointer, data: Pointer, size: number, format: number): boolean {
-    return (lib.symbols.kwxConnection_Poke(this._ptr, item, data, size, format) as number) !== 0;
+  Poke(item: string | Pointer, data: Pointer, size: number, format: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return (lib.symbols.kwxConnection_Poke(this._ptr, __s0 ? __s0.ptr : (item as Pointer), data, size, format) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Request(item: Pointer, size: Pointer, format: number): Pointer {
-    return lib.symbols.kwxConnection_Request(this._ptr, item, size, format);
+  Request(item: string | Pointer, size: Pointer, format: number): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.kwxConnection_Request(this._ptr, __s0 ? __s0.ptr : (item as Pointer), size, format);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetOnAdvise(pFunction: Pointer): void {
@@ -80,12 +105,24 @@ export class kwxConnection extends wxConnectionBase {
     lib.symbols.kwxConnection_SetOnStopAdvise(this._ptr, pFunction);
   }
 
-  StartAdvise(item: Pointer): boolean {
-    return (lib.symbols.kwxConnection_StartAdvise(this._ptr, item) as number) !== 0;
+  StartAdvise(item: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return (lib.symbols.kwxConnection_StartAdvise(this._ptr, __s0 ? __s0.ptr : (item as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  StopAdvise(item: Pointer): boolean {
-    return (lib.symbols.kwxConnection_StopAdvise(this._ptr, item) as number) !== 0;
+  StopAdvise(item: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return (lib.symbols.kwxConnection_StopAdvise(this._ptr, __s0 ? __s0.ptr : (item as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

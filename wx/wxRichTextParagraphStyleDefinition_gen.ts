@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRichTextStyleDefinition } from "./wxRichTextStyleDefinition_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -23,14 +24,20 @@ export class wxRichTextParagraphStyleDefinition extends wxRichTextStyleDefinitio
     this.Delete();
   }
 
-  SetNextStyle(name: Pointer): void {
-    lib.symbols.wxRichTextParagraphStyleDefinition_SetNextStyle(this._ptr, name);
+  SetNextStyle(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxRichTextParagraphStyleDefinition_SetNextStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetNextStyle(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextParagraphStyleDefinition_GetNextStyle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override Copy(def: Pointer): void {
@@ -39,10 +46,16 @@ export class wxRichTextParagraphStyleDefinition extends wxRichTextStyleDefinitio
 
 }
 
-export function createWxRichTextParagraphStyleDefinition(name: Pointer): wxRichTextParagraphStyleDefinition | null {
-    const rawPtr = lib.symbols.wxRichTextParagraphStyleDefinition_Create(name);
-    if (rawPtr === null) return null;
-    return new wxRichTextParagraphStyleDefinition(rawPtr);
+export function createWxRichTextParagraphStyleDefinition(name: string | Pointer): wxRichTextParagraphStyleDefinition | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxRichTextParagraphStyleDefinition_Create(__s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxRichTextParagraphStyleDefinition(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

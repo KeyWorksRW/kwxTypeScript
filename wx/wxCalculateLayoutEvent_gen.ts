@@ -20,7 +20,7 @@ export class wxCalculateLayoutEvent extends wxEvent {
   GetRect(): wxRect | null {
     const rawPtr = lib.symbols.wxCalculateLayoutEvent_GetRect(this._ptr);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   SetFlags(flags: number): void {

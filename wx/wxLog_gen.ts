@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -30,8 +31,14 @@ export class wxLog extends wxObject {
     lib.symbols.wxLog_SetOnDoLogTextAtLevel(this._ptr, pFunction);
   }
 
-  LogTextAtLevel(level: number, msg: Pointer): void {
-    lib.symbols.wxLog_LogTextAtLevel(this._ptr, level, msg);
+  LogTextAtLevel(level: number, msg: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof msg === "string") __s0 = createWxString(msg);
+      lib.symbols.wxLog_LogTextAtLevel(this._ptr, level, __s0 ? __s0.ptr : (msg as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   OnLog(level: number, szString: Pointer, timestamp: number): void {

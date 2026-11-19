@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxBookCtrlBase } from "./wxBookCtrlBase_gen.ts";
 import { wxColour } from "./wxColour_gen.ts";
@@ -31,13 +32,13 @@ export class wxNotebook extends wxBookCtrlBase {
   GetControllerSize(): wxSize | null {
     const rawPtr = lib.symbols.wxNotebook_GetControllerSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   CalcSizeFromPage(width: number, height: number): wxSize | null {
     const rawPtr = lib.symbols.wxNotebook_CalcSizeFromPage(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetInternalBorder(): number {
@@ -83,7 +84,7 @@ export class wxNotebook extends wxBookCtrlBase {
   GetTabRect(page: number): wxRect | null {
     const rawPtr = lib.symbols.wxNotebook_GetTabRect(this._ptr, page);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetTabOrientation(): number {
@@ -93,7 +94,7 @@ export class wxNotebook extends wxBookCtrlBase {
   GetThemeBackgroundColour(): wxColour | null {
     const rawPtr = lib.symbols.wxNotebook_GetThemeBackgroundColour(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   SendPageChangingEvent(nPage: number): boolean {
@@ -104,8 +105,14 @@ export class wxNotebook extends wxBookCtrlBase {
     lib.symbols.wxNotebook_SendPageChangedEvent(this._ptr, nPageOld, nPageNew);
   }
 
-  override AddPage(pPage: Pointer, strText: Pointer, bSelect: boolean, imageId: number): boolean {
-    return (lib.symbols.wxNotebook_AddPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) as number) !== 0;
+  override AddPage(pPage: Pointer, strText: string | Pointer, bSelect: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strText === "string") __s0 = createWxString(strText);
+      return (lib.symbols.wxNotebook_AddPage(this._ptr, pPage, __s0 ? __s0.ptr : (strText as Pointer), bSelect ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override AdvanceSelection(bForward: boolean): void {
@@ -143,7 +150,7 @@ export class wxNotebook extends wxBookCtrlBase {
   override GetPageText(nPage: number): wxString | null {
     const rawPtr = lib.symbols.wxNotebook_GetPageText(this._ptr, nPage);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetRowCount(): number {
@@ -158,8 +165,14 @@ export class wxNotebook extends wxBookCtrlBase {
     return lib.symbols.wxNotebook_HitTest(this._ptr, x, y, flags);
   }
 
-  override InsertPage(nPage: number, pPage: Pointer, strText: Pointer, bSelect: boolean, imageId: number): boolean {
-    return (lib.symbols.wxNotebook_InsertPage(this._ptr, nPage, pPage, strText, bSelect ? 1 : 0, imageId) as number) !== 0;
+  override InsertPage(nPage: number, pPage: Pointer, strText: string | Pointer, bSelect: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strText === "string") __s0 = createWxString(strText);
+      return (lib.symbols.wxNotebook_InsertPage(this._ptr, nPage, pPage, __s0 ? __s0.ptr : (strText as Pointer), bSelect ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override RemovePage(nPage: number): boolean {
@@ -182,8 +195,14 @@ export class wxNotebook extends wxBookCtrlBase {
     lib.symbols.wxNotebook_SetPageSize(this._ptr, width, height);
   }
 
-  override SetPageText(nPage: number, strText: Pointer): boolean {
-    return (lib.symbols.wxNotebook_SetPageText(this._ptr, nPage, strText) as number) !== 0;
+  override SetPageText(nPage: number, strText: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strText === "string") __s0 = createWxString(strText);
+      return (lib.symbols.wxNotebook_SetPageText(this._ptr, nPage, __s0 ? __s0.ptr : (strText as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override SetSelection(nPage: number): number {

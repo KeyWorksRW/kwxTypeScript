@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -38,8 +39,14 @@ export class wxTaskBarIcon extends wxEvtHandler {
     return (lib.symbols.wxTaskBarIcon_RemoveIcon(this._ptr) as number) !== 0;
   }
 
-  SetIcon(icon: Pointer, text: Pointer): boolean {
-    return (lib.symbols.wxTaskBarIcon_SetIcon(this._ptr, icon, text) as number) !== 0;
+  SetIcon(icon: Pointer, text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxTaskBarIcon_SetIcon(this._ptr, icon, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxArrayString } from "./wxArrayString_gen.ts";
@@ -29,22 +30,42 @@ export class wxVariant extends wxObject {
     return lib.symbols.wxVariant_GetReal(this._ptr);
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxVariant_SetName(this._ptr, name);
+  GetDataViewIconText(result: Pointer): boolean {
+    return (lib.symbols.wxVariant_GetDataViewIconText(this._ptr, result) as number) !== 0;
+  }
+
+  GetDataViewCheckIconText(result: Pointer): boolean {
+    return (lib.symbols.wxVariant_GetDataViewCheckIconText(this._ptr, result) as number) !== 0;
+  }
+
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxVariant_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxVariant_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsNull(): boolean {
     return (lib.symbols.wxVariant_IsNull(this._ptr) as number) !== 0;
   }
 
-  IsType(type_: Pointer): boolean {
-    return (lib.symbols.wxVariant_IsType(this._ptr, type_) as number) !== 0;
+  IsType(type_: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof type_ === "string") __s0 = createWxString(type_);
+      return (lib.symbols.wxVariant_IsType(this._ptr, __s0 ? __s0.ptr : (type_ as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   MakeNull(): void {
@@ -67,8 +88,14 @@ export class wxVariant extends wxObject {
     lib.symbols.wxVariant_SetDouble(this._ptr, value);
   }
 
-  SetString(value: Pointer): void {
-    lib.symbols.wxVariant_SetString(this._ptr, value);
+  SetString(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxVariant_SetString(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetDateTime(value: Pointer): void {
@@ -104,7 +131,7 @@ export class wxVariant extends wxObject {
   GetArrayString(): wxArrayString | null {
     const rawPtr = lib.symbols.wxVariant_GetArrayString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxArrayString(rawPtr, true);
+    return new wxArrayString(rawPtr);
   }
 
   GetCount(): number {
@@ -146,31 +173,31 @@ export class wxVariant extends wxObject {
   Item(index: bigint): wxVariant | null {
     const rawPtr = lib.symbols.wxVariant_Item(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxVariant(rawPtr, true);
+    return new wxVariant(rawPtr);
   }
 
   GetFont(): wxFont | null {
     const rawPtr = lib.symbols.wxVariant_GetFont(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   GetType(): wxString | null {
     const rawPtr = lib.symbols.wxVariant_GetType(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   MakeString(): wxString | null {
     const rawPtr = lib.symbols.wxVariant_MakeString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetString(): wxString | null {
     const rawPtr = lib.symbols.wxVariant_GetString(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetBool(): boolean {
@@ -187,58 +214,145 @@ export class wxVariant extends wxObject {
 
 }
 
-export function createWxVariantFromBool(value: boolean, name: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxVariant_CreateFromBool(value ? 1 : 0, name);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr);
+export function createWxVariantFromBool(value: boolean, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromBool(value ? 1 : 0, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxVariantFromLong(value: bigint, name: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxVariant_CreateFromLong(value, name);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr);
+export function createWxVariantFromLong(value: bigint, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromLong(value, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxVariantFromDouble(value: number, name: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxVariant_CreateFromDouble(value, name);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr);
+export function createWxVariantFromDouble(value: number, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromDouble(value, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxVariantFromString(value: Pointer, name: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxVariant_CreateFromString(value, name);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr);
+export function createWxVariantFromString(value: string | Pointer, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromString(__s0 ? __s0.ptr : (value as Pointer), __s1 ? __s1.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
-export function createWxVariantFromDateTime(value: Pointer, name: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxVariant_CreateFromDateTime(value, name);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr);
+export function createWxVariantFromDateTime(value: Pointer, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromDateTime(value, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxVariantFromChar(value: number, name: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxVariant_CreateFromChar(value, name);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr);
+export function createWxVariantFromChar(value: number, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromChar(value, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxVariantFromVoidPtr(value: Pointer, name: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxVariant_CreateFromVoidPtr(value, name);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr);
+export function createWxVariantFromVoidPtr(value: Pointer, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromVoidPtr(value, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxVariantFromObject(value: Pointer, name: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxVariant_CreateFromObject(value, name);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr);
+export function createWxVariantFromObject(value: Pointer, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromObject(value, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
-export function createWxVariantFromArrayString(value: Pointer, name: Pointer): wxVariant | null {
-    const rawPtr = lib.symbols.wxVariant_CreateFromArrayString(value, name);
-    if (rawPtr === null) return null;
-    return new wxVariant(rawPtr);
+export function createWxVariantFromArrayString(value: Pointer, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromArrayString(value, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
+}
+
+export function createWxVariantFromDataViewIconText(text: string | Pointer, icon: Pointer, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromDataViewIconText(__s0 ? __s0.ptr : (text as Pointer), icon, __s1 ? __s1.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
+}
+
+export function createWxVariantFromDataViewCheckIconText(text: string | Pointer, icon: Pointer, checkedState: number, name: string | Pointer): wxVariant | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      if (typeof name === "string") __s1 = createWxString(name);
+      const rawPtr = lib.symbols.wxVariant_CreateFromDataViewCheckIconText(__s0 ? __s0.ptr : (text as Pointer), icon, checkedState, __s1 ? __s1.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxVariant(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 export function createWxVariant(): wxVariant | null {

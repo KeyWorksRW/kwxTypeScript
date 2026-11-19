@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxWindow } from "./wxWindow_gen.ts";
 import { wxClientData } from "./wxClientData_gen.ts";
@@ -15,8 +16,14 @@ export class wxTreeListCtrl extends wxWindow {
     return this._ptr;
   }
 
-  SetItemTextSimple(item: Pointer, text: Pointer): void {
-    lib.symbols.wxTreeListCtrl_SetItemTextSimple(this._ptr, item, text);
+  SetItemTextSimple(item: Pointer, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeListCtrl_SetItemTextSimple(this._ptr, item, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetItemData(item: Pointer): wxClientData | null {
@@ -29,8 +36,14 @@ export class wxTreeListCtrl extends wxWindow {
     lib.symbols.wxTreeListCtrl_SetItemData(this._ptr, item, data);
   }
 
-  AppendColumn(title: Pointer, width: number, align: number, flags: number): number {
-    return lib.symbols.wxTreeListCtrl_AppendColumn(this._ptr, title, width, align, flags);
+  AppendColumn(title: string | Pointer, width: number, align: number, flags: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      return lib.symbols.wxTreeListCtrl_AppendColumn(this._ptr, __s0 ? __s0.ptr : (title as Pointer), width, align, flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetColumnCount(): number {
@@ -53,20 +66,44 @@ export class wxTreeListCtrl extends wxWindow {
     return lib.symbols.wxTreeListCtrl_GetColumnWidth(this._ptr, col);
   }
 
-  WidthFor(text: Pointer): number {
-    return lib.symbols.wxTreeListCtrl_WidthFor(this._ptr, text);
+  WidthFor(text: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return lib.symbols.wxTreeListCtrl_WidthFor(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AppendItem(parent: Pointer, text: Pointer, imageClosed: number, imageOpened: number, result: Pointer): void {
-    lib.symbols.wxTreeListCtrl_AppendItem(this._ptr, parent, text, imageClosed, imageOpened, result);
+  AppendItem(parent: Pointer, text: string | Pointer, imageClosed: number, imageOpened: number, result: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeListCtrl_AppendItem(this._ptr, parent, __s0 ? __s0.ptr : (text as Pointer), imageClosed, imageOpened, result);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertItem(parent: Pointer, previous: Pointer, text: Pointer, imageClosed: number, imageOpened: number, result: Pointer): void {
-    lib.symbols.wxTreeListCtrl_InsertItem(this._ptr, parent, previous, text, imageClosed, imageOpened, result);
+  InsertItem(parent: Pointer, previous: Pointer, text: string | Pointer, imageClosed: number, imageOpened: number, result: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeListCtrl_InsertItem(this._ptr, parent, previous, __s0 ? __s0.ptr : (text as Pointer), imageClosed, imageOpened, result);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  PrependItem(parent: Pointer, text: Pointer, imageClosed: number, imageOpened: number, result: Pointer): void {
-    lib.symbols.wxTreeListCtrl_PrependItem(this._ptr, parent, text, imageClosed, imageOpened, result);
+  PrependItem(parent: Pointer, text: string | Pointer, imageClosed: number, imageOpened: number, result: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeListCtrl_PrependItem(this._ptr, parent, __s0 ? __s0.ptr : (text as Pointer), imageClosed, imageOpened, result);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DeleteItem(item: Pointer): void {
@@ -105,11 +142,17 @@ export class wxTreeListCtrl extends wxWindow {
   GetItemText(item: Pointer, col: number): wxString | null {
     const rawPtr = lib.symbols.wxTreeListCtrl_GetItemText(this._ptr, item, col);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetItemText(item: Pointer, col: number, text: Pointer): void {
-    lib.symbols.wxTreeListCtrl_SetItemText(this._ptr, item, col, text);
+  SetItemText(item: Pointer, col: number, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeListCtrl_SetItemText(this._ptr, item, col, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetItemImage(item: Pointer, closed: number, opened: number): void {

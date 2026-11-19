@@ -33,13 +33,13 @@ export class wxFileType {
   ExpandCommand(command: Pointer, params: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxFileType_ExpandCommand(this._ptr, command, params);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDescription(): wxString | null {
     const rawPtr = lib.symbols.wxFileType_GetDescription(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetExtensions(list: Pointer): number {
@@ -53,7 +53,7 @@ export class wxFileType {
   GetMimeType(): wxString | null {
     const rawPtr = lib.symbols.wxFileType_GetMimeType(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetMimeTypes(list: Pointer): number {

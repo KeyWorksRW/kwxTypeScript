@@ -62,6 +62,12 @@ export function createWxBitmapBundleFromData(data: Pointer, size: bigint, bitmap
     return new wxBitmapBundle(rawPtr);
 }
 
+export function createWxBitmapBundleDefault(): wxBitmapBundle | null {
+    const rawPtr = lib.symbols.wxBitmapBundle_CreateDefault();
+    if (rawPtr === null) return null;
+    return new wxBitmapBundle(rawPtr);
+}
+
 export function createWxBitmapBundleFromBase64(base64: Pointer, len: bigint, bitmap_type: number): wxBitmapBundle | null {
     const rawPtr = lib.symbols.wxBitmapBundle_CreateFromBase64(base64, len, bitmap_type);
     if (rawPtr === null) return null;

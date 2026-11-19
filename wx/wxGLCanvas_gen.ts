@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxScrolledWindow } from "./wxScrolledWindow_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -26,10 +27,16 @@ export class wxGLCanvas extends wxScrolledWindow {
 
 }
 
-export function createWxGLCanvas(parent: Pointer, windowID: number, attributes: Pointer, x: number, y: number, width: number, height: number, style: number, title: Pointer, palette: Pointer): wxGLCanvas | null {
-    const rawPtr = lib.symbols.wxGLCanvas_Create(parent, windowID, attributes, x, y, width, height, style, title, palette);
-    if (rawPtr === null) return null;
-    return new wxGLCanvas(rawPtr);
+export function createWxGLCanvas(parent: Pointer, windowID: number, attributes: Pointer, x: number, y: number, width: number, height: number, style: number, title: string | Pointer, palette: Pointer): wxGLCanvas | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxGLCanvas_Create(parent, windowID, attributes, x, y, width, height, style, __s0 ? __s0.ptr : (title as Pointer), palette);
+      if (rawPtr === null) return null;
+      return new wxGLCanvas(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

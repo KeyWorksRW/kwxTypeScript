@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -30,8 +31,14 @@ export class wxDynamicLibrary {
     this.Delete();
   }
 
-  Load(name: Pointer, flags: number): number {
-    return lib.symbols.wxDynamicLibrary_Load(this._ptr, name, flags);
+  Load(name: string | Pointer, flags: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxDynamicLibrary_Load(this._ptr, __s0 ? __s0.ptr : (name as Pointer), flags);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Unload(): void {
@@ -42,12 +49,24 @@ export class wxDynamicLibrary {
     return (lib.symbols.wxDynamicLibrary_IsLoaded(this._ptr) as number) !== 0;
   }
 
-  HasSymbol(name: Pointer): boolean {
-    return (lib.symbols.wxDynamicLibrary_HasSymbol(this._ptr, name) as number) !== 0;
+  HasSymbol(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxDynamicLibrary_HasSymbol(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetSymbol(name: Pointer): Pointer {
-    return lib.symbols.wxDynamicLibrary_GetSymbol(this._ptr, name);
+  GetSymbol(name: string | Pointer): Pointer {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxDynamicLibrary_GetSymbol(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Detach(): Pointer {
@@ -57,7 +76,7 @@ export class wxDynamicLibrary {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxDynamicLibrary_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

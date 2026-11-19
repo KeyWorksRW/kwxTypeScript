@@ -44,7 +44,7 @@ export class wxSize {
   Scale(xscale: number, yscale: number): wxSize | null {
     const rawPtr = lib.symbols.wxSize_Scale(this._ptr, xscale, yscale);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetHeight(): number {

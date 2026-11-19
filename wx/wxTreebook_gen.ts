@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxBookCtrlBase } from "./wxBookCtrlBase_gen.ts";
 import { wxImageList } from "./wxImageList_gen.ts";
@@ -16,12 +17,24 @@ export class wxTreebook extends wxBookCtrlBase {
     return this._ptr;
   }
 
-  override AddPage(pPage: Pointer, strText: Pointer, bSelect: boolean, imageId: number): boolean {
-    return (lib.symbols.wxTreebook_AddPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) as number) !== 0;
+  override AddPage(pPage: Pointer, strText: string | Pointer, bSelect: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strText === "string") __s0 = createWxString(strText);
+      return (lib.symbols.wxTreebook_AddPage(this._ptr, pPage, __s0 ? __s0.ptr : (strText as Pointer), bSelect ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddSubPage(pPage: Pointer, strText: Pointer, bSelect: boolean, imageId: number): boolean {
-    return (lib.symbols.wxTreebook_AddSubPage(this._ptr, pPage, strText, bSelect ? 1 : 0, imageId) as number) !== 0;
+  AddSubPage(pPage: Pointer, strText: string | Pointer, bSelect: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strText === "string") __s0 = createWxString(strText);
+      return (lib.symbols.wxTreebook_AddSubPage(this._ptr, pPage, __s0 ? __s0.ptr : (strText as Pointer), bSelect ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override AdvanceSelection(bForward: boolean): void {
@@ -67,7 +80,7 @@ export class wxTreebook extends wxBookCtrlBase {
   override GetPageText(nPage: number): wxString | null {
     const rawPtr = lib.symbols.wxTreebook_GetPageText(this._ptr, nPage);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override GetSelection(): number {
@@ -84,12 +97,24 @@ export class wxTreebook extends wxBookCtrlBase {
     return lib.symbols.wxTreebook_HitTest(this._ptr, x, y, flags);
   }
 
-  override InsertPage(nPage: number, pPage: Pointer, strText: Pointer, bSelect: boolean, imageId: number): boolean {
-    return (lib.symbols.wxTreebook_InsertPage(this._ptr, nPage, pPage, strText, bSelect ? 1 : 0, imageId) as number) !== 0;
+  override InsertPage(nPage: number, pPage: Pointer, strText: string | Pointer, bSelect: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strText === "string") __s0 = createWxString(strText);
+      return (lib.symbols.wxTreebook_InsertPage(this._ptr, nPage, pPage, __s0 ? __s0.ptr : (strText as Pointer), bSelect ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertSubPage(nPage: number, pPage: Pointer, strText: Pointer, bSelect: boolean, imageId: number): boolean {
-    return (lib.symbols.wxTreebook_InsertSubPage(this._ptr, nPage, pPage, strText, bSelect ? 1 : 0, imageId) as number) !== 0;
+  InsertSubPage(nPage: number, pPage: Pointer, strText: string | Pointer, bSelect: boolean, imageId: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strText === "string") __s0 = createWxString(strText);
+      return (lib.symbols.wxTreebook_InsertSubPage(this._ptr, nPage, pPage, __s0 ? __s0.ptr : (strText as Pointer), bSelect ? 1 : 0, imageId) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsNodeExpanded(nPage: number): boolean {
@@ -112,8 +137,14 @@ export class wxTreebook extends wxBookCtrlBase {
     return (lib.symbols.wxTreebook_SetPageImage(this._ptr, nPage, nImage) as number) !== 0;
   }
 
-  override SetPageText(nPage: number, strText: Pointer): boolean {
-    return (lib.symbols.wxTreebook_SetPageText(this._ptr, nPage, strText) as number) !== 0;
+  override SetPageText(nPage: number, strText: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strText === "string") __s0 = createWxString(strText);
+      return (lib.symbols.wxTreebook_SetPageText(this._ptr, nPage, __s0 ? __s0.ptr : (strText as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override SetSelection(nPage: number): number {

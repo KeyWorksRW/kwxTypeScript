@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -39,14 +40,20 @@ export class wxRadioBox extends wxControl {
     lib.symbols.wxRadioBox_EnableItem(this._ptr, item, enable ? 1 : 0);
   }
 
-  FindString(str: Pointer): number {
-    return lib.symbols.wxRadioBox_FindString(this._ptr, str);
+  FindString(str: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      return lib.symbols.wxRadioBox_FindString(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetItemLabel(item: number): wxString | null {
     const rawPtr = lib.symbols.wxRadioBox_GetItemLabel(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNumberOfRowsOrCols(): number {
@@ -60,15 +67,21 @@ export class wxRadioBox extends wxControl {
   GetStringSelection(): wxString | null {
     const rawPtr = lib.symbols.wxRadioBox_GetStringSelection(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   Number(): number {
     return lib.symbols.wxRadioBox_Number(this._ptr);
   }
 
-  SetItemLabel(item: number, label: Pointer): void {
-    lib.symbols.wxRadioBox_SetItemLabel(this._ptr, item, label);
+  SetItemLabel(item: number, label: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof label === "string") __s0 = createWxString(label);
+      lib.symbols.wxRadioBox_SetItemLabel(this._ptr, item, __s0 ? __s0.ptr : (label as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetNumberOfRowsOrCols(count: number): void {
@@ -79,8 +92,14 @@ export class wxRadioBox extends wxControl {
     lib.symbols.wxRadioBox_SetSelection(this._ptr, selection);
   }
 
-  SetStringSelection(str: Pointer): void {
-    lib.symbols.wxRadioBox_SetStringSelection(this._ptr, str);
+  SetStringSelection(str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxRadioBox_SetStringSelection(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ShowItem(item: number, show: boolean): void {
@@ -109,10 +128,16 @@ export class wxRadioBox extends wxControl {
 
 }
 
-export function createWxRadioBox(parent: Pointer, id: number, text: Pointer, left: number, top: number, width: number, height: number, n: number, strings: Pointer, dimension: number, style: number): wxRadioBox | null {
-    const rawPtr = lib.symbols.wxRadioBox_Create(parent, id, text, left, top, width, height, n, strings, dimension, style);
-    if (rawPtr === null) return null;
-    return new wxRadioBox(rawPtr);
+export function createWxRadioBox(parent: Pointer, id: number, text: string | Pointer, left: number, top: number, width: number, height: number, n: number, strings: Pointer, dimension: number, style: number): wxRadioBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxRadioBox_Create(parent, id, __s0 ? __s0.ptr : (text as Pointer), left, top, width, height, n, strings, dimension, style);
+      if (rawPtr === null) return null;
+      return new wxRadioBox(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

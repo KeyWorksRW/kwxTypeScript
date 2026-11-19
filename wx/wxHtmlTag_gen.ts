@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -13,14 +14,26 @@ export class wxHtmlTag extends wxObject {
     return this._ptr;
   }
 
-  GetParam(par: Pointer, with_quotes: boolean): wxString | null {
-    const rawPtr = lib.symbols.wxHtmlTag_GetParam(this._ptr, par, with_quotes ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetParam(par: string | Pointer, with_quotes: boolean): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof par === "string") __s0 = createWxString(par);
+      const rawPtr = lib.symbols.wxHtmlTag_GetParam(this._ptr, __s0 ? __s0.ptr : (par as Pointer), with_quotes ? 1 : 0);
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  HasParam(par: Pointer): boolean {
-    return (lib.symbols.wxHtmlTag_HasParam(this._ptr, par) as number) !== 0;
+  HasParam(par: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof par === "string") __s0 = createWxString(par);
+      return (lib.symbols.wxHtmlTag_HasParam(this._ptr, __s0 ? __s0.ptr : (par as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

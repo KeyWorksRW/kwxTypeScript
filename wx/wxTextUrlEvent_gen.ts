@@ -5,6 +5,7 @@ import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxCommandEvent } from "./wxCommandEvent_gen.ts";
 import { wxMouseEvent } from "./wxMouseEvent_gen.ts";
+import { wxString } from "./wxString_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
 
 export class wxTextUrlEvent extends wxCommandEvent {
@@ -35,6 +36,12 @@ export class wxTextUrlEvent extends wxCommandEvent {
 
   GetURLEnd(): bigint {
     return lib.symbols.wxTextUrlEvent_GetURLEnd(this._ptr) as bigint;
+  }
+
+  override GetString(): wxString | null {
+    const rawPtr = lib.symbols.wxTextUrlEvent_GetString(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxString(rawPtr);
   }
 
 }

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxMDIChildFrame } from "./wxMDIChildFrame_gen.ts";
 import { wxDocument } from "./wxDocument_gen.ts";
@@ -36,10 +37,16 @@ export class wxDocMDIChildFrame extends wxMDIChildFrame {
 
 }
 
-export function createWxDocMDIChildFrame(doc: Pointer, view: Pointer, parent: Pointer, id: number, title: Pointer, x: number, y: number, width: number, height: number, style: number): wxDocMDIChildFrame | null {
-    const rawPtr = lib.symbols.wxDocMDIChildFrame_Create(doc, view, parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxDocMDIChildFrame(rawPtr);
+export function createWxDocMDIChildFrame(doc: Pointer, view: Pointer, parent: Pointer, id: number, title: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxDocMDIChildFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxDocMDIChildFrame_Create(doc, view, parent, id, __s0 ? __s0.ptr : (title as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxDocMDIChildFrame(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

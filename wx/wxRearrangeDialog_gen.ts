@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxArrayInt } from "./wxArrayInt_gen.ts";
@@ -27,7 +28,7 @@ export class wxRearrangeDialog extends wxDialog {
   GetOrder(): wxArrayInt | null {
     const rawPtr = lib.symbols.wxRearrangeDialog_GetOrder(this._ptr);
     if (rawPtr === null) return null;
-    return new wxArrayInt(rawPtr, true);
+    return new wxArrayInt(rawPtr);
   }
 
   GetList(): wxRearrangeList | null {
@@ -42,10 +43,19 @@ export class wxRearrangeDialog extends wxDialog {
 
 }
 
-export function createWxRearrangeDialog(parent: Pointer, message: Pointer, title: Pointer, order: Pointer, items: Pointer, x: number, y: number): wxRearrangeDialog | null {
-    const rawPtr = lib.symbols.wxRearrangeDialog_Create(parent, message, title, order, items, x, y);
-    if (rawPtr === null) return null;
-    return new wxRearrangeDialog(rawPtr);
+export function createWxRearrangeDialog(parent: Pointer, message: string | Pointer, title: string | Pointer, order: Pointer, items: Pointer, x: number, y: number): wxRearrangeDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof title === "string") __s1 = createWxString(title);
+      const rawPtr = lib.symbols.wxRearrangeDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (title as Pointer), order, items, x, y);
+      if (rawPtr === null) return null;
+      return new wxRearrangeDialog(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

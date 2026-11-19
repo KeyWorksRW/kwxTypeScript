@@ -17,7 +17,7 @@ export class wxDropFilesEvent extends wxEvent {
   GetPosition(): wxPoint | null {
     const rawPtr = lib.symbols.wxDropFilesEvent_GetPosition(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetNumberOfFiles(): number {
@@ -27,7 +27,7 @@ export class wxDropFilesEvent extends wxEvent {
   GetFile(index: number): wxString | null {
     const rawPtr = lib.symbols.wxDropFilesEvent_GetFile(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

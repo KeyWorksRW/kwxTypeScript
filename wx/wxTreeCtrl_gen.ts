@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxColour } from "./wxColour_gen.ts";
@@ -32,12 +33,24 @@ export class wxTreeCtrl extends wxControl {
     return lib.symbols.wxTreeCtrl_GetItemClientClosure(this._ptr, item);
   }
 
-  InsertItem2(parent: Pointer, idPrevious: Pointer, text: Pointer, image: number, selectedImage: number, closure: Pointer, item: Pointer): void {
-    lib.symbols.wxTreeCtrl_InsertItem2(this._ptr, parent, idPrevious, text, image, selectedImage, closure, item);
+  InsertItem2(parent: Pointer, idPrevious: Pointer, text: string | Pointer, image: number, selectedImage: number, closure: Pointer, item: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeCtrl_InsertItem2(this._ptr, parent, idPrevious, __s0 ? __s0.ptr : (text as Pointer), image, selectedImage, closure, item);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertItemByIndex2(parent: Pointer, index: number, text: Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
-    lib.symbols.wxTreeCtrl_InsertItemByIndex2(this._ptr, parent, index, text, image, selectedImage, data, item);
+  InsertItemByIndex2(parent: Pointer, index: number, text: string | Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeCtrl_InsertItemByIndex2(this._ptr, parent, index, __s0 ? __s0.ptr : (text as Pointer), image, selectedImage, data, item);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetItemClientClosure(item: Pointer, closure: Pointer): void {
@@ -80,8 +93,14 @@ export class wxTreeCtrl extends wxControl {
     lib.symbols.wxTreeCtrl_EnableBellOnNoMatch(this._ptr, on ? 1 : 0);
   }
 
-  AddRoot(text: Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
-    lib.symbols.wxTreeCtrl_AddRoot(this._ptr, text, image, selectedImage, data, item);
+  AddRoot(text: string | Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeCtrl_AddRoot(this._ptr, __s0 ? __s0.ptr : (text as Pointer), image, selectedImage, data, item);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   AssignButtonsImageList(imageList: Pointer): void {
@@ -92,8 +111,14 @@ export class wxTreeCtrl extends wxControl {
     lib.symbols.wxTreeCtrl_SetButtonsImageList(this._ptr, imageList);
   }
 
-  AppendItem(parent: Pointer, text: Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
-    lib.symbols.wxTreeCtrl_AppendItem(this._ptr, parent, text, image, selectedImage, data, item);
+  AppendItem(parent: Pointer, text: string | Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeCtrl_AppendItem(this._ptr, parent, __s0 ? __s0.ptr : (text as Pointer), image, selectedImage, data, item);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Collapse(item: Pointer): void {
@@ -136,7 +161,7 @@ export class wxTreeCtrl extends wxControl {
   GetBoundingRect(item: Pointer, textOnly: boolean): wxRect | null {
     const rawPtr = lib.symbols.wxTreeCtrl_GetBoundingRect(this._ptr, item, textOnly ? 1 : 0);
     if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+    return new wxRect(rawPtr);
   }
 
   GetChildrenCount(item: Pointer, recursively: boolean): number {
@@ -182,7 +207,7 @@ export class wxTreeCtrl extends wxControl {
   GetItemText(item: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxTreeCtrl_GetItemText(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLastChild(inputItem: Pointer, result: Pointer): void {
@@ -239,12 +264,24 @@ export class wxTreeCtrl extends wxControl {
     lib.symbols.wxTreeCtrl_HitTest(this._ptr, x, y, flags, item);
   }
 
-  InsertItem(parent: Pointer, idPrevious: Pointer, text: Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
-    lib.symbols.wxTreeCtrl_InsertItem(this._ptr, parent, idPrevious, text, image, selectedImage, data, item);
+  InsertItem(parent: Pointer, idPrevious: Pointer, text: string | Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeCtrl_InsertItem(this._ptr, parent, idPrevious, __s0 ? __s0.ptr : (text as Pointer), image, selectedImage, data, item);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertItemByIndex(parent: Pointer, index: number, text: Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
-    lib.symbols.wxTreeCtrl_InsertItemByIndex(this._ptr, parent, index, text, image, selectedImage, data, item);
+  InsertItemByIndex(parent: Pointer, index: number, text: string | Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeCtrl_InsertItemByIndex(this._ptr, parent, index, __s0 ? __s0.ptr : (text as Pointer), image, selectedImage, data, item);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsBold(item: Pointer): boolean {
@@ -271,8 +308,14 @@ export class wxTreeCtrl extends wxControl {
     return lib.symbols.wxTreeCtrl_OnCompareItems(this._ptr, item1, item2);
   }
 
-  PrependItem(parent: Pointer, text: Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
-    lib.symbols.wxTreeCtrl_PrependItem(this._ptr, parent, text, image, selectedImage, data, item);
+  PrependItem(parent: Pointer, text: string | Pointer, image: number, selectedImage: number, data: Pointer, item: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeCtrl_PrependItem(this._ptr, parent, __s0 ? __s0.ptr : (text as Pointer), image, selectedImage, data, item);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ScrollTo(item: Pointer): void {
@@ -331,8 +374,14 @@ export class wxTreeCtrl extends wxControl {
     lib.symbols.wxTreeCtrl_SetItemImage(this._ptr, item, image, which);
   }
 
-  SetItemText(item: Pointer, text: Pointer): void {
-    lib.symbols.wxTreeCtrl_SetItemText(this._ptr, item, text);
+  SetItemText(item: Pointer, text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTreeCtrl_SetItemText(this._ptr, item, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetItemTextColour(item: Pointer, col: Pointer): void {
@@ -406,19 +455,19 @@ export class wxTreeCtrl extends wxControl {
   GetItemTextColour(item: Pointer): wxColour | null {
     const rawPtr = lib.symbols.wxTreeCtrl_GetItemTextColour(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetItemBackgroundColour(item: Pointer): wxColour | null {
     const rawPtr = lib.symbols.wxTreeCtrl_GetItemBackgroundColour(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetItemFont(item: Pointer): wxFont | null {
     const rawPtr = lib.symbols.wxTreeCtrl_GetItemFont(this._ptr, item);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   Init(): void {
@@ -443,18 +492,33 @@ export class wxTreeCtrl extends wxControl {
     lib.symbols.wxComboPopup_OnDismiss(this._ptr);
   }
 
-  SetStringValue(value: Pointer): void {
-    lib.symbols.wxComboPopup_SetStringValue(this._ptr, value);
+  SetStringValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxComboPopup_SetStringValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetStringValue(): wxString | null {
     const rawPtr = lib.symbols.wxComboPopup_GetStringValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  FindItem(item: Pointer, trueItem: Pointer): boolean {
-    return (lib.symbols.wxComboPopup_FindItem(this._ptr, item, trueItem) as number) !== 0;
+  FindItem(item: string | Pointer, trueItem: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      if (typeof trueItem === "string") __s1 = createWxString(trueItem);
+      return (lib.symbols.wxComboPopup_FindItem(this._ptr, __s0 ? __s0.ptr : (item as Pointer), __s1 ? __s1.ptr : (trueItem as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   PaintComboControl(dc: Pointer, x: number, y: number, width: number, height: number): void {

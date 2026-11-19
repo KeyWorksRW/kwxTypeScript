@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxArrayInt } from "./wxArrayInt_gen.ts";
 
@@ -62,8 +63,14 @@ export class wxTextAttr {
     lib.symbols.wxTextAttr_SetFlags(this._ptr, flags);
   }
 
-  SetFontFaceName(faceName: Pointer): void {
-    lib.symbols.wxTextAttr_SetFontFaceName(this._ptr, faceName);
+  SetFontFaceName(faceName: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof faceName === "string") __s0 = createWxString(faceName);
+      lib.symbols.wxTextAttr_SetFontFaceName(this._ptr, __s0 ? __s0.ptr : (faceName as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFontSize(pointSize: number): void {

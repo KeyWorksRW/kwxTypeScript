@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxComboCtrl } from "./wxComboCtrl_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -14,10 +15,16 @@ export class wxGenericComboCtrl extends wxComboCtrl {
 
 }
 
-export function createWxGenericComboCtrl(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: bigint): wxComboCtrl | null {
-    const rawPtr = lib.symbols.wxGenericComboCtrl_Create(parent, id, value, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxComboCtrl(rawPtr);
+export function createWxGenericComboCtrl(parent: Pointer, id: number, value: string | Pointer, x: number, y: number, width: number, height: number, style: bigint): wxComboCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      const rawPtr = lib.symbols.wxGenericComboCtrl_Create(parent, id, __s0 ? __s0.ptr : (value as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxComboCtrl(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

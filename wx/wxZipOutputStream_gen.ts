@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxArchiveOutputStream } from "./wxArchiveOutputStream_gen.ts";
 
@@ -21,27 +22,51 @@ export class wxZipOutputStream extends wxArchiveOutputStream {
     this.Delete();
   }
 
-  override PutNextEntry(entry_name: Pointer, size: bigint): boolean;
+  override PutNextEntry(entry_name: string | Pointer, size: bigint): boolean;
   override PutNextEntry(entry: Pointer): boolean;
-  override PutNextEntry(entry_name: Pointer, size?: bigint): boolean {
+  override PutNextEntry(entry_name: string | Pointer, size?: bigint): boolean {
     if (arguments.length === 2) {
-      return (lib.symbols.wxZipOutputStream_PutNextEntry(this._ptr, entry_name, size as bigint) as number) !== 0;
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+        return (lib.symbols.wxZipOutputStream_PutNextEntry(this._ptr, __s0 ? __s0.ptr : (entry_name as Pointer), size as bigint) as number) !== 0;
+      } finally {
+        __s0?.Delete();
+      }
     }
     else {
-      return super.PutNextEntry(entry_name);
+      return super.PutNextEntry(entry_name as Pointer);
     }
   }
 
-  override PutNextEntryDate(entry_name: Pointer, dt: Pointer, size: bigint): boolean {
-    return (lib.symbols.wxZipOutputStream_PutNextEntryDate(this._ptr, entry_name, dt, size) as number) !== 0;
+  override PutNextEntryDate(entry_name: string | Pointer, dt: Pointer, size: bigint): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      return (lib.symbols.wxZipOutputStream_PutNextEntryDate(this._ptr, __s0 ? __s0.ptr : (entry_name as Pointer), dt, size) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  PutNextDirEntry(entry_name: Pointer): boolean {
-    return (lib.symbols.wxZipOutputStream_PutNextDirEntry(this._ptr, entry_name) as number) !== 0;
+  PutNextDirEntry(entry_name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      return (lib.symbols.wxZipOutputStream_PutNextDirEntry(this._ptr, __s0 ? __s0.ptr : (entry_name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  override PutNextDirEntryDate(entry_name: Pointer, dt: Pointer): boolean {
-    return (lib.symbols.wxZipOutputStream_PutNextDirEntryDate(this._ptr, entry_name, dt) as number) !== 0;
+  override PutNextDirEntryDate(entry_name: string | Pointer, dt: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof entry_name === "string") __s0 = createWxString(entry_name);
+      return (lib.symbols.wxZipOutputStream_PutNextDirEntryDate(this._ptr, __s0 ? __s0.ptr : (entry_name as Pointer), dt) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   PutEntry(entry: Pointer): boolean {
@@ -72,8 +97,14 @@ export class wxZipOutputStream extends wxArchiveOutputStream {
     return (lib.symbols.wxZipOutputStream_Close(this._ptr) as number) !== 0;
   }
 
-  SetComment(comment: Pointer): void {
-    lib.symbols.wxZipOutputStream_SetComment(this._ptr, comment);
+  SetComment(comment: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof comment === "string") __s0 = createWxString(comment);
+      lib.symbols.wxZipOutputStream_SetComment(this._ptr, __s0 ? __s0.ptr : (comment as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetLevel(): number {

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -27,17 +28,23 @@ export class wxIPaddress {
   Hostname(): wxString | null {
     const rawPtr = lib.symbols.wxIPaddress_Hostname(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  HostnameSet(hostname: Pointer): boolean {
-    return (lib.symbols.wxIPaddress_HostnameSet(this._ptr, hostname) as number) !== 0;
+  HostnameSet(hostname: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof hostname === "string") __s0 = createWxString(hostname);
+      return (lib.symbols.wxIPaddress_HostnameSet(this._ptr, __s0 ? __s0.ptr : (hostname as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IPAddress(): wxString | null {
     const rawPtr = lib.symbols.wxIPaddress_IPAddress(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsLocalHost(): boolean {
@@ -52,8 +59,14 @@ export class wxIPaddress {
     return lib.symbols.wxIPaddress_Service(this._ptr);
   }
 
-  ServiceSet(service: Pointer): boolean {
-    return (lib.symbols.wxIPaddress_ServiceSet(this._ptr, service) as number) !== 0;
+  ServiceSet(service: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof service === "string") __s0 = createWxString(service);
+      return (lib.symbols.wxIPaddress_ServiceSet(this._ptr, __s0 ? __s0.ptr : (service as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ServiceSetPort(service: number): boolean {
@@ -63,7 +76,7 @@ export class wxIPaddress {
   OrigHostname(): wxString | null {
     const rawPtr = lib.symbols.wxIPaddress_OrigHostname(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

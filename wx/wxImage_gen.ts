@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxPalette } from "./wxPalette_gen.ts";
@@ -40,55 +41,55 @@ export class wxImage extends wxObject {
   Size(width: number, height: number, x: number, y: number, r: number, g: number, b: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_Size(this._ptr, width, height, x, y, r, g, b);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ResampleNearest(width: number, height: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ResampleNearest(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ResampleBox(width: number, height: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ResampleBox(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ResampleBilinear(width: number, height: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ResampleBilinear(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ResampleBicubic(width: number, height: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ResampleBicubic(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   Blur(radius: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_Blur(this._ptr, radius);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   BlurHorizontal(radius: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_BlurHorizontal(this._ptr, radius);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   BlurVertical(radius: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_BlurVertical(this._ptr, radius);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ShrinkBy(xFactor: number, yFactor: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ShrinkBy(this._ptr, xFactor, yFactor);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   Resize(width: number, height: number, x: number, y: number, r: number, g: number, b: number): void {
@@ -98,37 +99,37 @@ export class wxImage extends wxObject {
   Rotate180(): wxImage | null {
     const rawPtr = lib.symbols.wxImage_Rotate180(this._ptr);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ConvertToGreyscale(): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ConvertToGreyscale(this._ptr);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ConvertToGreyscaleEx(weightR: number, weightG: number, weightB: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ConvertToGreyscaleEx(this._ptr, weightR, weightG, weightB);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ConvertToMono(r: number, g: number, b: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ConvertToMono(this._ptr, r, g, b);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ConvertToDisabled(brightness: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ConvertToDisabled(this._ptr, brightness);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   ChangeLightness(alpha: number): wxImage | null {
     const rawPtr = lib.symbols.wxImage_ChangeLightness(this._ptr, alpha);
     if (rawPtr === null) return null;
-    return new wxImage(rawPtr, true);
+    return new wxImage(rawPtr);
   }
 
   SetRGBRect(x: number, y: number, width: number, height: number, r: number, g: number, b: number): void {
@@ -171,26 +172,56 @@ export class wxImage extends wxObject {
     return lib.symbols.wxImage_GetLoadFlags(this._ptr);
   }
 
-  SaveFileMime(name: Pointer, mimetype: Pointer): boolean {
-    return (lib.symbols.wxImage_SaveFileMime(this._ptr, name, mimetype) as number) !== 0;
+  SaveFileMime(name: string | Pointer, mimetype: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof mimetype === "string") __s1 = createWxString(mimetype);
+      return (lib.symbols.wxImage_SaveFileMime(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (mimetype as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  LoadFileMime(name: Pointer, mimetype: Pointer, index: number): boolean {
-    return (lib.symbols.wxImage_LoadFileMime(this._ptr, name, mimetype, index) as number) !== 0;
+  LoadFileMime(name: string | Pointer, mimetype: string | Pointer, index: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof mimetype === "string") __s1 = createWxString(mimetype);
+      return (lib.symbols.wxImage_LoadFileMime(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (mimetype as Pointer), index) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  LoadStreamMime(stream: Pointer, mimetype: Pointer, index: number): boolean {
-    return (lib.symbols.wxImage_LoadStreamMime(this._ptr, stream, mimetype, index) as number) !== 0;
+  LoadStreamMime(stream: Pointer, mimetype: string | Pointer, index: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof mimetype === "string") __s0 = createWxString(mimetype);
+      return (lib.symbols.wxImage_LoadStreamMime(this._ptr, stream, __s0 ? __s0.ptr : (mimetype as Pointer), index) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SaveStreamMime(stream: Pointer, mimetype: Pointer): boolean {
-    return (lib.symbols.wxImage_SaveStreamMime(this._ptr, stream, mimetype) as number) !== 0;
+  SaveStreamMime(stream: Pointer, mimetype: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof mimetype === "string") __s0 = createWxString(mimetype);
+      return (lib.symbols.wxImage_SaveStreamMime(this._ptr, stream, __s0 ? __s0.ptr : (mimetype as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxImage_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetDataRGBA(data: Pointer): void {
@@ -232,7 +263,7 @@ export class wxImage extends wxObject {
   GetPalette(): wxPalette | null {
     const rawPtr = lib.symbols.wxImage_GetPalette(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPalette(rawPtr, true);
+    return new wxPalette(rawPtr);
   }
 
   SetPalette(palette: Pointer): void {
@@ -331,18 +362,36 @@ export class wxImage extends wxObject {
     return (lib.symbols.wxImage_HasMask(this._ptr) as number) !== 0;
   }
 
-  GetOption(name: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxImage_GetOption(this._ptr, name);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  GetOption(name: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxImage_GetOption(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetOptionInt(name: Pointer): boolean {
-    return (lib.symbols.wxImage_GetOptionInt(this._ptr, name) as number) !== 0;
+  GetOptionInt(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxImage_GetOptionInt(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  HasOption(name: Pointer): boolean {
-    return (lib.symbols.wxImage_HasOption(this._ptr, name) as number) !== 0;
+  HasOption(name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxImage_HasOption(this._ptr, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Initialize(width: number, height: number, clear: boolean): void {
@@ -353,8 +402,14 @@ export class wxImage extends wxObject {
     lib.symbols.wxImage_InitializeFromData(this._ptr, width, height, data);
   }
 
-  LoadFile(name: Pointer, type_: number, index: number): boolean {
-    return (lib.symbols.wxImage_LoadFile(this._ptr, name, type_, index) as number) !== 0;
+  LoadFile(name: string | Pointer, type_: number, index: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxImage_LoadFile(this._ptr, __s0 ? __s0.ptr : (name as Pointer), type_, index) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   LoadStream(name: Pointer, type_: number, index: number): boolean {
@@ -393,8 +448,14 @@ export class wxImage extends wxObject {
     lib.symbols.wxImage_Rotate90(this._ptr, clockwise ? 1 : 0, image);
   }
 
-  SaveFile(name: Pointer, type_: number): boolean {
-    return (lib.symbols.wxImage_SaveFile(this._ptr, name, type_) as number) !== 0;
+  SaveFile(name: string | Pointer, type_: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxImage_SaveFile(this._ptr, __s0 ? __s0.ptr : (name as Pointer), type_) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SaveStream(stream: Pointer, type_: number): boolean {
@@ -425,12 +486,27 @@ export class wxImage extends wxObject {
     lib.symbols.wxImage_SetMaskColour(this._ptr, r, g, b);
   }
 
-  SetOption(name: Pointer, value: Pointer): void {
-    lib.symbols.wxImage_SetOption(this._ptr, name, value);
+  SetOption(name: string | Pointer, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      if (typeof value === "string") __s1 = createWxString(value);
+      lib.symbols.wxImage_SetOption(this._ptr, __s0 ? __s0.ptr : (name as Pointer), __s1 ? __s1.ptr : (value as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetOptionInt(name: Pointer, value: number): void {
-    lib.symbols.wxImage_SetOptionInt(this._ptr, name, value);
+  SetOptionInt(name: string | Pointer, value: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxImage_SetOptionInt(this._ptr, __s0 ? __s0.ptr : (name as Pointer), value);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetRGB(x: number, y: number, r: number, g: number, b: number): void {
@@ -475,10 +551,16 @@ export function createWxImageFromData(width: number, height: number, data: Point
     return new wxImage(rawPtr);
 }
 
-export function createWxImageFromFile(name: Pointer): wxImage | null {
-    const rawPtr = lib.symbols.wxImage_CreateFromFile(name);
-    if (rawPtr === null) return null;
-    return new wxImage(rawPtr);
+export function createWxImageFromFile(name: string | Pointer): wxImage | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxImage_CreateFromFile(__s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxImage(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxImageFromDataEncoded(data: Pointer, size: bigint, bitmap_type: number): wxImage | null {

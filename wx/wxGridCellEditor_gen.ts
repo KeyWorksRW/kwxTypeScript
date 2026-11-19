@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 
@@ -32,8 +33,17 @@ export class wxGridCellEditor {
     lib.symbols.wxGridCellEditor_Destroy(this._ptr);
   }
 
-  EndEdit(row: number, col: number, grid: Pointer, oldStr: Pointer, newStr: Pointer): number {
-    return lib.symbols.wxGridCellEditor_EndEdit(this._ptr, row, col, grid, oldStr, newStr);
+  EndEdit(row: number, col: number, grid: Pointer, oldStr: string | Pointer, newStr: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof oldStr === "string") __s0 = createWxString(oldStr);
+      if (typeof newStr === "string") __s1 = createWxString(newStr);
+      return lib.symbols.wxGridCellEditor_EndEdit(this._ptr, row, col, grid, __s0 ? __s0.ptr : (oldStr as Pointer), __s1 ? __s1.ptr : (newStr as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   GetControl(): wxControl | null {
@@ -66,8 +76,14 @@ export class wxGridCellEditor {
     lib.symbols.wxGridCellEditor_SetControl(this._ptr, control);
   }
 
-  SetParameters(params: Pointer): void {
-    lib.symbols.wxGridCellEditor_SetParameters(this._ptr, params);
+  SetParameters(params: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof params === "string") __s0 = createWxString(params);
+      lib.symbols.wxGridCellEditor_SetParameters(this._ptr, __s0 ? __s0.ptr : (params as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetSize(x: number, y: number, width: number, height: number): void {

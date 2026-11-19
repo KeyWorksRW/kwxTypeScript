@@ -26,7 +26,7 @@ export class wxRearrangeList extends wxCheckListBox {
   GetCurrentOrder(): wxArrayInt | null {
     const rawPtr = lib.symbols.wxRearrangeList_GetCurrentOrder(this._ptr);
     if (rawPtr === null) return null;
-    return new wxArrayInt(rawPtr, true);
+    return new wxArrayInt(rawPtr);
   }
 
   CanMoveCurrentUp(): boolean {

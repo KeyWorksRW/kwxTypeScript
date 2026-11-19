@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxSecretStore {
@@ -33,20 +34,50 @@ export class wxSecretStore {
     return (lib.symbols.wxSecretStore_IsOk(this._ptr) as number) !== 0;
   }
 
-  IsOkWithError(error_message: Pointer): boolean {
-    return (lib.symbols.wxSecretStore_IsOkWithError(this._ptr, error_message) as number) !== 0;
+  IsOkWithError(error_message: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof error_message === "string") __s0 = createWxString(error_message);
+      return (lib.symbols.wxSecretStore_IsOkWithError(this._ptr, __s0 ? __s0.ptr : (error_message as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Save(service: Pointer, username: Pointer, password: Pointer): boolean {
-    return (lib.symbols.wxSecretStore_Save(this._ptr, service, username, password) as number) !== 0;
+  Save(service: string | Pointer, username: string | Pointer, password: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof service === "string") __s0 = createWxString(service);
+      if (typeof username === "string") __s1 = createWxString(username);
+      return (lib.symbols.wxSecretStore_Save(this._ptr, __s0 ? __s0.ptr : (service as Pointer), __s1 ? __s1.ptr : (username as Pointer), password) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  Load(service: Pointer, username: Pointer, password: Pointer): boolean {
-    return (lib.symbols.wxSecretStore_Load(this._ptr, service, username, password) as number) !== 0;
+  Load(service: string | Pointer, username: string | Pointer, password: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof service === "string") __s0 = createWxString(service);
+      if (typeof username === "string") __s1 = createWxString(username);
+      return (lib.symbols.wxSecretStore_Load(this._ptr, __s0 ? __s0.ptr : (service as Pointer), __s1 ? __s1.ptr : (username as Pointer), password) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  DeleteSecret(service: Pointer): boolean {
-    return (lib.symbols.wxSecretStore_DeleteSecret(this._ptr, service) as number) !== 0;
+  DeleteSecret(service: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof service === "string") __s0 = createWxString(service);
+      return (lib.symbols.wxSecretStore_DeleteSecret(this._ptr, __s0 ? __s0.ptr : (service as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

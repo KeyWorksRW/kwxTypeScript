@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxLogInterposer } from "./wxLogInterposer_gen.ts";
 import { wxFrame } from "./wxFrame_gen.ts";
@@ -35,10 +36,16 @@ export class wxLogWindow extends wxLogInterposer {
 
 }
 
-export function createWxLogWindow(parent: Pointer, title: Pointer, showit: boolean, passthrough: boolean): wxLogWindow | null {
-    const rawPtr = lib.symbols.wxLogWindow_Create(parent, title, showit ? 1 : 0, passthrough ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new wxLogWindow(rawPtr);
+export function createWxLogWindow(parent: Pointer, title: string | Pointer, showit: boolean, passthrough: boolean): wxLogWindow | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxLogWindow_Create(parent, __s0 ? __s0.ptr : (title as Pointer), showit ? 1 : 0, passthrough ? 1 : 0);
+      if (rawPtr === null) return null;
+      return new wxLogWindow(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

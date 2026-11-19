@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxRibbonControl } from "./wxRibbonControl_gen.ts";
 import { wxRibbonArtProvider } from "./wxRibbonArtProvider_gen.ts";
@@ -22,8 +23,14 @@ export class wxRibbonGallery extends wxRibbonControl {
     lib.symbols.wxRibbonGallery_SetItemClientObject(this._ptr, item, data);
   }
 
-  SetKeyTip(keytip: Pointer): void {
-    lib.symbols.wxRibbonGallery_SetKeyTip(this._ptr, keytip);
+  SetKeyTip(keytip: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof keytip === "string") __s0 = createWxString(keytip);
+      lib.symbols.wxRibbonGallery_SetKeyTip(this._ptr, __s0 ? __s0.ptr : (keytip as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Append(bitmap: Pointer, id: number): Pointer {

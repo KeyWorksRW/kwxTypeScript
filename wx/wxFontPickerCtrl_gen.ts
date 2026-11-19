@@ -16,7 +16,7 @@ export class wxFontPickerCtrl extends wxPickerBase {
   GetSelectedFont(): wxFont | null {
     const rawPtr = lib.symbols.wxFontPickerCtrl_GetSelectedFont(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   SetSelectedFont(font: Pointer): void {

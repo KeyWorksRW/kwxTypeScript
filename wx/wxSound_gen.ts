@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -36,10 +37,16 @@ export class wxSound extends wxEvtHandler {
 
 }
 
-export function createWxSound(fileName: Pointer, isResource: boolean): wxSound | null {
-    const rawPtr = lib.symbols.wxSound_Create(fileName, isResource ? 1 : 0);
-    if (rawPtr === null) return null;
-    return new wxSound(rawPtr);
+export function createWxSound(fileName: string | Pointer, isResource: boolean): wxSound | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof fileName === "string") __s0 = createWxString(fileName);
+      const rawPtr = lib.symbols.wxSound_Create(__s0 ? __s0.ptr : (fileName as Pointer), isResource ? 1 : 0);
+      if (rawPtr === null) return null;
+      return new wxSound(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

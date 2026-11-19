@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -37,19 +38,31 @@ export class wxIconLocation {
   GetFileName(): wxString | null {
     const rawPtr = lib.symbols.wxIconLocation_GetFileName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetFileName(file_name: Pointer): void {
-    lib.symbols.wxIconLocation_SetFileName(this._ptr, file_name);
+  SetFileName(file_name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      lib.symbols.wxIconLocation_SetFileName(this._ptr, __s0 ? __s0.ptr : (file_name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxIconLocation(file_name: Pointer, index: number): wxIconLocation | null {
-    const rawPtr = lib.symbols.wxIconLocation_Create(file_name, index);
-    if (rawPtr === null) return null;
-    return new wxIconLocation(rawPtr);
+export function createWxIconLocation(file_name: string | Pointer, index: number): wxIconLocation | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      const rawPtr = lib.symbols.wxIconLocation_Create(__s0 ? __s0.ptr : (file_name as Pointer), index);
+      if (rawPtr === null) return null;
+      return new wxIconLocation(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

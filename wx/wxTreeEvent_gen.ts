@@ -40,7 +40,7 @@ export class wxTreeEvent extends wxNotifyEvent {
   GetLabel(): wxString | null {
     const rawPtr = lib.symbols.wxTreeEvent_GetLabel(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetOldItem(ref: Pointer): void {
@@ -50,7 +50,7 @@ export class wxTreeEvent extends wxNotifyEvent {
   GetPoint(): wxPoint | null {
     const rawPtr = lib.symbols.wxTreeEvent_GetPoint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
 }

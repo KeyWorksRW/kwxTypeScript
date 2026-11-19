@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxProtocol } from "./wxProtocol_gen.ts";
 import { wxInputStream } from "./wxInputStream_gen.ts";
@@ -25,12 +26,31 @@ export class wxFTP extends wxProtocol {
     this.Delete();
   }
 
-  override Connect(host: Pointer): boolean {
-    return (lib.symbols.wxFTP_Connect(this._ptr, host) as number) !== 0;
+  override Connect(host: string | Pointer): boolean;
+  override Connect(address: Pointer, wait: boolean): boolean;
+  override Connect(host: string | Pointer, wait?: boolean): boolean {
+    if (arguments.length === 1) {
+      let __s0: ReturnType<typeof createWxString> | null = null;
+      try {
+        if (typeof host === "string") __s0 = createWxString(host);
+        return (lib.symbols.wxFTP_Connect(this._ptr, __s0 ? __s0.ptr : (host as Pointer)) as number) !== 0;
+      } finally {
+        __s0?.Delete();
+      }
+    }
+    else {
+      return super.Connect(host as Pointer, wait as boolean);
+    }
   }
 
-  ConnectPort(host: Pointer, port: number): boolean {
-    return (lib.symbols.wxFTP_ConnectPort(this._ptr, host, port) as number) !== 0;
+  ConnectPort(host: string | Pointer, port: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof host === "string") __s0 = createWxString(host);
+      return (lib.symbols.wxFTP_ConnectPort(this._ptr, __s0 ? __s0.ptr : (host as Pointer), port) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override ConnectAddr(address: Pointer, wait: boolean): boolean {
@@ -60,75 +80,150 @@ export class wxFTP extends wxProtocol {
   override GetContentType(): wxString | null {
     const rawPtr = lib.symbols.wxFTP_GetContentType(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLastResult(): wxString | null {
     const rawPtr = lib.symbols.wxFTP_GetLastResult(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SendCommand(command: Pointer): number {
-    return lib.symbols.wxFTP_SendCommand(this._ptr, command);
+  SendCommand(command: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof command === "string") __s0 = createWxString(command);
+      return lib.symbols.wxFTP_SendCommand(this._ptr, __s0 ? __s0.ptr : (command as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  CheckCommand(command: Pointer, expected_result: number): boolean {
-    return (lib.symbols.wxFTP_CheckCommand(this._ptr, command, expected_result) as number) !== 0;
+  CheckCommand(command: string | Pointer, expected_result: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof command === "string") __s0 = createWxString(command);
+      return (lib.symbols.wxFTP_CheckCommand(this._ptr, __s0 ? __s0.ptr : (command as Pointer), expected_result) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ChDir(directory: Pointer): boolean {
-    return (lib.symbols.wxFTP_ChDir(this._ptr, directory) as number) !== 0;
+  ChDir(directory: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof directory === "string") __s0 = createWxString(directory);
+      return (lib.symbols.wxFTP_ChDir(this._ptr, __s0 ? __s0.ptr : (directory as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  MkDir(directory: Pointer): boolean {
-    return (lib.symbols.wxFTP_MkDir(this._ptr, directory) as number) !== 0;
+  MkDir(directory: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof directory === "string") __s0 = createWxString(directory);
+      return (lib.symbols.wxFTP_MkDir(this._ptr, __s0 ? __s0.ptr : (directory as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  RmDir(directory: Pointer): boolean {
-    return (lib.symbols.wxFTP_RmDir(this._ptr, directory) as number) !== 0;
+  RmDir(directory: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof directory === "string") __s0 = createWxString(directory);
+      return (lib.symbols.wxFTP_RmDir(this._ptr, __s0 ? __s0.ptr : (directory as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Pwd(): wxString | null {
     const rawPtr = lib.symbols.wxFTP_Pwd(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  Rename(source: Pointer, destination: Pointer): boolean {
-    return (lib.symbols.wxFTP_Rename(this._ptr, source, destination) as number) !== 0;
+  Rename(source: string | Pointer, destination: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof source === "string") __s0 = createWxString(source);
+      if (typeof destination === "string") __s1 = createWxString(destination);
+      return (lib.symbols.wxFTP_Rename(this._ptr, __s0 ? __s0.ptr : (source as Pointer), __s1 ? __s1.ptr : (destination as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  RmFile(path: Pointer): boolean {
-    return (lib.symbols.wxFTP_RmFile(this._ptr, path) as number) !== 0;
+  RmFile(path: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      return (lib.symbols.wxFTP_RmFile(this._ptr, __s0 ? __s0.ptr : (path as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetFileSize(file_name: Pointer): number {
-    return lib.symbols.wxFTP_GetFileSize(this._ptr, file_name);
+  GetFileSize(file_name: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      return lib.symbols.wxFTP_GetFileSize(this._ptr, __s0 ? __s0.ptr : (file_name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FileExists(file_name: Pointer): boolean {
-    return (lib.symbols.wxFTP_FileExists(this._ptr, file_name) as number) !== 0;
+  FileExists(file_name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof file_name === "string") __s0 = createWxString(file_name);
+      return (lib.symbols.wxFTP_FileExists(this._ptr, __s0 ? __s0.ptr : (file_name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override Abort(): boolean {
     return (lib.symbols.wxFTP_Abort(this._ptr) as number) !== 0;
   }
 
-  override GetInputStream(path: Pointer): wxInputStream | null {
-    const rawPtr = lib.symbols.wxFTP_GetInputStream(this._ptr, path);
-    if (rawPtr === null) return null;
-    return new wxInputStream(rawPtr, true);
+  override GetInputStream(path: string | Pointer): wxInputStream | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      const rawPtr = lib.symbols.wxFTP_GetInputStream(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+      if (rawPtr === null) return null;
+      return new wxInputStream(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetOutputStream(path: Pointer): wxOutputStream | null {
-    const rawPtr = lib.symbols.wxFTP_GetOutputStream(this._ptr, path);
-    if (rawPtr === null) return null;
-    return new wxOutputStream(rawPtr, true);
+  GetOutputStream(path: string | Pointer): wxOutputStream | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      const rawPtr = lib.symbols.wxFTP_GetOutputStream(this._ptr, __s0 ? __s0.ptr : (path as Pointer));
+      if (rawPtr === null) return null;
+      return new wxOutputStream(rawPtr, true);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetList(files: Pointer, wildcard: Pointer, details: boolean): boolean {
-    return (lib.symbols.wxFTP_GetList(this._ptr, files, wildcard, details ? 1 : 0) as number) !== 0;
+  GetList(files: Pointer, wildcard: string | Pointer, details: boolean): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof wildcard === "string") __s0 = createWxString(wildcard);
+      return (lib.symbols.wxFTP_GetList(this._ptr, files, __s0 ? __s0.ptr : (wildcard as Pointer), details ? 1 : 0) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

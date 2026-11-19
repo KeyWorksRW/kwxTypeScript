@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -27,38 +28,83 @@ export class wxConfigBase extends wxObject {
     lib.symbols.wxConfigBase_Set(this._ptr);
   }
 
-  ReadLong(key: Pointer, def_val: bigint): bigint {
-    return lib.symbols.wxConfigBase_ReadLong(this._ptr, key, def_val) as bigint;
+  ReadLong(key: string | Pointer, def_val: bigint): bigint {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return lib.symbols.wxConfigBase_ReadLong(this._ptr, __s0 ? __s0.ptr : (key as Pointer), def_val) as bigint;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Read(key: Pointer, pStr: Pointer): boolean {
-    return (lib.symbols.wxConfigBase_Read(this._ptr, key, pStr) as number) !== 0;
+  Read(key: string | Pointer, pStr: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return (lib.symbols.wxConfigBase_Read(this._ptr, __s0 ? __s0.ptr : (key as Pointer), pStr) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Write(key: Pointer, value: Pointer): boolean {
-    return (lib.symbols.wxConfigBase_Write(this._ptr, key, value) as number) !== 0;
+  Write(key: string | Pointer, value: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      if (typeof value === "string") __s1 = createWxString(value);
+      return (lib.symbols.wxConfigBase_Write(this._ptr, __s0 ? __s0.ptr : (key as Pointer), __s1 ? __s1.ptr : (value as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   DeleteAll(): boolean {
     return (lib.symbols.wxConfigBase_DeleteAll(this._ptr) as number) !== 0;
   }
 
-  DeleteEntry(key: Pointer, bDeleteGroupIfEmpty: boolean): boolean {
-    return (lib.symbols.wxConfigBase_DeleteEntry(this._ptr, key, bDeleteGroupIfEmpty ? 1 : 0) as number) !== 0;
+  DeleteEntry(key: string | Pointer, bDeleteGroupIfEmpty: boolean): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return (lib.symbols.wxConfigBase_DeleteEntry(this._ptr, __s0 ? __s0.ptr : (key as Pointer), bDeleteGroupIfEmpty ? 1 : 0) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  DeleteGroup(key: Pointer): boolean {
-    return (lib.symbols.wxConfigBase_DeleteGroup(this._ptr, key) as number) !== 0;
+  DeleteGroup(key: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return (lib.symbols.wxConfigBase_DeleteGroup(this._ptr, __s0 ? __s0.ptr : (key as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Exists(strName: Pointer): boolean {
-    return (lib.symbols.wxConfigBase_Exists(this._ptr, strName) as number) !== 0;
+  Exists(strName: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strName === "string") __s0 = createWxString(strName);
+      return (lib.symbols.wxConfigBase_Exists(this._ptr, __s0 ? __s0.ptr : (strName as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ExpandEnvVars(str: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxConfigBase_ExpandEnvVars(this._ptr, str);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  ExpandEnvVars(str: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      const rawPtr = lib.symbols.wxConfigBase_ExpandEnvVars(this._ptr, __s0 ? __s0.ptr : (str as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Flush(bCurrentOnly: boolean): boolean {
@@ -68,35 +114,41 @@ export class wxConfigBase extends wxObject {
   GetAppName(): wxString | null {
     const rawPtr = lib.symbols.wxConfigBase_GetAppName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  GetEntryType(name: Pointer): number {
-    return lib.symbols.wxConfigBase_GetEntryType(this._ptr, name);
+  GetEntryType(name: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxConfigBase_GetEntryType(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetFirstEntry(lIndex: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxConfigBase_GetFirstEntry(this._ptr, lIndex);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFirstGroup(lIndex: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxConfigBase_GetFirstGroup(this._ptr, lIndex);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNextEntry(lIndex: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxConfigBase_GetNextEntry(this._ptr, lIndex);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNextGroup(lIndex: Pointer): wxString | null {
     const rawPtr = lib.symbols.wxConfigBase_GetNextGroup(this._ptr, lIndex);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetNumberOfEntries(bRecursive: boolean): number {
@@ -110,7 +162,7 @@ export class wxConfigBase extends wxObject {
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxConfigBase_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetStyle(): number {
@@ -120,15 +172,27 @@ export class wxConfigBase extends wxObject {
   GetVendorName(): wxString | null {
     const rawPtr = lib.symbols.wxConfigBase_GetVendorName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  HasEntry(strName: Pointer): boolean {
-    return (lib.symbols.wxConfigBase_HasEntry(this._ptr, strName) as number) !== 0;
+  HasEntry(strName: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strName === "string") __s0 = createWxString(strName);
+      return (lib.symbols.wxConfigBase_HasEntry(this._ptr, __s0 ? __s0.ptr : (strName as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  HasGroup(strName: Pointer): boolean {
-    return (lib.symbols.wxConfigBase_HasGroup(this._ptr, strName) as number) !== 0;
+  HasGroup(strName: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strName === "string") __s0 = createWxString(strName);
+      return (lib.symbols.wxConfigBase_HasGroup(this._ptr, __s0 ? __s0.ptr : (strName as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsExpandingEnvVars(): boolean {
@@ -139,42 +203,99 @@ export class wxConfigBase extends wxObject {
     return (lib.symbols.wxConfigBase_IsRecordingDefaults(this._ptr) as number) !== 0;
   }
 
-  ReadBool(key: Pointer, defVal: boolean): boolean {
-    return (lib.symbols.wxConfigBase_ReadBool(this._ptr, key, defVal ? 1 : 0) as number) !== 0;
+  ReadBool(key: string | Pointer, defVal: boolean): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return (lib.symbols.wxConfigBase_ReadBool(this._ptr, __s0 ? __s0.ptr : (key as Pointer), defVal ? 1 : 0) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ReadDouble(key: Pointer, defVal: number): number {
-    return lib.symbols.wxConfigBase_ReadDouble(this._ptr, key, defVal);
+  ReadDouble(key: string | Pointer, defVal: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return lib.symbols.wxConfigBase_ReadDouble(this._ptr, __s0 ? __s0.ptr : (key as Pointer), defVal);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ReadInteger(key: Pointer, defVal: number): number {
-    return lib.symbols.wxConfigBase_ReadInteger(this._ptr, key, defVal);
+  ReadInteger(key: string | Pointer, defVal: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return lib.symbols.wxConfigBase_ReadInteger(this._ptr, __s0 ? __s0.ptr : (key as Pointer), defVal);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ReadString(key: Pointer, defVal: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxConfigBase_ReadString(this._ptr, key, defVal);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  ReadString(key: string | Pointer, defVal: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      if (typeof defVal === "string") __s1 = createWxString(defVal);
+      const rawPtr = lib.symbols.wxConfigBase_ReadString(this._ptr, __s0 ? __s0.ptr : (key as Pointer), __s1 ? __s1.ptr : (defVal as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  RenameEntry(oldName: Pointer, newName: Pointer): boolean {
-    return (lib.symbols.wxConfigBase_RenameEntry(this._ptr, oldName, newName) as number) !== 0;
+  RenameEntry(oldName: string | Pointer, newName: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof oldName === "string") __s0 = createWxString(oldName);
+      if (typeof newName === "string") __s1 = createWxString(newName);
+      return (lib.symbols.wxConfigBase_RenameEntry(this._ptr, __s0 ? __s0.ptr : (oldName as Pointer), __s1 ? __s1.ptr : (newName as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  RenameGroup(oldName: Pointer, newName: Pointer): boolean {
-    return (lib.symbols.wxConfigBase_RenameGroup(this._ptr, oldName, newName) as number) !== 0;
+  RenameGroup(oldName: string | Pointer, newName: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof oldName === "string") __s0 = createWxString(oldName);
+      if (typeof newName === "string") __s1 = createWxString(newName);
+      return (lib.symbols.wxConfigBase_RenameGroup(this._ptr, __s0 ? __s0.ptr : (oldName as Pointer), __s1 ? __s1.ptr : (newName as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetAppName(appName: Pointer): void {
-    lib.symbols.wxConfigBase_SetAppName(this._ptr, appName);
+  SetAppName(appName: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof appName === "string") __s0 = createWxString(appName);
+      lib.symbols.wxConfigBase_SetAppName(this._ptr, __s0 ? __s0.ptr : (appName as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetExpandEnvVars(bDoIt: boolean): void {
     lib.symbols.wxConfigBase_SetExpandEnvVars(this._ptr, bDoIt ? 1 : 0);
   }
 
-  SetPath(strPath: Pointer): void {
-    lib.symbols.wxConfigBase_SetPath(this._ptr, strPath);
+  SetPath(strPath: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof strPath === "string") __s0 = createWxString(strPath);
+      lib.symbols.wxConfigBase_SetPath(this._ptr, __s0 ? __s0.ptr : (strPath as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetRecordDefaults(bDoIt: boolean): void {
@@ -185,28 +306,67 @@ export class wxConfigBase extends wxObject {
     lib.symbols.wxConfigBase_SetStyle(this._ptr, style);
   }
 
-  SetVendorName(vendorName: Pointer): void {
-    lib.symbols.wxConfigBase_SetVendorName(this._ptr, vendorName);
+  SetVendorName(vendorName: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof vendorName === "string") __s0 = createWxString(vendorName);
+      lib.symbols.wxConfigBase_SetVendorName(this._ptr, __s0 ? __s0.ptr : (vendorName as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  WriteBool(key: Pointer, value: boolean): boolean {
-    return (lib.symbols.wxConfigBase_WriteBool(this._ptr, key, value ? 1 : 0) as number) !== 0;
+  WriteBool(key: string | Pointer, value: boolean): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return (lib.symbols.wxConfigBase_WriteBool(this._ptr, __s0 ? __s0.ptr : (key as Pointer), value ? 1 : 0) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  WriteDouble(key: Pointer, value: number): boolean {
-    return (lib.symbols.wxConfigBase_WriteDouble(this._ptr, key, value) as number) !== 0;
+  WriteDouble(key: string | Pointer, value: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return (lib.symbols.wxConfigBase_WriteDouble(this._ptr, __s0 ? __s0.ptr : (key as Pointer), value) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  WriteInteger(key: Pointer, value: number): boolean {
-    return (lib.symbols.wxConfigBase_WriteInteger(this._ptr, key, value) as number) !== 0;
+  WriteInteger(key: string | Pointer, value: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return (lib.symbols.wxConfigBase_WriteInteger(this._ptr, __s0 ? __s0.ptr : (key as Pointer), value) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  WriteLong(key: Pointer, value: bigint): boolean {
-    return (lib.symbols.wxConfigBase_WriteLong(this._ptr, key, value) as number) !== 0;
+  WriteLong(key: string | Pointer, value: bigint): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      return (lib.symbols.wxConfigBase_WriteLong(this._ptr, __s0 ? __s0.ptr : (key as Pointer), value) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  WriteString(key: Pointer, value: Pointer): boolean {
-    return (lib.symbols.wxConfigBase_WriteString(this._ptr, key, value) as number) !== 0;
+  WriteString(key: string | Pointer, value: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof key === "string") __s0 = createWxString(key);
+      if (typeof value === "string") __s1 = createWxString(value);
+      return (lib.symbols.wxConfigBase_WriteString(this._ptr, __s0 ? __s0.ptr : (key as Pointer), __s1 ? __s1.ptr : (value as Pointer)) as number) !== 0;
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
 }

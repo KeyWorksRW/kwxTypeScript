@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxEvtHandler } from "./wxEvtHandler_gen.ts";
 import { wxCommandProcessor } from "./wxCommandProcessor_gen.ts";
@@ -28,7 +29,7 @@ export class wxDocument extends wxEvtHandler {
   GetFilename(): wxString | null {
     const rawPtr = lib.symbols.wxDocument_GetFilename(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFirstView(): wxView | null {
@@ -37,12 +38,46 @@ export class wxDocument extends wxEvtHandler {
     return new wxView(rawPtr, true);
   }
 
-  SetFilename(filename: Pointer, notifyViews: boolean): void {
-    lib.symbols.wxDocument_SetFilename(this._ptr, filename, notifyViews ? 1 : 0);
+  IsModified(): boolean {
+    return (lib.symbols.wxDocument_IsModified(this._ptr) as number) !== 0;
+  }
+
+  SetFilename(filename: string | Pointer, notifyViews: boolean): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      lib.symbols.wxDocument_SetFilename(this._ptr, __s0 ? __s0.ptr : (filename as Pointer), notifyViews ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   UpdateAllViews(sender: Pointer, hint: Pointer): void {
     lib.symbols.wxDocument_UpdateAllViews(this._ptr, sender, hint);
+  }
+
+  Close(): boolean {
+    return (lib.symbols.wxDocument_Close(this._ptr) as number) !== 0;
+  }
+
+  Save(): boolean {
+    return (lib.symbols.wxDocument_Save(this._ptr) as number) !== 0;
+  }
+
+  SaveAs(): boolean {
+    return (lib.symbols.wxDocument_SaveAs(this._ptr) as number) !== 0;
+  }
+
+  Revert(): boolean {
+    return (lib.symbols.wxDocument_Revert(this._ptr) as number) !== 0;
+  }
+
+  AlreadySaved(): boolean {
+    return (lib.symbols.wxDocument_AlreadySaved(this._ptr) as number) !== 0;
+  }
+
+  CanClose(): boolean {
+    return (lib.symbols.wxDocument_CanClose(this._ptr) as number) !== 0;
   }
 
   SetOnDoOpenDocument(pFunction: Pointer): void {
@@ -73,6 +108,82 @@ export class wxDocument extends wxEvtHandler {
     lib.symbols.wxDocument_SetOnOnOpenDocument(this._ptr, pFunction);
   }
 
+  SetOnDoOpenDocumentWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxDocument_SetOnDoOpenDocumentWithData(this._ptr, pFunction, data);
+  }
+
+  SetDoOpenDocumentResult(result: boolean): void {
+    lib.symbols.wxDocument_SetDoOpenDocumentResult(this._ptr, result ? 1 : 0);
+  }
+
+  SetOnDoSaveDocumentWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxDocument_SetOnDoSaveDocumentWithData(this._ptr, pFunction, data);
+  }
+
+  SetDoSaveDocumentResult(result: boolean): void {
+    lib.symbols.wxDocument_SetDoSaveDocumentResult(this._ptr, result ? 1 : 0);
+  }
+
+  SetOnIsModifiedWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxDocument_SetOnIsModifiedWithData(this._ptr, pFunction, data);
+  }
+
+  SetIsModifiedResult(result: boolean): void {
+    lib.symbols.wxDocument_SetIsModifiedResult(this._ptr, result ? 1 : 0);
+  }
+
+  SetOnModifyWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxDocument_SetOnModifyWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnOnCreateWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxDocument_SetOnOnCreateWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnCreateResult(result: boolean): void {
+    lib.symbols.wxDocument_SetOnCreateResult(this._ptr, result ? 1 : 0);
+  }
+
+  SetOnOnOpenDocumentWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.wxDocument_SetOnOnOpenDocumentWithData(this._ptr, pFunction, data);
+  }
+
+  SetOnOpenDocumentResult(result: boolean): void {
+    lib.symbols.wxDocument_SetOnOpenDocumentResult(this._ptr, result ? 1 : 0);
+  }
+
+  OnCreateBase(path: string | Pointer, flags: bigint): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      return (lib.symbols.wxDocument_OnCreateBase(this._ptr, __s0 ? __s0.ptr : (path as Pointer), flags) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  OnOpenDocumentBase(filename: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxDocument_OnOpenDocumentBase(this._ptr, __s0 ? __s0.ptr : (filename as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
+  }
+
+  IsModifiedBase(): boolean {
+    return (lib.symbols.wxDocument_IsModifiedBase(this._ptr) as number) !== 0;
+  }
+
+  ModifyBase(modified: boolean): void {
+    lib.symbols.wxDocument_ModifyBase(this._ptr, modified ? 1 : 0);
+  }
+
+}
+
+export function createWxDocumentWithParent(pObject: Pointer, parent: Pointer): Pointer {
+    return lib.symbols.wxDocument_CreateWithParent(pObject, parent);
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -27,10 +28,16 @@ export class wxEncodingConverter extends wxObject {
     lib.symbols.wxEncodingConverter_Convert(this._ptr, input, output);
   }
 
-  ConvertString(input: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxEncodingConverter_ConvertString(this._ptr, input);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  ConvertString(input: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof input === "string") __s0 = createWxString(input);
+      const rawPtr = lib.symbols.wxEncodingConverter_ConvertString(this._ptr, __s0 ? __s0.ptr : (input as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetAllEquivalents(enc: number, list: Pointer): number {

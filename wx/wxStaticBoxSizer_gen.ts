@@ -17,7 +17,7 @@ export class wxStaticBoxSizer extends wxBoxSizer {
   override CalcMin(): wxSize | null {
     const rawPtr = lib.symbols.wxStaticBoxSizer_CalcMin(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   override Detach(window: Pointer): boolean;

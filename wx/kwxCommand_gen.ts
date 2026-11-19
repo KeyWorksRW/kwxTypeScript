@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -30,15 +31,21 @@ export class kwxCommand extends wxObject {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.kwxCommand_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }
 
-export function createKwxCommand(canUndo: number, name: Pointer, pObject: Pointer, callback: Pointer): kwxCommand | null {
-    const rawPtr = lib.symbols.kwxCommand_Create(canUndo, name, pObject, callback);
-    if (rawPtr === null) return null;
-    return new kwxCommand(rawPtr);
+export function createKwxCommand(canUndo: number, name: string | Pointer, pObject: Pointer, callback: Pointer): kwxCommand | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.kwxCommand_Create(canUndo, __s0 ? __s0.ptr : (name as Pointer), pObject, callback);
+      if (rawPtr === null) return null;
+      return new kwxCommand(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

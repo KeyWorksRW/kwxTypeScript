@@ -38,7 +38,7 @@ export class wxColourPropertyValue extends wxObject {
   GetColour(): wxColour | null {
     const rawPtr = lib.symbols.wxColourPropertyValue_GetColour(this._ptr);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   SetColour(colour: Pointer): void {

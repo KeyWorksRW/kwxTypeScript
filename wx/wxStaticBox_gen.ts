@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -18,10 +19,16 @@ export class wxStaticBox extends wxControl {
 
 }
 
-export function createWxStaticBox(parent: Pointer, id: number, text: Pointer, left: number, top: number, width: number, height: number, style: number): wxStaticBox | null {
-    const rawPtr = lib.symbols.wxStaticBox_Create(parent, id, text, left, top, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxStaticBox(rawPtr);
+export function createWxStaticBox(parent: Pointer, id: number, text: string | Pointer, left: number, top: number, width: number, height: number, style: number): wxStaticBox | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      const rawPtr = lib.symbols.wxStaticBox_Create(parent, id, __s0 ? __s0.ptr : (text as Pointer), left, top, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxStaticBox(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 export function createWxStaticBoxWithLabelWindow(parent: Pointer, id: number, label: Pointer, left: number, top: number, width: number, height: number, style: number): wxStaticBox | null {

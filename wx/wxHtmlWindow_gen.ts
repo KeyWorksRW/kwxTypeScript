@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxScrolledWindow } from "./wxScrolledWindow_gen.ts";
 import { wxFrame } from "./wxFrame_gen.ts";
@@ -15,8 +16,14 @@ export class wxHtmlWindow extends wxScrolledWindow {
     return this._ptr;
   }
 
-  AppendToPage(source: Pointer): boolean {
-    return (lib.symbols.wxHtmlWindow_AppendToPage(this._ptr, source) as number) !== 0;
+  AppendToPage(source: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof source === "string") __s0 = createWxString(source);
+      return (lib.symbols.wxHtmlWindow_AppendToPage(this._ptr, __s0 ? __s0.ptr : (source as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetInternalRepresentation(): wxHtmlContainerCell | null {
@@ -28,19 +35,19 @@ export class wxHtmlWindow extends wxScrolledWindow {
   GetOpenedAnchor(): wxString | null {
     const rawPtr = lib.symbols.wxHtmlWindow_GetOpenedAnchor(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetOpenedPage(): wxString | null {
     const rawPtr = lib.symbols.wxHtmlWindow_GetOpenedPage(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetOpenedPageTitle(): wxString | null {
     const rawPtr = lib.symbols.wxHtmlWindow_GetOpenedPageTitle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetRelatedFrame(): wxFrame | null {
@@ -69,36 +76,75 @@ export class wxHtmlWindow extends wxScrolledWindow {
     return (lib.symbols.wxHtmlWindow_HistoryForward(this._ptr) as number) !== 0;
   }
 
-  LoadPage(location: Pointer): boolean {
-    return (lib.symbols.wxHtmlWindow_LoadPage(this._ptr, location) as number) !== 0;
+  LoadPage(location: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof location === "string") __s0 = createWxString(location);
+      return (lib.symbols.wxHtmlWindow_LoadPage(this._ptr, __s0 ? __s0.ptr : (location as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ReadCustomization(cfg: Pointer, path: Pointer): void {
-    lib.symbols.wxHtmlWindow_ReadCustomization(this._ptr, cfg, path);
+  ReadCustomization(cfg: Pointer, path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxHtmlWindow_ReadCustomization(this._ptr, cfg, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetBorders(borders: number): void {
     lib.symbols.wxHtmlWindow_SetBorders(this._ptr, borders);
   }
 
-  SetFonts(normal_face: Pointer, fixed_face: Pointer, sizes: Pointer): void {
-    lib.symbols.wxHtmlWindow_SetFonts(this._ptr, normal_face, fixed_face, sizes);
+  SetFonts(normal_face: string | Pointer, fixed_face: string | Pointer, sizes: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof normal_face === "string") __s0 = createWxString(normal_face);
+      if (typeof fixed_face === "string") __s1 = createWxString(fixed_face);
+      lib.symbols.wxHtmlWindow_SetFonts(this._ptr, __s0 ? __s0.ptr : (normal_face as Pointer), __s1 ? __s1.ptr : (fixed_face as Pointer), sizes);
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetPage(source: Pointer): number {
-    return lib.symbols.wxHtmlWindow_SetPage(this._ptr, source);
+  SetPage(source: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof source === "string") __s0 = createWxString(source);
+      return lib.symbols.wxHtmlWindow_SetPage(this._ptr, __s0 ? __s0.ptr : (source as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetRelatedFrame(frame: Pointer, format: Pointer): void {
-    lib.symbols.wxHtmlWindow_SetRelatedFrame(this._ptr, frame, format);
+  SetRelatedFrame(frame: Pointer, format: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof format === "string") __s0 = createWxString(format);
+      lib.symbols.wxHtmlWindow_SetRelatedFrame(this._ptr, frame, __s0 ? __s0.ptr : (format as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetRelatedStatusBar(bar: number): void {
     lib.symbols.wxHtmlWindow_SetRelatedStatusBar(this._ptr, bar);
   }
 
-  WriteCustomization(cfg: Pointer, path: Pointer): void {
-    lib.symbols.wxHtmlWindow_WriteCustomization(this._ptr, cfg, path);
+  WriteCustomization(cfg: Pointer, path: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      lib.symbols.wxHtmlWindow_WriteCustomization(this._ptr, cfg, __s0 ? __s0.ptr : (path as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetParser(): Pointer {
@@ -124,7 +170,7 @@ export class wxHtmlWindow extends wxScrolledWindow {
   SelectionToText(): wxString | null {
     const rawPtr = lib.symbols.wxHtmlWindow_SelectionToText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetBackgroundImage(bmpBg: Pointer): void {
@@ -135,22 +181,37 @@ export class wxHtmlWindow extends wxScrolledWindow {
     lib.symbols.wxHtmlWindow_SetHTMLBackgroundImage(this._ptr, bmpBg);
   }
 
-  SetStandardFonts(size: number, normal_face: Pointer, fixed_face: Pointer): void {
-    lib.symbols.wxHtmlWindow_SetStandardFonts(this._ptr, size, normal_face, fixed_face);
+  SetStandardFonts(size: number, normal_face: string | Pointer, fixed_face: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof normal_face === "string") __s0 = createWxString(normal_face);
+      if (typeof fixed_face === "string") __s1 = createWxString(fixed_face);
+      lib.symbols.wxHtmlWindow_SetStandardFonts(this._ptr, size, __s0 ? __s0.ptr : (normal_face as Pointer), __s1 ? __s1.ptr : (fixed_face as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
   ToText(): wxString | null {
     const rawPtr = lib.symbols.wxHtmlWindow_ToText(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }
 
-export function createWxHtmlWindow(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): wxHtmlWindow | null {
-    const rawPtr = lib.symbols.wxHtmlWindow_Create(parent, id, x, y, width, height, style, name);
-    if (rawPtr === null) return null;
-    return new wxHtmlWindow(rawPtr);
+export function createWxHtmlWindow(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: string | Pointer): wxHtmlWindow | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      const rawPtr = lib.symbols.wxHtmlWindow_Create(parent, id, x, y, width, height, style, __s0 ? __s0.ptr : (name as Pointer));
+      if (rawPtr === null) return null;
+      return new wxHtmlWindow(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

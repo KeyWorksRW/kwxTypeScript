@@ -16,6 +16,30 @@ export class kwxArtProv extends wxArtProvider {
     lib.symbols.kwxArtProv_Release(this._ptr);
   }
 
+  Push(): void {
+    lib.symbols.kwxArtProv_Push(this._ptr);
+  }
+
+  PushBack(): void {
+    lib.symbols.kwxArtProv_PushBack(this._ptr);
+  }
+
+  SetOnCreateBitmapWithData(pFunction: Pointer, data: Pointer): void {
+    lib.symbols.kwxArtProv_SetOnCreateBitmapWithData(this._ptr, pFunction, data);
+  }
+
+  GetRequestedWidth(): number {
+    return lib.symbols.kwxArtProv_GetRequestedWidth(this._ptr);
+  }
+
+  GetRequestedHeight(): number {
+    return lib.symbols.kwxArtProv_GetRequestedHeight(this._ptr);
+  }
+
+  SetCreateBitmapResult(bitmap: Pointer): void {
+    lib.symbols.kwxArtProv_SetCreateBitmapResult(this._ptr, bitmap);
+  }
+
 }
 
 export function createKwxArtProv(pObject: Pointer, callback: Pointer): kwxArtProv | null {

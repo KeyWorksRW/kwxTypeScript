@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -28,40 +29,70 @@ export class wxTextEntry {
     lib.symbols.wxTextEntry_ForwardEnableTextChangedEvents(this._ptr, enable ? 1 : 0);
   }
 
-  SetValue(value: Pointer): void {
-    lib.symbols.wxTextEntry_SetValue(this._ptr, value);
+  SetValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxTextEntry_SetValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  ChangeValue(value: Pointer): void {
-    lib.symbols.wxTextEntry_ChangeValue(this._ptr, value);
+  ChangeValue(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxTextEntry_ChangeValue(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetValue(): wxString | null {
     const rawPtr = lib.symbols.wxTextEntry_GetValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetRange(from_: bigint, to: bigint): wxString | null {
     const rawPtr = lib.symbols.wxTextEntry_GetRange(this._ptr, from_, to);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsEmpty(): boolean {
     return (lib.symbols.wxTextEntry_IsEmpty(this._ptr) as number) !== 0;
   }
 
-  WriteText(text: Pointer): void {
-    lib.symbols.wxTextEntry_WriteText(this._ptr, text);
+  WriteText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTextEntry_WriteText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AppendText(text: Pointer): void {
-    lib.symbols.wxTextEntry_AppendText(this._ptr, text);
+  AppendText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxTextEntry_AppendText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Replace(from_: bigint, to: bigint, value: Pointer): void {
-    lib.symbols.wxTextEntry_Replace(this._ptr, from_, to, value);
+  Replace(from_: bigint, to: bigint, value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxTextEntry_Replace(this._ptr, from_, to, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   Remove(from_: bigint, to: bigint): void {
@@ -155,7 +186,7 @@ export class wxTextEntry {
   GetStringSelection(): wxString | null {
     const rawPtr = lib.symbols.wxTextEntry_GetStringSelection(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   IsEditable(): boolean {
@@ -174,14 +205,20 @@ export class wxTextEntry {
     lib.symbols.wxTextEntry_ForceUpper(this._ptr);
   }
 
-  SetHint(hint: Pointer): boolean {
-    return (lib.symbols.wxTextEntry_SetHint(this._ptr, hint) as number) !== 0;
+  SetHint(hint: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof hint === "string") __s0 = createWxString(hint);
+      return (lib.symbols.wxTextEntry_SetHint(this._ptr, __s0 ? __s0.ptr : (hint as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetHint(): wxString | null {
     const rawPtr = lib.symbols.wxTextEntry_GetHint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   SetMargins(left: number, top: number): boolean {
@@ -196,12 +233,20 @@ export class wxTextEntry {
     return (lib.symbols.wxTextEntry_AutoComplete(this._ptr, count, items) as number) !== 0;
   }
 
+  AutoCompleteStrings(items: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteStrings(this._ptr, items) as number) !== 0;
+  }
+
   AutoCompleteFileNames(): boolean {
     return (lib.symbols.wxTextEntry_AutoCompleteFileNames(this._ptr) as number) !== 0;
   }
 
   AutoCompleteDirectories(): boolean {
     return (lib.symbols.wxTextEntry_AutoCompleteDirectories(this._ptr) as number) !== 0;
+  }
+
+  AutoCompleteCompleter(completer: Pointer): boolean {
+    return (lib.symbols.wxTextEntry_AutoCompleteCompleter(this._ptr, completer) as number) !== 0;
   }
 
 }

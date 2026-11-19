@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxUIActionSimulator {
@@ -69,12 +70,24 @@ export class wxUIActionSimulator {
     return (lib.symbols.wxUIActionSimulator_MouseUp(this._ptr, button) as number) !== 0;
   }
 
-  Select(text: Pointer): boolean {
-    return (lib.symbols.wxUIActionSimulator_Select(this._ptr, text) as number) !== 0;
+  Select(text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxUIActionSimulator_Select(this._ptr, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Text(text: Pointer): boolean {
-    return (lib.symbols.wxUIActionSimulator_Text(this._ptr, text) as number) !== 0;
+  Text(text: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxUIActionSimulator_Text(this._ptr, __s0 ? __s0.ptr : (text as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

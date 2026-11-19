@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -26,29 +27,56 @@ export class wxCredentialEntryDialog extends wxDialog {
   GetPassword(): wxString | null {
     const rawPtr = lib.symbols.wxCredentialEntryDialog_GetPassword(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetUser(): wxString | null {
     const rawPtr = lib.symbols.wxCredentialEntryDialog_GetUser(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetPassword(password: Pointer): void {
-    lib.symbols.wxCredentialEntryDialog_SetPassword(this._ptr, password);
+  SetPassword(password: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof password === "string") __s0 = createWxString(password);
+      lib.symbols.wxCredentialEntryDialog_SetPassword(this._ptr, __s0 ? __s0.ptr : (password as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetUser(user: Pointer): void {
-    lib.symbols.wxCredentialEntryDialog_SetUser(this._ptr, user);
+  SetUser(user: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof user === "string") __s0 = createWxString(user);
+      lib.symbols.wxCredentialEntryDialog_SetUser(this._ptr, __s0 ? __s0.ptr : (user as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
 
-export function createWxCredentialEntryDialog(parent: Pointer, message: Pointer, title: Pointer, user: Pointer, password: Pointer): wxCredentialEntryDialog | null {
-    const rawPtr = lib.symbols.wxCredentialEntryDialog_Create(parent, message, title, user, password);
-    if (rawPtr === null) return null;
-    return new wxCredentialEntryDialog(rawPtr);
+export function createWxCredentialEntryDialog(parent: Pointer, message: string | Pointer, title: string | Pointer, user: string | Pointer, password: string | Pointer): wxCredentialEntryDialog | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    let __s3: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof message === "string") __s0 = createWxString(message);
+      if (typeof title === "string") __s1 = createWxString(title);
+      if (typeof user === "string") __s2 = createWxString(user);
+      if (typeof password === "string") __s3 = createWxString(password);
+      const rawPtr = lib.symbols.wxCredentialEntryDialog_Create(parent, __s0 ? __s0.ptr : (message as Pointer), __s1 ? __s1.ptr : (title as Pointer), __s2 ? __s2.ptr : (user as Pointer), __s3 ? __s3.ptr : (password as Pointer));
+      if (rawPtr === null) return null;
+      return new wxCredentialEntryDialog(rawPtr);
+    } finally {
+      __s3?.Delete();
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

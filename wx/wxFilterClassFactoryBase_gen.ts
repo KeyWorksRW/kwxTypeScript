@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -23,23 +24,35 @@ export class wxFilterClassFactoryBase {
   GetProtocol(): wxString | null {
     const rawPtr = lib.symbols.wxFilterClassFactoryBase_GetProtocol(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetProtocols(type_: number): wxString | null {
     const rawPtr = lib.symbols.wxFilterClassFactoryBase_GetProtocols(this._ptr, type_);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  CanHandle(protocol: Pointer, type_: number): boolean {
-    return (lib.symbols.wxFilterClassFactoryBase_CanHandle(this._ptr, protocol, type_) as number) !== 0;
+  CanHandle(protocol: string | Pointer, type_: number): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof protocol === "string") __s0 = createWxString(protocol);
+      return (lib.symbols.wxFilterClassFactoryBase_CanHandle(this._ptr, __s0 ? __s0.ptr : (protocol as Pointer), type_) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  PopExtension(location: Pointer): wxString | null {
-    const rawPtr = lib.symbols.wxFilterClassFactoryBase_PopExtension(this._ptr, location);
-    if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+  PopExtension(location: string | Pointer): wxString | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof location === "string") __s0 = createWxString(location);
+      const rawPtr = lib.symbols.wxFilterClassFactoryBase_PopExtension(this._ptr, __s0 ? __s0.ptr : (location as Pointer));
+      if (rawPtr === null) return null;
+      return new wxString(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }

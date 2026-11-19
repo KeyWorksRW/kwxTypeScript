@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxInputStream } from "./wxInputStream_gen.ts";
@@ -38,11 +39,17 @@ export class wxURL extends wxObject {
   GetURL(): wxString | null {
     const rawPtr = lib.symbols.wxURL_GetURL(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetURL(url: Pointer): number {
-    return lib.symbols.wxURL_SetURL(this._ptr, url);
+  SetURL(url: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof url === "string") __s0 = createWxString(url);
+      return lib.symbols.wxURL_SetURL(this._ptr, __s0 ? __s0.ptr : (url as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsOk(): boolean {
@@ -55,8 +62,14 @@ export class wxURL extends wxObject {
     return new wxInputStream(rawPtr, true);
   }
 
-  SetProxy(proxy_url: Pointer): void {
-    lib.symbols.wxURL_SetProxy(this._ptr, proxy_url);
+  SetProxy(proxy_url: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof proxy_url === "string") __s0 = createWxString(proxy_url);
+      lib.symbols.wxURL_SetProxy(this._ptr, __s0 ? __s0.ptr : (proxy_url as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
 }
@@ -67,10 +80,16 @@ export function createWxURL(): wxURL | null {
     return new wxURL(rawPtr);
 }
 
-export function createWxURLFromString(url: Pointer): wxURL | null {
-    const rawPtr = lib.symbols.wxURL_CreateFromString(url);
-    if (rawPtr === null) return null;
-    return new wxURL(rawPtr);
+export function createWxURLFromString(url: string | Pointer): wxURL | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof url === "string") __s0 = createWxString(url);
+      const rawPtr = lib.symbols.wxURL_CreateFromString(__s0 ? __s0.ptr : (url as Pointer));
+      if (rawPtr === null) return null;
+      return new wxURL(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

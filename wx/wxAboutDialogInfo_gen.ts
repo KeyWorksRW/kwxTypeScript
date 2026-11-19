@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxString } from "./wxString_gen.ts";
 
@@ -30,72 +31,96 @@ export class wxAboutDialogInfo {
     this.Delete();
   }
 
-  AddArtist(artist: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_AddArtist(this._ptr, artist);
+  AddArtist(artist: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof artist === "string") __s0 = createWxString(artist);
+      lib.symbols.wxAboutDialogInfo_AddArtist(this._ptr, __s0 ? __s0.ptr : (artist as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetDocWriters(docwriters: Pointer): void {
     lib.symbols.wxAboutDialogInfo_SetDocWriters(this._ptr, docwriters);
   }
 
-  AddDeveloper(developer: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_AddDeveloper(this._ptr, developer);
+  AddDeveloper(developer: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof developer === "string") __s0 = createWxString(developer);
+      lib.symbols.wxAboutDialogInfo_AddDeveloper(this._ptr, __s0 ? __s0.ptr : (developer as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddDocWriter(docwriter: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_AddDocWriter(this._ptr, docwriter);
+  AddDocWriter(docwriter: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof docwriter === "string") __s0 = createWxString(docwriter);
+      lib.symbols.wxAboutDialogInfo_AddDocWriter(this._ptr, __s0 ? __s0.ptr : (docwriter as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AddTranslator(translator: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_AddTranslator(this._ptr, translator);
+  AddTranslator(translator: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof translator === "string") __s0 = createWxString(translator);
+      lib.symbols.wxAboutDialogInfo_AddTranslator(this._ptr, __s0 ? __s0.ptr : (translator as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetCopyright(): wxString | null {
     const rawPtr = lib.symbols.wxAboutDialogInfo_GetCopyright(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetDescription(): wxString | null {
     const rawPtr = lib.symbols.wxAboutDialogInfo_GetDescription(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLicence(): wxString | null {
     const rawPtr = lib.symbols.wxAboutDialogInfo_GetLicence(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetLongVersion(): wxString | null {
     const rawPtr = lib.symbols.wxAboutDialogInfo_GetLongVersion(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxAboutDialogInfo_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetVersion(): wxString | null {
     const rawPtr = lib.symbols.wxAboutDialogInfo_GetVersion(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetWebSiteDescription(): wxString | null {
     const rawPtr = lib.symbols.wxAboutDialogInfo_GetWebSiteDescription(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetWebSiteURL(): wxString | null {
     const rawPtr = lib.symbols.wxAboutDialogInfo_GetWebSiteURL(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   HasArtists(): boolean {
@@ -126,36 +151,84 @@ export class wxAboutDialogInfo {
     return (lib.symbols.wxAboutDialogInfo_HasWebSite(this._ptr) as number) !== 0;
   }
 
-  SetCopyright(copyright: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_SetCopyright(this._ptr, copyright);
+  SetCopyright(copyright: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof copyright === "string") __s0 = createWxString(copyright);
+      lib.symbols.wxAboutDialogInfo_SetCopyright(this._ptr, __s0 ? __s0.ptr : (copyright as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetDescription(desc: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_SetDescription(this._ptr, desc);
+  SetDescription(desc: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof desc === "string") __s0 = createWxString(desc);
+      lib.symbols.wxAboutDialogInfo_SetDescription(this._ptr, __s0 ? __s0.ptr : (desc as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetIcon(icon: Pointer): void {
     lib.symbols.wxAboutDialogInfo_SetIcon(this._ptr, icon);
   }
 
-  SetLicence(licence: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_SetLicence(this._ptr, licence);
+  SetLicence(licence: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof licence === "string") __s0 = createWxString(licence);
+      lib.symbols.wxAboutDialogInfo_SetLicence(this._ptr, __s0 ? __s0.ptr : (licence as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetLicense(licence: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_SetLicense(this._ptr, licence);
+  SetLicense(licence: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof licence === "string") __s0 = createWxString(licence);
+      lib.symbols.wxAboutDialogInfo_SetLicense(this._ptr, __s0 ? __s0.ptr : (licence as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetName(name: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_SetName(this._ptr, name);
+  SetName(name: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      lib.symbols.wxAboutDialogInfo_SetName(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetVersion(version: Pointer, longVersion: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_SetVersion(this._ptr, version, longVersion);
+  SetVersion(version: string | Pointer, longVersion: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof version === "string") __s0 = createWxString(version);
+      if (typeof longVersion === "string") __s1 = createWxString(longVersion);
+      lib.symbols.wxAboutDialogInfo_SetVersion(this._ptr, __s0 ? __s0.ptr : (version as Pointer), __s1 ? __s1.ptr : (longVersion as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
-  SetWebSite(url: Pointer, desc: Pointer): void {
-    lib.symbols.wxAboutDialogInfo_SetWebSite(this._ptr, url, desc);
+  SetWebSite(url: string | Pointer, desc: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof url === "string") __s0 = createWxString(url);
+      if (typeof desc === "string") __s1 = createWxString(desc);
+      lib.symbols.wxAboutDialogInfo_SetWebSite(this._ptr, __s0 ? __s0.ptr : (url as Pointer), __s1 ? __s1.ptr : (desc as Pointer));
+    } finally {
+      __s1?.Delete();
+      __s0?.Delete();
+    }
   }
 
 }

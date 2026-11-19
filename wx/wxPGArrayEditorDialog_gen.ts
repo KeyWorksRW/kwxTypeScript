@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxDialog } from "./wxDialog_gen.ts";
 import { wxVariant } from "./wxVariant_gen.ts";
@@ -24,15 +25,21 @@ export class wxPGArrayEditorDialog extends wxDialog {
   GetDialogValue(): wxVariant | null {
     const rawPtr = lib.symbols.wxPGArrayEditorDialog_GetDialogValue(this._ptr);
     if (rawPtr === null) return null;
-    return new wxVariant(rawPtr, true);
+    return new wxVariant(rawPtr);
   }
 
   EnableCustomNewAction(): void {
     lib.symbols.wxPGArrayEditorDialog_EnableCustomNewAction(this._ptr);
   }
 
-  SetNewButtonText(text: Pointer): void {
-    lib.symbols.wxPGArrayEditorDialog_SetNewButtonText(this._ptr, text);
+  SetNewButtonText(text: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxPGArrayEditorDialog_SetNewButtonText(this._ptr, __s0 ? __s0.ptr : (text as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   IsModified(): boolean {

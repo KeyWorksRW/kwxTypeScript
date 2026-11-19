@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxHtmlListBox } from "./wxHtmlListBox_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -29,11 +30,17 @@ export class wxSimpleHtmlListBox extends wxHtmlListBox {
   GetString(index: number): wxString | null {
     const rawPtr = lib.symbols.wxSimpleHtmlListBox_GetString(this._ptr, index);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetString(index: number, str: Pointer): void {
-    lib.symbols.wxSimpleHtmlListBox_SetString(this._ptr, index, str);
+  SetString(index: number, str: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxSimpleHtmlListBox_SetString(this._ptr, index, __s0 ? __s0.ptr : (str as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override GetSelection(): number {
@@ -44,24 +51,54 @@ export class wxSimpleHtmlListBox extends wxHtmlListBox {
     lib.symbols.wxSimpleHtmlListBox_SetSelection(this._ptr, index);
   }
 
-  Append(item: Pointer): number {
-    return lib.symbols.wxSimpleHtmlListBox_Append(this._ptr, item);
+  Append(item: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxSimpleHtmlListBox_Append(this._ptr, __s0 ? __s0.ptr : (item as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  AppendData(item: Pointer, data: Pointer): number {
-    return lib.symbols.wxSimpleHtmlListBox_AppendData(this._ptr, item, data);
+  AppendData(item: string | Pointer, data: Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxSimpleHtmlListBox_AppendData(this._ptr, __s0 ? __s0.ptr : (item as Pointer), data);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  Insert(item: Pointer, pos: number): number {
-    return lib.symbols.wxSimpleHtmlListBox_Insert(this._ptr, item, pos);
+  Insert(item: string | Pointer, pos: number): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxSimpleHtmlListBox_Insert(this._ptr, __s0 ? __s0.ptr : (item as Pointer), pos);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  InsertData(item: Pointer, pos: number, data: Pointer): number {
-    return lib.symbols.wxSimpleHtmlListBox_InsertData(this._ptr, item, pos, data);
+  InsertData(item: string | Pointer, pos: number, data: Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof item === "string") __s0 = createWxString(item);
+      return lib.symbols.wxSimpleHtmlListBox_InsertData(this._ptr, __s0 ? __s0.ptr : (item as Pointer), pos, data);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  FindString(str: Pointer, caseSensitive: boolean): number {
-    return lib.symbols.wxSimpleHtmlListBox_FindString(this._ptr, str, caseSensitive ? 1 : 0);
+  FindString(str: string | Pointer, caseSensitive: boolean): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      return lib.symbols.wxSimpleHtmlListBox_FindString(this._ptr, __s0 ? __s0.ptr : (str as Pointer), caseSensitive ? 1 : 0);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetItemClientData(index: number): Pointer {

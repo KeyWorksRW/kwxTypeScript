@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxColour } from "./wxColour_gen.ts";
 import { wxFont } from "./wxFont_gen.ts";
@@ -28,7 +29,7 @@ export class wxAuiDockArt {
   GetColor(id: number): wxColour | null {
     const rawPtr = lib.symbols.wxAuiDockArt_GetColor(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetMetricForWindow(id: number, window: Pointer): number {
@@ -43,8 +44,14 @@ export class wxAuiDockArt {
     lib.symbols.wxAuiDockArt_DrawBorder(this._ptr, dc, window, rect, pane);
   }
 
-  DrawCaption(dc: Pointer, window: Pointer, text: Pointer, rect: Pointer, pane: Pointer): void {
-    lib.symbols.wxAuiDockArt_DrawCaption(this._ptr, dc, window, text, rect, pane);
+  DrawCaption(dc: Pointer, window: Pointer, text: string | Pointer, rect: Pointer, pane: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxAuiDockArt_DrawCaption(this._ptr, dc, window, __s0 ? __s0.ptr : (text as Pointer), rect, pane);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DrawGripper(dc: Pointer, window: Pointer, rect: Pointer, pane: Pointer): void {
@@ -62,13 +69,13 @@ export class wxAuiDockArt {
   GetColour(id: number): wxColour | null {
     const rawPtr = lib.symbols.wxAuiDockArt_GetColour(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxColour(rawPtr, true);
+    return new wxColour(rawPtr);
   }
 
   GetFont(id: number): wxFont | null {
     const rawPtr = lib.symbols.wxAuiDockArt_GetFont(this._ptr, id);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   GetMetric(id: number): number {

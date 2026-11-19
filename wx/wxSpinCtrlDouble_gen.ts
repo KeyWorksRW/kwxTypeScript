@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -20,8 +21,14 @@ export class wxSpinCtrlDouble extends wxControl {
     lib.symbols.wxSpinCtrlDouble_SetValue(this._ptr, value);
   }
 
-  SetValueString(value: Pointer): void {
-    lib.symbols.wxSpinCtrlDouble_SetValueString(this._ptr, value);
+  SetValueString(value: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      lib.symbols.wxSpinCtrlDouble_SetValueString(this._ptr, __s0 ? __s0.ptr : (value as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetRange(minVal: number, maxVal: number): void {
@@ -54,10 +61,16 @@ export class wxSpinCtrlDouble extends wxControl {
 
 }
 
-export function createWxSpinCtrlDouble(parent: Pointer, id: number, value: Pointer, x: number, y: number, width: number, height: number, style: number, min: number, max: number, initial: number, inc: number): wxSpinCtrlDouble | null {
-    const rawPtr = lib.symbols.wxSpinCtrlDouble_Create(parent, id, value, x, y, width, height, style, min, max, initial, inc);
-    if (rawPtr === null) return null;
-    return new wxSpinCtrlDouble(rawPtr);
+export function createWxSpinCtrlDouble(parent: Pointer, id: number, value: string | Pointer, x: number, y: number, width: number, height: number, style: number, min: number, max: number, initial: number, inc: number): wxSpinCtrlDouble | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof value === "string") __s0 = createWxString(value);
+      const rawPtr = lib.symbols.wxSpinCtrlDouble_Create(parent, id, __s0 ? __s0.ptr : (value as Pointer), x, y, width, height, style, min, max, initial, inc);
+      if (rawPtr === null) return null;
+      return new wxSpinCtrlDouble(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

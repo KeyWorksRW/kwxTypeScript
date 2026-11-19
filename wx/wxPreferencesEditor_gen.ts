@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 
 export class wxPreferencesEditor {
@@ -47,10 +48,16 @@ export class wxPreferencesEditor {
 
 }
 
-export function createWxPreferencesEditor(title: Pointer): wxPreferencesEditor | null {
-    const rawPtr = lib.symbols.wxPreferencesEditor_Create(title);
-    if (rawPtr === null) return null;
-    return new wxPreferencesEditor(rawPtr);
+export function createWxPreferencesEditor(title: string | Pointer): wxPreferencesEditor | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxPreferencesEditor_Create(__s0 ? __s0.ptr : (title as Pointer));
+      if (rawPtr === null) return null;
+      return new wxPreferencesEditor(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxControl } from "./wxControl_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -16,13 +17,13 @@ export class wxFileCtrl extends wxControl {
   GetDirectory(): wxString | null {
     const rawPtr = lib.symbols.wxFileCtrl_GetDirectory(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFilename(): wxString | null {
     const rawPtr = lib.symbols.wxFileCtrl_GetFilename(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetFilenames(filenames: Pointer): void {
@@ -36,7 +37,7 @@ export class wxFileCtrl extends wxControl {
   GetPath(): wxString | null {
     const rawPtr = lib.symbols.wxFileCtrl_GetPath(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetPaths(paths: Pointer): void {
@@ -46,27 +47,51 @@ export class wxFileCtrl extends wxControl {
   GetWildcard(): wxString | null {
     const rawPtr = lib.symbols.wxFileCtrl_GetWildcard(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetDirectory(directory: Pointer): boolean {
-    return (lib.symbols.wxFileCtrl_SetDirectory(this._ptr, directory) as number) !== 0;
+  SetDirectory(directory: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof directory === "string") __s0 = createWxString(directory);
+      return (lib.symbols.wxFileCtrl_SetDirectory(this._ptr, __s0 ? __s0.ptr : (directory as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetFilename(filename: Pointer): boolean {
-    return (lib.symbols.wxFileCtrl_SetFilename(this._ptr, filename) as number) !== 0;
+  SetFilename(filename: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof filename === "string") __s0 = createWxString(filename);
+      return (lib.symbols.wxFileCtrl_SetFilename(this._ptr, __s0 ? __s0.ptr : (filename as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetPath(path: Pointer): boolean {
-    return (lib.symbols.wxFileCtrl_SetPath(this._ptr, path) as number) !== 0;
+  SetPath(path: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof path === "string") __s0 = createWxString(path);
+      return (lib.symbols.wxFileCtrl_SetPath(this._ptr, __s0 ? __s0.ptr : (path as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   SetFilterIndex(filterIndex: number): void {
     lib.symbols.wxFileCtrl_SetFilterIndex(this._ptr, filterIndex);
   }
 
-  SetWildcard(wildCard: Pointer): void {
-    lib.symbols.wxFileCtrl_SetWildcard(this._ptr, wildCard);
+  SetWildcard(wildCard: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof wildCard === "string") __s0 = createWxString(wildCard);
+      lib.symbols.wxFileCtrl_SetWildcard(this._ptr, __s0 ? __s0.ptr : (wildCard as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   ShowHidden(show: boolean): void {
@@ -75,10 +100,22 @@ export class wxFileCtrl extends wxControl {
 
 }
 
-export function createWxFileCtrl(parent: Pointer, id: number, defaultDirectory: Pointer, defaultFilename: Pointer, wildCard: Pointer, x: number, y: number, width: number, height: number, style: number): wxFileCtrl | null {
-    const rawPtr = lib.symbols.wxFileCtrl_Create(parent, id, defaultDirectory, defaultFilename, wildCard, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxFileCtrl(rawPtr);
+export function createWxFileCtrl(parent: Pointer, id: number, defaultDirectory: string | Pointer, defaultFilename: string | Pointer, wildCard: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxFileCtrl | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    let __s1: ReturnType<typeof createWxString> | null = null;
+    let __s2: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof defaultDirectory === "string") __s0 = createWxString(defaultDirectory);
+      if (typeof defaultFilename === "string") __s1 = createWxString(defaultFilename);
+      if (typeof wildCard === "string") __s2 = createWxString(wildCard);
+      const rawPtr = lib.symbols.wxFileCtrl_Create(parent, id, __s0 ? __s0.ptr : (defaultDirectory as Pointer), __s1 ? __s1.ptr : (defaultFilename as Pointer), __s2 ? __s2.ptr : (wildCard as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxFileCtrl(rawPtr);
+    } finally {
+      __s2?.Delete();
+      __s1?.Delete();
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

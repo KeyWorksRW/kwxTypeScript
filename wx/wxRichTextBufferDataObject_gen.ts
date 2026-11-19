@@ -32,7 +32,7 @@ export class wxRichTextBufferDataObject extends wxDataObjectSimple {
   GetRichTextBufferFormatId(): wxString | null {
     const rawPtr = lib.symbols.wxRichTextBufferDataObject_GetRichTextBufferFormatId(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override GetDataSize(): bigint {

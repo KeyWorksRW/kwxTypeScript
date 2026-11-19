@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxFrame } from "./wxFrame_gen.ts";
 import { wxIcon } from "./wxIcon_gen.ts";
@@ -57,14 +58,20 @@ export class wxAuiMDIChildFrame extends wxFrame {
     return new wxToolBar(rawPtr, true);
   }
 
-  override SetTitle(title: Pointer): void {
-    lib.symbols.wxAuiMDIChildFrame_SetTitle(this._ptr, title);
+  override SetTitle(title: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      lib.symbols.wxAuiMDIChildFrame_SetTitle(this._ptr, __s0 ? __s0.ptr : (title as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   override GetTitle(): wxString | null {
     const rawPtr = lib.symbols.wxAuiMDIChildFrame_GetTitle(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   override SetIcons(icons: Pointer): void {
@@ -74,7 +81,7 @@ export class wxAuiMDIChildFrame extends wxFrame {
   override GetIcons(): wxIconBundle | null {
     const rawPtr = lib.symbols.wxAuiMDIChildFrame_GetIcons(this._ptr);
     if (rawPtr === null) return null;
-    return new wxIconBundle(rawPtr, true);
+    return new wxIconBundle(rawPtr);
   }
 
   override SetIcon(icon: Pointer): void {
@@ -84,7 +91,7 @@ export class wxAuiMDIChildFrame extends wxFrame {
   override GetIcon(): wxIcon | null {
     const rawPtr = lib.symbols.wxAuiMDIChildFrame_GetIcon(this._ptr);
     if (rawPtr === null) return null;
-    return new wxIcon(rawPtr, true);
+    return new wxIcon(rawPtr);
   }
 
   GetMDIParent(): wxWindow | null {
@@ -95,10 +102,16 @@ export class wxAuiMDIChildFrame extends wxFrame {
 
 }
 
-export function createWxAuiMDIChildFrame(parent: Pointer, id: number, title: Pointer, x: number, y: number, width: number, height: number, style: number): wxAuiMDIChildFrame | null {
-    const rawPtr = lib.symbols.wxAuiMDIChildFrame_Create(parent, id, title, x, y, width, height, style);
-    if (rawPtr === null) return null;
-    return new wxAuiMDIChildFrame(rawPtr);
+export function createWxAuiMDIChildFrame(parent: Pointer, id: number, title: string | Pointer, x: number, y: number, width: number, height: number, style: number): wxAuiMDIChildFrame | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof title === "string") __s0 = createWxString(title);
+      const rawPtr = lib.symbols.wxAuiMDIChildFrame_Create(parent, id, __s0 ? __s0.ptr : (title as Pointer), x, y, width, height, style);
+      if (rawPtr === null) return null;
+      return new wxAuiMDIChildFrame(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
 }
 
 /** Wraps a pointer to an object owned by wxWidgets; Delete() is a no-op. */

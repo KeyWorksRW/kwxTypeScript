@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxHtmlListBox } from "./wxHtmlListBox_gen.ts";
 import { wxRichTextCtrl } from "./wxRichTextCtrl_gen.ts";
@@ -51,12 +52,24 @@ export class wxRichTextStyleListBox extends wxHtmlListBox {
     return new wxRichTextStyleDefinition(rawPtr, true);
   }
 
-  GetIndexForStyle(name: Pointer): number {
-    return lib.symbols.wxRichTextStyleListBox_GetIndexForStyle(this._ptr, name);
+  GetIndexForStyle(name: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxRichTextStyleListBox_GetIndexForStyle(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetStyleSelection(name: Pointer): number {
-    return lib.symbols.wxRichTextStyleListBox_SetStyleSelection(this._ptr, name);
+  SetStyleSelection(name: string | Pointer): number {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return lib.symbols.wxRichTextStyleListBox_SetStyleSelection(this._ptr, __s0 ? __s0.ptr : (name as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   UpdateStyles(): void {

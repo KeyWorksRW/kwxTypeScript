@@ -28,7 +28,7 @@ export class wxWizardPage extends wxPanel {
   GetBitmap(): wxBitmap | null {
     const rawPtr = lib.symbols.wxWizardPage_GetBitmap(this._ptr);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   SetOnGetNext(pFunction: Pointer): void {

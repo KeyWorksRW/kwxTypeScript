@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
 import { wxBitmap } from "./wxBitmap_gen.ts";
@@ -65,13 +66,13 @@ export class wxDC extends wxObject {
   FromDIPSize(width: number, height: number): wxSize | null {
     const rawPtr = lib.symbols.wxDC_FromDIPSize(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   ToDIPSize(width: number, height: number): wxSize | null {
     const rawPtr = lib.symbols.wxDC_ToDIPSize(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   SetLayoutDirection(direction: number): void {
@@ -82,56 +83,74 @@ export class wxDC extends wxObject {
     return lib.symbols.wxDC_GetLayoutDirection(this._ptr);
   }
 
-  GetTextExtentSize(string: Pointer): wxSize | null {
-    const rawPtr = lib.symbols.wxDC_GetTextExtentSize(this._ptr, string);
-    if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+  GetTextExtentSize(string: string | Pointer): wxSize | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof string === "string") __s0 = createWxString(string);
+      const rawPtr = lib.symbols.wxDC_GetTextExtentSize(this._ptr, __s0 ? __s0.ptr : (string as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSize(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetMultiLineTextExtentSize(string: Pointer): wxSize | null {
-    const rawPtr = lib.symbols.wxDC_GetMultiLineTextExtentSize(this._ptr, string);
-    if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+  GetMultiLineTextExtentSize(string: string | Pointer): wxSize | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof string === "string") __s0 = createWxString(string);
+      const rawPtr = lib.symbols.wxDC_GetMultiLineTextExtentSize(this._ptr, __s0 ? __s0.ptr : (string as Pointer));
+      if (rawPtr === null) return null;
+      return new wxSize(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetPartialTextExtents(text: Pointer, count: number, widths: Pointer): boolean {
-    return (lib.symbols.wxDC_GetPartialTextExtents(this._ptr, text, count, widths) as number) !== 0;
+  GetPartialTextExtents(text: string | Pointer, count: number, widths: Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      return (lib.symbols.wxDC_GetPartialTextExtents(this._ptr, __s0 ? __s0.ptr : (text as Pointer), count, widths) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DeviceToLogical(x: number, y: number): wxPoint | null {
     const rawPtr = lib.symbols.wxDC_DeviceToLogical(this._ptr, x, y);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   LogicalToDevice(x: number, y: number): wxPoint | null {
     const rawPtr = lib.symbols.wxDC_LogicalToDevice(this._ptr, x, y);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   DeviceToLogicalRel(width: number, height: number): wxSize | null {
     const rawPtr = lib.symbols.wxDC_DeviceToLogicalRel(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   LogicalToDeviceRel(width: number, height: number): wxSize | null {
     const rawPtr = lib.symbols.wxDC_LogicalToDeviceRel(this._ptr, width, height);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetLogicalOriginPoint(): wxPoint | null {
     const rawPtr = lib.symbols.wxDC_GetLogicalOriginPoint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   GetDeviceOriginPoint(): wxPoint | null {
     const rawPtr = lib.symbols.wxDC_GetDeviceOriginPoint(this._ptr);
     if (rawPtr === null) return null;
-    return new wxPoint(rawPtr, true);
+    return new wxPoint(rawPtr);
   }
 
   CopyAttributes(dc: Pointer): void {
@@ -181,7 +200,7 @@ export class wxDC extends wxObject {
   GetAsBitmap(x: number, y: number, width: number, height: number, useRect: boolean): wxBitmap | null {
     const rawPtr = lib.symbols.wxDC_GetAsBitmap(this._ptr, x, y, width, height, useRect ? 1 : 0);
     if (rawPtr === null) return null;
-    return new wxBitmap(rawPtr, true);
+    return new wxBitmap(rawPtr);
   }
 
   DrawSpline(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number): void {
@@ -282,14 +301,26 @@ export class wxDC extends wxObject {
     lib.symbols.wxDC_DrawIcon(this._ptr, icon, x, y);
   }
 
-  DrawLabel(str: Pointer, x: number, y: number, width: number, height: number, align: number, indexAccel: number): void {
-    lib.symbols.wxDC_DrawLabel(this._ptr, str, x, y, width, height, align, indexAccel);
+  DrawLabel(str: string | Pointer, x: number, y: number, width: number, height: number, align: number, indexAccel: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      lib.symbols.wxDC_DrawLabel(this._ptr, __s0 ? __s0.ptr : (str as Pointer), x, y, width, height, align, indexAccel);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  DrawLabelBitmap(str: Pointer, bmp: Pointer, x: number, y: number, width: number, height: number, align: number, indexAccel: number): wxRect | null {
-    const rawPtr = lib.symbols.wxDC_DrawLabelBitmap(this._ptr, str, bmp, x, y, width, height, align, indexAccel);
-    if (rawPtr === null) return null;
-    return new wxRect(rawPtr, true);
+  DrawLabelBitmap(str: string | Pointer, bmp: Pointer, x: number, y: number, width: number, height: number, align: number, indexAccel: number): wxRect | null {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof str === "string") __s0 = createWxString(str);
+      const rawPtr = lib.symbols.wxDC_DrawLabelBitmap(this._ptr, __s0 ? __s0.ptr : (str as Pointer), bmp, x, y, width, height, align, indexAccel);
+      if (rawPtr === null) return null;
+      return new wxRect(rawPtr);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DrawLine(x1: number, y1: number, x2: number, y2: number): void {
@@ -316,16 +347,28 @@ export class wxDC extends wxObject {
     lib.symbols.wxDC_DrawRectangle(this._ptr, x, y, width, height);
   }
 
-  DrawRotatedText(text: Pointer, x: number, y: number, angle: number): void {
-    lib.symbols.wxDC_DrawRotatedText(this._ptr, text, x, y, angle);
+  DrawRotatedText(text: string | Pointer, x: number, y: number, angle: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxDC_DrawRotatedText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), x, y, angle);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DrawRoundedRectangle(x: number, y: number, width: number, height: number, radius: number): void {
     lib.symbols.wxDC_DrawRoundedRectangle(this._ptr, x, y, width, height, radius);
   }
 
-  DrawText(text: Pointer, x: number, y: number): void {
-    lib.symbols.wxDC_DrawText(this._ptr, text, x, y);
+  DrawText(text: string | Pointer, x: number, y: number): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof text === "string") __s0 = createWxString(text);
+      lib.symbols.wxDC_DrawText(this._ptr, __s0 ? __s0.ptr : (text as Pointer), x, y);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   EndDoc(): void {
@@ -395,7 +438,7 @@ export class wxDC extends wxObject {
   GetPPI(): wxSize | null {
     const rawPtr = lib.symbols.wxDC_GetPPI(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetPen(ref: Pointer): void {
@@ -409,25 +452,37 @@ export class wxDC extends wxObject {
   GetSize(): wxSize | null {
     const rawPtr = lib.symbols.wxDC_GetSize(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetSizeMM(): wxSize | null {
     const rawPtr = lib.symbols.wxDC_GetSizeMM(this._ptr);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   GetTextBackground(ref: Pointer): void {
     lib.symbols.wxDC_GetTextBackground(this._ptr, ref);
   }
 
-  GetTextExtent(string: Pointer, width: Pointer, height: Pointer, descent: Pointer, externalLeading: Pointer, theFont: Pointer): void {
-    lib.symbols.wxDC_GetTextExtent(this._ptr, string, width, height, descent, externalLeading, theFont);
+  GetTextExtent(string: string | Pointer, width: Pointer, height: Pointer, descent: Pointer, externalLeading: Pointer, theFont: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof string === "string") __s0 = createWxString(string);
+      lib.symbols.wxDC_GetTextExtent(this._ptr, __s0 ? __s0.ptr : (string as Pointer), width, height, descent, externalLeading, theFont);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  GetMultiLineTextExtent(string: Pointer, width: Pointer, height: Pointer, heightLine: Pointer, theFont: Pointer): void {
-    lib.symbols.wxDC_GetMultiLineTextExtent(this._ptr, string, width, height, heightLine, theFont);
+  GetMultiLineTextExtent(string: string | Pointer, width: Pointer, height: Pointer, heightLine: Pointer, theFont: Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof string === "string") __s0 = createWxString(string);
+      lib.symbols.wxDC_GetMultiLineTextExtent(this._ptr, __s0 ? __s0.ptr : (string as Pointer), width, height, heightLine, theFont);
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetTextForeground(ref: Pointer): void {
@@ -550,8 +605,14 @@ export class wxDC extends wxObject {
     lib.symbols.wxDC_SetUserScale(this._ptr, x, y);
   }
 
-  StartDoc(msg: Pointer): boolean {
-    return (lib.symbols.wxDC_StartDoc(this._ptr, msg) as number) !== 0;
+  StartDoc(msg: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof msg === "string") __s0 = createWxString(msg);
+      return (lib.symbols.wxDC_StartDoc(this._ptr, __s0 ? __s0.ptr : (msg as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   StartPage(): void {

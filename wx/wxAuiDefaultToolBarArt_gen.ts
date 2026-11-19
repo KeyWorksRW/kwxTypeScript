@@ -34,7 +34,7 @@ export class wxAuiDefaultToolBarArt extends wxAuiToolBarArt {
   override GetFont(): wxFont | null {
     const rawPtr = lib.symbols.wxAuiDefaultToolBarArt_GetFont(this._ptr);
     if (rawPtr === null) return null;
-    return new wxFont(rawPtr, true);
+    return new wxFont(rawPtr);
   }
 
   override SetTextOrientation(orientation: number): void {
@@ -84,13 +84,13 @@ export class wxAuiDefaultToolBarArt extends wxAuiToolBarArt {
   override GetLabelSize(dc: Pointer, window: Pointer, item: Pointer): wxSize | null {
     const rawPtr = lib.symbols.wxAuiDefaultToolBarArt_GetLabelSize(this._ptr, dc, window, item);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   override GetToolSize(dc: Pointer, window: Pointer, item: Pointer): wxSize | null {
     const rawPtr = lib.symbols.wxAuiDefaultToolBarArt_GetToolSize(this._ptr, dc, window, item);
     if (rawPtr === null) return null;
-    return new wxSize(rawPtr, true);
+    return new wxSize(rawPtr);
   }
 
   override GetElementSize(element: number): number {

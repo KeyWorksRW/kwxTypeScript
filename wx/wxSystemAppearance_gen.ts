@@ -20,8 +20,26 @@ export class wxSystemAppearance {
     return this._ptr;
   }
 
+  Delete(): void {
+    if (this._disposed || this._borrowed) return;
+    this._disposed = true;
+    lib.symbols.wxSystemAppearance_Delete(this._ptr);
+  }
+
+  [Symbol.dispose](): void {
+    this.Delete();
+  }
+
   IsDark(): boolean {
     return (lib.symbols.wxSystemAppearance_IsDark(this._ptr) as number) !== 0;
+  }
+
+  IsSystemDark(): boolean {
+    return (lib.symbols.wxSystemAppearance_IsSystemDark(this._ptr) as number) !== 0;
+  }
+
+  AreAppsDark(): boolean {
+    return (lib.symbols.wxSystemAppearance_AreAppsDark(this._ptr) as number) !== 0;
   }
 
   IsUsingDarkBackground(): boolean {
@@ -31,7 +49,7 @@ export class wxSystemAppearance {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxSystemAppearance_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
 }

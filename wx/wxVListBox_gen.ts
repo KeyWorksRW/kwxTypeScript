@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxVScrolledWindow } from "./wxVScrolledWindow_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
@@ -16,8 +17,14 @@ export class wxVListBox extends wxVScrolledWindow {
     lib.symbols.wxVListBox_Clear(this._ptr);
   }
 
-  override Create(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: Pointer): boolean {
-    return (lib.symbols.wxVListBox_Create(this._ptr, parent, id, x, y, width, height, style, name) as number) !== 0;
+  override Create(parent: Pointer, id: number, x: number, y: number, width: number, height: number, style: bigint, name: string | Pointer): boolean {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof name === "string") __s0 = createWxString(name);
+      return (lib.symbols.wxVListBox_Create(this._ptr, parent, id, x, y, width, height, style, __s0 ? __s0.ptr : (name as Pointer)) as number) !== 0;
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   DeselectAll(): boolean {

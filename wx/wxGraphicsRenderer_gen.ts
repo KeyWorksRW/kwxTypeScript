@@ -4,10 +4,10 @@ import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxObject } from "./wxObject_gen.ts";
-import { wxGraphicsContext } from "./wxGraphicsContext_gen.ts";
 import { wxGraphicsPath } from "./wxGraphicsPath_gen.ts";
 import { wxString } from "./wxString_gen.ts";
 import type { wxClosure } from "./wxClosure_gen.ts";
+import type { wxGraphicsContext } from "./wxGraphicsContext_gen.ts";
 
 export class wxGraphicsRenderer extends wxObject {
   /** Returns the underlying native pointer. */
@@ -28,31 +28,55 @@ export class wxGraphicsRenderer extends wxObject {
   CreateContext(dc: Pointer): wxGraphicsContext | null {
     const rawPtr = lib.symbols.wxGraphicsRenderer_CreateContext(this._ptr, dc);
     if (rawPtr === null) return null;
-    return new wxGraphicsContext(rawPtr, true);
+    const WrapperClass = getClass<wxGraphicsContext>("wxGraphicsContext");
+    return new WrapperClass(rawPtr, true);
   }
 
   CreateContextFromWindow(window: Pointer): wxGraphicsContext | null {
     const rawPtr = lib.symbols.wxGraphicsRenderer_CreateContextFromWindow(this._ptr, window);
     if (rawPtr === null) return null;
-    return new wxGraphicsContext(rawPtr, true);
+    const WrapperClass = getClass<wxGraphicsContext>("wxGraphicsContext");
+    return new WrapperClass(rawPtr, true);
+  }
+
+  CreateContextFromMemory(dc: Pointer): wxGraphicsContext | null {
+    const rawPtr = lib.symbols.wxGraphicsRenderer_CreateContextFromMemory(this._ptr, dc);
+    if (rawPtr === null) return null;
+    const WrapperClass = getClass<wxGraphicsContext>("wxGraphicsContext");
+    return new WrapperClass(rawPtr, true);
+  }
+
+  CreateContextFromUnknownDC(dc: Pointer): wxGraphicsContext | null {
+    const rawPtr = lib.symbols.wxGraphicsRenderer_CreateContextFromUnknownDC(this._ptr, dc);
+    if (rawPtr === null) return null;
+    const WrapperClass = getClass<wxGraphicsContext>("wxGraphicsContext");
+    return new WrapperClass(rawPtr, true);
   }
 
   CreateContextFromNativeContext(context: Pointer): wxGraphicsContext | null {
     const rawPtr = lib.symbols.wxGraphicsRenderer_CreateContextFromNativeContext(this._ptr, context);
     if (rawPtr === null) return null;
-    return new wxGraphicsContext(rawPtr, true);
+    const WrapperClass = getClass<wxGraphicsContext>("wxGraphicsContext");
+    return new WrapperClass(rawPtr, true);
   }
 
   CreateContextFromNativeWindow(window: Pointer): wxGraphicsContext | null {
     const rawPtr = lib.symbols.wxGraphicsRenderer_CreateContextFromNativeWindow(this._ptr, window);
     if (rawPtr === null) return null;
-    return new wxGraphicsContext(rawPtr, true);
+    const WrapperClass = getClass<wxGraphicsContext>("wxGraphicsContext");
+    return new WrapperClass(rawPtr, true);
   }
 
   CreatePath(): wxGraphicsPath | null {
     const rawPtr = lib.symbols.wxGraphicsRenderer_CreatePath(this._ptr);
     if (rawPtr === null) return null;
     return new wxGraphicsPath(rawPtr, true);
+  }
+
+  GetCairoRenderer(): wxGraphicsRenderer | null {
+    const rawPtr = lib.symbols.wxGraphicsRenderer_GetCairoRenderer(this._ptr);
+    if (rawPtr === null) return null;
+    return new wxGraphicsRenderer(rawPtr, true);
   }
 
   GetDefaultRenderer(): wxGraphicsRenderer | null {
@@ -76,7 +100,7 @@ export class wxGraphicsRenderer extends wxObject {
   GetName(): wxString | null {
     const rawPtr = lib.symbols.wxGraphicsRenderer_GetName(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetVersion(major: Pointer, minor: Pointer, micro: Pointer): void {

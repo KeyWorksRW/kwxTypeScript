@@ -2,6 +2,7 @@
 
 import { lib } from "./kwx_ffi_gen.ts";
 import { getClass, registerClass } from "./kwx_class_registry_gen.ts";
+import { createWxString } from "./kwx_helpers_gen.ts";
 import { Pointer } from "kwx/platform";
 import { wxValidator } from "./wxValidator_gen.ts";
 import { wxString } from "./wxString_gen.ts";
@@ -13,28 +14,46 @@ export class wxTextValidator extends wxValidator {
     return this._ptr;
   }
 
-  AddCharIncludes(chars: Pointer): void {
-    lib.symbols.wxTextValidator_AddCharIncludes(this._ptr, chars);
+  AddCharIncludes(chars: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof chars === "string") __s0 = createWxString(chars);
+      lib.symbols.wxTextValidator_AddCharIncludes(this._ptr, __s0 ? __s0.ptr : (chars as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetCharExcludes(): wxString | null {
     const rawPtr = lib.symbols.wxTextValidator_GetCharExcludes(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
   GetCharIncludes(): wxString | null {
     const rawPtr = lib.symbols.wxTextValidator_GetCharIncludes(this._ptr);
     if (rawPtr === null) return null;
-    return new wxString(rawPtr, true);
+    return new wxString(rawPtr);
   }
 
-  SetCharExcludes(chars: Pointer): void {
-    lib.symbols.wxTextValidator_SetCharExcludes(this._ptr, chars);
+  SetCharExcludes(chars: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof chars === "string") __s0 = createWxString(chars);
+      lib.symbols.wxTextValidator_SetCharExcludes(this._ptr, __s0 ? __s0.ptr : (chars as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
-  SetCharIncludes(chars: Pointer): void {
-    lib.symbols.wxTextValidator_SetCharIncludes(this._ptr, chars);
+  SetCharIncludes(chars: string | Pointer): void {
+    let __s0: ReturnType<typeof createWxString> | null = null;
+    try {
+      if (typeof chars === "string") __s0 = createWxString(chars);
+      lib.symbols.wxTextValidator_SetCharIncludes(this._ptr, __s0 ? __s0.ptr : (chars as Pointer));
+    } finally {
+      __s0?.Delete();
+    }
   }
 
   GetExcludes(count: Pointer): Pointer {
